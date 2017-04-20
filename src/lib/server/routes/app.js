@@ -1,6 +1,6 @@
 let express = require('express')
 let get = require('lodash/get')
-let _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+// let _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
 let logger = require('../lib/logger')
 let request = require('../modules/request')
