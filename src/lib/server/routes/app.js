@@ -7,16 +7,16 @@ let request = require('../modules/request')
 let build = require('../build').default
 let router = express.Router()
 
-function ensureLoggedIn (req, res, next) {
-  if (req.session.logout) {
-    let url = req.originalUrl.split('/')
-    url.pop()
-    res.redirect(url.join('/'))
-  } else {
-    _ensureLoggedIn(req, res, next)
-  }
-  delete req.session.logout
-}
+// function ensureLoggedIn (req, res, next) {
+//   if (req.session.logout) {
+//     let url = req.originalUrl.split('/')
+//     url.pop()
+//     res.redirect(url.join('/'))
+//   } else {
+//     _ensureLoggedIn(req, res, next)
+//   }
+//   delete req.session.logout
+// }
 
 function getRenderDataBuilder (req) {
   return (data) => {
