@@ -1,0 +1,74 @@
+{
+  "name": "hire",
+  "version": "0.0.1",
+  "description": "Nudj hirer website",
+  "main": "lib/server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nudj/web.git"
+  },
+  "author": "Nick Collings",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nudj/web/issues"
+  },
+  "homepage": "https://github.com/nudj/web#readme",
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "lib/server/assets",
+      "lib/server/build*",
+      "lib/node_modules",
+      "webpack*"
+    ]
+  },
+  "dependencies": {
+    "@nudj/dummy": "0.6.0",
+    "@nudj/schemas": "0.8.1",
+    "body-parser": "^1.16.1",
+    "classnames": "^2.2.5",
+    "connect-ensure-login": "^0.1.1",
+    "connect-redis": "^3.2.0",
+    "consolidate": "^0.14.5",
+    "csurf": "^1.9.0",
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "font-awesome": "^4.7.0",
+    "history": "^4.6.1",
+    "intercom-client": "^2.8.7",
+    "json-server": "^0.9.6",
+    "lodash": "^4.17.4",
+    "mailgun-js": "^0.9.1",
+    "node-fetch": "^1.6.3",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.6.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-helmet": "^5.0.3",
+    "react-redux": "^5.0.3",
+    "react-router-dom": "^4.0.0",
+    "react-router-redux": "next",
+    "redis": "^2.7.1",
+    "redux": "^3.6.0",
+    "tachyons": "^4.6.2",
+    "validator": "^7.0.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-env": "^1.1.10",
+    "babel-preset-react": "^6.23.0",
+    "chai": "^3.5.0",
+    "css-loader": "^0.26.2",
+    "directory-named-webpack-plugin": "^2.1.0",
+    "dirty-chai": "^1.2.2",
+    "extract-text-webpack-plugin": "^2.0.0",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "standard": "^9.0.0",
+    "style-loader": "^0.13.2",
+    "webpack": "^2.2.1"
+  }
+}

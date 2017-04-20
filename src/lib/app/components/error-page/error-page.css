@@ -1,0 +1,3 @@
+.body {
+  composes: flex flex-column justify-center items-center from 'tachyons/css/tachyons.css';
+}

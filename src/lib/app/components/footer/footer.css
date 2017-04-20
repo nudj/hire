@@ -1,0 +1,24 @@
+.background {
+  composes: bg-light-red w-100 from 'tachyons/css/tachyons.css';
+}
+.container {
+  composes: w-100 mw8 center flex flex-column justify-center items-center pv5-ns pv4 ph4 ph0-ns white from 'tachyons/css/tachyons.css';
+}
+.copyright {
+  composes: f6 db tc pt4 mw5 w-100 bt bw1 b--white from 'tachyons/css/tachyons.css';
+}
+.links {
+  composes: flex flex-row flex-wrap justify-between items-stretch-ns items-center w-100 center tc ma0 pa0 pb4 list from 'tachyons/css/tachyons.css';
+}
+.link {
+  composes: justify-center items-center w-25-ns w-100 tc ph1 pv1-ns pv2 from 'tachyons/css/tachyons.css';
+}
+.release,
+.roadmap,
+.hiring,
+.terms {
+  composes: f6 link grow no-underline-ns underline dib-ns di ph3 pv3 mh1 mv1-ns mv2 br2 ba-ns bw1-ns white b--white-ns from 'tachyons/css/tachyons.css';
+}
+.label {
+  composes: tc pt2 mh0 mv0 dn dib-ns from 'tachyons/css/tachyons.css';
+}
