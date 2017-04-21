@@ -4,19 +4,21 @@ let get = require('lodash/get')
 
 let logger = require('../lib/logger')
 let request = require('../modules/request')
+let jobs = require('../modules/jobs')
 let build = require('../build').default
 let router = express.Router()
 
-// function ensureLoggedIn (req, res, next) {
-//   if (req.session.logout) {
-//     let url = req.originalUrl.split('/')
-//     url.pop()
-//     res.redirect(url.join('/'))
-//   } else {
-//     _ensureLoggedIn(req, res, next)
-//   }
-//   delete req.session.logout
-// }
+function ensureLoggedIn (req, res, next) {
+  return next()
+  if (req.session.logout) {
+    let url = req.originalUrl.split('/')
+    url.pop()
+    res.redirect(url.join('/'))
+  } else {
+    _ensureLoggedIn(req, res, next)
+  }
+  delete req.session.logout
+}
 
 function getRenderDataBuilder (req) {
   return (data) => {
@@ -124,7 +126,16 @@ function requestHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function jobsHandler (req, res, next) {
+  jobs
+    .get(req.params.companySlug, req.session.person)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.post('/request', requestHandler)
+router.get('/:companySlug', ensureLoggedIn, jobsHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

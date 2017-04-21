@@ -1,0 +1,61 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import { withRouter, Link } from 'react-router-dom'
+import get from 'lodash/get'
+import format from 'date-fns/format'
+import style from './jobs-page.css'
+
+function jobList (props, status) {
+  return (
+    <ul className={style[status]}>
+      {get(props, status, []).map((job) => {
+        const added = format(get(job, 'created'), 'DD/MM/YYYY')
+        return (
+          <li key={job.id} className={style.job}>
+            <dl className={style.details}>
+              <dt className={style.detailTitleTitle}>Title</dt>
+              <dd className={style.detailDetailTitle}>{get(job, 'title')}</dd>
+              <dt className={style.detailTitleLocation}>Location</dt>
+              <dd className={style.detailDetailLocation}>{get(job, 'location')}</dd>
+              <dt className={style.detailTitleAdded}>Added</dt>
+              <dd className={style.detailDetailAdded}>{added}</dd>
+              <dt className={style.detailTitleBonus}>Nudj Bonus</dt>
+              <dd className={style.detailDetailBonus}>£{get(job, 'bonus')}</dd>
+            </dl>
+            <ul className={style.actions}>
+              <li className={style.action}>
+                <a href={`//nudj.co/${get(props, 'company.slug')}/${get(job, 'slug')}`}>View</a>
+              </li>
+              <li className={style.action}>
+                <a href={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</a>
+              </li>
+              <li className={style.action}>
+                <form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/archive`} method='POST'>
+                  <button>Archive</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+const Component = (props) => (
+  <div className={style.body}>
+    <header>
+      <h1>Jobs</h1>
+      <h2>@ {get(props, 'company.name')}</h2>
+    </header>
+    <h3>Published Jobs</h3>
+    {jobList(props, 'published')}
+    <hr />
+    <h3>Archived Jobs</h3>
+    {jobList(props, 'archived')}
+  </div>
+)
+
+const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
+const mapDispatchToProps = (dispatch, ownProps) => ({})
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

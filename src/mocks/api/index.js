@@ -10,7 +10,7 @@ let dummyData = dummy({
   },
   jobs: {
     schema: schemas.job,
-    count: 5
+    count: 50
   },
   people: {
     schema: schemas.people,
@@ -23,13 +23,32 @@ let dummyData = dummy({
   applications: {
     schema: schemas.applications,
     count: 5
+  },
+  hirers: {
+    schema: {
+      companyId: {
+        example: {
+          fn: 'choice',
+          args: [['1']]
+        }
+      },
+      personId: {
+        example: {
+          fn: 'choice',
+          args: [['21']]
+        }
+      }
+    },
+    count: 1
   }
 })
 dummyData.jobs = dummyData.jobs.concat([
   {
     'id': '99',
+    'created': '2009-05-23T12:22:13.000+00:00',
+    'modified': '2010-01-08T21:39:25.000+00:00',
     'title': 'Senior Full-Stack Software Engineer',
-    'slug': 'senior-full-stack-software-engineer-2',
+    'slug': 'senior-full-stack-software-engineer',
     'url': 'https://bulb.workable.com/j/389500EB72',
     'status': 'Open',
     'bonus': 1000,
