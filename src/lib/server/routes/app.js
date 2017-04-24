@@ -128,7 +128,15 @@ function requestHandler (req, res, next) {
 
 function jobsHandler (req, res, next) {
   jobs
-    .get(req.params.companySlug, req.session.person)
+    .getAllForCompany(req.session.person, req.params.companySlug)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function jobHandler (req, res, next) {
+  jobs
+    .get(req.session.person, req.params.companySlug, req.params.jobSlug)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -136,6 +144,7 @@ function jobsHandler (req, res, next) {
 
 router.post('/request', requestHandler)
 router.get('/:companySlug', ensureLoggedIn, jobsHandler)
+router.get('/:companySlug/:jobSlug', ensureLoggedIn, jobHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

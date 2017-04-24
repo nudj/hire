@@ -17,16 +17,29 @@ function promiseMap (promiseObj) {
   })
 }
 
-function fetchCompany (companySlug, loggedInPerson) {
+function fetchCompany (loggedInPerson, companySlug) {
   return promiseMap({
+    person: loggedInPerson,
+    company: fetch(`companies/${companySlug}`)
+  })
+}
+
+function fetchJob (loggedInPerson, companySlug, jobSlug) {
+  return promiseMap({
+    person: loggedInPerson,
     company: fetch(`companies/${companySlug}`),
-    person: loggedInPerson
+    job: fetch(`jobs/${jobSlug}`)
   })
 }
 
 function fetchJobs (data) {
   data.published = fetch(`jobs?companyId=${data.company.id}&status=Published`)
   data.archived = fetch(`jobs?companyId=${data.company.id}&status=Archived`)
+  return promiseMap(data)
+}
+
+function fetchRecommendations (data) {
+  data.recommendations = fetch(`recommendations?job=${data.job.id}`)
   return promiseMap(data)
 }
 
@@ -167,8 +180,13 @@ function apply (data) {
   return promiseMap(data)
 }
 
-module.exports.get = function (companySlug, loggedInPerson) {
-  return fetchCompany(companySlug, loggedInPerson)
+module.exports.get = function (loggedInPerson, companySlug, jobSlug) {
+  return fetchJob(loggedInPerson, companySlug, jobSlug)
+  .then(fetchRecommendations)
+}
+
+module.exports.getAllForCompany = function (loggedInPerson, companySlug) {
+  return fetchCompany(loggedInPerson, companySlug)
   .then(fetchJobs)
 }
 

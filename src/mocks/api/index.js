@@ -172,6 +172,18 @@ server.get('/:type/first', (req, res, next) => {
     })
   }
 })
+server.get('/recommendations', (req, res, next) => {
+  let jobId = req.query.job
+  if (jobId) {
+    res.json(dummyData.people)
+  } else {
+    res.json({
+      error: true,
+      code: 400,
+      errorMessage: 'missing job id'
+    })
+  }
+})
 server.use(router)
 
 module.exports = server
