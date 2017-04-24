@@ -25,21 +25,12 @@ let dummyData = dummy({
     count: 5
   },
   hirers: {
-    schema: {
-      companyId: {
-        example: {
-          fn: 'choice',
-          args: [['1']]
-        }
-      },
-      personId: {
-        example: {
-          fn: 'choice',
-          args: [['21']]
-        }
-      }
-    },
+    schema: schemas.hirers,
     count: 1
+  },
+  recommendations: {
+    schema: schemas.recommendations,
+    count: 3
   }
 })
 dummyData.jobs = dummyData.jobs.concat([
@@ -169,18 +160,6 @@ server.get('/:type/first', (req, res, next) => {
       error: true,
       code: 404,
       errorMessage: 'no match'
-    })
-  }
-})
-server.get('/recommendations', (req, res, next) => {
-  let jobId = req.query.job
-  if (jobId) {
-    res.json(dummyData.people)
-  } else {
-    res.json({
-      error: true,
-      code: 400,
-      errorMessage: 'missing job id'
     })
   }
 })

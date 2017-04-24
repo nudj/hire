@@ -9,6 +9,10 @@ let build = require('../build').default
 let router = express.Router()
 
 function ensureLoggedIn (req, res, next) {
+  req.session.person = {
+    firstName: 'David',
+    lastName: 'Platt'
+  }
   return next()
   if (req.session.logout) {
     let url = req.originalUrl.split('/')
@@ -142,9 +146,19 @@ function jobHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function composeHandler (req, res, next) {
+  jobs
+    .compose(req.session.person, req.params.companySlug, req.params.jobSlug, [].concat(req.body.recipients || []))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.post('/request', requestHandler)
 router.get('/:companySlug', ensureLoggedIn, jobsHandler)
 router.get('/:companySlug/:jobSlug', ensureLoggedIn, jobHandler)
+router.get('/:companySlug/:jobSlug/compose', (req, res) => res.redirect(`/${req.params.companySlug}/${req.params.jobSlug}`))
+router.post('/:companySlug/:jobSlug/compose', ensureLoggedIn, composeHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

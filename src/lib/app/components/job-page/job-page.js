@@ -47,7 +47,7 @@ class Component extends React.Component {
                 </li>
                 <li className={style.action}>
                   <label className={style.addLabel} htmlFor={`add-${get(person, 'id')}`}>Add to senders</label>
-                  <input type='checkbox' name='recommendations' value={get(person, 'id')} checked={this.state.selected.includes(get(person, 'id'))} onChange={this.onClickAdd} id={`add-${get(person, 'id')}`} />
+                  <input type='checkbox' name='recipients' value={get(person, 'id')} checked={this.state.selected.includes(get(person, 'id'))} onChange={this.onClickAdd} id={`add-${get(person, 'id')}`} />
                 </li>
               </ul>
             </li>
@@ -58,13 +58,13 @@ class Component extends React.Component {
   }
   render () {
     return (
-      <form className={style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}`} method='POST'>
+      <form className={style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/compose`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <header>
           <h1>{get(this.props, 'job.title')}</h1>
           <h2>@ {get(this.props, 'company.name')}</h2>
           <p className={style.selected}>Selected {this.state.selected.length}</p>
-          <button className={style.submit}>Submit</button>
+          <button className={style.submit}>Write message</button>
         </header>
         <p>We recommend sending a nudj request to ...</p>
         {this.recommendationList()}

@@ -43,6 +43,13 @@ function fetchRecommendations (data) {
   return promiseMap(data)
 }
 
+function convertToPeople (key) {
+  return (data) => {
+    data[key] = Promise.all(data[key].map((rec) => fetch(`people/${rec.personId}`)))
+    return promiseMap(data)
+  }
+}
+
 function ensureValidReferralUrl (data) {
   let company = data.company
   let job = data.job
@@ -183,11 +190,18 @@ function apply (data) {
 module.exports.get = function (loggedInPerson, companySlug, jobSlug) {
   return fetchJob(loggedInPerson, companySlug, jobSlug)
   .then(fetchRecommendations)
+  .then(convertToPeople('recommendations'))
 }
 
 module.exports.getAllForCompany = function (loggedInPerson, companySlug) {
   return fetchCompany(loggedInPerson, companySlug)
   .then(fetchJobs)
+}
+
+module.exports.compose = function (loggedInPerson, companySlug, jobSlug, recipients) {
+  return fetchJob(loggedInPerson, companySlug, jobSlug)
+  .then((data) => Object.assign(data, { recipients: recipients.map((id) => ({ personId: id })) }))
+  .then(convertToPeople('recipients'))
 }
 
 // module.exports.nudj = function (companySlug, jobSlugRefId, loggedInPerson) {
