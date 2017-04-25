@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
 import some from 'lodash/some'
 import mapValues from 'lodash/mapValues'
-import format from 'date-fns/format'
 import template from 'string-template'
 import style from './compose-page.css'
 
@@ -61,7 +60,7 @@ Look forward to hearing from you. Thanks so much for your help.
       message: event.target.value
     })
   }
-  renderMessage() {
+  renderMessage () {
     return `<p>${template(get(this.state, 'message'), mapValues({
       refereeName: 'First Name',
       jobTitle: get(this.props, 'job.title'),

@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
-import format from 'date-fns/format'
 import style from './job-page.css'
 
 class Component extends React.Component {

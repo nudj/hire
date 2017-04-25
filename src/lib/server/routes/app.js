@@ -14,14 +14,14 @@ function ensureLoggedIn (req, res, next) {
     lastName: 'Platt'
   }
   return next()
-  if (req.session.logout) {
-    let url = req.originalUrl.split('/')
-    url.pop()
-    res.redirect(url.join('/'))
-  } else {
-    _ensureLoggedIn(req, res, next)
-  }
-  delete req.session.logout
+  // if (req.session.logout) {
+  //   let url = req.originalUrl.split('/')
+  //   url.pop()
+  //   res.redirect(url.join('/'))
+  // } else {
+  //   _ensureLoggedIn(req, res, next)
+  // }
+  // delete req.session.logout
 }
 
 function getRenderDataBuilder (req) {
