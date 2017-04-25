@@ -122,6 +122,10 @@ function getRenderer (req, res, next) {
   }
 }
 
+function redirect (res, url) {
+  return () => res.redirect(url)
+}
+
 function requestHandler (req, res, next) {
   request
     .send(req.body.first_name, req.body.last_name, req.body.email, req.body.company_name)
@@ -146,6 +150,24 @@ function jobHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function archiveHandler (req, res, next) {
+  jobs
+    .patch(req.params.jobSlug, {
+      status: 'Archived'
+    })
+    .then(redirect(res, req.get('Referrer')))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function publishHandler (req, res, next) {
+  jobs
+    .patch(req.params.jobSlug, {
+      status: 'Published'
+    })
+    .then(redirect(res, req.get('Referrer')))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function composeHandler (req, res, next) {
   jobs
     .compose(req.session.person, req.params.companySlug, req.params.jobSlug, [].concat(req.body.recipients || []))
@@ -157,6 +179,8 @@ function composeHandler (req, res, next) {
 router.post('/request', requestHandler)
 router.get('/:companySlug', ensureLoggedIn, jobsHandler)
 router.get('/:companySlug/:jobSlug', ensureLoggedIn, jobHandler)
+router.post('/:companySlug/:jobSlug/archive', ensureLoggedIn, archiveHandler)
+router.post('/:companySlug/:jobSlug/publish', ensureLoggedIn, publishHandler)
 router.get('/:companySlug/:jobSlug/compose', (req, res) => res.redirect(`/${req.params.companySlug}/${req.params.jobSlug}`))
 router.post('/:companySlug/:jobSlug/compose', ensureLoggedIn, composeHandler)
 router.get('*', (req, res) => {

@@ -25,7 +25,7 @@ I hope you don't mind me contacting you.
 
 I'm currently looking for a {jobTitle} to come join us at {companyName} and thought you might know someone you've worked with previously who might be interested?
 
-There's a bonus of {jobBonus} available for any successful introduction you make. Just share your unique link below with those you'd recommend and we'll take care of the rest.
+There's a bonus of £{jobBonus} available for any successful introduction you make. Just share your unique link below with those you'd recommend and we'll take care of the rest.
 
 {link}
 
