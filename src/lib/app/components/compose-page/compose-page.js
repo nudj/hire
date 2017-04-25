@@ -4,12 +4,28 @@ import { withRouter } from 'react-router-dom'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
 import some from 'lodash/some'
-import mapValues from 'lodash/mapValues'
-import template from 'string-template'
+import escapeHtml from 'escape-html'
 import style from './compose-page.css'
 
-function tagify (contents) {
-  return `<span class="${style.tag}">${contents}</span>`
+function tagify (contents, ok) {
+  return `<span class="${ok ? style.tagOk : style.tagError}">${contents}</span>`
+}
+
+function stripDelims (tag) {
+  return tag.slice(2, -2)
+}
+
+function renderTpl (tpl, data) {
+  let tags = tpl.match(/\{\{.*?\}\}/g)
+  let order = tpl.match(/\{\{.*?\}\}|((?!(\{\{.*?\}\}))[^])+/g)
+  return order.map((chunk) => {
+    if (tags.includes(chunk)) {
+      let result = get(data, stripDelims(chunk))
+      return tagify(result !== undefined ? result : escapeHtml(chunk), !!result)
+    } else {
+      return escapeHtml(chunk)
+    }
+  }).join('')
 }
 
 class Component extends React.Component {
@@ -18,19 +34,19 @@ class Component extends React.Component {
     this.state = {
       recipients: props.recipients,
       subject: 'Hey, I need your help',
-      message: `Hi {refereeName},
+      message: `Hi {{refereeName}},
 
 I hope you don't mind me contacting you.
 
-I'm currently looking for a {jobTitle} to come join us at {companyName} and thought you might know someone you've worked with previously who might be interested?
+I'm currently looking for a {{job.title}} to come join us at {{companyName}} and thought you might know someone you've worked with previously who might be interested?
 
-There's a bonus of £{jobBonus} available for any successful introduction you make. Just share your unique link below with those you'd recommend and we'll take care of the rest.
+There's a bonus of £{{job.bonus}} available for any successful introduction you make. Just share your unique link below with those you'd recommend and we'll take care of the rest.
 
-{link}
+{{link}}
 
 Look forward to hearing from you. Thanks so much for your help.
 
-{personName}`,
+{{personName}}`,
       edit: false
     }
     this.onClickRemove = this.onClickRemove.bind(this)
@@ -61,14 +77,16 @@ Look forward to hearing from you. Thanks so much for your help.
     })
   }
   renderMessage () {
-    return `<p>${template(get(this.state, 'message'), mapValues({
+    return `<p>${renderTpl(get(this.state, 'message'), {
       refereeName: 'First Name',
-      jobTitle: get(this.props, 'job.title'),
+      job: {
+        title: get(this.props, 'job.title'),
+        bonus: get(this.props, 'job.bonus')
+      },
       companyName: get(this.props, 'company.name'),
-      jobBonus: get(this.props, 'job.bonus'),
       link: 'https://nudj.co/company/job',
       personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}`
-    }, tagify)).split('\n').join('</p><p>')}</p>`
+    }).split('\n').join('</p><p>')}</p>`
   }
   render () {
     return (

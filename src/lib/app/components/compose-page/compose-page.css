@@ -1,8 +1,13 @@
-.tag {
-  background: pink;
-  border: 1px solid red;
+.tagOk,
+.tagError {
+  background: lightgreen;
+  border: 1px solid green;
   border-radius: 1rem;
   padding: 2px 8px;
+}
+.tagError {
+  background: pink;
+  border-color: red;
 }
 .message {
   width: 100%;
