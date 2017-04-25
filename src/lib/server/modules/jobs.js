@@ -83,7 +83,7 @@ module.exports.patch = function (jobSlug, patch) {
 }
 
 module.exports.compose = function (loggedInPerson, companySlug, jobSlug, recipients) {
-  return fetchJob(loggedInPerson, companySlug, jobSlug)
+  return fetchCompanyAndJob(loggedInPerson, companySlug, jobSlug)
   .then((data) => Object.assign(data, { recipients: recipients.map((id) => ({ personId: id })) }))
   .then(convertToPeople('recipients'))
 }

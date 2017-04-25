@@ -13,6 +13,7 @@ class Component extends React.Component {
       selected: []
     }
     this.onClickAdd = this.onClickAdd.bind(this)
+    this.onClickToggleAll = this.onClickToggleAll.bind(this)
   }
   onClickAdd (event) {
     let selected = this.state.selected
@@ -22,6 +23,18 @@ class Component extends React.Component {
       }
     } else {
       selected = filter(selected, (value) => value !== event.target.value)
+    }
+    this.setState({
+      selected
+    })
+  }
+  onClickToggleAll (event) {
+    let selected = this.state.selected
+    let recommendations = get(this.props, 'recommendations', [])
+    if (selected.length !== recommendations.length) {
+      selected = recommendations.map((person) => person.id)
+    } else {
+      selected = []
     }
     this.setState({
       selected
@@ -67,6 +80,8 @@ class Component extends React.Component {
           <button className={style.submit}>Write message</button>
         </header>
         <p>We recommend sending a nudj request to ...</p>
+        <label className={style.toggleAll} htmlFor='toggle-all'>Toggle all</label>
+        <input type='checkbox' checked={this.state.selected.length === get(this.props, 'recommendations', []).length} onChange={this.onClickToggleAll} id='toggle-all' />
         {this.recommendationList()}
       </form>
     )
