@@ -86,7 +86,7 @@ Look forward to hearing from you. Thanks so much for your help.
       companyName: get(this.props, 'company.name'),
       link: 'https://nudj.co/company/job',
       personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}`
-    }).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br />')}</p>`
+    }).replace(/(.)\n{2}(.)/g, '$1</p><p>$2').replace(/(.)\n{2}/g, '$1</p>\n').replace(/\n{2}(.)/g, '\n<p>$1').replace(/\n/g, '<br />')}</p>`
   }
   render () {
     return (
