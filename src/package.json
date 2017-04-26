@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@nudj/dummy": "0.6.0",
-    "@nudj/schemas": "0.10.0",
+    "@nudj/schemas": "0.11.1",
     "body-parser": "^1.16.1",
     "classnames": "^2.2.5",
     "connect-ensure-login": "^0.1.1",
@@ -34,6 +34,7 @@
     "date-fns": "^1.28.3",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
+    "escape-html": "^1.0.3",
     "font-awesome": "^4.7.0",
     "history": "^4.6.1",
     "intercom-client": "^2.8.7",

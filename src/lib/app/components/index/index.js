@@ -6,6 +6,8 @@ import Header from '../header'
 import Message from '../message'
 import HomePage from '../home-page'
 import JobsPage from '../jobs-page'
+import JobPage from '../job-page'
+import ComposePage from '../compose-page'
 import RequestPage from '../request-page'
 import PageNotFound from '../404-page'
 import Footer from '../footer'
@@ -51,6 +53,8 @@ const Index = (props) => {
           <Route exact path='/' component={HomePage} />
           <Route exact path='/request' component={RequestPage} />
           <Route exact path='/:companySlug' component={JobsPage} />
+          <Route exact path='/:companySlug/:jobSlug' component={JobPage} />
+          <Route exact path='/:companySlug/:jobSlug/compose' component={ComposePage} />
           <Route render={(props) => (
             <Status code={404}>
               <PageNotFound {...props} {...data} />

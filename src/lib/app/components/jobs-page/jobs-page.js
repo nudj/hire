@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import get from 'lodash/get'
 import format from 'date-fns/format'
 import style from './jobs-page.css'
@@ -30,8 +30,9 @@ function jobList (props, status) {
                 <a href={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</a>
               </li>
               <li className={style.action}>
-                <form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/archive`} method='POST'>
-                  <button>Archive</button>
+                <form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/${status === 'archived' ? 'publish' : 'archive'}`} method='POST'>
+                  <input type='hidden' name='_csrf' value={get(props, 'csrfToken')} />
+                  <button>{status === 'archived' ? 'Publish' : 'Archive'}</button>
                 </form>
               </li>
             </ul>

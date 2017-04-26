@@ -25,21 +25,12 @@ let dummyData = dummy({
     count: 5
   },
   hirers: {
-    schema: {
-      companyId: {
-        example: {
-          fn: 'choice',
-          args: [['1']]
-        }
-      },
-      personId: {
-        example: {
-          fn: 'choice',
-          args: [['21']]
-        }
-      }
-    },
+    schema: schemas.hirers,
     count: 1
+  },
+  recommendations: {
+    schema: schemas.recommendations,
+    count: 3
   }
 })
 dummyData.jobs = dummyData.jobs.concat([
