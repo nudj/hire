@@ -1,5 +1,4 @@
 let logger = require('./lib/logger')
-
 let path = require('path')
 let express = require('express')
 let bodyParser = require('body-parser')

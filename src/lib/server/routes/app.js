@@ -5,7 +5,7 @@ let get = require('lodash/get')
 let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
-let build = require('../build').default
+let app = require('../build').default
 let router = express.Router()
 
 function ensureLoggedIn (req, res, next) {
@@ -108,7 +108,7 @@ function getRenderer (req, res, next) {
   return (data) => {
     delete req.session.logout
     delete req.session.returnTo
-    let staticContext = build(data)
+    let staticContext = app(data)
     if (staticContext.url) {
       res.redirect(staticContext.url)
     } else {
@@ -116,6 +116,7 @@ function getRenderer (req, res, next) {
       res.status(status).render('app', {
         data: JSON.stringify(data),
         html: staticContext.html,
+        css: staticContext.css,
         helmet: staticContext.helmet
       })
     }

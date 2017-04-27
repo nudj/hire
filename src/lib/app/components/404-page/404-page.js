@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import style from './404-page.css'
+import style from './404-page.css.js'
 
 export default (props) => (
   <div className={style.content}>

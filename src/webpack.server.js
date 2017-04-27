@@ -4,6 +4,7 @@ var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 process.noDeprecation = true
 
 module.exports = {
+  cache: true,
   target: 'node',
   entry: {
     'lib/server/build': './lib/app/server'
@@ -14,7 +15,7 @@ module.exports = {
     filename: '[name].js',
     chunkFilename: '[id].js'
   },
-  devtool: 'source-map',
+  devtool: 'cheap-eval-source-map',
   module: {
     rules: [
       {
