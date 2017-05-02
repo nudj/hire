@@ -1,9 +1,9 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
 process.noDeprecation = true
 
 module.exports = {
+  cache: true,
   target: 'node',
   entry: {
     'lib/server/build': './lib/app/server'
@@ -14,7 +14,7 @@ module.exports = {
     filename: '[name].js',
     chunkFilename: '[id].js'
   },
-  devtool: 'source-map',
+  devtool: 'cheap-eval-source-map',
   module: {
     rules: [
       {
@@ -24,22 +24,9 @@ module.exports = {
         query: {
           presets: ['react']
         }
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?modules&sourceMap&-url'
-        })
       }
     ]
   },
-  plugins: [
-    new ExtractTextPlugin({
-      filename: './lib/server/assets/css/app.css',
-      allChunks: true
-    })
-  ],
   resolve: {
     plugins: [
       new DirectoryNamedWebpackPlugin()

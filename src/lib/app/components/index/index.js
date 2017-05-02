@@ -42,7 +42,6 @@ const Index = (props) => {
         <meta property='twitter:image' content='' />
         <meta property='og:image' content='' />
         <link rel='icon' href='/assets/images/nudj-square.ico' type='image/x-icon' />
-        <link rel='stylesheet' href='/assets/css/app.css' />
       </Helmet>
       <header className={style.header}>
         <Route path='*' component={Header} />
