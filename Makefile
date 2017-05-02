@@ -9,15 +9,6 @@ BIN:=./node_modules/.bin
 
 build:
 	@docker build \
-		-t $(IMAGE) \
-		--build-arg NPM_TOKEN=${NPM_TOKEN} \
-		.
-
-push:
-	@docker push $(IMAGE):latest
-
-buildDev:
-	@docker build \
 		-t $(IMAGEDEV) \
 		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		-f $(CWD)/Dockerfile.dev \
@@ -30,13 +21,6 @@ cache:
 		-v $(CWD)/.cache:/usr/src/.cache \
 		$(IMAGEDEV) \
 		/bin/sh -c 'rm -rf .cache/* && cp -R /tmp/node_modules/. .cache/'
-
-run:
-	@docker run -it --rm \
-		--name hire \
-		-p 0.0.0.0:4000:80 \
-		$(IMAGE)
-	@echo 'App running on http://localhost:4000/'
 
 dev:
 	-@docker rm -f hire-dev-container 2> /dev/null || true
