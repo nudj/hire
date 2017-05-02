@@ -1,6 +1,5 @@
 var path = require('path')
 var webpack = require('webpack')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
 process.noDeprecation = true
@@ -36,21 +35,10 @@ module.exports = {
             }]
           ]
         }
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?modules&-url'
-        })
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      filename: './ignore.css',
-      allChunks: true
-    }),
     new webpack.DllReferencePlugin({
       context: '.',
       manifest: require('./vendors-manifest.json')
