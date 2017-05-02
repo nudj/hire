@@ -1,45 +1,44 @@
 import css, {
-  breakpoints,
   merge
 } from '../../lib/css'
 
 const listStyle = {
   listStyle: 'none',
   padding: 0,
-  margin: 0,
+  margin: 0
 }
 
 const blockStyle = {
   margin: 0,
-  display: 'block',
+  display: 'block'
 }
 
 export default css({
   recommendations: listStyle,
   person: merge({
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   }, listStyle),
   actions: merge({}, blockStyle, {
     width: '50%',
     display: 'flex',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'center'
   }, listStyle),
   action: listStyle,
   details: merge({
-    width: '50%',
+    width: '50%'
   }, blockStyle),
   detailTitleName: {
-    display: 'none',
+    display: 'none'
   },
   detailTitleTitle: {
-    display: 'none',
+    display: 'none'
   },
   detailTitleCompany: {
-    display: 'none',
+    display: 'none'
   },
   detailDetailName: blockStyle,
   detailDetailTitle: blockStyle,
-  detailDetailCompany: blockStyle,
+  detailDetailCompany: blockStyle
 })

@@ -14,16 +14,16 @@ let textLink = merge({
   textAlign: 'center',
   textDecoration: 'none',
   ':hover': {
-    textDecoration: 'underline',
+    textDecoration: 'underline'
   },
   ':focus': {
-    textDecoration: 'underline',
+    textDecoration: 'underline'
   },
   [breakpoints.l]: {
     display: 'inline-block',
     fontSize: '1rem',
     marginLeft: '2rem',
-    marginRight: '2rem',
+    marginRight: '2rem'
   }
 }, dim, link)
 
@@ -41,34 +41,34 @@ export default css({
     [breakpoints.ns]: {
       flexDirection: 'row',
       paddingTop: '1rem',
-      paddingBottom: '1rem',
+      paddingBottom: '1rem'
     }
   },
   left: {
     display: 'flex',
     justifyContent: 'center',
     [breakpoints.ns]: {
-      justifyContent: 'space-between',
+      justifyContent: 'space-between'
     }
   },
   home: {
-    display: 'inline-block',
+    display: 'inline-block'
   },
   brand: {
     maxWidth: '4rem',
-    paddingTop: '.5rem',
+    paddingTop: '.5rem'
   },
   right: {
     position: 'static',
     display: 'flex',
     justifyContent: 'center',
     [breakpoints.ns]: {
-      justifyContent: 'flex-end',
+      justifyContent: 'flex-end'
     }
   },
   link: textLink,
   learnMore: merge({}, textLink, {
-    display: 'none',
+    display: 'none'
   }),
   request: merge({
     fontSize: '1rem',
@@ -81,7 +81,7 @@ export default css({
     background: '#ff725c',
     [breakpoints.l]: {
       display: 'inline-block',
-      marginLeft: '1rem',
+      marginLeft: '1rem'
     }
   }, link, grow)
 })

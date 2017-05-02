@@ -18,13 +18,13 @@ export const breakpoints = {
 }
 
 export const sansSerif = {
-  fontFamily: '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif'
 }
 
 const dimHover = {
   backfaceVisibility: 'hidden',
   opacity: '.5',
-  transition: 'opacity .15s ease-in',
+  transition: 'opacity .15s ease-in'
 }
 export const dim = {
   opacity: 1,
@@ -34,12 +34,12 @@ export const dim = {
   ':active': {
     backfaceVisibility: 'hidden',
     opacity: '.8',
-    transition: 'opacity .15s ease-out',
+    transition: 'opacity .15s ease-out'
   }
 }
 
 const visited = {
-  transition: 'color .15s ease-in',
+  transition: 'color .15s ease-in'
 }
 export const link = {
   textDecoration: 'none',
@@ -47,16 +47,16 @@ export const link = {
   ':link': visited,
   ':visited': visited,
   ':hover': {
-    transition: 'color .15s ease-in',
+    transition: 'color .15s ease-in'
   },
   ':focus': {
     transition: 'color .15s ease-in',
-    outline: '1px dotted currentColor',
+    outline: '1px dotted currentColor'
   }
 }
 
 const growHover = {
-  transform: 'scale( 1.05 )',
+  transform: 'scale( 1.05 )'
 }
 export const grow = {
   backfaceVisibility: 'hidden',
@@ -65,6 +65,6 @@ export const grow = {
   ':hover': growHover,
   ':focus': growHover,
   ':active': {
-    transform: 'transform: scale( .90 )',
+    transform: 'transform: scale( .90 )'
   }
 }

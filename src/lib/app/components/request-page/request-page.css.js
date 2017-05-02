@@ -11,7 +11,7 @@ export default css({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   }, sansSerif),
   content: {
     width: '100%',
@@ -20,15 +20,15 @@ export default css({
     padding: '2rem 1rem',
     textAlign: 'center',
     [breakpoints.ns]: {
-      padding: '4rem 0',
-    },
+      padding: '4rem 0'
+    }
   },
   formHeader: {
     paddingBottom: 0,
     borderBottom: '0.125rem solid #f4f4f4',
     [breakpoints.ns]: {
-      paddingBottom: '0.5rem',
-    },
+      paddingBottom: '0.5rem'
+    }
   },
   title: {
     fontSize: '3rem',
@@ -36,24 +36,24 @@ export default css({
     margin: '1rem 0',
     textAlign: 'left',
     [breakpoints.l]: {
-      fontSize: '2.25rem',
+      fontSize: '2.25rem'
     }
   },
   subtitle: {
     fontSize: '1rem',
     textAlign: 'left',
     [breakpoints.l]: {
-      fontSize: '1.25rem',
+      fontSize: '1.25rem'
     }
   },
   fieldSet: {
     border: '1px solid transparent',
     padding: 0,
-    margin: 0,
+    margin: 0
   },
   fieldWrap: {
     marginTop: '1rem',
-    marginBottom: '1rem',
+    marginBottom: '1rem'
   },
   fieldLabel: {
     display: 'block',
@@ -61,14 +61,14 @@ export default css({
     fontSize: '.875rem',
     fontWeight: 600,
     lineHeight: 1.5,
-    paddingBottom: '0.25rem',
+    paddingBottom: '0.25rem'
   },
   fieldInput: {
     padding: '0.5rem',
     border: '1px solid',
     width: '100%',
     backgroundColor: 'transparent',
-    appearance: 'none',
+    appearance: 'none'
   },
   fieldSubmit: merge({
     fontSize: '1rem',
@@ -78,13 +78,13 @@ export default css({
     color: 'white',
     border: '0.125rem solid #ff725c',
     borderRadius: '.25rem',
-    backgroundColor: '#ff725c',
+    backgroundColor: '#ff725c'
   }, dim, link),
   successHeader: {
     fontWeight: 600,
-    fontSize: '1.5rem',
+    fontSize: '1.5rem'
   },
   successCopy: {
-    fontSize: '1rem',
-  },
+    fontSize: '1rem'
+  }
 })

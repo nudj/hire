@@ -6,12 +6,12 @@ export default css({
     textAlign: 'center',
     '@media screen and (min-width: 30em)': {
       paddingTop: '2rem',
-      paddingBottom: '2rem',
+      paddingBottom: '2rem'
     }
   },
   header: {
     fontWeight: '600',
-    fontSize: '1.5rem',
+    fontSize: '1.5rem'
   },
   copy: {
     fontSize: '1rem'
@@ -21,15 +21,15 @@ export default css({
     textTransform: 'uppercase',
     paddingTop: '.5rem',
     paddingBottom: '.5rem',
-    color: '#555',
+    color: '#555'
   },
   pages: {
-    padding: '.5rem',
+    padding: '.5rem'
   },
   links: Object.assign({
     display: 'inline-block',
     padding: '.5rem',
     color: '#ff725c',
-    textDecoration: 'none',
-  }, dim),
+    textDecoration: 'none'
+  }, dim)
 })

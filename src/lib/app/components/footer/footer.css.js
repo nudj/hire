@@ -13,14 +13,14 @@ const linkItem = merge({
     textDecoration: 'none',
     display: 'inline-block',
     marginTop: '.25rem',
-    marginBottom: '.25rem',
+    marginBottom: '.25rem'
   }
 }, link, grow)
 
 export default css({
   background: {
     backgroundColor: '#ff725c',
-    width: '100%',
+    width: '100%'
   },
   container: {
     width: '100%',
@@ -33,7 +33,7 @@ export default css({
     color: 'white',
     margin: '0 auto',
     [breakpoints.ns]: {
-      padding: '4rem 0',
+      padding: '4rem 0'
     }
   },
   copyright: {
@@ -43,7 +43,7 @@ export default css({
     paddingTop: '2rem',
     maxWidth: '16rem',
     width: '100%',
-    borderTop: 'solid .125rem #fff',
+    borderTop: 'solid .125rem #fff'
   },
   links: {
     display: 'flex',
@@ -57,7 +57,7 @@ export default css({
     padding: '0 0 2rem 0',
     listStyleType: 'none',
     [breakpoints.ns]: {
-      alignItems: 'stretch',
+      alignItems: 'stretch'
     }
   },
   item: {
@@ -69,7 +69,7 @@ export default css({
     [breakpoints.ns]: {
       width: '25%',
       paddingTop: '.25rem',
-      paddingBottom: '.25rem',
+      paddingBottom: '.25rem'
     }
   },
   release: linkItem,
@@ -82,7 +82,7 @@ export default css({
     margin: 0,
     display: 'none',
     [breakpoints.ns]: {
-      display: 'inline-block',
+      display: 'inline-block'
     }
   }
 })

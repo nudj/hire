@@ -1,48 +1,43 @@
 import css, {
-  breakpoints,
   merge
 } from '../../lib/css'
 
 const listStyle = {
   listStyle: 'none',
   padding: 0,
-  margin: 0,
+  margin: 0
 }
 
 const floatBlock = {
   margin: 0,
   display: 'block',
-  float: 'left',
+  float: 'left'
 }
 
 export default css({
   published: listStyle,
   archived: listStyle,
-  job: listStyle,
-  actions: listStyle,
   action: listStyle,
-  job: {
+  job: merge({
     display: 'flex',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'
+  }, listStyle),
   details: {
     width: '50%',
     display: 'block',
-    margin: 0,
+    margin: 0
   },
-  actions: {
+  actions: merge({
     width: '50%',
-    display: 'block',
-    margin: 0,
     display: 'flex',
     justifyContent: 'space-around',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }, listStyle),
   detailTitleTitle: {
-    display: 'none',
+    display: 'none'
   },
   detailTitleLocation: {
-    display: 'none',
+    display: 'none'
   },
   detailTitleAdded: {
     display: 'block',
@@ -50,8 +45,8 @@ export default css({
     clear: 'both',
     ':after': {
       content: ': ',
-      whiteSpace: 'pre',
-    },
+      whiteSpace: 'pre'
+    }
   },
   detailTitleBonus: {
     display: 'block',
@@ -59,15 +54,15 @@ export default css({
     clear: 'both',
     ':after': {
       content: ': ',
-      whiteSpace: 'pre',
+      whiteSpace: 'pre'
     }
   },
   detailDetailTitle: merge({
-    clear: 'both',
+    clear: 'both'
   }, floatBlock),
   detailDetailLocation: merge({
-    clear: 'both',
+    clear: 'both'
   }, floatBlock),
   detailDetailAdded: floatBlock,
-  detailDetailBonus: floatBlock,
+  detailDetailBonus: floatBlock
 })

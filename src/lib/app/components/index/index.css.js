@@ -6,13 +6,13 @@ export default css({
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   }, sansSerif),
   header: Object.assign({
     width: '100%',
     flex: 'none',
     paddingLeft: '1rem',
-    paddingRight: '1rem',
+    paddingRight: '1rem'
   }, sansSerif),
   content: {
     display: 'flex',
@@ -20,7 +20,7 @@ export default css({
     justifyContent: 'center',
     flex: '1 1 auto',
     minWidth: 0,
-    minHeight: 0,
+    minHeight: 0
   },
   footer: Object.assign({
     width: '100%',

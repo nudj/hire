@@ -8,34 +8,34 @@ let messageStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '1rem',
-  color: 'white',
+  color: 'white'
 }
 
 export default css({
   wrapper: {
     width: '100%',
-    flex: 'none',
+    flex: 'none'
   },
   primary: merge({
-    backgroundColor: '#111',
+    backgroundColor: '#111'
   }, messageStyle),
   info: merge({
-    backgroundColor: '#00449e',
+    backgroundColor: '#00449e'
   }, messageStyle),
   warning: merge({
-    backgroundColor: '#ffb700',
+    backgroundColor: '#ffb700'
   }, messageStyle),
   error: merge({
-    backgroundColor: '#e7040f',
+    backgroundColor: '#e7040f'
   }, messageStyle),
   success: merge({
-    backgroundColor: '#19a974',
+    backgroundColor: '#19a974'
   }, messageStyle),
   copy: {
     fontSize: '.875rem',
     lineHeight: 1.25,
     [breakpoints.ns]: {
-      fontSize: '1rem',
+      fontSize: '1rem'
     }
   }
 })

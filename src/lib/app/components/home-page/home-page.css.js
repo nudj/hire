@@ -1,6 +1,5 @@
 import css, {
   sansSerif,
-  dim,
   link,
   grow,
   breakpoints,
@@ -9,13 +8,13 @@ import css, {
 
 export default css({
   body: merge({
-    color: 'black',
+    color: 'black'
   }, sansSerif),
   background: {
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
-    backgroundImage: 'url(/assets/images/office-space-2.jpg)',
+    backgroundImage: 'url(/assets/images/office-space-2.jpg)'
   },
   hero: {
     display: 'flex',
@@ -39,7 +38,7 @@ export default css({
     flex: 1,
     [breakpoints.ns]: {
       paddingTop: 0,
-      paddingBottom: 0,
+      paddingBottom: 0
     }
   },
   title: {
@@ -49,11 +48,10 @@ export default css({
     margin: 0,
     padding: '.5rem',
     [breakpoints.l]: {
-      fontSize: '3rem',
+      fontSize: '3rem'
     }
   },
   subtitle: {
-    fontSize: '1.25rem',
     fontSize: '1.5rem',
     padding: '0 .5rem 2rem',
     margin: 0,
@@ -65,7 +63,7 @@ export default css({
   break: {
     display: 'none',
     [breakpoints.ns]: {
-      display: 'inline',
+      display: 'inline'
     }
   },
   heroFooter: {
@@ -73,12 +71,12 @@ export default css({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 0,
+    flex: 0
   },
   indicator: {
     fontSize: '2.25rem',
     textAlign: 'center',
-    paddingBottom: '1rem',
+    paddingBottom: '1rem'
   },
   sectionMedium: {
     display: 'flex',
@@ -92,7 +90,7 @@ export default css({
     padding: '2rem 1rem',
     [breakpoints.l]: {
       paddingTop: '4rem',
-      paddingBottom: '4rem',
+      paddingBottom: '4rem'
     }
   },
   howItWorks: {
@@ -103,24 +101,23 @@ export default css({
     marginRight: 'auto',
     marginLeft: 'auto',
     paddingLeft: '.5rem',
-    paddingRight: '.5rem',
+    paddingRight: '.5rem'
   },
   number: {
-    fontSize: '1.25rem',
     fontSize: '1.5rem',
     fontWeight: 600,
-    textAlign: 'left',
+    textAlign: 'left'
   },
   step: {
     lineHeight: '1.5',
-    textAlign: 'left',
+    textAlign: 'left'
   },
   compare: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     marginRight: 'auto',
-    marginLeft: 'auto',
+    marginLeft: 'auto'
   },
   table: {
     fontSize: '.875rem',
@@ -128,40 +125,38 @@ export default css({
     maxWidth: '64rem',
     marginRight: 'auto',
     marginLeft: 'auto',
-    borderSpacing: 0,
+    borderSpacing: 0
   },
   tableHeader: {
     fontSize: '1.5rem',
     borderBottom: '1px solid rgba( 0, 0, 0, .2 )',
     paddingTop: '.5rem',
     paddingBottom: '.5rem',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   tableHeaderNudj: {
-    fontSize: '1rem',
     fontSize: '1.5rem',
     borderBottom: '1px solid rgba( 0, 0, 0, .2 )',
     paddingTop: '.5rem',
     paddingBottom: '.5rem',
     textAlign: 'center',
-    color: '#ff725c',
+    color: '#ff725c'
   },
   tableBody: {
-    lineHeight: '1.5',
+    lineHeight: '1.5'
   },
   tableLeft: {
-    fontSize: '.875rem',
     fontSize: '1rem',
     borderBottom: '1px solid rgba( 0, 0, 0, .2 )',
     paddingTop: '.5rem',
-    paddingBottom: '.5rem',
+    paddingBottom: '.5rem'
   },
   tableItem: {
     fontSize: '1.25rem',
     borderBottom: '1px solid rgba( 0, 0, 0, .2 )',
     paddingTop: '.5rem',
     paddingBottom: '.5rem',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   tableItemNudj: {
     fontSize: '1.25rem',
@@ -169,7 +164,7 @@ export default css({
     paddingTop: '.5rem',
     paddingBottom: '.5rem',
     textAlign: 'center',
-    color: '#ff725c',
+    color: '#ff725c'
   },
   beta: {
     justifyContent: 'center',
@@ -177,10 +172,9 @@ export default css({
     width: '100%',
     maxWidth: '64rem',
     marginRight: 'auto',
-    marginLeft: 'auto',
+    marginLeft: 'auto'
   },
   bodyNudj: {
-    fontSize: '1rem',
     fontSize: '1.25rem',
     paddingTop: '1rem',
     paddingBottom: '1rem',
@@ -188,30 +182,29 @@ export default css({
     color: '#ff725c',
     [breakpoints.l]: {
       paddingTop: '2rem',
-      paddingBottom: '2rem',
+      paddingBottom: '2rem'
     }
   },
   brand: {
     textAlign: 'center',
-    width: '16rem',
     width: '100%',
     [breakpoints.ns]: {
-      width: '33%',
+      width: '33%'
     }
   },
   backgroundFooter: {
     backgroundColor: '#001b44',
-    color: 'white',
+    color: 'white'
   },
   cost: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    maxWidth: '64rem',
+    maxWidth: '64rem'
   },
   pricing: {
     paddingTop: '.5rem',
-    paddingBottom: '.5rem',
+    paddingBottom: '.5rem'
   },
   price: {
     fontSize: '1.25rem',
@@ -219,16 +212,16 @@ export default css({
     textAlign: 'center',
     lineHeight: '1.25',
     [breakpoints.l]: {
-      fontSize: '2.25rem',
+      fontSize: '2.25rem'
     }
   },
   detail: {
     lineHeight: '1.5',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   buttons: {
     textAlign: 'center',
-    padding: '1rem',
+    padding: '1rem'
   },
   request: merge({
     fontSize: '1rem',
@@ -239,7 +232,7 @@ export default css({
     color: 'white',
     borderRadius: '.25rem',
     border: '.125rem solid #ff725c',
-    background: '#ff725c',
+    background: '#ff725c'
   }, link, grow),
   padding: {
     paddingTop: '1rem',
@@ -247,7 +240,7 @@ export default css({
     display: 'block',
     [breakpoints.ns]: {
       display: 'inline-block',
-      padding: '1rem',
+      padding: '1rem'
     }
   },
   outlined: merge({
@@ -258,6 +251,6 @@ export default css({
     textDecoration: 'none',
     borderRadius: '.25rem',
     border: '.125rem solid #ff725c',
-    color: 'white',
-  }, link, grow),
+    color: 'white'
+  }, link, grow)
 })
