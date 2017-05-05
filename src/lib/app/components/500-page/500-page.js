@@ -1,8 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import style from './500-page.css'
+const React = require('react')
+const { Link } = require('react-router-dom')
+const style = require('./500-page.css')
 
-export default (props) => (
+module.exports = (props) => (
   <div className={style.content}>
     <div className={style.gif}>
       <img src='https://media.giphy.com/media/ZeB4HcMpsyDo4/giphy.gif' width='320' height='202' />

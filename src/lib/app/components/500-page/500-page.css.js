@@ -1,6 +1,6 @@
-import css, { dim } from '../../lib/css'
+let { css, dim } = require('../../lib/css')
 
-export default css({
+module.exports = css({
   content: {
     textAlign: 'center',
     paddingTop: '2rem',

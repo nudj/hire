@@ -1,6 +1,7 @@
-import { StyleSheet, css } from 'aphrodite/no-important'
+let merge = require('lodash/merge')
+let { StyleSheet, css } = require('aphrodite/no-important')
 
-export default (stylesheet) => {
+module.exports.css = (stylesheet) => {
   const styles = StyleSheet.create(stylesheet)
 
   return Object.keys(stylesheet).reduce((classList, className) => {
@@ -9,15 +10,15 @@ export default (stylesheet) => {
   }, {})
 }
 
-export { default as merge } from 'lodash/merge'
+module.exports.merge = merge
 
-export const breakpoints = {
+module.exports.breakpoints = {
   ns: '@media screen and (min-width: 30em)',
   m: '@media screen and (min-width: 30em) and (max-width: 60em)',
   l: '@media screen and (min-width: 60em)'
 }
 
-export const sansSerif = {
+module.exports.sansSerif = {
   fontFamily: '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif'
 }
 
@@ -26,7 +27,7 @@ const dimHover = {
   opacity: '.5',
   transition: 'opacity .15s ease-in'
 }
-export const dim = {
+module.exports.dim = {
   opacity: 1,
   transition: 'opacity .15s ease-in',
   ':hover': dimHover,
@@ -41,7 +42,7 @@ export const dim = {
 const visited = {
   transition: 'color .15s ease-in'
 }
-export const link = {
+module.exports.link = {
   textDecoration: 'none',
   transition: 'color .15s ease-in',
   ':link': visited,
@@ -58,7 +59,7 @@ export const link = {
 const growHover = {
   transform: 'scale( 1.05 )'
 }
-export const grow = {
+module.exports.grow = {
   backfaceVisibility: 'hidden',
   transform: 'translateZ( 0 )',
   transition: 'transform .25s ease-out',

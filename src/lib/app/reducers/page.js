@@ -1,14 +1,18 @@
-import {
+let {
   SET_JOB
-} from '../actions/app'
+} = require('../actions/app')
 
 const initialState = {}
 
-export function pageReducer (state = initialState, action) {
+function pageReducer (state = initialState, action) {
   switch (action.type) {
     case SET_JOB:
       return state
     default:
       return state
   }
+}
+
+module.exports = {
+  pageReducer
 }

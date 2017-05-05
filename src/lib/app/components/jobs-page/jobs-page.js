@@ -1,9 +1,9 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import get from 'lodash/get'
-import format from 'date-fns/format'
-import style from './jobs-page.css'
+const React = require('react')
+const { connect } = require('react-redux')
+const { withRouter } = require('react-router-dom')
+const get = require('lodash/get')
+const format = require('date-fns/format')
+const style = require('./jobs-page.css')
 
 function jobList (props, status) {
   return (
@@ -59,4 +59,4 @@ const Component = (props) => (
 
 const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
 const mapDispatchToProps = (dispatch, ownProps) => ({})
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
+module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

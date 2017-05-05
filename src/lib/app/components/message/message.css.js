@@ -1,7 +1,8 @@
-import css, {
+let {
+  css,
   breakpoints,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
 let messageStyle = {
   display: 'flex',
@@ -11,7 +12,7 @@ let messageStyle = {
   color: 'white'
 }
 
-export default css({
+module.exports = css({
   wrapper: {
     width: '100%',
     flex: 'none'

@@ -1,12 +1,13 @@
-import css, {
+let {
+  css,
   dim,
   link,
   sansSerif,
   breakpoints,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
-export default css({
+module.exports = css({
   body: merge({
     display: 'flex',
     flexDirection: 'column',

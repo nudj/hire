@@ -1,6 +1,6 @@
-import css, { sansSerif } from '../../lib/css'
+let { css, sansSerif } = require('../../lib/css')
 
-export default css({
+module.exports = css({
   body: Object.assign({
     position: 'relative',
     minHeight: '100vh',

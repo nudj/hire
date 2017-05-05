@@ -1,13 +1,13 @@
-import css from '../../lib/css'
+let { css } = require('../../lib/css')
 
-let tag = {
+const tag = {
   background: 'lightgreen',
   border: '1px solid green',
   borderRadius: '1rem',
   padding: '2px 8px'
 }
 
-export default css({
+module.exports = css({
   tagOk: tag,
   tagError: Object.assign({}, tag, {
     background: 'pink',

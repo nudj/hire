@@ -1,31 +1,23 @@
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { createStore, combineReducers } from 'redux'
-import { Helmet } from 'react-helmet'
-import { StyleSheetServer } from 'aphrodite'
+let React = require('react')
+let ReactDOMServer = require('react-dom/server')
+let { StaticRouter } = require('react-router-dom')
+let { Provider } = require('react-redux')
+let { createStore, combineReducers } = require('redux')
+let { Helmet } = require('react-helmet')
+let { StyleSheetServer } = require('aphrodite')
 
-import { urlReducer } from './reducers/url'
-import { errorReducer } from './reducers/error'
-import { userReducer } from './reducers/user'
-import { messageReducer } from './reducers/message'
-import { pageReducer } from './reducers/page'
+let { pageReducer } = require('./reducers/page')
 
-export default (data) => {
+module.exports = (data) => {
   const store = createStore(
     combineReducers({
-      url: urlReducer,
-      error: errorReducer,
-      user: userReducer,
-      page: pageReducer,
-      message: messageReducer
+      page: pageReducer
     }),
     data
   )
   const context = {}
   const { html, css } = StyleSheetServer.renderStatic(() => {
-    const App = require('./components/index').default
+    const App = require('./components/index')
     return ReactDOMServer.renderToString(
       <Provider store={store}>
         <StaticRouter

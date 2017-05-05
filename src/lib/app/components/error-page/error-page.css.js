@@ -1,6 +1,6 @@
-import css from '../../lib/css'
+let { css } = require('../../lib/css')
 
-export default css({
+module.exports = css({
   body: {
     display: 'flex',
     flexDirection: 'column',

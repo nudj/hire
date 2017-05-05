@@ -5,7 +5,7 @@ DEVURL:=
 CWD=$(shell pwd)
 BIN:=./node_modules/.bin
 
-.PHONY: build buildDev run dev packClient packServer pack test tdd
+.PHONY: build dev pack test tdd dll stats cache
 
 build:
 	@docker build \
@@ -33,9 +33,8 @@ dev:
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
-		-v $(CWD)/src/webpack.client.js:/usr/src/webpack.client.js \
+		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/webpack.server.js:/usr/src/webpack.server.js \
 		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
 		--env-file $(CWD)/.env \
 		$(IMAGEDEV) \
@@ -45,7 +44,7 @@ dev:
 			--quiet \
 			--watch ./ \
 			--delay 250ms \
-			-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.client.js --bail --hide-modules && ./node_modules/.bin/webpack --config ./webpack.server.js --bail --hide-modules && node ."'
+			-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
 
 stats:
 	-@docker rm -f stats-container 2> /dev/null || true
@@ -53,13 +52,12 @@ stats:
 		--name stats-container \
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
-		-v $(CWD)/src/webpack.client.js:/usr/src/webpack.client.js \
+		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/webpack.server.js:/usr/src/webpack.server.js \
 		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
 		-v $(CWD)/src/stats.json:/usr/src/stats.json \
 		$(IMAGEDEV) \
-		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && ./node_modules/.bin/webpack  --config ./webpack.client.js --profile --json > stats.json'
+		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && ./node_modules/.bin/webpack  --config ./webpack.config.js --profile --json > stats.json'
 
 dll:
 	-@docker rm -f dll-container 2> /dev/null || true
@@ -73,15 +71,9 @@ dll:
 		$(IMAGEDEV) \
 		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && ./node_modules/.bin/webpack  --config ./webpack.dll.js --bail --hide-modules'
 
-packClient:
+pack:
 	@docker exec -i hire-dev-container \
-		$(BIN)/webpack --config ./webpack.client.js --bail --hide-modules
-
-packServer:
-	@docker exec -i hire-dev-container \
-		$(BIN)/webpack --config ./webpack.server.js --bail --hide-modules
-
-pack: packClient packServer
+		$(BIN)/webpack --config ./webpack.config.js --bail --hide-modules
 
 test:
 	-@docker rm -f test-container 2> /dev/null || true

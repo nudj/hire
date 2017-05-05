@@ -1,6 +1,7 @@
-import css, {
+let {
+  css,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
 const listStyle = {
   listStyle: 'none',
@@ -13,7 +14,7 @@ const blockStyle = {
   display: 'block'
 }
 
-export default css({
+module.exports = css({
   recommendations: listStyle,
   person: merge({
     display: 'flex',

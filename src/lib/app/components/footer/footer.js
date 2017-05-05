@@ -1,8 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import style from './footer.css'
+const React = require('react')
+const { Link } = require('react-router-dom')
+const style = require('./footer.css')
 
-export default (props) => (
+module.exports = (props) => (
   <div className={style.background}>
     <div className={style.container}>
       <ul className={style.links}>

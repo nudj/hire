@@ -1,26 +1,20 @@
 /* global data */
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import createHistory from 'history/createBrowserHistory'
-import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
+let React = require('react')
+let ReactDOM = require('react-dom')
+let { createStore, combineReducers, applyMiddleware } = require('redux')
+let { Provider } = require('react-redux')
+let { createBrowserHistory } = require('history')
+let { ConnectedRouter, routerReducer, routerMiddleware } = require('react-router-redux')
 
-import App from './components/index'
-import { errorReducer } from './reducers/error'
-import { userReducer } from './reducers/user'
-import { messageReducer } from './reducers/message'
-import { pageReducer } from './reducers/page'
+let App = require('./components/index')
+let { pageReducer } = require('./reducers/page')
 
-const history = createHistory()
+const history = createBrowserHistory()
 const middleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
-    error: errorReducer,
-    user: userReducer,
     page: pageReducer,
-    message: messageReducer,
     router: routerReducer
   }),
   data,

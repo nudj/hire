@@ -1,6 +1,7 @@
-import css, {
+let {
+  css,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
 const listStyle = {
   listStyle: 'none',
@@ -14,7 +15,7 @@ const floatBlock = {
   float: 'left'
 }
 
-export default css({
+module.exports = css({
   published: listStyle,
   archived: listStyle,
   action: listStyle,

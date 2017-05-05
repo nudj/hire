@@ -1,11 +1,11 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import get from 'lodash/get'
-import filter from 'lodash/filter'
-import some from 'lodash/some'
-import escapeHtml from 'escape-html'
-import style from './compose-page.css'
+const React = require('react')
+const { connect } = require('react-redux')
+const { withRouter } = require('react-router-dom')
+const get = require('lodash/get')
+const filter = require('lodash/filter')
+const some = require('lodash/some')
+const escapeHtml = require('escape-html')
+const style = require('./compose-page.css')
 
 function tagify (contents, ok) {
   return `<span class="${ok ? style.tagOk : style.tagError}">${contents}</span>`
@@ -127,4 +127,4 @@ Look forward to hearing from you. Thanks so much for your help.
 
 const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
 const mapDispatchToProps = (dispatch, ownProps) => ({})
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
+module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

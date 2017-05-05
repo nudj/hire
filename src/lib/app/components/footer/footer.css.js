@@ -1,4 +1,4 @@
-import css, { link, breakpoints, grow, merge } from '../../lib/css'
+let { css, link, breakpoints, grow, merge } = require('../../lib/css')
 
 const linkItem = merge({
   fontSize: '.875rem',
@@ -17,7 +17,7 @@ const linkItem = merge({
   }
 }, link, grow)
 
-export default css({
+module.exports = css({
   background: {
     backgroundColor: '#ff725c',
     width: '100%'

@@ -1,10 +1,11 @@
-import css, {
+let {
+  css,
   dim,
   link,
   grow,
   breakpoints,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
 let textLink = merge({
   fontSize: '.875rem',
@@ -27,7 +28,7 @@ let textLink = merge({
   }
 }, dim, link)
 
-export default css({
+module.exports = css({
   nav: {
     width: '100%',
     maxWidth: '64rem',

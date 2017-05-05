@@ -1,10 +1,10 @@
-import React from 'react'
+const React = require('react')
 
-import style from './error-page.css'
-import PageNotFound from '../404-page'
-import ServerError from '../500-page'
+const style = require('./error-page.css')
+const PageNotFound = require('../404-page/404-page')
+const ServerError = require('../500-page/500-page')
 
-export default (props) => {
+module.exports = (props) => {
   let html
   if (props.code === 404) {
     html = <PageNotFound />

@@ -1,3 +1,6 @@
+require('babel-register')({
+  presets: ['react']
+})
 let logger = require('./lib/logger')
 let path = require('path')
 let express = require('express')

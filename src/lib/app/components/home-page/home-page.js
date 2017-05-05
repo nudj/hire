@@ -1,7 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
-import style from './home-page.css'
+const React = require('react')
+const { connect } = require('react-redux')
+const { withRouter, Link } = require('react-router-dom')
+const style = require('./home-page.css')
 
 const Component = (props) => (
   <div className={style.body}>
@@ -97,4 +97,4 @@ const Component = (props) => (
 
 const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
 const mapDispatchToProps = (dispatch, ownProps) => ({})
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
+module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

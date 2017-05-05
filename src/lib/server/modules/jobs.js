@@ -35,6 +35,7 @@ function fetchJob (jobSlug) {
 }
 
 function fetchJobs (data) {
+  console.log('data', data)
   data.published = fetch(`jobs?companyId=${data.company.id}&status=Published`)
   data.archived = fetch(`jobs?companyId=${data.company.id}&status=Archived`)
   return promiseMap(data)

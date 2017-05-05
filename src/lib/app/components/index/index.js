@@ -1,16 +1,16 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import style from './index.css'
-import Header from '../header'
-import Message from '../message'
-import HomePage from '../home-page'
-import JobsPage from '../jobs-page'
-import JobPage from '../job-page'
-import ComposePage from '../compose-page'
-import RequestPage from '../request-page'
-import PageNotFound from '../404-page'
-import Footer from '../footer'
+const React = require('react')
+const { Switch, Route } = require('react-router-dom')
+const { Helmet } = require('react-helmet')
+const style = require('./index.css')
+const Header = require('../header/header')
+const Message = require('../message/message')
+const HomePage = require('../home-page/home-page')
+const JobsPage = require('../jobs-page/jobs-page')
+const JobPage = require('../job-page/job-page')
+const ComposePage = require('../compose-page/compose-page')
+const RequestPage = require('../request-page/request-page')
+const PageNotFound = require('../404-page/404-page')
+const Footer = require('../footer/footer')
 
 const Status = ({ code, children }) => (
   <Route render={({ staticContext }) => {
@@ -68,4 +68,4 @@ const Index = (props) => {
   )
 }
 
-export default Index
+module.exports = Index

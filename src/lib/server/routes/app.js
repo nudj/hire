@@ -5,7 +5,7 @@ let get = require('lodash/get')
 let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
-let app = require('../build').default
+let app = require('../../app/server')
 let router = express.Router()
 
 function ensureLoggedIn (req, res, next) {

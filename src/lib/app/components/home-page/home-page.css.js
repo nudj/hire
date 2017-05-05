@@ -1,12 +1,13 @@
-import css, {
+let {
+  css,
   sansSerif,
   link,
   grow,
   breakpoints,
   merge
-} from '../../lib/css'
+} = require('../../lib/css')
 
-export default css({
+module.exports = css({
   body: merge({
     color: 'black'
   }, sansSerif),
