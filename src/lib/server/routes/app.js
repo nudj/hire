@@ -4,7 +4,7 @@ let get = require('lodash/get')
 
 let logger = require('../lib/logger')
 let request = require('../modules/request')
-let jobs = require('../modules/jobs')
+let jobs = require('../../modules/jobs')
 let app = require('../../app/server')
 let router = express.Router()
 
@@ -108,6 +108,9 @@ function getRenderer (req, res, next) {
   return (data) => {
     delete req.session.logout
     delete req.session.returnTo
+    if (req.accepts('json') && !req.accepts('html')) {
+      return res.json(data)
+    }
     let staticContext = app(data)
     if (staticContext.url) {
       res.redirect(staticContext.url)

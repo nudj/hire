@@ -1,6 +1,4 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter } = require('react-router-dom')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
 const some = require('lodash/some')
@@ -28,7 +26,7 @@ function renderTpl (tpl, data) {
   }).join('')
 }
 
-class Component extends React.Component {
+module.exports = class Component extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -124,7 +122,3 @@ Look forward to hearing from you. Thanks so much for your help.
     )
   }
 }
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

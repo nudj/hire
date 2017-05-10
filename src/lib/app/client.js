@@ -5,25 +5,28 @@ let ReactDOM = require('react-dom')
 let { createStore, combineReducers, applyMiddleware } = require('redux')
 let { Provider } = require('react-redux')
 let { createBrowserHistory } = require('history')
-let { ConnectedRouter, routerReducer, routerMiddleware } = require('react-router-redux')
+let { ConnectedRouter, routerMiddleware, routerReducer } = require('@nudj/react-router-redux')
+let thunkMiddleware = require('redux-thunk').default
 
 let App = require('./components/index')
 let { pageReducer } = require('./reducers/page')
+let { fetchPage } = require('./actions/app')
 
 const history = createBrowserHistory()
-const middleware = routerMiddleware(history)
+const historyMiddleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
-    page: pageReducer,
-    router: routerReducer
+    router: routerReducer,
+    page: pageReducer
   }),
   data,
-  applyMiddleware(middleware)
+  applyMiddleware(thunkMiddleware),
+  applyMiddleware(historyMiddleware)
 )
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <ConnectedRouter history={history} onChange={(dispatch, location) => dispatch(fetchPage(location.pathname))}>
       <App />
     </ConnectedRouter>
   </Provider>,

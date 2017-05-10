@@ -1,6 +1,7 @@
 const React = require('react')
-const { Switch, Route } = require('react-router-dom')
+const { Switch, Route, withRouter } = require('react-router-dom')
 const { Helmet } = require('react-helmet')
+const { connect } = require('react-redux')
 const style = require('./index.css')
 const Header = require('../header/header')
 const Message = require('../message/message')
@@ -20,6 +21,12 @@ const Status = ({ code, children }) => (
     return children
   }} />
 )
+
+const withState = (Page) => {
+  return withRouter(connect((state, props) => Object.assign({}, state, props))((props) => {
+    return <Page {...props.page} />
+  }))
+}
 
 const Index = (props) => {
   let { page: data } = props
@@ -44,16 +51,16 @@ const Index = (props) => {
         <link rel='icon' href='/assets/images/nudj-square.ico' type='image/x-icon' />
       </Helmet>
       <header className={style.header}>
-        <Route path='*' component={Header} />
+        <Route path='*' component={withState(Header)} />
       </header>
-      <Route path='*' component={Message} />
+      <Route path='*' component={withState(Message)} />
       <div className={style.content}>
         <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route exact path='/request' component={RequestPage} />
-          <Route exact path='/:companySlug' component={JobsPage} />
-          <Route exact path='/:companySlug/:jobSlug' component={JobPage} />
-          <Route exact path='/:companySlug/:jobSlug/compose' component={ComposePage} />
+          <Route exact path='/' component={withState(HomePage)} />
+          <Route exact path='/request' component={withState(RequestPage)} />
+          <Route exact path='/:companySlug' component={withState(JobsPage)} />
+          <Route exact path='/:companySlug/:jobSlug' component={withState(JobPage)} />
+          <Route exact path='/:companySlug/:jobSlug/compose' component={withState(ComposePage)} />
           <Route render={(props) => (
             <Status code={404}>
               <PageNotFound {...props} {...data} />

@@ -2,7 +2,7 @@ FROM node:6.10.0-alpine
 ARG NPM_TOKEN
 COPY src/package.json src/.npmrc /tmp/
 COPY .cache /tmp/node_modules
-RUN cd /tmp && npm i && mkdir -p /usr/src
+RUN cd /tmp && npm i && npm prune && mkdir -p /usr/src
 WORKDIR /usr/src
 COPY src/lib /usr/src/lib
 COPY src/mocks /usr/src/mocks

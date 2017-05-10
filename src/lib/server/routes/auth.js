@@ -1,6 +1,6 @@
 let express = require('express')
 let passport = require('passport')
-let fetch = require('../lib/fetch')
+let request = require('../../lib/request')
 let logger = require('../lib/logger')
 
 function cacheReturnTo (req, res, next) {
@@ -27,11 +27,11 @@ router.get('/callback',
       throw new Error('user null')
     }
 
-    fetch(`people/first?email=${req.user._json.email}`)
+    request(`people/first?email=${req.user._json.email}`)
     .then((person) => {
       if (!person) {
-        return fetch(`people`, {
-          method: 'POST',
+        return request(`people`, {
+          method: 'post',
           headers: {
             'Content-Type': 'application/json'
           },

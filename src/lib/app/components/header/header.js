@@ -1,9 +1,8 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter, Link } = require('react-router-dom')
+const { Link } = require('react-router-dom')
 const style = require('./header.css')
 
-const Component = (props) => {
+module.exports = (props) => {
   return (
     <nav className={style.nav}>
       <div className={style.left}>
@@ -20,7 +19,3 @@ const Component = (props) => {
     </nav>
   )
 }
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

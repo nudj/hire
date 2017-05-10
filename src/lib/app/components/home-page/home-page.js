@@ -1,9 +1,8 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter, Link } = require('react-router-dom')
+const { Link } = require('react-router-dom')
 const style = require('./home-page.css')
 
-const Component = (props) => (
+module.exports = (props) => (
   <div className={style.body}>
     <div className={style.background}>
       <div className={style.hero}>
@@ -94,7 +93,3 @@ const Component = (props) => (
     </div>
   </div>
 )
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
