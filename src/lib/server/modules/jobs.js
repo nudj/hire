@@ -1,4 +1,4 @@
-let request = require('../lib/request')
+let request = require('../../lib/request')
 
 function promiseMap (promiseObj) {
   let promiseArr = []
