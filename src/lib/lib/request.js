@@ -4,8 +4,7 @@ let config = {
   baseURL: '/',
   headers: {
     'Accept': 'application/json'
-  },
-  validateStatus: (status) => status >= 200 && status < 400
+  }
 }
 try {
   if (process.title === 'node') {
