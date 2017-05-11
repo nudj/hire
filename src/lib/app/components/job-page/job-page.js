@@ -1,11 +1,9 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter } = require('react-router-dom')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
 const style = require('./job-page.css')
 
-class Component extends React.Component {
+module.exports = class JobPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -86,7 +84,3 @@ class Component extends React.Component {
     )
   }
 }
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

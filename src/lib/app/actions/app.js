@@ -1,19 +1,18 @@
-const ADD_TODO = 'ADD_TODO'
-const TOGGLE_TODO = 'TOGGLE_TODO'
-const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+const request = require('../../lib/request')
 
-module.exports.ADD_TODO = ADD_TODO
-module.exports.TOGGLE_TODO = TOGGLE_TODO
-module.exports.SET_VISIBILITY_FILTER = SET_VISIBILITY_FILTER
+const FETCHED_PAGE = 'FETCHED_PAGE'
 
-module.exports.addTodo = function (text) {
-  return { type: ADD_TODO, text }
+module.exports.FETCHED_PAGE = FETCHED_PAGE
+
+function fetchedPage (page) {
+  return {
+    type: FETCHED_PAGE,
+    page
+  }
 }
 
-module.exports.toggleTodo = function (index) {
-  return { type: TOGGLE_TODO, index }
-}
-
-module.exports.setVisibilityFilter = function (filter) {
-  return { type: SET_VISIBILITY_FILTER, filter }
+module.exports.fetchPage = function (url) {
+  return (dispatch, getState) => {
+    request(url).then((data) => dispatch(fetchedPage(data.page)))
+  }
 }

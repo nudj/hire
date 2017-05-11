@@ -1,9 +1,7 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter } = require('react-router-dom')
 const style = require('./request-page.css')
 
-const Component = (props) => {
+module.exports = (props) => {
   let html
   if (props.success) {
     html = (
@@ -49,7 +47,3 @@ const Component = (props) => {
     </div>
   )
 }
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))

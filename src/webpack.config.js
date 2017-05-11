@@ -15,7 +15,7 @@ module.exports = {
     chunkFilename: '[id].js',
     devtoolLineToLine: true
   },
-  devtool: 'cheap-eval-source-map',
+  devtool: 'source-map',
   module: {
     loaders: [
       {

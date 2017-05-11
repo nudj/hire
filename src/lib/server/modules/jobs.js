@@ -1,4 +1,4 @@
-let fetch = require('../lib/fetch')
+let request = require('../../lib/request')
 
 function promiseMap (promiseObj) {
   let promiseArr = []
@@ -18,52 +18,51 @@ function promiseMap (promiseObj) {
 function fetchCompany (loggedInPerson, companySlug) {
   return promiseMap({
     person: loggedInPerson,
-    company: fetch(`companies/${companySlug}`)
+    company: request(`companies/${companySlug}`)
   })
 }
 
 function fetchCompanyAndJob (loggedInPerson, companySlug, jobSlug) {
   return promiseMap({
     person: loggedInPerson,
-    company: fetch(`companies/${companySlug}`),
-    job: fetch(`jobs/${jobSlug}`)
+    company: request(`companies/${companySlug}`),
+    job: request(`jobs/${jobSlug}`)
   })
 }
 
 function fetchJob (jobSlug) {
-  return fetch(`jobs/${jobSlug}`)
+  return request(`jobs/${jobSlug}`)
 }
 
 function fetchJobs (data) {
-  console.log('data', data)
-  data.published = fetch(`jobs?companyId=${data.company.id}&status=Published`)
-  data.archived = fetch(`jobs?companyId=${data.company.id}&status=Archived`)
+  data.published = request(`jobs?companyId=${data.company.id}&status=Published`)
+  data.archived = request(`jobs?companyId=${data.company.id}&status=Archived`)
   return promiseMap(data)
 }
 
 function fetchRecommendations (data) {
-  data.recommendations = fetch(`recommendations?job=${data.job.id}`)
+  data.recommendations = request(`recommendations?job=${data.job.id}`)
   return promiseMap(data)
 }
 
 function convertToPeople (key) {
   return (data) => {
-    data[key] = Promise.all(data[key].map((rec) => fetch(`people/${rec.personId}`)))
+    data[key] = Promise.all(data[key].map((rec) => request(`people/${rec.personId}`)))
     return promiseMap(data)
   }
 }
 
-function patchJobWith (patch) {
-  return (job) => {
-    return fetch(`jobs/${job.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(patch)
-    })
-  }
+function patchJobWith (data) {
+  return (job) => request(`jobs/${job.id}`, {
+    method: 'patch',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data
+  })
 }
+
+module.exports.fetchJob = fetchJob
 
 module.exports.get = function (loggedInPerson, companySlug, jobSlug) {
   return fetchCompanyAndJob(loggedInPerson, companySlug, jobSlug)

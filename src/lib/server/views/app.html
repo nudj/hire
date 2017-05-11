@@ -16,26 +16,6 @@
 </head>
 <body>
   <div id="app"><%= html %></div>
-  <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.0/clipboard.min.js"></script>
-  <script>
-    let copyButton = document.getElementById('copy')
-    function restoreTitle () {
-      setTimeout(function () {
-        copyButton.innerText = 'Copy'
-      }, 2000)
-    }
-    if (copyButton) {
-      var clipboard = new Clipboard('#copy')
-      clipboard.on('success', function(e) {
-        copyButton.innerText = 'Copied!'
-        restoreTitle()
-      })
-      clipboard.on('error', function(e) {
-        copyButton.innerText = 'No'
-        restoreTitle()
-      })
-    }
-  </script>
   <script src="/assets/js/vendors.js"></script>
   <script src="/assets/js/app.js"></script>
 </body>

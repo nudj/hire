@@ -1,9 +1,9 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter } = require('react-router-dom')
+const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const format = require('date-fns/format')
 const style = require('./jobs-page.css')
+const Form = require('../form/form')
 
 function jobList (props, status) {
   return (
@@ -27,13 +27,13 @@ function jobList (props, status) {
                 <a href={`//nudj.co/${get(props, 'company.slug')}/${get(job, 'slug')}`}>View</a>
               </li>
               <li className={style.action}>
-                <a href={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</a>
+                <Link to={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</Link>
               </li>
               <li className={style.action}>
-                <form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/${status === 'archived' ? 'publish' : 'archive'}`} method='POST'>
+                <Form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/${status === 'archived' ? 'publish' : 'archive'}`} method='post'>
                   <input type='hidden' name='_csrf' value={get(props, 'csrfToken')} />
                   <button>{status === 'archived' ? 'Publish' : 'Archive'}</button>
-                </form>
+                </Form>
               </li>
             </ul>
           </li>
@@ -43,7 +43,7 @@ function jobList (props, status) {
   )
 }
 
-const Component = (props) => (
+module.exports = (props) => (
   <div className={style.body}>
     <header>
       <h1>Jobs</h1>
@@ -56,7 +56,3 @@ const Component = (props) => (
     {jobList(props, 'archived')}
   </div>
 )
-
-const mapStateToProps = (state, props) => Object.assign({}, state.page, props)
-const mapDispatchToProps = (dispatch, ownProps) => ({})
-module.exports = withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
