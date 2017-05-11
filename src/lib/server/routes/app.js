@@ -126,8 +126,12 @@ function getRenderer (req, res, next) {
   }
 }
 
-function redirect (res, url) {
-  return () => res.redirect(url)
+function redirect (req, res, url) {
+  if (req.accepts('json') && !req.accepts('html')) {
+    return () => res.json({ redirect: url })
+  } else {
+    return () => res.redirect(url)
+  }
 }
 
 function requestHandler (req, res, next) {
@@ -159,7 +163,7 @@ function archiveHandler (req, res, next) {
     .patch(req.params.jobSlug, {
       status: 'Archived'
     })
-    .then(redirect(res, req.get('Referrer')))
+    .then(redirect(req, res, req.get('Referrer')))
     .catch(getErrorHandler(req, res, next))
 }
 
@@ -168,7 +172,7 @@ function publishHandler (req, res, next) {
     .patch(req.params.jobSlug, {
       status: 'Published'
     })
-    .then(redirect(res, req.get('Referrer')))
+    .then(redirect(req, res, req.get('Referrer')))
     .catch(getErrorHandler(req, res, next))
 }
 

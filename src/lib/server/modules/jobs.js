@@ -52,16 +52,14 @@ function convertToPeople (key) {
   }
 }
 
-function patchJobWith (patch) {
-  return (job) => {
-    return request(`jobs/${job.id}`, {
-      method: 'patch',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(patch)
-    })
-  }
+function patchJobWith (data) {
+  return (job) => request(`jobs/${job.id}`, {
+    method: 'patch',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data
+  })
 }
 
 module.exports.fetchJob = fetchJob

@@ -13,11 +13,6 @@ function fetchedPage (page) {
 
 module.exports.fetchPage = function (url) {
   return (dispatch, getState) => {
-    console.log('info', 'Fetching page', url)
-    request(url)
-      .then((data) => {
-        console.log('info', 'Fetched page', data.page)
-        return dispatch(fetchedPage(data.page))
-      })
+    request(url).then((data) => dispatch(fetchedPage(data.page)))
   }
 }

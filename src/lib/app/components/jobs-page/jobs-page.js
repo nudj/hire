@@ -3,6 +3,7 @@ const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const format = require('date-fns/format')
 const style = require('./jobs-page.css')
+const Form = require('../form/form')
 
 function jobList (props, status) {
   return (
@@ -29,10 +30,10 @@ function jobList (props, status) {
                 <Link to={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</Link>
               </li>
               <li className={style.action}>
-                <form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/${status === 'archived' ? 'publish' : 'archive'}`} method='POST'>
+                <Form action={`/${get(props, 'company.slug')}/${get(job, 'slug')}/${status === 'archived' ? 'publish' : 'archive'}`} method='post'>
                   <input type='hidden' name='_csrf' value={get(props, 'csrfToken')} />
                   <button>{status === 'archived' ? 'Publish' : 'Archive'}</button>
-                </form>
+                </Form>
               </li>
             </ul>
           </li>

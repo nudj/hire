@@ -4,7 +4,8 @@ let config = {
   baseURL: '/',
   headers: {
     'Accept': 'application/json'
-  }
+  },
+  validateStatus: (status) => status >= 200 && status < 400
 }
 try {
   if (process.title === 'node') {
@@ -18,11 +19,11 @@ const axios = Axios.create(config)
 function request (uri, options) {
   return axios(uri, options)
     .then((response) => {
-      switch (response.status === 500) {
-        case 500:
-          throw new Error(response.statusText)
+      switch (response.status) {
         case 404:
           return undefined
+        case 500:
+          throw new Error(response.statusText)
       }
       return response.data
     })
