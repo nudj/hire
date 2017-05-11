@@ -16,3 +16,9 @@ module.exports.fetchPage = function (url) {
     request(url).then((data) => dispatch(fetchedPage(data.page)))
   }
 }
+
+module.exports.setPage = function (data) {
+  return (dispatch, getState) => {
+    dispatch(fetchedPage(data.page))
+  }
+}

@@ -26,7 +26,14 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history} onChange={(dispatch, location) => dispatch(fetchPage(location.pathname))}>
+    <ConnectedRouter history={history} onChange={(dispatch, location) => {
+      // only fetch new page data if...
+      // - REPLACE action called on the history (forcing a refresh)
+      // - requested url is not already in page data (page data is stale)
+      if (history.action === 'REPLACE' || location.pathname !== store.getState().page.url.originalUrl) {
+        dispatch(fetchPage(location.pathname))
+      }
+    }}>
       <App />
     </ConnectedRouter>
   </Provider>,

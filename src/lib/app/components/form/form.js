@@ -3,6 +3,7 @@ const PropTypes = require('prop-types')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
 const request = require('../../../lib/request')
+const { setPage } = require('../../actions/app')
 
 function getSubmitHandler (props, context) {
   return (event) => {
@@ -18,9 +19,13 @@ function getSubmitHandler (props, context) {
       if (data.redirect) {
         // This only supports redirects within our application for now.
         // We will need more intelligent url grokking in order to handle redirects to external urls
-        return context.router.history.replace('/' + data.redirect.split('/').slice(3).join('/'))
+        context.router.history.replace('/' + data.redirect.split('/').slice(3).join('/'))
       } else {
-        // when no redirect prop is found we should treat the response as new state data for the current page
+        // when no redirect prop is found we should treat the response as new state data for the form's action page
+        // so first set the new page data
+        props.dispatch(setPage(data))
+        // then transition to the new page
+        context.router.history.push(props.action)
         return data
       }
     })

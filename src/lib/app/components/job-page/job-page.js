@@ -1,7 +1,9 @@
 const React = require('react')
+const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
 const style = require('./job-page.css')
+const Form = require('../form/form')
 
 module.exports = class JobPage extends React.Component {
   constructor (props) {
@@ -68,11 +70,11 @@ module.exports = class JobPage extends React.Component {
   }
   render () {
     return (
-      <form className={style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/compose`} method='POST'>
+      <Form className={style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/compose`} method='post'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <header>
           <h1>{get(this.props, 'job.title')}</h1>
-          <h2>@ {get(this.props, 'company.name')}</h2>
+          <h2>@ <Link to={`/${get(this.props, 'company.slug')}`}>{get(this.props, 'company.name')}</Link></h2>
           <p className={style.selected}>Selected {this.state.selected.length}</p>
           <button className={style.submit}>Write message</button>
         </header>
@@ -80,7 +82,7 @@ module.exports = class JobPage extends React.Component {
         <label className={style.toggleAll} htmlFor='toggle-all'>Toggle all</label>
         <input type='checkbox' checked={this.state.selected.length === get(this.props, 'recommendations', []).length} onChange={this.onClickToggleAll} id='toggle-all' />
         {this.recommendationList()}
-      </form>
+      </Form>
     )
   }
 }
