@@ -10,7 +10,6 @@ const JobPage = require('../job-page/job-page')
 const ComposePage = require('../compose-page/compose-page')
 const RequestPage = require('../request-page/request-page')
 const PageNotFound = require('../404-page/404-page')
-const Footer = require('../footer/footer')
 const Status = require('../status/status')
 const withState = require('../../lib/with-state')
 
@@ -32,12 +31,13 @@ const Index = () => (
       <meta property='twitter:image' content='' />
       <meta property='og:image' content='' />
       <link rel='icon' href='/assets/images/nudj-square.ico' type='image/x-icon' />
+      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
     </Helmet>
     <header className={style.header}>
       <Route path='*' component={withState(Header)} />
     </header>
-    <Route path='*' component={withState(Message)} />
     <div className={style.content}>
+      <Route path='*' component={withState(Message)} />
       <Switch>
         <Route exact path='/' component={withState(HomePage)} />
         <Route exact path='/request' component={withState(RequestPage)} />
@@ -47,9 +47,6 @@ const Index = () => (
         <Route render={(props) => <Status code={404}><PageNotFound {...props} /></Status>} />
       </Switch>
     </div>
-    <footer className={style.footer}>
-      <Footer />
-    </footer>
   </div>
 )
 

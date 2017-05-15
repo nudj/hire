@@ -1,6 +1,5 @@
 let {
-  css,
-  merge
+  css
 } = require('../../lib/css')
 
 const listStyle = {
@@ -9,37 +8,22 @@ const listStyle = {
   margin: 0
 }
 
-const blockStyle = {
-  margin: 0,
-  display: 'block'
-}
-
 module.exports = css({
+  body: {
+    flexGrow: 1,
+    background: '#ececeb'
+  },
   recommendations: listStyle,
-  person: merge({
-    display: 'flex',
-    justifyContent: 'space-between'
-  }, listStyle),
-  actions: merge({}, blockStyle, {
-    width: '50%',
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  }, listStyle),
-  action: listStyle,
-  details: merge({
-    width: '50%'
-  }, blockStyle),
-  detailTitleName: {
-    display: 'none'
+  content: {
+    flex: 1,
+    padding: '10px 20px',
+    display: 'flex'
   },
-  detailTitleTitle: {
-    display: 'none'
+  main: {
+    flex: 1
   },
-  detailTitleCompany: {
-    display: 'none'
-  },
-  detailDetailName: blockStyle,
-  detailDetailTitle: blockStyle,
-  detailDetailCompany: blockStyle
+  sidebar: {
+    width: '420px',
+    padding: '0 60px'
+  }
 })

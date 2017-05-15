@@ -5,14 +5,16 @@ module.exports = css({
     position: 'relative',
     minHeight: '100vh',
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    flexDirection: 'row',
+    justifyContent: 'stretch',
+    paddingLeft: '120px'
   }, sansSerif),
   header: Object.assign({
-    width: '100%',
-    flex: 'none',
-    paddingLeft: '1rem',
-    paddingRight: '1rem'
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    width: '120px',
+    height: '100%'
   }, sansSerif),
   content: {
     display: 'flex',
@@ -21,9 +23,5 @@ module.exports = css({
     flex: '1 1 auto',
     minWidth: 0,
     minHeight: 0
-  },
-  footer: Object.assign({
-    width: '100%',
-    flex: 'none'
-  }, sansSerif)
+  }
 })
