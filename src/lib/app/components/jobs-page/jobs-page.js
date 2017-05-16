@@ -35,7 +35,7 @@ module.exports = (props) => {
                 }]}
                 actions={[
                   <ClipboardButton data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(job, 'slug')}`}>Copy link</ClipboardButton>,
-                  <Link to={`/${get(props, 'company.slug')}/${get(job, 'slug')}`}>Nudj</Link>
+                  <Link to={`/jobs/${get(job, 'slug')}`}>Nudj</Link>
                 ]}
               />
             ))}

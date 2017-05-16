@@ -61,7 +61,8 @@ module.exports = css({
   },
   definitionDescription: {
     display: 'block',
-    margin: 0
+    margin: 0,
+    wordBreak: 'break-word'
   },
   actions: merge({
     flex: 0,

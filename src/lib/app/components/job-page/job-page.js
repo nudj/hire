@@ -11,7 +11,7 @@ module.exports = class JobPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selected: []
+      selected: get(props, 'recommendations', []).map((person) => get(person, 'id'))
     }
     this.onClickAdd = this.onClickAdd.bind(this)
     this.onClickToggleAll = this.onClickToggleAll.bind(this)
@@ -68,7 +68,7 @@ module.exports = class JobPage extends React.Component {
   }
   render () {
     return (
-      <div className={style.body}>
+      <Form className={style.body} action={`/jobs/${get(this.props, 'job.slug')}/compose`} method='post'>
         <PageHeader
           title={get(this.props, 'job.title')}
           subtitle={<Link to={`/${get(this.props, 'company.slug')}`}>
@@ -80,17 +80,17 @@ module.exports = class JobPage extends React.Component {
         </PageHeader>
         <p>We recommend sending a nudj request to ...</p>
         <div className={style.content}>
-          <Form className={style.main} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/compose`} method='post'>
+          <div className={style.main}>
             <input type='hidden' name='_csrf' value={this.props.csrfToken} />
             <label className={style.toggleAll} htmlFor='toggle-all'>Toggle all</label>
             <input type='checkbox' checked={this.state.selected.length === get(this.props, 'recommendations', []).length} onChange={this.onClickToggleAll} id='toggle-all' />
             {this.recommendationList()}
-          </Form>
+          </div>
           <div className={style.sidebar}>
             Sidebar yo
           </div>
         </div>
-      </div>
+      </Form>
     )
   }
 }

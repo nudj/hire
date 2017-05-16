@@ -9,9 +9,16 @@ let app = require('../../app/server')
 let router = express.Router()
 
 function ensureLoggedIn (req, res, next) {
-  req.session.person = {
-    firstName: 'David',
-    lastName: 'Platt'
+  req.session.data = {
+    person: {
+      firstName: 'David',
+      lastName: 'Platt'
+    },
+    company: {
+      id: '1',
+      name: 'Johns PLC',
+      slug: 'johns-plc'
+    }
   }
   return next()
   // if (req.session.logout) {
@@ -27,8 +34,10 @@ function ensureLoggedIn (req, res, next) {
 function getRenderDataBuilder (req) {
   return (data) => {
     data.csrfToken = req.csrfToken()
-    req.session.person = data.person || req.session.person
-    data.person = req.session.person
+    if (req.session.data) {
+      req.session.data.person = data.person || req.session.data.person
+      data.person = req.session.data.person
+    }
     if (req.session.message) {
       data.message = req.session.message
       delete req.session.message
@@ -144,7 +153,7 @@ function requestHandler (req, res, next) {
 
 function jobsHandler (req, res, next) {
   jobs
-    .getAllForCompany(req.session.person, req.params.companySlug)
+    .getAll(Object.assign({}, req.session.data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -152,7 +161,7 @@ function jobsHandler (req, res, next) {
 
 function jobHandler (req, res, next) {
   jobs
-    .get(req.session.person, req.params.companySlug, req.params.jobSlug)
+    .get(Object.assign({}, req.session.data), req.params.jobSlug)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -178,19 +187,19 @@ function publishHandler (req, res, next) {
 
 function composeHandler (req, res, next) {
   jobs
-    .compose(req.session.person, req.params.companySlug, req.params.jobSlug, [].concat(req.body.recipients || []))
+    .compose(Object.assign({}, req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 router.post('/request', requestHandler)
-router.get('/:companySlug', ensureLoggedIn, jobsHandler)
-router.get('/:companySlug/:jobSlug', ensureLoggedIn, jobHandler)
-router.post('/:companySlug/:jobSlug/archive', ensureLoggedIn, archiveHandler)
-router.post('/:companySlug/:jobSlug/publish', ensureLoggedIn, publishHandler)
-router.get('/:companySlug/:jobSlug/compose', (req, res) => res.redirect(`/${req.params.companySlug}/${req.params.jobSlug}`))
-router.post('/:companySlug/:jobSlug/compose', ensureLoggedIn, composeHandler)
+router.get('/jobs', ensureLoggedIn, jobsHandler)
+router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
+router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
+router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
+router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
+router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

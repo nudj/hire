@@ -1,6 +1,5 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
-const get = require('lodash/get')
 const style = require('./header.css')
 
 module.exports = (props) => {
@@ -11,13 +10,13 @@ module.exports = (props) => {
           <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
         </Link>
         <ul className={style.menu}>
-          <li className={style.menuItem}><Link className={style.jobs} to={`/${get(props, 'company.slug')}`}>Jobs</Link></li>
-          <li className={style.menuItem}><Link className={style.candidates} to={`/candidates`}>Candidates</Link></li>
+          <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li>
+          <li className={style.menuItem}><Link className={style.candidates} to={'/candidates'}>Candidates</Link></li>
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>
       <div className={style.sub}>
-        <Link className={style.logout} to={`/logout`}>Log out</Link>
+        <Link className={style.logout} to={'/logout'}>Log out</Link>
       </div>
     </nav>
   )

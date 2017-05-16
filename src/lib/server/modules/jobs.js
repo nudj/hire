@@ -1,37 +1,19 @@
 let request = require('../../lib/request')
+let { promiseMap } = require('../lib')
 
-function promiseMap (promiseObj) {
-  let promiseArr = []
-  let keyMap = {}
-  Object.keys(promiseObj).forEach((key, i) => {
-    keyMap[i] = key
-    promiseArr[i] = promiseObj[key]
-  })
-  return Promise.all(promiseArr).then((resolvedArr) => {
-    return resolvedArr.reduce((resolvedObj, v, i) => {
-      resolvedObj[keyMap[i]] = v
-      return resolvedObj
-    }, {})
-  })
+function fetchPeopleFromFrgaments (fragments) {
+  return Promise.all(fragments.map((fragment) => request(`people/${fragment.personId || fragment}`)))
 }
 
-function fetchCompany (loggedInPerson, companySlug) {
-  return promiseMap({
-    person: loggedInPerson,
-    company: request(`companies/${companySlug}`)
-  })
+function fetchJob (data, jobSlug) {
+  data.job = request(`jobs/${jobSlug}`)
+  return promiseMap(data)
 }
 
-function fetchCompanyAndJob (loggedInPerson, companySlug, jobSlug) {
-  return promiseMap({
-    person: loggedInPerson,
-    company: request(`companies/${companySlug}`),
-    job: request(`jobs/${jobSlug}`)
-  })
-}
-
-function fetchJob (jobSlug) {
-  return request(`jobs/${jobSlug}`)
+function fetchJobAndRecipients (data, jobSlug, recipients) {
+  data.job = request(`jobs/${jobSlug}`)
+  data.recipients = fetchPeopleFromFrgaments(recipients)
+  return promiseMap(data)
 }
 
 function fetchJobs (data) {
@@ -42,46 +24,37 @@ function fetchJobs (data) {
 
 function fetchRecommendations (data) {
   data.recommendations = request(`recommendations?job=${data.job.id}`)
+  .then(fetchPeopleFromFrgaments)
   return promiseMap(data)
 }
 
-function convertToPeople (key) {
+function patchJobWith (patch) {
   return (data) => {
-    data[key] = Promise.all(data[key].map((rec) => request(`people/${rec.personId}`)))
+    data.job = request(`jobs/${data.job.id}`, {
+      method: 'patch',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: patch
+    })
     return promiseMap(data)
   }
 }
 
-function patchJobWith (data) {
-  return (job) => request(`jobs/${job.id}`, {
-    method: 'patch',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data
-  })
-}
-
-module.exports.fetchJob = fetchJob
-
-module.exports.get = function (loggedInPerson, companySlug, jobSlug) {
-  return fetchCompanyAndJob(loggedInPerson, companySlug, jobSlug)
+module.exports.get = function (data, jobSlug) {
+  return fetchJob(data, jobSlug)
   .then(fetchRecommendations)
-  .then(convertToPeople('recommendations'))
 }
 
-module.exports.getAllForCompany = function (loggedInPerson, companySlug) {
-  return fetchCompany(loggedInPerson, companySlug)
-  .then(fetchJobs)
+module.exports.getAll = function (data) {
+  return fetchJobs(data)
 }
 
-module.exports.patch = function (jobSlug, patch) {
-  return fetchJob(jobSlug)
+module.exports.patch = function (data, jobSlug, patch) {
+  return fetchJob(data, jobSlug)
   .then(patchJobWith(patch))
 }
 
-module.exports.compose = function (loggedInPerson, companySlug, jobSlug, recipients) {
-  return fetchCompanyAndJob(loggedInPerson, companySlug, jobSlug)
-  .then((data) => Object.assign(data, { recipients: recipients.map((id) => ({ personId: id })) }))
-  .then(convertToPeople('recipients'))
+module.exports.compose = function (data, jobSlug, recipients) {
+  return fetchJobAndRecipients(data, jobSlug, recipients)
 }
