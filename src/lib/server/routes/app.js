@@ -28,9 +28,7 @@ function ensureLoggedIn (req, res, next) {
   } else {
     if (req.xhr) {
       if (!req.isAuthenticated || !req.isAuthenticated()) {
-        return res.status(401).json({
-          redirect: '/login'
-        })
+        return res.status(401).send()
       }
     }
     _ensureLoggedIn(req, res, next)
