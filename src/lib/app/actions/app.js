@@ -13,7 +13,7 @@ function fetchedPage (page) {
 
 module.exports.fetchPage = function (url) {
   return (dispatch, getState) => {
-    request(url).then((data) => dispatch(fetchedPage(data.page)))
+    return request(url).then((data) => dispatch(fetchedPage(data.page)))
   }
 }
 

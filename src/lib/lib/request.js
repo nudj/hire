@@ -3,7 +3,8 @@ const Axios = require('axios')
 let config = {
   baseURL: '/',
   headers: {
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
   }
 }
 try {
@@ -17,16 +18,11 @@ const axios = Axios.create(config)
 
 function request (uri, options) {
   return axios(uri, options)
-    .then((response) => {
-      switch (response.status) {
-        case 404:
-          return undefined
-        case 500:
-          throw new Error(response.statusText)
-      }
-      return response.data
-    })
+    .then((response) => response.data)
     .catch((error) => {
+      if (error.response.status === 401) {
+        throw new Error('Unauthorized')
+      }
       console.log('error', error.message, `request - ${config.baseURL}${uri}`, options)
       throw new Error('Something went wrong')
     })

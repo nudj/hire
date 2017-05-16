@@ -31,7 +31,15 @@ ReactDOM.render(
       // - REPLACE action called on the history (forcing a refresh)
       // - requested url is not already in page data (page data is stale)
       if (history.action === 'REPLACE' || location.pathname !== store.getState().page.url.originalUrl) {
-        dispatch(fetchPage(location.pathname))
+        dispatch(fetchPage(location.pathname)).catch((error) => {
+          switch (error.message) {
+            case 'Unauthorized':
+              window.location = ''
+              break
+            default:
+              console.log(error)
+          }
+        })
       }
     }}>
       <App />

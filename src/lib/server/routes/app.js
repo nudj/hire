@@ -1,6 +1,6 @@
 let express = require('express')
 let get = require('lodash/get')
-// let _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+let _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
 let logger = require('../lib/logger')
 let request = require('../modules/request')
@@ -9,26 +9,33 @@ let app = require('../../app/server')
 let router = express.Router()
 
 function ensureLoggedIn (req, res, next) {
-  req.session.data = {
-    person: {
-      firstName: 'David',
-      lastName: 'Platt'
-    },
-    company: {
-      id: '1',
-      name: 'Johns PLC',
-      slug: 'johns-plc'
-    }
-  }
-  return next()
-  // if (req.session.logout) {
-  //   let url = req.originalUrl.split('/')
-  //   url.pop()
-  //   res.redirect(url.join('/'))
-  // } else {
-  //   _ensureLoggedIn(req, res, next)
+  // req.session.data = {
+  //   person: {
+  //     firstName: 'David',
+  //     lastName: 'Platt'
+  //   },
+  //   company: {
+  //     id: '1',
+  //     name: 'Johns PLC',
+  //     slug: 'johns-plc'
+  //   }
   // }
-  // delete req.session.logout
+  // return next()
+  if (req.session.logout) {
+    let url = req.originalUrl.split('/')
+    url.pop()
+    res.redirect(url.join('/'))
+  } else {
+    if (req.xhr) {
+      if (!req.isAuthenticated || !req.isAuthenticated()) {
+        return res.status(401).json({
+          redirect: '/login'
+        })
+      }
+    }
+    _ensureLoggedIn(req, res, next)
+  }
+  delete req.session.logout
 }
 
 function getRenderDataBuilder (req) {
@@ -117,7 +124,7 @@ function getRenderer (req, res, next) {
   return (data) => {
     delete req.session.logout
     delete req.session.returnTo
-    if (req.accepts('json') && !req.accepts('html')) {
+    if (req.xhr) {
       return res.json(data)
     }
     let staticContext = app(data)
@@ -136,7 +143,7 @@ function getRenderer (req, res, next) {
 }
 
 function redirect (req, res, url) {
-  if (req.accepts('json') && !req.accepts('html')) {
+  if (req.xhr) {
     return () => res.json({ redirect: url })
   } else {
     return () => res.redirect(url)

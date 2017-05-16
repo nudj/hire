@@ -39,7 +39,7 @@ function fetchPerson (email) {
 }
 
 function fetchCompany (data) {
-  data.company = request(`hirers/first?personId=${data.person.companyId}`)
+  data.company = request(`hirers/first?personId=${data.person.id}`)
   .then((hirer) => {
     if (!hirer) throw new Error('Not a registered hirer')
     if (hirer.error) throw new Error('Error fetching hirer')
@@ -48,6 +48,7 @@ function fetchCompany (data) {
   .then((company) => {
     if (!company) throw new Error('Company not found')
     if (company.error) throw new Error('Error fetching company')
+    return company
   })
   return promiseMap(data)
 }
@@ -66,7 +67,8 @@ router.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/login' }),
   (req, res, next) => {
     if (!req.user) {
-      throw new Error('User not returned from Auth0')
+      logger.log('error', 'User not returned from Auth0')
+      return next('Unable to login')
     }
 
     fetchPerson(req.user._json.email)
