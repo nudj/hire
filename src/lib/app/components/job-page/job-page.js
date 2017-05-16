@@ -71,7 +71,7 @@ module.exports = class JobPage extends React.Component {
       <Form className={style.body} action={`/jobs/${get(this.props, 'job.slug')}/compose`} method='post'>
         <PageHeader
           title={get(this.props, 'job.title')}
-          subtitle={<Link to={`/${get(this.props, 'company.slug')}`}>
+          subtitle={<Link to={'/jobs'}>
             {get(this.props, 'company.name')}
           </Link>}
         >
