@@ -7,7 +7,7 @@ const initialState = {}
 function pageReducer (state = initialState, action) {
   switch (action.type) {
     case FETCHED_PAGE:
-      return Object.assign({}, state, action.page)
+      return action.page
     default:
       return state
   }

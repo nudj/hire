@@ -1,6 +1,5 @@
 let {
-  css,
-  merge
+  css
 } = require('../../lib/css')
 
 const listStyle = {
@@ -9,61 +8,55 @@ const listStyle = {
   margin: 0
 }
 
-const floatBlock = {
-  margin: 0,
-  display: 'block',
-  float: 'left'
-}
-
-module.exports = css({
-  published: listStyle,
-  archived: listStyle,
-  action: listStyle,
-  job: merge({
+module.exports = () => css({
+  body: {
+    flexGrow: 1,
+    background: '#ececeb',
     display: 'flex',
-    justifyContent: 'space-between'
-  }, listStyle),
-  details: {
-    width: '50%',
-    display: 'block',
+    flexDirection: 'column',
+    justifyContent: 'stretch'
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 0,
+    background: '#fff',
+    padding: '10px 20px'
+  },
+  title: {
+
+  },
+  headline: {
+    padding: '20px 20px 10px',
     margin: 0
   },
-  actions: merge({
-    width: '50%',
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  }, listStyle),
-  detailTitleTitle: {
-    display: 'none'
+  content: {
+    flex: 1,
+    padding: '10px 20px',
+    display: 'flex'
   },
-  detailTitleLocation: {
-    display: 'none'
+  main: {
+    flex: 1
   },
-  detailTitleAdded: {
-    display: 'block',
-    float: 'left',
-    clear: 'both',
-    ':after': {
-      content: ': ',
-      whiteSpace: 'pre'
+  sidebar: {
+    width: '420px',
+    padding: '0 60px'
+  },
+  jobs: listStyle,
+  tip: {
+    background: '#fff',
+    padding: '30px'
+  },
+  tipTitle: {
+    color: '#002d72',
+    marginTop: 0
+  },
+  tipParagraph: {
+    margin: 0,
+    marginTop: '1rem',
+    ':first-child': {
+      marginTop: 0
     }
-  },
-  detailTitleBonus: {
-    display: 'block',
-    float: 'left',
-    clear: 'both',
-    ':after': {
-      content: ': ',
-      whiteSpace: 'pre'
-    }
-  },
-  detailDetailTitle: merge({
-    clear: 'both'
-  }, floatBlock),
-  detailDetailLocation: merge({
-    clear: 'both'
-  }, floatBlock),
-  detailDetailAdded: floatBlock,
-  detailDetailBonus: floatBlock
+  }
 })

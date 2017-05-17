@@ -4,7 +4,7 @@ let { StaticRouter } = require('react-router-dom')
 let { Provider } = require('react-redux')
 let { createStore, combineReducers, applyMiddleware } = require('redux')
 let { Helmet } = require('react-helmet')
-let { StyleSheetServer } = require('aphrodite')
+let { StyleSheetServer } = require('aphrodite/no-important')
 let thunkMiddleware = require('redux-thunk').default
 
 let { pageReducer } = require('./reducers/page')

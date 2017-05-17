@@ -1,7 +1,8 @@
 const React = require('react')
-const style = require('./request-page.css')
+const getStyle = require('./request-page.css')
 
-module.exports = (props) => {
+const RequestPage = (props) => {
+  const style = getStyle()
   let html
   if (props.success) {
     html = (
@@ -47,3 +48,5 @@ module.exports = (props) => {
     </div>
   )
 }
+
+module.exports = RequestPage

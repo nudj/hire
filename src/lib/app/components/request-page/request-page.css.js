@@ -7,7 +7,7 @@ let {
   merge
 } = require('../../lib/css')
 
-module.exports = css({
+module.exports = () => css({
   body: merge({
     display: 'flex',
     flexDirection: 'column',

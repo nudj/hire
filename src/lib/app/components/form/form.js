@@ -2,6 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
+const omit = require('lodash/omit')
 const request = require('../../../lib/request')
 const { setPage } = require('../../actions/app')
 
@@ -33,7 +34,8 @@ function getSubmitHandler (props, context) {
 }
 
 const Form = (props, context) => {
-  return <form action={props.action} method={props.method || 'post'} onSubmit={getSubmitHandler(props, context)}>
+  let filteredProps = omit(props, ['dispatch'])
+  return <form {...filteredProps} method={props.method || 'post'} onSubmit={getSubmitHandler(props, context)}>
     {props.children}
   </form>
 }

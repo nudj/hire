@@ -3,7 +3,6 @@ let { StyleSheet, css } = require('aphrodite/no-important')
 
 module.exports.css = (stylesheet) => {
   const styles = StyleSheet.create(stylesheet)
-
   return Object.keys(stylesheet).reduce((classList, className) => {
     classList[className] = css(styles[className])
     return classList

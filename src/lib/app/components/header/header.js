@@ -1,21 +1,26 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
-const style = require('./header.css')
+const getStyle = require('./header.css')
 
-module.exports = (props) => {
+const Header = (props) => {
+  const style = getStyle()
   return (
     <nav className={style.nav}>
-      <div className={style.left}>
+      <div className={style.main}>
         <Link className={style.home} to='/'>
-          <img className={style.brand} src='/assets/images/nudj-logo.png' />
+          <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
         </Link>
+        <ul className={style.menu}>
+          <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li>
+          <li className={style.menuItem}><Link className={style.candidates} to={'/candidates'}>Candidates</Link></li>
+          <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
+        </ul>
       </div>
-      <div className={style.right}>
-        <a href='http://help.nudj.co' className={style.learnMore}>Learn more</a>
-        <Link to='/' className={style.link} >Job seeker</Link>
-        <Link to='/hiring' className={style.link}>Hirer</Link>
-        <Link to='' id='open-intercom' className={style.request}>Get in touch</Link>
+      <div className={style.sub}>
+        <Link className={style.logout} to={'/logout'}>Log out</Link>
       </div>
     </nav>
   )
 }
+
+module.exports = Header
