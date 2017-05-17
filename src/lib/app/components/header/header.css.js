@@ -2,7 +2,7 @@ let {
   css
 } = require('../../lib/css')
 
-module.exports = css({
+module.exports = () => css({
   nav: {
     height: '100%',
     width: '100%',

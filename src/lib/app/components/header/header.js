@@ -1,8 +1,9 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
-const style = require('./header.css')
+const getStyle = require('./header.css')
 
-module.exports = (props) => {
+const Header = (props) => {
+  const style = getStyle()
   return (
     <nav className={style.nav}>
       <div className={style.main}>
@@ -21,3 +22,5 @@ module.exports = (props) => {
     </nav>
   )
 }
+
+module.exports = Header

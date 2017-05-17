@@ -12,7 +12,7 @@ let messageStyle = {
   color: 'white'
 }
 
-module.exports = css({
+module.exports = () => css({
   wrapper: {
     width: '100%',
     flex: 'none'

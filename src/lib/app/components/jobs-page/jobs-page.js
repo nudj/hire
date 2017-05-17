@@ -3,11 +3,12 @@ const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const format = require('date-fns/format')
 const ClipboardButton = require('react-clipboard.js')
-const style = require('./jobs-page.css')
+const getStyle = require('./jobs-page.css')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 
-module.exports = (props) => {
+const JobsPage = (props) => {
+  const style = getStyle()
   let jobs = get(props, 'published', [])
   return (
     <div className={style.body}>
@@ -53,3 +54,5 @@ module.exports = (props) => {
     </div>
   )
 }
+
+module.exports = JobsPage

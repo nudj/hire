@@ -1,6 +1,6 @@
 let { css, dim } = require('../../lib/css')
 
-module.exports = css({
+module.exports = () => css({
   content: {
     textAlign: 'center',
     paddingTop: '2rem',

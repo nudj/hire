@@ -1,10 +1,11 @@
 const React = require('react')
 
-const style = require('./error-page.css')
+const getStyle = require('./error-page.css')
 const PageNotFound = require('../404-page/404-page')
 const ServerError = require('../500-page/500-page')
 
-module.exports = (props) => {
+const ErrorPage = (props) => {
+  const style = getStyle()
   let html
   if (props.code === 404) {
     html = <PageNotFound />
@@ -17,3 +18,5 @@ module.exports = (props) => {
     </div>
   )
 }
+
+module.exports = ErrorPage

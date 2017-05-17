@@ -7,7 +7,7 @@ const tag = {
   padding: '2px 8px'
 }
 
-module.exports = css({
+module.exports = () => css({
   tagOk: tag,
   tagError: Object.assign({}, tag, {
     background: 'pink',

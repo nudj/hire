@@ -1,6 +1,6 @@
 let { css, sansSerif } = require('../../lib/css')
 
-module.exports = css({
+module.exports = () => css({
   body: Object.assign({
     position: 'relative',
     minHeight: '100vh',

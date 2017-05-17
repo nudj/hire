@@ -3,10 +3,10 @@ const get = require('lodash/get')
 const filter = require('lodash/filter')
 const some = require('lodash/some')
 const escapeHtml = require('escape-html')
-const style = require('./compose-page.css')
+const getStyle = require('./compose-page.css')
 
 function tagify (contents, ok) {
-  return `<span class="${ok ? style.tagOk : style.tagError}">${contents}</span>`
+  return `<span class="${ok ? this.style.tagOk : this.style.tagError}">${contents}</span>`
 }
 
 function stripDelims (tag) {
@@ -26,9 +26,10 @@ function renderTpl (tpl, data) {
   }).join('')
 }
 
-module.exports = class Component extends React.Component {
+module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
+    this.style = getStyle()
     this.state = {
       recipients: props.recipients,
       subject: 'Hey, I need your help',
@@ -88,13 +89,13 @@ Look forward to hearing from you. Thanks so much for your help.
   }
   render () {
     return (
-      <form className={style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
+      <form className={this.style.body} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <header>
           <h1>{get(this.props, 'job.title')}</h1>
           <h2>@ {get(this.props, 'company.name')}</h2>
-          <button className={style.submit}>Send message</button>
-          <button className={style.edit} onClick={this.onClickEdit}>{this.state.edit ? 'Done' : 'Edit'}</button>
+          <button className={this.style.submit}>Send message</button>
+          <button className={this.style.edit} onClick={this.onClickEdit}>{this.state.edit ? 'Done' : 'Edit'}</button>
         </header>
         <h3>Compose message</h3>
         <fieldset>
@@ -112,11 +113,11 @@ Look forward to hearing from you. Thanks so much for your help.
           </ul>
         </fieldset>
         <hr />
-        <label className={style.addLabel} htmlFor='subject'>Subject line</label>
-        {get(this.state, 'edit') ? <input className={style.subject} type='text' name='subject' value={get(this.state, 'subject')} onChange={this.onChangeSubject} id='subject' /> : <div className={style.subject}>{get(this.state, 'subject')}</div>}
+        <label className={this.style.addLabel} htmlFor='subject'>Subject line</label>
+        {get(this.state, 'edit') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject')} onChange={this.onChangeSubject} id='subject' /> : <div className={this.style.subject}>{get(this.state, 'subject')}</div>}
         <hr />
-        <label className={style.addLabel} htmlFor='message'>Message</label>
-        {get(this.state, 'edit') ? <textarea className={style.message} name='message' value={get(this.state, 'message')} onChange={this.onChangeMessage} id='message' /> : <div className={style.message} dangerouslySetInnerHTML={{ __html: this.renderMessage() }} />}
+        <label className={this.style.addLabel} htmlFor='message'>Message</label>
+        {get(this.state, 'edit') ? <textarea className={this.style.message} name='message' value={get(this.state, 'message')} onChange={this.onChangeMessage} id='message' /> : <div className={this.style.message} dangerouslySetInnerHTML={{ __html: this.renderMessage() }} />}
         <hr />
       </form>
     )

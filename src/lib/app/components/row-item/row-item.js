@@ -1,8 +1,9 @@
 const React = require('react')
 const get = require('lodash/get')
-const style = require('./row-item.css')
+const getStyle = require('./row-item.css')
 
 const RowItem = (props) => {
+  const style = getStyle()
   return (
     <div className={style.row}>
       <a className={style.title} href={get(props, 'uri')}>{get(props, 'title')}</a>

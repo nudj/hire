@@ -1,6 +1,6 @@
 let { css } = require('../../lib/css')
 
-module.exports = css({
+module.exports = () => css({
   header: {
     display: 'flex',
     justifyContent: 'space-between',

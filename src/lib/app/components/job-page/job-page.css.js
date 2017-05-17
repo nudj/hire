@@ -8,7 +8,7 @@ const listStyle = {
   margin: 0
 }
 
-module.exports = css({
+module.exports = () => css({
   body: {
     flexGrow: 1,
     background: '#ececeb'

@@ -1,16 +1,17 @@
-/* global data */
+/* global data renderedClassNames */
 
-let React = require('react')
-let ReactDOM = require('react-dom')
-let { createStore, combineReducers, applyMiddleware } = require('redux')
-let { Provider } = require('react-redux')
-let { createBrowserHistory } = require('history')
-let { ConnectedRouter, routerMiddleware, routerReducer } = require('@nudj/react-router-redux')
-let thunkMiddleware = require('redux-thunk').default
+const React = require('react')
+const ReactDOM = require('react-dom')
+const { createStore, combineReducers, applyMiddleware } = require('redux')
+const { Provider } = require('react-redux')
+const { createBrowserHistory } = require('history')
+const { ConnectedRouter, routerMiddleware, routerReducer } = require('@nudj/react-router-redux')
+const thunkMiddleware = require('redux-thunk').default
+const { StyleSheet } = require('aphrodite/no-important')
 
-let App = require('./components/index')
-let { pageReducer } = require('./reducers/page')
-let { setPage } = require('./actions/app')
+const App = require('./components/index')
+const { pageReducer } = require('./reducers/page')
+const { setPage } = require('./actions/app')
 const request = require('../lib/request')
 
 const history = createBrowserHistory()
@@ -25,6 +26,7 @@ const store = createStore(
   applyMiddleware(historyMiddleware)
 )
 
+StyleSheet.rehydrate(renderedClassNames)
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history} onChange={(dispatch, location) => {

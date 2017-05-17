@@ -2,7 +2,7 @@ const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
-const style = require('./job-page.css')
+const getStyle = require('./job-page.css')
 const Form = require('../form/form')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
@@ -10,6 +10,7 @@ const RowItem = require('../row-item/row-item')
 module.exports = class JobPage extends React.Component {
   constructor (props) {
     super(props)
+    this.style = getStyle()
     this.state = {
       selected: get(props, 'recommendations', []).map((person) => get(person, 'id'))
     }
@@ -48,7 +49,7 @@ module.exports = class JobPage extends React.Component {
   }
   recommendationList () {
     return (
-      <ul className={style.recommendations}>
+      <ul className={this.style.recommendations}>
         {get(this.props, 'recommendations', []).map((person) => {
           return (
             <RowItem
@@ -73,25 +74,25 @@ module.exports = class JobPage extends React.Component {
   }
   render () {
     return (
-      <Form className={style.body} action={`/jobs/${get(this.props, 'job.slug')}/compose`} method='post'>
+      <Form className={this.style.body} action={`/jobs/${get(this.props, 'job.slug')}/compose`} method='post'>
         <PageHeader
           title={get(this.props, 'job.title')}
           subtitle={<Link to={'/jobs'}>
             {get(this.props, 'company.name')}
           </Link>}
         >
-          <p className={style.selected}>{this.state.selected.length} Selected</p>
-          <button className={style.submit}>Write message</button>
+          <p className={this.style.selected}>{this.state.selected.length} Selected</p>
+          <button className={this.style.submit}>Write message</button>
         </PageHeader>
         <p>We recommend sending a nudj request to ...</p>
-        <div className={style.content}>
-          <div className={style.main}>
+        <div className={this.style.content}>
+          <div className={this.style.main}>
             <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-            <label className={style.toggleAll} htmlFor='toggle-all'>Toggle all</label>
+            <label className={this.style.toggleAll} htmlFor='toggle-all'>Toggle all</label>
             <input type='checkbox' checked={this.state.selected.length === get(this.props, 'recommendations', []).length} onChange={this.onClickToggleAll} id='toggle-all' />
             {this.recommendationList()}
           </div>
-          <div className={style.sidebar}>
+          <div className={this.style.sidebar}>
             Sidebar yo
           </div>
         </div>

@@ -17,7 +17,7 @@ const linkItem = merge({
   }
 }, link, grow)
 
-module.exports = css({
+module.exports = () => css({
   background: {
     backgroundColor: '#ff725c',
     width: '100%'
