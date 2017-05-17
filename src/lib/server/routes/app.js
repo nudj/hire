@@ -5,6 +5,12 @@ let get = require('lodash/get')
 let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
+
+const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
+const repo = process.env.PRISMICIO_REPO
+
+const prismic = require('../modules/prismic')({accessToken, repo})
+
 let app = require('../../app/server')
 let router = express.Router()
 
@@ -36,6 +42,14 @@ function ensureLoggedIn (req, res, next) {
   //   _ensureLoggedIn(req, res, next)
   // }
   // delete req.session.logout
+}
+
+function fetchPrismicContent ({prismicQuery, destination, data}) {
+  return prismic.fetchContent(prismicQuery)
+    .then(result => {
+      data[destination] = result
+      return data
+    })
 }
 
 function getRenderDataBuilder (req) {
@@ -159,16 +173,30 @@ function requestHandler (req, res, next) {
 }
 
 function jobsHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobsDashboard']
+  }
+  const destination = 'tooltip'
+
   jobs
     .getAll(clone(req.session.data))
+    .then(data => fetchPrismicContent({prismicQuery, destination, data}))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function jobHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobsDashboard'] // change
+  }
+  const destination = 'tooltip'
+
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => fetchPrismicContent({prismicQuery, destination, data}))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
