@@ -16,6 +16,11 @@ module.exports = class JobPage extends React.Component {
     this.onClickAdd = this.onClickAdd.bind(this)
     this.onClickToggleAll = this.onClickToggleAll.bind(this)
   }
+  componentWillReceiveProps (props) {
+    this.setState({
+      selected: get(props, 'recommendations', []).map((person) => get(person, 'id'))
+    })
+  }
   onClickAdd (event) {
     let selected = this.state.selected
     if (event.target.checked) {
