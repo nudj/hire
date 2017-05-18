@@ -1,6 +1,6 @@
 let {
   css,
-  breakpoints,
+  variables,
   merge
 } = require('../../lib/css')
 
@@ -12,7 +12,7 @@ let messageStyle = {
   color: 'white'
 }
 
-module.exports = () => css({
+module.exports = css({
   wrapper: {
     width: '100%',
     flex: 'none'
@@ -35,7 +35,7 @@ module.exports = () => css({
   copy: {
     fontSize: '.875rem',
     lineHeight: 1.25,
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       fontSize: '1rem'
     }
   }

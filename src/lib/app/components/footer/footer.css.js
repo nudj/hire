@@ -1,4 +1,4 @@
-let { css, link, breakpoints, grow, merge } = require('../../lib/css')
+let { css, mixins, variables, merge } = require('../../lib/css')
 
 const linkItem = merge({
   fontSize: '.875rem',
@@ -8,16 +8,16 @@ const linkItem = merge({
   margin: '.5rem .25rem',
   borderRadius: '.25rem',
   color: 'white',
-  [breakpoints.ns]: {
+  [variables.breakpoints.ns]: {
     border: 'solid .125rem white',
     textDecoration: 'none',
     display: 'inline-block',
     marginTop: '.25rem',
     marginBottom: '.25rem'
   }
-}, link, grow)
+}, mixins.link, mixins.grow)
 
-module.exports = () => css({
+module.exports = css({
   background: {
     backgroundColor: '#ff725c',
     width: '100%'
@@ -32,7 +32,7 @@ module.exports = () => css({
     padding: '2rem',
     color: 'white',
     margin: '0 auto',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       padding: '4rem 0'
     }
   },
@@ -56,7 +56,7 @@ module.exports = () => css({
     margin: '0 auto',
     padding: '0 0 2rem 0',
     listStyleType: 'none',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       alignItems: 'stretch'
     }
   },
@@ -66,7 +66,7 @@ module.exports = () => css({
     width: '100%',
     textAlign: 'center',
     padding: '.5rem .25rem',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       width: '25%',
       paddingTop: '.25rem',
       paddingBottom: '.25rem'
@@ -81,7 +81,7 @@ module.exports = () => css({
     paddingTop: '.5rem',
     margin: 0,
     display: 'none',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       display: 'inline-block'
     }
   }

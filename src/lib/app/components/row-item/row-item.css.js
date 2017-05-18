@@ -9,8 +9,8 @@ const listStyle = {
   margin: 0
 }
 
-module.exports = () => css({
-  row: merge({}, listStyle, {
+module.exports = css({
+  row: merge(listStyle, {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

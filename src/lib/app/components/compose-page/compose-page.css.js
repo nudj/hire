@@ -1,4 +1,8 @@
-let { css } = require('../../lib/css')
+let {
+  css,
+  merge,
+  mixins
+} = require('../../lib/css')
 
 const tag = {
   background: 'lightgreen',
@@ -7,9 +11,9 @@ const tag = {
   padding: '2px 8px'
 }
 
-module.exports = () => css({
+module.exports = css(merge(mixins.pageLayout, {
   tagOk: tag,
-  tagError: Object.assign({}, tag, {
+  tagError: merge(tag, {
     background: 'pink',
     borderColor: 'red'
   }),
@@ -21,4 +25,4 @@ module.exports = () => css({
     width: '100%',
     display: 'block'
   }
-})
+}))

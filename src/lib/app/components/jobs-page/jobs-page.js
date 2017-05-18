@@ -11,13 +11,13 @@ const JobsPage = (props) => {
   const style = getStyle()
   let jobs = get(props, 'published', [])
   return (
-    <div className={style.body}>
-      <PageHeader title='Jobs' subtitle={get(props, 'company.name')}>
+    <div className={style.pageBody}>
+      <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
         <button className={style.upload}>Upload job</button>
       </PageHeader>
-      <h3 className={style.headline}>You currently have {jobs.length} jobs listed on nudj...</h3>
-      <div className={style.content}>
-        <div className={style.main}>
+      <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj...</h3>
+      <div className={style.pageContent}>
+        <div className={style.pageMain}>
           <ul className={style.jobs}>
             {jobs.map((job) => (
               <RowItem
@@ -42,7 +42,7 @@ const JobsPage = (props) => {
             ))}
           </ul>
         </div>
-        <div className={style.sidebar}>
+        <div className={style.pageSidebar}>
           <aside className={style.tip}>
             <h1 className={style.tipTitle}>Welcome!</h1>
             <p className={style.tipParagraph}>To save you time, all your jobs have already been uploaded. You can start seeking referrals by selecting 'nudj'.</p>

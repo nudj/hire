@@ -1,16 +1,14 @@
 let {
   css,
-  sansSerif,
-  link,
-  grow,
-  breakpoints,
+  mixins,
+  variables,
   merge
 } = require('../../lib/css')
 
-module.exports = () => css({
+module.exports = css({
   body: merge({
     color: 'black'
-  }, sansSerif),
+  }, mixins.sansSerif),
   background: {
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -37,7 +35,7 @@ module.exports = () => css({
     marginLeft: 'auto',
     padding: '4rem 1rem',
     flex: 1,
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       paddingTop: 0,
       paddingBottom: 0
     }
@@ -48,7 +46,7 @@ module.exports = () => css({
     textAlign: 'center',
     margin: 0,
     padding: '.5rem',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       fontSize: '3rem'
     }
   },
@@ -57,13 +55,13 @@ module.exports = () => css({
     padding: '0 .5rem 2rem',
     margin: 0,
     textAlign: 'center',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       padding: '0 4rem 4rem'
     }
   },
   break: {
     display: 'none',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       display: 'inline'
     }
   },
@@ -89,7 +87,7 @@ module.exports = () => css({
     marginRight: 'auto',
     marginLeft: 'auto',
     padding: '2rem 1rem',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       paddingTop: '4rem',
       paddingBottom: '4rem'
     }
@@ -181,7 +179,7 @@ module.exports = () => css({
     paddingBottom: '1rem',
     textAlign: 'center',
     color: '#ff725c',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       paddingTop: '2rem',
       paddingBottom: '2rem'
     }
@@ -189,7 +187,7 @@ module.exports = () => css({
   brand: {
     textAlign: 'center',
     width: '100%',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       width: '33%'
     }
   },
@@ -212,7 +210,7 @@ module.exports = () => css({
     fontWeight: 500,
     textAlign: 'center',
     lineHeight: '1.25',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       fontSize: '2.25rem'
     }
   },
@@ -234,12 +232,12 @@ module.exports = () => css({
     borderRadius: '.25rem',
     border: '.125rem solid #ff725c',
     background: '#ff725c'
-  }, link, grow),
+  }, mixins.link, mixins.grow),
   padding: {
     paddingTop: '1rem',
     paddingBottom: '1rem',
     display: 'block',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       display: 'inline-block',
       padding: '1rem'
     }
@@ -253,5 +251,5 @@ module.exports = () => css({
     borderRadius: '.25rem',
     border: '.125rem solid #ff725c',
     color: 'white'
-  }, link, grow)
+  }, mixins.link, mixins.grow)
 })

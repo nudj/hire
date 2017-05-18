@@ -8,6 +8,8 @@ let jobs = require('../modules/jobs')
 let app = require('../../app/server')
 let router = express.Router()
 
+const clone = (obj) => Object.assign({}, obj)
+
 function ensureLoggedIn (req, res, next) {
   req.session.data = {
     person: {
@@ -158,7 +160,7 @@ function requestHandler (req, res, next) {
 
 function jobsHandler (req, res, next) {
   jobs
-    .getAll(Object.assign({}, req.session.data))
+    .getAll(clone(req.session.data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -166,48 +168,57 @@ function jobsHandler (req, res, next) {
 
 function jobHandler (req, res, next) {
   jobs
-    .get(Object.assign({}, req.session.data), req.params.jobSlug)
+    .get(clone(req.session.data), req.params.jobSlug)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
-function archiveHandler (req, res, next) {
+function internalHandler (req, res, next) {
   jobs
-    .patch(req.params.jobSlug, {
-      status: 'Archived'
-    })
-    .then(redirect(req, res, req.get('Referrer')))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function publishHandler (req, res, next) {
-  jobs
-    .patch(req.params.jobSlug, {
-      status: 'Published'
-    })
-    .then(redirect(req, res, req.get('Referrer')))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function composeHandler (req, res, next) {
-  jobs
-    .compose(Object.assign({}, req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
+    .get(clone(req.session.data), req.params.jobSlug)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
+
+// function archiveHandler (req, res, next) {
+//   jobs
+//     .patch(req.params.jobSlug, {
+//       status: 'Archived'
+//     })
+//     .then(redirect(req, res, req.get('Referrer')))
+//     .catch(getErrorHandler(req, res, next))
+// }
+//
+// function publishHandler (req, res, next) {
+//   jobs
+//     .patch(req.params.jobSlug, {
+//       status: 'Published'
+//     })
+//     .then(redirect(req, res, req.get('Referrer')))
+//     .catch(getErrorHandler(req, res, next))
+// }
+//
+// function composeHandler (req, res, next) {
+//   jobs
+//     .compose(clone(req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
+//     .then(getRenderDataBuilder(req, res, next))
+//     .then(getRenderer(req, res, next))
+//     .catch(getErrorHandler(req, res, next))
+// }
 
 router.post('/request', requestHandler)
 router.get('/jobs', ensureLoggedIn, jobsHandler)
 router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
-router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
-router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
-router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
-router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
-router.get('*', (req, res) => {
-  let data = getRenderDataBuilder(req)({})
-  getRenderer(req, res)(data)
-})
+router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
+// router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
+// router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
+// router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
+// router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
+// router.get('*', (req, res) => {
+//   let data = getRenderDataBuilder(req)({})
+//   getRenderer(req, res)(data)
+// })
 
 module.exports = router

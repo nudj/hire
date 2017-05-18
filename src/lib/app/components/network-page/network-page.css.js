@@ -11,6 +11,10 @@ const listStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
+  body: {
+    flexGrow: 1,
+    background: '#ececeb'
+  },
   recommendations: listStyle,
   content: {
     flex: 1,

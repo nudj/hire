@@ -45,7 +45,7 @@ const Index = () => {
           <Route exact path='/request' component={withState(RequestPage)} />
           <Route exact path='/:companySlug' component={withState(JobsPage)} />
           <Route exact path='/:companySlug/:jobSlug' component={withState(JobPage)} />
-          <Route exact path='/:companySlug/:jobSlug/compose' component={withState(ComposePage)} />
+          <Route exact path='/:companySlug/:jobSlug/internal' component={withState(ComposePage)} />
           <Route render={(props) => <Status code={404}><PageNotFound {...props} /></Status>} />
         </Switch>
       </div>

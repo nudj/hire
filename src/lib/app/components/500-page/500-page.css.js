@@ -1,6 +1,10 @@
-let { css, dim } = require('../../lib/css')
+let {
+  css,
+  merge,
+  mixins
+} = require('../../lib/css')
 
-module.exports = () => css({
+module.exports = css({
   content: {
     textAlign: 'center',
     paddingTop: '2rem',
@@ -19,8 +23,8 @@ module.exports = () => css({
     textTransform: 'uppercase',
     color: '#555'
   },
-  link: Object.assign({
+  link: merge({
     color: '#ff725c',
     textDecoration: 'none'
-  }, dim)
+  }, mixins.dim)
 })
