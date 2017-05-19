@@ -8,7 +8,7 @@ const Tooltip = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
 
-  const prismicTooltip = new PrismicReact({document: tooltip})
+  const prismicTooltip = new PrismicReact(tooltip)
 
   const tooltipTitle = prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptitle',

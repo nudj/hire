@@ -8,7 +8,7 @@ const Dialog = (props) => {
   const style = getStyle()
   const dialog = get(props, 'dialog')
 
-  const prismicDialog = new PrismicReact({document: dialog})
+  const prismicDialog = new PrismicReact(dialog)
 
   const dialogTitle = prismicDialog.fragmentToReact({
     fragment: 'dialog.dialogtitle',

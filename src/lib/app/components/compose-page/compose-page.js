@@ -17,7 +17,7 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const prismicCompose = new PrismicReact({document: props.compose})
+    const prismicCompose = new PrismicReact(props.compose)
 
     const composeSubject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
     const composeMessage = prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
