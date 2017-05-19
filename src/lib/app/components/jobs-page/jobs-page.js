@@ -6,6 +6,7 @@ const ClipboardButton = require('react-clipboard.js')
 const getStyle = require('./jobs-page.css')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
+const Tooltip = require('../tooltip/tooltip')
 
 const JobsPage = (props) => {
   const style = getStyle()
@@ -43,12 +44,7 @@ const JobsPage = (props) => {
           </ul>
         </div>
         <div className={style.pageSidebar}>
-          <aside className={style.tip}>
-            <h1 className={style.tipTitle}>Welcome!</h1>
-            <p className={style.tipParagraph}>To save you time, all your jobs have already been uploaded. You can start seeking referrals by selecting 'nudj'.</p>
-            <p className={style.tipParagraph}>Alternatively, you can copy a trackable link to each job or view the live job page by clicking on the job title.</p>
-            <p className={style.tipParagraph}>If you need to remove or edit anything please get in touch.</p>
-          </aside>
+          <Tooltip {...props} />
         </div>
       </div>
     </div>

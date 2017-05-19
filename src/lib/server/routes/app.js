@@ -5,6 +5,14 @@ let get = require('lodash/get')
 let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
+
+let { promiseMap } = require('../lib')
+
+const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
+const repo = process.env.PRISMICIO_REPO
+
+const prismic = require('../modules/prismic')({accessToken, repo})
+
 let app = require('../../app/server')
 let router = express.Router()
 
@@ -159,24 +167,56 @@ function requestHandler (req, res, next) {
 }
 
 function jobsHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobsDashboard']
+  }
+
   jobs
     .getAll(clone(req.session.data))
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function jobHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobDashboard']
+  }
+
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function internalHandler (req, res, next) {
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['internal']
+  }
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendInternal']
+  }
+
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.compose = prismic.fetchContent(composeQuery)
+      data.dialog = prismic.fetchContent(dialogQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
