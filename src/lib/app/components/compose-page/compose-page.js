@@ -7,28 +7,24 @@ const escapeHtml = require('escape-html')
 const getStyle = require('./compose-page.css')
 const PageHeader = require('../page-header/page-header')
 
+const PrismicReact = require('../../lib/prismic-react')
+
 const stripDelims = (tag) => tag.slice(2, -2)
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
+
+    const prismicCompose = new PrismicReact({document: props.compose})
+
+    const composeSubject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
+    const composeMessage = prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
+
     this.state = {
       recipients: props.recipients,
-      subject: 'Hey, I need your help',
-      message: `Hi {{refereeName}},
-
-I hope you don't mind me contacting you.
-
-I'm currently looking for a {{job.title}} to come join us at {{companyName}} and thought you might know someone you've worked with previously who might be interested?
-
-There's a bonus of £{{job.bonus}} available for any successful introduction you make. Just share your unique link below with those you'd recommend and we'll take care of the rest.
-
-{{link}}
-
-Look forward to hearing from you. Thanks so much for your help.
-
-{{personName}}`,
+      subject: composeSubject,
+      message: composeMessage,
       edit: false
     }
     this.onClickRemove = this.onClickRemove.bind(this)

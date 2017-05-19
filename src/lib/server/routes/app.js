@@ -190,7 +190,7 @@ function jobsHandler (req, res, next) {
 function jobHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
-    'document.tags': ['jobsDashboard'] // change
+    'document.tags': ['jobDashboard']
   }
   const destination = 'tooltip'
 
@@ -203,8 +203,15 @@ function jobHandler (req, res, next) {
 }
 
 function internalHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['long', 'formal', 'internal']
+  }
+  const destination = 'compose'
+
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => fetchPrismicContent({prismicQuery, destination, data}))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))

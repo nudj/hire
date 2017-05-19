@@ -2,29 +2,50 @@ const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./tooltip.css')
 
-function getCopyText (tooltipData, style) {
-  const copy = []
-  tooltipData['tooltip.tooltiptext'].value.forEach((item, index) => {
-    copy.push((<p className={style.tooltipText} key={index}>{item.text}</p>))
-  })
-  return (copy)
-}
-
-function getTitleText (tooltipData) {
-  // wtf with this path #vomit
-  return tooltipData['tooltip.tooltiptitle'].value[0].text
-}
+const PrismicReact = require('../../lib/prismic-react')
 
 const Tooltip = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
 
-  const tooltipTitle = getTitleText(tooltip.data)
-  const tooltipText = getCopyText(tooltip.data, style)
+  const prismicTooltip = new PrismicReact({document: tooltip})
+
+  const tooltipTitle = prismicTooltip.fragmentToReact({
+    fragment: 'tooltip.tooltiptitle',
+    props: {
+      className: style.tooltipTitle,
+      element: 'h1'
+    }
+  })
+
+  const tooltipText = prismicTooltip.fragmentToReact({
+    fragment: 'tooltip.tooltiptext',
+    props: {
+      className: style.tooltipText,
+      element: 'p'
+    }
+  })
+
+  // Not sure why I can't get the function call to work
+  function fuckOnClick () {
+    window.alert('yyy')
+  }
+
+  const tooltipIntercomButton = (<button data-thing='tooltip-intercom-testing-poop' className={props.className} />)
+
+  const tooltipIntercom = prismicTooltip.fragmentToReact({
+    fragment: 'tooltip.tooltipintercombutton',
+    props: {
+      className: style.tooltipIntercomButton,
+      onClick: fuckOnClick,
+      element: tooltipIntercomButton
+    }
+  })
 
   return (<aside className={style.tooltip}>
-    <h1 className={style.tooltipTitle}>{tooltipTitle}</h1>
+    {tooltipTitle}
     {tooltipText}
+    {tooltipIntercom}
   </aside>)
 }
 
