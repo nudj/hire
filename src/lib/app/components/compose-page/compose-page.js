@@ -6,6 +6,7 @@ const some = require('lodash/some')
 const escapeHtml = require('escape-html')
 const getStyle = require('./compose-page.css')
 const PageHeader = require('../page-header/page-header')
+const Dialog = require('../dialog/dialog')
 
 const PrismicReact = require('../../lib/prismic-react')
 
@@ -122,6 +123,7 @@ module.exports = class ComposePage extends React.Component {
           <div className={this.style.pageSidebar}>
             Sidebar...
           </div>
+          <Dialog {...this.props} />
         </div>
       </form>
     )
