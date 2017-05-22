@@ -1,20 +1,42 @@
-let merge = require('lodash/merge')
-let { StyleSheet, css } = require('aphrodite/no-important')
-
-module.exports.css = (stylesheet) => {
-  const styles = StyleSheet.create(stylesheet)
-  return Object.keys(stylesheet).reduce((classList, className) => {
-    classList[className] = css(styles[className])
-    return classList
-  }, {})
+module.exports.pageLayout = {
+  pageBody: {
+    flexGrow: 1,
+    background: '#ececeb',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'stretch'
+  },
+  pageHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 0,
+    background: '#fff',
+    padding: '10px 20px'
+  },
+  pageHeadline: {
+    padding: '20px 20px 10px',
+    margin: 0
+  },
+  pageContent: {
+    flex: 1,
+    padding: '10px 20px',
+    display: 'flex'
+  },
+  pageMain: {
+    flex: 1
+  },
+  pageSidebar: {
+    width: '420px',
+    padding: '0 60px'
+  }
 }
 
-module.exports.merge = merge
-
-module.exports.breakpoints = {
-  ns: '@media screen and (min-width: 30em)',
-  m: '@media screen and (min-width: 30em) and (max-width: 60em)',
-  l: '@media screen and (min-width: 60em)'
+module.exports.cardStyle = {
+  background: '#fff',
+  borderRadius: '4px',
+  boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
+  padding: '30px'
 }
 
 module.exports.sansSerif = {

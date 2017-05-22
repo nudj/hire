@@ -11,6 +11,7 @@ const ComposePage = require('../compose-page/compose-page')
 const RequestPage = require('../request-page/request-page')
 const PageNotFound = require('../404-page/404-page')
 const Status = require('../status/status')
+const Overlay = require('../overlay/overlay')
 const withState = require('../../lib/with-state')
 
 const Index = () => {
@@ -45,10 +46,11 @@ const Index = () => {
           <Route exact path='/request' component={withState(RequestPage)} />
           <Route exact path='/:companySlug' component={withState(JobsPage)} />
           <Route exact path='/:companySlug/:jobSlug' component={withState(JobPage)} />
-          <Route exact path='/:companySlug/:jobSlug/compose' component={withState(ComposePage)} />
-          <Route render={(props) => <Status code={404}><PageNotFound {...props} /></Status>} />
+          <Route exact path='/:companySlug/:jobSlug/internal' component={withState(ComposePage)} />
+          <Route render={withState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>
+      <Route path='*' component={withState(Overlay)} />
     </div>
   )
 }

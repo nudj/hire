@@ -8,7 +8,7 @@ const PageHeader = (props) => {
     <header className={style.header}>
       <div>
         <h1>{get(props, 'title', '')}</h1>
-        <h2>@ {get(props, 'subtitle', '')}</h2>
+        <h2>{get(props, 'subtitle', '')}</h2>
       </div>
       <div className={style.sub}>
         {get(props, 'children', '')}

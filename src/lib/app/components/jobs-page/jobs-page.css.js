@@ -1,5 +1,7 @@
 let {
-  css
+  css,
+  merge,
+  mixins
 } = require('../../lib/css')
 
 const listStyle = {
@@ -8,41 +10,7 @@ const listStyle = {
   margin: 0
 }
 
-module.exports = () => css({
-  body: {
-    flexGrow: 1,
-    background: '#ececeb',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'stretch'
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 0,
-    background: '#fff',
-    padding: '10px 20px'
-  },
-  title: {
-
-  },
-  headline: {
-    padding: '20px 20px 10px',
-    margin: 0
-  },
-  content: {
-    flex: 1,
-    padding: '10px 20px',
-    display: 'flex'
-  },
-  main: {
-    flex: 1
-  },
-  sidebar: {
-    width: '420px',
-    padding: '0 60px'
-  },
+module.exports = css(merge(mixins.pageLayout, {
   jobs: listStyle,
   tip: {
     background: '#fff',
@@ -59,4 +27,4 @@ module.exports = () => css({
       marginTop: 0
     }
   }
-})
+}))

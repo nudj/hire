@@ -1,33 +1,31 @@
 let {
   css,
-  dim,
-  link,
-  sansSerif,
-  breakpoints,
+  mixins,
+  variables,
   merge
 } = require('../../lib/css')
 
-module.exports = () => css({
+module.exports = css({
   body: merge({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
-  }, sansSerif),
+  }, mixins.sansSerif),
   content: {
     width: '100%',
     maxWidth: '32rem',
     margin: '0 auto',
     padding: '2rem 1rem',
     textAlign: 'center',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       padding: '4rem 0'
     }
   },
   formHeader: {
     paddingBottom: 0,
     borderBottom: '0.125rem solid #f4f4f4',
-    [breakpoints.ns]: {
+    [variables.breakpoints.ns]: {
       paddingBottom: '0.5rem'
     }
   },
@@ -36,14 +34,14 @@ module.exports = () => css({
     fontWeight: 500,
     margin: '1rem 0',
     textAlign: 'left',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       fontSize: '2.25rem'
     }
   },
   subtitle: {
     fontSize: '1rem',
     textAlign: 'left',
-    [breakpoints.l]: {
+    [variables.breakpoints.l]: {
       fontSize: '1.25rem'
     }
   },
@@ -80,7 +78,7 @@ module.exports = () => css({
     border: '0.125rem solid #ff725c',
     borderRadius: '.25rem',
     backgroundColor: '#ff725c'
-  }, dim, link),
+  }, mixins.dim, mixins.link),
   successHeader: {
     fontWeight: 600,
     fontSize: '1.5rem'

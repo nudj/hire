@@ -5,8 +5,18 @@ let get = require('lodash/get')
 let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
+
+let { promiseMap } = require('../lib')
+
+const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
+const repo = process.env.PRISMICIO_REPO
+
+const prismic = require('../modules/prismic')({accessToken, repo})
+
 let app = require('../../app/server')
 let router = express.Router()
+
+const clone = (obj) => Object.assign({}, obj)
 
 function ensureLoggedIn (req, res, next) {
   req.session.data = {
@@ -140,13 +150,13 @@ function getRenderer (req, res, next) {
   }
 }
 
-function redirect (req, res, url) {
-  if (req.xhr) {
-    return () => res.json({ redirect: url })
-  } else {
-    return () => res.redirect(url)
-  }
-}
+// function redirect (req, res, url) {
+//   if (req.xhr) {
+//     return () => res.json({ redirect: url })
+//   } else {
+//     return () => res.redirect(url)
+//   }
+// }
 
 function requestHandler (req, res, next) {
   request
@@ -157,57 +167,108 @@ function requestHandler (req, res, next) {
 }
 
 function jobsHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobsDashboard']
+  }
+
   jobs
-    .getAll(Object.assign({}, req.session.data))
+    .getAll(clone(req.session.data))
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function jobHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobDashboard']
+  }
+
   jobs
-    .get(Object.assign({}, req.session.data), req.params.jobSlug)
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
-function archiveHandler (req, res, next) {
-  jobs
-    .patch(req.params.jobSlug, {
-      status: 'Archived'
-    })
-    .then(redirect(req, res, req.get('Referrer')))
-    .catch(getErrorHandler(req, res, next))
-}
+function internalHandler (req, res, next) {
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['internal']
+  }
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendInternal']
+  }
 
-function publishHandler (req, res, next) {
   jobs
-    .patch(req.params.jobSlug, {
-      status: 'Published'
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.compose = prismic.fetchContent(composeQuery)
+      data.dialog = prismic.fetchContent(dialogQuery)
+      return promiseMap(data)
     })
-    .then(redirect(req, res, req.get('Referrer')))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function composeHandler (req, res, next) {
-  jobs
-    .compose(Object.assign({}, req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
+
+function internalSendHandler (req, res, next) {
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+// function archiveHandler (req, res, next) {
+//   jobs
+//     .patch(req.params.jobSlug, {
+//       status: 'Archived'
+//     })
+//     .then(redirect(req, res, req.get('Referrer')))
+//     .catch(getErrorHandler(req, res, next))
+// }
+//
+// function publishHandler (req, res, next) {
+//   jobs
+//     .patch(req.params.jobSlug, {
+//       status: 'Published'
+//     })
+//     .then(redirect(req, res, req.get('Referrer')))
+//     .catch(getErrorHandler(req, res, next))
+// }
+//
+// function composeHandler (req, res, next) {
+//   jobs
+//     .compose(clone(req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
+//     .then(getRenderDataBuilder(req, res, next))
+//     .then(getRenderer(req, res, next))
+//     .catch(getErrorHandler(req, res, next))
+// }
 
 router.post('/request', requestHandler)
 router.get('/jobs', ensureLoggedIn, jobsHandler)
 router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
-router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
-router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
-router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
-router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
-router.get('*', (req, res) => {
-  let data = getRenderDataBuilder(req)({})
-  getRenderer(req, res)(data)
-})
+router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
+router.get('/jobs/:jobSlug/internal/send', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}/internal`))
+router.post('/jobs/:jobSlug/internal/send', ensureLoggedIn, internalSendHandler)
+// router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
+// router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
+// router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
+// router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
+// router.get('*', (req, res) => {
+//   let data = getRenderDataBuilder(req)({})
+//   getRenderer(req, res)(data)
+// })
 
 module.exports = router

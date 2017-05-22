@@ -1,6 +1,10 @@
-let { css, dim } = require('../../lib/css')
+let {
+  css,
+  merge,
+  mixins
+} = require('../../lib/css')
 
-module.exports = () => css({
+module.exports = css({
   content: {
     padding: '8rem .5rem',
     textAlign: 'center',
@@ -26,10 +30,10 @@ module.exports = () => css({
   pages: {
     padding: '.5rem'
   },
-  links: Object.assign({
+  links: merge({
     display: 'inline-block',
     padding: '.5rem',
     color: '#ff725c',
     textDecoration: 'none'
-  }, dim)
+  }, mixins.dim)
 })
