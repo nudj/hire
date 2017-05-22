@@ -90,3 +90,9 @@ module.exports.grow = {
     transform: 'transform: scale( .90 )'
   }
 }
+
+module.exports.deList = {
+  listStyle: 'none',
+  margin: '0',
+  padding: '0'
+}

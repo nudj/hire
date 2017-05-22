@@ -29,6 +29,11 @@ class PrismicModule {
   fragmentToReact ({fragment, props}) {
     const structuredText = this.doc.get(fragment)
 
+    if (!structuredText) {
+      console.log('FRAGMENT NOT FOUND', fragment)
+      return []
+    }
+
     if (!structuredText.blocks || !Array.isArray(structuredText.blocks)) {
       console.log('HAS NO BLOCKS') // should return this?
       return []
