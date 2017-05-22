@@ -1,17 +1,18 @@
 const React = require('react')
 const Prismic = require('prismic.io')
+const omit = require('lodash/omit')
 
 class PrismicModule {
   constructor (doc) {
     this.doc = this.convertDocument(doc)
   }
 
-  createElement ({block, props}) {
+  createElement ({block, props, index}) {
     // `block.type` contains information about the element type
     if (typeof props.element === 'object' && props.element.$$typeof) {
-      return (<props.element.type {...props.element.props} {...props}>{block.text}</props.element.type>)
+      return (<props.element.type {...omit(props.element.props, ['element'])} {...omit(props, ['element'])} key={`${props.element.type}+${index}`}>{block.text}</props.element.type>)
     } else {
-      return (<props.element {...props}>{block.text}</props.element>)
+      return (<props.element {...omit(props, ['element'])} key={`${props.element}+${index}`}>{block.text}</props.element>)
     }
     // add a `key` property?
   }
@@ -33,7 +34,7 @@ class PrismicModule {
       return []
     }
 
-    const reactElements = structuredText.blocks.map(block => this.createElement({block, props}))
+    const reactElements = structuredText.blocks.map((block, index) => this.createElement({block, props, index}))
 
     return reactElements
   }

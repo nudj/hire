@@ -9,12 +9,11 @@ const { setPage } = require('../../actions/app')
 function getSubmitHandler (props, context) {
   return (event) => {
     event.preventDefault()
-    let data = serialise(event.target, { hash: true })
     props.onSubmit && props.onSubmit(event)
     request(props.action, {
       method: props.method,
       maxRedirects: 0,
-      data
+      data: serialise(event.target, { hash: true })
     })
     .then((data) => {
       if (data.redirect) {

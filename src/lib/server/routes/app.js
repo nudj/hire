@@ -150,13 +150,13 @@ function getRenderer (req, res, next) {
   }
 }
 
-function redirect (req, res, url) {
-  if (req.xhr) {
-    return () => res.json({ redirect: url })
-  } else {
-    return () => res.redirect(url)
-  }
-}
+// function redirect (req, res, url) {
+//   if (req.xhr) {
+//     return () => res.json({ redirect: url })
+//   } else {
+//     return () => res.redirect(url)
+//   }
+// }
 
 function requestHandler (req, res, next) {
   request
@@ -222,6 +222,14 @@ function internalHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function internalSendHandler (req, res, next) {
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 // function archiveHandler (req, res, next) {
 //   jobs
 //     .patch(req.params.jobSlug, {
@@ -252,6 +260,8 @@ router.post('/request', requestHandler)
 router.get('/jobs', ensureLoggedIn, jobsHandler)
 router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
+router.get('/jobs/:jobSlug/internal/send', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}/internal`))
+router.post('/jobs/:jobSlug/internal/send', ensureLoggedIn, internalSendHandler)
 // router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
 // router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
 // router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))

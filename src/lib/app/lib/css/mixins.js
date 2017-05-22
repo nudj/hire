@@ -32,6 +32,13 @@ module.exports.pageLayout = {
   }
 }
 
+module.exports.cardStyle = {
+  background: '#fff',
+  borderRadius: '4px',
+  boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
+  padding: '30px'
+}
+
 module.exports.sansSerif = {
   fontFamily: '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif'
 }

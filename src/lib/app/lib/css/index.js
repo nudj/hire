@@ -1,10 +1,7 @@
-const deepmerge = require('deepmerge')
 const { StyleSheet, css: _css } = require('aphrodite/no-important')
 const variables = require('./variables')
 const mixins = require('./mixins')
-
-// make merge non-destructive (emulates immutability)
-const merge = (...objs) => deepmerge.all([...objs], { clone: true })
+const { merge } = require('../')
 
 const css = (stylesheet) => {
   return () => {

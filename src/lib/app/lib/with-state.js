@@ -5,7 +5,7 @@ const ScrollTop = require('../components/scroll-top/scroll-top')
 
 const WithState = (Page) => {
   return withRouter(connect((state, props) => Object.assign({}, state, props))((props) => {
-    return <ScrollTop ignore={props.history.action === 'REPLACE'}><Page {...props.page} /></ScrollTop>
+    return <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} /></ScrollTop>
   }))
 }
 

@@ -1,12 +1,9 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
-const filter = require('lodash/filter')
 const ClipboardButton = require('react-clipboard.js')
 const getStyle = require('./job-page.css')
-const Form = require('../form/form')
 const PageHeader = require('../page-header/page-header')
-const RowItem = require('../row-item/row-item')
 
 const JobPage = (props) => {
   let style = getStyle()
@@ -22,7 +19,7 @@ const JobPage = (props) => {
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <Link to={`/jobs/${get(props, 'job.slug')}/internal`}>Internal</Link>
-          <Link to={`/jobs/${get(props, 'job.slug')}/external`} disabled={true}>External</Link>
+          <Link to={`/jobs/${get(props, 'job.slug')}/external`} disabled>External</Link>
         </div>
         <div className={style.pageSidebar}>
           Sidebar yo
