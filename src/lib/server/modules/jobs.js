@@ -1,9 +1,6 @@
 let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
-
-function fetchPeopleFromFrgaments (fragments) {
-  return Promise.all(fragments.map((fragment) => request(`people/${fragment.personId || fragment}`)))
-}
+const common = require('./common')
 
 function fetchJob (data, jobSlug) {
   data.job = request(`jobs/${jobSlug}`)
@@ -12,19 +9,13 @@ function fetchJob (data, jobSlug) {
 
 function fetchJobAndRecipients (data, jobSlug, recipients) {
   data.job = request(`jobs/${jobSlug}`)
-  data.recipients = fetchPeopleFromFrgaments(recipients)
+  data.recipients = common.fetchPeopleFromFragments(recipients)
   return promiseMap(data)
 }
 
 function fetchJobs (data) {
   data.published = request(`jobs?companyId=${data.company.id}&status=Published`)
   data.archived = request(`jobs?companyId=${data.company.id}&status=Archived`)
-  return promiseMap(data)
-}
-
-function fetchRecommendations (data) {
-  data.recommendations = request(`recommendations?job=${data.job.id}`)
-  .then(fetchPeopleFromFrgaments)
   return promiseMap(data)
 }
 
@@ -43,7 +34,6 @@ function patchJobWith (patch) {
 
 module.exports.get = function (data, jobSlug) {
   return fetchJob(data, jobSlug)
-  .then(fetchRecommendations)
 }
 
 module.exports.getAll = function (data) {

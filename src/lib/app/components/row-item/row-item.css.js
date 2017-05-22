@@ -9,7 +9,7 @@ const listStyle = {
   margin: 0
 }
 
-module.exports = css({
+const styles = {
   row: merge(listStyle, {
     display: 'flex',
     justifyContent: 'space-between',
@@ -72,4 +72,18 @@ module.exports = css({
     alignItems: 'center'
   }, listStyle),
   action: listStyle
+}
+
+styles.rowSmall = merge({}, styles.row, {
+  margin: '0 0 20px 20px',
+  marginTop: '0',
+  width: 'calc(50% - 20px)',
+  ':first-child': {
+    margin: '0 0 20px 0'
+  },
+  ':nth-child(odd)': {
+    marginLeft: '0'
+  }
 })
+
+module.exports = css(styles)

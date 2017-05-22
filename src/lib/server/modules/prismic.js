@@ -7,14 +7,14 @@ class PrismicModule {
     this.repoUrl = `https://${this.repo}.prismic.io/api`
   }
 
-  fetchContent (documentQuery = {}) {
+  fetchContent (documentQuery = {}, returnOne = false) {
     const request = Prismic.api(this.repoUrl, {accessToken: this.accessToken})
       .then(api => this.queryDocuments({api, documentQuery}))
       .then(response => {
-        // Just returns the first one - works ok for now, but not so great
-        // Also need to work out what happens if no results
-        // look at using lodash?
-        return response.results[0]
+        if (!returnOne) {
+          return response.results
+        }
+        return response.results.length ? response.results[0] : undefined
       })
       .catch(error => this.handleErrors(error))
 

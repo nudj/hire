@@ -4,8 +4,11 @@ const getStyle = require('./row-item.css')
 
 const RowItem = (props) => {
   const style = getStyle()
+
+  const rowClass = props.rowClass || 'row'
+
   return (
-    <div className={style.row}>
+    <li className={style[rowClass]}>
       <a className={style.title} href={get(props, 'uri')}>{get(props, 'title')}</a>
       <ul className={style.details}>
         {get(props, 'details', []).map((detail) => {
@@ -28,7 +31,7 @@ const RowItem = (props) => {
           )
         })}
       </ul>
-    </div>
+    </li>
   )
 }
 

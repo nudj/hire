@@ -2,6 +2,44 @@ let dummy = require('@nudj/dummy')
 let schemas = require('@nudj/schemas')
 let jsonServer = require('json-server')
 let find = require('lodash/find')
+const merge = require('lodash/merge')
+
+const recommendationsSchema = merge({}, schemas.recommendations, {
+  hirerId: schemas.hirers.personId,
+  source: {
+    example: {
+      fn: 'choice',
+      args: [['nudj', 'hirer']]
+    }
+  }
+})
+
+const sentExternalSchema = merge({}, recommendationsSchema, {
+  sentMessageLength: {
+    example: {
+      fn: 'choice',
+      args: [['short', 'long']]
+    }
+  },
+  sentMessageStyle: {
+    example: {
+      fn: 'choice',
+      args: [['bff', 'familiar', 'professional']]
+    }
+  },
+  sentMessageText: {
+    example: {
+      fn: 'choice',
+      args: [['whatever']]
+    }
+  },
+  sentMessageDeliveryMethod: {
+    example: {
+      fn: 'choice',
+      args: [['email', 'message']]
+    }
+  }
+})
 
 let dummyData = dummy({
   companies: {
@@ -29,8 +67,12 @@ let dummyData = dummy({
     count: 1
   },
   recommendations: {
-    schema: schemas.recommendations,
-    count: 3
+    schema: recommendationsSchema,
+    count: 6
+  },
+  sentExternal: {
+    schema: sentExternalSchema,
+    count: 0
   }
 })
 dummyData.jobs = dummyData.jobs.concat([

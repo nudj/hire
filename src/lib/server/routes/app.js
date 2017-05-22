@@ -6,6 +6,8 @@ let logger = require('../lib/logger')
 let request = require('../modules/request')
 let jobs = require('../modules/jobs')
 
+const network = require('../modules/network')
+
 let { promiseMap } = require('../lib')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -21,6 +23,7 @@ const clone = (obj) => Object.assign({}, obj)
 function ensureLoggedIn (req, res, next) {
   req.session.data = {
     person: {
+      id: '21',
       firstName: 'David',
       lastName: 'Platt'
     },
@@ -175,7 +178,7 @@ function jobsHandler (req, res, next) {
   jobs
     .getAll(clone(req.session.data))
     .then(data => {
-      data.tooltip = prismic.fetchContent(prismicQuery)
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
     })
     .then(getRenderDataBuilder(req, res, next))
@@ -192,7 +195,7 @@ function jobHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => {
-      data.tooltip = prismic.fetchContent(prismicQuery)
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
     })
     .then(getRenderDataBuilder(req, res, next))
@@ -213,8 +216,8 @@ function internalHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => {
-      data.compose = prismic.fetchContent(composeQuery)
-      data.dialog = prismic.fetchContent(dialogQuery)
+      data.compose = prismic.fetchContent(composeQuery, true)
+      data.dialog = prismic.fetchContent(dialogQuery, true)
       return promiseMap(data)
     })
     .then(getRenderDataBuilder(req, res, next))
@@ -225,6 +228,52 @@ function internalHandler (req, res, next) {
 function internalSendHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function externalHandler (req, res, next) {
+  const selectReferrersQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['selectReferrers', 'external']
+  }
+
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => network.get(data, data.person.id, data.job.id))
+    .then(data => {
+      data.networkSent = data.sentExternal.map(person => person.id)
+
+      const referrerType = data.sentExternal.length ? 'notFirstTime' : 'firstTime'
+      selectReferrersQuery['document.tags'].push(referrerType)
+
+      data.tooltips = prismic.fetchContent(selectReferrersQuery)
+
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function externalComposeHandler (req, res, next) {
+  const composeExternalTooltips = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendExternal']
+  }
+  const composeExternalMessages = {
+    'document.type': 'composemessage',
+    'document.tags': ['external']
+  }
+
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.tooltips = prismic.fetchContent(composeExternalTooltips)
+      data.messages = prismic.fetchContent(composeExternalMessages)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -262,6 +311,8 @@ router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.get('/jobs/:jobSlug/internal/send', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}/internal`))
 router.post('/jobs/:jobSlug/internal/send', ensureLoggedIn, internalSendHandler)
+router.get('/jobs/:jobSlug/external', ensureLoggedIn, externalHandler)
+router.get('/jobs/:jobSlug/external/compose', ensureLoggedIn, externalComposeHandler)
 // router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
 // router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
 // router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
