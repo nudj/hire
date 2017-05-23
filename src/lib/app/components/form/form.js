@@ -1,51 +1,26 @@
 const React = require('react')
-const PropTypes = require('prop-types')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
 const omit = require('lodash/omit')
-const request = require('../../../lib/request')
-const { setPage } = require('../../actions/app')
+const { postData } = require('../../actions/app')
 
-function getSubmitHandler (props, context) {
+function getSubmitHandler (props) {
   return (event) => {
     event.preventDefault()
     props.onSubmit && props.onSubmit(event)
-    request(props.action, {
+    props.dispatch(postData({
+      url: props.action,
       method: props.method,
-      maxRedirects: 0,
       data: serialise(event.target, { hash: true })
-    })
-    .then((data) => {
-      if (data.redirect) {
-        // This only supports redirects within our application for now.
-        // We will need more intelligent url grokking in order to handle redirects to external urls
-        context.router.history.replace('/' + data.redirect.split('/').slice(3).join('/'))
-      } else {
-        // when no redirect prop is found we should treat the response as new state data for the form's action page
-        // so first set the new page data
-        props.dispatch(setPage(data))
-        // then transition to the new page
-        context.router.history.push(props.action)
-        return data
-      }
-    })
+    }))
   }
 }
 
-const Form = (props, context) => {
+const Form = (props) => {
   let filteredProps = omit(props, ['dispatch'])
-  return <form {...filteredProps} method={props.method || 'post'} onSubmit={getSubmitHandler(props, context)}>
+  return <form {...filteredProps} method={props.method || 'post'} onSubmit={getSubmitHandler(props)}>
     {props.children}
   </form>
-}
-Form.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired,
-      createHref: PropTypes.func.isRequired
-    }).isRequired
-  }).isRequired
 }
 
 module.exports = connect()(Form)

@@ -1,22 +1,20 @@
-let express = require('express')
-let get = require('lodash/get')
-// let _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+const express = require('express')
+const get = require('lodash/get')
+// const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
-let logger = require('../lib/logger')
-let request = require('../modules/request')
-let jobs = require('../modules/jobs')
-
+const logger = require('../lib/logger')
+const request = require('../modules/request')
+const jobs = require('../modules/jobs')
 const network = require('../modules/network')
-
-let { promiseMap } = require('../lib')
+const { promiseMap } = require('../lib')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
 
 const prismic = require('../modules/prismic')({accessToken, repo})
 
-let app = require('../../app/server')
-let router = express.Router()
+const app = require('../../app/server')
+const router = express.Router()
 
 const clone = (obj) => Object.assign({}, obj)
 
@@ -226,8 +224,22 @@ function internalHandler (req, res, next) {
 }
 
 function internalSendHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['internal']
+  }
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendInternal']
+  }
+
+  network
+    .send(clone(req.session.data), req.params.jobSlug, req.body)
+    .then(data => {
+      data.compose = prismic.fetchContent(composeQuery)
+      data.dialog = prismic.fetchContent(dialogQuery)
+      return promiseMap(data)
+    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -309,8 +321,7 @@ router.post('/request', requestHandler)
 router.get('/jobs', ensureLoggedIn, jobsHandler)
 router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
-router.get('/jobs/:jobSlug/internal/send', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}/internal`))
-router.post('/jobs/:jobSlug/internal/send', ensureLoggedIn, internalSendHandler)
+router.post('/jobs/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/jobs/:jobSlug/external', ensureLoggedIn, externalHandler)
 router.get('/jobs/:jobSlug/external/compose', ensureLoggedIn, externalComposeHandler)
 // router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)

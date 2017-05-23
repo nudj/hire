@@ -1,7 +1,7 @@
 const { StyleSheet, css: _css } = require('aphrodite/no-important')
 const variables = require('./variables')
 const mixins = require('./mixins')
-const { merge } = require('../')
+const { merge } = require('../../../lib')
 
 const css = (stylesheet) => {
   return () => {

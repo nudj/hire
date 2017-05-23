@@ -22,8 +22,7 @@ const store = createStore(
     page: pageReducer
   }),
   data,
-  applyMiddleware(thunkMiddleware),
-  applyMiddleware(historyMiddleware)
+  applyMiddleware(thunkMiddleware, historyMiddleware)
 )
 
 StyleSheet.rehydrate(renderedClassNames)
@@ -47,7 +46,7 @@ ReactDOM.render(
         })
         .then((data) => {
           // only update page state if it is the date for the page we are currently viewing
-          if (data.page.url.originalUrl === store.getState().router.location.pathname) {
+          if (data && data.page.url.originalUrl === store.getState().router.location.pathname) {
             return dispatch(setPage(data))
           }
         })
