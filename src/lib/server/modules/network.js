@@ -85,6 +85,13 @@ function fetchNetworkForJob (data, hirerId, jobId) {
   return promiseMap(data)
 }
 
+function fetchNetworkForJobAndPerson (data, hirerId, jobId, personId) {
+  data.recommendation = request(`recommendations/?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}&source=hirer`)
+    .then(common.fetchPeopleFromFragments)
+
+  return promiseMap(data)
+}
+
 function fetchNetwork (data, hirerId, jobId) {
   data.network = request(`recommendations/?hirerId=${hirerId}`)
     .then(common.fetchPeopleFromFragments)
@@ -93,6 +100,10 @@ function fetchNetwork (data, hirerId, jobId) {
 
 module.exports.get = function (data, hirerId, jobId) {
   return fetchNetworkForJob(data, hirerId, jobId)
+}
+
+module.exports.getById = function (data, hirerId, jobId, personId) {
+  return fetchNetworkForJobAndPerson(data, hirerId, jobId, personId)
 }
 
 module.exports.getAll = function (data, hirerId) {

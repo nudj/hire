@@ -281,6 +281,7 @@ function externalComposeHandler (req, res, next) {
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => network.getById(data, data.person.id, data.job.id, data.personId))
     .then(data => {
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)
@@ -323,7 +324,7 @@ router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/jobs/:jobSlug/external', ensureLoggedIn, externalHandler)
-router.get('/jobs/:jobSlug/external/compose', ensureLoggedIn, externalComposeHandler)
+router.get('/jobs/:jobSlug/external/compose/:personId', ensureLoggedIn, externalComposeHandler)
 // router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
 // router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
 // router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))

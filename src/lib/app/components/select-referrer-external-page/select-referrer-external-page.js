@@ -21,6 +21,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderNetworkList () {
+    const jobSlug = this.props.job.slug
     return (<ul className={this.style.network}>
       {this.props.network.map((person, index) => {
         const personId = get(person, 'id')
@@ -40,7 +41,7 @@ module.exports = class ComposePage extends React.Component {
             description: get(person, 'company')
           }]}
           actions={[
-            <Link to={`/jobs/external/compose/${get(person, 'id')}`}>Nudj</Link>
+            <Link to={`/jobs/${jobSlug}/external/compose/${get(person, 'id')}`}>Nudj</Link>
           ]}
         />)
       })}
