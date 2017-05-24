@@ -50,5 +50,8 @@ module.exports = css(merge(mixins.pageLayout, {
   message: {
     width: '100%',
     height: '20rem'
+  },
+  errorLabel: {
+    color: 'red'
   }
 }))

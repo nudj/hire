@@ -12,8 +12,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: '[name].js',
-    chunkFilename: '[id].js',
-    devtoolLineToLine: true
+    chunkFilename: '[id].js'
   },
   devtool: 'source-map',
   module: {

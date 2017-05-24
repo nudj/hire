@@ -1,9 +1,6 @@
-const {
-  replace,
-  push
-} = require('@nudj/react-router-redux')
+const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
-const { merge } = require('../lib')
+const { merge } = require('../../lib')
 
 const FETCHED_PAGE = 'FETCHED_PAGE'
 module.exports.FETCHED_PAGE = FETCHED_PAGE
@@ -48,30 +45,20 @@ module.exports.hideDialog = () => {
 
 module.exports.postData = ({
   url,
+  method = 'post',
   data
 }) => {
   return (dispatch, getState) => {
     let state = getState()
     request(url, {
-      method: 'post',
-      maxRedirects: 0,
+      method,
       data: merge(data, {
         _csrf: state.page.csrfToken
       })
     })
     .then((data) => {
-      if (data.redirect) {
-        // This only supports redirects within our application for now.
-        // We will need more intelligent url grokking in order to handle redirects to external urls
-        // context.router.history.replace('/' + data.redirect.split('/').slice(3).join('/'))
-        dispatch(replace('/' + data.redirect.split('/').slice(3).join('/')))
-      } else {
-        // when no redirect prop is found we should treat the response as new state data for the form's action page
-        // so first set the new page data
-        dispatch(fetchedPage(data))
-        // then transition to the new page
-        dispatch(push(url))
-      }
+      dispatch(fetchedPage(data))
+      dispatch(push(data.page.url.originalUrl))
     })
   }
 }

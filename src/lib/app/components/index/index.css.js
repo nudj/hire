@@ -23,7 +23,7 @@ module.exports = css({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flex: '1 1 auto',
     minWidth: 0,
     minHeight: 0
