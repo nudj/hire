@@ -17,6 +17,7 @@ const fieldStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
+  submit: mixins.button,
   tagOk: tag,
   tagError: merge(tag, {
     background: 'pink',
@@ -43,6 +44,7 @@ module.exports = css(merge(mixins.pageLayout, {
     width: '100%',
     display: 'block'
   },
+  editing: mixins.buttonTertiary,
   messageWrap: merge(fieldStyle, {
     paddingTop: '30px',
     alignItems: 'flex-start'

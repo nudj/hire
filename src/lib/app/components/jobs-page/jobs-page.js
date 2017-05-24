@@ -2,7 +2,6 @@ const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const format = require('date-fns/format')
-const ClipboardButton = require('react-clipboard.js')
 const getStyle = require('./jobs-page.css')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
@@ -36,8 +35,7 @@ const JobsPage = (props) => {
                   description: `£${get(job, 'bonus')}`
                 }]}
                 actions={[
-                  <ClipboardButton data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(job, 'slug')}`}>Copy link</ClipboardButton>,
-                  <Link to={`/jobs/${get(job, 'slug')}`}>Nudj</Link>
+                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>Get started</Link>
                 ]}
               />
             ))}
