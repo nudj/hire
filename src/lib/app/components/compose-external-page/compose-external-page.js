@@ -320,7 +320,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   submitComposeMessage () {
-    const composeMessage = this.state.tempMessage
+    const composeMessage = this.state.tempMessage || this.getComposeMessageBaseText()
     const data = merge({}, this.state.data, {composeMessage})
     const active = 'sendMessage'
     this.saveAndPostData({active, data})
