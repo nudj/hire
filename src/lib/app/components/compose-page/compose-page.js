@@ -20,7 +20,7 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    let prismicCompose = get(this.props, 'compose') && new PrismicReact(this.props.compose)
+    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
 
@@ -44,7 +44,7 @@ module.exports = class ComposePage extends React.Component {
     this.onClickCancel = this.onClickCancel.bind(this)
   }
   componentWillReceiveProps (props) {
-    let prismicCompose = get(this.props, 'compose') && new PrismicReact(this.props.compose)
+    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
 
