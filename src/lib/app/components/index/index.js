@@ -50,7 +50,7 @@ const Index = () => {
           <Route exact path='/:companySlug/:jobSlug' component={withState(JobPage)} />
           <Route exact path='/:companySlug/:jobSlug/internal' component={withState(ComposePage)} />
           <Route exact path='/:companySlug/:jobSlug/external' component={withState(SelectReferrerExternalPage)} />
-          <Route exact path='/:companySlug/:jobSlug/external/compose/:recommendationId' component={withState(ComposeExternalPage)} />
+          <Route exact path='/:companySlug/:jobSlug/external/:recommendationId' component={withState(ComposeExternalPage)} />
           <Route render={withState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>
