@@ -1,4 +1,4 @@
-const { push } = require('@nudj/react-router-redux')
+const { push, replace } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
 const { merge } = require('../../lib')
 
@@ -13,6 +13,19 @@ function fetchedPage (data) {
 module.exports.setPage = (data) => {
   return (dispatch, getState) => {
     dispatch(fetchedPage(data))
+  }
+}
+
+const SENDING = 'SENDING'
+module.exports.SENDING = SENDING
+function sending () {
+  return {
+    type: SENDING
+  }
+}
+module.exports.sending = () => {
+  return (dispatch, getState) => {
+    dispatch(sending())
   }
 }
 
@@ -50,6 +63,7 @@ module.exports.postData = ({
 }) => {
   return (dispatch, getState) => {
     let state = getState()
+    dispatch(sending())
     request(url, {
       method,
       data: merge(data, {
@@ -58,7 +72,9 @@ module.exports.postData = ({
     })
     .then((data) => {
       dispatch(fetchedPage(data))
-      dispatch(push(data.page.url.originalUrl))
+      if (data.page.url.originalUrl !== url) {
+        dispatch(push(data.page.url.originalUrl))
+      }
     })
   }
 }

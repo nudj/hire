@@ -1,7 +1,8 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
 const tag = {
@@ -17,6 +18,14 @@ const fieldStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
+  jobLink: {
+    color: variables.colors.royalBlue,
+    textDecoration: 'none'
+  },
+  companyLink: {
+    color: variables.colors.charcoal,
+    textDecoration: 'none'
+  },
   submit: mixins.button,
   tagOk: tag,
   tagError: merge(tag, {

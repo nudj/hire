@@ -239,8 +239,8 @@ function internalSendHandler (req, res, next) {
   network
     .send(clone(req.session.data), req.params.jobSlug, req.body)
     .then(data => {
-      data.compose = prismic.fetchContent(composeQuery)
-      data.dialog = prismic.fetchContent(dialogQuery)
+      data.compose = prismic.fetchContent(composeQuery, true)
+      data.dialog = prismic.fetchContent(dialogQuery, true)
       return promiseMap(data)
     })
     .then(getRenderDataBuilder(req, res, next))

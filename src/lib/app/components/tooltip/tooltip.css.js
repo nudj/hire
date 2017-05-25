@@ -1,12 +1,14 @@
 let {
-  css
+  css,
+  mixins,
+  variables,
+  merge
 } = require('../../lib/css')
 
 module.exports = css({
-  tooltip: {},
-  tooltipTitle: {},
-  tooltipText: {},
-  tooltipIntercomButton: {
-    color: 'red'
-  }
+  tooltip: mixins.cardStyle,
+  tooltipTitle: merge(mixins.headings.h7, {
+    marginTop: 0
+  }),
+  tooltipIntercomButton: mixins.buttonTertiary
 })

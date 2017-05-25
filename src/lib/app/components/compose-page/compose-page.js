@@ -7,6 +7,7 @@ const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
 const Form = require('../form/form')
 const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
+const Tooltip = require('../tooltip/tooltip')
 const {
   showDialog,
   hideDialog,
@@ -30,8 +31,7 @@ module.exports = class ComposePage extends React.Component {
       subjectFallback: composeSubject,
       message: get(props, 'form.template'),
       messageFallback: composeMessage,
-      editing: false,
-      sending: false
+      editing: false
     }
     this.onClickEdit = this.onClickEdit.bind(this)
     this.onChangeRecipients = this.onChangeRecipients.bind(this)
@@ -97,9 +97,6 @@ module.exports = class ComposePage extends React.Component {
     })
   }
   onClickConfirm () {
-    this.setState({
-      sending: true
-    })
     this.props.dispatch(postData({
       url: `/jobs/${get(this.props, 'job.slug')}/internal`,
       data: {
@@ -125,12 +122,13 @@ module.exports = class ComposePage extends React.Component {
   }
   renderComposer () {
     const error = get(this.props, 'error')
+    const tooltip = get(this.props, 'tooltip')
     return (
       <Form className={this.style.pageBody} action={`/jobs/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title={<Link to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-          subtitle={<span>@ <Link to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         >
           <button className={this.style.submit} onClick={this.onClickSend}>Send message</button>
         </PageHeader>
@@ -155,7 +153,7 @@ module.exports = class ComposePage extends React.Component {
             </div>
           </div>
           <div className={this.style.pageSidebar}>
-            Sidebar...
+            {tooltip ? <Tooltip {...tooltip} /> : ''}
           </div>
         </div>
       </Form>
@@ -164,7 +162,7 @@ module.exports = class ComposePage extends React.Component {
   render () {
     let page
     switch (true) {
-      case get(this.state, 'sending'):
+      case get(this.props, 'sending'):
         page = this.renderSending()
         break
       case !!get(this.props, 'messages'):
