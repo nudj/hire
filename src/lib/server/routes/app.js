@@ -1,11 +1,14 @@
 const express = require('express')
 const get = require('lodash/get')
+const merge = require('lodash/merge')
 // const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
 const logger = require('../lib/logger')
 const request = require('../modules/request')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
+const sentExternal = require('../modules/sent-external')
+
 const { promiseMap } = require('../lib')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -254,6 +257,7 @@ function externalHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => network.get(data, data.person.id, data.job.id))
+    .then(data => sentExternal.getAll(data, data.person.id, data.job.id))
     .then(data => {
       data.networkSent = data.sentExternal.map(person => person.id)
 
@@ -269,7 +273,7 @@ function externalHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function externalComposeHandler (req, res, next) {
+function getExternalComposeProperties (data) {
   const composeExternalTooltips = {
     'document.type': 'tooltip',
     'document.tags': ['sendExternal']
@@ -279,14 +283,45 @@ function externalComposeHandler (req, res, next) {
     'document.tags': ['external']
   }
 
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => network.getById(data, data.person.id, data.job.id, data.personId))
+  return network.getById(data, data.person.id, data.job.id, data.personId)
     .then(data => {
+      data.sentMessage = sentExternal.get(data, data.person.id, data.job.id, data.personId)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)
       return promiseMap(data)
     })
+}
+
+function externalComposeHandler (req, res, next) {
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => {
+      data.personId = req.params.personId
+      return promiseMap(data)
+    })
+    .then(data => getExternalComposeProperties(data))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function externalSaveHandler (req, res, next) {
+  const hirerId = req.session.data.person
+  const personId = req.params.personId
+
+  const composeMessage = req.body.composeMessage
+  const selectStyle = req.body.selectStyle
+  const selectLength = req.body.selectLength
+  const sendMessage = req.body.sendMessage
+
+  const sentMessage = {composeMessage, selectStyle, selectLength, sendMessage}
+  const data = {hirerId, personId, sentMessage}
+
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(job => promiseMap(merge(data, job)))
+    .then(data => sentExternal.post(data.person.id, data.job.id, data.personId, data.sentMessage))
+    .then(result => getExternalComposeProperties(data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -325,6 +360,7 @@ router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/jobs/:jobSlug/external', ensureLoggedIn, externalHandler)
 router.get('/jobs/:jobSlug/external/compose/:personId', ensureLoggedIn, externalComposeHandler)
+router.post('/jobs/:jobSlug/external/compose/:personId', ensureLoggedIn, externalSaveHandler)
 // router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
 // router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
 // router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))

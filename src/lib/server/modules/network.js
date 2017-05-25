@@ -79,9 +79,6 @@ function fetchNetworkForJob (data, hirerId, jobId) {
   data.nudjNetwork = request(`recommendations/?hirerId=${hirerId}&jobId=${jobId}&source=nudj`)
     .then(common.fetchPeopleFromFragments)
 
-  data.sentExternal = request(`sentExternal/?hirerId=${hirerId}&jobId=${jobId}`)
-    .then(common.fetchPeopleFromFragments)
-
   return promiseMap(data)
 }
 

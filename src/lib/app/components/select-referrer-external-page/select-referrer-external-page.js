@@ -17,7 +17,6 @@ module.exports = class ComposePage extends React.Component {
     const tooltips = this.props.tooltips
 
     this.state = {tooltips}
-    // recipients: props.recipients
   }
 
   renderNetworkList () {

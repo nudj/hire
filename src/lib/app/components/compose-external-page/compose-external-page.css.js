@@ -1,12 +1,23 @@
 let { css, merge, mixins } = require('../../lib/css')
 
 const title = {
-  padding: '0 0 0 50px',
-  width: '100px'
+  width: '150px'
 }
 
 const nextToTitleContainer = {
-  width: 'calc(100% - 100px - 50px)'
+  width: 'calc(100% - 150px)'
+}
+
+const sectionNumber = {
+  backgroundColor: 'blue',
+  borderRadius: '100%',
+  color: 'white',
+  display: 'inline-block',
+  height: '1rem',
+  lineHeight: '1rem',
+  position: 'relative',
+  textAlign: 'center',
+  width: '1rem'
 }
 
 const styles = {
@@ -15,6 +26,10 @@ const styles = {
     display: 'flex'
   },
   sectionTitle: merge({}, title),
+  sectionNumber: sectionNumber,
+  sectionDone: merge({}, sectionNumber, {
+    color: 'blue'
+  }),
   preActiveText: merge({}, nextToTitleContainer, {
     textAlign: 'center'
   }),
@@ -22,13 +37,19 @@ const styles = {
     display: 'flex'
   }),
   activeOption: {
+    border: '1px solid black',
     flexBasis: '0',
     flexGrow: '1',
-    textAlign: 'center'
+    margin: '0 0 0 10px',
+    textAlign: 'center',
+    ':first-child': {
+      margin: '0'
+    }
   },
   activeOptionAction: {
     cursor: 'pointer',
-    display: 'block'
+    display: 'block',
+    padding: '10px'
   },
   activeOptionIcon: {},
   activeOptionIconEmoji: {},
@@ -41,7 +62,20 @@ const styles = {
   }),
   completedSectionSummaryTitle: {},
   completedSectionSummaryText: {},
-  completedSectionSummaryMessage: {}
+  completedSectionSummaryMessage: {
+    textAlign: 'left'
+  },
+  messageContainer: {},
+  messageTextarea: {
+    height: '20rem',
+    width: '100%'
+  },
+  tagOk: {
+    color: 'green'
+  },
+  tagError: {
+    color: 'red'
+  }
 }
 
 module.exports = css(merge({}, mixins.pageLayout, styles))

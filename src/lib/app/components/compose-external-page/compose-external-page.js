@@ -3,29 +3,56 @@ const get = require('lodash/get')
 const merge = require('lodash/merge')
 const { Link } = require('react-router-dom')
 
+const Form = require('../form/form')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 
 const getStyle = require('./compose-external-page.css')
 
 const PrismicReact = require('../../lib/prismic-react')
+const templater = require('../../../lib/templater')
+
+const { postData } = require('../../actions/app')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
 
-    const active = 'selectLength'
-    const data = {}
-    const messages = props.messages
-    const tooltips = props.tooltips
+    const data = this.props.sentMessage || {}
+    const active = this.activeFromData(data)
+    const messages = this.props.messages
+    const tooltips = this.props.tooltips
 
     this.state = {active, data, messages, tooltips}
-    // recipients: props.recipients
   }
 
-  fakeClick () {
-    window.alert('click')
+  activeFromData (data) {
+    let active = 'selectLength'
+
+    if (data.sendMessage) {
+      active = 'nextSteps'
+    } else if (data.composeMessage) {
+      active = 'sendMessage'
+    } else if (data.selectStyle) {
+      active = 'composeMessage'
+    } else if (data.selectLength) {
+      active = 'selectStyle'
+    }
+
+    return active
+  }
+
+  componentDidUpdate () {
+    const tempMessage = this.getComposeMessageBaseText()
+    if (!this.state.tempMessage && tempMessage) {
+      this.setState({tempMessage})
+    }
+  }
+
+  changedMessage (event) {
+    const tempMessage = event.target.value
+    this.setState({tempMessage})
   }
 
   getComposeMessageBaseText () {
@@ -79,12 +106,14 @@ module.exports = class ComposePage extends React.Component {
       content = (<div className={this.style.activeContainer}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
         <Link to={'/jobs'} className={this.style.buttonSecondary}>Go to dashboard</Link>
-        <Link to={`/jobs/${get(this.props, 'job.slug')}`} className={this.style.buttonPrimary}>Send another nudj</Link>
+        <Link to={`/jobs/${get(this.props, 'job.slug')}/external`} className={this.style.buttonPrimary}>Send another nudj</Link>
       </div>)
     }
 
     return (<div className={this.style.section}>
-      <h4 className={this.style.sectionTitle}>Next steps</h4>
+      <h4 className={this.style.sectionTitle}>
+        <span className={this.style.sectionNumber}>5</span> Next steps
+      </h4>
       {content}
     </div>)
   }
@@ -120,35 +149,67 @@ module.exports = class ComposePage extends React.Component {
     }
 
     return (<div className={this.style.section}>
-      <h4 className={this.style.sectionTitle}>Select length</h4>
+      <h4 className={this.style.sectionTitle}>
+        <span className={this.state.data.selectLength ? this.style.sectionDone : this.style.sectionNumber}>1</span> Select length
+      </h4>
       {content}
+    </div>)
+  }
+
+  renderMessage (content) {
+    return templater.render({
+      template: content,
+      data: {
+        refereeName: 'First Name',
+        job: {
+          title: get(this.props, 'job.title'), // ?
+          bonus: get(this.props, 'job.bonus')  // ?
+        },
+        companyName: get(this.props, 'company.name'), // ?
+        link: 'https://nudj.co/company/job', // ?
+        personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}` // ?
+      },
+      tagify: this.tagify.bind(this) // ?
+    })
+  }
+
+  // ?
+  tagify (contents, ok) {
+    return `<span class='${ok ? this.style.tagOk : this.style.tagError}'>${contents}</span>`
+  }
+
+  renderComposeMessage () {
+    const tempMessage = this.state.tempMessage || this.getComposeMessageBaseText()
+
+    return (<div className={this.style.activeContainer}>
+      <div className={this.style.messageContainer}>
+        <textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
+      </div>
+      <a className={this.style.buttonPrimary} onClick={this.submitComposeMessage.bind(this)}>Save</a>
+    </div>)
+  }
+
+  renderComposedMessage (messageContent) {
+    const message = this.renderMessage(messageContent)
+    return (<div className={this.style.completedSectionSummary}>
+      <div className={this.style.completedSectionSummaryMessage} dangerouslySetInnerHTML={{ __html: message }} />
     </div>)
   }
 
   renderSectionComposeMessage () {
     let content = this.renderPreActiveText('Compose your masterpiece here.')
-    let composeMessageContent = ''
 
     if (this.state.active === 'composeMessage') {
-      composeMessageContent = this.getComposeMessageBaseText()
-      content = (composeMessageContent)
+      content = this.renderComposeMessage()
     } else if (this.state.data.composeMessage) {
-      content = this.renderCompletedSectionSummary(this.state.data.composeMessage) // not really
+      const composeMessageContent = this.state.data.composeMessage
+      content = this.renderComposedMessage(composeMessageContent)
     }
 
-    // {/* composer */}
-    // {/* composed message */}
-    // <div className={this.style.completedSectionSummaryMessage}>
-    //   <p className={this.style.completedSectionSummaryText}>Hi  Alex,</p>
-    //   <p className={this.style.completedSectionSummaryText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt molestie sollicitudin. Lorem ipsum dolor sit amet…Sed ac ullamcorper nunc. Vivamus lectus erat, mattis a neque vitae, faucibus aliquam magna.</p>
-    //   <p className={this.style.completedSectionSummaryText}>Sed hendrerit ultricies finibus. Nam ut elementum turpis. Duis tempor mauris venenatis nunc interdum, eu… ullamcorper magna tincidunt.</p>
-    //   <p className={this.style.completedSectionSummaryText}>Maecenas commodo, nulla mollis faucibus auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt molestie sollicitudin. Lorem ipsum    Airbnb    amet, consectetur adipiscing elit. Sed ac ullamcorper nunc. Vivamus lectus erat, mattis a neque vitae, faucibus aliquam magna.</p>
-    //   <p className={this.style.completedSectionSummaryText}>Sed hendrerit ultricies finibus. Nam ut elementum turpis. Duis tempor mauris venenatis nunc interdum, eu ullamcorper magna tincidunt.</p>
-    //   <p className={this.style.completedSectionSummaryText}>Your name</p>
-    // </div>
-
     return (<div className={this.style.section}>
-      <h4 className={this.style.sectionTitle}>Create message</h4>
+      <h4 className={this.style.sectionTitle}>
+        <span className={this.state.data.composeMessage ? this.style.sectionDone : this.style.sectionNumber}>3</span> Create message
+      </h4>
       {content}
     </div>)
   }
@@ -176,7 +237,9 @@ module.exports = class ComposePage extends React.Component {
     }
 
     return (<div className={this.style.section}>
-      <h4 className={this.style.sectionTitle}>Send message</h4>
+      <h4 className={this.style.sectionTitle}>
+        <span className={this.state.data.sendMessage ? this.style.sectionDone : this.style.sectionNumber}>4</span> Send message
+      </h4>
       {content}
     </div>)
   }
@@ -224,7 +287,9 @@ module.exports = class ComposePage extends React.Component {
     }
 
     return (<div className={this.style.section}>
-      <h4 className={this.style.sectionTitle}>Select style</h4>
+      <h4 className={this.style.sectionTitle}>
+        <span className={this.state.data.selectStyle ? this.style.sectionDone : this.style.sectionNumber}>2</span> Select style
+      </h4>
       {content}
     </div>)
   }
@@ -238,39 +303,43 @@ module.exports = class ComposePage extends React.Component {
     return (<Tooltip {...props} />)
   }
 
-  submitComposeMessage (composeMessage) {
+  submitComposeMessage () {
+    const composeMessage = this.state.tempMessage
     const data = merge({}, this.state.data, {composeMessage})
     const active = 'sendMessage'
-    this.setState({active, data})
+    this.saveAndPostData({active, data})
   }
 
   submitSelectLength (selectLength) {
     const data = merge({}, this.state.data, {selectLength})
     const active = 'selectStyle'
-    this.setState({active, data})
+    this.saveAndPostData({active, data})
   }
 
   submitSelectStyle (selectStyle) {
     const data = merge({}, this.state.data, {selectStyle})
     const active = 'composeMessage'
-    this.setState({active, data})
+    this.saveAndPostData({active, data})
   }
 
   submitSendMessage (sendMessage) {
     const data = merge({}, this.state.data, {sendMessage})
     const active = 'nextSteps'
-    this.setState({active, data})
+    this.saveAndPostData({active, data})
   }
 
-  // renderMessage () {
-  //   const message = new PrismicReact(this.state.messages[0])
-  //   const props = {message}
-  //   return (<Message {...props} />)
-  // }
+  saveAndPostData ({active, data}) {
+    this.setState({active, data}, () => {
+      this.props.dispatch(postData({
+        url: `/jobs/${get(this.props, 'job.slug')}/external/compose/${get(this.props, 'personId')}`,
+        data: this.state.data
+      }))
+    })
+  }
 
   render () {
     return (
-      <form className={this.style.pageBody} method='POST'>
+      <Form className={this.style.pageBody} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={get(this.props, 'job.title')}
@@ -315,7 +384,7 @@ module.exports = class ComposePage extends React.Component {
           </div>
           <div className={this.style.pageSidebar}>{('')}</div>
         </div>
-      </form>
+      </Form>
     )
   }
 }
