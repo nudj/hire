@@ -14,18 +14,20 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const tooltips = this.props.tooltips
+    const tooltips = get(this.props, 'tooltips', [])
 
     this.state = {tooltips}
   }
 
   renderNetworkList () {
     const jobSlug = this.props.job.slug
+    const network = get(this.props, 'network', [])
+    const networkSent = get(this.props, 'networkSent', [])
     return (<ul className={this.style.network}>
-      {this.props.network.map((person, index) => {
+      {network.map((person, index) => {
         const personId = get(person, 'id')
 
-        if (this.props.networkSent.includes(personId)) {
+        if (networkSent.includes(personId)) {
           return ''
         }
 
@@ -40,7 +42,7 @@ module.exports = class ComposePage extends React.Component {
             description: get(person, 'company')
           }]}
           actions={[
-            <Link to={`/jobs/${jobSlug}/external/compose/${get(person, 'id')}`}>Nudj</Link>
+            <Link to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
           ]}
         />)
       })}
@@ -48,7 +50,10 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderNudjNetworkList () {
-    if (this.props.networkSent.length) {
+    const networkSent = get(this.props, 'networkSent', [])
+    const nudjNetwork = get(this.props, 'nudjNetwork', [])
+
+    if (networkSent.length) {
       return ('')
     }
 
@@ -57,7 +62,7 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.pageContent}>
         <div className={this.style.pageMain}>
           <ul className={this.style.networkSmall}>
-            {this.props.nudjNetwork.map((person, index) => {
+            {nudjNetwork.map((person, index) => {
               const personId = get(person, 'id')
 
               return (<RowItem
