@@ -11,7 +11,9 @@ const listStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
+  upload: mixins.buttonSecondary,
   jobs: listStyle,
+  nudj: mixins.button,
   tip: {
     background: '#fff',
     padding: '30px'

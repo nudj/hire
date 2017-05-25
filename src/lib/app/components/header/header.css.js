@@ -1,6 +1,24 @@
 let {
-  css
+  css,
+  merge,
+  mixins
 } = require('../../lib/css')
+
+let linkStyle = {
+  width: '70px',
+  height: '70px',
+  display: 'block',
+  padding: '10px 0',
+  textDecoration: 'none',
+  ':before': {
+    content: '""',
+    display: 'block',
+    height: '30px',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+    marginBottom: '5px'
+  }
+}
 
 module.exports = css({
   nav: {
@@ -22,7 +40,10 @@ module.exports = css({
     flexDirection: 'column'
   },
   home: {
-    display: 'inline-block'
+    display: 'inline-block',
+    width: '70px',
+    textAlign: 'center',
+    marginBottom: '30px'
   },
   brand: {
     maxWidth: '4rem',
@@ -33,24 +54,41 @@ module.exports = css({
     padding: 0,
     margin: 0
   },
-  menuItem: {
-    textAlign: 'center'
-  },
-  jobs: {
-    color: '#fff'
-  },
-  candidates: {
-    color: '#fff'
-  },
-  help: {
-    color: '#fff'
-  },
+  menuItem: merge(mixins.headings.small, {
+    textAlign: 'center',
+    fontSize: '10px',
+    marginTop: '10px',
+    ':first-child': {
+      marginTop: 0
+    }
+  }),
+  jobs: merge(linkStyle, {
+    color: '#fff',
+    ':before': {
+      backgroundImage: 'url("/assets/images/business-24-px-outline-briefcase-24.svg")'
+    }
+  }),
+  candidates: merge(linkStyle, {
+    color: '#fff',
+    ':before': {
+      backgroundImage: 'url("/assets/images/business-24-px-outline-briefcase-24.svg")'
+    }
+  }),
+  help: merge(linkStyle, {
+    color: '#fff',
+    ':before': {
+      backgroundImage: 'url("/assets/images/ui-24-px-outline-2-alert-circle.svg")'
+    }
+  }),
   sub: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
   },
-  logout: {
-    color: '#fff'
-  }
+  logout: merge(linkStyle, {
+    color: '#fff',
+    ':before': {
+      backgroundImage: 'url("/assets/images/arrows-24-px-outline-2-circle-out.svg")'
+    }
+  })
 })

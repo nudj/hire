@@ -1,6 +1,8 @@
 let {
   css,
-  merge
+  merge,
+  variables,
+  mixins
 } = require('../../lib/css')
 
 const listStyle = {
@@ -24,9 +26,11 @@ const styles = {
       margin: 0
     }
   }),
-  title: {
+  title: merge(mixins.headings.h7, {
+    color: variables.colors.royalBlue,
+    textDecoration: 'none',
     flex: 1
-  },
+  }),
   details: {
     flex: 2,
     listStyle: 'none',
@@ -56,14 +60,16 @@ const styles = {
   definition: {
     margin: 0
   },
-  definitionTerm: {
+  definitionTerm: merge(mixins.headings.h8, {
+    color: variables.colors.charcoal,
     display: 'block'
-  },
-  definitionDescription: {
+  }),
+  definitionDescription: merge(mixins.headings.small, {
+    color: variables.colors.royalBlue,
     display: 'block',
     margin: 0,
     wordBreak: 'break-word'
-  },
+  }),
   actions: merge({
     flex: 0,
     width: '50%',

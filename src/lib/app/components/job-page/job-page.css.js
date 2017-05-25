@@ -23,5 +23,6 @@ module.exports = css(merge(mixins.pageLayout, {
   sidebar: {
     width: '420px',
     padding: '0 60px'
-  }
+  },
+  copyLink: mixins.buttonSecondary
 }))

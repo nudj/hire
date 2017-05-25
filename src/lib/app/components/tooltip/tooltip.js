@@ -8,23 +8,23 @@ const Tooltip = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
 
-  const prismicTooltip = new PrismicReact(tooltip)
+  const prismicTooltip = tooltip && new PrismicReact(tooltip)
 
-  const tooltipTitle = prismicTooltip.fragmentToReact({
+  const tooltipTitle = (tooltip && prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptitle',
     props: {
       className: style.tooltipTitle,
       element: 'h1'
     }
-  })
+  })) || ''
 
-  const tooltipText = prismicTooltip.fragmentToReact({
+  const tooltipText = (tooltip && prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptext',
     props: {
       className: style.tooltipText,
       element: 'p'
     }
-  })
+  })) || ''
 
   // Not sure why I can't get the function call to work
   function fuckOnClick () {
@@ -33,14 +33,14 @@ const Tooltip = (props) => {
 
   const tooltipIntercomButton = (<button data-thing='tooltip-intercom-testing-poop' className={props.className} />)
 
-  const tooltipIntercom = prismicTooltip.fragmentToReact({
+  const tooltipIntercom = (tooltip && prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltipintercombutton',
     props: {
       className: style.tooltipIntercomButton,
       onClick: fuckOnClick,
       element: tooltipIntercomButton
     }
-  })
+  })) || ''
 
   return (<aside className={style.tooltip}>
     {tooltipTitle}
