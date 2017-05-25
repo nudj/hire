@@ -6,10 +6,11 @@ let {
 } = require('../../lib/css')
 
 const tag = {
-  background: 'lightgreen',
-  border: '1px solid green',
-  borderRadius: '1rem',
-  padding: '2px 8px'
+  color: variables.colors.royalBlue,
+  background: variables.colors.grey,
+  borderRadius: '4px',
+  padding: '2px 8px',
+  whiteSpace: 'nowrap'
 }
 const fieldStyle = {
   display: 'flex',
@@ -27,10 +28,17 @@ module.exports = css(merge(mixins.pageLayout, {
     textDecoration: 'none'
   },
   submit: mixins.button,
+  chunk: {},
+  para: {
+    lineHeight: '1.5rem',
+    ':first-child': {
+      margin: 0
+    }
+  },
   tagOk: tag,
   tagError: merge(tag, {
-    background: 'pink',
-    borderColor: 'red'
+    background: variables.colors.lightPink,
+    color: variables.colors.darkPink
   }),
   recipientsWrap: merge(mixins.cardStyle, fieldStyle, {
     height: '100px',

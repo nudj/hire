@@ -1,6 +1,8 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const some = require('lodash/some')
+const isEmail = require('validator/lib/isEmail')
 const getStyle = require('./compose-page.css')
 const PageHeader = require('../page-header/page-header')
 const PrismicReact = require('../../lib/prismic-react')
@@ -15,6 +17,38 @@ const {
 } = require('../../actions/app')
 
 const errorLabel = (className, message) => <p className={className}>{message}</p>
+const tagRegex = /\{\{.*?\}\}/g
+const permittedTags = [
+  '{{refereeName}}',
+  '{{job.title}}',
+  '{{job.bonus}}',
+  '{{companyName}}',
+  '{{link}}',
+  '{{personName}}'
+]
+const validators = {
+  recipients: (value) => {
+    return (
+      typeof value !== 'string' ||
+      !value.length ||
+      some(value.replace(' ', '').split(','), (email) => !isEmail(email))
+    ) && 'Please enter at least one valid email'
+  },
+  subject: (value) => {
+    return (
+      typeof value !== 'string' ||
+      !value.length
+    ) && 'Please enter a subject'
+  },
+  message: (value) => {
+    let tags = value.match(tagRegex)
+    return (
+      typeof value !== 'string' ||
+      !value.length ||
+      some(tags, (tag) => !permittedTags.includes(tag))
+    ) && 'Please enter a message ensuring all tags are correct'
+  }
+}
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -31,17 +65,29 @@ module.exports = class ComposePage extends React.Component {
       subjectFallback: composeSubject,
       message: get(props, 'form.template'),
       messageFallback: composeMessage,
-      editing: false
+      editing: false,
+      error: false
     }
+    this.validate = this.validate.bind(this)
     this.onClickEdit = this.onClickEdit.bind(this)
     this.onChangeRecipients = this.onChangeRecipients.bind(this)
     this.onChangeSubject = this.onChangeSubject.bind(this)
     this.onChangeMessage = this.onChangeMessage.bind(this)
     this.renderMessage = this.renderMessage.bind(this)
     this.tagify = this.tagify.bind(this)
+    this.pify = this.pify.bind(this)
     this.onClickSend = this.onClickSend.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
+  }
+  validate () {
+    return ['subject', 'message'].reduce((result, key) => {
+      if (!result) {
+        let value = get(this.state, key, get(this.state, `${key}Fallback`))
+        result = validators[key](value)
+      }
+      return result
+    }, false)
   }
   componentWillReceiveProps (props) {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
@@ -59,7 +105,8 @@ module.exports = class ComposePage extends React.Component {
   onClickEdit (event) {
     event.preventDefault()
     this.setState({
-      editing: !this.state.editing
+      editing: !this.state.editing,
+      error: this.validate()
     })
   }
   onChangeRecipients (event) {
@@ -77,8 +124,14 @@ module.exports = class ComposePage extends React.Component {
       message: event.target.value
     })
   }
-  tagify (contents, ok) {
-    return `<span class='${ok ? this.style.tagOk : this.style.tagError}'>${contents}</span>`
+  chunkify (contents, index) {
+    return <span className={this.style.chunk} key={`chunk${index}`}>{contents}</span>
+  }
+  tagify (contents, ok, index) {
+    return <span className={ok ? this.style.tagOk : this.style.tagError} key={`chunk${index}`}>{contents}</span>
+  }
+  pify (para, index) {
+    return <p className={this.style.para} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
     return templater.render({
@@ -93,7 +146,9 @@ module.exports = class ComposePage extends React.Component {
         link: 'https://nudj.co/company/job',
         personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}`
       },
-      tagify: this.tagify
+      tagify: this.tagify,
+      pify: this.pify,
+      chunkify: this.chunkify
     })
   }
   onClickConfirm () {
@@ -130,7 +185,7 @@ module.exports = class ComposePage extends React.Component {
           title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         >
-          <button className={this.style.submit} onClick={this.onClickSend}>Send message</button>
+          <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'error') || validators.recipients(get(this.state, 'recipients'))}>Send message</button>
         </PageHeader>
         <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
         <div className={this.style.pageContent}>
@@ -148,7 +203,7 @@ module.exports = class ComposePage extends React.Component {
               </div>
               <div className={this.style.messageWrap}>
                 <label className={this.style.addLabel} htmlFor='message'>Message</label>
-                {get(this.state, 'editing') ? <textarea className={this.style.message} name='template' value={get(this.state, 'message', get(this.state, 'messageFallback', ''))} onChange={this.onChangeMessage} id='message' /> : <div className={this.style.message} dangerouslySetInnerHTML={{ __html: this.renderMessage(get(this.state, 'message', get(this.state, 'messageFallback', ''))) }} />}
+                {get(this.state, 'editing') ? <textarea className={this.style.message} name='template' value={get(this.state, 'message', get(this.state, 'messageFallback', ''))} onChange={this.onChangeMessage} id='message' /> : <div className={this.style.message}> {this.renderMessage(get(this.state, 'message', get(this.state, 'messageFallback', '')))}</div>}
               </div>
             </div>
           </div>

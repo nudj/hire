@@ -18,6 +18,23 @@ const cardStyle = merge(mixins.cardStyle, {
   }
 })
 
+const cardContent = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flex: 1,
+  ':before': {
+    content: '""',
+    display: 'block',
+    width: '46px',
+    height: '46px',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+    backgroundSize: 'contain'
+  }
+}
+
 module.exports = css(merge(mixins.pageLayout, {
   headerLink: {
     color: variables.colors.charcoal,
@@ -30,22 +47,16 @@ module.exports = css(merge(mixins.pageLayout, {
   },
   internal: cardStyle,
   external: cardStyle,
-  cardContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
+  internalContent: merge(cardContent, {
     ':before': {
-      content: '""',
-      display: 'block',
-      backgroundImage: 'url("/assets/images/arrows-24-px-outline-2-circle-out.svg")',
-      width: '60px',
-      height: '60px',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center'
-    },
-  },
+      backgroundImage: 'url("/assets/images/company.svg")'
+    }
+  }),
+  externalContent: merge(cardContent, {
+    ':before': {
+      backgroundImage: 'url("/assets/images/network.svg")'
+    }
+  }),
   title: merge(mixins.headings.h7, {
     color: variables.colors.royalBlue,
     marginTop: '20px',
