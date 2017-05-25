@@ -1,6 +1,8 @@
 const { merge } = require('../../../lib')
 const variables = require('./variables')
 
+module.exports.variables = variables
+
 const breakpoints = {
   ns: `@media screen and (min-width: ${variables.breakpoints.medium})`,
   l: `@media screen and (min-width: ${variables.breakpoints.large})`
@@ -168,16 +170,23 @@ module.exports.pageLayout = {
   },
   pageSidebar: {
     width: '420px',
-    padding: '0 60px 0 30px'
+    padding: '0 60px 0 30px',
+    position: 'relative'
   }
 }
 
-module.exports.cardStyle = {
+const cardStyle = {
   background: '#fff',
   borderRadius: '4px',
   boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
   padding: '30px'
 }
+
+module.exports.cardStyle = cardStyle
+
+module.exports.cardStyleTwo = merge({}, cardStyle, {
+  background: variables.colors.grey
+})
 
 module.exports.sansSerif = {
   fontFamily: '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif'

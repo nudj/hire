@@ -69,9 +69,11 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderActiveOption (option, index) {
+    const iconContent = option.iconEmoji || (<img src={`/assets/images/${option.icon}`} className={this.style.activeOptionImage} alt={option.title} />)
+
     return (<li className={this.style.activeOption} key={index}>
       <a className={this.style.activeOptionAction} onClick={option.onClick.bind(this)}>
-        <span className={option.iconEmoji ? this.style.activeOptionIconEmoji : this.style.activeOptionIcon}>{option.iconEmoji || 'x'}</span>
+        <span className={option.iconEmoji ? this.style.activeOptionIconEmoji : this.style.activeOptionIcon}>{iconContent}</span>
         <h5 className={this.style.activeOptionTitle}>{option.title}</h5>
         <p className={this.style.activeOptionText}>{option.text}</p>
       </a>
@@ -103,10 +105,10 @@ module.exports = class ComposePage extends React.Component {
     let content = this.renderPreActiveText('Let us know what you’d like to do next.')
 
     if (this.state.active === 'nextSteps') {
-      content = (<div className={this.style.activeContainer}>
+      content = (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-        <Link to={'/jobs'} className={this.style.buttonSecondary}>Go to dashboard</Link>
-        <Link to={`/jobs/${get(this.props, 'job.slug')}/external`} className={this.style.buttonPrimary}>Send another nudj</Link>
+        <Link to={'/jobs'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
+        <Link to={`/jobs/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
       </div>)
     }
 
@@ -121,6 +123,7 @@ module.exports = class ComposePage extends React.Component {
   renderSectionLength () {
     const options = [
       {
+        icon: 'message-bubble.svg',
         title: 'Short and sweet',
         text: 'For getting straight to the point.',
         onClick: () => this.submitSelectLength({
@@ -130,6 +133,7 @@ module.exports = class ComposePage extends React.Component {
         })
       },
       {
+        icon: 'detail-icon.svg',
         title: 'A bit more detail',
         text: 'For when you need to add extra info.',
         onClick: () => this.submitSelectLength({
@@ -185,7 +189,7 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.messageContainer}>
         <textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
       </div>
-      <a className={this.style.buttonPrimary} onClick={this.submitComposeMessage.bind(this)}>Save</a>
+      <a className={this.style.composeMessageSave} onClick={this.submitComposeMessage.bind(this)}>Save</a>
     </div>)
   }
 
@@ -217,14 +221,24 @@ module.exports = class ComposePage extends React.Component {
   renderSectionSendMessage () {
     const options = [
       {
+        icon: 'email-icon.svg',
         title: 'Send it via your email app',
-        text: 'This will open whatever you’ve set as the default mail client on your computer or device<br /> (for example, Mail on Mac).',
-        onClick: () => this.submitSendMessage('email')
+        text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
+        onClick: () => this.submitSendMessage({
+          type: 'email',
+          title: 'Send it via your email app',
+          message: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).'
+        })
       },
       {
+        icon: 'mobile.svg',
         title: 'Send it using a message app',
         text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
-        onClick: () => this.submitSendMessage('message')
+        onClick: () => this.submitSendMessage({
+          type: 'message',
+          title: 'Send it using a message app',
+          message: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.'
+        })
       }
     ]
 
@@ -300,7 +314,9 @@ module.exports = class ComposePage extends React.Component {
       return ('')
     }
     const props = {tooltip}
-    return (<Tooltip {...props} />)
+    return (<div className={this.style.tooltipFloating}>
+      <Tooltip {...props} />
+    </div>)
   }
 
   submitComposeMessage () {
