@@ -67,9 +67,11 @@ const styles = {
     }
   }, mixins.cardStyleTwo),
   activeOptionAction: {
+    color: 'inherit',
     cursor: 'pointer',
     display: 'block',
-    padding: '10px'
+    padding: '10px',
+    textDecoration: 'none'
   },
   activeOptionIcon: {
     display: 'block'
