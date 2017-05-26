@@ -1,4 +1,5 @@
 const get = require('lodash/get')
+const filter = require('lodash/filter')
 const isEmail = require('validator/lib/isEmail')
 const NudjError = require('../../lib/error')
 const request = require('../../lib/request')
@@ -6,24 +7,36 @@ const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
 const { promiseMap } = require('../lib')
 const { merge } = require('../../lib')
+const { emails: validators } = require('../../lib/validators')
 
 function fetchJob (data, jobSlug) {
   data.job = request(`jobs/${jobSlug}`)
   return promiseMap(data)
 }
 
+function validate (formData, data) {
+  let invalid
+  formData = mapValues(formData, (value, key) => {
+    const error = validators[key](value)
+    if (error) {
+      invalid = true
+    }
+    return {
+      value,
+      error
+    }
+  })
+  if (invalid) {
+    throw new NudjError(`Invalid form data`, 'invalid-form', formData)
+  }
+  data.form = formData
+  return data
+}
+
 function sendEmails ({ recipients, subject, template }) {
   return (data) => {
     try {
-      data.form = { recipients, subject, template }
-      recipients = recipients.replace(' ', '').split(',').reduce((emails, email) => {
-        if (isEmail(email)) {
-          emails.push(email)
-        } else {
-          throw new NudjError(`Invalid email - ${email}`, 'invalid-email', email)
-        }
-        return emails
-      }, [])
+      data = validate({ recipients, subject, template }, data)
       let html = renderMessage({ data, template })
       data.messages = Promise.all(recipients.map(sendEmail({ subject, html })))
     } catch (error) {

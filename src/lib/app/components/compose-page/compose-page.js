@@ -2,11 +2,12 @@ const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const some = require('lodash/some')
-const isEmail = require('validator/lib/isEmail')
+const values = require('lodash/values')
 const getStyle = require('./compose-page.css')
 const PageHeader = require('../page-header/page-header')
 const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
+const { merge } = require('../../../lib')
 const Form = require('../form/form')
 const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
 const Tooltip = require('../tooltip/tooltip')
@@ -15,40 +16,9 @@ const {
   hideDialog,
   postData
 } = require('../../actions/app')
+const { emails: validators } = require('../../../lib/validators')
 
 const errorLabel = (className, message) => <p className={className}>{message}</p>
-const tagRegex = /\{\{.*?\}\}/g
-const permittedTags = [
-  '{{refereeName}}',
-  '{{job.title}}',
-  '{{job.bonus}}',
-  '{{companyName}}',
-  '{{link}}',
-  '{{personName}}'
-]
-const validators = {
-  recipients: (value) => {
-    return (
-      typeof value !== 'string' ||
-      !value.length ||
-      some(value.replace(' ', '').split(','), (email) => !isEmail(email))
-    ) && 'Please enter at least one valid email'
-  },
-  subject: (value) => {
-    return (
-      typeof value !== 'string' ||
-      !value.length
-    ) && 'Please enter a subject'
-  },
-  message: (value) => {
-    let tags = value.match(tagRegex)
-    return (
-      typeof value !== 'string' ||
-      !value.length ||
-      some(tags, (tag) => !permittedTags.includes(tag))
-    ) && 'Please enter a message ensuring all tags are correct'
-  }
-}
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -60,15 +30,20 @@ module.exports = class ComposePage extends React.Component {
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
 
     this.state = {
-      recipients: get(props, 'form.recipients'),
-      subject: get(props, 'form.subject'),
+      recipients: get(props, 'form.recipients.value'),
+      recipientsError: get(props, 'form.recipients.error', false),
+      subject: get(props, 'form.subject.value'),
       subjectFallback: composeSubject,
-      message: get(props, 'form.template'),
+      subjectError: get(props, 'form.subject.error', false),
+      message: get(props, 'form.template.value'),
       messageFallback: composeMessage,
+      messageError: get(props, 'form.template.error', false),
       editing: false,
-      error: false
+      error: get(props, 'error', false)
     }
-    this.validate = this.validate.bind(this)
+    this.validateRecipients = this.validateRecipients.bind(this)
+    this.validateEmail = this.validateEmail.bind(this)
+    this.isInvalid = this.isInvalid.bind(this)
     this.onClickEdit = this.onClickEdit.bind(this)
     this.onChangeRecipients = this.onChangeRecipients.bind(this)
     this.onChangeSubject = this.onChangeSubject.bind(this)
@@ -79,12 +54,22 @@ module.exports = class ComposePage extends React.Component {
     this.onClickSend = this.onClickSend.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
+    this.onBlurRecipients = this.onBlurRecipients.bind(this)
   }
-  validate () {
-    return ['subject', 'message'].reduce((result, key) => {
+  validateRecipients () {
+    return validators.recipients(get(this.state, 'recipients'))
+  }
+  validateEmail () {
+    return ['subject', 'message'].reduce((newState, key) => {
+      let value = get(this.state, key, get(this.state, `${key}Fallback`))
+      newState[`${key}Error`] = validators[key](value)
+      return newState
+    }, {})
+  }
+  isInvalid () {
+    return ['recipients', 'subject', 'message'].reduce((result, key) => {
       if (!result) {
-        let value = get(this.state, key, get(this.state, `${key}Fallback`))
-        result = validators[key](value)
+        result = get(this.state, `${key}Error`)
       }
       return result
     }, false)
@@ -95,19 +80,26 @@ module.exports = class ComposePage extends React.Component {
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
 
     this.setState({
-      recipients: get(this.state, 'recipients', get(props, 'form.recipients')),
-      subject: get(this.state, 'subject', get(props, 'form.subject')),
+      recipients: get(this.state, 'recipients', get(props, 'form.recipients.value')),
+      recipientsError: get(this.state, 'recipients', get(props, 'form.recipients.error', false)),
+      subject: get(this.state, 'subject', get(props, 'form.subject.value')),
       subjectFallback: composeSubject,
-      message: get(this.state, 'message', get(props, 'form.template')),
-      messageFallback: composeMessage
+      subjectError: get(this.state, 'subject', get(props, 'form.subject.error', false)),
+      message: get(this.state, 'message', get(props, 'form.template.value')),
+      messageFallback: composeMessage,
+      messageError: get(this.state, 'message', get(props, 'form.message.error', false))
+    })
+  }
+  onBlurRecipients (event) {
+    this.setState({
+      recipientsError: this.validateRecipients()
     })
   }
   onClickEdit (event) {
     event.preventDefault()
-    this.setState({
-      editing: !this.state.editing,
-      error: this.validate()
-    })
+    this.setState(merge({
+      editing: !this.state.editing
+    }, this.validateEmail()))
   }
   onChangeRecipients (event) {
     this.setState({
@@ -176,8 +168,12 @@ module.exports = class ComposePage extends React.Component {
     return <div>Success</div>
   }
   renderComposer () {
-    const error = get(this.props, 'error')
+    const error = get(this.state, 'error')
     const tooltip = get(this.props, 'tooltip')
+    const invalid = this.isInvalid()
+    const recipientsError = get(this.state, 'recipientsError')
+    const subjectError = get(this.state, 'subjectError')
+    const messageError = get(this.state, 'messageError')
     return (
       <Form className={this.style.pageBody} action={`/jobs/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
@@ -185,25 +181,28 @@ module.exports = class ComposePage extends React.Component {
           title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         >
-          <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'error') || validators.recipients(get(this.state, 'recipients'))}>Send message</button>
+          {invalid ? errorLabel(this.style.errorLabel, invalid) : ''}
+          <button className={this.style.submit} onClick={this.onClickSend} disabled={this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value)}>Send message</button>
         </PageHeader>
         <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <div className={this.style.recipientsWrap}>
               <label className={this.style.addLabel}>Sending to</label>
-              <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} />
-              {error && error.type === 'invalid-email' ? errorLabel(this.style.errorLabel, error.message) : ''}
+              <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} />
+              {recipientsError ? errorLabel(this.style.errorLabel, recipientsError) : ''}
             </div>
             <div className={this.style.email}>
               <div className={this.style.subjectWrap}>
                 <label className={this.style.addLabel} htmlFor='subject'>Subject</label>
                 {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
+                {subjectError ? errorLabel(this.style.errorLabel, subjectError) : ''}
                 <button className={this.style.editing} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button>
               </div>
               <div className={this.style.messageWrap}>
                 <label className={this.style.addLabel} htmlFor='message'>Message</label>
                 {get(this.state, 'editing') ? <textarea className={this.style.message} name='template' value={get(this.state, 'message', get(this.state, 'messageFallback', ''))} onChange={this.onChangeMessage} id='message' /> : <div className={this.style.message}> {this.renderMessage(get(this.state, 'message', get(this.state, 'messageFallback', '')))}</div>}
+                {messageError ? errorLabel(this.style.errorLabel, messageError) : ''}
               </div>
             </div>
           </div>
