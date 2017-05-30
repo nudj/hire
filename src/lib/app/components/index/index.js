@@ -29,6 +29,7 @@ const Index = () => {
         <meta property='og:image' content='' />
         <link rel='icon' href='/assets/images/nudj-square.ico' type='image/x-icon' />
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+        <link rel='stylesheet' href='/assets/css/reset.css' />
       </Helmet>
       <header className={style.header}>
         <Route path='*' component={withState(Header)} />

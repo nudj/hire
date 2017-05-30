@@ -138,13 +138,37 @@ headings.p2Bold = merge({}, headings.p2, {
 
 module.exports.headings = headings
 
+module.exports.typography = {
+  h1: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h1),
+  h2: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h2),
+  h3: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h3),
+  h4: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h4),
+  h5: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h5),
+  p: merge({
+    color: variables.colors.charcoal,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.p)
+}
+
 module.exports.pageLayout = {
-  pageBody: merge(headings.p, {
-    flexGrow: 1,
+  pageBody: merge({}, headings.p, {
     background: variables.colors.grey,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'stretch'
+    minHeight: '100vh'
   }),
   pageHeader: {
     display: 'flex',
@@ -152,40 +176,42 @@ module.exports.pageLayout = {
     alignItems: 'center',
     flex: 0,
     background: variables.colors.white,
-    padding: '10px 20px'
+    padding: `${variables.padding.e} ${variables.padding.d}`
   },
-  pageHeadline: merge(headings.h5, {
+  pageHeadline: merge({}, headings.h5, {
     color: variables.colors.royalBlue,
-    padding: '30px',
+    padding: `${variables.padding.c} ${variables.padding.d} ${variables.padding.d} ${variables.padding.d}`,
     margin: 0
   }),
   pageContent: {
     flex: 1,
-    padding: '0 0 30px',
+    padding: `0 0 ${variables.padding.c} 0`,
     display: 'flex'
   },
   pageMain: {
     flex: 1,
-    padding: '0 30px'
+    padding: `0 ${variables.padding.d}`
   },
   pageSidebar: {
-    width: '420px',
-    padding: '0 60px 0 30px',
-    position: 'relative'
+    boxSizing: 'content-box',
+    padding: `0 ${variables.padding.d} 0 calc(${variables.padding.c} + ${variables.padding.d})`,
+    position: 'relative',
+    width: variables.sizing.sidebarWidth
   }
 }
 
 const cardStyle = {
   background: variables.colors.white,
-  borderRadius: '4px',
-  boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
-  padding: '30px'
+  borderRadius: variables.sizing.baseBorderRadius,
+  boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
+  padding: variables.padding.d
 }
 
 module.exports.cardStyle = cardStyle
 
 module.exports.cardStyleTwo = merge({}, cardStyle, {
-  background: variables.colors.grey
+  background: variables.colors.offGrey,
+  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.midGrey}`
 })
 
 module.exports.sansSerif = {
@@ -244,6 +270,11 @@ module.exports.deList = {
   listStyle: 'none',
   margin: '0',
   padding: '0'
+module.exports.deLink = {
+}
+
+  color: 'inherit',
+  textDecoration: 'none'
 }
 
 module.exports.button = merge(headings.pBold, {
@@ -276,3 +307,7 @@ module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
   backgroundColor: variables.colors.grey
 })
+
+module.exports.linkImage = function (imagePath) {
+  return `url('${variables.assets.images}${imagePath}')`
+}

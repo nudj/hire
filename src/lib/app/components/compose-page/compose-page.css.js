@@ -8,8 +8,8 @@ let {
 const tag = {
   color: variables.colors.royalBlue,
   background: variables.colors.grey,
-  borderRadius: '4px',
-  padding: '2px 8px',
+  borderRadius: variables.sizing.baseBorderRadius,
+  padding: `${variables.sizing.baseBorderWidth} calc(${variables.sizing.baseBorderWidth} * 4)`,
   whiteSpace: 'nowrap'
 }
 const fieldStyle = {
@@ -23,17 +23,12 @@ module.exports = css(merge(mixins.pageLayout, {
     color: variables.colors.royalBlue,
     textDecoration: 'none'
   },
-  companyLink: {
-    color: variables.colors.charcoal,
-    textDecoration: 'none'
-  },
+  companyLink: mixins.deLink,
   submit: mixins.button,
   chunk: {},
   para: {
     lineHeight: '1.5rem',
-    ':first-child': {
-      margin: 0
-    }
+    margin: `0 0 ${variables.padding.e} 0`
   },
   tagOk: tag,
   tagError: merge(tag, {
@@ -41,21 +36,21 @@ module.exports = css(merge(mixins.pageLayout, {
     color: variables.colors.darkPink
   }),
   recipientsWrap: merge(mixins.cardStyle, fieldStyle, {
-    height: '100px',
+    height: '100px', // ?
     border: 0,
-    margin: '0 0 10px'
+    margin: `0 0 ${variables.padding.e}`
   }),
   addLabel: {
-    width: '120px',
-    paddingRight: '20px'
+    width: '120px', // ?
+    paddingRight: variables.padding.d
   },
   recipients: {
   },
   email: merge(mixins.cardStyle, {
   }),
   subjectWrap: merge(fieldStyle, {
-    borderBottom: '1px solid gray',
-    paddingBottom: '30px'
+    borderBottom: `${variables.sizing.baseBorderWidth} solid ${variables.colors.grey}`,
+    paddingBottom: variables.padding.d
   }),
   subject: {
     width: '100%',
@@ -63,14 +58,14 @@ module.exports = css(merge(mixins.pageLayout, {
   },
   editing: mixins.buttonTertiary,
   templateWrap: merge(fieldStyle, {
-    paddingTop: '30px',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    paddingTop: variables.padding.d
   }),
   template: {
     width: '100%',
     height: '20rem'
   },
   errorLabel: {
-    color: 'red'
+    color: variables.colors.midRed
   }
 }))

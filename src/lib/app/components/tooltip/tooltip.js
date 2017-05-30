@@ -12,9 +12,9 @@ const Tooltip = (props) => {
     fragment: 'tooltip.tooltiptitle',
     props: {
       className: style.tooltipTitle,
-      element: 'h1'
+      element: 'h4'
     }
-  })) || ''
+  }))
 
   const tooltipText = (prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptext',
@@ -22,7 +22,7 @@ const Tooltip = (props) => {
       className: style.tooltipText,
       element: 'p'
     }
-  })) || ''
+  }))
 
   // Not sure why I can't get the function call to work
   function fuckOnClick () {
@@ -38,7 +38,7 @@ const Tooltip = (props) => {
       onClick: fuckOnClick,
       element: tooltipIntercomButton
     }
-  })) || ''
+  }))
 
   return (<aside className={style.tooltip}>
     {tooltipTitle}

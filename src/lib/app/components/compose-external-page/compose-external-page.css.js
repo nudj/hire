@@ -1,41 +1,71 @@
 let { css, merge, mixins, variables } = require('../../lib/css')
 
-const title = {
-  width: '150px'
-}
+const title = merge({}, mixins.headings.h7, {
+  flexShrink: '0',
+  color: variables.colors.royalBlue,
+  width: variables.padding.a
+})
 
 const nextToTitleContainer = {
-  width: 'calc(100% - 150px)'
+  width: `calc(100% - ${variables.padding.a})`
 }
 
-const sectionNumberSize = '1.25rem'
+const sectionNumberSize = variables.padding.d
 
-const sectionNumber = {
-  backgroundColor: variables.colors.royalBlue,
+const sectionNumber = merge({}, mixins.headings.h7, {
+  backgroundColor: variables.colors.midGrey,
   borderRadius: '100%',
-  color: 'white',
+  color: variables.colors.white,
   display: 'inline-block',
   height: sectionNumberSize,
   lineHeight: sectionNumberSize,
+  margin: `0 ${variables.padding.e} 0 0`,
   position: 'relative',
   textAlign: 'center',
   width: sectionNumberSize
+})
+
+const sectionNumberActive = merge({}, sectionNumber, {
+  backgroundColor: variables.colors.royalBlue
+})
+
+const activeOptionIcon = {
+  display: 'inline-block',
+  padding: `0 0 ${variables.padding.e} 0`
 }
 
+const optionTitle = merge({}, mixins.headings.h7, {
+  color: variables.colors.royalBlue,
+  padding: `0 0 ${variables.padding.f} 0`
+})
+
+const optionText = merge({}, mixins.headings.p, {
+  color: variables.colors.charcoal
+})
+
 const styles = {
+  pageContent: {
+    padding: `0 0 ${variables.padding.d} 0`
+  },
+  companyLink: mixins.deLink,
   tooltipFloating: {
-    left: '30px', // These are naughty magic numbers from mixins.pageSidebar
+    left: `calc(${variables.padding.c} + ${variables.padding.d})`,
     position: 'absolute',
-    right: '60px',
+    right: variables.padding.d,
     top: '0'
   },
   section: merge({
     alignItems: 'center',
     display: 'flex'
+  }, mixins.cardStyleTwo),
+  sectionActive: merge({
+    alignItems: 'center',
+    display: 'flex'
   }, mixins.cardStyle),
   sectionTitle: merge({}, title),
   sectionNumber: sectionNumber,
-  sectionDone: merge({}, sectionNumber, {
+  sectionNumberActive: sectionNumberActive,
+  sectionDone: merge({}, sectionNumberActive, {
     color: variables.colors.royalBlue,
     '::after': {
       backgroundImage: `url('/assets/images/ui-24px-outline-1_check.svg')`,
@@ -57,49 +87,49 @@ const styles = {
   activeOptionsContainer: merge({}, nextToTitleContainer, mixins.deList, {
     display: 'flex'
   }),
-  activeOption: merge({
+  activeOption: merge({}, mixins.cardStyleTwo, {
+    background: variables.colors.offWhite,
     flexBasis: '0',
     flexGrow: '1',
-    margin: '0 0 0 10px',
+    margin: `0 0 0 ${variables.padding.e}`,
+    padding: '0',
     textAlign: 'center',
     ':first-child': {
       margin: '0'
     }
-  }, mixins.cardStyleTwo),
+  }),
   activeOptionAction: {
     color: 'inherit',
     cursor: 'pointer',
     display: 'block',
-    padding: '10px',
+    padding: variables.padding.d,
     textDecoration: 'none'
   },
-  activeOptionIcon: {
-    display: 'block'
-  },
+  activeOptionIcon: activeOptionIcon,
   activeOptionImage: {},
-  activeOptionIconEmoji: {},
-  activeOptionTitle: {
-    color: variables.colors.royalBlue
-  },
-  activeOptionText: {},
+  activeOptionIconEmoji: merge({
+    display: 'block'
+  }, activeOptionIcon),
+  activeOptionTitle: optionTitle,
+  activeOptionText: optionText,
   activeContainer: merge({}, nextToTitleContainer),
   activeContainerCentered: merge({}, nextToTitleContainer, {
     textAlign: 'center'
   }),
-  activeContainerTitle: {},
+  activeContainerTitle: merge({}, optionText, {
+    padding: `0 0 ${variables.padding.e} 0`
+  }),
   completedSectionSummary: merge({}, nextToTitleContainer, {
     textAlign: 'center'
   }),
-  completedSectionSummaryTitle: {
-    color: variables.colors.royalBlue
-  },
-  completedSectionSummaryText: {},
+  completedSectionSummaryTitle: optionTitle,
+  completedSectionSummaryText: optionText,
   completedSectionSummaryMessage: {
     textAlign: 'left'
   },
   messageContainer: {},
   messageTextarea: {
-    height: '20rem',
+    height: '20rem', // ?
     width: '100%'
   },
   tagOk: {
@@ -116,7 +146,7 @@ const styles = {
   }),
   nextStepDashboard: merge({}, mixins.buttonSecondary, {
     display: 'inline-block',
-    margin: '0 20px 0 0'
+    margin: `0 ${variables.padding.d} 0 0`
   })
 }
 

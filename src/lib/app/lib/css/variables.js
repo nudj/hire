@@ -8,15 +8,52 @@ module.exports.breakpoints = {
   large: '60em'
 }
 
+const basePixelSize = 20
+
+module.exports.sizing = {
+  basePadding: `${basePixelSize}px`,
+  baseBorderRadius: '4px',
+  baseBorderWidth: '2px',
+  detailSeparatorWidth: '1px',
+  fixedHeaderWidth: `${basePixelSize * 6}px`,
+  fixedHeaderButtonSize: `${basePixelSize * 3.5}px`,
+  fixedHeaderButtonIconSize: `${basePixelSize * 1.5}px`,
+  genericBoxShadow: '0 0.5px 0.5px 0',
+  overlayDialogWidth: '500px',
+  sidebarWidth: '285px'
+}
+
+module.exports.padding = {
+  a: `${basePixelSize * 8}px`,
+  b: `${basePixelSize * 4}px`,
+  c: `${basePixelSize * 2}px`,
+  d: `${basePixelSize}px`,
+  e: `${basePixelSize * 0.5}px`,
+  f: `${basePixelSize * 0.25}px`
+}
+
 module.exports.colors = {
+  beige: '#efebd3',
   charcoal: '#2d2926',
+  charcoalTint2: '#817f7d',
+  darkPink: '#8f3a49',
   grey: '#ececeb',
-  white: '#fff',
+  lightGrey: '#d0d0ce',
+  lighterGrey: '#f7f7f6',
+  lightYellow: '#f7ea48',
+  midRed: '#e35205',
+  midGrey: '#ced2d5',
   navy: '#081f2c',
+  navyBlue: '#002051',
   royalBlue: '#002d72',
   royalBlueFade: '#6681aa',
   lightPink: '#f5a0af',
-  darkPink: '#8f3a49'
+  white: '#fff',
+  offWhite: '#fafafa',
+  offGrey: '#f6f6f5',
+  //
+  genericBoxShadow: 'rgba(0, 0, 0, 0.1)',
+  genericOverlayCover: 'rgba(45, 41, 38, 0.4)'
 }
 
 module.exports.fonts = {

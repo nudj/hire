@@ -1,31 +1,25 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
 module.exports = css({
   body: merge({
-    position: 'relative',
     minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'stretch',
-    paddingLeft: '120px'
+    paddingLeft: variables.sizing.fixedHeaderWidth,
+    position: 'relative'
   }, mixins.sansSerif),
   header: merge({
-    position: 'fixed',
+    height: '100%',
     left: 0,
+    position: 'fixed',
     top: 0,
-    width: '120px',
-    height: '100%'
+    width: variables.sizing.fixedHeaderWidth
   }, mixins.sansSerif),
   content: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    flex: '1 1 auto',
-    minWidth: 0,
-    minHeight: 0
+    minHeight: '100vh',
+    width: `calc(100vw - ${variables.sizing.fixedHeaderWidth})`
   }
 })

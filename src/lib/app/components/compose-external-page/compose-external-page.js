@@ -19,10 +19,10 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const data = this.props.sentMessage || {}
+    const data = get(this.props, 'sentMessage', {})
     const active = this.activeFromData(data)
-    const messages = this.props.messages
-    const tooltips = this.props.tooltips
+    const messages = get(this.props, 'messages', [])
+    const tooltips = get(this.props, 'tooltips', [])
 
     this.state = {active, data, messages, tooltips}
   }
@@ -104,17 +104,22 @@ module.exports = class ComposePage extends React.Component {
   renderNextSteps () {
     let content = this.renderPreActiveText('Let us know what you’d like to do next.')
 
+    let sectionClass = this.style.section
+    let sectionNumberClass = this.style.sectionNumber
+
     if (this.state.active === 'nextSteps') {
       content = (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
         <Link to={'/jobs'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
         <Link to={`/jobs/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
       </div>)
+      sectionClass = this.style.sectionActive
+      sectionNumberClass = this.style.sectionNumberActive
     }
 
-    return (<div className={this.style.section}>
+    return (<div className={sectionClass}>
       <h4 className={this.style.sectionTitle}>
-        <span className={this.style.sectionNumber}>5</span> Next steps
+        <span className={sectionNumberClass}>5</span>Next steps
       </h4>
       {content}
     </div>)
@@ -145,16 +150,21 @@ module.exports = class ComposePage extends React.Component {
     ]
 
     let content = ('')
+    let sectionClass = this.style.section
+    let sectionNumberClass = this.style.sectionNumber
 
     if (this.state.active === 'selectLength') {
       content = this.renderActiveOptions(options)
+      sectionClass = this.style.sectionActive
+      sectionNumberClass = this.style.sectionNumberActive
     } else if (this.state.data.selectLength) {
       content = this.renderCompletedSectionSummary(this.state.data.selectLength) // not really
+      sectionNumberClass = this.style.sectionDone
     }
 
-    return (<div className={this.style.section}>
+    return (<div className={sectionClass}>
       <h4 className={this.style.sectionTitle}>
-        <span className={this.state.data.selectLength ? this.style.sectionDone : this.style.sectionNumber}>1</span> Select length
+        <span className={sectionNumberClass}>1</span>Select length
       </h4>
       {content}
     </div>)
@@ -209,17 +219,22 @@ module.exports = class ComposePage extends React.Component {
 
   renderSectionComposeMessage () {
     let content = this.renderPreActiveText('Compose your masterpiece here.')
+    let sectionClass = this.style.section
+    let sectionNumberClass = this.style.sectionNumber
 
     if (this.state.active === 'composeMessage') {
       content = this.renderComposeMessage()
+      sectionClass = this.style.sectionActive
+      sectionNumberClass = this.style.sectionNumberActive
     } else if (this.state.data.composeMessage) {
       const composeMessageContent = this.state.data.composeMessage
       content = this.renderComposedMessage(composeMessageContent)
+      sectionNumberClass = this.style.sectionDone
     }
 
-    return (<div className={this.style.section}>
+    return (<div className={sectionClass}>
       <h4 className={this.style.sectionTitle}>
-        <span className={this.state.data.composeMessage ? this.style.sectionDone : this.style.sectionNumber}>3</span> Create message
+        <span className={sectionNumberClass}>3</span>Create message
       </h4>
       {content}
     </div>)
@@ -248,7 +263,7 @@ module.exports = class ComposePage extends React.Component {
       },
       {
         link: gmailLink,
-        icon: 'New_Logo_Gmail.svg',
+        icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
         title: 'Send it via Gmail',
         text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
         onClick: (event) => this.submitSendMessage(event, {
@@ -260,16 +275,21 @@ module.exports = class ComposePage extends React.Component {
     ]
 
     let content = this.renderPreActiveText('Tell us how you want to send it, so we can deliver it to you in the format you need.')
+    let sectionClass = this.style.section
+    let sectionNumberClass = this.style.sectionNumber
 
     if (this.state.active === 'sendMessage') {
       content = this.renderActiveOptions(options)
+      sectionClass = this.style.sectionActive
+      sectionNumberClass = this.style.sectionNumberActive
     } else if (this.state.data.sendMessage) {
       content = this.renderCompletedSectionSummary(this.state.data.sendMessage) // not really
+      sectionNumberClass = this.style.sectionDone
     }
 
-    return (<div className={this.style.section}>
+    return (<div className={sectionClass}>
       <h4 className={this.style.sectionTitle}>
-        <span className={this.state.data.sendMessage ? this.style.sectionDone : this.style.sectionNumber}>4</span> Send message
+        <span className={sectionNumberClass}>4</span>Send message
       </h4>
       {content}
     </div>)
@@ -310,16 +330,21 @@ module.exports = class ComposePage extends React.Component {
     ]
 
     let content = this.renderPreActiveText('Choose how best to say it.')
+    let sectionClass = this.style.section
+    let sectionNumberClass = this.style.sectionNumber
 
     if (this.state.active === 'selectStyle') {
       content = this.renderActiveOptions(options)
+      sectionClass = this.style.sectionActive
+      sectionNumberClass = this.style.sectionNumberActive
     } else if (this.state.data.selectStyle) {
       content = this.renderCompletedSectionSummary(this.state.data.selectStyle) // not really
+      sectionNumberClass = this.style.sectionDone
     }
 
-    return (<div className={this.style.section}>
+    return (<div className={sectionClass}>
       <h4 className={this.style.sectionTitle}>
-        <span className={this.state.data.selectStyle ? this.style.sectionDone : this.style.sectionNumber}>2</span> Select style
+        <span className={sectionNumberClass}>2</span>Select style
       </h4>
       {content}
     </div>)
@@ -330,9 +355,8 @@ module.exports = class ComposePage extends React.Component {
     if (!tooltip || this.state.active !== tooltipTag) {
       return ('')
     }
-    const props = {tooltip}
     return (<div className={this.style.tooltipFloating}>
-      <Tooltip {...props} />
+      <Tooltip {...tooltip} />
     </div>)
   }
 
@@ -384,7 +408,7 @@ module.exports = class ComposePage extends React.Component {
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={get(this.props, 'job.title')}
-          subtitle={<span>@ <Link to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
         <div className={this.style.pageContent}>

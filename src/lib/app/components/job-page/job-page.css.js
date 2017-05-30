@@ -5,37 +5,29 @@ let {
   variables
 } = require('../../lib/css')
 
+const cardChoiceIconSize = '46px'
+
 const cardStyle = merge(mixins.cardStyle, {
-  width: '286px',
-  height: '312px',
-  display: 'flex',
-  marginLeft: '10px',
-  flexDirection: 'column',
-  justifyContent: 'stretch',
-  alignItems: 'center',
+  textAlign: 'center',
+  marginLeft: variables.padding.e,
   ':first-child': {
     marginLeft: 0
   }
 })
 
 const cardContent = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flex: 1,
   ':before': {
-    content: '""',
-    display: 'block',
-    width: '46px',
-    height: '46px',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
-    backgroundSize: 'contain'
+    backgroundSize: 'contain',
+    content: `''`,
+    display: 'inline-block',
+    height: cardChoiceIconSize,
+    width: cardChoiceIconSize
   }
 }
 
-module.exports = css(merge(mixins.pageLayout, {
+module.exports = css(merge({}, mixins.pageLayout, {
   headerLink: {
     color: variables.colors.charcoal,
     textDecoration: 'none'
@@ -49,24 +41,21 @@ module.exports = css(merge(mixins.pageLayout, {
   external: cardStyle,
   internalContent: merge(cardContent, {
     ':before': {
-      backgroundImage: 'url("/assets/images/company.svg")'
+      backgroundImage: mixins.linkImage('company.svg')
     }
   }),
   externalContent: merge(cardContent, {
     ':before': {
-      backgroundImage: 'url("/assets/images/network.svg")'
+      backgroundImage: mixins.linkImage('network.svg')
     }
   }),
   title: merge(mixins.headings.h7, {
     color: variables.colors.royalBlue,
-    marginTop: '20px',
-    marginBottom: '10px'
+    marginTop: variables.padding.d,
+    marginBottom: variables.padding.e
   }),
-  description: merge(mixins.headings.small, {
-    textAlign: 'center',
-    margin: 0
-  }),
-  button: merge(mixins.button, {
-    flex: 0
+  description: merge({}, mixins.typography.p),
+  button: merge({}, mixins.button, {
+    display: 'inline-block'
   })
 }))
