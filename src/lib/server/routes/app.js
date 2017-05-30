@@ -5,6 +5,7 @@ const merge = require('lodash/merge')
 
 const logger = require('../lib/logger')
 const request = require('../modules/request')
+const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
 const sentExternal = require('../modules/sent-external')
@@ -285,6 +286,7 @@ function getExternalComposeProperties (data) {
 
   return network.getById(data, data.person.id, data.job.id, data.personId)
     .then(data => {
+      data.recipient = common.fetchPersonFromFragment(data.personId)
       data.sentMessage = sentExternal.get(data, data.person.id, data.job.id, data.personId)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)

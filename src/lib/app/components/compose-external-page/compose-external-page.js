@@ -72,7 +72,7 @@ module.exports = class ComposePage extends React.Component {
     const iconContent = option.iconEmoji || (<img src={`/assets/images/${option.icon}`} className={this.style.activeOptionImage} alt={option.title} />)
 
     return (<li className={this.style.activeOption} key={index}>
-      <a className={this.style.activeOptionAction} onClick={option.onClick.bind(this)}>
+      <a className={this.style.activeOptionAction} onClick={option.onClick.bind(this)} href={option.link}>
         <span className={option.iconEmoji ? this.style.activeOptionIconEmoji : this.style.activeOptionIcon}>{iconContent}</span>
         <h5 className={this.style.activeOptionTitle}>{option.title}</h5>
         <p className={this.style.activeOptionText}>{option.text}</p>
@@ -160,11 +160,11 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
-  renderMessage (content) {
-    return templater.render({
+  renderMessage (content, textOnly) {
+    const options = {
       template: content,
       data: {
-        refereeName: 'First Name',
+        refereeName: get(this.props, 'recipient.firstName'),
         job: {
           title: get(this.props, 'job.title'), // ?
           bonus: get(this.props, 'job.bonus')  // ?
@@ -172,9 +172,16 @@ module.exports = class ComposePage extends React.Component {
         companyName: get(this.props, 'company.name'), // ?
         link: 'https://nudj.co/company/job', // ?
         personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}` // ?
-      },
-      tagify: this.tagify.bind(this) // ?
-    })
+      }
+    }
+
+    if (textOnly) {
+      options.pify = content => content.join('\n')
+    } else {
+      options.tagify = this.tagify.bind(this)
+    }
+
+    return templater.render(options)
   }
 
   // ?
@@ -219,24 +226,34 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderSectionSendMessage () {
+    const recipient = get(this.props, 'recipient.email', 'tech@nudj.com')
+    const subject = 'Guuuuuurl!'
+    const message = this.renderMessage(this.state.data.composeMessage || '', true)
+    const body = encodeURIComponent(message)
+
+    const emailLink = `mailto:${recipient}?subject=${subject}&body=${body}`
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`
+
     const options = [
       {
-        icon: 'email-icon.svg',
-        title: 'Send it via your email app',
+        link: emailLink,
+        icon: 'mail-icons.png',
+        title: 'Send it via your default email app',
         text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
-        onClick: () => this.submitSendMessage({
+        onClick: (event) => this.submitSendMessage(event, {
           type: 'email',
           title: 'Send it via your email app',
           message: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).'
         })
       },
       {
-        icon: 'mobile.svg',
-        title: 'Send it using a message app',
+        link: gmailLink,
+        icon: 'New_Logo_Gmail.svg',
+        title: 'Send it via Gmail',
         text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
-        onClick: () => this.submitSendMessage({
-          type: 'message',
-          title: 'Send it using a message app',
+        onClick: (event) => this.submitSendMessage(event, {
+          type: 'gmail',
+          title: 'Send it via Gmail',
           message: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.'
         })
       }
@@ -338,7 +355,14 @@ module.exports = class ComposePage extends React.Component {
     this.saveAndPostData({active, data})
   }
 
-  submitSendMessage (sendMessage) {
+  submitSendMessage (event, sendMessage) {
+    event.preventDefault()
+    const link = event.currentTarget.href
+
+    if (link) {
+      window.open(link)
+    }
+
     const data = merge({}, this.state.data, {sendMessage})
     const active = 'nextSteps'
     this.saveAndPostData({active, data})
@@ -354,6 +378,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   render () {
+    const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     return (
       <Form className={this.style.pageBody} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
@@ -361,7 +386,7 @@ module.exports = class ComposePage extends React.Component {
           title={get(this.props, 'job.title')}
           subtitle={<span>@ <Link to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         />
-        <h3 className={this.style.pageHeadline}>We recommend sending a Nujd request to...</h3>
+        <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             {this.renderSectionLength()}
