@@ -172,11 +172,16 @@ module.exports = class ComposePage extends React.Component {
         companyName: get(this.props, 'company.name'), // ?
         link: 'https://nudj.co/company/job', // ?
         personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}` // ?
-      },
-      tagify: this.tagify.bind(this) // ?
+      }
     }
 
-    return textOnly ? templater.text(options) : templater.render(options)
+    if (textOnly) {
+      options.pify = content => content.join('\n')
+    } else {
+      options.tagify = this.tagify.bind(this)
+    }
+
+    return templater.render(options)
   }
 
   // ?
