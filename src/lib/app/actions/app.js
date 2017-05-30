@@ -1,4 +1,4 @@
-const { push, replace } = require('@nudj/react-router-redux')
+const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
 const { merge } = require('../../lib')
 

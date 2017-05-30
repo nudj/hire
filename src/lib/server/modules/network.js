@@ -1,6 +1,5 @@
 const get = require('lodash/get')
-const filter = require('lodash/filter')
-const isEmail = require('validator/lib/isEmail')
+const mapValues = require('lodash/mapValues')
 const NudjError = require('../../lib/error')
 const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
@@ -37,9 +36,10 @@ function sendEmails ({ recipients, subject, template }) {
   return (data) => {
     try {
       data = validate({ recipients, subject, template }, data)
-      let html = renderMessage({ data, template })
-      data.messages = Promise.all(recipients.map(sendEmail({ subject, html })))
+      let html = renderMessage({ data, template }).join('')
+      data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
     } catch (error) {
+      if (error.name !== 'NudjError') throw error
       data = handleError(error, data)
     }
     return promiseMap(data)
@@ -51,10 +51,11 @@ function handleError (error, data) {
   data.error = merge(error, {
     code: 500
   })
+  data.form = error.data
   return data
 }
 
-function renderMessage ({ data, template }) {
+function renderMessage ({ data, template, pify }) {
   return templater.render({
     template,
     data: {
@@ -65,7 +66,8 @@ function renderMessage ({ data, template }) {
       companyName: get(data, 'company.name'),
       link: 'https://nudj.co/company/job',
       personName: `${get(data, 'person.firstName')} ${get(data, 'person.lastName')}`
-    }
+    },
+    pify: (contents) => `<p>${contents.join('')}</p>`
   })
 }
 

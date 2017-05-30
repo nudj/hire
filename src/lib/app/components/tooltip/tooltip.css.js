@@ -1,7 +1,6 @@
 let {
   css,
   mixins,
-  variables,
   merge
 } = require('../../lib/css')
 

@@ -62,11 +62,11 @@ module.exports = css(merge(mixins.pageLayout, {
     display: 'block'
   },
   editing: mixins.buttonTertiary,
-  messageWrap: merge(fieldStyle, {
+  templateWrap: merge(fieldStyle, {
     paddingTop: '30px',
     alignItems: 'flex-start'
   }),
-  message: {
+  template: {
     width: '100%',
     height: '20rem'
   },

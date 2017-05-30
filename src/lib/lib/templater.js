@@ -1,12 +1,9 @@
-const React = require('react')
 const get = require('lodash/get')
 const without = require('lodash/without')
 const identity = require('lodash/identity')
-const escapeHtml = require('escape-html')
+const { stripDelims } = require('.')
 
-const stripDelims = (tag) => tag.slice(2, -2)
-
-const tagifyParagraph = (para, data, tagify) => {
+const tagifyParagraph = (para, data, tagify, chunkify) => {
   let tags = para.match(/\{\{.*?\}\}/g) || []
   let order = para.match(/\{\{.*?\}\}|((?!(\{\{.*?\}\}))[^])+/g) || []
   let result = order.map((chunk, index) => {
@@ -14,7 +11,7 @@ const tagifyParagraph = (para, data, tagify) => {
       let result = get(data, stripDelims(chunk))
       return tagify(result !== undefined ? result : chunk, !!result, index)
     } else {
-      return <span key={`chunk${index}`}>{chunk}</span>
+      return chunkify(chunk, index)
     }
   })
   return result
@@ -24,9 +21,11 @@ module.exports.render = ({
   template,
   data,
   tagify = identity,
-  pify
+  pify = identity,
+  chunkify = identity,
+  splitter = '\n'
 }) => {
-  return without(template.split('\n'), '')
-    .map((para) => tagifyParagraph(para, data, tagify))
+  return without(template.split(splitter), '')
+    .map((para) => tagifyParagraph(para, data, tagify, chunkify))
     .map(pify)
 }

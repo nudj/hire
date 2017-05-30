@@ -18,7 +18,7 @@ const {
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
-const errorLabel = (className, message) => <p className={className}>{message}</p>
+const errorLabel = (className, template) => <p className={className}>{template}</p>
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -27,7 +27,7 @@ module.exports = class ComposePage extends React.Component {
 
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
-    let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
+    let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
 
     this.state = {
       recipients: get(props, 'form.recipients.value'),
@@ -35,10 +35,10 @@ module.exports = class ComposePage extends React.Component {
       subject: get(props, 'form.subject.value'),
       subjectFallback: composeSubject,
       subjectError: get(props, 'form.subject.error', false),
-      message: get(props, 'form.template.value'),
-      messageFallback: composeMessage,
-      messageError: get(props, 'form.template.error', false),
-      editing: false,
+      template: get(props, 'form.template.value'),
+      templateFallback: composeMessage,
+      templateError: get(props, 'form.template.error', false),
+      editing: true,
       error: get(props, 'error', false)
     }
     this.validateRecipients = this.validateRecipients.bind(this)
@@ -51,23 +51,30 @@ module.exports = class ComposePage extends React.Component {
     this.renderMessage = this.renderMessage.bind(this)
     this.tagify = this.tagify.bind(this)
     this.pify = this.pify.bind(this)
+    this.chunkify = this.chunkify.bind(this)
     this.onClickSend = this.onClickSend.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
     this.onBlurRecipients = this.onBlurRecipients.bind(this)
   }
+  componentDidMount () {
+    this.setState({
+      editing: false,
+      js: true
+    })
+  }
   validateRecipients () {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
-    return ['subject', 'message'].reduce((newState, key) => {
+    return ['subject', 'template'].reduce((newState, key) => {
       let value = get(this.state, key, get(this.state, `${key}Fallback`))
       newState[`${key}Error`] = validators[key](value)
       return newState
     }, {})
   }
   isInvalid () {
-    return ['recipients', 'subject', 'message'].reduce((result, key) => {
+    return ['recipients', 'subject', 'template'].reduce((result, key) => {
       if (!result) {
         result = get(this.state, `${key}Error`)
       }
@@ -77,17 +84,17 @@ module.exports = class ComposePage extends React.Component {
   componentWillReceiveProps (props) {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
-    let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '')
+    let composeMessage = (get(this.state, 'template', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
 
     this.setState({
       recipients: get(this.state, 'recipients', get(props, 'form.recipients.value')),
-      recipientsError: get(this.state, 'recipients', get(props, 'form.recipients.error', false)),
+      recipientsError: get(this.state, 'recipientsError', get(props, 'form.recipients.error', false)),
       subject: get(this.state, 'subject', get(props, 'form.subject.value')),
       subjectFallback: composeSubject,
-      subjectError: get(this.state, 'subject', get(props, 'form.subject.error', false)),
-      message: get(this.state, 'message', get(props, 'form.template.value')),
-      messageFallback: composeMessage,
-      messageError: get(this.state, 'message', get(props, 'form.message.error', false))
+      subjectError: get(this.state, 'subjectError', get(props, 'form.subject.error', false)),
+      template: get(this.state, 'template', get(props, 'form.template.value')),
+      templateFallback: composeMessage,
+      templateError: get(this.state, 'templateError', get(props, 'form.template.error', false))
     })
   }
   onBlurRecipients (event) {
@@ -113,7 +120,7 @@ module.exports = class ComposePage extends React.Component {
   }
   onChangeMessage (event) {
     this.setState({
-      message: event.target.value
+      template: event.target.value
     })
   }
   chunkify (contents, index) {
@@ -127,7 +134,7 @@ module.exports = class ComposePage extends React.Component {
   }
   renderMessage (template) {
     return templater.render({
-      template: template || get(this.state, 'message', ''),
+      template: template || get(this.state, 'template', ''),
       data: {
         refereeName: 'First Name',
         job: {
@@ -149,7 +156,7 @@ module.exports = class ComposePage extends React.Component {
       data: {
         recipients: get(this.state, 'recipients', ''),
         subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
-        template: get(this.state, 'message', get(this.state, 'messageFallback', ''))
+        template: get(this.state, 'template', get(this.state, 'templateFallback', ''))
       }
     }))
     this.props.dispatch(hideDialog())
@@ -168,12 +175,11 @@ module.exports = class ComposePage extends React.Component {
     return <div>Success</div>
   }
   renderComposer () {
-    const error = get(this.state, 'error')
     const tooltip = get(this.props, 'tooltip')
     const invalid = this.isInvalid()
     const recipientsError = get(this.state, 'recipientsError')
     const subjectError = get(this.state, 'subjectError')
-    const messageError = get(this.state, 'messageError')
+    const templateError = get(this.state, 'templateError')
     return (
       <Form className={this.style.pageBody} action={`/jobs/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
@@ -182,7 +188,7 @@ module.exports = class ComposePage extends React.Component {
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         >
           {invalid ? errorLabel(this.style.errorLabel, invalid) : ''}
-          <button className={this.style.submit} onClick={this.onClickSend} disabled={this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value)}>Send message</button>
+          <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
         </PageHeader>
         <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
         <div className={this.style.pageContent}>
@@ -197,12 +203,12 @@ module.exports = class ComposePage extends React.Component {
                 <label className={this.style.addLabel} htmlFor='subject'>Subject</label>
                 {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
                 {subjectError ? errorLabel(this.style.errorLabel, subjectError) : ''}
-                <button className={this.style.editing} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button>
+                {get(this.state, 'js') ? <button className={this.style.editing} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button> : ''}
               </div>
-              <div className={this.style.messageWrap}>
-                <label className={this.style.addLabel} htmlFor='message'>Message</label>
-                {get(this.state, 'editing') ? <textarea className={this.style.message} name='template' value={get(this.state, 'message', get(this.state, 'messageFallback', ''))} onChange={this.onChangeMessage} id='message' /> : <div className={this.style.message}> {this.renderMessage(get(this.state, 'message', get(this.state, 'messageFallback', '')))}</div>}
-                {messageError ? errorLabel(this.style.errorLabel, messageError) : ''}
+              <div className={this.style.templateWrap}>
+                <label className={this.style.addLabel} htmlFor='template'>Message</label>
+                {get(this.state, 'editing') ? <textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' /> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
+                {templateError ? errorLabel(this.style.errorLabel, templateError) : ''}
               </div>
             </div>
           </div>

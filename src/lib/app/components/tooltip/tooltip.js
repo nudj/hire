@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 const getStyle = require('./tooltip.css')
 
 const PrismicReact = require('../../lib/prismic-react')
