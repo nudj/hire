@@ -1,6 +1,5 @@
 const React = require('react')
-const { connect } = require('react-redux')
-const { withRouter, Switch, Route } = require('react-router-dom')
+const { Switch, Route } = require('react-router-dom')
 const get = require('lodash/get')
 
 const withState = require('../../lib/with-state')
