@@ -34,11 +34,9 @@ dev:
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
-		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
 		--env-file $(CWD)/.env \
 		$(IMAGEDEV) \
-		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && $(BIN)/nodemon \
+		/bin/sh -c '$(BIN)/nodemon \
 			--config ./nodemon.json \
 			-e js,html,css \
 			--quiet \
@@ -53,11 +51,9 @@ stats:
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
-		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
 		-v $(CWD)/src/stats.json:/usr/src/stats.json \
 		$(IMAGEDEV) \
-		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && ./node_modules/.bin/webpack  --config ./webpack.config.js --profile --json > stats.json'
+		/bin/sh -c './node_modules/.bin/webpack  --config ./webpack.config.js --profile --json > stats.json'
 
 dll:
 	-@docker rm -f dll-container 2> /dev/null || true
@@ -69,7 +65,7 @@ dll:
 		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
 		-v $(CWD)/src/stats.json:/usr/src/stats.json \
 		$(IMAGEDEV) \
-		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && ./node_modules/.bin/webpack  --config ./webpack.dll.js --bail --hide-modules'
+		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules'
 
 pack:
 	@docker exec -i hire-dev-container \
@@ -90,7 +86,7 @@ tdd:
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/test:/usr/src/test \
 		$(IMAGEDEV) \
-		/bin/sh -c 'ln -s /tmp/node_modules ./node_modules && $(BIN)/nodemon \
+		/bin/sh -c '$(BIN)/nodemon \
 			--quiet \
 			--watch ./ \
 			--delay 250ms \
