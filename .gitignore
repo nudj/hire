@@ -9,3 +9,4 @@ db.json
 .cache/*
 !.cache/readme.md
 !.cache/.npmrc
+src/vendors-manifest.json
