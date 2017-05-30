@@ -16,6 +16,19 @@ module.exports.setPage = (data) => {
   }
 }
 
+const SENDING = 'SENDING'
+module.exports.SENDING = SENDING
+function sending () {
+  return {
+    type: SENDING
+  }
+}
+module.exports.sending = () => {
+  return (dispatch, getState) => {
+    dispatch(sending())
+  }
+}
+
 const SHOW_DIALOG = 'SHOW_DIALOG'
 module.exports.SHOW_DIALOG = SHOW_DIALOG
 function showDialog (dialog) {
@@ -50,6 +63,7 @@ module.exports.postData = ({
 }) => {
   return (dispatch, getState) => {
     let state = getState()
+    dispatch(sending())
     request(url, {
       method,
       data: merge(data, {
@@ -58,7 +72,9 @@ module.exports.postData = ({
     })
     .then((data) => {
       dispatch(fetchedPage(data))
-      dispatch(push(data.page.url.originalUrl))
+      if (data.page.url.originalUrl !== url) {
+        dispatch(push(data.page.url.originalUrl))
+      }
     })
   }
 }

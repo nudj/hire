@@ -71,7 +71,7 @@ module.exports = css({
   candidates: merge(linkStyle, {
     color: '#fff',
     ':before': {
-      backgroundImage: 'url("/assets/images/business-24-px-outline-briefcase-24.svg")'
+      backgroundImage: 'url("/assets/images/candidates.svg")'
     }
   }),
   help: merge(linkStyle, {

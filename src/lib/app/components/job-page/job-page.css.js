@@ -1,28 +1,72 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
-const listStyle = {
-  listStyle: 'none',
-  padding: 0,
-  margin: 0
+const cardStyle = merge(mixins.cardStyle, {
+  width: '286px',
+  height: '312px',
+  display: 'flex',
+  marginLeft: '10px',
+  flexDirection: 'column',
+  justifyContent: 'stretch',
+  alignItems: 'center',
+  ':first-child': {
+    marginLeft: 0
+  }
+})
+
+const cardContent = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flex: 1,
+  ':before': {
+    content: '""',
+    display: 'block',
+    width: '46px',
+    height: '46px',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+    backgroundSize: 'contain'
+  }
 }
 
 module.exports = css(merge(mixins.pageLayout, {
-  recommendations: listStyle,
-  content: {
-    flex: 1,
-    padding: '10px 20px',
-    display: 'flex'
+  headerLink: {
+    color: variables.colors.charcoal,
+    textDecoration: 'none'
   },
-  main: {
-    flex: 1
+  copyLink: mixins.buttonSecondary,
+  pageMain: {
+    display: 'flex',
+    justifyContent: 'flex-start'
   },
-  sidebar: {
-    width: '420px',
-    padding: '0 60px'
-  },
-  copyLink: mixins.buttonSecondary
+  internal: cardStyle,
+  external: cardStyle,
+  internalContent: merge(cardContent, {
+    ':before': {
+      backgroundImage: 'url("/assets/images/company.svg")'
+    }
+  }),
+  externalContent: merge(cardContent, {
+    ':before': {
+      backgroundImage: 'url("/assets/images/network.svg")'
+    }
+  }),
+  title: merge(mixins.headings.h7, {
+    color: variables.colors.royalBlue,
+    marginTop: '20px',
+    marginBottom: '10px'
+  }),
+  description: merge(mixins.headings.small, {
+    textAlign: 'center',
+    margin: 0
+  }),
+  button: merge(mixins.button, {
+    flex: 0
+  })
 }))

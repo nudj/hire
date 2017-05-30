@@ -1,14 +1,16 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
 const tag = {
-  background: 'lightgreen',
-  border: '1px solid green',
-  borderRadius: '1rem',
-  padding: '2px 8px'
+  color: variables.colors.royalBlue,
+  background: variables.colors.grey,
+  borderRadius: '4px',
+  padding: '2px 8px',
+  whiteSpace: 'nowrap'
 }
 const fieldStyle = {
   display: 'flex',
@@ -17,11 +19,26 @@ const fieldStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
+  jobLink: {
+    color: variables.colors.royalBlue,
+    textDecoration: 'none'
+  },
+  companyLink: {
+    color: variables.colors.charcoal,
+    textDecoration: 'none'
+  },
   submit: mixins.button,
+  chunk: {},
+  para: {
+    lineHeight: '1.5rem',
+    ':first-child': {
+      margin: 0
+    }
+  },
   tagOk: tag,
   tagError: merge(tag, {
-    background: 'pink',
-    borderColor: 'red'
+    background: variables.colors.lightPink,
+    color: variables.colors.darkPink
   }),
   recipientsWrap: merge(mixins.cardStyle, fieldStyle, {
     height: '100px',
@@ -45,11 +62,11 @@ module.exports = css(merge(mixins.pageLayout, {
     display: 'block'
   },
   editing: mixins.buttonTertiary,
-  messageWrap: merge(fieldStyle, {
+  templateWrap: merge(fieldStyle, {
     paddingTop: '30px',
     alignItems: 'flex-start'
   }),
-  message: {
+  template: {
     width: '100%',
     height: '20rem'
   },

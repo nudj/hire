@@ -32,7 +32,7 @@ ReactDOM.render(
       // only fetch new page data if...
       // - history action is not PUSH
       // - history action is PUSH and requested url is not already in page data (page data is stale)
-      if (!(history.action === 'PUSH' && location.pathname === store.getState().page.url.originalUrl)) {
+      if (location.pathname !== store.getState().page.url.originalUrl) {
         request(location.pathname)
         .catch((error) => {
           switch (error.message) {

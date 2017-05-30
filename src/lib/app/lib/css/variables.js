@@ -13,7 +13,9 @@ module.exports.colors = {
   grey: '#ececeb',
   white: '#fff',
   royalBlue: '#002d72',
-  royalBlueFade: '#6681aa'
+  royalBlueFade: '#6681aa',
+  lightPink: '#f5a0af',
+  darkPink: '#8f3a49'
 }
 
 module.exports.fonts = {

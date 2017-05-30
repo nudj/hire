@@ -9,7 +9,8 @@ const Tooltip = require('../tooltip/tooltip')
 
 const JobsPage = (props) => {
   const style = getStyle()
-  let jobs = get(props, 'published', [])
+  const jobs = get(props, 'published', [])
+  const tooltip = get(props, 'tooltip')
   return (
     <div className={style.pageBody}>
       <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
@@ -42,7 +43,7 @@ const JobsPage = (props) => {
           </ul>
         </div>
         <div className={style.pageSidebar}>
-          <Tooltip {...props} />
+          {tooltip ? <Tooltip {...tooltip} /> : ''}
         </div>
       </div>
     </div>

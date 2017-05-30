@@ -1,16 +1,14 @@
 const React = require('react')
-const get = require('lodash/get')
 const getStyle = require('./tooltip.css')
 
 const PrismicReact = require('../../lib/prismic-react')
 
 const Tooltip = (props) => {
   const style = getStyle()
-  const tooltip = get(props, 'tooltip')
 
-  const prismicTooltip = tooltip && new PrismicReact(tooltip)
+  const prismicTooltip = new PrismicReact(props)
 
-  const tooltipTitle = (tooltip && prismicTooltip.fragmentToReact({
+  const tooltipTitle = (prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptitle',
     props: {
       className: style.tooltipTitle,
@@ -18,7 +16,7 @@ const Tooltip = (props) => {
     }
   })) || ''
 
-  const tooltipText = (tooltip && prismicTooltip.fragmentToReact({
+  const tooltipText = (prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltiptext',
     props: {
       className: style.tooltipText,
@@ -33,7 +31,7 @@ const Tooltip = (props) => {
 
   const tooltipIntercomButton = (<button data-thing='tooltip-intercom-testing-poop' className={props.className} />)
 
-  const tooltipIntercom = (tooltip && prismicTooltip.fragmentToReact({
+  const tooltipIntercom = (prismicTooltip.fragmentToReact({
     fragment: 'tooltip.tooltipintercombutton',
     props: {
       className: style.tooltipIntercomButton,

@@ -246,7 +246,7 @@ module.exports.deList = {
   padding: '0'
 }
 
-module.exports.button = merge({
+module.exports.button = merge(headings.pBold, {
   display: 'block',
   height: '40px',
   border: 0,
@@ -256,21 +256,21 @@ module.exports.button = merge({
   padding: '10px 30px',
   cursor: 'pointer',
   textDecoration: 'none',
-  whiteSpace: 'nowrap'
-}, headings.pBold)
-module.exports.buttonDisabled = merge(module.exports.button, {
-  backgroundColor: variables.colors.royalBlueFade,
-  cursor: 'default'
+  whiteSpace: 'nowrap',
+  ':disabled': {
+    backgroundColor: variables.colors.royalBlueFade,
+    cursor: 'default'
+  }
 })
 module.exports.buttonSecondary = merge(module.exports.button, {
   color: variables.colors.royalBlue,
   backgroundColor: variables.colors.white,
-  border: `2px solid ${variables.colors.royalBlue}`
-})
-module.exports.buttonSecondaryDisabled = merge(module.exports.buttonSecondary, {
-  color: variables.colors.royalBlueFade,
-  borderColor: variables.colors.royalBlueFade,
-  cursor: 'default'
+  border: `2px solid ${variables.colors.royalBlue}`,
+  ':disabled': {
+    color: variables.colors.royalBlueFade,
+    borderColor: variables.colors.royalBlueFade,
+    cursor: 'default'
+  }
 })
 module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
