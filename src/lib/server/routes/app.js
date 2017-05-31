@@ -4,7 +4,6 @@ const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
 const logger = require('../lib/logger')
-const request = require('../modules/request')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
@@ -157,22 +156,6 @@ function getRenderer (req, res, next) {
       })
     }
   }
-}
-
-// function redirect (req, res, url) {
-//   if (req.xhr) {
-//     return () => res.json({ redirect: url })
-//   } else {
-//     return () => res.redirect(url)
-//   }
-// }
-
-function requestHandler (req, res, next) {
-  request
-    .send(req.body.first_name, req.body.last_name, req.body.email, req.body.company_name)
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
 }
 
 function jobsHandler (req, res, next) {
@@ -333,44 +316,13 @@ function externalSaveHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-// function archiveHandler (req, res, next) {
-//   jobs
-//     .patch(req.params.jobSlug, {
-//       status: 'Archived'
-//     })
-//     .then(redirect(req, res, req.get('Referrer')))
-//     .catch(getErrorHandler(req, res, next))
-// }
-//
-// function publishHandler (req, res, next) {
-//   jobs
-//     .patch(req.params.jobSlug, {
-//       status: 'Published'
-//     })
-//     .then(redirect(req, res, req.get('Referrer')))
-//     .catch(getErrorHandler(req, res, next))
-// }
-//
-// function composeHandler (req, res, next) {
-//   jobs
-//     .compose(clone(req.session.data), req.params.jobSlug, [].concat(req.body.recipients || []))
-//     .then(getRenderDataBuilder(req, res, next))
-//     .then(getRenderer(req, res, next))
-//     .catch(getErrorHandler(req, res, next))
-// }
-
-router.post('/request', requestHandler)
-router.get('/jobs', ensureLoggedIn, jobsHandler)
-router.get('/jobs/:jobSlug', ensureLoggedIn, jobHandler)
-router.get('/jobs/:jobSlug/internal', ensureLoggedIn, internalHandler)
-router.post('/jobs/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
-router.get('/jobs/:jobSlug/external', ensureLoggedIn, externalHandler)
-router.get('/jobs/:jobSlug/external/:personId', ensureLoggedIn, externalComposeHandler)
-router.post('/jobs/:jobSlug/external/:personId', ensureLoggedIn, externalSaveHandler)
-// router.post('/jobs/:jobSlug/archive', ensureLoggedIn, archiveHandler)
-// router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
-// router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
-// router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
+router.get('/', ensureLoggedIn, jobsHandler)
+router.get('/:jobSlug', ensureLoggedIn, jobHandler)
+router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
+router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
+router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)
+router.get('/:jobSlug/external/:personId', ensureLoggedIn, externalComposeHandler)
+router.post('/:jobSlug/external/:personId', ensureLoggedIn, externalSaveHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

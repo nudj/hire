@@ -152,7 +152,7 @@ module.exports = class ComposePage extends React.Component {
   }
   onClickConfirm () {
     this.props.dispatch(postData({
-      url: `/jobs/${get(this.props, 'job.slug')}/internal`,
+      url: `/${get(this.props, 'job.slug')}/internal`,
       data: {
         recipients: get(this.state, 'recipients', ''),
         subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
@@ -181,10 +181,10 @@ module.exports = class ComposePage extends React.Component {
     const subjectError = get(this.state, 'subjectError')
     const templateError = get(this.state, 'templateError')
     return (
-      <Form className={this.style.pageBody} action={`/jobs/${get(this.props, 'job.slug')}/internal`} method='POST'>
+      <Form className={this.style.pageBody} action={`/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+          title={<Link className={this.style.jobLink} to={`/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         >
           {invalid ? errorLabel(this.style.errorLabel, invalid) : ''}

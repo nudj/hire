@@ -115,7 +115,7 @@ module.exports = class ComposePage extends React.Component {
       content = (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
         <Link to={'/jobs'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
-        <Link to={`/jobs/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
+        <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
       </div>)
       sectionClass = this.style.sectionActive
       sectionNumberClass = this.style.sectionNumberActive
@@ -403,7 +403,7 @@ module.exports = class ComposePage extends React.Component {
   saveAndPostData ({active, data}) {
     this.setState({active, data}, () => {
       this.props.dispatch(postData({
-        url: `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`,
+        url: `/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`,
         data: this.state.data
       }))
     })
