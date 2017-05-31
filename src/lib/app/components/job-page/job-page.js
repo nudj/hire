@@ -25,14 +25,14 @@ const JobPage = (props) => {
               <h4 className={style.title}>Ask your company</h4>
               <p className={style.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac gravida neque. Curabitur vitae tortor ut dui porttit.</p>
             </div>
-            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/internal`}>Select</Link>
+            <Link className={style.button} to={`/${get(props, 'job.slug')}/internal`}>Select</Link>
           </div>
           <div className={style.external}>
             <div className={style.externalContent}>
               <h4 className={style.title}>Ask your network</h4>
               <p className={style.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac gravida neque. Curabitur vitae tortor ut dui porttit.</p>
             </div>
-            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/external`}>Select</Link>
+            <Link className={style.button} to={`/${get(props, 'job.slug')}/external`}>Select</Link>
           </div>
         </div>
         <div className={style.pageSidebar}>

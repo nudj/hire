@@ -41,7 +41,7 @@ module.exports = class ComposePage extends React.Component {
             description: get(person, 'company')
           }]}
           actions={[
-            <Link className={this.style.nudjButton} to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
+            <Link className={this.style.nudjButton} to={`/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
           ]}
         />)
       })}
