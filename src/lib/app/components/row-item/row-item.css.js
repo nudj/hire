@@ -12,7 +12,7 @@ const listStyle = {
 }
 
 const styles = {
-  row: merge({}, listStyle, mixins.cardStyle, {
+  row: merge(listStyle, mixins.cardStyle, {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -76,7 +76,7 @@ const styles = {
   action: listStyle
 }
 
-styles.rowSmall = merge({}, styles.row, {
+styles.rowSmall = merge(styles.row, {
   margin: `0 0 ${variables.padding.e} ${variables.padding.e}`,
   marginTop: '0',
   width: `calc(50% - ${variables.padding.e})`,

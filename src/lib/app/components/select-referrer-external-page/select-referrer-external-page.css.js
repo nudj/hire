@@ -6,10 +6,10 @@ const styles = {
   companyLink: mixins.deLink,
   pageContent: {},
   pageMain: {},
-  pageMainNetwork: merge({}, mixins.pageLayout.pageMain, {
+  pageMainNetwork: merge(mixins.pageLayout.pageMain, {
     paddingRight: `calc(${variables.sizing.sidebarWidth} + ${variables.padding.b})`
   }),
-  network: merge({}, mixins.deList),
+  network: merge(mixins.deList),
   networkSmall: merge({
     display: 'flex',
     flexWrap: 'wrap'
@@ -18,4 +18,4 @@ const styles = {
   nudjButton: mixins.button
 }
 
-module.exports = css(merge({}, mixins.pageLayout, styles))
+module.exports = css(merge(mixins.pageLayout, styles))

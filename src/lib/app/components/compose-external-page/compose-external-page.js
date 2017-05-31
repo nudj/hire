@@ -24,14 +24,6 @@ module.exports = class ComposePage extends React.Component {
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])
 
-    if (!messages.length) {
-      console.error('No messages')
-    }
-
-    if (!tooltips.length) {
-      console.error('No tooltips')
-    }
-
     this.state = {active, data, messages, tooltips}
   }
 
@@ -378,19 +370,19 @@ module.exports = class ComposePage extends React.Component {
 
   submitComposeMessage () {
     const composeMessage = this.state.tempMessage || this.getComposeMessageBaseText()
-    const data = merge({}, this.state.data, {composeMessage})
+    const data = merge(this.state.data, {composeMessage})
     const active = 'sendMessage'
     this.saveAndPostData({active, data})
   }
 
   submitSelectLength (selectLength) {
-    const data = merge({}, this.state.data, {selectLength})
+    const data = merge(this.state.data, {selectLength})
     const active = 'selectStyle'
     this.saveAndPostData({active, data})
   }
 
   submitSelectStyle (selectStyle) {
-    const data = merge({}, this.state.data, {selectStyle})
+    const data = merge(this.state.data, {selectStyle})
     const active = 'composeMessage'
     this.saveAndPostData({active, data})
   }
@@ -403,7 +395,7 @@ module.exports = class ComposePage extends React.Component {
       window.open(link)
     }
 
-    const data = merge({}, this.state.data, {sendMessage})
+    const data = merge(this.state.data, {sendMessage})
     const active = 'nextSteps'
     this.saveAndPostData({active, data})
   }

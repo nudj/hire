@@ -40,7 +40,7 @@ module.exports = css(merge(mixins.pageLayout, {
     border: '0',
     margin: `0 0 ${variables.padding.e}`
   }),
-  addLabel: merge({}, mixins.headings.h7, {
+  addLabel: merge(mixins.headings.h7, {
     color: variables.colors.royalBlue,
     flexShrink: '0',
     paddingRight: variables.padding.d,
@@ -55,7 +55,7 @@ module.exports = css(merge(mixins.pageLayout, {
     borderBottom: `${variables.sizing.baseBorderWidth} solid ${variables.colors.grey}`,
     paddingBottom: variables.padding.d
   }),
-  subject: merge({}, mixins.formElements.inputBoxBorderless, mixins.headings.h4, {
+  subject: merge(mixins.formElements.inputBoxBorderless, mixins.headings.h4, {
     color: variables.colors.royalBlue,
     flexGrow: '1'
   }),
@@ -65,7 +65,7 @@ module.exports = css(merge(mixins.pageLayout, {
     alignItems: 'flex-start',
     paddingTop: variables.padding.d
   }),
-  template: merge({}, mixins.formElements.inputBoxBorderless, {
+  template: merge(mixins.formElements.inputBoxBorderless, {
     height: '20rem',
     flexGrow: '1',
     padding: `0 0 ${variables.padding.d} 0`

@@ -126,12 +126,12 @@ const headings = {
   }
 }
 
-headings.pBold = merge({}, headings.p, {
+headings.pBold = merge(headings.p, {
   fontFamily: [fonts.jan.bold],
   fontWeight: 'bold'
 })
 
-headings.p2Bold = merge({}, headings.p2, {
+headings.p2Bold = merge(headings.p2, {
   fontFamily: [fonts.jan.bold],
   fontWeight: 'bold'
 })
@@ -172,7 +172,7 @@ const linkImage = function (imagePath) {
 module.exports.linkImage = linkImage
 
 module.exports.pageLayout = {
-  pageBody: merge({}, headings.p, {
+  pageBody: merge(headings.p, {
     background: variables.colors.grey,
     minHeight: '100vh'
   }),
@@ -184,7 +184,7 @@ module.exports.pageLayout = {
     background: variables.colors.white,
     padding: `${variables.padding.e} ${variables.padding.d}`
   },
-  pageHeadline: merge({}, headings.h5, {
+  pageHeadline: merge(headings.h5, {
     color: variables.colors.royalBlue,
     padding: `${variables.padding.c} ${variables.padding.d} ${variables.padding.d} ${variables.padding.d}`,
     margin: 0
@@ -215,7 +215,7 @@ const cardStyle = {
 
 module.exports.cardStyle = cardStyle
 
-module.exports.cardStyleTwo = merge({}, cardStyle, {
+module.exports.cardStyleTwo = merge(cardStyle, {
   background: variables.colors.offGrey,
   border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.midGrey}`
 })
@@ -333,7 +333,7 @@ module.exports.buttonClose = {
   width: variables.padding.d
 }
 
-const inputBox = merge({}, headings.p, {
+const inputBox = merge(headings.p, {
   border: `calc(${variables.sizing.baseBorderWidth} * 0.5) solid ${variables.colors.midGrey}`,
   borderRadius: `calc(${variables.sizing.baseBorderRadius} * 0.5)`,
   color: variables.colors.charcoal,
@@ -352,7 +352,7 @@ const inputBox = merge({}, headings.p, {
 
 module.exports.formElements = {
   inputBox: inputBox,
-  inputBoxBorderless: merge({}, inputBox, {
+  inputBoxBorderless: merge(inputBox, {
     border: '0',
     boxShadow: 'none',
     padding: `${variables.padding.e} ${variables.padding.e} ${variables.padding.e} 0`,

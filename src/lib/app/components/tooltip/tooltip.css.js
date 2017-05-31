@@ -6,7 +6,7 @@ let {
 
 module.exports = css({
   tooltip: mixins.cardStyle,
-  tooltipTitle: merge({}, mixins.typography.h5),
-  tooltipText: merge({}, mixins.typography.p),
-  tooltipIntercomButton: merge({}, mixins.button)
+  tooltipTitle: merge(mixins.typography.h5),
+  tooltipText: merge(mixins.typography.p),
+  tooltipIntercomButton: merge(mixins.button)
 })

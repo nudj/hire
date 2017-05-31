@@ -27,7 +27,7 @@ const cardContent = {
   }
 }
 
-module.exports = css(merge({}, mixins.pageLayout, {
+module.exports = css(merge(mixins.pageLayout, {
   headerLink: {
     color: variables.colors.charcoal,
     textDecoration: 'none'
@@ -54,8 +54,8 @@ module.exports = css(merge({}, mixins.pageLayout, {
     marginTop: variables.padding.d,
     marginBottom: variables.padding.e
   }),
-  description: merge({}, mixins.typography.p),
-  button: merge({}, mixins.button, {
+  description: merge(mixins.typography.p),
+  button: merge(mixins.button, {
     display: 'inline-block'
   })
 }))

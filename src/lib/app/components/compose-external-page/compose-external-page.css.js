@@ -1,6 +1,6 @@
 let { css, merge, mixins, variables } = require('../../lib/css')
 
-const title = merge({}, mixins.headings.h7, {
+const title = merge(mixins.headings.h7, {
   flexShrink: '0',
   color: variables.colors.royalBlue,
   width: variables.padding.a
@@ -12,7 +12,7 @@ const nextToTitleContainer = {
 
 const sectionNumberSize = variables.padding.d
 
-const sectionNumber = merge({}, mixins.headings.h7, {
+const sectionNumber = merge(mixins.headings.h7, {
   backgroundColor: variables.colors.midGrey,
   borderRadius: '100%',
   color: variables.colors.white,
@@ -25,7 +25,7 @@ const sectionNumber = merge({}, mixins.headings.h7, {
   width: sectionNumberSize
 })
 
-const sectionNumberActive = merge({}, sectionNumber, {
+const sectionNumberActive = merge(sectionNumber, {
   backgroundColor: variables.colors.royalBlue
 })
 
@@ -34,12 +34,12 @@ const activeOptionIcon = {
   padding: `0 0 ${variables.padding.e} 0`
 }
 
-const optionTitle = merge({}, mixins.headings.h7, {
+const optionTitle = merge(mixins.headings.h7, {
   color: variables.colors.royalBlue,
   padding: `0 0 ${variables.padding.f} 0`
 })
 
-const optionText = merge({}, mixins.headings.p, {
+const optionText = merge(mixins.headings.p, {
   color: variables.colors.charcoal
 })
 
@@ -62,10 +62,10 @@ const styles = {
     alignItems: 'center',
     display: 'flex'
   }, mixins.cardStyle),
-  sectionTitle: merge({}, title),
+  sectionTitle: merge(title),
   sectionNumber: sectionNumber,
   sectionNumberActive: sectionNumberActive,
-  sectionDone: merge({}, sectionNumberActive, {
+  sectionDone: merge(sectionNumberActive, {
     color: variables.colors.royalBlue,
     '::after': {
       backgroundImage: `url('/assets/images/ui-24px-outline-1_check.svg')`,
@@ -81,13 +81,13 @@ const styles = {
       width: '100%'
     }
   }),
-  preActiveText: merge({}, nextToTitleContainer, {
+  preActiveText: merge(nextToTitleContainer, {
     textAlign: 'center'
   }),
-  activeOptionsContainer: merge({}, nextToTitleContainer, mixins.deList, {
+  activeOptionsContainer: merge(nextToTitleContainer, mixins.deList, {
     display: 'flex'
   }),
-  activeOption: merge({}, mixins.cardStyleTwo, {
+  activeOption: merge(mixins.cardStyleTwo, {
     background: variables.colors.offWhite,
     flexBasis: '0',
     flexGrow: '1',
@@ -112,14 +112,14 @@ const styles = {
   }, activeOptionIcon),
   activeOptionTitle: optionTitle,
   activeOptionText: optionText,
-  activeContainer: merge({}, nextToTitleContainer),
-  activeContainerCentered: merge({}, nextToTitleContainer, {
+  activeContainer: merge(nextToTitleContainer),
+  activeContainerCentered: merge(nextToTitleContainer, {
     textAlign: 'center'
   }),
-  activeContainerTitle: merge({}, optionText, {
+  activeContainerTitle: merge(optionText, {
     padding: `0 0 ${variables.padding.d} 0`
   }),
-  completedSectionSummary: merge({}, nextToTitleContainer, {
+  completedSectionSummary: merge(nextToTitleContainer, {
     textAlign: 'center'
   }),
   completedSectionSummaryTitle: optionTitle,
@@ -127,13 +127,13 @@ const styles = {
   completedSectionSummaryMessage: {
     textAlign: 'left'
   },
-  completedSectionSummaryMessageParagraph: merge({}, mixins.typography.p, {
+  completedSectionSummaryMessageParagraph: merge(mixins.typography.p, {
     ':last-child': {
       margin: '0'
     }
   }),
   messageContainer: {},
-  messageTextarea: merge({}, mixins.formElements.inputBoxBorderless, {
+  messageTextarea: merge(mixins.formElements.inputBoxBorderless, {
     height: '20rem',
     padding: `0 0 ${variables.padding.d} 0`,
     width: '100%'
@@ -144,16 +144,16 @@ const styles = {
   tagError: {
     color: 'red'
   },
-  composeMessageSave: merge({}, mixins.button, {
+  composeMessageSave: merge(mixins.button, {
     display: 'inline-block'
   }),
-  nextStepNudj: merge({}, mixins.button, {
+  nextStepNudj: merge(mixins.button, {
     display: 'inline-block'
   }),
-  nextStepDashboard: merge({}, mixins.buttonSecondary, {
+  nextStepDashboard: merge(mixins.buttonSecondary, {
     display: 'inline-block',
     margin: `0 ${variables.padding.d} 0 0`
   })
 }
 
-module.exports = css(merge({}, mixins.pageLayout, styles))
+module.exports = css(merge(mixins.pageLayout, styles))

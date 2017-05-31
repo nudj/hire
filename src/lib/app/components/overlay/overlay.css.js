@@ -21,7 +21,7 @@ module.exports = css({
   hidden: {
     display: 'none'
   },
-  dialog: merge({}, mixins.cardStyle, {
+  dialog: merge(mixins.cardStyle, {
     backgroundImage: mixins.linkImage('ok-hand.svg'),
     backgroundPosition: 'calc(100% - 30px) bottom',
     backgroundRepeat: 'no-repeat',
