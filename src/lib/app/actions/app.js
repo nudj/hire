@@ -69,6 +69,33 @@ module.exports.hideDialog = () => {
   }
 }
 
+const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
+module.exports.SHOW_NOTIFICATION = SHOW_NOTIFICATION
+function showNotification (notification) {
+  return {
+    type: SHOW_NOTIFICATION,
+    notification
+  }
+}
+module.exports.showNotification = (notification) => {
+  return (dispatch, getState) => {
+    dispatch(showNotification(notification))
+  }
+}
+
+const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION'
+module.exports.HIDE_NOTIFICATION = HIDE_NOTIFICATION
+function hideNotification () {
+  return {
+    type: HIDE_NOTIFICATION
+  }
+}
+module.exports.hideNotification = () => {
+  return (dispatch, getState) => {
+    dispatch(hideNotification())
+  }
+}
+
 module.exports.postData = ({
   url,
   method = 'post',

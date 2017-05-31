@@ -4,6 +4,7 @@ const { Helmet } = require('react-helmet')
 const getStyle = require('./index.css')
 const Header = require('../header/header')
 const Message = require('../message/message')
+const Notification = require('../notification/notification')
 const Page = require('../page/page')
 const Overlay = require('../overlay/overlay')
 const withState = require('../../lib/with-state')
@@ -36,6 +37,7 @@ const Index = () => {
       </header>
       <div className={style.content}>
         <Route path='*' component={withState(Message)} />
+        <Route path='*' component={withState(Notification)} />
         <Route path='*' component={withState(Page)} />
       </div>
       <Route path='*' component={withState(Overlay)} />

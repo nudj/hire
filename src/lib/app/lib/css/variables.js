@@ -50,9 +50,11 @@ module.exports.colors = {
   royalBlue: '#002d72',
   royalBlueFade: '#6681aa',
   lightPink: '#f5a0af',
+  darkPink: '#ef6079',
   white: '#fff',
   offWhite: '#fafafa',
   offGrey: '#f6f6f5',
+  green: '#7ac74f',
   //
   genericBoxShadow: 'rgba(0, 0, 0, 0.1)',
   genericOverlayCover: 'rgba(45, 41, 38, 0.4)'
