@@ -12,6 +12,7 @@ module.exports.colors = {
   charcoal: '#2d2926',
   grey: '#ececeb',
   white: '#fff',
+  navy: '#081f2c',
   royalBlue: '#002d72',
   royalBlueFade: '#6681aa',
   lightPink: '#f5a0af',
