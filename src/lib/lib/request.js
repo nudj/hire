@@ -1,4 +1,5 @@
 const Axios = require('axios')
+const get = require('lodash/get')
 
 let config = {
   baseURL: '/',
@@ -20,7 +21,7 @@ function request (uri, options) {
   return axios(uri, options)
     .then((response) => response.data)
     .catch((error) => {
-      if (error.response.status === 401) {
+      if (get(error, 'response.status') === 401) {
         throw new Error('Unauthorized')
       }
       console.log('error', error.message, `request - ${config.baseURL}${uri}`, options)
