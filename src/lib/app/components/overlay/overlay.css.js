@@ -1,38 +1,34 @@
 let {
   css,
   mixins,
-  merge
+  merge,
+  variables
 } = require('../../lib/css')
 
 module.exports = css({
   background: {
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
+    background: variables.colors.genericOverlayCover,
+    cursor: 'pointer',
+    display: 'flex',
+    height: '100vh',
+    justifyContent: 'center',
+    left: '0',
     position: 'fixed',
-    top: 0,
-    left: 0,
-    background: 'rgba(45, 41, 38, 0.4)',
-    cursor: 'pointer'
+    top: '0',
+    width: '100vw'
   },
   hidden: {
     display: 'none'
   },
   dialog: merge(mixins.cardStyle, {
-    cursor: 'auto',
-    position: 'relative',
-    backgroundImage: 'url("/assets/images/ok-hand.svg")',
-    width: '500px',
-    minHeight: '340px',
+    backgroundImage: mixins.linkImage('ok-hand.svg'),
     backgroundPosition: 'calc(100% - 30px) bottom',
     backgroundRepeat: 'no-repeat',
-    padding: '30px 30px 100px'
+    cursor: 'auto',
+    padding: `${variables.padding.c} ${variables.padding.c} ${variables.padding.b} ${variables.padding.c}`,
+    position: 'relative',
+    width: variables.sizing.overlayDialogWidth
   }),
-  close: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px'
-  }
+  close: mixins.buttonClose
 })

@@ -126,25 +126,55 @@ const headings = {
   }
 }
 
-headings.pBold = merge({}, headings.p, {
+headings.pBold = merge(headings.p, {
   fontFamily: [fonts.jan.bold],
   fontWeight: 'bold'
 })
 
-headings.p2Bold = merge({}, headings.p2, {
+headings.p2Bold = merge(headings.p2, {
   fontFamily: [fonts.jan.bold],
   fontWeight: 'bold'
 })
 
 module.exports.headings = headings
 
+module.exports.typography = {
+  h1: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h1),
+  h2: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h2),
+  h3: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h3),
+  h4: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h4),
+  h5: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h5),
+  p: merge({
+    color: variables.colors.charcoal,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.p)
+}
+
+const linkImage = function (imagePath) {
+  return `url('${variables.assets.images}${imagePath}')`
+}
+
+module.exports.linkImage = linkImage
+
 module.exports.pageLayout = {
   pageBody: merge(headings.p, {
-    flexGrow: 1,
     background: variables.colors.grey,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'stretch'
+    minHeight: '100vh'
   }),
   pageHeader: {
     display: 'flex',
@@ -152,40 +182,42 @@ module.exports.pageLayout = {
     alignItems: 'center',
     flex: 0,
     background: variables.colors.white,
-    padding: '10px 20px'
+    padding: `${variables.padding.e} ${variables.padding.d}`
   },
   pageHeadline: merge(headings.h5, {
     color: variables.colors.royalBlue,
-    padding: '30px',
+    padding: `${variables.padding.c} ${variables.padding.d} ${variables.padding.d} ${variables.padding.d}`,
     margin: 0
   }),
   pageContent: {
     flex: 1,
-    padding: '0 0 30px',
+    padding: `0 0 ${variables.padding.c} 0`,
     display: 'flex'
   },
   pageMain: {
     flex: 1,
-    padding: '0 30px'
+    padding: `0 ${variables.padding.d}`
   },
   pageSidebar: {
-    width: '420px',
-    padding: '0 60px 0 30px',
-    position: 'relative'
+    boxSizing: 'content-box',
+    padding: `0 ${variables.padding.d} 0 calc(${variables.padding.c} + ${variables.padding.d})`,
+    position: 'relative',
+    width: variables.sizing.sidebarWidth
   }
 }
 
 const cardStyle = {
   background: variables.colors.white,
-  borderRadius: '4px',
-  boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
-  padding: '30px'
+  borderRadius: variables.sizing.baseBorderRadius,
+  boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
+  padding: variables.padding.d
 }
 
 module.exports.cardStyle = cardStyle
 
-module.exports.cardStyleTwo = merge({}, cardStyle, {
-  background: variables.colors.grey
+module.exports.cardStyleTwo = merge(cardStyle, {
+  background: variables.colors.offGrey,
+  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.midGrey}`
 })
 
 module.exports.sansSerif = {
@@ -246,33 +278,87 @@ module.exports.deList = {
   padding: '0'
 }
 
+module.exports.deLink = {
+  color: 'inherit',
+  textDecoration: 'none'
+}
+
 module.exports.button = merge(headings.pBold, {
-  display: 'block',
-  height: '40px',
-  border: 0,
-  borderRadius: '40px',
+  border: '0',
+  borderRadius: variables.sizing.buttonBorderRadius,
   backgroundColor: variables.colors.royalBlue,
   color: variables.colors.white,
-  padding: '10px 30px',
   cursor: 'pointer',
+  display: 'block',
+  padding: `${variables.padding.e} ${variables.padding.d}`,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   ':disabled': {
     backgroundColor: variables.colors.royalBlueFade,
     cursor: 'default'
+  },
+  ':focus': {
+    outline: 'none'
   }
 })
+
 module.exports.buttonSecondary = merge(module.exports.button, {
   color: variables.colors.royalBlue,
   backgroundColor: variables.colors.white,
-  border: `2px solid ${variables.colors.royalBlue}`,
+  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.royalBlue}`,
   ':disabled': {
     color: variables.colors.royalBlueFade,
     borderColor: variables.colors.royalBlueFade,
     cursor: 'default'
   }
 })
+
 module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
   backgroundColor: variables.colors.grey
 })
+
+module.exports.buttonClose = {
+  backgroundColor: 'transparent',
+  backgroundImage: linkImage('close-icon.svg'),
+  backgroundPosition: 'center center',
+  backgroundRepeat: 'no-repeat',
+  border: 'none',
+  cursor: 'pointer',
+  height: variables.padding.d,
+  outline: 'none',
+  position: 'absolute',
+  right: variables.padding.e,
+  top: variables.padding.e,
+  width: variables.padding.d
+}
+
+const inputBox = merge(headings.p, {
+  border: `calc(${variables.sizing.baseBorderWidth} * 0.5) solid ${variables.colors.midGrey}`,
+  borderRadius: `calc(${variables.sizing.baseBorderRadius} * 0.5)`,
+  color: variables.colors.charcoal,
+  outline: 'none',
+  padding: variables.padding.e,
+  ':placeholder-shown': {
+    color: variables.colors.midGrey
+  },
+  ':focus': {
+    borderColor: variables.colors.royalBlue,
+    boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
+    color: variables.colors.royalBlue,
+    outline: 'none'
+  }
+})
+
+module.exports.formElements = {
+  inputBox: inputBox,
+  inputBoxBorderless: merge(inputBox, {
+    border: '0',
+    boxShadow: 'none',
+    padding: `${variables.padding.e} ${variables.padding.e} ${variables.padding.e} 0`,
+    ':focus': {
+      border: '0',
+      boxShadow: 'none'
+    }
+  })
+}

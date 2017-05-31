@@ -25,6 +25,7 @@ const Status = ({ code, children }) => (
 
 const Page = (props) => {
   let page
+
   switch (true) {
     case !!get(props, 'error'):
       page = (
@@ -50,6 +51,7 @@ const Page = (props) => {
         </Switch>
       )
   }
+
   return page
 }
 

@@ -12,16 +12,12 @@ const listStyle = {
 }
 
 const styles = {
-  row: merge(listStyle, {
+  row: merge(listStyle, mixins.cardStyle, {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    background: '#fff',
-    borderRadius: '4px',
-    marginTop: '10px',
-    padding: '20px',
-    boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
-    minHeight: '80px',
+    marginTop: variables.padding.e,
+    minHeight: variables.padding.b,
     ':first-child': {
       margin: 0
     }
@@ -40,13 +36,13 @@ const styles = {
     listStyle: 'none',
     flex: 1,
     position: 'relative',
-    paddingLeft: '40px',
+    paddingLeft: variables.padding.c,
     ':before': {
       content: '""',
-      borderLeft: '1px solid gray',
-      height: '20px',
+      borderLeft: `${variables.sizing.detailSeparatorWidth} solid ${variables.colors.lightGrey}`,
+      height: variables.padding.d,
       position: 'absolute',
-      left: '20px',
+      left: variables.padding.d,
       top: '50%',
       transform: 'translateY(-50%)'
     },
@@ -80,12 +76,12 @@ const styles = {
   action: listStyle
 }
 
-styles.rowSmall = merge({}, styles.row, {
-  margin: '0 0 20px 20px',
+styles.rowSmall = merge(styles.row, {
+  margin: `0 0 ${variables.padding.e} ${variables.padding.e}`,
   marginTop: '0',
-  width: 'calc(50% - 20px)',
+  width: `calc(50% - ${variables.padding.e})`,
   ':first-child': {
-    margin: '0 0 20px 0'
+    margin: `0 0 ${variables.padding.e} 0`
   },
   ':nth-child(odd)': {
     marginLeft: '0'

@@ -21,7 +21,7 @@ const Dialog = (props) => {
   const dialogText = prismicDialog.fragmentToReact({
     fragment: 'dialog.dialogtext',
     props: {
-      className: style.dialogtext,
+      className: style.dialogText,
       element: 'p'
     }
   })
@@ -49,8 +49,8 @@ const Dialog = (props) => {
     {dialogTitle}
     {dialogText}
     <div className={style.dialogButtons}>
-      {dialogConfirm}
       {dialogCancel}
+      {dialogConfirm}
     </div>
   </div>)
 }

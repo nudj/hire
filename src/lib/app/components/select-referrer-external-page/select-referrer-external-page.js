@@ -7,7 +7,6 @@ const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
 
 const getStyle = require('./select-referrer-external-page.css')
-// const PrismicReact = require('../../lib/prismic-react')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -20,7 +19,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderNetworkList () {
-    const jobSlug = this.props.job.slug
+    const jobSlug = get(this.props, 'job.slug', '')
     const network = get(this.props, 'network', [])
     const networkSent = get(this.props, 'networkSent', [])
     return (<ul className={this.style.network}>
@@ -42,7 +41,7 @@ module.exports = class ComposePage extends React.Component {
             description: get(person, 'company')
           }]}
           actions={[
-            <Link to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
+            <Link className={this.style.nudjButton} to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
           ]}
         />)
       })}
@@ -60,7 +59,7 @@ module.exports = class ComposePage extends React.Component {
     return (<div>
       <h3 className={this.style.pageHeadline}>We’ll also be sending a request to these people in our network...</h3>
       <div className={this.style.pageContent}>
-        <div className={this.style.pageMain}>
+        <div className={this.style.pageMainNetwork}>
           <ul className={this.style.networkSmall}>
             {nudjNetwork.map((person, index) => {
               const personId = get(person, 'id')
@@ -86,8 +85,7 @@ module.exports = class ComposePage extends React.Component {
 
   renderTooltip () {
     const tooltip = this.state.tooltips[0]
-    const props = {tooltip}
-    return (<Tooltip {...props} />)
+    return (<Tooltip {...tooltip} />)
   }
 
   render () {
@@ -96,7 +94,7 @@ module.exports = class ComposePage extends React.Component {
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={get(this.props, 'job.title')}
-          subtitle={<span>@ <Link to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>We recommend sending a Nujd request to...</h3>
         <div className={this.style.pageContent}>

@@ -12,16 +12,16 @@ module.exports = css({
     alignItems: 'center',
     flex: '0 0 auto',
     background: variables.colors.white,
-    padding: '0 20px',
-    height: '80px',
-    width: '100%'
+    padding: `0 ${variables.padding.d}`,
+    height: variables.padding.b,
+    width: '100%' // ?
   },
   main: {
 
   },
   title: merge(mixins.headings.h6, {
     color: variables.colors.royalBlue,
-    margin: '0 0 3px'
+    padding: `0 0 ${variables.padding.f} 0`
   }),
   subtitle: merge(mixins.headings.h8, {
     color: variables.colors.charcoal,
@@ -29,6 +29,7 @@ module.exports = css({
     margin: 0
   }),
   sub: {
+    alignItems: 'center',
     display: 'flex',
     justifyContent: 'flex-end'
   }

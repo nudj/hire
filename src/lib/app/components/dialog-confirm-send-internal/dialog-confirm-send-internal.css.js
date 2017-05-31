@@ -1,17 +1,21 @@
 let {
-  css
+  css,
+  merge,
+  mixins,
+  variables
 } = require('../../lib/css')
 
 module.exports = css({
   dialog: {},
-  dialogTitle: {},
-  dialogText: {},
-  dialogButtons: {},
-  dialogCloseButton: {},
-  dialogCancelButton: {
-    color: 'red'
+  dialogTitle: mixins.typography.h3,
+  dialogText: mixins.typography.p,
+  dialogButtons: {
+    display: 'flex',
+    padding: `${variables.padding.d} 0 0 0`
   },
-  dialogConfirmButton: {
-    color: 'green'
-  }
+  dialogCloseButton: {},
+  dialogCancelButton: merge(mixins.buttonSecondary, {
+    margin: `0 ${variables.padding.d} 0 0`
+  }),
+  dialogConfirmButton: mixins.button
 })

@@ -1,7 +1,8 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
 const listStyle = {
@@ -15,17 +16,15 @@ module.exports = css(merge(mixins.pageLayout, {
     flexGrow: 1,
     background: '#ececeb'
   },
+  companyLink: mixins.deLink,
   recommendations: listStyle,
   content: {
     flex: 1,
-    padding: '10px 20px',
+    padding: `${variables.padding.e} ${variables.padding.d}`,
     display: 'flex'
   },
   main: {
     flex: 1
   },
-  sidebar: {
-    width: '420px',
-    padding: '0 60px'
-  }
+  sidebar: mixins.pageLayout.pageSidebar
 }))
