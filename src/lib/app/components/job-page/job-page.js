@@ -13,7 +13,7 @@ const JobPage = (props) => {
     <div className={style.pageBody}>
       <PageHeader
         title={get(props, 'job.title')}
-        subtitle={<span>@ <Link className={style.headerLink} to={'/jobs'}>{get(props, 'company.name')}</Link></span>}
+        subtitle={<span>@ <Link className={style.headerLink} to={'/'}>{get(props, 'company.name')}</Link></span>}
       >
         <ClipboardButton className={style.copyLink} data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</ClipboardButton>
       </PageHeader>

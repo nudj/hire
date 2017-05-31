@@ -11,7 +11,7 @@ const Header = (props) => {
           <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
         </Link>
         <ul className={style.menu}>
-          <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li>
+          <li className={style.menuItem}><Link className={style.jobs} to={'/'}>Jobs</Link></li>
           <li className={style.menuItem}><Link className={style.candidates} to={'/candidates'}>Candidates</Link></li>
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>

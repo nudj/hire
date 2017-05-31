@@ -185,7 +185,7 @@ module.exports = class ComposePage extends React.Component {
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={<Link className={this.style.jobLink} to={`/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         >
           {invalid ? errorLabel(this.style.errorLabel, invalid) : ''}
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>

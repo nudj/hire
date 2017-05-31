@@ -77,7 +77,7 @@ module.exports = class NetworkPage extends React.Component {
       <Form className={this.style.body} action={`/${get(this.props, 'job.slug')}/compose`} method='post'>
         <PageHeader
           title={get(this.props, 'job.title')}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         >
           <p className={this.style.selected}>{this.state.selected.length} Selected</p>
           <button className={this.style.submit}>Write message</button>

@@ -114,7 +114,7 @@ module.exports = class ComposePage extends React.Component {
     if (this.state.active === 'nextSteps') {
       content = (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-        <Link to={'/jobs'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
+        <Link to={'/'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
         <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
       </div>)
       sectionClass = this.style.sectionActive
@@ -416,7 +416,7 @@ module.exports = class ComposePage extends React.Component {
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={get(this.props, 'job.title')}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/jobs'}>{get(this.props, 'company.name')}</Link></span>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
         <div className={this.style.pageContent}>
