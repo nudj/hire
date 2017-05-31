@@ -24,7 +24,7 @@ const JobsPage = (props) => {
               <RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
-                uri={`//nudj.co/${get(props, 'company.slug')}+${get(job, 'slug')}`}
+                uri={`//nudj.co/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
                 details={[{
                   term: 'Location',
                   description: get(job, 'location')

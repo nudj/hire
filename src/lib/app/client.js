@@ -11,7 +11,7 @@ const { StyleSheet } = require('aphrodite/no-important')
 
 const App = require('./components/index')
 const { pageReducer } = require('./reducers/page')
-const { setPage } = require('./actions/app')
+const { setPage, showLoading } = require('./actions/app')
 const request = require('../lib/request')
 
 const history = createBrowserHistory()
@@ -33,6 +33,7 @@ ReactDOM.render(
       // - history action is not PUSH
       // - history action is PUSH and requested url is not already in page data (page data is stale)
       if (location.pathname !== store.getState().page.url.originalUrl) {
+        dispatch(showLoading())
         request(location.pathname)
         .catch((error) => {
           switch (error.message) {

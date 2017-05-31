@@ -141,7 +141,7 @@ module.exports.headings = headings
 module.exports.pageLayout = {
   pageBody: merge(headings.p, {
     flexGrow: 1,
-    background: '#ececeb',
+    background: variables.colors.grey,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'stretch'
@@ -151,7 +151,7 @@ module.exports.pageLayout = {
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 0,
-    background: '#fff',
+    background: variables.colors.white,
     padding: '10px 20px'
   },
   pageHeadline: merge(headings.h5, {
@@ -176,7 +176,7 @@ module.exports.pageLayout = {
 }
 
 const cardStyle = {
-  background: '#fff',
+  background: variables.colors.white,
   borderRadius: '4px',
   boxShadow: '0 0.5px 0.5px 0 rgba(0, 0, 0, 0.1)',
   padding: '30px'

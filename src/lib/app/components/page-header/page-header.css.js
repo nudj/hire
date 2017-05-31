@@ -10,10 +10,11 @@ module.exports = css({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 0,
-    background: '#fff',
+    flex: '0 0 auto',
+    background: variables.colors.white,
     padding: '0 20px',
-    height: '80px'
+    height: '80px',
+    width: '100%'
   },
   main: {
 

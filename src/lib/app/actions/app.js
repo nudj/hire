@@ -29,6 +29,19 @@ module.exports.sending = () => {
   }
 }
 
+const SHOW_LOADING = 'SHOW_LOADING'
+module.exports.SHOW_LOADING = SHOW_LOADING
+function showLoading () {
+  return {
+    type: SHOW_LOADING
+  }
+}
+module.exports.showLoading = () => {
+  return (dispatch, getState) => {
+    dispatch(showLoading())
+  }
+}
+
 const SHOW_DIALOG = 'SHOW_DIALOG'
 module.exports.SHOW_DIALOG = SHOW_DIALOG
 function showDialog (dialog) {
