@@ -13,7 +13,7 @@ module.exports = css({
     flex: '0 0 auto',
     background: variables.colors.white,
     padding: `0 ${variables.padding.d}`,
-    height: variables.padding.b
+    height: variables.padding.b,
     width: '100%' // ?
   },
   main: {

@@ -165,6 +165,12 @@ module.exports.typography = {
   }, headings.p)
 }
 
+const linkImage = function (imagePath) {
+  return `url('${variables.assets.images}${imagePath}')`
+}
+
+module.exports.linkImage = linkImage
+
 module.exports.pageLayout = {
   pageBody: merge({}, headings.p, {
     background: variables.colors.grey,
@@ -270,22 +276,21 @@ module.exports.deList = {
   listStyle: 'none',
   margin: '0',
   padding: '0'
-module.exports.deLink = {
 }
 
+module.exports.deLink = {
   color: 'inherit',
   textDecoration: 'none'
 }
 
 module.exports.button = merge(headings.pBold, {
-  display: 'block',
-  height: '40px',
-  border: 0,
-  borderRadius: '40px',
+  border: '0',
+  borderRadius: variables.sizing.buttonBorderRadius,
   backgroundColor: variables.colors.royalBlue,
   color: variables.colors.white,
-  padding: '10px 30px',
   cursor: 'pointer',
+  display: 'block',
+  padding: `${variables.padding.e} ${variables.padding.d}`,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   ':disabled': {
@@ -296,23 +301,36 @@ module.exports.button = merge(headings.pBold, {
     outline: 'none'
   }
 })
+
 module.exports.buttonSecondary = merge(module.exports.button, {
   color: variables.colors.royalBlue,
   backgroundColor: variables.colors.white,
-  border: `2px solid ${variables.colors.royalBlue}`,
+  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.royalBlue}`,
   ':disabled': {
     color: variables.colors.royalBlueFade,
     borderColor: variables.colors.royalBlueFade,
     cursor: 'default'
   }
 })
+
 module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
   backgroundColor: variables.colors.grey
 })
 
-module.exports.linkImage = function (imagePath) {
-  return `url('${variables.assets.images}${imagePath}')`
+module.exports.buttonClose = {
+  backgroundColor: 'transparent',
+  backgroundImage: linkImage('close-icon.svg'),
+  backgroundPosition: 'center center',
+  backgroundRepeat: 'no-repeat',
+  border: 'none',
+  cursor: 'pointer',
+  height: variables.padding.d,
+  outline: 'none',
+  position: 'absolute',
+  right: variables.padding.e,
+  top: variables.padding.e,
+  width: variables.padding.d
 }
 
 const inputBox = merge({}, headings.p, {

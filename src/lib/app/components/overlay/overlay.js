@@ -18,7 +18,7 @@ const Overlay = (props) => {
   const style = getStyle()
   return <div className={props.overlay ? style.background : style.hidden} onClick={onClickBackground(props)}>
     <div className={style.dialog} onClick={onClickDialog(props)}>
-      <button className={style.close} onClick={onClickClose(props)}>x</button>
+      <button className={style.close} onClick={onClickClose(props)} />
       {props.overlay}
     </div>
   </div>

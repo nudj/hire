@@ -14,6 +14,8 @@ module.exports.sizing = {
   basePadding: `${basePixelSize}px`,
   baseBorderRadius: '4px',
   baseBorderWidth: '2px',
+  buttonBorderRadius: '9999px',
+  buttonBorderWidth: '2px',
   detailSeparatorWidth: '1px',
   fixedHeaderWidth: `${basePixelSize * 6}px`,
   fixedHeaderButtonSize: `${basePixelSize * 3.5}px`,

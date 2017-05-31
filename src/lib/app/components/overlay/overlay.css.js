@@ -30,9 +30,5 @@ module.exports = css({
     position: 'relative',
     width: variables.sizing.overlayDialogWidth
   }),
-  close: {
-    position: 'absolute',
-    right: variables.padding.e,
-    top: variables.padding.e
-  }
+  close: mixins.buttonClose
 })

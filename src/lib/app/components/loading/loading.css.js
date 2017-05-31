@@ -15,22 +15,18 @@ const spin = {
 
 module.exports = css({
   loading: {
-    background: variables.colors.grey,
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column'
+    background: variables.colors.grey
   },
   body: {
     flex: '1 1 auto',
     display: 'flex',
+    height: `calc(100vh - ${variables.sizing.fixedHeaderButtonIconSize})`,
     justifyContent: 'center',
     alignItems: 'center'
   },
   spinner: {
-    width: '40px',
-    height: '40px',
+    width: variables.padding.c,
+    height: variables.padding.c,
     backgroundColor: variables.colors.navy,
     borderRadius: '100%',
     animationName: spin,
