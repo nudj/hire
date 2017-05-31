@@ -29,7 +29,7 @@ module.exports = css({
     backgroundColor: variables.colors.lightYellow
   },
   error: {
-    backgroundColor: variables.colors.darkPink
+    backgroundColor: variables.colors.pink
   },
   success: {
     backgroundColor: variables.colors.green

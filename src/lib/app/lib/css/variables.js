@@ -39,6 +39,7 @@ module.exports.colors = {
   charcoal: '#2d2926',
   charcoalTint2: '#817f7d',
   darkPink: '#8f3a49',
+  pink: '#ef6079',
   grey: '#ececeb',
   lightGrey: '#d0d0ce',
   lighterGrey: '#f7f7f6',

@@ -27,9 +27,9 @@ function pageReducer (state = initialState, action) {
     case HIDE_DIALOG:
       return merge(state, { overlay: undefined })
     case SHOW_NOTIFICATION:
-      return merge(state, { notification: action.notification })
+      return merge(state, { notification: merge(action.notification, { hide: false }) })
     case HIDE_NOTIFICATION:
-      return merge(state, { notification: undefined })
+      return merge(state, { notification: { hide: true } })
     default:
       return state
   }

@@ -12,7 +12,7 @@ const Notification = (props) => {
   const notification = get(props, 'notification')
   const type = get(notification, 'type')
   const typeClass = type ? style[type] : ''
-  const stateClass = notification ? style.visible : ''
+  const stateClass = notification && !get(notification, 'hide') ? style.visible : ''
   return <div className={`${style.notification} ${typeClass} ${stateClass}`}>
     <div className={style.message}>{get(notification, 'message', '')}</div>
     <button className={style.close} onClick={onClickClose(props)}><img src='/assets/images/close.svg' alt='Close' /></button>
