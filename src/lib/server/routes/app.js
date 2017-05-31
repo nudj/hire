@@ -1,7 +1,7 @@
 const express = require('express')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
-// const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 
 const logger = require('../lib/logger')
 const request = require('../modules/request')
@@ -9,12 +9,10 @@ const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
 const sentExternal = require('../modules/sent-external')
-
 const { promiseMap } = require('../lib')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
-
 const prismic = require('../modules/prismic')({accessToken, repo})
 
 const app = require('../../app/server')
@@ -22,7 +20,7 @@ const router = express.Router()
 
 const clone = (obj) => Object.assign({}, obj)
 
-function ensureLoggedIn (req, res, next) {
+function spoofLoggedIn (req, res, next) {
   req.session.data = {
     person: {
       id: '21',
@@ -36,20 +34,26 @@ function ensureLoggedIn (req, res, next) {
     }
   }
   return next()
-  // if (req.session.logout) {
-  //   let url = req.originalUrl.split('/')
-  //   url.pop()
-  //   res.redirect(url.join('/'))
-  // } else {
-  //   if (req.xhr) {
-  //     if (!req.isAuthenticated || !req.isAuthenticated()) {
-  //       return res.status(401).send()
-  //     }
-  //   }
-  //   _ensureLoggedIn(req, res, next)
-  // }
-  // delete req.session.logout
 }
+
+function doEnsureLoggedIn (req, res, next) {
+  if (req.session.logout) {
+    let url = req.originalUrl.split('/')
+    url.pop()
+    res.redirect(url.join('/'))
+  } else {
+    if (req.xhr) {
+      if (!req.isAuthenticated || !req.isAuthenticated()) {
+        return res.status(401).send()
+      }
+    }
+    _ensureLoggedIn(req, res, next)
+  }
+  delete req.session.logout
+}
+
+const spoofUser = process.env.SPOOF_USER === 'true'
+const ensureLoggedIn = spoofUser ? spoofLoggedIn : doEnsureLoggedIn
 
 function getRenderDataBuilder (req) {
   return (data) => {
@@ -367,9 +371,9 @@ router.post('/jobs/:jobSlug/external/:personId', ensureLoggedIn, externalSaveHan
 // router.post('/jobs/:jobSlug/publish', ensureLoggedIn, publishHandler)
 // router.get('/jobs/:jobSlug/compose', (req, res) => res.redirect(`/jobs/${req.params.jobSlug}`))
 // router.post('/jobs/:jobSlug/compose', ensureLoggedIn, composeHandler)
-// router.get('*', (req, res) => {
-//   let data = getRenderDataBuilder(req)({})
-//   getRenderer(req, res)(data)
-// })
+router.get('*', (req, res) => {
+  let data = getRenderDataBuilder(req)({})
+  getRenderer(req, res)(data)
+})
 
 module.exports = router
