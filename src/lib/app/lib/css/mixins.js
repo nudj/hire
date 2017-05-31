@@ -291,6 +291,9 @@ module.exports.button = merge(headings.pBold, {
   ':disabled': {
     backgroundColor: variables.colors.royalBlueFade,
     cursor: 'default'
+  },
+  ':focus': {
+    outline: 'none'
   }
 })
 module.exports.buttonSecondary = merge(module.exports.button, {
@@ -310,4 +313,34 @@ module.exports.buttonTertiary = merge(module.exports.button, {
 
 module.exports.linkImage = function (imagePath) {
   return `url('${variables.assets.images}${imagePath}')`
+}
+
+const inputBox = merge({}, headings.p, {
+  border: `calc(${variables.sizing.baseBorderWidth} * 0.5) solid ${variables.colors.midGrey}`,
+  borderRadius: `calc(${variables.sizing.baseBorderRadius} * 0.5)`,
+  color: variables.colors.charcoal,
+  outline: 'none',
+  padding: variables.padding.e,
+  ':placeholder-shown': {
+    color: variables.colors.midGrey
+  },
+  ':focus': {
+    borderColor: variables.colors.royalBlue,
+    boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
+    color: variables.colors.royalBlue,
+    outline: 'none'
+  }
+})
+
+module.exports.formElements = {
+  inputBox: inputBox,
+  inputBoxBorderless: merge({}, inputBox, {
+    border: '0',
+    boxShadow: 'none',
+    padding: `${variables.padding.e} ${variables.padding.e} ${variables.padding.e} 0`,
+    ':focus': {
+      border: '0',
+      boxShadow: 'none'
+    }
+  })
 }

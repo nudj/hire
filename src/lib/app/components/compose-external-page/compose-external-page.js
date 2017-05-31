@@ -24,6 +24,14 @@ module.exports = class ComposePage extends React.Component {
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])
 
+    if (!messages.length) {
+      console.error('No messages')
+    }
+
+    if (!tooltips.length) {
+      console.error('No tooltips')
+    }
+
     this.state = {active, data, messages, tooltips}
   }
 
@@ -57,6 +65,10 @@ module.exports = class ComposePage extends React.Component {
 
   getComposeMessageBaseText () {
     if (!this.state.data.selectLength || !this.state.data.selectStyle) {
+      return ''
+    }
+
+    if (!this.state.messages.length) {
       return ''
     }
 
@@ -188,13 +200,17 @@ module.exports = class ComposePage extends React.Component {
     if (textOnly) {
       options.pify = content => content.join('\n')
     } else {
+      options.pify = this.pify.bind(this)
       options.tagify = this.tagify.bind(this)
     }
 
-    return templater.render(options)
+    return templater.render(options).join('')
   }
 
-  // ?
+  pify (para, index) {
+    return `<p class='${this.style.completedSectionSummaryMessageParagraph}' key='para${index}'>${para}</p>`
+  }
+
   tagify (contents, ok) {
     return `<span class='${ok ? this.style.tagOk : this.style.tagError}'>${contents}</span>`
   }

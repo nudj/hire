@@ -3,6 +3,19 @@ const getStyle = require('./tooltip.css')
 
 const PrismicReact = require('../../lib/prismic-react')
 
+function renderIntercomButton (prismicTooltip, style) {
+  const tooltipText = prismicTooltip.fragmentToText({fragment: 'tooltip.tooltipintercombutton'})
+
+  if (!tooltipText) {
+    return ('')
+  }
+
+  // Need an intercom method
+  const tooltipIntercomButton = (<button className={style.tooltipIntercomButton}>{tooltipText}</button>)
+
+  return tooltipIntercomButton
+}
+
 const Tooltip = (props) => {
   const style = getStyle()
 
@@ -24,21 +37,7 @@ const Tooltip = (props) => {
     }
   }))
 
-  // Not sure why I can't get the function call to work
-  function fuckOnClick () {
-    window.alert('yyy')
-  }
-
-  const tooltipIntercomButton = (<button data-thing='tooltip-intercom-testing-poop' className={props.className} />)
-
-  const tooltipIntercom = (prismicTooltip.fragmentToReact({
-    fragment: 'tooltip.tooltipintercombutton',
-    props: {
-      className: style.tooltipIntercomButton,
-      onClick: fuckOnClick,
-      element: tooltipIntercomButton
-    }
-  }))
+  const tooltipIntercom = renderIntercomButton(prismicTooltip, style)
 
   return (<aside className={style.tooltip}>
     {tooltipTitle}

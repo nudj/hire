@@ -117,7 +117,7 @@ const styles = {
     textAlign: 'center'
   }),
   activeContainerTitle: merge({}, optionText, {
-    padding: `0 0 ${variables.padding.e} 0`
+    padding: `0 0 ${variables.padding.d} 0`
   }),
   completedSectionSummary: merge({}, nextToTitleContainer, {
     textAlign: 'center'
@@ -127,11 +127,17 @@ const styles = {
   completedSectionSummaryMessage: {
     textAlign: 'left'
   },
+  completedSectionSummaryMessageParagraph: merge({}, mixins.typography.p, {
+    ':last-child': {
+      margin: '0'
+    }
+  }),
   messageContainer: {},
-  messageTextarea: {
-    height: '20rem', // ?
+  messageTextarea: merge({}, mixins.formElements.inputBoxBorderless, {
+    height: '20rem',
+    padding: `0 0 ${variables.padding.d} 0`,
     width: '100%'
-  },
+  }),
   tagOk: {
     color: 'green'
   },

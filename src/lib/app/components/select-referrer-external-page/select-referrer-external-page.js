@@ -7,7 +7,6 @@ const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
 
 const getStyle = require('./select-referrer-external-page.css')
-// const PrismicReact = require('../../lib/prismic-react')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -20,7 +19,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderNetworkList () {
-    const jobSlug = this.props.job.slug
+    const jobSlug = get(this.props, 'job.slug', '')
     const network = get(this.props, 'network', [])
     const networkSent = get(this.props, 'networkSent', [])
     return (<ul className={this.style.network}>

@@ -20,7 +20,8 @@ module.exports = css({
 
   },
   title: merge(mixins.headings.h6, {
-    color: variables.colors.royalBlue
+    color: variables.colors.royalBlue,
+    padding: `0 0 ${variables.padding.f} 0`
   }),
   subtitle: merge(mixins.headings.h8, {
     color: variables.colors.charcoal,
@@ -28,6 +29,7 @@ module.exports = css({
     margin: 0
   }),
   sub: {
+    alignItems: 'center',
     display: 'flex',
     justifyContent: 'flex-end'
   }

@@ -195,7 +195,7 @@ module.exports = class ComposePage extends React.Component {
           <div className={this.style.pageMain}>
             <div className={this.style.recipientsWrap}>
               <label className={this.style.addLabel}>Sending to</label>
-              <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} />
+              <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} placeholder='Enter employee’s email here' />
               {recipientsError ? errorLabel(this.style.errorLabel, recipientsError) : ''}
             </div>
             <div className={this.style.email}>
@@ -203,7 +203,7 @@ module.exports = class ComposePage extends React.Component {
                 <label className={this.style.addLabel} htmlFor='subject'>Subject</label>
                 {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
                 {subjectError ? errorLabel(this.style.errorLabel, subjectError) : ''}
-                {get(this.state, 'js') ? <button className={this.style.editing} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button> : ''}
+                {get(this.state, 'js') ? <button className={this.state.editing ? this.style.doneButton : this.style.editButton} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button> : ''}
               </div>
               <div className={this.style.templateWrap}>
                 <label className={this.style.addLabel} htmlFor='template'>Message</label>
