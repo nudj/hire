@@ -1,11 +1,10 @@
 const React = require('react')
-const { Switch, Route } = require('react-router-dom')
+const { Route } = require('react-router-dom')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./index.css')
 const Header = require('../header/header')
 const Message = require('../message/message')
 const Page = require('../page/page')
-const Status = require('../status/status')
 const Overlay = require('../overlay/overlay')
 const withState = require('../../lib/with-state')
 
