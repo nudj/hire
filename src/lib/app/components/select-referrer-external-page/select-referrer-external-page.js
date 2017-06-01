@@ -48,12 +48,18 @@ module.exports = class ComposePage extends React.Component {
     </ul>)
   }
 
+  renderNudjNetworkListEmpty () {
+    return (<div>
+      <h3 className={this.style.pageHeadline}>Don’t want to send to these folks? Check back soon, we’ll have more for you.</h3>
+    </div>)
+  }
+
   renderNudjNetworkList () {
     const networkSent = get(this.props, 'networkSent', [])
     const nudjNetwork = get(this.props, 'nudjNetwork', [])
 
     if (networkSent.length) {
-      return ('')
+      return this.renderNudjNetworkListEmpty()
     }
 
     return (<div>
