@@ -15,8 +15,16 @@ const tag = {
 const fieldStyle = {
   display: 'flex',
   justifyContent: 'stretch',
-  alignItems: 'center'
+  alignItems: 'flex-start'
 }
+
+const labelStyle = merge(mixins.headings.h7, {
+  color: variables.colors.royalBlue,
+  flexShrink: '0',
+  paddingRight: variables.padding.d,
+  width: variables.padding.a,
+  alignSelf: 'center'
+})
 
 module.exports = css(merge(mixins.pageLayout, {
   jobLink: {
@@ -35,16 +43,19 @@ module.exports = css(merge(mixins.pageLayout, {
     background: variables.colors.lightPink,
     color: variables.colors.darkPink
   }),
+  inputWrap: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column'
+  },
   recipientsWrap: merge(mixins.cardStyle, fieldStyle, {
-    height: variables.padding.b,
+    minHeight: variables.padding.b,
     border: '0',
     margin: `0 0 ${variables.padding.e}`
   }),
-  addLabel: merge(mixins.headings.h7, {
-    color: variables.colors.royalBlue,
-    flexShrink: '0',
-    paddingRight: variables.padding.d,
-    width: variables.padding.a
+  addLabel: labelStyle,
+  messageLabel: merge(labelStyle, {
+    alignSelf: 'flex-start'
   }),
   recipients: merge({
     flexGrow: '1'
@@ -71,6 +82,7 @@ module.exports = css(merge(mixins.pageLayout, {
     padding: `0 0 ${variables.padding.d} 0`
   }),
   errorLabel: {
-    color: variables.colors.midRed
+    color: variables.colors.midRed,
+    paddingBottom: variables.padding.e
   }
 }))

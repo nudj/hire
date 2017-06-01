@@ -14,7 +14,8 @@ const Tooltip = require('../tooltip/tooltip')
 const {
   showDialog,
   hideDialog,
-  postData
+  postData,
+  showLoading
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
@@ -38,12 +39,10 @@ module.exports = class ComposePage extends React.Component {
       template: get(props, 'form.template.value'),
       templateFallback: composeMessage,
       templateError: get(props, 'form.template.error', false),
-      editing: true,
-      error: get(props, 'error', false)
+      editing: true
     }
     this.validateRecipients = this.validateRecipients.bind(this)
     this.validateEmail = this.validateEmail.bind(this)
-    this.isInvalid = this.isInvalid.bind(this)
     this.onClickEdit = this.onClickEdit.bind(this)
     this.onChangeRecipients = this.onChangeRecipients.bind(this)
     this.onChangeSubject = this.onChangeSubject.bind(this)
@@ -72,14 +71,6 @@ module.exports = class ComposePage extends React.Component {
       newState[`${key}Error`] = validators[key](value)
       return newState
     }, {})
-  }
-  isInvalid () {
-    return ['recipients', 'subject', 'template'].reduce((result, key) => {
-      if (!result) {
-        result = get(this.state, `${key}Error`)
-      }
-      return result
-    }, false)
   }
   componentWillReceiveProps (props) {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
@@ -151,6 +142,7 @@ module.exports = class ComposePage extends React.Component {
     })
   }
   onClickConfirm () {
+    this.props.dispatch(showLoading())
     this.props.dispatch(postData({
       url: `/${get(this.props, 'job.slug')}/internal`,
       data: {
@@ -174,9 +166,8 @@ module.exports = class ComposePage extends React.Component {
   renderSuccess () {
     return <div>Success</div>
   }
-  renderComposer () {
+  render () {
     const tooltip = get(this.props, 'tooltip')
-    const invalid = this.isInvalid()
     const recipientsError = get(this.state, 'recipientsError')
     const subjectError = get(this.state, 'subjectError')
     const templateError = get(this.state, 'templateError')
@@ -187,7 +178,6 @@ module.exports = class ComposePage extends React.Component {
           title={<Link className={this.style.jobLink} to={`/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         >
-          {invalid ? errorLabel(this.style.errorLabel, invalid) : ''}
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
         </PageHeader>
         <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
@@ -195,20 +185,26 @@ module.exports = class ComposePage extends React.Component {
           <div className={this.style.pageMain}>
             <div className={this.style.recipientsWrap}>
               <label className={this.style.addLabel}>Sending to</label>
-              <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} placeholder='Enter employee’s email here' />
-              {recipientsError ? errorLabel(this.style.errorLabel, recipientsError) : ''}
+              <div className={this.style.inputWrap}>
+                {recipientsError ? errorLabel(this.style.errorLabel, recipientsError) : null}
+                <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} placeholder='Enter employee’s email here' />
+              </div>
             </div>
             <div className={this.style.email}>
               <div className={this.style.subjectWrap}>
                 <label className={this.style.addLabel} htmlFor='subject'>Subject</label>
-                {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
-                {subjectError ? errorLabel(this.style.errorLabel, subjectError) : ''}
+                <div className={this.style.inputWrap}>
+                  {subjectError ? errorLabel(this.style.errorLabel, subjectError) : null}
+                  {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' placeholder='Enter subject here' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
+                </div>
                 {get(this.state, 'js') ? <button className={this.state.editing ? this.style.doneButton : this.style.editButton} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button> : ''}
               </div>
               <div className={this.style.templateWrap}>
-                <label className={this.style.addLabel} htmlFor='template'>Message</label>
-                {get(this.state, 'editing') ? <textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' /> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
-                {templateError ? errorLabel(this.style.errorLabel, templateError) : ''}
+                <label className={this.style.messageLabel} htmlFor='template'>Message</label>
+                <div className={this.style.inputWrap}>
+                  {templateError ? errorLabel(this.style.errorLabel, templateError) : null}
+                  {get(this.state, 'editing') ? <textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' placeholder='Enter message here' /> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
+                </div>
               </div>
             </div>
           </div>
@@ -218,19 +214,5 @@ module.exports = class ComposePage extends React.Component {
         </div>
       </Form>
     )
-  }
-  render () {
-    let page
-    switch (true) {
-      case get(this.props, 'sending'):
-        page = this.renderSending()
-        break
-      case !!get(this.props, 'messages'):
-        page = this.renderSuccess()
-        break
-      default:
-        page = this.renderComposer()
-    }
-    return page
   }
 }

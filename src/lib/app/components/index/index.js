@@ -1,12 +1,19 @@
 const React = require('react')
-const { Route } = require('react-router-dom')
+const { Switch, Route } = require('react-router-dom')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./index.css')
 const Header = require('../header/header')
 const Message = require('../message/message')
-const Page = require('../page/page')
+const Notification = require('../notification/notification')
+const JobsPage = require('../jobs-page/jobs-page')
+const JobPage = require('../job-page/job-page')
+const ComposePage = require('../compose-page/compose-page')
+const SelectReferrerExternalPage = require('../select-referrer-external-page/select-referrer-external-page')
+const ComposeExternalPage = require('../compose-external-page/compose-external-page')
+const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
-const withState = require('../../lib/with-state')
+const Status = require('../status/status')
+const { PageWithState, WithState } = require('../../lib/with-state')
 
 const Index = () => {
   const style = getStyle()
@@ -32,13 +39,21 @@ const Index = () => {
         <link rel='stylesheet' href='/assets/css/reset.css' />
       </Helmet>
       <header className={style.header}>
-        <Route path='*' component={withState(Header)} />
+        <Route path='*' component={WithState(Header)} />
       </header>
       <div className={style.content}>
-        <Route path='*' component={withState(Message)} />
-        <Route path='*' component={withState(Page)} />
+        <Route path='*' component={WithState(Message)} />
+        <Route path='*' component={WithState(Notification)} />
+        <Switch>
+          <Route exact path='/' component={PageWithState(JobsPage)} />
+          <Route exact path='/:jobSlug' component={PageWithState(JobPage)} />
+          <Route exact path='/:jobSlug/internal' component={PageWithState(ComposePage)} />
+          <Route exact path='/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
+          <Route exact path='/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
+          <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
+        </Switch>
       </div>
-      <Route path='*' component={withState(Overlay)} />
+      <Route path='*' component={WithState(Overlay)} />
     </div>
   )
 }

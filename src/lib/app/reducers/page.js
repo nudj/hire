@@ -3,7 +3,9 @@ let {
   FETCHED_PAGE,
   SHOW_DIALOG,
   HIDE_DIALOG,
-  SHOW_LOADING
+  SHOW_LOADING,
+  SHOW_NOTIFICATION,
+  HIDE_NOTIFICATION
 } = require('../actions/app')
 const { merge } = require('../../lib')
 
@@ -24,6 +26,10 @@ function pageReducer (state = initialState, action) {
       return merge(state, { overlay: action.dialog })
     case HIDE_DIALOG:
       return merge(state, { overlay: undefined })
+    case SHOW_NOTIFICATION:
+      return merge(state, { notification: merge(action.notification, { hide: false }) })
+    case HIDE_NOTIFICATION:
+      return merge(state, { notification: { hide: true } })
     default:
       return state
   }
