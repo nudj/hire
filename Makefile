@@ -77,6 +77,7 @@ test:
 		--name test-container \
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/mocks:/usr/src/mocks \
 		$(IMAGEDEV)
 
 tdd:

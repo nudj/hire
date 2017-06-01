@@ -1,168 +1,46 @@
-let dummy = require('@nudj/dummy')
-let schemas = require('@nudj/schemas')
-let jsonServer = require('json-server')
-let find = require('lodash/find')
+const http = require('http')
+const jsonServer = require('json-server')
+const enableDestroy = require('server-destroy')
+
+const find = require('lodash/find')
 const merge = require('lodash/merge')
 
-const recommendationsSchema = merge({}, schemas.recommendations, {
-  hirerId: schemas.hirers.personId,
-  source: {
-    example: {
-      fn: 'choice',
-      args: [['nudj', 'hirer']]
-    }
-  }
-})
+const dummyData = require('./dummy-data')
 
-const sentExternalSchema = merge({}, recommendationsSchema, {
-  sentMessageLength: {
-    example: {
-      fn: 'choice',
-      args: [['short', 'long']]
-    }
-  },
-  sentMessageStyle: {
-    example: {
-      fn: 'choice',
-      args: [['bff', 'familiar', 'professional']]
-    }
-  },
-  sentMessageText: {
-    example: {
-      fn: 'choice',
-      args: [['whatever']]
-    }
-  },
-  sentMessageDeliveryMethod: {
-    example: {
-      fn: 'choice',
-      args: [['email', 'message']]
-    }
+class MockApi {
+  constructor ({jsonServer, dummyData}) {
+    this.serverUp = false
+    this.dummyData = dummyData
   }
-})
 
-let dummyData = dummy({
-  companies: {
-    schema: schemas.company,
-    count: 5
-  },
-  jobs: {
-    schema: schemas.job,
-    count: 50
-  },
-  people: {
-    schema: schemas.people,
-    count: 5
-  },
-  referrals: {
-    schema: schemas.referrals,
-    count: 5
-  },
-  applications: {
-    schema: schemas.applications,
-    count: 5
-  },
-  hirers: {
-    schema: schemas.hirers,
-    count: 1
-  },
-  recommendations: {
-    schema: recommendationsSchema,
-    count: 6
-  },
-  sentExternal: {
-    schema: sentExternalSchema,
-    count: 0
+  injectDummyData () {
+    this.router = jsonServer.router(merge({}, this.dummyData))
   }
-})
-dummyData.jobs = dummyData.jobs.concat([
-  {
-    'id': '99',
-    'created': '2009-05-23T12:22:13.000+00:00',
-    'modified': '2010-01-08T21:39:25.000+00:00',
-    'title': 'Senior Full-Stack Software Engineer',
-    'slug': 'senior-full-stack-software-engineer',
-    'url': 'https://bulb.workable.com/j/389500EB72',
-    'status': 'Open',
-    'bonus': 1000,
-    'description': '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
-    'type': 'Permanent',
-    'remuneration': 'Competitive + Options',
-    'tags': [
-      'Software',
-      'Developer',
-      'Full-Stack'
-    ],
-    'location': 'London',
-    'companyId': '2',
-    'related': [
-      {
-        'url': '/bulb/operations-strategy-analyst',
-        'title': 'Operations Strategy Analyst',
-        'location': 'London'
+
+  getCompanyById ({req, res, next}) {
+    if (!req.params.cid.match(/^\d+$/)) {
+      let company = find(this.dummyData.companies, {
+        slug: req.params.cid
+      })
+      if (company) {
+        res.json(company)
+      } else {
+        res.json({
+          error: true,
+          code: 404,
+          errorMessage: 'no match'
+        })
       }
-    ]
+    } else {
+      next()
+    }
   }
-])
-dummyData.people = dummyData.people.concat([
-  {
-    id: '21',
-    firstName: 'Nick',
-    lastName: 'Collings',
-    email: 'nick@nudj.co',
-    url: 'http://test.com/',
-    title: 'Tech Lead',
-    type: 'external',
-    company: 'nudj',
-    status: 'user'
-  },
-  {
-    id: '22',
-    firstName: 'Robyn',
-    lastName: 'McGirl',
-    email: 'robyn@nudj.co',
-    url: 'http://test.com/',
-    title: 'CEO',
-    type: 'external',
-    company: 'nudj',
-    status: 'user'
-  },
-  {
-    id: '23',
-    firstName: 'Jamie',
-    lastName: 'Gunson',
-    email: 'jamie@nudj.co',
-    url: 'http://test.com/',
-    title: 'Head of Product',
-    type: 'external',
-    company: 'nudj',
-    status: 'user'
-  },
-  {
-    id: '24',
-    firstName: 'Matt',
-    lastName: 'Ellis',
-    email: 'matt@nudj.co',
-    url: 'http://test.com/',
-    title: 'Design Wizard',
-    type: 'external',
-    company: 'nudj',
-    status: 'user'
-  }
-])
 
-let server = jsonServer.create()
-let router = jsonServer.router(dummyData)
-let middlewares = jsonServer.defaults()
-
-server.use(middlewares)
-server.get('/companies/:cid', (req, res, next) => {
-  if (!req.params.cid.match(/^\d+$/)) {
-    let company = find(dummyData.companies, {
-      slug: req.params.cid
-    })
-    if (company) {
-      res.json(company)
+  getFirstOfType ({req, res, next}) {
+    let type = req.params.type
+    let match = find(this.dummyData[type], req.query)
+    if (match) {
+      res.json(match)
     } else {
       res.json({
         error: true,
@@ -170,41 +48,95 @@ server.get('/companies/:cid', (req, res, next) => {
         errorMessage: 'no match'
       })
     }
-  } else {
-    next()
   }
-})
-server.get('/jobs/:jid', (req, res, next) => {
-  if (!req.params.jid.match(/^\d+$/)) {
-    let job = find(dummyData.jobs, {
-      slug: req.params.jid
-    })
-    if (job) {
-      res.json(job)
-    } else {
-      res.json({
-        error: true,
-        code: 404,
-        errorMessage: 'no match'
-      })
-    }
-  } else {
-    next()
-  }
-})
-server.get('/:type/first', (req, res, next) => {
-  let type = req.params.type
-  let match = find(dummyData[type], req.query)
-  if (match) {
-    res.json(match)
-  } else {
-    res.json({
-      error: true,
-      code: 404,
-      errorMessage: 'no match'
-    })
-  }
-})
-server.use(router)
 
-module.exports = server
+  getJobById ({req, res, next}) {
+    if (!req.params.jid.match(/^\d+$/)) {
+      let job = find(this.dummyData.jobs, {
+        slug: req.params.jid
+      })
+      if (job) {
+        res.json(job)
+      } else {
+        res.json({
+          error: true,
+          code: 404,
+          errorMessage: 'no match'
+        })
+      }
+    } else {
+      next()
+    }
+  }
+
+  listen (port, callback) {
+    if (!this.serverUp) {
+      this.start()
+    }
+
+    this.port = port
+    this.callback = callback
+
+    return new Promise((resolve, reject) => {
+      this.httpServer.listen(this.port, (error) => {
+        if (error) {
+          return reject(error)
+        }
+        enableDestroy(this.httpServer)
+        resolve(this.callback())
+      })
+    })
+  }
+
+  start () {
+    const middlewares = jsonServer.defaults()
+
+    this.server = jsonServer.create()
+    this.httpServer = http.createServer(this.server)
+
+    this.server.use(middlewares)
+
+    this.injectDummyData()
+
+    this.server.get('/companies/:cid', (req, res, next) => this.getCompanyById({req, res, next}))
+    this.server.get('/jobs/:jid', (req, res, next) => this.getJobById({req, res, next}))
+    this.server.get('/:type/first', (req, res, next) => this.getFirstOfType({req, res, next}))
+
+    this.server.get('/restart-mock-api', (req, res, next) => this.restartHandler({req, res, next}))
+
+    this.server.use(this.router)
+    this.serverUp = true
+  }
+
+  close () {
+    this.serverUp = false
+    return new Promise((resolve, reject) => {
+      return this.httpServer.destroy(error => error ? reject(error) : resolve())
+    })
+  }
+
+  restart () {
+    return this.close()
+      .then(() => this.listen(this.port, this.callback))
+  }
+
+  restartHandler ({req, res, next}) {
+    process.nextTick(() => {
+      this.restart()
+        .catch(error => console.error(error))
+    })
+
+    const message = 'Restarting on next tick - bye! 👋🏼'
+
+    console.log(message)
+    res.send(message)
+  }
+}
+
+const api = new MockApi({jsonServer, dummyData})
+
+module.exports = {
+  listen: api.listen.bind(api),
+  restart: api.restart.bind(api),
+  start: api.start.bind(api)
+}
