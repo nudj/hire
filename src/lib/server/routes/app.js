@@ -61,9 +61,9 @@ function getRenderDataBuilder (req) {
       req.session.data.person = data.person || req.session.data.person
       data.person = req.session.data.person
     }
-    if (req.session.message) {
-      data.message = req.session.message
-      delete req.session.message
+    if (req.session.notification) {
+      data.notification = req.session.notification
+      delete req.session.notification
     }
     data.url = {
       protocol: req.protocol,
@@ -81,19 +81,6 @@ function getErrorHandler (req, res, next) {
     try {
       let data, errorMessage
       switch (error.message) {
-        // redirects with message
-        case 'Already referred':
-        case 'Already applied':
-          req.session.message = {
-            code: 403,
-            type: 'error',
-            message: error.message
-          }
-          let destination = req.originalUrl.split('/')
-          logger.log('error', error.message, req.method, req.params.companySlug, req.params.jobSlugRefId, destination.pop(), error)
-          destination = destination.join('/')
-          res.redirect(destination)
-          break
         // renders with message
         case 'Invalid url':
           errorMessage = {
@@ -227,13 +214,21 @@ function internalSendHandler (req, res, next) {
   network
     .send(clone(req.session.data), req.params.jobSlug, req.body)
     .then(data => {
+      if (data.messages) {
+        // successful send
+        req.session.notification = {
+          type: 'success',
+          message: 'That’s the way, aha aha, I like it! 🎉'
+        }
+        return res.redirect(`/${req.params.jobSlug}`)
+      }
       data.compose = prismic.fetchContent(composeQuery, true)
       data.dialog = prismic.fetchContent(dialogQuery, true)
       return promiseMap(data)
+      .then(getRenderDataBuilder(req, res, next))
+      .then(getRenderer(req, res, next))
+      .catch(getErrorHandler(req, res, next))
     })
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
 }
 
 function externalHandler (req, res, next) {

@@ -48,14 +48,15 @@ function sendEmails ({ recipients, subject, template }) {
 
 function handleError (error, data) {
   delete data.messages
-  data.error = merge(error, {
-    code: 500
-  })
   data.form = error.data
+  data.notification = {
+    type: 'error',
+    message: error.message
+  }
   return data
 }
 
-function renderMessage ({ data, template, pify }) {
+function renderMessage ({ data, template }) {
   return templater.render({
     template,
     data: {

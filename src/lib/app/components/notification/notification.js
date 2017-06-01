@@ -3,20 +3,31 @@ const get = require('lodash/get')
 const getStyle = require('./notification.css')
 const { hideNotification } = require('../../actions/app')
 
-function onClickClose (props) {
-  return (event) => props.dispatch(hideNotification())
-}
+const onClickClose = (props) => (event) => props.dispatch(hideNotification())
 
-const Notification = (props) => {
-  const style = getStyle()
-  const notification = get(props, 'notification')
-  const type = get(notification, 'type')
-  const typeClass = type ? style[type] : ''
-  const stateClass = notification && !get(notification, 'hide') ? style.visible : ''
-  return <div className={`${style.notification} ${typeClass} ${stateClass}`}>
-    <div className={style.message}>{get(notification, 'message', '')}</div>
-    <button className={style.close} onClick={onClickClose(props)}><img src='/assets/images/close.svg' alt='Close' /></button>
-  </div>
+class Notification extends React.Component {
+  constructor (props) {
+    super(props)
+    this.style = getStyle()
+    this.state = {
+      js: false
+    }
+  }
+  componentDidMount () {
+    this.setState({
+      js: true
+    })
+  }
+  render () {
+    const notification = get(this.props, 'notification')
+    const type = get(notification, 'type')
+    const typeClass = type ? this.style[type] : ''
+    const stateClass = notification && !get(notification, 'hide') ? this.style.visible : ''
+    return <div className={`${this.style.notification} ${typeClass} ${stateClass}`}>
+      <div className={this.style.message}>{get(notification, 'message', '')}</div>
+      {get(this.state, 'js') ? <button className={this.style.close} onClick={onClickClose(this.props)}><img src='/assets/images/close.svg' alt='Close' /></button> : null}
+    </div>
+  }
 }
 
 module.exports = Notification
