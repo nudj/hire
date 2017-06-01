@@ -5,7 +5,6 @@ const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
 const { promiseMap } = require('../lib')
-const { merge } = require('../../lib')
 const { emails: validators } = require('../../lib/validators')
 
 function fetchJob (data, jobSlug) {

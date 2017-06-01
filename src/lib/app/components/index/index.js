@@ -12,16 +12,8 @@ const SelectReferrerExternalPage = require('../select-referrer-external-page/sel
 const ComposeExternalPage = require('../compose-external-page/compose-external-page')
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
+const Status = require('../status/status')
 const { PageWithState, WithState } = require('../../lib/with-state')
-
-const Status = ({ code, children }) => (
-  <Route render={({ staticContext }) => {
-    if (staticContext) {
-      staticContext.status = code
-    }
-    return children
-  }} />
-)
 
 const Index = () => {
   const style = getStyle()

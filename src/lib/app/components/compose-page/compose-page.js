@@ -14,7 +14,8 @@ const Tooltip = require('../tooltip/tooltip')
 const {
   showDialog,
   hideDialog,
-  postData
+  postData,
+  showLoading
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
@@ -42,7 +43,6 @@ module.exports = class ComposePage extends React.Component {
     }
     this.validateRecipients = this.validateRecipients.bind(this)
     this.validateEmail = this.validateEmail.bind(this)
-    this.isInvalid = this.isInvalid.bind(this)
     this.onClickEdit = this.onClickEdit.bind(this)
     this.onChangeRecipients = this.onChangeRecipients.bind(this)
     this.onChangeSubject = this.onChangeSubject.bind(this)
@@ -71,14 +71,6 @@ module.exports = class ComposePage extends React.Component {
       newState[`${key}Error`] = validators[key](value)
       return newState
     }, {})
-  }
-  isInvalid () {
-    return ['recipients', 'subject', 'template'].reduce((result, key) => {
-      if (!result) {
-        result = get(this.state, `${key}Error`)
-      }
-      return result
-    }, false)
   }
   componentWillReceiveProps (props) {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
@@ -150,6 +142,7 @@ module.exports = class ComposePage extends React.Component {
     })
   }
   onClickConfirm () {
+    this.props.dispatch(showLoading())
     this.props.dispatch(postData({
       url: `/${get(this.props, 'job.slug')}/internal`,
       data: {
@@ -173,9 +166,8 @@ module.exports = class ComposePage extends React.Component {
   renderSuccess () {
     return <div>Success</div>
   }
-  renderComposer () {
+  render () {
     const tooltip = get(this.props, 'tooltip')
-    const invalid = this.isInvalid()
     const recipientsError = get(this.state, 'recipientsError')
     const subjectError = get(this.state, 'subjectError')
     const templateError = get(this.state, 'templateError')
@@ -222,19 +214,5 @@ module.exports = class ComposePage extends React.Component {
         </div>
       </Form>
     )
-  }
-  render () {
-    let page
-    switch (true) {
-      case get(this.props, 'sending'):
-        page = this.renderSending()
-        break
-      case !!get(this.props, 'messages'):
-        page = this.renderSuccess()
-        break
-      default:
-        page = this.renderComposer()
-    }
-    return page
   }
 }

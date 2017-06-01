@@ -4,6 +4,8 @@ const { connect } = require('react-redux')
 const get = require('lodash/get')
 const ScrollTop = require('../components/scroll-top/scroll-top')
 const ErrorPage = require('../components/error-page/error-page')
+const Status = require('../components/status/status')
+const Loading = require('../components/loading/loading')
 
 const withState = (callback) => {
   return withRouter(connect((state, props) => Object.assign({}, state, props))(callback))
