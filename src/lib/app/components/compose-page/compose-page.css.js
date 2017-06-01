@@ -83,6 +83,6 @@ module.exports = css(merge(mixins.pageLayout, {
   }),
   errorLabel: {
     color: variables.colors.midRed,
-    paddingBottom: '10px'
+    paddingBottom: variables.padding.e
   }
 }))

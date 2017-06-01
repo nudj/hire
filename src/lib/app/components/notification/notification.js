@@ -25,7 +25,7 @@ class Notification extends React.Component {
     const stateClass = notification && !get(notification, 'hide') ? this.style.visible : ''
     return <div className={`${this.style.notification} ${typeClass} ${stateClass}`}>
       <div className={this.style.message}>{get(notification, 'message', '')}</div>
-      {get(this.state, 'js') ? <button className={this.style.close} onClick={onClickClose(this.props)}><img src='/assets/images/close.svg' alt='Close' /></button> : null}
+      {get(this.state, 'js') ? <button className={this.style.close} onClick={onClickClose(this.props)}><img className={this.style.closeIcon} src='/assets/images/close.svg' alt='Close' /></button> : null}
     </div>
   }
 }

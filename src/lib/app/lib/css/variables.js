@@ -22,7 +22,8 @@ module.exports.sizing = {
   fixedHeaderButtonIconSize: `${basePixelSize * 1.5}px`,
   genericBoxShadow: '0 0.5px 0.5px 0',
   overlayDialogWidth: '500px',
-  sidebarWidth: '285px'
+  sidebarWidth: '285px',
+  notificationTop: `${basePixelSize * 1.5}px`
 }
 
 module.exports.padding = {
@@ -30,6 +31,7 @@ module.exports.padding = {
   b: `${basePixelSize * 4}px`,
   c: `${basePixelSize * 2}px`,
   d: `${basePixelSize}px`,
+  de: `${basePixelSize * 0.75}px`,
   e: `${basePixelSize * 0.5}px`,
   f: `${basePixelSize * 0.25}px`
 }
@@ -57,7 +59,8 @@ module.exports.colors = {
   green: '#7ac74f',
   //
   genericBoxShadow: 'rgba(0, 0, 0, 0.1)',
-  genericOverlayCover: 'rgba(45, 41, 38, 0.4)'
+  genericOverlayCover: 'rgba(45, 41, 38, 0.4)',
+  genericLightShade: 'rgba(45, 41, 38, 0.2)'
 }
 
 module.exports.fonts = {

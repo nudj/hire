@@ -10,16 +10,15 @@ module.exports = css({
     display: 'flex',
     justifyContent: 'stretch',
     alignItems: 'center',
-    width: '500px',
-    height: '50px',
-    borderRadius: '4px',
+    width: variables.sizing.overlayDialogWidth,
+    borderRadius: variables.sizing.baseBorderRadius,
+    boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
     backgroundColor: variables.colors.lightGrey,
-    boxShadow: '0 2px 20px 0 rgba(45, 41, 38, 0.2)',
     position: 'absolute',
     left: '50%',
-    top: '15px',
+    top: variables.sizing.notificationTop,
     transition: 'transform 300ms ease-in-out',
-    transform: 'translateX(-50%) translateY(-80px)',
+    transform: 'translateX(-50%) translateY(-200%)',
     overflow: 'hidden'
   },
   info: {
@@ -36,17 +35,17 @@ module.exports = css({
   },
   message: merge(mixins.headings.p2, {
     flex: 1,
-    padding: '0 30px',
+    padding: `${variables.padding.de} ${variables.padding.d}`,
     color: variables.colors.white
   }),
   close: {
-    backgroundColor: 'rgba(45, 41, 38, 0.2)',
+    backgroundColor: variables.colors.genericLightShade,
     border: 0,
-    height: '50px',
     display: 'block',
-    padding: '17px',
     cursor: 'pointer',
     color: variables.colors.white,
+    alignSelf: 'stretch',
+    padding: variables.padding.de,
     ':active': {
       outline: 'none',
       border: 'none'
@@ -56,7 +55,10 @@ module.exports = css({
       border: 'none'
     }
   },
+  closeIcon: {
+    display: 'block'
+  },
   visible: {
-    transform: 'translateX(-50%) translateY(0)'
+    transform: 'translateX(-50%) translateY(-30%)'
   }
 })
