@@ -111,6 +111,21 @@ module.exports = class ComposePage extends React.Component {
   }
 
   render () {
+    const network = get(this.props, 'network', [])
+    const networkSent = get(this.props, 'networkSent', [])
+    const networkUnsent = network.filter(person => !networkSent.includes(person.id))
+
+    if (!network.length || (networkSent.length && !networkUnsent.length)) {
+      return (<form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
+        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+        <PageHeader
+          title={get(this.props, 'job.title')}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
+        />
+        <h3 className={this.style.pageHeadline}>Doesn't look like we could find anyone relevant in your network 😥 Check back soon and see if the nudj network can help.</h3>
+      </form>)
+    }
+
     return (
       <form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
