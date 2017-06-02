@@ -19,7 +19,6 @@ const {
   showLoading
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
-const cssVariables = require('../../lib/css/variables')
 
 const errorLabel = (className, template) => <p className={className}>{template}</p>
 
@@ -123,7 +122,7 @@ module.exports = class ComposePage extends React.Component {
     return <span className={ok ? this.style.tagOk : this.style.tagError} key={`chunk${index}`}>{contents}</span>
   }
   pify (para, index, margin = 0) {
-    return <p className={this.style.para} style={{ marginTop: `${1.5*margin}rem` }} key={`para${index}`}>{para}</p>
+    return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
     return templater.render({
