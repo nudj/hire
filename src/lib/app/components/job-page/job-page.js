@@ -1,10 +1,10 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
-const ClipboardButton = require('react-clipboard.js')
 const getStyle = require('./job-page.css')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
+const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 
 const JobPage = (props) => {
   const style = getStyle()
@@ -15,7 +15,7 @@ const JobPage = (props) => {
         title={get(props, 'job.title')}
         subtitle={<span>@ <Link className={style.headerLink} to={'/'}>{get(props, 'company.name')}</Link></span>}
       >
-        <ClipboardButton className={style.copyLink} data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</ClipboardButton>
+        <CopyToClipboard className={style.copyLink} data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</CopyToClipboard>
       </PageHeader>
       <h3 className={style.pageHeadline}>Who would you like to ask first?</h3>
       <div className={style.pageContent}>
