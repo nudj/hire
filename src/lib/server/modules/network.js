@@ -6,12 +6,8 @@ const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
 const { promiseMap } = require('../lib')
 const { merge } = require('../../lib')
+const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
-
-function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/${jobSlug}`)
-  return promiseMap(data)
-}
 
 function validate (formData, data) {
   let invalid
@@ -85,14 +81,17 @@ function sendEmail ({ subject, html }) {
 
 module.exports.send = function (data, instructions) {
   return sendEmails(instructions)(data)
-  .catch((error) => merge(data, {
-    messages: null,
-    form: mapValues(instructions, (value) => ({ value })),
-    notification: {
-      type: 'error',
-      message: 'There was a problem sending your email, please try again'
-    }
-  }))
+  .catch((error) => {
+    logger.log('error', error)
+    return merge(data, {
+      messages: null,
+      form: mapValues(instructions, (value) => ({ value })),
+      notification: {
+        type: 'error',
+        message: 'There was a problem sending your email, please try again'
+      }
+    })
+  })
 }
 
 const common = require('./common')
