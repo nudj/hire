@@ -179,7 +179,7 @@ function jobHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function internalHandler (req, res, next) {
+function fetchInternalPrismicContent (data) {
   const composeQuery = {
     'document.type': 'composemessage',
     'document.tags': ['internal']
@@ -192,36 +192,25 @@ function internalHandler (req, res, next) {
     'document.type': 'tooltip',
     'document.tags': ['sendInternal']
   }
+  data.compose = prismic.fetchContent(composeQuery, true)
+  data.dialog = prismic.fetchContent(dialogQuery, true)
+  data.tooltip = prismic.fetchContent(tooltipQuery, true)
+  return promiseMap(data)
+}
 
+function internalHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => {
-      data.compose = prismic.fetchContent(composeQuery, true)
-      data.dialog = prismic.fetchContent(dialogQuery, true)
-      data.tooltip = prismic.fetchContent(tooltipQuery, true)
-      return promiseMap(data)
-    })
+    .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function internalSendHandler (req, res, next) {
-  const composeQuery = {
-    'document.type': 'composemessage',
-    'document.tags': ['internal']
-  }
-  const dialogQuery = {
-    'document.type': 'dialog',
-    'document.tags': ['sendInternal']
-  }
-  const tooltipQuery = {
-    'document.type': 'tooltip',
-    'document.tags': ['sendInternal']
-  }
-
-  network
-    .send(clone(req.session.data), req.params.jobSlug, req.body)
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then((data) => network.send(data, req.body))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -231,14 +220,12 @@ function internalSendHandler (req, res, next) {
         }
         return res.redirect(`/${req.params.jobSlug}`)
       }
-      data.compose = prismic.fetchContent(composeQuery, true)
-      data.dialog = prismic.fetchContent(dialogQuery, true)
-      data.tooltip = prismic.fetchContent(tooltipQuery, true)
-      return promiseMap(data)
-      .then(getRenderDataBuilder(req, res, next))
-      .then(getRenderer(req, res, next))
-      .catch(getErrorHandler(req, res, next))
+      return fetchInternalPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
     })
+    .catch(getErrorHandler(req, res, next))
 }
 
 function externalHandler (req, res, next) {
