@@ -23,7 +23,8 @@ module.exports.sizing = {
   genericBoxShadow: '0 0.5px 0.5px 0',
   overlayDialogWidth: '500px',
   sidebarWidth: '285px',
-  notificationTop: `${basePixelSize * 1.5}px`
+  notificationTop: `${basePixelSize * 1.5}px`,
+  textEditorLineHeight: '1.5rem'
 }
 
 module.exports.padding = {

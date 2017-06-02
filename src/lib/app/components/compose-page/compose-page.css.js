@@ -35,8 +35,11 @@ module.exports = css(merge(mixins.pageLayout, {
   submit: mixins.button,
   chunk: {},
   para: {
-    lineHeight: '1.5rem',
-    margin: `0 0 ${variables.padding.e} 0`
+    lineHeight: variables.sizing.textEditorLineHeight,
+    margin: `${variables.sizing.textEditorLineHeight} 0 0 0`,
+    ':first-child': {
+      marginTop: 0
+    }
   },
   tagOk: tag,
   tagError: merge(tag, {
@@ -77,9 +80,9 @@ module.exports = css(merge(mixins.pageLayout, {
     paddingTop: variables.padding.d
   }),
   template: merge(mixins.formElements.inputBoxBorderless, {
-    height: '20rem',
     flexGrow: '1',
-    padding: `0 0 ${variables.padding.d} 0`
+    padding: 0,
+    lineHeight: variables.sizing.textEditorLineHeight
   }),
   errorLabel: {
     color: variables.colors.midRed,

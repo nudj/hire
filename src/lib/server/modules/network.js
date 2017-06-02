@@ -67,7 +67,7 @@ function renderMessage ({ data, template }) {
       link: 'https://nudj.co/company/job',
       personName: `${get(data, 'person.firstName')} ${get(data, 'person.lastName')}`
     },
-    pify: (contents) => `<p>${contents.join('')}</p>`
+    pify: (contents, index, margin = 0) => `<p style="margin-top:${1.5 * margin}rem;">${contents.join('')}</p>`
   })
 }
 
