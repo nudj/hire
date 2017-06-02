@@ -73,7 +73,7 @@ function renderMessage ({ data, template }) {
 
 function sendEmail ({ subject, html }) {
   return (to) => mailer.send({
-    from: 'nick@nudj.co',
+    from: 'hello@nudj.co',
     to,
     subject,
     html
