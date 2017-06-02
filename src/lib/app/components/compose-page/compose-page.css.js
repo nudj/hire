@@ -67,7 +67,8 @@ module.exports = css(merge(mixins.pageLayout, {
   }),
   subjectWrap: merge(fieldStyle, {
     borderBottom: `${variables.sizing.baseBorderWidth} solid ${variables.colors.grey}`,
-    paddingBottom: variables.padding.d
+    paddingBottom: variables.padding.d,
+    alignItems: 'center'
   }),
   subject: merge(mixins.formElements.inputBoxBorderless, mixins.headings.h4, {
     color: variables.colors.royalBlue,

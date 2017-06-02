@@ -188,12 +188,17 @@ function internalHandler (req, res, next) {
     'document.type': 'dialog',
     'document.tags': ['sendInternal']
   }
+  const tooltipQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendInternal']
+  }
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => {
       data.compose = prismic.fetchContent(composeQuery, true)
       data.dialog = prismic.fetchContent(dialogQuery, true)
+      data.tooltip = prismic.fetchContent(tooltipQuery, true)
       return promiseMap(data)
     })
     .then(getRenderDataBuilder(req, res, next))
@@ -210,6 +215,10 @@ function internalSendHandler (req, res, next) {
     'document.type': 'dialog',
     'document.tags': ['sendInternal']
   }
+  const tooltipQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendInternal']
+  }
 
   network
     .send(clone(req.session.data), req.params.jobSlug, req.body)
@@ -224,6 +233,7 @@ function internalSendHandler (req, res, next) {
       }
       data.compose = prismic.fetchContent(composeQuery, true)
       data.dialog = prismic.fetchContent(dialogQuery, true)
+      data.tooltip = prismic.fetchContent(tooltipQuery, true)
       return promiseMap(data)
       .then(getRenderDataBuilder(req, res, next))
       .then(getRenderer(req, res, next))
