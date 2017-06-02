@@ -12,6 +12,11 @@ function fetchSentMessagesForJob (data, hirerId, jobId) {
   return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}`)
 }
 
+function fetchCompleteSentMessagesForJob (data, hirerId, jobId) {
+  return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}`)
+    .then(results => results.filter(result => !!result.sentMessage.sendMessage))
+}
+
 function saveSentMessage (hirerId, jobId, personId, sentMessage) {
   const data = {hirerId, jobId, personId, sentMessage}
   let url = 'sentExternal'
@@ -36,6 +41,13 @@ module.exports.get = function (data, hirerId, jobId, personId) {
 
 module.exports.getAll = function (data, hirerId, jobId) {
   data.sentExternal = fetchSentMessagesForJob(data, hirerId, jobId)
+    .then(common.fetchPeopleFromFragments)
+
+  return promiseMap(data)
+}
+
+module.exports.getAllComplete = function (data, hirerId, jobId) {
+  data.sentExternalComplete = fetchCompleteSentMessagesForJob(data, hirerId, jobId)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)

@@ -18,32 +18,48 @@ module.exports = class ComposePage extends React.Component {
     this.state = {tooltips}
   }
 
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index}) {
+    const personId = get(person, 'id', '')
+    const firstName = get(person, 'firstName', '')
+    const lastName = get(person, 'lastName', '')
+    const title = get(person, 'title', '')
+    const company = get(person, 'company', '')
+
+    return (<RowItem
+      key={`${personId}_${index}`}
+      title={`${firstName} ${lastName}`}
+      details={[{
+        term: 'Job title',
+        description: title
+      }, {
+        term: 'Company',
+        description: company
+      }]}
+      actions={[
+        <Link className={buttonClass} to={`/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
+      ]}
+    />)
+  }
+
   renderNetworkList () {
     const jobSlug = get(this.props, 'job.slug', '')
     const network = get(this.props, 'network', [])
+    const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
     return (<ul className={this.style.network}>
       {network.map((person, index) => {
         const personId = get(person, 'id')
+        let buttonLabel = 'Nudj'
+        let buttonClass = this.style.nudjButton
 
         if (networkSent.includes(personId)) {
           return ''
+        } else if (networkSaved.includes(personId)) {
+          buttonLabel = 'Continue'
+          buttonClass = this.style.continueButton
         }
 
-        return (<RowItem
-          key={`${personId}_${index}`}
-          title={`${get(person, 'firstName')} ${get(person, 'lastName')}`}
-          details={[{
-            term: 'Job title',
-            description: get(person, 'title')
-          }, {
-            term: 'Company',
-            description: get(person, 'company')
-          }]}
-          actions={[
-            <Link className={this.style.nudjButton} to={`/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
-          ]}
-        />)
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index})
       })}
     </ul>)
   }

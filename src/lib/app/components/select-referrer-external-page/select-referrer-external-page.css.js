@@ -15,7 +15,8 @@ const styles = {
     flexWrap: 'wrap'
   }, mixins.deList),
   pageSidebar: {},
-  nudjButton: mixins.button
+  nudjButton: mixins.button,
+  continueButton: mixins.buttonSecondary
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))
