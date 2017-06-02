@@ -18,34 +18,56 @@ module.exports = class ComposePage extends React.Component {
     this.state = {tooltips}
   }
 
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index}) {
+    const personId = get(person, 'id', '')
+    const firstName = get(person, 'firstName', '')
+    const lastName = get(person, 'lastName', '')
+    const title = get(person, 'title', '')
+    const company = get(person, 'company', '')
+
+    return (<RowItem
+      key={`${personId}_${index}`}
+      title={`${firstName} ${lastName}`}
+      details={[{
+        term: 'Job title',
+        description: title
+      }, {
+        term: 'Company',
+        description: company
+      }]}
+      actions={[
+        <Link className={buttonClass} to={`/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
+      ]}
+    />)
+  }
+
   renderNetworkList () {
     const jobSlug = get(this.props, 'job.slug', '')
     const network = get(this.props, 'network', [])
+    const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
     return (<ul className={this.style.network}>
       {network.map((person, index) => {
         const personId = get(person, 'id')
+        let buttonLabel = 'Nudj'
+        let buttonClass = this.style.nudjButton
 
         if (networkSent.includes(personId)) {
           return ''
+        } else if (networkSaved.includes(personId)) {
+          buttonLabel = 'Continue'
+          buttonClass = this.style.continueButton
         }
 
-        return (<RowItem
-          key={`${personId}_${index}`}
-          title={`${get(person, 'firstName')} ${get(person, 'lastName')}`}
-          details={[{
-            term: 'Job title',
-            description: get(person, 'title')
-          }, {
-            term: 'Company',
-            description: get(person, 'company')
-          }]}
-          actions={[
-            <Link className={this.style.nudjButton} to={`/${jobSlug}/external/${get(person, 'id')}`}>Nudj</Link>
-          ]}
-        />)
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index})
       })}
     </ul>)
+  }
+
+  renderNudjNetworkListEmpty () {
+    return (<div>
+      <h3 className={this.style.pageHeadline}>Don’t want to send to these folks? Check back soon, we’ll have more for you.</h3>
+    </div>)
   }
 
   renderNudjNetworkList () {
@@ -53,7 +75,7 @@ module.exports = class ComposePage extends React.Component {
     const nudjNetwork = get(this.props, 'nudjNetwork', [])
 
     if (networkSent.length) {
-      return ('')
+      return this.renderNudjNetworkListEmpty()
     }
 
     return (<div>
@@ -89,6 +111,21 @@ module.exports = class ComposePage extends React.Component {
   }
 
   render () {
+    const network = get(this.props, 'network', [])
+    const networkSent = get(this.props, 'networkSent', [])
+    const networkUnsent = network.filter(person => !networkSent.includes(person.id))
+
+    if (!network.length || (networkSent.length && !networkUnsent.length)) {
+      return (<form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
+        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+        <PageHeader
+          title={get(this.props, 'job.title')}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
+        />
+        <h3 className={this.style.pageHeadline}>Doesn't look like we could find anyone relevant in your network 😥 Check back soon and see if the nudj network can help.</h3>
+      </form>)
+    }
+
     return (
       <form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />

@@ -251,8 +251,10 @@ function externalHandler (req, res, next) {
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => network.get(data, data.person.id, data.job.id))
     .then(data => sentExternal.getAll(data, data.person.id, data.job.id))
+    .then(data => sentExternal.getAllComplete(data, data.person.id, data.job.id))
     .then(data => {
-      data.networkSent = data.sentExternal.map(person => person.id)
+      data.networkSaved = data.sentExternal.map(person => person.id)
+      data.networkSent = data.sentExternalComplete.map(person => person.id)
 
       const referrerType = data.sentExternal.length ? 'notFirstTime' : 'firstTime'
       selectReferrersQuery['document.tags'].push(referrerType)
