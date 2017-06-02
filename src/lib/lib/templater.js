@@ -1,5 +1,4 @@
 const get = require('lodash/get')
-const without = require('lodash/without')
 const identity = require('lodash/identity')
 const { stripDelims } = require('.')
 

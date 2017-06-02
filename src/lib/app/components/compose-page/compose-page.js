@@ -123,7 +123,7 @@ module.exports = class ComposePage extends React.Component {
     return <span className={ok ? this.style.tagOk : this.style.tagError} key={`chunk${index}`}>{contents}</span>
   }
   pify (para, index, margin = 0) {
-    return <p className={this.style.para} style={{ marginTop: variables.sizing.textEditorLineHeight }} key={`para${index}`}>{para}</p>
+    return <p className={this.style.para} style={{ marginTop: cssVariables.sizing.textEditorLineHeight }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
     return templater.render({
@@ -206,7 +206,7 @@ module.exports = class ComposePage extends React.Component {
                 <label className={this.style.messageLabel} htmlFor='template'>Message</label>
                 <div className={this.style.inputWrap}>
                   {templateError ? errorLabel(this.style.errorLabel, templateError) : null}
-                  {get(this.state, 'editing') ? <Textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' placeholder='Enter message here'></Textarea> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
+                  {get(this.state, 'editing') ? <Textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' placeholder='Enter message here' /> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
                 </div>
               </div>
             </div>
