@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
 const { Link } = require('react-router-dom')
+const Textarea = require('react-textarea-autosize').default
 
 const Form = require('../form/form')
 const PageHeader = require('../page-header/page-header')
@@ -190,17 +191,17 @@ module.exports = class ComposePage extends React.Component {
     }
 
     if (textOnly) {
-      options.pify = content => content.join('\n')
+      options.pify = content => content.join('')
     } else {
       options.pify = this.pify.bind(this)
       options.tagify = this.tagify.bind(this)
     }
 
-    return templater.render(options).join('')
+    return templater.render(options).join('\n\n')
   }
 
-  pify (para, index) {
-    return `<p class='${this.style.completedSectionSummaryMessageParagraph}' key='para${index}'>${para}</p>`
+  pify (para, index, margin = 0) {
+    return `<p class='${this.style.completedSectionSummaryMessageParagraph}' key='para${index}' style="margin-top:${1.5 * margin}rem;">${para.join('')}</p>`
   }
 
   tagify (contents, ok) {
@@ -212,7 +213,7 @@ module.exports = class ComposePage extends React.Component {
 
     return (<div className={this.style.activeContainer}>
       <div className={this.style.messageContainer}>
-        <textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
+        <Textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
       </div>
       <a className={this.style.composeMessageSave} onClick={this.submitComposeMessage.bind(this)}>Save</a>
     </div>)
