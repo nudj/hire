@@ -88,24 +88,24 @@ module.exports.send = function (data, jobSlug, instructions) {
 const common = require('./common')
 
 function fetchNetworkForJob (data, hirerId, jobId) {
-  data.network = request(`recommendations/?hirerId=${hirerId}&jobId=${jobId}&source=hirer`)
+  data.network = request(`recommendations/filter?hirerId=${hirerId}&jobId=${jobId}&source=hirer`)
     .then(common.fetchPeopleFromFragments)
 
-  data.nudjNetwork = request(`recommendations/?hirerId=${hirerId}&jobId=${jobId}&source=nudj`)
+  data.nudjNetwork = request(`recommendations/filter?hirerId=${hirerId}&jobId=${jobId}&source=nudj`)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)
 }
 
 function fetchNetworkForJobAndPerson (data, hirerId, jobId, personId) {
-  data.recommendation = request(`recommendations/?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}&source=hirer`)
+  data.recommendation = request(`recommendations/filter?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}&source=hirer`)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)
 }
 
 function fetchNetwork (data, hirerId, jobId) {
-  data.network = request(`recommendations/?hirerId=${hirerId}`)
+  data.network = request(`recommendations/filter?hirerId=${hirerId}`)
     .then(common.fetchPeopleFromFragments)
   return promiseMap(data)
 }
