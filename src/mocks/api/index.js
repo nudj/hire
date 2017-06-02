@@ -1,6 +1,7 @@
 const http = require('http')
 const jsonServer = require('json-server')
 const enableDestroy = require('server-destroy')
+const rewrite = require('express-urlrewrite')
 
 const find = require('lodash/find')
 const merge = require('lodash/merge')
@@ -98,6 +99,7 @@ class MockApi {
 
     this.injectDummyData()
 
+    this.server.get('/:type/filter', rewrite('/:type'))
     this.server.get('/companies/:cid', (req, res, next) => this.getCompanyById({req, res, next}))
     this.server.get('/jobs/:jid', (req, res, next) => this.getJobById({req, res, next}))
     this.server.get('/:type/first', (req, res, next) => this.getFirstOfType({req, res, next}))

@@ -4,12 +4,12 @@ let { promiseMap } = require('../lib')
 const common = require('./common')
 
 function fetchSentMessage (hirerId, jobId, personId) {
-  return request(`sentExternal/?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}`)
+  return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}`)
     .then(results => results.pop())
 }
 
 function fetchSentMessagesForJob (data, hirerId, jobId) {
-  return request(`sentExternal/?hirerId=${hirerId}&jobId=${jobId}`)
+  return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}`)
 }
 
 function saveSentMessage (hirerId, jobId, personId, sentMessage) {
