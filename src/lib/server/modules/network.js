@@ -58,13 +58,18 @@ function renderMessage ({ data, template }) {
   return templater.render({
     template,
     data: {
-      job: {
-        title: get(data, 'job.title'),
-        bonus: get(data, 'job.bonus')
+      company: {
+        name: get(data, 'company.name', '')
       },
-      companyName: get(data, 'company.name'),
-      link: 'https://nudj.co/company/job',
-      personName: `${get(data, 'person.firstName')} ${get(data, 'person.lastName')}`
+      job: {
+        bonus: get(data, 'job.bonus', ''),
+        link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
+        title: get(data, 'job.title', '')
+      },
+      sender: {
+        firstname: get(data, 'person.firstName', ''),
+        lastname: get(data, 'person.lastName', '')
+      }
     },
     pify: (contents, index, margin = 0) => `<p style="margin-top:${1.5 * margin}rem;">${contents.join('')}</p>`
   })
