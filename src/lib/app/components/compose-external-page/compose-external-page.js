@@ -56,7 +56,7 @@ module.exports = class ComposePage extends React.Component {
     this.setState({tempMessage})
   }
 
-  getComposeMessageBaseText () {
+  getComposeMessageBase () {
     if (!this.state.data.selectLength || !this.state.data.selectStyle) {
       return ''
     }
@@ -67,10 +67,22 @@ module.exports = class ComposePage extends React.Component {
 
     const lengthTag = this.state.data.selectLength.type
     const styleTag = this.state.data.selectStyle.type
-    const message = this.state.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
-    const prismicCompose = new PrismicReact(message)
+    const prismicMessage = this.state.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
+    const prismicCompose = new PrismicReact(prismicMessage)
 
-    return prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
+    const message = prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
+    const subject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
+
+    return {message, subject}
+  }
+
+  getComposeMessageBaseSubject () {
+    const subject = this.getComposeMessageBase().subject
+    return subject ? this.renderMessage(subject, true) : ''
+  }
+
+  getComposeMessageBaseText () {
+    return this.getComposeMessageBase().message
   }
 
   renderActiveOption (option, index) {
@@ -176,17 +188,28 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderMessage (content, textOnly) {
+    const companySlug = get(this.props, 'company.slug', '')
+    const jobSlug = get(this.props, 'job.slug', '')
+
     const options = {
       template: content,
       data: {
-        refereeName: get(this.props, 'recipient.firstName'),
-        job: {
-          title: get(this.props, 'job.title'), // ?
-          bonus: get(this.props, 'job.bonus')  // ?
+        company: {
+          name: get(this.props, 'company.name', '')
         },
-        companyName: get(this.props, 'company.name'), // ?
-        link: 'https://nudj.co/company/job', // ?
-        personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}` // ?
+        job: {
+          bonus: get(this.props, 'job.title', ''),
+          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
+          title: get(this.props, 'job.title', '')
+        },
+        recipient: {
+          firstname: get(this.props, 'recipient.firstName', ''),
+          lastname: get(this.props, 'recipient.lastName', '')
+        },
+        sender: {
+          firstname: get(this.props, 'person.firstName', ''),
+          lastname: get(this.props, 'person.lastName', '')
+        }
       }
     }
 
@@ -251,7 +274,11 @@ module.exports = class ComposePage extends React.Component {
 
   renderSectionSendMessage () {
     const recipient = get(this.props, 'recipient.email', 'tech@nudj.com')
-    const subject = 'I need your help'
+
+    const defaultSubject = 'I need your help'
+    const prismicSubject = this.getComposeMessageBaseSubject()
+    const subject = prismicSubject || defaultSubject
+
     const message = this.renderMessage(this.state.data.composeMessage || '', true)
     const body = encodeURIComponent(message)
 
