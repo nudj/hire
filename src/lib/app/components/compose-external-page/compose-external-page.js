@@ -198,7 +198,7 @@ module.exports = class ComposePage extends React.Component {
           name: get(this.props, 'company.name', '')
         },
         job: {
-          bonus: get(this.props, 'job.title', ''),
+          bonus: get(this.props, 'job.bonus', ''),
           link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
           title: get(this.props, 'job.title', '')
         },
