@@ -2,6 +2,7 @@ const express = require('express')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+let getTime = require('date-fns/get_time')
 
 const logger = require('../lib/logger')
 const common = require('../modules/common')
@@ -134,12 +135,17 @@ function getRenderer (req, res, next) {
     if (staticContext.url) {
       res.redirect(staticContext.url)
     } else {
-      let status = get(data, 'error.code', staticContext.status || 200)
+      let status = get(data, 'page.error.code', staticContext.status || 200)
+      let person = get(data, 'page.person')
       res.status(status).render('app', {
         data: JSON.stringify(data),
-        html: staticContext.html,
         css: staticContext.css,
-        helmet: staticContext.helmet
+        html: staticContext.html,
+        helmet: staticContext.helmet,
+        intercom_app_id: `'${process.env.INTERCOM_APP_ID}'`,
+        fullname: person && person.firstName && person.lastName && `'${person.firstName} ${person.lastName}'`,
+        email: person && `'${person.email}'`,
+        created_at: person && (getTime(person.created) / 1000)
       })
     }
   }
