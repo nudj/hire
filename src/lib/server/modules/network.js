@@ -55,6 +55,9 @@ function handleError (error, data) {
 }
 
 function renderMessage ({ data, template }) {
+  const companySlug = get(data, 'company.slug', '')
+  const jobSlug = get(data, 'job.slug', '')
+
   return templater.render({
     template,
     data: {

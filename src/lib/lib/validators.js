@@ -5,12 +5,14 @@ const { stripDelims } = require('.')
 
 const tagRegex = /\{\{.*?\}\}/g
 const permittedTags = [
-  'refereeName',
+  'recipient.firstname',
+  'recipient.lastname',
   'job.title',
   'job.bonus',
-  'companyName',
-  'link',
-  'personName'
+  'job.link',
+  'company.name',
+  'sender.firstname',
+  'sender.lastname'
 ]
 
 const isNotOfType = (type) => (value) => typeof value !== type // eslint-disable-line valid-typeof
