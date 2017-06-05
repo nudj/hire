@@ -251,7 +251,7 @@ module.exports = class ComposePage extends React.Component {
 
   renderSectionSendMessage () {
     const recipient = get(this.props, 'recipient.email', 'tech@nudj.com')
-    const subject = 'Guuuuuurl!'
+    const subject = 'I need your help'
     const message = this.renderMessage(this.state.data.composeMessage || '', true)
     const body = encodeURIComponent(message)
 
