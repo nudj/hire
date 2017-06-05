@@ -138,7 +138,9 @@ const styles = {
       margin: '0'
     }
   }),
-  messageContainer: {},
+  messageContainer: {
+    margin: `0 0 ${variables.padding.d} 0`
+  },
   messageTextarea: merge(mixins.formElements.inputBoxBorderless, {
     height: '20rem',
     padding: `0 0 ${variables.padding.d} 0`,
