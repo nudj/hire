@@ -235,11 +235,11 @@ module.exports = class ComposePage extends React.Component {
   renderComposeMessage () {
     const tempMessage = this.state.tempMessage || this.getComposeMessageBaseText()
 
-    return (<div className={this.style.activeContainer}>
+    return (<div className={this.style.activeContainerCentered}>
       <div className={this.style.messageContainer}>
         <Textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
       </div>
-      <a className={this.style.composeMessageSave} onClick={this.submitComposeMessage.bind(this)}>Save</a>
+      <a className={this.style.composeMessageSave} onClick={this.submitComposeMessage.bind(this)}>Next</a>
     </div>)
   }
 
