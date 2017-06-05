@@ -125,17 +125,28 @@ module.exports = class ComposePage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
+    const companySlug = get(this.props, 'company.slug', '')
+    const jobSlug = get(this.props, 'job.slug', '')
+
     return templater.render({
       template: template || get(this.state, 'template', ''),
       data: {
-        refereeName: 'First Name',
-        job: {
-          title: get(this.props, 'job.title'),
-          bonus: get(this.props, 'job.bonus')
+        company: {
+          name: get(this.props, 'company.name', '')
         },
-        companyName: get(this.props, 'company.name'),
-        link: 'https://nudj.co/company/job',
-        personName: `${get(this.props, 'person.firstName')} ${get(this.props, 'person.lastName')}`
+        job: {
+          bonus: get(this.props, 'job.title', ''),
+          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
+          title: get(this.props, 'job.title', '')
+        },
+        recipient: {
+          firstname: 'First name',
+          lastname: 'Last name'
+        },
+        sender: {
+          firstname: get(this.props, 'person.firstName', ''),
+          lastname: get(this.props, 'person.lastName', '')
+        }
       },
       tagify: this.tagify,
       pify: this.pify,
