@@ -386,12 +386,12 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
-  renderTooltip (tooltipTag) {
+  renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = this.state.tooltips.find(tooltip => tooltip.tags.includes(tooltipTag))
     if (!tooltip || this.state.active !== tooltipTag) {
       return ('')
     }
-    return (<div className={this.style.tooltipFloating}>
+    return (<div className={anchorBottom ? this.style.tooltipFloatingBottom : this.style.tooltipFloating}>
       <Tooltip {...tooltip} />
     </div>)
   }
@@ -476,7 +476,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderSectionSendMessage()}
           </div>
           <div className={this.style.pageSidebar}>
-            {this.renderTooltip('sendMessage')}
+            {this.renderTooltip('sendMessage', true)}
           </div>
         </div>
         <div className={this.style.pageContent}>

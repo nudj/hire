@@ -140,3 +140,7 @@ module.exports.fontSizes = {
   f8: '14px',
   f9: '12px'
 }
+
+module.exports.zIndicies = {
+  tooltip: '900'
+}

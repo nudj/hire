@@ -43,17 +43,23 @@ const optionText = merge(mixins.headings.p, {
   color: variables.colors.charcoal
 })
 
+const tooltipFloating = {
+  left: `calc(${variables.padding.c} + ${variables.padding.d})`,
+  position: 'absolute',
+  right: variables.padding.d
+}
+
 const styles = {
   pageContent: {
     padding: `0 0 ${variables.padding.d} 0`
   },
   companyLink: mixins.deLink,
-  tooltipFloating: {
-    left: `calc(${variables.padding.c} + ${variables.padding.d})`,
-    position: 'absolute',
-    right: variables.padding.d,
+  tooltipFloating: merge(tooltipFloating, {
     top: '0'
-  },
+  }),
+  tooltipFloatingBottom: merge(tooltipFloating, {
+    bottom: '0'
+  }),
   section: merge({
     alignItems: 'center',
     display: 'flex'
