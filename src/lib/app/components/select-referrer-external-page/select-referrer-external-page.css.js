@@ -8,7 +8,9 @@ const styles = {
   copy: mixins.typography.p,
   pageMain: {},
   pageMainNetwork: merge(mixins.pageLayout.pageMain, {
-    paddingRight: `calc(${variables.sizing.sidebarWidth} + ${variables.padding.b})`
+    [mixins.breakpoints.l]: {
+      paddingRight: `calc(${variables.sizing.sidebarWidth} + ${variables.padding.b})`
+    }
   }),
   network: merge(mixins.deList),
   networkSmall: merge({

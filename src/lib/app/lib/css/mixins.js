@@ -4,7 +4,8 @@ const variables = require('./variables')
 module.exports.variables = variables
 
 const breakpoints = {
-  ns: `@media screen and (min-width: ${variables.breakpoints.medium})`,
+  ns: `@media screen and (min-width: ${variables.breakpoints.notSmall})`,
+  m: `@media screen and (min-width: ${variables.breakpoints.medium})`,
   l: `@media screen and (min-width: ${variables.breakpoints.large})`
 }
 module.exports.breakpoints = breakpoints
@@ -196,13 +197,22 @@ module.exports.pageLayout = {
   },
   pageMain: {
     flex: 1,
-    padding: `0 ${variables.padding.d}`
+    padding: `0 ${variables.padding.d}`,
+    minWidth: '520px'
   },
   pageSidebar: {
     boxSizing: 'content-box',
-    padding: `0 ${variables.padding.d} 0 calc(${variables.padding.c} + ${variables.padding.d})`,
+    display: 'none',
+    padding: '0',
     position: 'relative',
-    width: variables.sizing.sidebarWidth
+    [breakpoints.m]: {
+      display: 'block',
+      width: variables.sizing.squishedSidebarWidth
+    },
+    [breakpoints.l]: {
+      padding: `0 ${variables.padding.d} 0 calc(${variables.padding.c} + ${variables.padding.d})`,
+      width: variables.sizing.sidebarWidth
+    }
   }
 }
 

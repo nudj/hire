@@ -44,9 +44,13 @@ const optionText = merge(mixins.headings.p, {
 })
 
 const tooltipFloating = {
-  left: `calc(${variables.padding.c} + ${variables.padding.d})`,
+  left: '0',
   position: 'absolute',
-  right: variables.padding.d
+  right: '0',
+  [mixins.breakpoints.l]: {
+    left: `calc(${variables.padding.c} + ${variables.padding.d})`,
+    right: variables.padding.d
+  }
 }
 
 const styles = {

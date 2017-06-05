@@ -4,7 +4,8 @@ module.exports.assets = {
 }
 
 module.exports.breakpoints = {
-  medium: '30em',
+  notSmall: '30em',
+  medium: '45em',
   large: '60em'
 }
 
@@ -23,6 +24,7 @@ module.exports.sizing = {
   genericBoxShadow: '0 0.5px 0.5px 0',
   overlayDialogWidth: '500px',
   sidebarWidth: '285px',
+  squishedSidebarWidth: '160px',
   notificationTop: `${basePixelSize * 1.5}px`,
   textEditorLineHeight: '1.5rem'
 }
