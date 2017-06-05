@@ -5,6 +5,7 @@ const styles = {
   pageHeadline: {},
   companyLink: mixins.deLink,
   pageContent: {},
+  copy: mixins.typography.p,
   pageMain: {},
   pageMainNetwork: merge(mixins.pageLayout.pageMain, {
     paddingRight: `calc(${variables.sizing.sidebarWidth} + ${variables.padding.b})`
