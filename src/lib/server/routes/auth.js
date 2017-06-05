@@ -12,7 +12,7 @@ function cacheReturnTo (req, res, next) {
 }
 
 function fetchPerson (email) {
-  let person = request(`people/first?email=${email}`)
+  let person = request(`people/first?email=${encodeURIComponent(email)}`)
   .then((person) => {
     if (!person) {
       person = request(`people`, {
