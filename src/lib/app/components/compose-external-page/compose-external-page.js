@@ -127,7 +127,7 @@ module.exports = class ComposePage extends React.Component {
     if (this.state.active === 'nextSteps') {
       content = (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-        <Link to={'/'} className={this.style.nextStepDashboard}>Go to dashboard</Link>
+        <Link to={'/'} className={this.style.nextStepDashboard}>View all jobs</Link>
         <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
       </div>)
       sectionClass = this.style.sectionActive
