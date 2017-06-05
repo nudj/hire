@@ -215,6 +215,7 @@ module.exports = class ComposePage extends React.Component {
 
     if (textOnly) {
       options.pify = content => content.join('')
+      options.brify = () => '\n'
     } else {
       options.pify = this.pify.bind(this)
       options.tagify = this.tagify.bind(this)
@@ -273,17 +274,16 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderSectionSendMessage () {
-    const recipient = get(this.props, 'recipient.email', 'tech@nudj.com')
+    const recipient = encodeURIComponent(get(this.props, 'recipient.email', 'tech@nudj.com'))
 
     const defaultSubject = 'I need your help'
     const prismicSubject = this.getComposeMessageBaseSubject()
-    const subject = prismicSubject || defaultSubject
+    const subject = encodeURIComponent(prismicSubject || defaultSubject)
 
-    const message = this.renderMessage(this.state.data.composeMessage || '', true)
-    const body = encodeURIComponent(message)
+    const message = encodeURIComponent(this.renderMessage(this.state.data.composeMessage || '', true))
 
-    const emailLink = `mailto:${recipient}?subject=${subject}&body=${body}`
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`
+    const emailLink = `mailto:${recipient}?subject=${subject}&body=${message}`
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${message}`
 
     const options = [
       {
