@@ -7,7 +7,11 @@ let {
 
 module.exports = css({
   tooltip: merge(mixins.cardStyle, {
-    zIndex: variables.zIndicies.tooltip
+    borderRadius: `${variables.sizing.baseBorderRadius} 0 0 ${variables.sizing.baseBorderRadius}`,
+    zIndex: variables.zIndicies.tooltip,
+    [mixins.breakpoints.l]: {
+      borderRadius: variables.sizing.baseBorderRadius
+    }
   }),
   tooltipTitle: merge(mixins.typography.h5),
   tooltipText: merge(mixins.typography.p),
