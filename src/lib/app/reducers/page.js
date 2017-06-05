@@ -14,7 +14,7 @@ const initialState = {}
 function pageReducer (state = initialState, action) {
   switch (action.type) {
     case SENDING:
-      return merge(state, { sending: true })
+      return merge(state, { sending: true, notification: null })
     case SHOW_LOADING:
       return merge(state, { loading: true })
     case FETCHED_PAGE:

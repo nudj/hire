@@ -5,12 +5,9 @@ const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
 const { promiseMap } = require('../lib')
+const { merge } = require('../../lib')
+const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
-
-function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/${jobSlug}`)
-  return promiseMap(data)
-}
 
 function validate (formData, data) {
   let invalid
@@ -38,7 +35,9 @@ function sendEmails ({ recipients, subject, template }) {
       let html = renderMessage({ data, template }).join('')
       data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
     } catch (error) {
-      if (error.name !== 'NudjError') throw error
+      if (error.name !== 'NudjError') {
+        return Promise.reject(error)
+      }
       data = handleError(error, data)
     }
     return promiseMap(data)
@@ -80,9 +79,19 @@ function sendEmail ({ subject, html }) {
   })
 }
 
-module.exports.send = function (data, jobSlug, instructions) {
-  return fetchJob(data, jobSlug)
-  .then(sendEmails(instructions))
+module.exports.send = function (data, instructions) {
+  return sendEmails(instructions)(data)
+  .catch((error) => {
+    logger.log('error', error)
+    return merge(data, {
+      messages: null,
+      form: mapValues(instructions, (value) => ({ value })),
+      notification: {
+        type: 'error',
+        message: 'There was a problem sending your email, please try again'
+      }
+    })
+  })
 }
 
 const common = require('./common')
