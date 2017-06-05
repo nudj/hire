@@ -14,7 +14,7 @@ const JobsPage = (props) => {
   return (
     <div className={style.pageBody}>
       <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
-        <button className={style.upload}>Upload job</button>
+        <button className={style.upload} id='open-intercom'>Upload job</button>
       </PageHeader>
       <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj...</h3>
       <div className={style.pageContent}>
