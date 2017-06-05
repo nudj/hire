@@ -1,6 +1,5 @@
 IMAGE:=nudj/hire
 IMAGEDEV:=nudj/hire-dev
-DEVURL:=
 
 CWD=$(shell pwd)
 BIN:=./node_modules/.bin
@@ -36,7 +35,7 @@ dev:
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		--env-file $(CWD)/.env \
 		$(IMAGEDEV) \
-		/bin/sh -c '$(BIN)/nodemon \
+		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && $(BIN)/nodemon \
 			--config ./nodemon.json \
 			-e js,html,css \
 			--quiet \
@@ -53,7 +52,7 @@ stats:
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/stats.json:/usr/src/stats.json \
 		$(IMAGEDEV) \
-		/bin/sh -c './node_modules/.bin/webpack  --config ./webpack.config.js --profile --json > stats.json'
+		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.config.js --profile --json > stats.json'
 
 dll:
 	-@docker rm -f dll-container 2> /dev/null || true
@@ -62,8 +61,6 @@ dll:
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/vendors-manifest.json:/usr/src/vendors-manifest.json \
-		-v $(CWD)/src/stats.json:/usr/src/stats.json \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules'
 
