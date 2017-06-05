@@ -215,6 +215,7 @@ module.exports = class ComposePage extends React.Component {
 
     if (textOnly) {
       options.pify = content => content.join('')
+      options.brify = () => '\n'
     } else {
       options.pify = this.pify.bind(this)
       options.tagify = this.tagify.bind(this)
