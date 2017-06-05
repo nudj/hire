@@ -10,8 +10,7 @@ function renderIntercomButton (prismicTooltip, style) {
     return ('')
   }
 
-  // Need an intercom method
-  const tooltipIntercomButton = (<button className={style.tooltipIntercomButton}>{tooltipText}</button>)
+  const tooltipIntercomButton = (<button className={style.tooltipIntercomButton} id='open-intercom'>{tooltipText}</button>)
 
   return tooltipIntercomButton
 }
