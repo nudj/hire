@@ -26,11 +26,11 @@ function saveSentMessage (hirerId, jobId, personId, sentMessage) {
     .then(result => {
       if (result) {
         url = `${url}/${result.id}`
-        method = 'put'
+        method = 'patch'
       }
 
-      const options = {data, method, url}
-      return request(options)
+      const options = { data, method }
+      return request(url, options)
     })
 }
 
