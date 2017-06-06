@@ -111,7 +111,7 @@ module.exports = class ComposePage extends React.Component {
           title={get(this.props, 'job.title')}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
-        <h3 className={this.style.pageHeadline}>We recommend sending a Nujd request to...</h3>
+        <h3 className={this.style.pageHeadline}>We recommend nudj'ing...</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             {this.renderNetworkList()}
@@ -120,7 +120,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderTooltip()}
           </div>
         </div>
-        <h3 className={this.style.pageHeadline}>We’ll also be sending a request to these people in our network...</h3>
+        <h3 className={this.style.pageHeadline}>We’ll also nudj these people in our network...</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMainNetwork}>
             {this.renderNudjNetworkList()}
