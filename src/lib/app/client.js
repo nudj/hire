@@ -32,7 +32,12 @@ ReactDOM.render(
       // only fetch new page data if...
       // - history action is not PUSH
       // - history action is PUSH and requested url is not already in page data (page data is stale)
-      if (location.pathname !== store.getState().page.url.originalUrl) {
+      const newUrl = location.pathname
+      const oldUrl = store.getState().page.url.originalUrl
+      if (newUrl === '/logout') {
+        dispatch(showLoading())
+        window.location = `${newUrl}?returnTo=${encodeURIComponent(oldUrl)}`
+      } else if (newUrl !== oldUrl) {
         dispatch(showLoading())
         request(location.pathname)
         .catch((error) => {

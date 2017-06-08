@@ -57,10 +57,17 @@ let router = express.Router()
 
 // Perform session logout and redirect to last known page or homepage
 router.get('/logout', (req, res, next) => {
-  req.logout()
+  req.logOut()
   delete req.session.data
   req.session.logout = true
-  res.redirect(req.get('Referrer') || '/')
+  req.session.returnTo = req.query.returnTo
+  res.clearCookie('connect.sid', {path: '/'})
+  res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?returnTo=${encodeURIComponent(`http://${process.env.DOMAIN}/loggedout`)}&client_id=${process.env.AUTH0_CLIENT_ID}`)
+})
+
+router.get('/loggedout', (req, res, next) => {
+  const returnTo = req.session.returnTo
+  req.session.destroy(() => res.redirect(returnTo || '/'))
 })
 
 router.get('/callback',

@@ -1,6 +1,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const { Helmet } = require('react-helmet')
 const getStyle = require('./job-page.css')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
@@ -11,11 +12,14 @@ const JobPage = (props) => {
   const tooltip = get(props, 'tooltip')
   return (
     <div className={style.pageBody}>
+      <Helmet>
+        <title>{`nudj - ${get(props, 'job.title')} @ ${get(props, 'company.name')}`}</title>
+      </Helmet>
       <PageHeader
         title={get(props, 'job.title')}
         subtitle={<span>@ <Link className={style.headerLink} to={'/'}>{get(props, 'company.name')}</Link></span>}
       >
-        <CopyToClipboard className={style.copyLink} data-clipboard-text={`//nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</CopyToClipboard>
+        <CopyToClipboard className={style.copyLink} data-clipboard-text={`https://nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</CopyToClipboard>
       </PageHeader>
       <h3 className={style.pageHeadline}>Who would you like to ask first?</h3>
       <div className={style.pageContent}>

@@ -1,4 +1,5 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const getStyle = require('./500-page.css')
 
@@ -6,6 +7,9 @@ const ServerError = (props) => {
   const style = getStyle()
   return (
     <div className={style.content}>
+      <Helmet>
+        <title>nudj - something went wrong</title>
+      </Helmet>
       <div className={style.gif}>
         <img src='https://media.giphy.com/media/ZeB4HcMpsyDo4/giphy.gif' width='320' height='202' />
       </div>

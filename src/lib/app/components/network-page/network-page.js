@@ -1,4 +1,5 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
@@ -75,6 +76,9 @@ module.exports = class NetworkPage extends React.Component {
   render () {
     return (
       <Form className={this.style.body} action={`/${get(this.props, 'job.slug')}/compose`} method='post'>
+        <Helmet>
+          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+        </Helmet>
         <PageHeader
           title={get(this.props, 'job.title')}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}

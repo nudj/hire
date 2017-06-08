@@ -1,4 +1,5 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const { Link } = require('react-router-dom')
 
@@ -106,6 +107,9 @@ module.exports = class ComposePage extends React.Component {
   render () {
     return (
       <form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
+        <Helmet>
+          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+        </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
           title={get(this.props, 'job.title')}
