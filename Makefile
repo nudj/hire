@@ -38,8 +38,7 @@ run:
 		-e 'ENVIRONMENT=local' \
 		-e 'TORUS_TOKEN_ID=04c50pyz4d7kr9m6pu30yjcp6bfvr' \
 		-e 'TORUS_TOKEN_SECRET=AyeDMWd-WJKoD0m-LY6SLZrK' \
-		$(IMAGE):local \
-		/bin/sh
+		$(IMAGE):local
 
 dev:
 	-@docker rm -f hire-dev-container 2> /dev/null || true
