@@ -3,7 +3,9 @@ ARG NPM_TOKEN
 WORKDIR /usr/src
 COPY src/package.json src/.npmrc /tmp/
 COPY .cache /tmp/node_modules
-RUN cd /tmp && npm i && npm prune && ln -s /tmp/node_modules /usr/src/node_modules && mkdir -p /usr/src
+RUN apk add --no-cache --virtual .gyp python make g++ \
+  && cd /tmp && npm i && npm prune && ln -s /tmp/node_modules /usr/src/node_modules && mkdir -p /usr/src \
+  && apk del .gyp
 COPY src/lib /usr/src/lib
 COPY src/mocks /usr/src/mocks
 COPY src/test /usr/src/test
