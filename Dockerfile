@@ -9,4 +9,4 @@ RUN npm i -g torus-cli \
   && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules \
   && npm prune --production
 EXPOSE 80
-CMD torus run -o nudj -p hire -e local -- node .
+CMD torus run -o nudj -p hire -e $ENVIRONMENT -- node .

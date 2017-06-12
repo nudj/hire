@@ -35,7 +35,7 @@ run:
 		-p 0.0.0.0:70:80 \
 		-p 0.0.0.0:71:81 \
 		--add-host api:127.0.0.1 \
-		--env-file $(CWD)/.env-torus \
+		--env-file $(CWD)/.env \
 		$(IMAGE):local
 
 dev:
@@ -50,7 +50,7 @@ dev:
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
-		--env-file $(CWD)/.env-torus \
+		--env-file $(CWD)/.env \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && $(BIN)/nodemon \
 			--config ./nodemon.json \
