@@ -13,6 +13,12 @@ build:
 		-f $(CWD)/Dockerfile.dev \
 		.
 
+buildLocal:
+	@docker build \
+		-t $(IMAGE):local \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
+		.
+
 cache:
 	-@docker rm -f hire-dev-cache 2> /dev/null || true
 	@docker run --rm -it \
@@ -20,6 +26,17 @@ cache:
 		-v $(CWD)/.cache:/usr/src/.cache \
 		$(IMAGEDEV) \
 		/bin/sh -c 'rm -rf .cache/* && cp -R /tmp/node_modules/. .cache/'
+
+run:
+	-@docker rm -f hire-dev-container 2> /dev/null || true
+	@echo 'App=http://localhost:70/, Api=http://localhost:71/'
+	@docker run --rm -it \
+		--name hire-dev-container \
+		-p 0.0.0.0:70:80 \
+		-p 0.0.0.0:71:81 \
+		--add-host api:127.0.0.1 \
+		--env-file $(CWD)/.env \
+		$(IMAGE):local
 
 dev:
 	-@docker rm -f hire-dev-container 2> /dev/null || true
@@ -41,7 +58,7 @@ dev:
 			--quiet \
 			--watch ./ \
 			--delay 250ms \
-			-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+			-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p hire -e local -- node ."'
 
 stats:
 	-@docker rm -f stats-container 2> /dev/null || true
