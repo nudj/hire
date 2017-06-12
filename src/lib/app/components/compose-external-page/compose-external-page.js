@@ -6,6 +6,7 @@ const { Link } = require('react-router-dom')
 const Textarea = require('react-textarea-autosize').default
 
 const Form = require('../form/form')
+const FormStep = require('../form-step/form-step')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 
@@ -120,27 +121,20 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderNextSteps () {
-    let content = this.renderPreActiveText('Let us know what you’d like to do next.')
-
-    let sectionClass = this.style.section
-    let sectionNumberClass = this.style.sectionNumber
-
-    if (this.state.active === 'nextSteps') {
-      content = (<div className={this.style.activeContainerCentered}>
+    return <FormStep
+      isActive={this.state.active === 'nextSteps'}
+      index={5}
+      title='Next steps'
+      isComplete={!!this.state.data.nextSteps}
+      data={this.state.data.nextSteps}
+      placeholder='Let us know what you’d like to do next.'
+      content={() => (<div className={this.style.activeContainerCentered}>
         <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
         <Link to={'/'} className={this.style.nextStepDashboard}>View all jobs</Link>
         <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
-      </div>)
-      sectionClass = this.style.sectionActive
-      sectionNumberClass = this.style.sectionNumberActive
-    }
-
-    return (<div className={sectionClass}>
-      <h4 className={this.style.sectionTitle}>
-        <span className={sectionNumberClass}>5</span>Next steps
-      </h4>
-      {content}
-    </div>)
+      </div>)}
+      completed={this.renderCompletedSectionSummary.bind(this)}
+    />
   }
 
   renderSectionLength () {
@@ -167,25 +161,16 @@ module.exports = class ComposePage extends React.Component {
       }
     ]
 
-    let content = ('')
-    let sectionClass = this.style.section
-    let sectionNumberClass = this.style.sectionNumber
-
-    if (this.state.active === 'selectLength') {
-      content = this.renderActiveOptions(options)
-      sectionClass = this.style.sectionActive
-      sectionNumberClass = this.style.sectionNumberActive
-    } else if (this.state.data.selectLength) {
-      content = this.renderCompletedSectionSummary(this.state.data.selectLength) // not really
-      sectionNumberClass = this.style.sectionDone
-    }
-
-    return (<div className={sectionClass}>
-      <h4 className={this.style.sectionTitle}>
-        <span className={sectionNumberClass}>1</span>Select length
-      </h4>
-      {content}
-    </div>)
+    return <FormStep
+      isActive={this.state.active === 'selectLength'}
+      index={1}
+      title='Select length'
+      isComplete={!!this.state.data.selectLength}
+      data={this.state.data.selectLength}
+      placeholder='Placeholder goes here'
+      content={() => this.renderActiveOptions(options)}
+      completed={this.renderCompletedSectionSummary.bind(this)}
+    />
   }
 
   renderMessage (content, textOnly) {
@@ -252,7 +237,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderSectionComposeMessage () {
-    let content = this.renderPreActiveText('Compose your masterpiece here.')
+    let content = 'Compose your masterpiece here.'
     let sectionClass = this.style.section
     let sectionNumberClass = this.style.sectionNumber
 
@@ -266,12 +251,16 @@ module.exports = class ComposePage extends React.Component {
       sectionNumberClass = this.style.sectionDone
     }
 
-    return (<div className={sectionClass}>
-      <h4 className={this.style.sectionTitle}>
-        <span className={sectionNumberClass}>3</span>Create message
-      </h4>
-      {content}
-    </div>)
+    return <FormStep
+      isActive={this.state.active === 'composeMessage'}
+      index={3}
+      title='Create message'
+      isComplete={!!this.state.data.composeMessage}
+      data={this.state.data.composeMessage}
+      placeholder='Compose your masterpiece here.'
+      content={this.renderComposeMessage.bind(this)}
+      completed={this.renderComposedMessage.bind(this)}
+    />
   }
 
   renderSectionSendMessage () {
@@ -311,25 +300,16 @@ module.exports = class ComposePage extends React.Component {
       }
     ]
 
-    let content = this.renderPreActiveText('Tell us how you want to send it, so we can deliver it to you in the format you need.')
-    let sectionClass = this.style.section
-    let sectionNumberClass = this.style.sectionNumber
-
-    if (this.state.active === 'sendMessage') {
-      content = this.renderActiveOptions(options)
-      sectionClass = this.style.sectionActive
-      sectionNumberClass = this.style.sectionNumberActive
-    } else if (this.state.data.sendMessage) {
-      content = this.renderCompletedSectionSummary(this.state.data.sendMessage) // not really
-      sectionNumberClass = this.style.sectionDone
-    }
-
-    return (<div className={sectionClass}>
-      <h4 className={this.style.sectionTitle}>
-        <span className={sectionNumberClass}>4</span>Send message
-      </h4>
-      {content}
-    </div>)
+    return <FormStep
+      isActive={this.state.active === 'sendMessage'}
+      index={4}
+      title='Send message'
+      isComplete={!!this.state.data.sendMessage}
+      data={this.state.data.sendMessage}
+      placeholder='Tell us how you want to send it, so we can deliver it to you in the format you need.'
+      content={() => this.renderActiveOptions(options)}
+      completed={this.renderCompletedSectionSummary.bind(this)}
+    />
   }
 
   renderSectionStyle () {
@@ -366,25 +346,16 @@ module.exports = class ComposePage extends React.Component {
       }
     ]
 
-    let content = this.renderPreActiveText('Choose how best to say it.')
-    let sectionClass = this.style.section
-    let sectionNumberClass = this.style.sectionNumber
-
-    if (this.state.active === 'selectStyle') {
-      content = this.renderActiveOptions(options)
-      sectionClass = this.style.sectionActive
-      sectionNumberClass = this.style.sectionNumberActive
-    } else if (this.state.data.selectStyle) {
-      content = this.renderCompletedSectionSummary(this.state.data.selectStyle) // not really
-      sectionNumberClass = this.style.sectionDone
-    }
-
-    return (<div className={sectionClass}>
-      <h4 className={this.style.sectionTitle}>
-        <span className={sectionNumberClass}>2</span>Select style
-      </h4>
-      {content}
-    </div>)
+    return <FormStep
+      isActive={this.state.active === 'selectStyle'}
+      index={2}
+      title='Select style'
+      isComplete={!!this.state.data.selectStyle}
+      data={this.state.data.selectStyle}
+      placeholder='Choose how best to say it.'
+      content={() => this.renderActiveOptions(options)}
+      completed={this.renderCompletedSectionSummary.bind(this)}
+    />
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
