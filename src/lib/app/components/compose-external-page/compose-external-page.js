@@ -11,6 +11,7 @@ const FormStepLength = require('../form-step-length/form-step-length')
 const FormStepStyle = require('../form-step-style/form-step-style')
 const FormStepCompose = require('../form-step-compose/form-step-compose')
 const FormStepSend = require('../form-step-send/form-step-send')
+const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 
@@ -20,17 +21,6 @@ const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
 
 const { postData } = require('../../actions/app')
-
-const steps = [
-  {
-    name: 'selectLength',
-    component: FormStepLength
-  },
-  {
-    name: 'selectStyle',
-    component: FormStepStyle
-  }
-]
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -47,6 +37,28 @@ module.exports = class ComposePage extends React.Component {
     this.onSubmitStep = this.onSubmitStep.bind(this)
     this.onSubmitComposeMessage = this.onSubmitComposeMessage.bind(this)
     this.onSubmitSendMessage = this.onSubmitSendMessage.bind(this)
+
+    this.steps = [
+      {
+        name: 'selectLength',
+        component: FormStepLength
+      },
+      {
+        name: 'selectStyle',
+        component: FormStepStyle
+      }
+    ]
+    this.steps2 = [
+      {
+        name: 'sendMessage',
+        component: FormStepSend,
+        onSubmit: this.onSubmitSendMessage
+      },
+      {
+        name: 'nextSteps',
+        component: FormStepNext
+      }
+    ]
   }
 
   activeFromData (data) {
@@ -258,7 +270,7 @@ module.exports = class ComposePage extends React.Component {
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
-        {steps.map((step, index) => {
+        {this.steps.map((step, index) => {
           index = index + 1
           const name = step.name
           const Component = step.component
@@ -271,6 +283,11 @@ module.exports = class ComposePage extends React.Component {
                   index={index}
                   data={this.state.data[name]}
                   onSubmitStep={this.onSubmitStep}
+                  length={this.state.data.selectLength}
+                  style={this.state.data.selectStyle}
+                  message={this.state.data.composeMessage}
+                  messages={this.state.messages}
+                  pageData={this.props}
                 />
               </div>
               <div className={this.style.pageSidebar}>
@@ -306,44 +323,32 @@ module.exports = class ComposePage extends React.Component {
             {this.renderTooltip('createMessage')}
           </div>
         </div>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            <FormStepSend
-              key={'sendMessage'}
-              isActive={this.state.active === 4}
-              index={4}
-              data={this.state.data.sendMessage}
-              onSubmitStep={this.onSubmitSendMessage}
-              length={this.state.data.selectLength}
-              style={this.state.data.selectStyle}
-              message={this.state.data.composeMessage}
-              messages={this.state.messages}
-              pageData={this.props}
-            />
-          </div>
-          <div className={this.style.pageSidebar}>
-            {this.renderTooltip('sendMessage', true)}
-          </div>
-        </div>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            <FormStep
-              isActive={this.state.active === 5}
-              index={5}
-              title='Next steps'
-              isComplete={!!this.state.data.nextSteps}
-              data={this.state.data.nextSteps}
-              placeholder='Let us know what you’d like to do next.'
-              content={() => (<div className={this.style.activeContainerCentered}>
-                <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-                <Link to={'/'} className={this.style.nextStepDashboard}>View all jobs</Link>
-                <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
-              </div>)}
-              completed={this.renderCompletedSectionSummary.bind(this)}
-            />
-          </div>
-          <div className={this.style.pageSidebar}>{('')}</div>
-        </div>
+        {this.steps2.map((step, index) => {
+          index = index + 4
+          const name = step.name
+          const Component = step.component
+          return (
+            <div className={this.style.pageContent} key={step.name}>
+              <div className={this.style.pageMain}>
+                <Component
+                  key={name}
+                  isActive={this.state.active === index}
+                  index={index}
+                  data={this.state.data[name]}
+                  onSubmitStep={step.onSubmit || this.onSubmitStep}
+                  length={this.state.data.selectLength}
+                  style={this.state.data.selectStyle}
+                  message={this.state.data.composeMessage}
+                  messages={this.state.messages}
+                  pageData={this.props}
+                />
+              </div>
+              <div className={this.style.pageSidebar}>
+                {this.renderTooltip(name)}
+              </div>
+            </div>
+          )
+        })}
       </Form>
     )
   }

@@ -52,13 +52,6 @@ const styles = {
   },
   composeMessageSave: merge(mixins.button, {
     display: 'inline-block'
-  }),
-  nextStepNudj: merge(mixins.button, {
-    display: 'inline-block'
-  }),
-  nextStepDashboard: merge(mixins.buttonSecondary, {
-    display: 'inline-block',
-    margin: `0 ${variables.padding.d} 0 0`
   })
 }
 
