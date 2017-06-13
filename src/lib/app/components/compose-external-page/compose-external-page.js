@@ -7,6 +7,10 @@ const Textarea = require('react-textarea-autosize').default
 
 const Form = require('../form/form')
 const FormStep = require('../form-step/form-step')
+const FormStepLength = require('../form-step-length/form-step-length')
+const FormStepStyle = require('../form-step-style/form-step-style')
+const FormStepCompose = require('../form-step-compose/form-step-compose')
+const FormStepSend = require('../form-step-send/form-step-send')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 
@@ -16,6 +20,17 @@ const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
 
 const { postData } = require('../../actions/app')
+
+const steps = [
+  {
+    name: 'selectLength',
+    component: FormStepLength
+  },
+  {
+    name: 'selectStyle',
+    component: FormStepStyle
+  }
+]
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -28,19 +43,23 @@ module.exports = class ComposePage extends React.Component {
     const tooltips = get(this.props, 'tooltips', [])
 
     this.state = {active, data, messages, tooltips}
+
+    this.onSubmitStep = this.onSubmitStep.bind(this)
+    this.onSubmitComposeMessage = this.onSubmitComposeMessage.bind(this)
+    this.onSubmitSendMessage = this.onSubmitSendMessage.bind(this)
   }
 
   activeFromData (data) {
-    let active = 'selectLength'
+    let active = 1
 
     if (data.sendMessage) {
-      active = 'nextSteps'
+      active = 5
     } else if (data.composeMessage) {
-      active = 'sendMessage'
+      active = 4
     } else if (data.selectStyle) {
-      active = 'composeMessage'
+      active = 3
     } else if (data.selectLength) {
-      active = 'selectStyle'
+      active = 2
     }
 
     return active
@@ -116,63 +135,6 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
-  renderPreActiveText (text) {
-    return (<p className={this.style.preActiveText}>{text}</p>)
-  }
-
-  renderNextSteps () {
-    return <FormStep
-      isActive={this.state.active === 'nextSteps'}
-      index={5}
-      title='Next steps'
-      isComplete={!!this.state.data.nextSteps}
-      data={this.state.data.nextSteps}
-      placeholder='Let us know what you’d like to do next.'
-      content={() => (<div className={this.style.activeContainerCentered}>
-        <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-        <Link to={'/'} className={this.style.nextStepDashboard}>View all jobs</Link>
-        <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
-      </div>)}
-      completed={this.renderCompletedSectionSummary.bind(this)}
-    />
-  }
-
-  renderSectionLength () {
-    const options = [
-      {
-        icon: 'message-bubble.svg',
-        title: 'Short and sweet',
-        text: 'For getting straight to the point.',
-        onClick: () => this.submitSelectLength({
-          type: 'short',
-          title: 'Short and sweet',
-          message: 'For getting straight to the point.'
-        })
-      },
-      {
-        icon: 'detail-icon.svg',
-        title: 'A bit more detail',
-        text: 'For when you need to add extra info.',
-        onClick: () => this.submitSelectLength({
-          type: 'long',
-          title: 'A bit more detail',
-          message: 'For when you need to add extra info.'
-        })
-      }
-    ]
-
-    return <FormStep
-      isActive={this.state.active === 'selectLength'}
-      index={1}
-      title='Select length'
-      isComplete={!!this.state.data.selectLength}
-      data={this.state.data.selectLength}
-      placeholder='Placeholder goes here'
-      content={() => this.renderActiveOptions(options)}
-      completed={this.renderCompletedSectionSummary.bind(this)}
-    />
-  }
-
   renderMessage (content, textOnly) {
     const companySlug = get(this.props, 'company.slug', '')
     const jobSlug = get(this.props, 'job.slug', '')
@@ -225,7 +187,7 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.messageContainer}>
         <Textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
       </div>
-      <a className={this.style.composeMessageSave} onClick={this.submitComposeMessage.bind(this)}>Next</a>
+      <a className={this.style.composeMessageSave} onClick={this.onSubmitComposeMessage}>Next</a>
     </div>)
   }
 
@@ -234,128 +196,6 @@ module.exports = class ComposePage extends React.Component {
     return (<div className={this.style.completedSectionSummary}>
       <div className={this.style.completedSectionSummaryMessage} dangerouslySetInnerHTML={{ __html: message }} />
     </div>)
-  }
-
-  renderSectionComposeMessage () {
-    let content = 'Compose your masterpiece here.'
-    let sectionClass = this.style.section
-    let sectionNumberClass = this.style.sectionNumber
-
-    if (this.state.active === 'composeMessage') {
-      content = this.renderComposeMessage()
-      sectionClass = this.style.sectionActive
-      sectionNumberClass = this.style.sectionNumberActive
-    } else if (this.state.data.composeMessage) {
-      const composeMessageContent = this.state.data.composeMessage
-      content = this.renderComposedMessage(composeMessageContent)
-      sectionNumberClass = this.style.sectionDone
-    }
-
-    return <FormStep
-      isActive={this.state.active === 'composeMessage'}
-      index={3}
-      title='Create message'
-      isComplete={!!this.state.data.composeMessage}
-      data={this.state.data.composeMessage}
-      placeholder='Compose your masterpiece here.'
-      content={this.renderComposeMessage.bind(this)}
-      completed={this.renderComposedMessage.bind(this)}
-    />
-  }
-
-  renderSectionSendMessage () {
-    const recipient = encodeURIComponent(get(this.props, 'recipient.email', 'tech@nudj.com'))
-
-    const defaultSubject = 'I need your help'
-    const prismicSubject = this.getComposeMessageBaseSubject()
-    const subject = encodeURIComponent(prismicSubject || defaultSubject)
-
-    const message = encodeURIComponent(this.renderMessage(this.state.data.composeMessage || '', true))
-
-    const emailLink = `mailto:${recipient}?subject=${subject}&body=${message}`
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${message}`
-
-    const options = [
-      {
-        link: emailLink,
-        icon: 'mail-icons.png',
-        title: 'Send it via your default email app',
-        text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
-        onClick: (event) => this.submitSendMessage(event, {
-          type: 'email',
-          title: 'Send it via your email app',
-          message: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).'
-        })
-      },
-      {
-        link: gmailLink,
-        icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
-        title: 'Send it via Gmail',
-        text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
-        onClick: (event) => this.submitSendMessage(event, {
-          type: 'gmail',
-          title: 'Send it via Gmail',
-          message: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.'
-        })
-      }
-    ]
-
-    return <FormStep
-      isActive={this.state.active === 'sendMessage'}
-      index={4}
-      title='Send message'
-      isComplete={!!this.state.data.sendMessage}
-      data={this.state.data.sendMessage}
-      placeholder='Tell us how you want to send it, so we can deliver it to you in the format you need.'
-      content={() => this.renderActiveOptions(options)}
-      completed={this.renderCompletedSectionSummary.bind(this)}
-    />
-  }
-
-  renderSectionStyle () {
-    const options = [
-      {
-        iconEmoji: '👭',
-        title: 'BFFs',
-        text: 'You’re inseperable!',
-        onClick: () => this.submitSelectStyle({
-          type: 'bff',
-          title: 'BFFs',
-          message: 'You know this person like the back of your hand.'
-        })
-      },
-      {
-        iconEmoji: '🤜🤛',
-        title: 'Familar',
-        text: 'Keep it casual.',
-        onClick: () => this.submitSelectStyle({
-          type: 'familiar',
-          title: 'Familar',
-          message: 'Keep it casual.'
-        })
-      },
-      {
-        iconEmoji: '🤝',
-        title: 'Professional',
-        text: 'Stay classy.',
-        onClick: () => this.submitSelectStyle({
-          type: 'professional',
-          title: 'Professional',
-          message: 'Stay classy.'
-        })
-      }
-    ]
-
-    return <FormStep
-      isActive={this.state.active === 'selectStyle'}
-      index={2}
-      title='Select style'
-      isComplete={!!this.state.data.selectStyle}
-      data={this.state.data.selectStyle}
-      placeholder='Choose how best to say it.'
-      content={() => this.renderActiveOptions(options)}
-      completed={this.renderCompletedSectionSummary.bind(this)}
-    />
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
@@ -368,26 +208,22 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
-  submitComposeMessage () {
+  onSubmitStep (step) {
+    return (stepData) => {
+      const data = merge(this.state.data, {[step]: stepData})
+      const active = get(this.state, 'active') + 1
+      this.saveAndPostData({active, data})
+    }
+  }
+
+  onSubmitComposeMessage () {
     const composeMessage = this.state.tempMessage || this.getComposeMessageBaseText()
     const data = merge(this.state.data, {composeMessage})
-    const active = 'sendMessage'
+    const active = get(this.state, 'active') + 1
     this.saveAndPostData({active, data})
   }
 
-  submitSelectLength (selectLength) {
-    const data = merge(this.state.data, {selectLength})
-    const active = 'selectStyle'
-    this.saveAndPostData({active, data})
-  }
-
-  submitSelectStyle (selectStyle) {
-    const data = merge(this.state.data, {selectStyle})
-    const active = 'composeMessage'
-    this.saveAndPostData({active, data})
-  }
-
-  submitSendMessage (event, sendMessage) {
+  onSubmitSendMessage (event, sendMessage) {
     event.preventDefault()
     const link = event.currentTarget.href
 
@@ -396,7 +232,7 @@ module.exports = class ComposePage extends React.Component {
     }
 
     const data = merge(this.state.data, {sendMessage})
-    const active = 'nextSteps'
+    const active = get(this.state, 'active') + 1
     this.saveAndPostData({active, data})
   }
 
@@ -422,25 +258,49 @@ module.exports = class ComposePage extends React.Component {
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
+        {steps.map((step, index) => {
+          index = index + 1
+          const name = step.name
+          const Component = step.component
+          return (
+            <div className={this.style.pageContent} key={step.name}>
+              <div className={this.style.pageMain}>
+                <Component
+                  key={name}
+                  isActive={this.state.active === index}
+                  index={index}
+                  data={this.state.data[name]}
+                  onSubmitStep={this.onSubmitStep}
+                />
+              </div>
+              <div className={this.style.pageSidebar}>
+                {this.renderTooltip(name)}
+              </div>
+            </div>
+          )
+        })}
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
-            {this.renderSectionLength()}
-          </div>
-          <div className={this.style.pageSidebar}>
-            {this.renderTooltip('selectLength')}
-          </div>
-        </div>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            {this.renderSectionStyle()}
-          </div>
-          <div className={this.style.pageSidebar}>
-            {this.renderTooltip('selectStyle')}
-          </div>
-        </div>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            {this.renderSectionComposeMessage()}
+            <FormStep
+              isActive={this.state.active === 3}
+              index={3}
+              title='Create message'
+              isComplete={!!this.state.data.composeMessage}
+              data={this.state.data.composeMessage}
+              placeholder='Compose your masterpiece here.'
+              content={this.renderComposeMessage.bind(this)}
+              completed={this.renderComposedMessage.bind(this)}
+            />
+            {/*<FormStepCompose
+              key={'composeMessage'}
+              isActive={this.state.active === 3}
+              index={3}
+              data={this.state.data.composeMessage}
+              onSubmitStep={this.onSubmitStep}
+              length={this.state.data.selectLength}
+              style={this.state.data.selectStyle}
+              messages={this.state.messages}
+            />*/}
           </div>
           <div className={this.style.pageSidebar}>
             {this.renderTooltip('createMessage')}
@@ -448,7 +308,18 @@ module.exports = class ComposePage extends React.Component {
         </div>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
-            {this.renderSectionSendMessage()}
+            <FormStepSend
+              key={'sendMessage'}
+              isActive={this.state.active === 4}
+              index={4}
+              data={this.state.data.sendMessage}
+              onSubmitStep={this.onSubmitSendMessage}
+              length={this.state.data.selectLength}
+              style={this.state.data.selectStyle}
+              message={this.state.data.composeMessage}
+              messages={this.state.messages}
+              pageData={this.props}
+            />
           </div>
           <div className={this.style.pageSidebar}>
             {this.renderTooltip('sendMessage', true)}
@@ -456,7 +327,20 @@ module.exports = class ComposePage extends React.Component {
         </div>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
-            {this.renderNextSteps()}
+            <FormStep
+              isActive={this.state.active === 5}
+              index={5}
+              title='Next steps'
+              isComplete={!!this.state.data.nextSteps}
+              data={this.state.data.nextSteps}
+              placeholder='Let us know what you’d like to do next.'
+              content={() => (<div className={this.style.activeContainerCentered}>
+                <p className={this.style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
+                <Link to={'/'} className={this.style.nextStepDashboard}>View all jobs</Link>
+                <Link to={`/${get(this.props, 'job.slug')}/external`} className={this.style.nextStepNudj}>Send another nudj</Link>
+              </div>)}
+              completed={this.renderCompletedSectionSummary.bind(this)}
+            />
           </div>
           <div className={this.style.pageSidebar}>{('')}</div>
         </div>
