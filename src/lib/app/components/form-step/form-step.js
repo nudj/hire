@@ -53,7 +53,7 @@ const FormStep = (props) => {
   }
 
   return (
-    <div className={stepClass}>
+    <div className={stepClass} onClick={props.onClick}>
       <h4 className={style.sectionTitle}>
         <span className={numberClass}>{index}</span>{get(props, 'title')}
       </h4>

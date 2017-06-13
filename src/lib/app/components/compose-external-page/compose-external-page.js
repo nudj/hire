@@ -37,6 +37,7 @@ module.exports = class ComposePage extends React.Component {
     this.onSubmitStep = this.onSubmitStep.bind(this)
     this.onSubmitComposeMessage = this.onSubmitComposeMessage.bind(this)
     this.onSubmitSendMessage = this.onSubmitSendMessage.bind(this)
+    this.onClickStep = this.onClickStep.bind(this)
 
     this.steps = [
       {
@@ -62,16 +63,16 @@ module.exports = class ComposePage extends React.Component {
   }
 
   activeFromData (data) {
-    let active = 1
+    let active = 0
 
     if (data.sendMessage) {
-      active = 5
-    } else if (data.composeMessage) {
       active = 4
-    } else if (data.selectStyle) {
+    } else if (data.composeMessage) {
       active = 3
-    } else if (data.selectLength) {
+    } else if (data.selectStyle) {
       active = 2
+    } else if (data.selectLength) {
+      active = 1
     }
 
     return active
@@ -257,6 +258,16 @@ module.exports = class ComposePage extends React.Component {
     })
   }
 
+  onClickStep (index) {
+    return (event) => {
+      if (index < this.state.active || (index > this.state.active && !!this.state.data[this.steps[index].name])) {
+        this.setState({
+          active: index
+        })
+      }
+    }
+  }
+
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     return (
@@ -271,7 +282,6 @@ module.exports = class ComposePage extends React.Component {
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
         {this.steps.map((step, index) => {
-          index = index + 1
           const name = step.name
           const Component = step.component
           return (
@@ -280,7 +290,7 @@ module.exports = class ComposePage extends React.Component {
                 <Component
                   key={name}
                   isActive={this.state.active === index}
-                  index={index}
+                  index={index + 1}
                   data={this.state.data[name]}
                   onSubmitStep={this.onSubmitStep}
                   length={this.state.data.selectLength}
@@ -288,6 +298,7 @@ module.exports = class ComposePage extends React.Component {
                   message={this.state.data.composeMessage}
                   messages={this.state.messages}
                   pageData={this.props}
+                  onClick={this.onClickStep(index)}
                 />
               </div>
               <div className={this.style.pageSidebar}>
@@ -299,7 +310,7 @@ module.exports = class ComposePage extends React.Component {
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <FormStep
-              isActive={this.state.active === 3}
+              isActive={this.state.active === 2}
               index={3}
               title='Create message'
               isComplete={!!this.state.data.composeMessage}
@@ -308,23 +319,13 @@ module.exports = class ComposePage extends React.Component {
               content={this.renderComposeMessage.bind(this)}
               completed={this.renderComposedMessage.bind(this)}
             />
-            {/*<FormStepCompose
-              key={'composeMessage'}
-              isActive={this.state.active === 3}
-              index={3}
-              data={this.state.data.composeMessage}
-              onSubmitStep={this.onSubmitStep}
-              length={this.state.data.selectLength}
-              style={this.state.data.selectStyle}
-              messages={this.state.messages}
-            />*/}
           </div>
           <div className={this.style.pageSidebar}>
             {this.renderTooltip('createMessage')}
           </div>
         </div>
         {this.steps2.map((step, index) => {
-          index = index + 4
+          index = index + 3
           const name = step.name
           const Component = step.component
           return (
@@ -333,7 +334,7 @@ module.exports = class ComposePage extends React.Component {
                 <Component
                   key={name}
                   isActive={this.state.active === index}
-                  index={index}
+                  index={index + 1}
                   data={this.state.data[name]}
                   onSubmitStep={step.onSubmit || this.onSubmitStep}
                   length={this.state.data.selectLength}
@@ -341,6 +342,7 @@ module.exports = class ComposePage extends React.Component {
                   message={this.state.data.composeMessage}
                   messages={this.state.messages}
                   pageData={this.props}
+                  onClick={this.onClickStep(index)}
                 />
               </div>
               <div className={this.style.pageSidebar}>
