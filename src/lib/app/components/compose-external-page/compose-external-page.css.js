@@ -4,6 +4,11 @@ const nextToTitleContainer = {
   width: `calc(100% - ${variables.padding.a})`
 }
 
+const optionTitle = merge(mixins.headings.h7, {
+  color: variables.colors.royalBlue,
+  padding: `0 0 ${variables.padding.f} 0`
+})
+
 const optionText = merge(mixins.headings.p, {
   color: variables.colors.charcoal
 })
@@ -52,6 +57,22 @@ const styles = {
   },
   composeMessageSave: merge(mixins.button, {
     display: 'inline-block'
+  }),
+  confirm: merge(nextToTitleContainer, {
+    textAlign: 'center'
+  }),
+  confirmTitle: optionTitle,
+  confirmText: optionText,
+  confirmActions: {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: `${variables.padding.d} 0 0`
+  },
+  confirmButton: merge(mixins.button, {
+    margin: `0 ${variables.padding.e}`
+  }),
+  cancelButton: merge(mixins.buttonSecondary, {
+    margin: `0 ${variables.padding.e}`
   })
 }
 

@@ -48,6 +48,18 @@ const optionText = merge(mixins.headings.p, {
   color: variables.colors.charcoal
 })
 
+const activeOption = merge(mixins.cardStyleTwo, {
+  background: variables.colors.offWhite,
+  flexBasis: '0',
+  flexGrow: '1',
+  margin: `0 0 0 ${variables.padding.e}`,
+  padding: '0',
+  textAlign: 'center',
+  ':first-child': {
+    margin: '0'
+  }
+})
+
 const styles = {
   section: merge({
     alignItems: 'center',
@@ -82,16 +94,10 @@ const styles = {
   activeOptionsContainer: merge(nextToTitleContainer, mixins.deList, {
     display: 'flex'
   }),
-  activeOption: merge(mixins.cardStyleTwo, {
-    background: variables.colors.offWhite,
-    flexBasis: '0',
-    flexGrow: '1',
-    margin: `0 0 0 ${variables.padding.e}`,
-    padding: '0',
-    textAlign: 'center',
-    ':first-child': {
-      margin: '0'
-    }
+  activeOption,
+  activeOptionSelected: merge(activeOption, {
+    borderColor: variables.colors.royalBlue,
+    backgroundColor: variables.colors.royalBlueShade
   }),
   activeOptionAction: {
     color: 'inherit',

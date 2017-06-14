@@ -38,15 +38,19 @@ module.exports = class ComposePage extends React.Component {
     this.onSubmitComposeMessage = this.onSubmitComposeMessage.bind(this)
     this.onSubmitSendMessage = this.onSubmitSendMessage.bind(this)
     this.onClickStep = this.onClickStep.bind(this)
+    this.onClickConfirm = this.onClickConfirm.bind(this)
+    this.onClickCancel = this.onClickCancel.bind(this)
 
     this.steps = [
       {
         name: 'selectLength',
-        component: FormStepLength
+        component: FormStepLength,
+        resets: 'composeMessage'
       },
       {
         name: 'selectStyle',
-        component: FormStepStyle
+        component: FormStepStyle,
+        resets: 'composeMessage'
       }
     ]
     this.steps2 = [
@@ -258,14 +262,55 @@ module.exports = class ComposePage extends React.Component {
     })
   }
 
-  onClickStep (index) {
+  onClickStep (step, index, steps) {
     return (event) => {
-      if (index < this.state.active || (index > this.state.active && !!this.state.data[this.steps[index].name])) {
-        this.setState({
-          active: index
-        })
+      let active = this.state.active
+      let confirm = null
+      if (index < this.state.active) {
+        if (step.resets && !!this.state.data[step.resets]) {
+          confirm = index
+        } else {
+          active = index
+        }
+      } else if ((index > this.state.active && !!this.state.data[step.name]) || (steps[index - 1] && !!this.state.data[steps[index - 1].name])) {
+        active = index
       }
+      this.setState({
+        active,
+        confirm
+      })
     }
+  }
+
+  onClickConfirm (event) {
+    event.stopPropagation()
+    const data = this.state.data
+    data.composeMessage = null
+    this.setState({
+      active: this.state.confirm,
+      confirm: null,
+      data
+    })
+  }
+
+  onClickCancel (event) {
+    event.stopPropagation()
+    this.setState({
+      confirm: null
+    })
+  }
+
+  renderConfirm () {
+    return (
+      <div className={this.style.confirm}>
+        <h5 className={this.style.confirmTitle}>Whoa there!</h5>
+        <p className={this.style.confirmText}>Selecting a different option will cause you to lose any edits you’ve made to your message.</p>
+        <div className={this.style.confirmActions}>
+          <button className={this.style.cancelButton} onClick={this.onClickCancel}>Cancel</button>
+          <button className={this.style.confirmButton} onClick={this.onClickConfirm}>Ok</button>
+        </div>
+      </div>
+    )
   }
 
   render () {
@@ -281,24 +326,25 @@ module.exports = class ComposePage extends React.Component {
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
-        {this.steps.map((step, index) => {
-          const name = step.name
-          const Component = step.component
+        {this.steps.map((step, index, steps) => {
+          const {
+            name,
+            component: Component,
+            resets
+          } = step
           return (
-            <div className={this.style.pageContent} key={step.name}>
+            <div className={this.style.pageContent} key={name}>
               <div className={this.style.pageMain}>
                 <Component
-                  key={name}
+                  name={name}
                   isActive={this.state.active === index}
                   index={index + 1}
-                  data={this.state.data[name]}
+                  {...this.state.data}
                   onSubmitStep={this.onSubmitStep}
-                  length={this.state.data.selectLength}
-                  style={this.state.data.selectStyle}
-                  message={this.state.data.composeMessage}
                   messages={this.state.messages}
                   pageData={this.props}
-                  onClick={this.onClickStep(index)}
+                  onClick={this.onClickStep(step, index, steps)}
+                  confirm={this.state.confirm === index && this.renderConfirm()}
                 />
               </div>
               <div className={this.style.pageSidebar}>
@@ -310,11 +356,11 @@ module.exports = class ComposePage extends React.Component {
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <FormStep
+              name='composeMessage'
               isActive={this.state.active === 2}
               index={3}
               title='Create message'
-              isComplete={!!this.state.data.composeMessage}
-              data={this.state.data.composeMessage}
+              {...this.state.data}
               placeholder='Compose your masterpiece here.'
               content={this.renderComposeMessage.bind(this)}
               completed={this.renderComposedMessage.bind(this)}
@@ -324,7 +370,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderTooltip('createMessage')}
           </div>
         </div>
-        {this.steps2.map((step, index) => {
+        {this.steps2.map((step, index, steps) => {
           index = index + 3
           const name = step.name
           const Component = step.component
@@ -332,17 +378,14 @@ module.exports = class ComposePage extends React.Component {
             <div className={this.style.pageContent} key={step.name}>
               <div className={this.style.pageMain}>
                 <Component
-                  key={name}
+                  name={name}
                   isActive={this.state.active === index}
                   index={index + 1}
-                  data={this.state.data[name]}
+                  {...this.state.data}
                   onSubmitStep={step.onSubmit || this.onSubmitStep}
-                  length={this.state.data.selectLength}
-                  style={this.state.data.selectStyle}
-                  message={this.state.data.composeMessage}
                   messages={this.state.messages}
                   pageData={this.props}
-                  onClick={this.onClickStep(index)}
+                  onClick={this.onClickStep(step, index, steps)}
                 />
               </div>
               <div className={this.style.pageSidebar}>

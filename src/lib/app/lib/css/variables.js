@@ -26,7 +26,8 @@ module.exports.sizing = {
   sidebarWidth: '285px',
   squishedSidebarWidth: '160px',
   notificationTop: `${basePixelSize * 1.5}px`,
-  textEditorLineHeight: '1.5rem'
+  textEditorLineHeight: '1.5rem',
+  buttonMinWidth: '120px'
 }
 
 module.exports.padding = {
@@ -63,7 +64,8 @@ module.exports.colors = {
   //
   genericBoxShadow: 'rgba(0, 0, 0, 0.1)',
   genericOverlayCover: 'rgba(45, 41, 38, 0.4)',
-  genericLightShade: 'rgba(45, 41, 38, 0.2)'
+  genericLightShade: 'rgba(45, 41, 38, 0.2)',
+  royalBlueShade: 'rgba(77, 108, 157, 0.1)'
 }
 
 module.exports.fonts = {
