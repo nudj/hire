@@ -233,7 +233,8 @@ module.exports = class ComposePage extends React.Component {
     }
   }
 
-  onSubmitComposeMessage () {
+  onSubmitComposeMessage (event) {
+    event.stopPropagation()
     const composeMessage = this.state.tempMessage || this.getComposeMessageBaseText()
     const data = merge(this.state.data, {composeMessage})
     const active = get(this.state, 'active') + 1
@@ -360,9 +361,10 @@ module.exports = class ComposePage extends React.Component {
               isActive={this.state.active === 2}
               index={3}
               title='Create message'
-              {...this.state.data}
               placeholder='Compose your masterpiece here.'
+              {...this.state.data}
               content={this.renderComposeMessage.bind(this)}
+              onClick={this.onClickStep({ name: 'composeMessage' }, 2, this.steps)}
               completed={this.renderComposedMessage.bind(this)}
             />
           </div>
