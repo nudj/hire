@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const { Link } = require('react-router-dom')
 const Textarea = require('react-textarea-autosize').default
 
@@ -14,6 +13,7 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
+const { merge } = require('../../../lib')
 
 const getStyle = require('./compose-external-page.css')
 
@@ -82,16 +82,12 @@ module.exports = class ComposePage extends React.Component {
     return active
   }
 
-  componentDidUpdate () {
-    const tempMessage = this.getComposeMessageBaseText()
-    if (!this.state.tempMessage && tempMessage) {
-      this.setState({tempMessage})
-    }
-  }
-
   changedMessage (event) {
-    const tempMessage = event.target.value
-    this.setState({tempMessage})
+    this.setState({
+      data: merge(this.state.data, {
+        composeMessage: event.target.value
+      })
+    })
   }
 
   getComposeMessageBase () {
@@ -198,11 +194,11 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderComposeMessage () {
-    const tempMessage = this.state.tempMessage || this.getComposeMessageBaseText()
+    const message = this.state.data.composeMessage || this.getComposeMessageBaseText()
 
     return (<div className={this.style.activeContainerCentered}>
       <div className={this.style.messageContainer}>
-        <Textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage.bind(this)} id='message' />
+        <Textarea className={this.style.messageTextarea} name='template' value={message} onChange={this.changedMessage.bind(this)} id='message' />
       </div>
       <a className={this.style.composeMessageSave} onClick={this.onSubmitComposeMessage}>Next</a>
     </div>)
@@ -235,10 +231,12 @@ module.exports = class ComposePage extends React.Component {
 
   onSubmitComposeMessage (event) {
     event.stopPropagation()
-    const composeMessage = this.state.tempMessage || this.getComposeMessageBaseText()
-    const data = merge(this.state.data, {composeMessage})
+    const composeMessage = this.state.data.composeMessage || this.getComposeMessageBaseText()
     const active = get(this.state, 'active') + 1
-    this.saveAndPostData({active, data})
+    this.saveAndPostData({
+      active,
+      data: merge(this.state.data, {composeMessage})
+    })
   }
 
   onSubmitSendMessage (event, sendMessage) {
