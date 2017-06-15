@@ -130,7 +130,6 @@ class FormStepCompose extends React.Component {
   getComposeMessageBaseText () {
     return this.getComposeMessageBase().message
   }
-
 }
 
 module.exports = FormStepCompose

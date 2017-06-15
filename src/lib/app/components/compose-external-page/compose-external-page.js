@@ -2,10 +2,8 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const { Link } = require('react-router-dom')
-const Textarea = require('react-textarea-autosize').default
 
 const Form = require('../form/form')
-const FormStep = require('../form-step/form-step')
 const FormStepLength = require('../form-step-length/form-step-length')
 const FormStepStyle = require('../form-step-style/form-step-style')
 const FormStepCompose = require('../form-step-compose/form-step-compose')
@@ -16,9 +14,6 @@ const Tooltip = require('../tooltip/tooltip')
 const { merge } = require('../../../lib')
 
 const getStyle = require('./compose-external-page.css')
-
-const PrismicReact = require('../../lib/prismic-react')
-const templater = require('../../../lib/templater')
 
 const { postData } = require('../../actions/app')
 
@@ -183,8 +178,7 @@ module.exports = class ComposePage extends React.Component {
         {this.steps.map((step, index, steps) => {
           const {
             name,
-            component: Component,
-            resets
+            component: Component
           } = step
           return (
             <div className={this.style.pageContent} key={name}>

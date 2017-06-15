@@ -2,8 +2,6 @@ const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./form-step.css')
 
-const renderPreActiveText = (text) => <p className={style.preActiveText}>{text}</p>
-
 function renderActiveOption (option, index, style) {
   const optionClass = option.selected ? style.activeOptionSelected : style.activeOption
   const iconContent = option.iconEmoji || (<img src={`/assets/images/${option.icon}`} className={style.activeOptionImage} alt={option.title} />)

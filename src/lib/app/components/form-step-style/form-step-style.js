@@ -26,7 +26,7 @@ const FormStepStyle = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'familiar',
       onClick: (event) => {
         event.stopPropagation()
-          props.onSubmitStep({
+        props.onSubmitStep({
           type: 'familiar',
           title: 'Familar',
           message: 'Keep it casual.'
