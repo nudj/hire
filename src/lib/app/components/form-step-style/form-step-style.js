@@ -4,7 +4,6 @@ const get = require('lodash/get')
 const FormStep = require('../form-step/form-step')
 
 const FormStepStyle = (props) => {
-  const onSubmitStep = props.onSubmitStep('selectStyle')
   const options = [
     {
       iconEmoji: '👭',
@@ -13,7 +12,7 @@ const FormStepStyle = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'bff',
       onClick: (event) => {
         event.stopPropagation()
-        onSubmitStep({
+        props.onSubmitStep({
           type: 'bff',
           title: 'BFFs',
           message: 'You know this person like the back of your hand.'
@@ -27,7 +26,7 @@ const FormStepStyle = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'familiar',
       onClick: (event) => {
         event.stopPropagation()
-          onSubmitStep({
+          props.onSubmitStep({
           type: 'familiar',
           title: 'Familar',
           message: 'Keep it casual.'
@@ -41,7 +40,7 @@ const FormStepStyle = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'professional',
       onClick: (event) => {
         event.stopPropagation()
-        onSubmitStep({
+        props.onSubmitStep({
           type: 'professional',
           title: 'Professional',
           message: 'Stay classy.'

@@ -4,7 +4,6 @@ const get = require('lodash/get')
 const FormStep = require('../form-step/form-step')
 
 const FormStepLength = (props) => {
-  const onSubmitStep = props.onSubmitStep('selectLength')
   const options = [
     {
       icon: 'message-bubble.svg',
@@ -13,7 +12,7 @@ const FormStepLength = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'short',
       onClick: (event) => {
         event.stopPropagation()
-        onSubmitStep({
+        props.onSubmitStep({
           type: 'short',
           title: 'Short and sweet',
           message: 'For getting straight to the point.'
@@ -27,7 +26,7 @@ const FormStepLength = (props) => {
       selected: get(props, `${get(props, 'name')}.type`) === 'long',
       onClick: (event) => {
         event.stopPropagation()
-        onSubmitStep({
+        props.onSubmitStep({
           type: 'long',
           title: 'A bit more detail',
           message: 'For when you need to add extra info.'

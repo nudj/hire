@@ -35,8 +35,6 @@ module.exports = class ComposePage extends React.Component {
     this.state = {active, data, messages, tooltips}
 
     this.onSubmitStep = this.onSubmitStep.bind(this)
-    this.onSubmitComposeMessage = this.onSubmitComposeMessage.bind(this)
-    this.onSubmitSendMessage = this.onSubmitSendMessage.bind(this)
     this.onClickStep = this.onClickStep.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
@@ -51,13 +49,14 @@ module.exports = class ComposePage extends React.Component {
         name: 'selectStyle',
         component: FormStepStyle,
         resets: 'composeMessage'
-      }
-    ]
-    this.steps2 = [
+      },
+      {
+        name: 'composeMessage',
+        component: FormStepCompose
+      },
       {
         name: 'sendMessage',
-        component: FormStepSend,
-        onSubmit: this.onSubmitSendMessage
+        component: FormStepSend
       },
       {
         name: 'nextSteps',
@@ -82,135 +81,6 @@ module.exports = class ComposePage extends React.Component {
     return active
   }
 
-  changedMessage (event) {
-    this.setState({
-      data: merge(this.state.data, {
-        composeMessage: event.target.value
-      })
-    })
-  }
-
-  getComposeMessageBase () {
-    if (!this.state.data.selectLength || !this.state.data.selectStyle) {
-      return ''
-    }
-
-    if (!this.state.messages.length) {
-      return ''
-    }
-
-    const lengthTag = this.state.data.selectLength.type
-    const styleTag = this.state.data.selectStyle.type
-    const prismicMessage = this.state.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
-    const prismicCompose = new PrismicReact(prismicMessage)
-
-    const message = prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
-    const subject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
-
-    return {message, subject}
-  }
-
-  getComposeMessageBaseSubject () {
-    const subject = this.getComposeMessageBase().subject
-    return subject ? this.renderMessage(subject, true) : ''
-  }
-
-  getComposeMessageBaseText () {
-    return this.getComposeMessageBase().message
-  }
-
-  renderActiveOption (option, index) {
-    const iconContent = option.iconEmoji || (<img src={`/assets/images/${option.icon}`} className={this.style.activeOptionImage} alt={option.title} />)
-
-    return (<li className={this.style.activeOption} key={index}>
-      <a className={this.style.activeOptionAction} onClick={option.onClick.bind(this)} href={option.link}>
-        <span className={option.iconEmoji ? this.style.activeOptionIconEmoji : this.style.activeOptionIcon}>{iconContent}</span>
-        <h5 className={this.style.activeOptionTitle}>{option.title}</h5>
-        <p className={this.style.activeOptionText}>{option.text}</p>
-      </a>
-    </li>)
-  }
-
-  renderActiveOptions (options) {
-    return (<ul className={this.style.activeOptionsContainer}>
-      {options.map((option, index) => this.renderActiveOption(option, index))}
-    </ul>)
-  }
-
-  renderCompletedSectionSummary (option) {
-    const title = option.title ? (<h5 className={this.style.completedSectionSummaryTitle}>{option.title}</h5>) : ''
-    const message = option.message
-
-    // Need to support the compose message having multi-line message
-    return (<div className={this.style.completedSectionSummary}>
-      {title}
-      <p className={this.style.completedSectionSummaryText}>{message}</p>
-    </div>)
-  }
-
-  renderMessage (content, textOnly) {
-    const companySlug = get(this.props, 'company.slug', '')
-    const jobSlug = get(this.props, 'job.slug', '')
-
-    const options = {
-      template: content,
-      data: {
-        company: {
-          name: get(this.props, 'company.name', '')
-        },
-        job: {
-          bonus: get(this.props, 'job.bonus', ''),
-          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
-          title: get(this.props, 'job.title', '')
-        },
-        recipient: {
-          firstname: get(this.props, 'recipient.firstName', ''),
-          lastname: get(this.props, 'recipient.lastName', '')
-        },
-        sender: {
-          firstname: get(this.props, 'person.firstName', ''),
-          lastname: get(this.props, 'person.lastName', '')
-        }
-      }
-    }
-
-    if (textOnly) {
-      options.pify = content => content.join('')
-      options.brify = () => '\n'
-    } else {
-      options.pify = this.pify.bind(this)
-      options.tagify = this.tagify.bind(this)
-    }
-
-    return templater.render(options).join('\n\n')
-  }
-
-  pify (para, index, margin = 0) {
-    return `<p class='${this.style.completedSectionSummaryMessageParagraph}' key='para${index}' style="margin-top:${1.5 * margin}rem;">${para.join('')}</p>`
-  }
-
-  tagify (contents, ok) {
-    return `<span class='${ok ? this.style.tagOk : this.style.tagError}'>${contents}</span>`
-  }
-
-  renderComposeMessage () {
-    const message = this.state.data.composeMessage || this.getComposeMessageBaseText()
-
-    return (<div className={this.style.activeContainerCentered}>
-      <div className={this.style.messageContainer}>
-        <Textarea className={this.style.messageTextarea} name='template' value={message} onChange={this.changedMessage.bind(this)} id='message' />
-      </div>
-      <a className={this.style.composeMessageSave} onClick={this.onSubmitComposeMessage}>Next</a>
-    </div>)
-  }
-
-  renderComposedMessage (messageContent) {
-    const message = this.renderMessage(messageContent)
-    return (<div className={this.style.completedSectionSummary}>
-      <div className={this.style.completedSectionSummaryMessage} dangerouslySetInnerHTML={{ __html: message }} />
-    </div>)
-  }
-
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = this.state.tooltips.find(tooltip => tooltip.tags.includes(tooltipTag))
     if (!tooltip || this.state.active !== tooltipTag) {
@@ -221,35 +91,20 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
+  onChangeStep (step) {
+    return (stepData) => {
+      this.setState({
+        data: merge(this.state.data, {[step]: stepData})
+      })
+    }
+  }
+
   onSubmitStep (step) {
     return (stepData) => {
       const data = merge(this.state.data, {[step]: stepData})
       const active = get(this.state, 'active') + 1
       this.saveAndPostData({active, data})
     }
-  }
-
-  onSubmitComposeMessage (event) {
-    event.stopPropagation()
-    const composeMessage = this.state.data.composeMessage || this.getComposeMessageBaseText()
-    const active = get(this.state, 'active') + 1
-    this.saveAndPostData({
-      active,
-      data: merge(this.state.data, {composeMessage})
-    })
-  }
-
-  onSubmitSendMessage (event, sendMessage) {
-    event.preventDefault()
-    const link = event.currentTarget.href
-
-    if (link) {
-      window.open(link)
-    }
-
-    const data = merge(this.state.data, {sendMessage})
-    const active = get(this.state, 'active') + 1
-    this.saveAndPostData({active, data})
   }
 
   saveAndPostData ({active, data}) {
@@ -339,53 +194,12 @@ module.exports = class ComposePage extends React.Component {
                   isActive={this.state.active === index}
                   index={index + 1}
                   {...this.state.data}
-                  onSubmitStep={this.onSubmitStep}
+                  onSubmitStep={this.onSubmitStep(name)}
+                  onChangeStep={this.onChangeStep(name)}
                   messages={this.state.messages}
                   pageData={this.props}
                   onClick={this.onClickStep(step, index, steps)}
                   confirm={this.state.confirm === index && this.renderConfirm()}
-                />
-              </div>
-              <div className={this.style.pageSidebar}>
-                {this.renderTooltip(name)}
-              </div>
-            </div>
-          )
-        })}
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            <FormStep
-              name='composeMessage'
-              isActive={this.state.active === 2}
-              index={3}
-              title='Create message'
-              placeholder='Compose your masterpiece here.'
-              {...this.state.data}
-              content={this.renderComposeMessage.bind(this)}
-              onClick={this.onClickStep({ name: 'composeMessage' }, 2, this.steps)}
-              completed={this.renderComposedMessage.bind(this)}
-            />
-          </div>
-          <div className={this.style.pageSidebar}>
-            {this.renderTooltip('createMessage')}
-          </div>
-        </div>
-        {this.steps2.map((step, index, steps) => {
-          index = index + 3
-          const name = step.name
-          const Component = step.component
-          return (
-            <div className={this.style.pageContent} key={step.name}>
-              <div className={this.style.pageMain}>
-                <Component
-                  name={name}
-                  isActive={this.state.active === index}
-                  index={index + 1}
-                  {...this.state.data}
-                  onSubmitStep={step.onSubmit || this.onSubmitStep}
-                  messages={this.state.messages}
-                  pageData={this.props}
-                  onClick={this.onClickStep(step, index, steps)}
                 />
               </div>
               <div className={this.style.pageSidebar}>

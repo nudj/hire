@@ -1,4 +1,5 @@
 const React = require('react')
+const get = require('lodash/get')
 const Textarea = require('react-textarea-autosize').default
 
 const PrismicReact = require('../../lib/prismic-react')
@@ -12,64 +13,44 @@ class FormStepCompose extends React.Component {
     super(props)
     this.style = getStyle()
     this.state = {}
-    this.onSubmitStep = props.onSubmitStep('composeMessage')
-    this.changedMessage = this.changedMessage.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onChangeMessage = this.onChangeMessage.bind(this)
+    this.renderComposeMessage = this.renderComposeMessage.bind(this)
+    this.renderComposedMessage = this.renderComposedMessage.bind(this)
   }
-  componentDidUpdate () {
-    const tempMessage = this.getComposeMessageBaseText()
-    if (!this.state.tempMessage && tempMessage) {
-      this.setState({tempMessage})
-    }
-  }
+
   render () {
     return <FormStep
       {...this.props}
       title='Create message'
       placeholder='Compose your masterpiece here.'
-      content={() => this.renderComposeMessage(this.props.pageData)}
+      content={this.renderComposeMessage}
       completed={this.renderComposedMessage}
     />
   }
-  renderComposeMessage () {
-    const tempMessage = this.state.tempMessage || this.getComposeMessageBaseText()
-
-    return (<div className={this.style.activeContainerCentered}>
-      <div className={this.style.messageContainer}>
-        <Textarea className={this.style.messageTextarea} name='template' value={tempMessage} onChange={this.changedMessage} id='message' />
-      </div>
-      <a className={this.style.composeMessageSave} onClick={this.onSubmitStep}>Next</a>
-    </div>)
-  }
-
-  renderComposedMessage (messageContent) {
-    const message = renderMessage(messageContent)
-    return (<div className={this.style.completedSectionSummary}>
-      <div className={this.style.completedSectionSummaryMessage} dangerouslySetInnerHTML={{ __html: message }} />
-    </div>)
-  }
 
   renderMessage (content, textOnly) {
-    const companySlug = get(this.props, 'company.slug', '')
-    const jobSlug = get(this.props, 'job.slug', '')
+    const companySlug = get(this.props, 'pageData.company.slug', '')
+    const jobSlug = get(this.props, 'pageData.job.slug', '')
 
     const options = {
       template: content,
       data: {
         company: {
-          name: get(this.props, 'company.name', '')
+          name: get(this.props, 'pageData.company.name', '')
         },
         job: {
-          bonus: get(this.props, 'job.bonus', ''),
-          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
-          title: get(this.props, 'job.title', '')
+          bonus: get(this.props, 'pageData.job.bonus', ''),
+          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`,
+          title: get(this.props, 'pageData.job.title', '')
         },
         recipient: {
-          firstname: get(this.props, 'recipient.firstName', ''),
-          lastname: get(this.props, 'recipient.lastName', '')
+          firstname: get(this.props, 'pageData.recipient.firstName', ''),
+          lastname: get(this.props, 'pageData.recipient.lastName', '')
         },
         sender: {
-          firstname: get(this.props, 'person.firstName', ''),
-          lastname: get(this.props, 'person.lastName', '')
+          firstname: get(this.props, 'pageData.person.firstName', ''),
+          lastname: get(this.props, 'pageData.person.lastName', '')
         }
       }
     }
@@ -93,22 +74,45 @@ class FormStepCompose extends React.Component {
     return `<span class='${ok ? this.style.tagOk : this.style.tagError}'>${contents}</span>`
   }
 
-  changedMessage (event) {
-    const tempMessage = event.target.value
-    this.setState({tempMessage})
+  renderComposeMessage () {
+    const message = this.props.composeMessage || this.getComposeMessageBaseText()
+
+    return (<div className={this.style.activeContainerCentered}>
+      <div className={this.style.messageContainer}>
+        <Textarea className={this.style.messageTextarea} name='template' value={message} onChange={this.onChangeMessage} id='message' />
+      </div>
+      <a className={this.style.composeMessageSave} onClick={this.onSubmit}>Next</a>
+    </div>)
+  }
+
+  onChangeMessage (event) {
+    event.stopPropagation()
+    this.props.onChangeStep(event.target.value)
+  }
+
+  onSubmit (event) {
+    event.stopPropagation()
+    this.props.onSubmitStep(this.props.composeMessage || this.getComposeMessageBaseText())
+  }
+
+  renderComposedMessage (messageContent) {
+    const message = this.renderMessage(messageContent)
+    return (<div className={this.style.completedSectionSummary}>
+      <div className={this.style.completedSectionSummaryMessage} dangerouslySetInnerHTML={{ __html: message }} />
+    </div>)
   }
 
   getComposeMessageBase () {
-    if (!this.props.length || !this.props.style) {
+    if (!this.props.selectLength || !this.props.selectStyle) {
       return ''
     }
 
-    if (!this.props.messages || !this.props.messages.length) {
+    if (!this.props.messages.length) {
       return ''
     }
 
-    const lengthTag = this.props.length.type
-    const styleTag = this.props.style.type
+    const lengthTag = this.props.selectLength.type
+    const styleTag = this.props.selectStyle.type
     const prismicMessage = this.props.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
     const prismicCompose = new PrismicReact(prismicMessage)
 

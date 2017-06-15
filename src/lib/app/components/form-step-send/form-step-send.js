@@ -56,8 +56,14 @@ function getComposeMessageBaseSubject (props) {
   return subject ? renderMessage(subject, props.pageData) : ''
 }
 
+function onSubmitSendMessage (url, onSubmitStep, sendMessage) {
+  if (url) {
+    window.open(url)
+  }
+  onSubmitStep(sendMessage)
+}
+
 const FormStepSend = (props) => {
-  const onSubmitStep = props.onSubmitStep
   const recipient = encodeURIComponent(get(props, 'pageData.recipient.email', 'tech@nudj.com'))
   const defaultSubject = 'I need your help'
   const prismicSubject = getComposeMessageBaseSubject(props)
@@ -73,7 +79,8 @@ const FormStepSend = (props) => {
       text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
       onClick: (event) => {
         event.stopPropagation()
-          onSubmitStep(event, {
+        event.preventDefault()
+        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, {
           type: 'email',
           title: 'Send it via your email app',
           message: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).'
@@ -87,7 +94,8 @@ const FormStepSend = (props) => {
       text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
       onClick: (event) => {
         event.stopPropagation()
-        onSubmitStep(event, {
+        event.preventDefault()
+        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, {
           type: 'gmail',
           title: 'Send it via Gmail',
           message: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.'
