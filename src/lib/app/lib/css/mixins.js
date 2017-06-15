@@ -304,6 +304,7 @@ module.exports.button = merge(headings.pBold, {
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   minWidth: variables.sizing.buttonMinWidth,
+  textAlign: 'center',
   ':disabled': {
     backgroundColor: variables.colors.royalBlueFade,
     cursor: 'default'

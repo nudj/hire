@@ -114,20 +114,22 @@ module.exports = class ComposePage extends React.Component {
   onClickStep (step, index, steps) {
     return (event) => {
       let active = this.state.active
-      let confirm = null
-      if (index < this.state.active) {
-        if (step.resets && !!this.state.data[step.resets]) {
-          confirm = index
-        } else {
+      if (active < 4) { // only allow skipping through steps before sending
+        let confirm = null
+        if (index < this.state.active) {
+          if (step.resets && !!this.state.data[step.resets]) {
+            confirm = index
+          } else {
+            active = index
+          }
+        } else if ((index > this.state.active && !!this.state.data[step.name]) || (steps[index - 1] && !!this.state.data[steps[index - 1].name])) {
           active = index
         }
-      } else if ((index > this.state.active && !!this.state.data[step.name]) || (steps[index - 1] && !!this.state.data[steps[index - 1].name])) {
-        active = index
+        this.setState({
+          active,
+          confirm
+        })
       }
-      this.setState({
-        active,
-        confirm
-      })
     }
   }
 
