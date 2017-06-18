@@ -75,7 +75,7 @@ module.exports = class ComposePage extends React.Component {
     const networkSent = get(this.props, 'networkSent', [])
     const nudjNetwork = get(this.props, 'nudjNetwork', [])
 
-    if (networkSent.length) {
+    if (!nudjNetwork.length || networkSent.length) {
       return (<p className={this.style.copy}>We haven’t found any more relevant people within the nudj network, however, we will send your job to them as soon as we do.</p>)
     }
 
@@ -124,6 +124,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderTooltip()}
           </div>
         </div>
+        <hr className={this.style.sectionDivider} />
         <h3 className={this.style.pageHeadline}>We’ll also nudj these people in our network...</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMainNetwork}>

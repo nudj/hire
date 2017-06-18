@@ -79,7 +79,7 @@ const styles = {
 styles.rowSmall = merge(styles.row, {
   margin: `0 0 ${variables.padding.e} ${variables.padding.e}`,
   marginTop: '0',
-  width: `calc(50% - ${variables.padding.e})`,
+  width: `calc(50% - ${variables.padding.f})`,
   ':first-child': {
     margin: `0 0 ${variables.padding.e} 0`
   },
