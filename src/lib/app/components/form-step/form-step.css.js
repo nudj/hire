@@ -73,9 +73,10 @@ const styles = {
   sectionNumber: sectionNumber,
   sectionNumberActive: sectionNumberActive,
   sectionNumberComplete: merge(sectionNumberActive, {
-    color: variables.colors.royalBlue,
+    backgroundColor: variables.colors.green,
+    color: variables.colors.green,
     '::after': {
-      backgroundImage: `url('/assets/images/ui-24px-outline-1_check.svg')`,
+      backgroundImage: mixins.linkImage('ui-24px-outline-1_check.svg'),
       backgroundPosition: 'center center',
       backgroundRepeat: 'no-repeat',
       backgroundSize: '60%', // ABOMINATION

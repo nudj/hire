@@ -78,7 +78,8 @@ module.exports = class ComposePage extends React.Component {
 
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = this.state.tooltips.find(tooltip => tooltip.tags.includes(tooltipTag))
-    if (!tooltip || this.state.active !== tooltipTag) {
+    const activeName = this.steps[this.state.active].name
+    if (!tooltip || activeName !== tooltipTag) {
       return ('')
     }
     return (<div className={anchorBottom ? this.style.tooltipFloatingBottom : this.style.tooltipFloating}>
