@@ -63,6 +63,7 @@ class FormStep extends React.Component {
     let content = () => <p className={this.style.preActiveText}>{get(this.props, 'placeholder')}</p>
 
     if (isComplete) {
+      stepClass = this.style.sectionComplete
       numberClass = this.style.sectionNumberComplete
       content = get(this.props, 'completed') || renderCompletedSectionSummary
     }
@@ -72,6 +73,7 @@ class FormStep extends React.Component {
       content = get(this.props, 'content') || renderActiveOptions
     }
     if (this.props.confirm) {
+      stepClass = this.style.sectionConfirm
       content = () => this.props.confirm
     }
 
