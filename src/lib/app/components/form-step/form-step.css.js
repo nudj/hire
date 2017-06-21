@@ -18,12 +18,12 @@ const title = merge(mixins.headings.h7, {
 const sectionNumberSize = variables.padding.d
 
 const sectionNumber = merge(mixins.headings.h7, {
-  backgroundColor: variables.colors.midGrey,
+  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.royalBlue}`,
   borderRadius: '100%',
-  color: variables.colors.white,
+  color: variables.colors.royalBlue,
   display: 'inline-block',
   height: sectionNumberSize,
-  lineHeight: sectionNumberSize,
+  lineHeight: `calc(${sectionNumberSize} - ${variables.sizing.baseBorderWidth} * 2)`,
   margin: `0 ${variables.padding.e} 0 0`,
   position: 'relative',
   textAlign: 'center',
@@ -31,7 +31,8 @@ const sectionNumber = merge(mixins.headings.h7, {
 })
 
 const sectionNumberActive = merge(sectionNumber, {
-  backgroundColor: variables.colors.royalBlue
+  backgroundColor: variables.colors.royalBlue,
+  color: variables.colors.white
 })
 
 const activeOptionIcon = {
@@ -69,11 +70,21 @@ const styles = {
     alignItems: 'center',
     display: 'flex'
   }, mixins.cardStyle),
+  sectionComplete: merge({
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex'
+  }, mixins.cardStyleTwo),
+  sectionConfirm: merge({
+    alignItems: 'center',
+    display: 'flex'
+  }, mixins.cardStyle),
   sectionTitle: merge(title),
   sectionNumber: sectionNumber,
   sectionNumberActive: sectionNumberActive,
   sectionNumberComplete: merge(sectionNumberActive, {
     backgroundColor: variables.colors.green,
+    borderColor: variables.colors.green,
     color: variables.colors.green,
     '::after': {
       backgroundImage: mixins.linkImage('ui-24px-outline-1_check.svg'),
