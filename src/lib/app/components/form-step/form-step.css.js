@@ -87,10 +87,10 @@ const styles = {
     borderColor: variables.colors.green,
     color: variables.colors.green,
     '::after': {
-      backgroundImage: mixins.linkImage('ui-24px-outline-1_check.svg'),
+      backgroundImage: mixins.linkImage('ui-16px-1_check.svg'),
       backgroundPosition: 'center center',
       backgroundRepeat: 'no-repeat',
-      backgroundSize: '60%', // ABOMINATION
+      backgroundSize: '75%', // ABOMINATION
       content: `''`,
       display: 'block',
       height: '100%',
