@@ -174,8 +174,25 @@ function jobHandler (req, res, next) {
     'document.tags': ['jobDashboard']
   }
 
+  // Dummy complete data
+  // {"id":"23","firstName":"Jamie","lastName":"Gunson","email":"jamie@nudj.co","url":"http://test.com/","title":"Head of Product","type":"external","company":"nudj","status":"user"},
+  // {"id":"23","firstName":"Jamie","lastName":"Gunson","email":"jamie@nudj.co","url":"http://test.com/","title":"Head of Product","type":"external","company":"nudj","status":"user"}
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => sentExternal.getAllComplete(data, data.person.id, data.job.id))
+    .then(data => {
+      // Add internal later
+      data.sentInternalComplete = []
+      return promiseMap(data)
+    })
+    .then(data => {
+      const sentExternalComplete = data.sentExternalComplete.map(sent => merge(sent, {source: 'external'}))
+      const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
+
+      // somehow interleave w/sorting sentExternal & sentInternal
+      data.sentComplete = [].concat(sentExternalComplete, sentInternalComplete)
+      return promiseMap(data)
+    })
     .then(data => {
       data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
@@ -318,6 +335,7 @@ function externalSaveHandler (req, res, next) {
 
 router.get('/', ensureLoggedIn, jobsHandler)
 router.get('/:jobSlug', ensureLoggedIn, jobHandler)
+router.get('/:jobSlug/nudj', ensureLoggedIn, jobHandler)
 router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)

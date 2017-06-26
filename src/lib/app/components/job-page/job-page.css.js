@@ -33,6 +33,9 @@ module.exports = css(merge(mixins.pageLayout, {
     textDecoration: 'none'
   },
   copyLink: mixins.buttonSecondary,
+  nudjLink: merge({
+    margin: `0 0 0 ${variables.padding.d}`
+  }, mixins.button),
   pageMain: {
     display: 'flex',
     justifyContent: 'flex-start'
@@ -57,5 +60,10 @@ module.exports = css(merge(mixins.pageLayout, {
   description: merge(mixins.typography.p),
   button: merge(mixins.button, {
     display: 'inline-block'
-  })
+  }),
+  network: merge({}, mixins.deList, {
+    padding: `0 ${variables.padding.d}`,
+    width: '100%'
+  }),
+  resendLink: mixins.button
 }))

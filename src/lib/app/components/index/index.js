@@ -7,6 +7,7 @@ const Message = require('../message/message')
 const Notification = require('../notification/notification')
 const JobsPage = require('../jobs-page/jobs-page')
 const JobPage = require('../job-page/job-page')
+const Nudj = require('../nudj/nudj')
 const ComposePage = require('../compose-page/compose-page')
 const SelectReferrerExternalPage = require('../select-referrer-external-page/select-referrer-external-page')
 const ComposeExternalPage = require('../compose-external-page/compose-external-page')
@@ -47,6 +48,7 @@ const Index = () => {
         <Switch>
           <Route exact path='/' component={PageWithState(JobsPage)} />
           <Route exact path='/:jobSlug' component={PageWithState(JobPage)} />
+          <Route exact path='/:jobSlug/nudj' component={PageWithState(Nudj)} />
           <Route exact path='/:jobSlug/internal' component={PageWithState(ComposePage)} />
           <Route exact path='/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
           <Route exact path='/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
