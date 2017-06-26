@@ -167,6 +167,7 @@ module.exports = class ComposePage extends React.Component {
 
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
+    const data = this.state.data
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
@@ -183,6 +184,7 @@ module.exports = class ComposePage extends React.Component {
             name,
             component: Component
           } = step
+          const canSkipTo = !!(steps[index - 1] && !!data[steps[index - 1].name])
           return (
             <div className={this.style.pageContent} key={name}>
               <div className={this.style.pageMain}>
@@ -197,6 +199,7 @@ module.exports = class ComposePage extends React.Component {
                   pageData={this.props}
                   onClick={this.onClickStep(step, index, steps)}
                   confirm={this.state.confirm === index && this.renderConfirm()}
+                  canSkipTo={canSkipTo}
                 />
               </div>
               <div className={this.style.pageSidebar}>

@@ -57,11 +57,15 @@ class FormStep extends React.Component {
     const options = get(this.props, 'options')
     const data = get(this.props, name)
     const isComplete = !!data
+    const canSkipTo = get(this.props, 'canSkipTo')
 
     let stepClass = this.style.section
     let numberClass = this.style.sectionNumber
     let content = () => <p className={this.style.preActiveText}>{get(this.props, 'placeholder')}</p>
 
+    if (canSkipTo) {
+      stepClass = this.style.sectionCanSkipTo
+    }
     if (isComplete) {
       stepClass = this.style.sectionComplete
       numberClass = this.style.sectionNumberComplete
