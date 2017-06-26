@@ -66,6 +66,11 @@ const styles = {
     alignItems: 'center',
     display: 'flex'
   }, mixins.cardStyleTwo),
+  sectionCanSkipTo: merge({
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex'
+  }, mixins.cardStyleTwo),
   sectionActive: merge({
     alignItems: 'center',
     display: 'flex'
