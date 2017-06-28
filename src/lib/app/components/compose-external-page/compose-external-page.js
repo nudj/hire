@@ -22,7 +22,15 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const data = get(this.props, 'sentMessage', {})
+    let data = get(this.props, 'sentMessage', {})
+
+    // Message already sent, force-starting a new message
+    if (data.sendMessage && data.sendMessage.message) {
+      const url = `/${get(this.props, 'job.slug')}/external/forced/${get(this.props, 'personId')}`
+      data = {}
+      this.props.dispatch(postData({ url, data }))
+    }
+
     const active = this.activeFromData(data)
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])

@@ -311,7 +311,7 @@ function externalComposeHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function externalSaveHandler (req, res, next) {
+function externalSaveHandler ({req, res, next, forced = false}) {
   const hirerId = req.session.data.person
   const personId = req.params.personId
 
@@ -326,11 +326,16 @@ function externalSaveHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(job => promiseMap(merge(data, job)))
-    .then(data => sentExternal.post(data.person.id, data.job.id, data.personId, data.sentMessage))
+    .then(data => sentExternal.post(data.person.id, data.job.id, data.personId, data.sentMessage, forced))
     .then(result => getExternalComposeProperties(data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
+}
+
+function externalForceSaveHandler (req, res, next) {
+  const forced = true
+  externalSaveHandler({req, res, next, forced})
 }
 
 router.get('/', ensureLoggedIn, jobsHandler)
@@ -340,7 +345,8 @@ router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)
 router.get('/:jobSlug/external/:personId', ensureLoggedIn, externalComposeHandler)
-router.post('/:jobSlug/external/:personId', ensureLoggedIn, externalSaveHandler)
+router.post('/:jobSlug/external/forced/:personId', ensureLoggedIn, externalForceSaveHandler)
+router.post('/:jobSlug/external/:personId', ensureLoggedIn, (req, res, next) => externalSaveHandler({req, res, next}))
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

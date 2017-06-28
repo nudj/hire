@@ -1,11 +1,16 @@
 let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 
+const isAfter = require('date-fns/is_after')
+
 const common = require('./common')
 
 function fetchSentMessage (hirerId, jobId, personId) {
   return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}`)
-    .then(results => results.pop())
+    .then(results => {
+      results.sort((a, b) => isAfter(a.modified, b.modified) ? 1 : -1)
+      return results.pop()
+    })
 }
 
 function fetchSentMessagesForJob (data, hirerId, jobId) {
@@ -17,14 +22,14 @@ function fetchCompleteSentMessagesForJob (data, hirerId, jobId) {
     .then(results => results.filter(result => !!result.sentMessage.sendMessage))
 }
 
-function saveSentMessage (hirerId, jobId, personId, sentMessage) {
+function saveSentMessage (hirerId, jobId, personId, sentMessage, forced = false) {
   const data = {hirerId, jobId, personId, sentMessage}
   let url = 'sentExternal'
   let method = 'post'
 
   return fetchSentMessage(hirerId, jobId, personId)
     .then(result => {
-      if (result) {
+      if (result && !forced) {
         url = `${url}/${result.id}`
         method = 'patch'
       }
@@ -53,6 +58,6 @@ module.exports.getAllComplete = function (data, hirerId, jobId) {
   return promiseMap(data)
 }
 
-module.exports.post = function (hirerId, jobId, personId, sentMessage) {
-  return saveSentMessage(hirerId, jobId, personId, sentMessage)
+module.exports.post = function (hirerId, jobId, personId, sentMessage, forced = false) {
+  return saveSentMessage(hirerId, jobId, personId, sentMessage, forced)
 }
