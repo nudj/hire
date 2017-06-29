@@ -5,8 +5,12 @@ const isAfter = require('date-fns/is_after')
 
 const common = require('./common')
 
-function fetchSentMessage (hirerId, jobId, personId) {
+function fetchSentMessages (hirerId, jobId, personId) {
   return request(`sentExternal/filter?hirerId=${hirerId}&jobId=${jobId}&personId=${personId}`)
+}
+
+function fetchLatestSentMessage (hirerId, jobId, personId) {
+  return fetchSentMessages(hirerId, jobId, personId)
     .then(results => {
       results.sort((a, b) => isAfter(a.modified, b.modified) ? 1 : -1)
       return results.pop()
@@ -27,7 +31,7 @@ function saveSentMessage (hirerId, jobId, personId, sentMessage, forced = false)
   let url = 'sentExternal'
   let method = 'post'
 
-  return fetchSentMessage(hirerId, jobId, personId)
+  return fetchLatestSentMessage(hirerId, jobId, personId)
     .then(result => {
       if (result && !forced) {
         url = `${url}/${result.id}`
@@ -40,7 +44,7 @@ function saveSentMessage (hirerId, jobId, personId, sentMessage, forced = false)
 }
 
 module.exports.get = function (data, hirerId, jobId, personId) {
-  return fetchSentMessage(hirerId, jobId, personId)
+  return fetchLatestSentMessage(hirerId, jobId, personId)
     .then(result => (result && result.sentMessage) ? result.sentMessage : result)
 }
 

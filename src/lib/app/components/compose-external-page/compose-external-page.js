@@ -28,7 +28,7 @@ module.exports = class ComposePage extends React.Component {
     if (data.sendMessage && data.sendMessage.message) {
       const url = `/${get(this.props, 'job.slug')}/external/forced/${get(this.props, 'personId')}`
       data = {}
-      this.props.dispatch(postData({ url, data }))
+      process.nextTick(() => this.props.dispatch(postData({ url, data })))
     }
 
     const active = this.activeFromData(data)
