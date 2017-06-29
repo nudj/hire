@@ -10,6 +10,53 @@ const Tooltip = require('../tooltip/tooltip')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 const RowItem = require('../row-item/row-item')
 
+function renderJobActivitiy ({activity, style}) {
+  let trendStyle = style.jobActivityHighlightPositive
+
+  if (activity.trend === -1) {
+    trendStyle = style.jobActivityHighlightNegative
+  } else if (activity.trend === 0) {
+    trendStyle = style.jobActivityHighlightNeutral
+  }
+
+  return (<div className={style.jobActivity}>
+    <h4 className={style.jobActivityTitle}>{activity.title}</h4>
+    <p className={style.jobActivitySummary}><span className={trendStyle}>{activity.thisWeek}</span> in the last week</p>
+    <p className={style.jobActivityFooter}>{activity.total} in total</p>
+  </div>)
+}
+
+function getActivityData (title, data) {
+  const activityData = {
+    title: title,
+    thisWeek: data.thisWeek,
+    total: data.total,
+    trend: data.trend
+  }
+  return activityData
+}
+
+function getActivitesData ({props}) {
+  const pageViewData = get(props, 'activities.pageViews', {})
+  const referrerData = get(props, 'activities.referrers', {})
+  const applicationData = get(props, 'activities.applications', {})
+
+  const pageViews = getActivityData('Page views', pageViewData)
+  const referrers = getActivityData('Referrers', referrerData)
+  const applications = getActivityData('Applications', applicationData)
+
+  return {pageViews, referrers, applications}
+}
+
+function renderJobActivities ({props, style}) {
+  const {referrers, applications} = getActivitesData({props})
+
+  return (<div className={style.jobActivities}>
+    {renderJobActivitiy({ activity: referrers, style })}
+    {renderJobActivitiy({ activity: applications, style })}
+  </div>)
+}
+
 function renderSentListItem ({jobSlug, person, index, style}) {
   const personId = get(person, 'id', '')
   const firstName = get(person, 'firstName', '')
@@ -69,7 +116,9 @@ const JobPage = (props) => {
   // We only need one entry for each person
   const sent = sentComplete.length > 1 ? sentComplete.reduce(reduceSentComplete) : sentComplete
   const sentList = renderSentList({sent, props, style})
-  const plural = sent.length > 1 ? 'people' : 'person'
+  const plural = sent.length === 1 ? 'person' : 'people'
+
+  const jobActivity = renderJobActivities({props, style})
 
   return (
     <div className={style.pageBody}>
@@ -83,9 +132,18 @@ const JobPage = (props) => {
         <CopyToClipboard className={style.copyLink} data-clipboard-text={`https://nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</CopyToClipboard>
         <Link className={style.nudjLink} to={nudjLink}>nudj job</Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>So far you've asked {sent.length} {plural}</h3>
       <div className={style.pageContent}>
-        {sentList}
+        <div className={style.pageMainContainer}>
+          <h3 className={style.pageHeadline}>Job activity</h3>
+          <div className={style.pageMain}>
+            {jobActivity}
+          </div>
+          <hr className={style.sectionDivider} />
+          <h3 className={style.pageHeadline}>So far you've asked {sent.length} {plural}</h3>
+          <div className={style.pageMain}>
+            {sentList}
+          </div>
+        </div>
         <div className={style.pageSidebar}>
           {tooltip ? <Tooltip {...tooltip} /> : ''}
         </div>

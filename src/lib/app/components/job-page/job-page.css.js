@@ -27,6 +27,10 @@ const cardContent = {
   }
 }
 
+const jobActivityHighlight = merge({}, mixins.pageLayout.pageHeadline, {
+  padding: '0'
+})
+
 module.exports = css(merge(mixins.pageLayout, {
   headerLink: {
     color: variables.colors.charcoal,
@@ -36,9 +40,9 @@ module.exports = css(merge(mixins.pageLayout, {
   nudjLink: merge({
     margin: `0 0 0 ${variables.padding.d}`
   }, mixins.button),
-  pageMain: {
-    display: 'flex',
-    justifyContent: 'flex-start'
+  pageMain: {},
+  pageMainContainer: {
+    flexGrow: '1'
   },
   internal: cardStyle,
   external: cardStyle,
@@ -62,8 +66,30 @@ module.exports = css(merge(mixins.pageLayout, {
     display: 'inline-block'
   }),
   network: merge({}, mixins.deList, {
-    padding: `0 ${variables.padding.d}`,
+    padding: '0',
     width: '100%'
   }),
-  resendLink: mixins.button
+  resendLink: mixins.button,
+  sectionDivider: merge({}, mixins.sectionDivider, {
+    marginTop: variables.padding.c
+  }),
+  jobActivities: {
+    display: 'flex'
+  },
+  jobActivity: merge({}, cardStyle, {
+    flexGrow: '1',
+    textAlign: 'left'
+  }),
+  jobActivityTitle: mixins.typography.p,
+  jobActivitySummary: mixins.typography.p,
+  jobActivityHighlightPositive: jobActivityHighlight,
+  jobActivityHighlightNegative: merge({}, jobActivityHighlight, {
+    color: variables.colors.midRed
+  }),
+  jobActivityHighlightNeutral: merge({}, jobActivityHighlight, {
+    color: variables.colors.midGrey
+  }),
+  jobActivityFooter: merge({}, mixins.headings.small, {
+    color: variables.colors.lightGrey
+  })
 }))
