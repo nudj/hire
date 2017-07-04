@@ -54,7 +54,7 @@ let dummyData = dummy({
   },
   referrals: {
     schema: schemas.referrals,
-    count: 5
+    count: 2
   },
   applications: {
     schema: schemas.applications,

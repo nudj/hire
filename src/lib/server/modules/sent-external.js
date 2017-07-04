@@ -1,8 +1,6 @@
 let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 
-const isAfter = require('date-fns/is_after')
-
 const common = require('./common')
 
 function fetchSentMessages (hirerId, jobId, personId) {
@@ -12,7 +10,7 @@ function fetchSentMessages (hirerId, jobId, personId) {
 function fetchLatestSentMessage (hirerId, jobId, personId) {
   return fetchSentMessages(hirerId, jobId, personId)
     .then(results => {
-      results.sort((a, b) => isAfter(a.modified, b.modified) ? 1 : -1)
+      results.sort(common.sortByModified)
       return results.pop()
     })
 }

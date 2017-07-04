@@ -4,9 +4,6 @@ const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
-const isThisWeek = require('date-fns/is_this_week')
-const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
-
 const logger = require('../lib/logger')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
@@ -171,48 +168,6 @@ function jobsHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function getJobActivity (dataCall, dataActivityKey) {
-  const today = new Date()
-
-  const activity = {
-    lastWeek: 0,
-    thisWeek: 0,
-    total: 0,
-    trend: 0
-  }
-
-  dataCall.then(dataActivity => {
-    const data = dataActivity[dataActivityKey]
-
-    activity.total = data.length
-    activity.thisWeek = data.filter(entry => isThisWeek(entry.created)).length
-    activity.lastWeek = data.filter(entry => differenceInCalendarWeeks(entry.created, today) === -1).length
-
-    if (activity.thisWeek < activity.lastWeek) {
-      activity.trend = -1
-    } else if (activity.thisWeek > activity.lastWeek) {
-      activity.trend = 1
-    }
-  })
-
-  return activity
-}
-
-function getJobActivities (data, jobId) {
-  const applications = getJobActivity(jobs.getApplications({}, data.job.id), 'applications')
-  const referrers = getJobActivity(jobs.getReferrals({}, data.job.id), 'referrals')
-
-  const pageViews = {
-    lastWeek: 0,
-    thisWeek: 0,
-    total: 0,
-    trend: 0
-  }
-
-  const activities = { applications, referrers, pageViews }
-  return promiseMap(activities)
-}
-
 function jobHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -222,21 +177,41 @@ function jobHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => sentExternal.getAllComplete(data, data.person.id, data.job.id))
+    .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => {
       // Add internal later
       data.sentInternalComplete = []
       return promiseMap(data)
     })
     .then(data => {
-      const sentExternalComplete = data.sentExternalComplete.map(sent => merge(sent, {source: 'external'}))
+      const baseReferrals = data.referrals.map(referral => {
+        const referrals = data.referrals.filter(child => child.referralId === referral.id).length
+        const source = 'referral'
+        return merge(referral, { referrals, source })
+      })
+
+      const sentExternalComplete = data.sentExternalComplete.map(sent => {
+        const correspondingReferral = baseReferrals.find(referral => referral.personId === sent.id)
+        return merge({}, correspondingReferral || {}, sent, {source: 'external'})
+      })
+
+      // Doesn't matter right now
       const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
 
-      // somehow interleave w/sorting sentExternal & sentInternal
-      data.sentComplete = [].concat(sentExternalComplete, sentInternalComplete)
+      const remainingReferrals = baseReferrals.filter(referral => {
+        const foundReferrals = sentExternalComplete.filter(sent => sent.id === referral.personId)
+        return !foundReferrals.length
+      })
+
+      // somehow interleave w/sorting sentExternal & sentInternal & now referrals
+      const sentComplete = [].concat(sentExternalComplete, sentInternalComplete, remainingReferrals)
+      sentComplete.sort(common.sortByModified)
+      data.sentComplete = sentComplete
+
       return promiseMap(data)
     })
     .then(data => {
-      data.activities = getJobActivities(data, data.job.id)
+      data.activities = jobs.getJobActivities(data, data.job.id)
       return promiseMap(data)
     })
     .then(data => {

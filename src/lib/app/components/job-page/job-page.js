@@ -62,21 +62,27 @@ function renderSentListItem ({jobSlug, person, index, style}) {
   const firstName = get(person, 'firstName', '')
   const lastName = get(person, 'lastName', '')
   const source = get(person, 'source', '')
+  const referrals = get(person, 'referrals', 0).toString()
 
   // internal - how to specify someone?
   const resendLink = source === 'external' ? `/${jobSlug}/external/${get(person, 'id')}` : `/${jobSlug}/internal`
   const resendButton = (<Link className={style.button} to={resendLink}>Resend</Link>)
+  const actions = source === 'referral' ? [] : [resendButton]
 
+  // Need to change this RowItem to use a table or something - alignment and also column headings
   return (<RowItem
     key={`${personId}_${index}`}
     rowKey={`${personId}_${index}`}
     title={`${firstName} ${lastName}`}
-    details={[{
-      description: source
-    }]}
-    actions={[
-      resendButton
+    details={[
+      {
+        description: source
+      },
+      {
+        description: referrals
+      }
     ]}
+    actions={actions}
   />)
 }
 
