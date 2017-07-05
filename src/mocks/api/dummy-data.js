@@ -58,7 +58,7 @@ let dummyData = dummy({
   },
   applications: {
     schema: schemas.applications,
-    count: 5
+    count: 2
   },
   hirers: {
     schema: schemas.hirers,

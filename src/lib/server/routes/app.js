@@ -168,6 +168,86 @@ function jobsHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function compoundCount ({accumulator, current, compoundKey}) {
+  if (!current || !current[compoundKey]) {
+    return accumulator
+  }
+
+  const index = current[compoundKey]
+  const existing = accumulator[index]
+  accumulator[index] = existing ? existing + 1 : 1
+  return accumulator
+}
+
+function reduceChildrenFromParent ({accumulator, current, parentKey}) {
+  const parentId = current[parentKey]
+  if (!parentId) {
+    return accumulator
+  }
+  if (!accumulator[parentId]) {
+    accumulator[parentId] = []
+  }
+  accumulator[parentId].push(current.id)
+  accumulator[parentId].sort()
+  return accumulator
+}
+
+function childCompoundCounting (children, applicationCounts, referralCounts, family, initial) {
+  return (children || []).reduce((accumulator, child) => {
+    return childCompoundCounting(family[child], applicationCounts, referralCounts, family, {
+      applications: accumulator.applications + (applicationCounts[child] || 0),
+      referrals: accumulator.referrals + (referralCounts[child] || 0)
+    })
+  }, initial)
+}
+
+function compoundCounting ({family, familyTotals, parent, applicationCounts, referralCounts}) {
+  const children = family[parent]
+  const initial = {
+    applications: applicationCounts[parent] || 0,
+    referrals: referralCounts[parent] || 0
+  }
+  const totals = childCompoundCounting(children, applicationCounts, referralCounts, family, initial)
+  familyTotals[parent] = totals
+}
+
+function aggregateSent (data) {
+  const compoundKey = 'referralId'
+
+  // Get the parent -> children relationships
+  const family = data.referrals.reduce((accumulator, current) => reduceChildrenFromParent({accumulator, current, parentKey: compoundKey}), {})
+
+  // Count the total applications and referrals for each referralId
+  const applicationCounts = data.applications.reduce((accumulator, current) => compoundCount({accumulator, current, compoundKey}), {})
+  const referralCounts = data.referrals.reduce((accumulator, current) => compoundCount({accumulator, current, compoundKey}), {})
+
+  // Count the compound number of referrals and applications for each referralId (include the counts of their decendents)
+  const familyTotals = {}
+  Object.keys(family).forEach(parent => compoundCounting({family, familyTotals, parent, applicationCounts, referralCounts}))
+
+  const sentExternalComplete = data.sentExternalComplete.map(sent => {
+    return merge({}, sent, {source: 'external'})
+  })
+
+  // Doesn't matter right now
+  const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
+
+  // Concat and sort external and external
+  const sentComplete = [].concat(sentExternalComplete, sentInternalComplete)
+  sentComplete.sort(common.sortByModified)
+
+  data.sentComplete = sentComplete.map(complete => {
+    // there should be only one person per referral
+    const referral = data.referrals.find(referral => referral.personId === complete.id)
+    const referralAggregate = familyTotals[referral.id]
+    const totalApplications = referralAggregate.applications || 0
+    const totalReferrals = referralAggregate.referrals || 0
+    return merge({}, complete, {totalApplications, totalReferrals})
+  })
+
+  return promiseMap(data)
+}
+
 function jobHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -178,38 +258,13 @@ function jobHandler (req, res, next) {
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => sentExternal.getAllComplete(data, data.person.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
+    .then(data => jobs.getApplications(data, data.job.id))
     .then(data => {
       // Add internal later
       data.sentInternalComplete = []
       return promiseMap(data)
     })
-    .then(data => {
-      const baseReferrals = data.referrals.map(referral => {
-        const referrals = data.referrals.filter(child => child.referralId === referral.id).length
-        const source = 'referral'
-        return merge(referral, { referrals, source })
-      })
-
-      const sentExternalComplete = data.sentExternalComplete.map(sent => {
-        const correspondingReferral = baseReferrals.find(referral => referral.personId === sent.id)
-        return merge({}, correspondingReferral || {}, sent, {source: 'external'})
-      })
-
-      // Doesn't matter right now
-      const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
-
-      const remainingReferrals = baseReferrals.filter(referral => {
-        const foundReferrals = sentExternalComplete.filter(sent => sent.id === referral.personId)
-        return !foundReferrals.length
-      })
-
-      // somehow interleave w/sorting sentExternal & sentInternal & now referrals
-      const sentComplete = [].concat(sentExternalComplete, sentInternalComplete, remainingReferrals)
-      sentComplete.sort(common.sortByModified)
-      data.sentComplete = sentComplete
-
-      return promiseMap(data)
-    })
+    .then(data => aggregateSent(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
       return promiseMap(data)

@@ -106,7 +106,20 @@ module.exports.compose = function (data, jobSlug, recipients) {
 }
 
 module.exports.getApplications = function (data, jobId) {
-  return fetchJobApplications(data, jobId)
+  data.applications = request(`applications/filter?jobId=${jobId}`)
+    .then(applications => Promise.all(applications.map(application => {
+      return common.fetchPersonFromFragment(application.personId)
+        .then(person => {
+          const personDetails = {
+            firstName: person.firstName,
+            lastName: person.lastName,
+            email: person.email
+          }
+          return merge({}, application, personDetails)
+        })
+    })))
+
+  return promiseMap(data)
 }
 
 module.exports.getReferrals = function (data, jobId) {
