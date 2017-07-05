@@ -239,7 +239,7 @@ function aggregateSent (data) {
   data.sentComplete = sentComplete.map(complete => {
     // there should be only one person per referral
     const referral = data.referrals.find(referral => referral.personId === complete.id)
-    const referralAggregate = familyTotals[referral.id]
+    const referralAggregate = referral && familyTotals[referral.id] ? familyTotals[referral.id] : {}
     const totalApplications = referralAggregate.applications || 0
     const totalReferrals = referralAggregate.referrals || 0
     return merge({}, complete, {totalApplications, totalReferrals})
