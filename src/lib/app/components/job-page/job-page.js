@@ -79,33 +79,33 @@ function renderSentListItem ({jobSlug, person, index, style}) {
   }
 
   // Need to change this RowItem to use a table or something - alignment and also column headings
-  return (<RowItem
-    key={`${personId}_${index}`}
-    rowKey={`${personId}_${index}`}
-    title={`${firstName} ${lastName}`}
-    details={[
-      {
-        description: source
-      },
-      {
-        description: status
-      },
-      {
-        description: referrals
-      },
-      {
-        description: applications
-      }
-    ]}
-    actions={actions}
-  />)
+  return (<tr className={style.networkRow} key={`${personId}_${index}`}>
+    <td className={style.networkCellName}>{`${firstName} ${lastName}`}</td>
+    <td className={style.networkCellCapitalise}>{source}</td>
+    <td className={style.networkCell}>{status}</td>
+    <td className={style.networkCell}>{referrals}</td>
+    <td className={style.networkCell}>{applications}</td>
+    <td className={style.networkCellActions}>{actions}</td>
+  </tr>)
 }
 
 function renderSentList ({sent, props, style}) {
   const jobSlug = get(props, 'job.slug', '')
-  return (<ul className={style.network}>
-    {sent.map((person, index) => renderSentListItem({jobSlug, person, index, style}))}
-  </ul>)
+  return (<table className={style.network}>
+    <thead>
+      <tr className={style.networkRow}>
+        <th className={style.networkHead}>Name</th>
+        <th className={style.networkHead}>Source</th>
+        <th className={style.networkHead}>Status</th>
+        <th className={style.networkHead}>Referrals</th>
+        <th className={style.networkHead}>Applications</th>
+        <th className={style.networkHead} />
+      </tr>
+    </thead>
+    <tbody>
+      {sent.map((person, index) => renderSentListItem({jobSlug, person, index, style}))}
+    </tbody>
+  </table>)
 }
 
 function reduceSentComplete (accumulator, person) {
