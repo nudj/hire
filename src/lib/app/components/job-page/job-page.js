@@ -8,7 +8,6 @@ const getStyle = require('./job-page.css')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
-const RowItem = require('../row-item/row-item')
 
 function renderJobActivitiy ({activity, style}) {
   let trendStyle = style.jobActivityHighlightPositive
