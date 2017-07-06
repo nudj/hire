@@ -6,7 +6,8 @@ const RowItem = (props) => {
   const style = getStyle()
 
   const rowClass = props.rowClass || 'row'
-  const key = get(props, 'key', '') || get(props, 'rowKey', '')
+  const rowKey = get(props, 'rowKey', '')
+  const key = get(props, 'key', rowKey)
 
   return (
     <li className={style[rowClass]} key={key}>

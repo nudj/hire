@@ -1,7 +1,7 @@
-const merge = require('lodash/merge')
 const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
 
+const { merge } = require('../../lib')
 let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 const common = require('./common')
@@ -115,7 +115,7 @@ module.exports.getApplications = function (data, jobId) {
             lastName: person.lastName,
             email: person.email
           }
-          return merge({}, application, personDetails)
+          return merge(application, personDetails)
         })
     })))
 
@@ -132,7 +132,7 @@ module.exports.getReferrals = function (data, jobId) {
             lastName: person.lastName,
             email: person.email
           }
-          return merge({}, referral, personDetails)
+          return merge(referral, personDetails)
         })
     })))
 

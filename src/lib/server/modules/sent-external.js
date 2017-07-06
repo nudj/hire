@@ -24,26 +24,22 @@ function fetchCompleteSentMessagesForJob (data, hirerId, jobId) {
     .then(results => results.filter(result => !!result.sentMessage.sendMessage))
 }
 
-function saveSentMessage (hirerId, jobId, personId, sentMessage, forced = false) {
+function saveSentMessage (hirerId, jobId, personId, sentMessage, id) {
   const data = {hirerId, jobId, personId, sentMessage}
   let url = 'sentExternal'
   let method = 'post'
 
-  return fetchLatestSentMessage(hirerId, jobId, personId)
-    .then(result => {
-      if (result && !forced) {
-        url = `${url}/${result.id}`
-        method = 'patch'
-      }
+  if (id) {
+    url = `${url}/${id}`
+    method = 'patch'
+  }
 
-      const options = { data, method }
-      return request(url, options)
-    })
+  const options = { data, method }
+  return request(url, options)
 }
 
 module.exports.get = function (data, hirerId, jobId, personId) {
   return fetchLatestSentMessage(hirerId, jobId, personId)
-    .then(result => (result && result.sentMessage) ? result.sentMessage : result)
 }
 
 module.exports.getAll = function (data, hirerId, jobId) {
@@ -60,6 +56,10 @@ module.exports.getAllComplete = function (data, hirerId, jobId) {
   return promiseMap(data)
 }
 
-module.exports.post = function (hirerId, jobId, personId, sentMessage, forced = false) {
-  return saveSentMessage(hirerId, jobId, personId, sentMessage, forced)
+module.exports.patch = function (hirerId, jobId, personId, sentMessage, id) {
+  return saveSentMessage(hirerId, jobId, personId, sentMessage, id)
+}
+
+module.exports.post = function (hirerId, jobId, personId, sentMessage) {
+  return saveSentMessage(hirerId, jobId, personId, sentMessage)
 }

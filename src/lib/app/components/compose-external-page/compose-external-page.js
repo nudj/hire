@@ -22,20 +22,13 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    let data = get(this.props, 'sentMessage', {})
-
-    // Message already sent, force-starting a new message
-    if (data.sendMessage && data.sendMessage.message) {
-      const url = `/${get(this.props, 'job.slug')}/external/forced/${get(this.props, 'personId')}`
-      data = {}
-      process.nextTick(() => this.props.dispatch(postData({ url, data })))
-    }
-
+    const id = get(this.props, 'id')
+    const data = get(this.props, 'sentMessage', {})
     const active = this.activeFromData(data)
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])
 
-    this.state = {active, data, messages, tooltips}
+    this.state = {active, data, id, messages, tooltips}
 
     this.onSubmitStep = this.onSubmitStep.bind(this)
     this.onClickStep = this.onClickStep.bind(this)
@@ -66,6 +59,11 @@ module.exports = class ComposePage extends React.Component {
         component: FormStepNext
       }
     ]
+  }
+
+  componentWillReceiveProps (props) {
+    const id = get(props, 'id')
+    this.setState({ id })
   }
 
   activeFromData (data) {
@@ -113,10 +111,16 @@ module.exports = class ComposePage extends React.Component {
 
   saveAndPostData ({active, data}) {
     this.setState({active, data}, () => {
-      this.props.dispatch(postData({
-        url: `/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`,
-        data: this.state.data
-      }))
+      let url = `/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`
+      let method = 'post'
+      const data = this.state.data
+
+      if (this.state.id) {
+        url = `${url}/${this.state.id}`
+        method = 'patch'
+      }
+
+      this.props.dispatch(postData({ url, data, method }))
     })
   }
 

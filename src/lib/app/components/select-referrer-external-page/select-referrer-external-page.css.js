@@ -26,7 +26,7 @@ const styles = {
   },
   nudjButton: mixins.button,
   continueButton: mixins.buttonSecondary,
-  sectionDivider: merge({}, mixins.sectionDivider, {
+  sectionDivider: merge(mixins.sectionDivider, {
     [mixins.breakpoints.l]: {
       margin: `0 ${mainNetworkPaddingRight} 0 ${variables.padding.d}`
     }

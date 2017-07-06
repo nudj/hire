@@ -1,9 +1,9 @@
 const express = require('express')
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
+const { merge } = require('../../lib')
 const logger = require('../lib/logger')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
@@ -226,7 +226,7 @@ function aggregateSent (data) {
   Object.keys(family).forEach(parent => compoundCounting({family, familyTotals, parent, applicationCounts, referralCounts}))
 
   const sentExternalComplete = data.sentExternalComplete.map(sent => {
-    return merge({}, sent, {source: 'external'})
+    return merge(sent, {source: 'external'})
   })
 
   // Doesn't matter right now
@@ -242,7 +242,7 @@ function aggregateSent (data) {
     const referralAggregate = referral && familyTotals[referral.id] ? familyTotals[referral.id] : {}
     const totalApplications = referralAggregate.applications || 0
     const totalReferrals = referralAggregate.referrals || 0
-    return merge({}, complete, {totalApplications, totalReferrals})
+    return merge(complete, {totalApplications, totalReferrals})
   })
 
   return promiseMap(data)
@@ -367,9 +367,22 @@ function getExternalComposeProperties (data) {
   return network.getById(data, data.person.id, data.job.id, data.personId)
     .then(data => {
       data.recipient = common.fetchPersonFromFragment(data.personId)
-      data.sentMessage = sentExternal.get(data, data.person.id, data.job.id, data.personId)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)
+      return promiseMap(data)
+    })
+    .then(data => {
+      data.result = sentExternal.get(data, data.person.id, data.job.id, data.personId)
+      return promiseMap(data)
+    })
+    .then(data => {
+      data.sentMessage = {}
+      data.id = undefined
+
+      if (data.result && data.result.sentMessage && !data.result.sentMessage.sendMessage) {
+        data.sentMessage = data.result.sentMessage
+        data.id = data.result.id
+      }
       return promiseMap(data)
     })
 }
@@ -387,7 +400,7 @@ function externalComposeHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function externalSaveHandler ({req, res, next, forced = false}) {
+function externalSaveHandler (req, res, next) {
   const hirerId = req.session.data.person
   const personId = req.params.personId
 
@@ -396,22 +409,19 @@ function externalSaveHandler ({req, res, next, forced = false}) {
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
 
+  const messageId = req.params.messageId
+  const saveMethod = messageId && req.method === 'PATCH' ? sentExternal.patch : sentExternal.post
+
   const sentMessage = {composeMessage, selectStyle, selectLength, sendMessage}
-  const data = {hirerId, personId, sentMessage}
+  const data = merge({hirerId, personId, sentMessage}, clone(req.session.data))
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then(job => promiseMap(merge(data, job)))
-    .then(data => sentExternal.post(data.person.id, data.job.id, data.personId, data.sentMessage, forced))
+    .get(data, req.params.jobSlug)
+    .then(data => saveMethod(data.person.id, data.job.id, data.personId, data.sentMessage, messageId))
     .then(result => getExternalComposeProperties(data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
-}
-
-function externalForceSaveHandler (req, res, next) {
-  const forced = true
-  externalSaveHandler({req, res, next, forced})
 }
 
 router.get('/', ensureLoggedIn, jobsHandler)
@@ -421,8 +431,8 @@ router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
 router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
 router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)
 router.get('/:jobSlug/external/:personId', ensureLoggedIn, externalComposeHandler)
-router.post('/:jobSlug/external/forced/:personId', ensureLoggedIn, externalForceSaveHandler)
-router.post('/:jobSlug/external/:personId', ensureLoggedIn, (req, res, next) => externalSaveHandler({req, res, next}))
+router.post('/:jobSlug/external/:personId', ensureLoggedIn, externalSaveHandler)
+router.patch('/:jobSlug/external/:personId/:messageId', ensureLoggedIn, externalSaveHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)
