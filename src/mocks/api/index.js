@@ -5,6 +5,7 @@ const rewrite = require('express-urlrewrite')
 
 const find = require('lodash/find')
 const merge = require('lodash/merge')
+const format = require('date-fns/format')
 
 const dummyData = require('./dummy-data')
 
@@ -16,6 +17,23 @@ class MockApi {
 
   injectDummyData () {
     this.router = jsonServer.router(merge({}, this.dummyData))
+  }
+
+  injectDate ({req, res, next}) {
+    const dateNow = format(Date.now(), 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+
+    if (req.method === 'POST') {
+      merge(req.body, {
+        created: dateNow,
+        modified: dateNow
+      })
+    } else if (req.method === 'PATCH') {
+      merge(req.body, {
+        modified: dateNow
+      })
+    }
+
+    next()
   }
 
   getCompanyById ({req, res, next}) {
@@ -105,6 +123,9 @@ class MockApi {
     this.server.get('/:type/first', (req, res, next) => this.getFirstOfType({req, res, next}))
 
     this.server.get('/restart-mock-api', (req, res, next) => this.restartHandler({req, res, next}))
+
+    this.server.use(jsonServer.bodyParser)
+    this.server.use((req, res, next) => this.injectDate({req, res, next}))
 
     this.server.use(this.router)
     this.serverUp = true

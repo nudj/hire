@@ -26,16 +26,11 @@ const styles = {
   },
   nudjButton: mixins.button,
   continueButton: mixins.buttonSecondary,
-  sectionDivider: {
-    backgroundColor: variables.colors.midGrey,
-    border: 'none',
-    color: variables.colors.midGrey,
-    height: variables.sizing.baseBorderWidth,
-    margin: `0 ${variables.padding.d} 0 ${variables.padding.d}`,
+  sectionDivider: merge(mixins.sectionDivider, {
     [mixins.breakpoints.l]: {
       margin: `0 ${mainNetworkPaddingRight} 0 ${variables.padding.d}`
     }
-  }
+  })
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))

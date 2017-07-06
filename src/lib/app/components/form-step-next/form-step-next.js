@@ -8,14 +8,15 @@ const getStyle = require('./form-step-next.css')
 
 const FormStepNext = (props) => {
   const style = getStyle()
+  const jobSlug = get(props, 'pageData.job.slug')
   return <FormStep
     {...props}
     title='Next steps'
     placeholder='Let us know what you’d like to do next.'
     content={() => (<div className={style.activeContainerCentered}>
       <p className={style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-      <Link to={'/'} className={style.nextStepDashboard}>View all jobs</Link>
-      <Link to={`/${get(props, 'pageData.job.slug')}/external`} className={style.nextStepNudj}>Send another nudj</Link>
+      <Link to={`/${jobSlug}`} className={style.nextStepDashboard}>View job</Link>
+      <Link to={`/${jobSlug}/external`} className={style.nextStepNudj}>Send another nudj</Link>
     </div>)}
   />
 }
