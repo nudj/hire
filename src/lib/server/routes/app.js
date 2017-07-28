@@ -1,6 +1,5 @@
 const express = require('express')
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
