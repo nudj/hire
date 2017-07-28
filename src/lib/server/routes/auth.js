@@ -14,37 +14,24 @@ function cacheReturnTo (req, res, next) {
 function fetchPerson (email) {
   let person = request(`people/first?email=${encodeURIComponent(email)}`)
   .then((person) => {
-    if (!person) {
-      person = request(`people`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email
-        })
-      })
-    }
     if (person.error) throw new Error('Unable to fetch person')
     return person
   })
-  .then((person) => {
-    if (person.error) throw new Error('Unable to create new person')
-    return person
-  })
-
-  return promiseMap({
-    person
-  })
+  return promiseMap({ person })
 }
 
-function fetchCompany (data) {
-  data.company = request(`hirers/first?personId=${data.person.id}`)
+function fetchHirer (data) {
+  data.hirer = request(`hirers/first?personId=${data.person.id}`)
   .then((hirer) => {
     if (!hirer) throw new Error('Not a registered hirer')
     if (hirer.error) throw new Error('Error fetching hirer')
-    return request(`companies/${hirer.companyId}`)
+    return hirer
   })
+  return promiseMap(data)
+}
+
+function fetchCompany (data) {
+  data.company = request(`companies/${data.hirer.companyId}`)
   .then((company) => {
     if (!company) throw new Error('Company not found')
     if (company.error) throw new Error('Error fetching company')
@@ -79,6 +66,7 @@ router.get('/callback',
     }
 
     fetchPerson(req.user._json.email)
+    .then(fetchHirer)
     .then(fetchCompany)
     .then((data) => {
       req.session.data = data

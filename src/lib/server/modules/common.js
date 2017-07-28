@@ -1,7 +1,7 @@
 let request = require('../../lib/request')
 
 function fetchPersonFromFragment (fragment) {
-  return request(`people/${fragment.personId || fragment}`)
+  return request(`people/${fragment.person || fragment}`)
 }
 
 module.exports.fetchPersonFromFragment = fetchPersonFromFragment
