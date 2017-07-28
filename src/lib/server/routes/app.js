@@ -279,7 +279,6 @@ function getExternalComposeProperties (data) {
   return network.getById(data, data.hirer.id, data.job.id, data.recipient.id)
     .then(data => {
       data.recipient = common.fetchPersonFromFragment(data.recipient.id)
-      // data.sentMessage = externalMessages.get(data, data.hirer.id, data.job.id, data.recipient.id)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)
       return promiseMap(data)
@@ -290,6 +289,7 @@ function externalComposeHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, req.params.personId))
+    .then(data => externalMessages.get(data, data.hirer.id, data.job.id, data.recipient.id))
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -298,7 +298,6 @@ function externalComposeHandler (req, res, next) {
 
 function externalSaveHandler (req, res, next) {
   const person = req.params.personId
-  console.log('req.params', req.params)
   const composeMessage = req.body.composeMessage
   const selectStyle = req.body.selectStyle
   const selectLength = req.body.selectLength

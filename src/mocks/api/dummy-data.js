@@ -42,7 +42,7 @@ data.jobs = data.jobs.concat([
     title: 'Senior Full-Stack Software Engineer',
     slug: 'senior-full-stack-software-engineer-2',
     url: 'https://bulb.workable.com/j/389500EB72',
-    status: 'Published',
+    status: 'PUBLISHED',
     bonus: 1000,
     description: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
     type: 'Permanent',
@@ -68,7 +68,7 @@ data.jobs = data.jobs.concat([
     title: 'Senior Fake Test Job',
     slug: 'senior-fake-test-job',
     url: 'https://fake.com',
-    status: 'Published',
+    status: 'PUBLISHED',
     bonus: 1000,
     description: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     type: 'Permanent',
@@ -189,7 +189,7 @@ data.recommendations = data.recommendations.concat([
     job: 'job2',
     person: 'person1',
     hirer: 'hirer1',
-    source: 'hirer'
+    source: 'HIRER'
   },
   {
     id: 'recommendation2',
@@ -198,7 +198,7 @@ data.recommendations = data.recommendations.concat([
     job: 'job2',
     person: 'person3',
     hirer: 'hirer1',
-    source: 'nudj'
+    source: 'NUDJ'
   },
   {
     id: 'recommendation3',
@@ -207,7 +207,7 @@ data.recommendations = data.recommendations.concat([
     job: 'job2',
     person: 'person2',
     hirer: 'hirer1',
-    source: 'hirer'
+    source: 'HIRER'
   },
   {
     id: 'recommendation4',
@@ -216,7 +216,7 @@ data.recommendations = data.recommendations.concat([
     job: 'job2',
     person: 'person5',
     hirer: 'hirer1',
-    source: 'nudj'
+    source: 'NUDJ'
   }
 ])
 

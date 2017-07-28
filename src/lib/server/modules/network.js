@@ -105,17 +105,17 @@ module.exports.send = function (data, instructions) {
 const common = require('./common')
 
 function fetchNetworkForJob (data, hirer, job) {
-  data.network = request(`recommendations/filter?hirer=${hirer}&job=${job}&source=hirer`)
+  data.network = request(`recommendations/filter?hirer=${hirer}&job=${job}&source=HIRER`)
     .then(common.fetchPeopleFromFragments)
 
-  data.nudjNetwork = request(`recommendations/filter?hirer=${hirer}&job=${job}&source=nudj`)
+  data.nudjNetwork = request(`recommendations/filter?hirer=${hirer}&job=${job}&source=NUDJ`)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)
 }
 
 function fetchNetworkForJobAndPerson (data, hirer, job, person) {
-  data.recommendation = request(`recommendations/filter?hirer=${hirer}&job=${job}&person=${person}&source=hirer`)
+  data.recommendation = request(`recommendations/filter?hirer=${hirer}&job=${job}&person=${person}&source=HIRER`)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)

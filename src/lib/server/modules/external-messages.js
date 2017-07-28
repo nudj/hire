@@ -35,7 +35,8 @@ function saveSentMessage (data) {
 }
 
 module.exports.get = function (data, hirer, job, person) {
-  return fetchSentMessage(hirer, job, person)
+  data.externalMessage = fetchSentMessage(hirer, job, person)
+  return promiseMap(data)
 }
 
 module.exports.getAll = function (data, hirer, job) {

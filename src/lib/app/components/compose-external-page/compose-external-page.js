@@ -21,8 +21,7 @@ module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
-
-    const data = get(this.props, 'sentMessage', {})
+    const data = get(this.props, 'externalMessage', {})
     const active = this.activeFromData(data)
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])

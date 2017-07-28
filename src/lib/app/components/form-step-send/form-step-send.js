@@ -46,9 +46,7 @@ function getComposeMessageBaseSubject (props) {
     return ''
   }
 
-  const lengthTag = selectLength.type
-  const styleTag = selectStyle.type
-  const prismicMessage = messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
+  const prismicMessage = messages.find(message => message.tags.includes(selectLength.toLowerCase()) && message.tags.includes(selectStyle.toLowerCase()))
   const prismicCompose = new PrismicReact(prismicMessage)
 
   const subject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
@@ -73,6 +71,7 @@ const FormStepSend = (props) => {
   const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${message}`
   const options = [
     {
+      type: 'EMAIL',
       link: emailLink,
       icon: 'mail-icons.png',
       title: 'Send it via your default email app',
@@ -80,14 +79,11 @@ const FormStepSend = (props) => {
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, {
-          type: 'email',
-          title: 'Send it via your email app',
-          message: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).'
-        })
+        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'EMAIL')
       }
     },
     {
+      type: 'GMAIL',
       link: gmailLink,
       icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
       title: 'Send it via Gmail',
@@ -95,11 +91,7 @@ const FormStepSend = (props) => {
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, {
-          type: 'gmail',
-          title: 'Send it via Gmail',
-          message: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.'
-        })
+        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'GMAIL')
       }
     }
   ]

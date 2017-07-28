@@ -111,8 +111,8 @@ class FormStepCompose extends React.Component {
       return ''
     }
 
-    const lengthTag = this.props.selectLength.type
-    const styleTag = this.props.selectStyle.type
+    const lengthTag = this.props.selectLength.toLowerCase()
+    const styleTag = this.props.selectStyle.toLowerCase()
     const prismicMessage = this.props.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
     const prismicCompose = new PrismicReact(prismicMessage)
 
