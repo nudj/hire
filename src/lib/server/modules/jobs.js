@@ -14,7 +14,7 @@ function fetchJobAndRecipients (data, jobSlug, recipients) {
 }
 
 function fetchJobs (data) {
-  data.jobs = request(`jobs/filter?companyId=${data.company.id}&status=Published`)
+  data.jobs = request(`jobs/filter?company=${data.company.id}&status=PUBLISHED`)
   return promiseMap(data)
 }
 

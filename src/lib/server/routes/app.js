@@ -1,6 +1,5 @@
 const express = require('express')
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
@@ -8,7 +7,7 @@ const logger = require('../lib/logger')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
-const sentExternal = require('../modules/sent-external')
+const externalMessages = require('../modules/external-messages')
 const { promiseMap } = require('../lib')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -22,13 +21,18 @@ const clone = (obj) => Object.assign({}, obj)
 
 function spoofLoggedIn (req, res, next) {
   req.session.data = {
+    hirer: {
+      id: 'hirer1',
+      company: 'company1',
+      person: 'person1'
+    },
     person: {
-      id: '21',
+      id: 'person1',
       firstName: 'David',
       lastName: 'Platt'
     },
     company: {
-      id: '1',
+      id: 'company1',
       name: 'Johns PLC',
       slug: 'johns-plc'
     }
@@ -242,14 +246,14 @@ function externalHandler (req, res, next) {
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => network.get(data, data.person.id, data.job.id))
-    .then(data => sentExternal.getAll(data, data.person.id, data.job.id))
-    .then(data => sentExternal.getAllComplete(data, data.person.id, data.job.id))
+    .then(data => network.get(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => {
-      data.networkSaved = data.sentExternal.map(person => person.id)
-      data.networkSent = data.sentExternalComplete.map(person => person.id)
+      data.networkSaved = data.externalMessages.map(person => person.id)
+      data.networkSent = data.externalMessagesComplete.map(person => person.id)
 
-      const referrerType = data.sentExternal.length ? 'notFirstTime' : 'firstTime'
+      const referrerType = data.externalMessages.length ? 'notFirstTime' : 'firstTime'
       selectReferrersQuery['document.tags'].push(referrerType)
 
       data.tooltips = prismic.fetchContent(selectReferrersQuery)
@@ -271,10 +275,9 @@ function getExternalComposeProperties (data) {
     'document.tags': ['external']
   }
 
-  return network.getById(data, data.person.id, data.job.id, data.personId)
+  return network.getById(data, data.hirer.id, data.job.id, data.recipient.id)
     .then(data => {
-      data.recipient = common.fetchPersonFromFragment(data.personId)
-      data.sentMessage = sentExternal.get(data, data.person.id, data.job.id, data.personId)
+      data.recipient = common.fetchPersonFromFragment(data.recipient.id)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
       data.messages = prismic.fetchContent(composeExternalMessages)
       return promiseMap(data)
@@ -284,33 +287,28 @@ function getExternalComposeProperties (data) {
 function externalComposeHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => {
-      data.personId = req.params.personId
-      return promiseMap(data)
-    })
-    .then(data => getExternalComposeProperties(data))
+    .then(data => network.getRecipient(data, req.params.personId))
+    .then(data => externalMessages.get(data, data.hirer.id, data.job.id, data.recipient.id))
+    .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function externalSaveHandler (req, res, next) {
-  const hirerId = req.session.data.person
-  const personId = req.params.personId
-
+  const person = req.params.personId
   const composeMessage = req.body.composeMessage
   const selectStyle = req.body.selectStyle
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
 
-  const sentMessage = {composeMessage, selectStyle, selectLength, sendMessage}
-  const data = {hirerId, personId, sentMessage}
+  const message = {person, composeMessage, selectStyle, selectLength, sendMessage}
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(job => promiseMap(merge(data, job)))
-    .then(data => sentExternal.post(data.person.id, data.job.id, data.personId, data.sentMessage))
-    .then(result => getExternalComposeProperties(data))
+    .then(data => network.getRecipient(data, person))
+    .then(data => externalMessages.post(data, message))
+    .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
