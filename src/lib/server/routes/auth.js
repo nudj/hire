@@ -21,7 +21,7 @@ function fetchPerson (email) {
 }
 
 function fetchHirer (data) {
-  data.hirer = request(`hirers/first?personId=${data.person.id}`)
+  data.hirer = request(`hirers/first?person=${data.person.id}`)
   .then((hirer) => {
     if (!hirer) throw new Error('Not a registered hirer')
     if (hirer.error) throw new Error('Error fetching hirer')
@@ -31,7 +31,7 @@ function fetchHirer (data) {
 }
 
 function fetchCompany (data) {
-  data.company = request(`companies/${data.hirer.companyId}`)
+  data.company = request(`companies/${data.hirer.company}`)
   .then((company) => {
     if (!company) throw new Error('Company not found')
     if (company.error) throw new Error('Error fetching company')

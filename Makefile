@@ -19,6 +19,12 @@ buildLocal:
 		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		.
 
+buildLatest:
+	@docker build \
+		-t $(IMAGE):latest \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
+		.
+
 cache:
 	-@docker rm -f hire-dev-cache 2> /dev/null || true
 	@docker run --rm -it \
