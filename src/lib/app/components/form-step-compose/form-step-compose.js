@@ -1,6 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
-const Textarea = require('react-textarea-autosize').default
+const Textarea = require('react-textarea-autosize')
 
 const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
