@@ -57,6 +57,7 @@ dev:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		--env-file $(CWD)/.env \
+		-e "USE_MOCKS=true" \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && $(BIN)/nodemon \
 			--config ./nodemon.json \
