@@ -10,6 +10,8 @@ const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 const JobPage = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
+  const jobLink = `https://nudj.co/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
+
   return (
     <div className={style.pageBody}>
       <Helmet>
@@ -19,7 +21,7 @@ const JobPage = (props) => {
         title={get(props, 'job.title')}
         subtitle={<span>@ <Link className={style.headerLink} to={'/'}>{get(props, 'company.name')}</Link></span>}
       >
-        <CopyToClipboard className={style.copyLink} data-clipboard-text={`https://nudj.co/${get(props, 'company.slug')}+${get(props, 'job.slug')}`}>Copy job link</CopyToClipboard>
+        <CopyToClipboard className={style.copyLink} data-clipboard-text={jobLink}>Copy job link</CopyToClipboard>
       </PageHeader>
       <h3 className={style.pageHeadline}>Who would you like to ask first?</h3>
       <div className={style.pageContent}>
