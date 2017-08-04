@@ -1,5 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const getStyle = require('./form-step.css')
 
 function renderActiveOption (option, index, style) {
@@ -14,15 +15,16 @@ function renderActiveOption (option, index, style) {
     </a>
   </li>)
 }
-function renderActiveOptions (data, options, style) {
+function renderActiveOptions (selection, options, style) {
   return (<ul className={style.activeOptionsContainer}>
     {options.map((option, index) => renderActiveOption(option, index, style))}
   </ul>)
 }
 
-function renderCompletedSectionSummary (data, options, style) {
+function renderCompletedSectionSummary (selection, options, style) {
+  const data = find(options, option => option.type === selection)
   const title = data.title ? (<h5 className={style.completedSectionSummaryTitle}>{data.title}</h5>) : ''
-  const message = data.message
+  const message = data.text
 
   // Need to support the compose message having multi-line message
   return (<div className={style.completedSectionSummary}>
@@ -55,8 +57,8 @@ class FormStep extends React.Component {
     const index = get(this.props, 'index')
     const name = get(this.props, 'name')
     const options = get(this.props, 'options')
-    const data = get(this.props, name)
-    const isComplete = !!data
+    const selection = get(this.props, name)
+    const isComplete = !!selection
     const canSkipTo = get(this.props, 'canSkipTo')
 
     let stepClass = this.style.section
@@ -86,7 +88,7 @@ class FormStep extends React.Component {
         <h4 className={this.style.sectionTitle}>
           <span className={numberClass}>{index}</span>{get(this.props, 'title')}
         </h4>
-        {content(data, options, this.style)}
+        {content(selection, options, this.style)}
       </div>
     )
   }

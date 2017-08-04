@@ -3,18 +3,18 @@ let { promiseMap } = require('../lib')
 const common = require('./common')
 
 function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`).then(jobs => jobs[0])
   return promiseMap(data)
 }
 
 function fetchJobAndRecipients (data, jobSlug, recipients) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`).then(jobs => jobs[0])
   data.recipients = common.fetchPeopleFromFragments(recipients)
   return promiseMap(data)
 }
 
 function fetchJobs (data) {
-  data.jobs = request(`jobs/filter?companyId=${data.company.id}&status=Published`)
+  data.jobs = request(`jobs/filter?company=${data.company.id}&status=PUBLISHED`)
   return promiseMap(data)
 }
 

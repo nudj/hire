@@ -21,8 +21,7 @@ module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
-
-    const data = get(this.props, 'sentMessage', {})
+    const data = get(this.props, 'externalMessage', {})
     const active = this.activeFromData(data)
     const messages = get(this.props, 'messages', [])
     const tooltips = get(this.props, 'tooltips', [])
@@ -106,7 +105,7 @@ module.exports = class ComposePage extends React.Component {
   saveAndPostData ({active, data}) {
     this.setState({active, data}, () => {
       this.props.dispatch(postData({
-        url: `/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`,
+        url: `/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`,
         data: this.state.data
       }))
     })

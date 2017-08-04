@@ -6,31 +6,25 @@ const FormStep = require('../form-step/form-step')
 const FormStepLength = (props) => {
   const options = [
     {
+      type: 'SHORT',
       icon: 'message-bubble.svg',
       title: 'Short and sweet',
       text: 'For getting straight to the point.',
-      selected: get(props, `${get(props, 'name')}.type`) === 'short',
+      selected: get(props, `${get(props, 'name')}`) === 'SHORT',
       onClick: (event) => {
         event.stopPropagation()
-        props.onSubmitStep({
-          type: 'short',
-          title: 'Short and sweet',
-          message: 'For getting straight to the point.'
-        })
+        props.onSubmitStep('SHORT')
       }
     },
     {
+      type: 'LONG',
       icon: 'detail-icon.svg',
       title: 'A bit more detail',
       text: 'For when you need to add extra info.',
-      selected: get(props, `${get(props, 'name')}.type`) === 'long',
+      selected: get(props, `${get(props, 'name')}`) === 'LONG',
       onClick: (event) => {
         event.stopPropagation()
-        props.onSubmitStep({
-          type: 'long',
-          title: 'A bit more detail',
-          message: 'For when you need to add extra info.'
-        })
+        props.onSubmitStep('LONG')
       }
     }
   ]

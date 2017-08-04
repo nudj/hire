@@ -19,6 +19,12 @@ buildLocal:
 		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		.
 
+buildLatest:
+	@docker build \
+		-t $(IMAGE):latest \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
+		.
+
 cache:
 	-@docker rm -f hire-dev-cache 2> /dev/null || true
 	@docker run --rm -it \
@@ -51,6 +57,7 @@ dev:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		--env-file $(CWD)/.env \
+		-e "USE_MOCKS=true" \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && $(BIN)/nodemon \
 			--config ./nodemon.json \

@@ -1,4 +1,4 @@
-FROM node:6.11.0
+FROM node:6.11.1
 ARG NPM_TOKEN
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
