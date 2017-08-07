@@ -111,7 +111,7 @@ module.exports = class ComposePage extends React.Component {
 
   saveAndPostData ({active, data}) {
     this.setState({active, data}, () => {
-      let url = `/${get(this.props, 'job.slug')}/external/${get(this.props, 'personId')}`
+      let url = `/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
       let method = 'post'
       const data = this.state.data
 

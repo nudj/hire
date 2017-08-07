@@ -157,7 +157,7 @@ data.people = data.people.concat([
 data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
-    person: 'person1',
+    person: 'person5',
     company: 'company1'
   }
 ])

@@ -17,13 +17,13 @@ function fetchJobAndRecipients (data, jobSlug, recipients) {
   return promiseMap(data)
 }
 
-function fetchJobApplications (data, jobId) {
-  data.applications = request(`applications/filter?jobId=${jobId}`)
+function fetchJobApplications (data, job) {
+  data.applications = request(`applications/filter?job=${job}`)
   return promiseMap(data)
 }
 
-function fetchJobReferrals (data, jobId) {
-  data.referrals = request(`referrals/filter?jobId=${jobId}`)
+function fetchJobReferrals (data, job) {
+  data.referrals = request(`referrals/filter?job=${job}`)
   return promiseMap(data)
 }
 
@@ -72,7 +72,7 @@ function getJobActivity (dataCall, dataActivityKey) {
   return activity
 }
 
-function getJobActivities (data, jobId) {
+function getJobActivities (data, job) {
   const applications = getJobActivity(fetchJobApplications({}, data.job.id), 'applications')
   const referrers = getJobActivity(fetchJobReferrals({}, data.job.id), 'referrals')
 
@@ -105,10 +105,10 @@ module.exports.compose = function (data, jobSlug, recipients) {
   return fetchJobAndRecipients(data, jobSlug, recipients)
 }
 
-module.exports.getApplications = function (data, jobId) {
-  data.applications = request(`applications/filter?jobId=${jobId}`)
+module.exports.getApplications = function (data, job) {
+  data.applications = request(`applications/filter?job=${job}`)
     .then(applications => Promise.all(applications.map(application => {
-      return common.fetchPersonFromFragment(application.personId)
+      return common.fetchPersonFromFragment(application.person)
         .then(person => {
           const personDetails = {
             firstName: person.firstName,
@@ -122,10 +122,10 @@ module.exports.getApplications = function (data, jobId) {
   return promiseMap(data)
 }
 
-module.exports.getReferrals = function (data, jobId) {
-  data.referrals = request(`referrals/filter?jobId=${jobId}`)
+module.exports.getReferrals = function (data, job) {
+  data.referrals = request(`referrals/filter?job=${job}`)
     .then(referrals => Promise.all(referrals.map(referral => {
-      return common.fetchPersonFromFragment(referral.personId)
+      return common.fetchPersonFromFragment(referral.person)
         .then(person => {
           const personDetails = {
             firstName: person.firstName,
@@ -139,6 +139,6 @@ module.exports.getReferrals = function (data, jobId) {
   return promiseMap(data)
 }
 
-module.exports.getJobActivities = function (data, jobId) {
-  return getJobActivities(data, jobId)
+module.exports.getJobActivities = function (data, job) {
+  return getJobActivities(data, job)
 }
