@@ -374,3 +374,11 @@ module.exports.formElements = {
     }
   })
 }
+
+module.exports.sectionDivider = {
+  backgroundColor: variables.colors.midGrey,
+  border: 'none',
+  color: variables.colors.midGrey,
+  height: variables.sizing.baseBorderWidth,
+  margin: `0 ${variables.padding.d} 0 ${variables.padding.d}`
+}
