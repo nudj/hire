@@ -3,7 +3,7 @@ const isAfter = require('date-fns/is_after')
 let request = require('../../lib/request')
 
 function fetchPersonFromFragment (fragment) {
-  return request(`people/${fragment.person || fragment}`)
+  return request(`people/${fragment.person || fragment.recipient || fragment}`)
 }
 
 module.exports.fetchPersonFromFragment = fetchPersonFromFragment
