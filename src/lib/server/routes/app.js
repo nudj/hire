@@ -376,6 +376,13 @@ function getExternalComposeProperties (data) {
       data.messages = prismic.fetchContent(composeExternalMessages)
       return promiseMap(data)
     })
+    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
+    .then(data => {
+      if (!data.referral) {
+        data.referral = jobs.addReferral(data, data.job.id, data.recipient.id)
+      }
+      return data
+    })
     .then(data => externalMessages.get(data, data.hirer.id, data.job.id, data.recipient.id))
     .then(data => {
       data.externalMessage = {}

@@ -32,6 +32,9 @@ class FormStepCompose extends React.Component {
   renderMessage (content, textOnly) {
     const companySlug = get(this.props, 'pageData.company.slug', '')
     const jobSlug = get(this.props, 'pageData.job.slug', '')
+    const referralId = get(this.props, 'pageData.referral.id', '')
+
+    const referralLink = `https://nudj.co/jobs/${companySlug}+${jobSlug}+${referralId}`
 
     const options = {
       template: content,
@@ -41,7 +44,7 @@ class FormStepCompose extends React.Component {
         },
         job: {
           bonus: get(this.props, 'pageData.job.bonus', ''),
-          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`,
+          link: referralLink,
           title: get(this.props, 'pageData.job.title', '')
         },
         recipient: {

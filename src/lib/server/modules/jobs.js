@@ -27,6 +27,12 @@ function fetchJobReferrals (data, job) {
   return promiseMap(data)
 }
 
+function saveJobReferral (job, person) {
+  const data = {job, person}
+  const method = 'post'
+  return request('referrals', { data, method })
+}
+
 function fetchJobs (data) {
   data.jobs = request(`jobs/filter?company=${data.company.id}&status=PUBLISHED`)
   return promiseMap(data)
@@ -139,6 +145,45 @@ module.exports.getReferrals = function (data, job) {
   return promiseMap(data)
 }
 
+function transformReferralFragment (referral) {
+  return common.fetchPersonFromFragment(referral.person)
+    .then(person => {
+      const personDetails = {
+        firstName: person.firstName,
+        lastName: person.lastName,
+        email: person.email
+      }
+      return merge(referral, personDetails)
+    })
+}
+
+module.exports.getReferrals = function (data, job) {
+  data.referrals = request(`referrals/filter?job=${job}`)
+    .then(referrals => Promise.all(referrals.map(transformReferralFragment)))
+
+  return promiseMap(data)
+}
+
+module.exports.getReferralsForPerson = function (data, person) {
+  data.referrals = request(`referrals/filter?person=${person}`)
+    .then(referrals => Promise.all(referrals.map(transformReferralFragment)))
+
+  return promiseMap(data)
+}
+
+module.exports.getReferralForPersonAndJob = function (data, person, job) {
+  data.referral = request(`referrals/filter?person=${person}&job=${job}`)
+    .then(referrals => Promise.all(referrals.map(transformReferralFragment)))
+    .then(referrals => referrals.pop())
+
+  return promiseMap(data)
+}
+
 module.exports.getJobActivities = function (data, job) {
   return getJobActivities(data, job)
+}
+
+module.exports.addReferral = function (data, job, person) {
+  data.referral = saveJobReferral(job, person)
+  return promiseMap(data)
 }
