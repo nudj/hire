@@ -432,17 +432,38 @@ function externalSaveHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function importContactsLinkedInHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['importContacts', 'linkedIn']
+  }
+
+  const data = clone(req.session.data)
+  data.tooltip = prismic.fetchContent(prismicQuery, true)
+
+  promiseMap(data)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
+
+router.get('/import-contacts', importContactsLinkedInHandler)
+
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)
+
 router.get('/:jobSlug/internal', internalHandler)
 router.post('/:jobSlug/internal', internalSendHandler)
+
 router.get('/:jobSlug/external', externalHandler)
 router.get('/:jobSlug/external/:recipientId', externalComposeHandler)
 router.post('/:jobSlug/external/:recipientId', externalSaveHandler)
 router.patch('/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
+
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

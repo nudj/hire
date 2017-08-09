@@ -11,6 +11,7 @@ const Nudj = require('../nudj/nudj')
 const ComposePage = require('../compose-page/compose-page')
 const SelectReferrerExternalPage = require('../select-referrer-external-page/select-referrer-external-page')
 const ComposeExternalPage = require('../compose-external-page/compose-external-page')
+const ImportContactsLinkedInPage = require('../import-contacts-linkedin-page/import-contacts-linkedin-page')
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
 const Status = require('../status/status')
@@ -47,6 +48,7 @@ const Index = () => {
         <Route path='*' component={WithState(Notification)} />
         <Switch>
           <Route exact path='/' component={PageWithState(JobsPage)} />
+          <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
           <Route exact path='/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/:jobSlug/nudj' component={PageWithState(Nudj)} />
           <Route exact path='/:jobSlug/internal' component={PageWithState(ComposePage)} />
