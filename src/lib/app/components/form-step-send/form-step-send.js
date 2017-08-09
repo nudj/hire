@@ -8,6 +8,9 @@ const FormStep = require('../form-step/form-step')
 function renderMessage (content, data) {
   const companySlug = get(data, 'company.slug', '')
   const jobSlug = get(data, 'job.slug', '')
+  const referralId = get(data, 'referral.id', '')
+
+  const referralLink = `https://nudj.co/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
     template: content,
@@ -17,7 +20,7 @@ function renderMessage (content, data) {
       },
       job: {
         bonus: get(data, 'job.bonus', ''),
-        link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
+        link: referralLink,
         title: get(data, 'job.title', '')
       },
       recipient: {
