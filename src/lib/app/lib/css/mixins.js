@@ -294,7 +294,7 @@ module.exports.deLink = {
 }
 
 module.exports.button = merge(headings.pBold, {
-  border: '0',
+  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.royalBlue}`,
   borderRadius: variables.sizing.buttonBorderRadius,
   backgroundColor: variables.colors.royalBlue,
   color: variables.colors.white,
