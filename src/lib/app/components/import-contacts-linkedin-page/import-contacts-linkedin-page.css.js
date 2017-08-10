@@ -125,7 +125,8 @@ const styles = {
   dragAndDropOk: mixins.dragAndDrop.dragAndDropOk,
   dragAndDropNotOk: mixins.dragAndDrop.dragAndDropNotOk,
   dragAndDropHeading: mixins.dragAndDrop.dragAndDropHeading,
-  dragAndDropCopy: mixins.dragAndDrop.dragAndDropCopy
+  dragAndDropCopy: mixins.dragAndDrop.dragAndDropCopy,
+  dragAndDropCopyEmphasis: mixins.dragAndDrop.dragAndDropCopyEmphasis
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))

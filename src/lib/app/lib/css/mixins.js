@@ -470,5 +470,8 @@ module.exports.dragAndDrop = {
   dragAndDropCopy: merge(module.exports.typography.p, {
     margin: '0',
     textAlign: 'center'
+  }),
+  dragAndDropCopyEmphasis: merge(module.exports.headings.pBold, {
+    fontStyle: 'normal'
   })
 }

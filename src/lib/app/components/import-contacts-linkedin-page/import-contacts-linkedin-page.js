@@ -176,10 +176,19 @@ module.exports = class ComposePage extends React.Component {
       return (<h5 className={this.style.dragAndDropHeading}>This type of file is not accepted</h5>)
     }
 
-    if (acceptedFiles.length) {
+    const data = this.state.data
+
+    if (acceptedFiles.length && data.length) {
       return (<span>
         <h5 className={this.style.dragAndDropHeading}>File looks ok!</h5>
         <p className={this.style.dragAndDropCopy}>Click the "Next" button to proceed</p>
+      </span>)
+    }
+
+    if (acceptedFiles.length && !data.length) {
+      return (<span>
+        <h5 className={this.style.dragAndDropHeading}>That CSV doesn't seem to be the one we want</h5>
+        <p className={this.style.dragAndDropCopy}>Please try uploading <em className={this.style.dragAndDropCopyEmphasis}>Connections.csv</em></p>
       </span>)
     }
 
