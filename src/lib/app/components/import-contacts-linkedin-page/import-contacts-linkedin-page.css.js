@@ -69,16 +69,63 @@ const styles = {
     padding: `${variables.padding.d} 0 0`
   },
   confirmButton: merge(mixins.button, {
-    margin: `0 ${variables.padding.e}`
+    margin: `0 0 0 ${variables.padding.d}`
+  }),
+  confirmButtonDisabled: merge(mixins.button, {
+    margin: `0 0 0 ${variables.padding.d}`
   }),
   cancelButton: merge(mixins.buttonSecondary, {
-    margin: `0 ${variables.padding.e}`
+    margin: `0 0 0 ${variables.padding.d}`
   }),
   buttonContainer: {
     align: 'center',
     display: 'flex',
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+    padding: `0 0 ${variables.padding.d} 0`
+  },
+  instructionsStepContainer: merge(mixins.cardStyle, {
+    margin: `0 0 ${variables.padding.d} 0`
+  }),
+  instructionsSteps: {
+    margin: '0',
+    padding: `0 0 ${variables.padding.c} 1rem`
+  },
+  instructionsStep: {
+    padding: `0 0 ${variables.padding.e} 0`
+  },
+  instructionsStepHeading: merge(mixins.typography.h4),
+  instructionsCopy: merge(mixins.typography.p),
+  instructionsCopyLink: merge(mixins.link, {
+    color: variables.colors.royalBlue
+  }),
+  instructionsCopyEmphasis: {},
+  instructionsImage: {
+    display: 'block',
+    left: '-1rem',
+    maxWidth: 'calc(100% + 1rem)',
+    position: 'relative',
+    width: 'calc(100% + 1rem)'
+  },
+  uploadTable: merge(mixins.table.tableFixedHeight, {
+    margin: `0 0 ${variables.padding.d} 0`
+  }),
+  uploadTableHead: mixins.table.tableHeadFixedHeight,
+  uploadTableHeader: mixins.table.tableHeaderFixedHeight,
+  uploadTableBodyFixedHeight: mixins.tableBodyFixedHeight(),
+  uploadTableRow: mixins.table.tableRowBodyFixedHeight,
+  uploadTableCell: mixins.table.tableCellFixedHeight,
+  uploadTableCellEven: mixins.table.tableCellEvenFixedHeight,
+  uploadTableCellTruncateContent: {
+    display: 'block',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  dragAndDrop: mixins.dragAndDrop.dragAndDrop,
+  dragAndDropOk: mixins.dragAndDrop.dragAndDropOk,
+  dragAndDropNotOk: mixins.dragAndDrop.dragAndDropNotOk,
+  dragAndDropHeading: mixins.dragAndDrop.dragAndDropHeading,
+  dragAndDropCopy: mixins.dragAndDrop.dragAndDropCopy
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))
