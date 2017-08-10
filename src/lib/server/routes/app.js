@@ -481,6 +481,28 @@ function importContactsLinkedInSaveHandler (req, res, next) {
     .then(data => importContactsLinkedIn(req, res, next, data))
 }
 
+function fetchSurveyPrismicContent (data) {
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendInternal']
+  }
+  const tooltipQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendInternal']
+  }
+  data.dialog = prismic.fetchContent(dialogQuery, true)
+  data.tooltip = prismic.fetchContent(tooltipQuery, true)
+  return promiseMap(data)
+}
+
+function surveyPageHandler (req, res, next) {
+  Promise.resolve({})
+  .then(fetchSurveyPrismicContent)
+  .then(getRenderDataBuilder(req, res, next))
+  .then(getRenderer(req, res, next))
+  .catch(getErrorHandler(req, res, next))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
@@ -488,6 +510,7 @@ router.get('/', jobsHandler)
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
+router.get('/survey-page', surveyPageHandler)
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)
 
