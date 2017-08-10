@@ -159,6 +159,11 @@ data.hirers = data.hirers.concat([
     id: 'hirer1',
     person: 'person5',
     company: 'company1'
+  },
+  {
+    id: 'hirer2',
+    person: 'person1',
+    company: 'company1'
   }
 ])
 data.referrals = data.referrals.concat([

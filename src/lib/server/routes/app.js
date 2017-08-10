@@ -432,15 +432,17 @@ function externalSaveHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-router.get('/', ensureLoggedIn, jobsHandler)
-router.get('/:jobSlug', ensureLoggedIn, jobHandler)
-router.get('/:jobSlug/nudj', ensureLoggedIn, jobHandler)
-router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
-router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
-router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)
-router.get('/:jobSlug/external/:recipientId', ensureLoggedIn, externalComposeHandler)
-router.post('/:jobSlug/external/:recipientId', ensureLoggedIn, externalSaveHandler)
-router.patch('/:jobSlug/external/:recipientId/:messageId', ensureLoggedIn, externalSaveHandler)
+router.use(ensureLoggedIn)
+
+router.get('/', jobsHandler)
+router.get('/:jobSlug', jobHandler)
+router.get('/:jobSlug/nudj', jobHandler)
+router.get('/:jobSlug/internal', internalHandler)
+router.post('/:jobSlug/internal', internalSendHandler)
+router.get('/:jobSlug/external', externalHandler)
+router.get('/:jobSlug/external/:recipientId', externalComposeHandler)
+router.post('/:jobSlug/external/:recipientId', externalSaveHandler)
+router.patch('/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)
