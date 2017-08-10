@@ -307,6 +307,7 @@ module.exports.button = merge(headings.pBold, {
   textAlign: 'center',
   ':disabled': {
     backgroundColor: variables.colors.royalBlueFade,
+    borderColor: variables.colors.royalBlueFade,
     cursor: 'default'
   },
   ':focus': {
@@ -381,4 +382,93 @@ module.exports.sectionDivider = {
   color: variables.colors.midGrey,
   height: variables.sizing.baseBorderWidth,
   margin: `0 ${variables.padding.d} 0 ${variables.padding.d}`
+}
+
+module.exports.table = {
+  table: {
+    borderCollapse: 'collapse',
+    margin: `0 0 ${variables.padding.d} 0`
+  },
+  tableHeader: merge(module.exports.headings.pBold, {
+    background: variables.colors.royalBlue,
+    color: variables.colors.white,
+    padding: variables.padding.e,
+    textAlign: 'left'
+  }),
+  tableRow: {},
+  tableCell: merge(module.exports.headings.p, {
+    background: variables.colors.white,
+    borderBottom: `${variables.sizing.detailSeparatorWidth} solid ${variables.colors.lightGrey}`,
+    colors: variables.colors.charcoal,
+    padding: `${variables.padding.d} ${variables.padding.e}`
+  })
+}
+
+module.exports.table.tableCellEven = merge(module.exports.table.tableCell, {
+  background: variables.colors.lighterGrey
+})
+
+// Fixed height body extras - this displays the table as block
+function tableBodyFixedHeight (fixedHeight = `calc(${variables.padding.a} * 2)`) {
+  return {
+    display: 'block',
+    maxHeight: fixedHeight,
+    overflowY: 'scroll'
+  }
+}
+
+module.exports.tableBodyFixedHeight = tableBodyFixedHeight
+
+module.exports.table.tableFixedHeight = merge(module.exports.table, {
+  display: 'block',
+  tableLayout: 'fixed',
+  width: '100%'
+})
+
+module.exports.table.tableRowBodyFixedHeight = {
+  display: 'flex'
+}
+
+module.exports.table.tableHeadFixedHeight = {
+  display: 'block'
+}
+
+const fixedCellBase = {
+  flexBasis: '0',
+  flexGrow: '1',
+  overflow: 'hidden',
+  width: '100%'
+}
+
+module.exports.table.tableHeaderFixedHeight = merge(module.exports.table.tableHeader, fixedCellBase)
+module.exports.table.tableCellFixedHeight = merge(module.exports.table.tableCell, fixedCellBase)
+module.exports.table.tableCellEvenFixedHeight = merge(module.exports.table.tableCellEven, fixedCellBase)
+
+const dragAndDropBase = {
+  alignItems: 'center',
+  alignContent: 'center',
+  border: `${variables.sizing.baseBorderWidth} dashed ${variables.colors.charcoal}`,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  minHeight: variables.padding.a,
+  width: '100%'
+}
+
+module.exports.dragAndDrop = {
+  dragAndDrop: dragAndDropBase,
+  dragAndDropOk: merge(dragAndDropBase, {
+    borderColor: variables.colors.green
+    // Animation in the future?
+  }),
+  dragAndDropNotOk: merge(dragAndDropBase, {
+    borderColor: variables.colors.midRed
+  }),
+  dragAndDropHeading: merge(module.exports.typography.h5, {
+    textAlign: 'center'
+  }),
+  dragAndDropCopy: merge(module.exports.typography.p, {
+    margin: '0',
+    textAlign: 'center'
+  })
 }
