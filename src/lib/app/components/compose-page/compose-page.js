@@ -21,7 +21,7 @@ const {
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
-const errorLabel = (className, template) => <p className={className}>{template}</p>
+const ComposeEmail = require('../compose-email/compose-email')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -178,9 +178,6 @@ module.exports = class ComposePage extends React.Component {
   }
   render () {
     const tooltip = get(this.props, 'tooltip')
-    const recipientsError = get(this.state, 'recipientsError')
-    const subjectError = get(this.state, 'subjectError')
-    const templateError = get(this.state, 'templateError')
     return (
       <Form className={this.style.pageBody} action={`/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <Helmet>
@@ -196,30 +193,24 @@ module.exports = class ComposePage extends React.Component {
         <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
-            <div className={this.style.recipientsWrap}>
-              <label className={this.style.addLabel}>Sending to</label>
-              <div className={this.style.inputWrap}>
-                {recipientsError ? errorLabel(this.style.errorLabel, recipientsError) : null}
-                <input className={this.style.recipients} id='recipients' name='recipients' value={get(this.state, 'recipients', '')} onChange={this.onChangeRecipients} onBlur={this.onBlurRecipients} placeholder='Enter employee’s email here' />
-              </div>
-            </div>
-            <div className={this.style.email}>
-              <div className={this.style.subjectWrap}>
-                <label className={this.style.addLabel} htmlFor='subject'>Subject</label>
-                <div className={this.style.inputWrap}>
-                  {subjectError ? errorLabel(this.style.errorLabel, subjectError) : null}
-                  {get(this.state, 'editing') ? <input className={this.style.subject} type='text' name='subject' value={get(this.state, 'subject', get(this.state, 'subjectFallback', ''))} onChange={this.onChangeSubject} id='subject' placeholder='Enter subject here' /> : <div className={this.style.subject}>{get(this.state, 'subject', get(this.state, 'subjectFallback', ''))}</div>}
-                </div>
-                {get(this.state, 'js') ? <button className={this.state.editing ? this.style.doneButton : this.style.editButton} onClick={this.onClickEdit}>{this.state.editing ? 'Done' : 'Edit'}</button> : ''}
-              </div>
-              <div className={this.style.templateWrap}>
-                <label className={this.style.messageLabel} htmlFor='template'>Message</label>
-                <div className={this.style.inputWrap}>
-                  {templateError ? errorLabel(this.style.errorLabel, templateError) : null}
-                  {get(this.state, 'editing') ? <Textarea className={this.style.template} name='template' value={get(this.state, 'template', get(this.state, 'templateFallback', ''))} onChange={this.onChangeMessage} id='template' placeholder='Enter message here' /> : <div className={this.style.template}> {this.renderMessage(get(this.state, 'template', get(this.state, 'templateFallback', '')))}</div>}
-                </div>
-              </div>
-            </div>
+            <ComposeEmail
+              recipients={get(this.state, 'recipients')}
+              recipientsError={get(this.state, 'recipientsError')}
+              subject={get(this.state, 'subject')}
+              subjectError={get(this.state, 'subjectError')}
+              js={get(this.state, 'js')}
+              editing={get(this.state, 'editing')}
+              templateFallback={get(this.state, 'templateFallback')}
+              template={get(this.state, 'template')}
+              templateError={get(this.state, 'templateError')}
+              subjectFallback={get(this.state, 'subjectFallback')}
+              onChangeRecipients={this.onChangeRecipients}
+              onBlurRecipients={this.onBlurRecipients}
+              onClickEdit={this.onClickEdit}
+              onChangeMessage={this.onChangeMessage}
+              renderMessage={this.renderMessage}
+              onChangeSubject={this.onChangeSubject}
+            />
           </div>
           <div className={this.style.pageSidebar}>
             {tooltip ? <Tooltip {...tooltip} /> : ''}
