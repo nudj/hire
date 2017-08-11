@@ -1,4 +1,5 @@
 const data = {
+  assets: [],
   companies: [],
   jobs: [],
   people: [],

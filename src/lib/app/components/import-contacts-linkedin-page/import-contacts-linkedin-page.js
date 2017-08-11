@@ -12,7 +12,7 @@ const Tooltip = require('../tooltip/tooltip')
 const getStyle = require('./import-contacts-linkedin-page.css')
 const loadingStyle = require('../loading/loading.css')()
 
-// const { postData } = require('../../actions/app')
+const { postFile } = require('../../actions/app')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -23,14 +23,16 @@ module.exports = class ComposePage extends React.Component {
     const data = []
     const leaving = false
     const parsing = false
-    this.state = {active, data, leaving, parsing}
+    const file = undefined
+    this.state = {active, data, file, leaving, parsing}
   }
 
   onClickStep (active) {
     return (event) => {
       // this resets data if you reload step 2
       const data = active === 2 ? [] : this.state.data
-      this.setState({ active, data })
+      const file = active === 2 ? undefined : this.state.file
+      this.setState({ active, data, file })
     }
   }
 
@@ -63,7 +65,7 @@ module.exports = class ComposePage extends React.Component {
         const linkedInData = get(results, 'data', [])
         const data = this.convertLinkedInToNudjPeople(linkedInData)
         const parsing = true
-        this.setState({data, parsing}, () => {
+        this.setState({data, file, parsing}, () => {
           const parsing = false
           setTimeout(() => this.setState({parsing}), 1000)
         })
@@ -72,7 +74,13 @@ module.exports = class ComposePage extends React.Component {
   }
 
   uploadContacts (event) {
-
+    const url = `/import-contacts`
+    const method = 'post'
+    const data = {
+      name: this.state.file.name
+    }
+    const file = this.state.file
+    this.props.dispatch(postFile({ url, data, method, file }))
   }
 
   cancelUpload (event) {

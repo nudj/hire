@@ -5,6 +5,8 @@ let getTime = require('date-fns/get_time')
 
 const { merge } = require('../../lib')
 const logger = require('../lib/logger')
+const mailer = require('../lib/mailer')
+const assets = require('../modules/assets')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
@@ -432,13 +434,12 @@ function externalSaveHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function importContactsLinkedInHandler (req, res, next) {
+function importContactsLinkedIn (req, res, next, data) {
   const prismicQuery = {
     'document.type': 'tooltip',
     'document.tags': ['importContacts', 'linkedIn']
   }
 
-  const data = clone(req.session.data)
   data.tooltip = prismic.fetchContent(prismicQuery, true)
 
   promiseMap(data)
@@ -447,11 +448,46 @@ function importContactsLinkedInHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function importContactsLinkedInHandler (req, res, next) {
+  const data = clone(req.session.data)
+  importContactsLinkedIn(req, res, next, data)
+}
+
+function sendImportEmail (data) {
+  const name = `${get(data, 'person.firstName', '')} ${get(data, 'person.lastName', '')}`
+  const company = get(data, 'company.name', '')
+  const location = get(data, 'asset.location', '')
+
+  const subject = `${name} @ ${company} has uploaded their connections`
+  const html = `You can download it from ${location}`
+  const from = 'hello@nudj.co'
+  // const to = 'hello@nudj.co'
+  const to = 'wayne@nudj.co'
+
+  mailer.send({from, to, subject, html})
+
+  return promiseMap(data)
+}
+
+function importContactsLinkedInSaveHandler (req, res, next) {
+  const data = clone(req.session.data)
+
+  const assetType = 'CONTACTS_LINKEDIN' // ENUM?
+  const person = data.person.id
+  const asset = req.files.file.data
+  const fileName = req.body.name
+
+  assets.post({data, asset, assetType, fileName, person})
+    .then(data => sendImportEmail(data))
+    .then(data => importContactsLinkedIn(req, res, next, data))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
 
 router.get('/import-contacts', importContactsLinkedInHandler)
+router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)

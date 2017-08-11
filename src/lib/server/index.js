@@ -10,6 +10,7 @@ let session = require('express-session')
 let passport = require('passport')
 let Auth0Strategy = require('passport-auth0')
 let csrf = require('csurf')
+let fileUpload = require('express-fileupload')
 let redis = require('redis')
 let RedisStore = require('connect-redis')(session)
 
@@ -60,6 +61,7 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')))
 app.use(session(sessionOpts))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(fileUpload())
 app.use(csrf({}))
 app.use((req, res, next) => {
   if (req.body && req.body._csrf) {
