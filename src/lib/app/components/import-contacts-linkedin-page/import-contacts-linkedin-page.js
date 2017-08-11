@@ -3,6 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const { Redirect } = require('react-router')
 const Dropzone = require('react-dropzone')
+const { Link } = require('react-router-dom')
 
 const Papa = require('papaparse')
 
@@ -24,7 +25,17 @@ module.exports = class ComposePage extends React.Component {
     const leaving = false
     const parsing = false
     const file = undefined
-    this.state = {active, data, file, leaving, parsing}
+    const uploading = false
+    this.state = {active, data, file, leaving, parsing, uploading}
+  }
+
+  componentWillReceiveProps (props) {
+    const asset = get(props, 'asset')
+    if (asset) {
+      const active = 4
+      const uploading = false
+      this.setState({active, uploading})
+    }
   }
 
   onClickStep (active) {
@@ -80,6 +91,10 @@ module.exports = class ComposePage extends React.Component {
       name: this.state.file.name
     }
     const file = this.state.file
+
+    const uploading = true
+    this.setState({uploading})
+
     this.props.dispatch(postFile({ url, data, method, file }))
   }
 
@@ -186,7 +201,17 @@ module.exports = class ComposePage extends React.Component {
   stepPreview () {
     const data = get(this.state, 'data', [])
 
-    return (<div>
+    const uploading = this.state.uploading
+
+    let className = this.style.uploadPreview
+    let overlay = (<span />)
+
+    if (uploading) {
+      className = this.style.uploadPreviewUploading
+      overlay = (<div className={this.style.loadingOverlay}><div className={loadingStyle.spinner} /></div>)
+    }
+
+    return (<div className={className}>
       <p className={this.style.instructionsCopy}>To be totally transparent, we wanted to show you the data that you’re uploading to our system, so you can check you’re happy with us using it</p>
       <p className={this.style.instructionsMajorHeading}>Contacts found <span className={this.style.highlight}>({data.length})</span></p>
       <div className={this.style.instructionsCard}>
@@ -215,6 +240,7 @@ module.exports = class ComposePage extends React.Component {
           <button onClick={this.cancelUpload.bind(this)} className={this.style.cancelButton}>Cancel</button>
           <button onClick={this.uploadContacts.bind(this)} className={this.style.confirmButton}>Upload</button>
         </div>
+        {overlay}
       </div>
     </div>)
   }
@@ -280,8 +306,16 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
+  stepFinished () {
+    return (<div className={this.style.done}>
+      <p className={this.style.doneCopy}>Great, we'll be in touch soon!</p>
+      <img src='/assets/images/ok-hand-2.svg' className={this.style.doneOkHand} alt='Ok' />
+    </div>)
+  }
+
   renderCurrentStep () {
     const active = this.state.active
+    const uploading = this.state.uploading
 
     let back = (<span />)
     let next = (<span />)
@@ -296,7 +330,11 @@ module.exports = class ComposePage extends React.Component {
         break
       case 3:
         step = this.stepPreview()
-        back = (<button onClick={this.onClickStep(active - 1)} className={this.style.cancelButton}>Back</button>)
+        back = uploading ? (<span />) : (<button onClick={this.onClickStep(active - 1)} className={this.style.cancelButton}>Back</button>)
+        break
+      case 4:
+        step = this.stepFinished()
+        next = (<Link className={this.style.confirmButton} to='/'>Finish</Link>)
         break
       default:
         step = this.stepInfo()

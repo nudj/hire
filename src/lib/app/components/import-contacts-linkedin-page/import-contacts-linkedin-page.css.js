@@ -86,7 +86,9 @@ const styles = {
   // instructionsStepContainer: merge(mixins.cardStyle, {
   //   margin: `0 0 ${variables.padding.d} 0`
   // }),
-  instructionsCard: mixins.cardStyle,
+  instructionsCard: merge(mixins.cardStyle, {
+    position: 'relative'
+  }),
   instructionsStepContainer: {
     margin: `0 0 ${variables.padding.d} 0`
   },
@@ -127,6 +129,11 @@ const styles = {
     padding: `0 ${variables.padding.e} 0 0`,
     width: '50%'
   },
+  uploadPreview: {},
+  uploadPreviewUploading: {
+    opacity: '0.5',
+    pointerEvents: 'none'
+  },
   uploadTable: mixins.table.tableFixedHeight,
   uploadTableHead: mixins.table.tableHeadFixedHeight,
   uploadTableHeader: mixins.table.tableHeaderFixedHeight,
@@ -140,6 +147,17 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
+  loadingOverlay: {
+    alignContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    left: '0',
+    position: 'absolute',
+    top: '0',
+    width: '100%'
+  },
   dragAndDrop: mixins.dragAndDrop.dragAndDrop,
   dragAndDropOk: mixins.dragAndDrop.dragAndDropOk,
   dragAndDropNotOk: mixins.dragAndDrop.dragAndDropNotOk,
@@ -149,7 +167,17 @@ const styles = {
   highlight: mixins.highlightColour,
   copy: merge(mixins.typography.p, {
     marginLeft: variables.padding.d
-  })
+  }),
+  done: mixins.cardStyle,
+  doneCopy: merge(mixins.typography.p, {
+    textAlign: 'center'
+  }),
+  doneOkHand: {
+    display: 'block',
+    margin: '0 auto',
+    position: 'relative',
+    top: variables.padding.d
+  }
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))
