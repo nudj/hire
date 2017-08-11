@@ -496,12 +496,31 @@ function fetchSurveyPrismicContent (data) {
 }
 
 function surveyPageHandler (req, res, next) {
-  Promise.resolve({})
-  .then(fetchSurveyPrismicContent)
-  .then(getRenderDataBuilder(req, res, next))
-  .then(getRenderer(req, res, next))
+  fetchSurveyPrismicContent(clone(req.session.data))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function surveyPageSendHandler (req, res, next) {
+  network.send(clone(req.session.data), req.body)
+  .then(data => {
+    if (data.messages) {
+      // successful send
+      req.session.notification = {
+        type: 'success',
+        message: 'That’s the way, aha aha, I like it! 🎉'
+      }
+      return res.redirect('/survey-page')
+    }
+    return fetchSurveyPrismicContent(data)
+      .then(getRenderDataBuilder(req, res, next))
+      .then(getRenderer(req, res, next))
+      .catch(getErrorHandler(req, res, next))
+  })
   .catch(getErrorHandler(req, res, next))
 }
+
 
 router.use(ensureLoggedIn)
 
@@ -511,6 +530,7 @@ router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
 router.get('/survey-page', surveyPageHandler)
+router.post('/survey-page', surveyPageSendHandler)
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)
 

@@ -141,7 +141,7 @@ module.exports = class SurveyPage extends React.Component {
   onClickConfirm () {
     this.props.dispatch(showLoading())
     this.props.dispatch(postData({
-      url: `/${get(this.props, 'job.slug')}/internal`,
+      url: `/survey-page`,
       data: {
         recipients: get(this.state, 'recipients', ''),
         subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
