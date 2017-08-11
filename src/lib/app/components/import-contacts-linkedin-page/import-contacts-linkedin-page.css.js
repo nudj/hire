@@ -81,12 +81,22 @@ const styles = {
     align: 'center',
     display: 'flex',
     justifyContent: 'flex-end',
-    padding: `0 0 ${variables.padding.d} 0`
+    padding: `${variables.padding.d} 0 0 0`
   },
-  instructionsStepContainer: merge(mixins.cardStyle, {
+  // instructionsStepContainer: merge(mixins.cardStyle, {
+  //   margin: `0 0 ${variables.padding.d} 0`
+  // }),
+  instructionsCard: mixins.cardStyle,
+  instructionsStepContainer: {
+    margin: `0 0 ${variables.padding.d} 0`
+  },
+  instructionsGroup: merge(mixins.cardStyle, {
+    alignItems: 'flex-start',
+    display: 'flex',
     margin: `0 0 ${variables.padding.d} 0`
   }),
   instructionsSteps: {
+    flexGrow: '1',
     margin: '0',
     padding: `0 0 ${variables.padding.c} 1rem`
   },
@@ -94,21 +104,30 @@ const styles = {
     padding: `0 0 ${variables.padding.e} 0`
   },
   instructionsStepHeading: merge(mixins.typography.h4),
+  instructionsMajorHeading: merge(mixins.typography.h5),
   instructionsCopy: merge(mixins.typography.p),
-  instructionsCopyLink: merge(mixins.link, {
-    color: variables.colors.royalBlue
+  instructionsCopyLink: merge(mixins.headings.pBold, {
+    color: variables.colors.royalBlue,
+    textDecoration: 'none',
+    ':hover': {
+      textDecoration: 'underline'
+    }
   }),
   instructionsCopyEmphasis: {},
+  // instructionsImage: {
+  //   display: 'block',
+  //   left: '-1rem',
+  //   maxWidth: 'calc(100% + 1rem)',
+  //   position: 'relative',
+  //   width: 'calc(100% + 1rem)'
+  // },
   instructionsImage: {
     display: 'block',
-    left: '-1rem',
-    maxWidth: 'calc(100% + 1rem)',
-    position: 'relative',
-    width: 'calc(100% + 1rem)'
+    margin: `calc(${variables.padding.f} * -1) 0 0 calc(${variables.padding.f} * -1)`,
+    padding: `0 ${variables.padding.e} 0 0`,
+    width: '50%'
   },
-  uploadTable: merge(mixins.table.tableFixedHeight, {
-    margin: `0 0 ${variables.padding.d} 0`
-  }),
+  uploadTable: mixins.table.tableFixedHeight,
   uploadTableHead: mixins.table.tableHeadFixedHeight,
   uploadTableHeader: mixins.table.tableHeaderFixedHeight,
   uploadTableBodyFixedHeight: mixins.tableBodyFixedHeight(),
@@ -126,7 +145,11 @@ const styles = {
   dragAndDropNotOk: mixins.dragAndDrop.dragAndDropNotOk,
   dragAndDropHeading: mixins.dragAndDrop.dragAndDropHeading,
   dragAndDropCopy: mixins.dragAndDrop.dragAndDropCopy,
-  dragAndDropCopyEmphasis: mixins.dragAndDrop.dragAndDropCopyEmphasis
+  dragAndDropCopyEmphasis: mixins.dragAndDrop.dragAndDropCopyEmphasis,
+  highlight: mixins.highlightColour,
+  copy: merge(mixins.typography.p, {
+    marginLeft: variables.padding.d
+  })
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))

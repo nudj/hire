@@ -419,7 +419,7 @@ function tableBodyFixedHeight (fixedHeight = `calc(${variables.padding.a} * 2)`)
 
 module.exports.tableBodyFixedHeight = tableBodyFixedHeight
 
-module.exports.table.tableFixedHeight = merge(module.exports.table, {
+module.exports.table.tableFixedHeight = merge(module.exports.table.table, {
   display: 'block',
   tableLayout: 'fixed',
   width: '100%'
@@ -448,6 +448,7 @@ const dragAndDropBase = {
   alignItems: 'center',
   alignContent: 'center',
   border: `${variables.sizing.baseBorderWidth} dashed ${variables.colors.charcoal}`,
+  cursor: 'pointer',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -474,4 +475,8 @@ module.exports.dragAndDrop = {
   dragAndDropCopyEmphasis: merge(module.exports.headings.pBold, {
     fontStyle: 'normal'
   })
+}
+
+module.exports.highlightColour = {
+  color: variables.colors.midRed
 }
