@@ -104,11 +104,12 @@ module.exports = class ComposePage extends React.Component {
   }
 
   stepInfo () {
+    const imageRoot = 'https://assets.nudj.co/assets/images/hire/upload-linkedin-contacts'
     return (<div className={this.style.instructionsStepContainer}>
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 1 - Requesting your data</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-03.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-03.png`} alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Go to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>"Getting an archive of your data"</a> on LinkedIn (you may need to log in).</p>
@@ -120,7 +121,7 @@ module.exports = class ComposePage extends React.Component {
         </div>
 
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-04.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-04.png`} alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
           <ol className={this.style.instructionsSteps} start='3'>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Enter your password and hit <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - you should now see a green tick with Save next to it.</p>
@@ -132,7 +133,7 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 2 - Downloading your data</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-05.png' alt='An email from LinkedIn with instructions on how to download your data' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-05.png`} alt='An email from LinkedIn with instructions on how to download your data' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Log into your email account that you use to log into your LinkedIn account, you should have received an email from LinkedIn with a link to download your data.</p>
@@ -145,7 +146,7 @@ module.exports = class ComposePage extends React.Component {
         </div>
 
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-06.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-06.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
           <ol className={this.style.instructionsSteps} start='3'>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Click on the Download button and save it where ever you like.</p>
@@ -157,7 +158,7 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 3 - Uploading to nudj</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-07.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-07.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Go to where you saved the downloaded folder, open it up and locate on the <em className={this.style.instructionsCopyEmphasis}>Connections.csv</em> file. We only need this .csv  file, not the whole folder.</p>
