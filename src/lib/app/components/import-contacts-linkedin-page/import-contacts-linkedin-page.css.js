@@ -83,20 +83,20 @@ const styles = {
     justifyContent: 'flex-end',
     padding: `${variables.padding.d} 0 0 0`
   },
-  // instructionsStepContainer: merge(mixins.cardStyle, {
-  //   margin: `0 0 ${variables.padding.d} 0`
-  // }),
   instructionsCard: merge(mixins.cardStyle, {
     position: 'relative'
   }),
   instructionsStepContainer: {
     margin: `0 0 ${variables.padding.d} 0`
   },
-  instructionsGroup: merge(mixins.cardStyle, {
+  instructionsStepCard: merge(mixins.cardStyle, {
+    margin: `0 0 ${variables.padding.d} 0`
+  }),
+  instructionsGroup: {
     alignItems: 'flex-start',
     display: 'flex',
     margin: `0 0 ${variables.padding.d} 0`
-  }),
+  },
   instructionsSteps: {
     flexGrow: '1',
     margin: '0',
@@ -105,8 +105,8 @@ const styles = {
   instructionsStep: {
     padding: `0 0 ${variables.padding.e} 0`
   },
-  instructionsStepHeading: merge(mixins.typography.h4),
-  instructionsMajorHeading: merge(mixins.typography.h5),
+  instructionsStepHeading: merge(mixins.typography.h6),
+  instructionsMajorHeading: merge(mixins.typography.h6),
   instructionsCopy: merge(mixins.typography.p),
   instructionsCopyLink: merge(mixins.headings.pBold, {
     color: variables.colors.royalBlue,
@@ -116,13 +116,6 @@ const styles = {
     }
   }),
   instructionsCopyEmphasis: {},
-  // instructionsImage: {
-  //   display: 'block',
-  //   left: '-1rem',
-  //   maxWidth: 'calc(100% + 1rem)',
-  //   position: 'relative',
-  //   width: 'calc(100% + 1rem)'
-  // },
   instructionsImage: {
     display: 'block',
     margin: `calc(${variables.padding.f} * -1) 0 0 calc(${variables.padding.f} * -1)`,
@@ -163,6 +156,7 @@ const styles = {
   dragAndDropNotOk: mixins.dragAndDrop.dragAndDropNotOk,
   dragAndDropHeading: mixins.dragAndDrop.dragAndDropHeading,
   dragAndDropCopy: mixins.dragAndDrop.dragAndDropCopy,
+  dragAndDropFakeLink: mixins.dragAndDrop.dragAndDropFakeLink,
   dragAndDropCopyEmphasis: mixins.dragAndDrop.dragAndDropCopyEmphasis,
   highlight: mixins.highlightColour,
   copy: merge(mixins.typography.p, {

@@ -461,8 +461,7 @@ function sendImportEmail (data) {
   const subject = `${name} @ ${company} has uploaded their connections`
   const html = `You can download it from ${location}`
   const from = 'hello@nudj.co'
-  // const to = 'hello@nudj.co'
-  const to = 'wayne@nudj.co'
+  const to = process.env.NUDJ_INTERNAL_NOTIFICATION_EMAIL
 
   mailer.send({from, to, subject, html})
 

@@ -105,94 +105,89 @@ module.exports = class ComposePage extends React.Component {
 
   stepInfo () {
     return (<div className={this.style.instructionsStepContainer}>
-      <h4 className={this.style.instructionsStepHeading}>Step 1 - Requesting your data</h4>
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-01.png' alt='Your LinkedIn home page' />
-        <ol className={this.style.instructionsSteps}>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Log in to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/' target='_blank'>LinkedIn</a>.</p>
-          </li>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Click on your profile image (labeled "Me") in the top right hand corner of the page.</p>
-          </li>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Next, click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/' target='_blank'>"Settings &amp; Privacy"</a>.</p>
-          </li>
-        </ol>
+      <div className={this.style.instructionsStepCard}>
+        <h4 className={this.style.instructionsStepHeading}>Step 1 - Requesting your data</h4>
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-01.png' alt='Your LinkedIn home page' />
+          <ol className={this.style.instructionsSteps}>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Log in to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/' target='_blank'>LinkedIn</a>.</p>
+            </li>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Click on your profile image (labeled "Me") in the top right hand corner of the page.</p>
+            </li>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Next, click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/' target='_blank'>"Settings &amp; Privacy"</a>.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-02.png' alt='The LinkedIn Settings &amp; Privacy page' />
+          <ol className={this.style.instructionsSteps} start='4'>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Scroll, down until <em className={this.style.instructionsCopyEmphasis}>"Getting an archive of your data"</em> and click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>Change</a>.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-03.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
+          <ol className={this.style.instructionsSteps} start='5'>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Make sure <em className={this.style.instructionsCopyEmphasis}>"Fast file only"</em> is selected, then click on <em className={this.style.instructionsCopyEmphasis}>"Request archive"</em>.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-04.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
+          <ol className={this.style.instructionsSteps} start='6'>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Enter your password and hit <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - you should now see a green tick with Save next to it.</p>
+            </li>
+          </ol>
+        </div>
       </div>
 
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-02.png' alt='The LinkedIn Settings &amp; Privacy page' />
-        <ol className={this.style.instructionsSteps} start='4'>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Scroll, down until <em className={this.style.instructionsCopyEmphasis}>"Getting an archive of your data"</em> and click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>Change</a>.</p>
-          </li>
-        </ol>
+      <div className={this.style.instructionsStepCard}>
+        <h4 className={this.style.instructionsStepHeading}>Step 2 - Downloading your data</h4>
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-05.png' alt='An email from LinkedIn with instructions on how to download your data' />
+          <ol className={this.style.instructionsSteps}>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Log into your email account that you use to log into your LinkedIn account, you should have received an email from LinkedIn with a link to download your data.</p>
+              <p className={this.style.instructionsCopy}>If it's not there, give it 10 minutes and check again (it may also end up in your spam / junk folder, so it's worth also checking in there if it doesn't appear immediately).</p>
+            </li>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Open the email and click the link to download your data - this will take you back to LinkedIn Settings page.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-06.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <ol className={this.style.instructionsSteps} start='3'>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Click on the Download button and save it where ever you like.</p>
+            </li>
+          </ol>
+        </div>
       </div>
 
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-03.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
-        <ol className={this.style.instructionsSteps} start='5'>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Make sure <em className={this.style.instructionsCopyEmphasis}>"Fast file only"</em> is selected, then click on <em className={this.style.instructionsCopyEmphasis}>"Request archive"</em>.</p>
-          </li>
-        </ol>
-      </div>
-
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-04.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
-        <ol className={this.style.instructionsSteps} start='6'>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Enter your password and hit <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - you should now see a green tick with Save next to it.</p>
-          </li>
-        </ol>
-      </div>
-
-      <h4 className={this.style.instructionsStepHeading}>Step 2 - Downloading your data</h4>
-
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-05.png' alt='An email from LinkedIn with instructions on how to download your data' />
-        <ol className={this.style.instructionsSteps}>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Log into your email account that you use to log into your LinkedIn account, you should have received an email from LinkedIn with a link to download your data.</p>
-            <p className={this.style.instructionsCopy}>If it's not there, give it 10 minutes and check again (it may also end up in your spam / junk folder, so it's worth also checking in there if it doesn't appear immediately).</p>
-          </li>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Open the email and click the link to download your data - this will take you back to LinkedIn Settings page.</p>
-          </li>
-        </ol>
-      </div>
-
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-06.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
-        <ol className={this.style.instructionsSteps} start='3'>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Click on the Download button and save it where ever you like.</p>
-          </li>
-        </ol>
-      </div>
-
-      <h4 className={this.style.instructionsStepHeading}>Step 3 - Preparing your data for upload</h4>
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-06.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
-        <ol className={this.style.instructionsSteps}>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Go to where you saved the downloaded folder, open it up and locate on the <em className={this.style.instructionsCopyEmphasis}>Connections.csv</em> file. We only need this .csv  file, not the whole folder.</p>
-          </li>
-        </ol>
-      </div>
-
-      <h4 className={this.style.instructionsStepHeading}>Step 4 - Uploading to nudj</h4>
-      <div className={this.style.instructionsGroup}>
-        <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-06.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
-        <ol className={this.style.instructionsSteps}>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Click next?</p>
-          </li>
-          <li className={this.style.instructionsStep}>
-            <p className={this.style.instructionsCopy}>Click the box, locate the .csv file and select it (alternatively you can drag and drop the renamed .csv  file into the box).</p>
-          </li>
-        </ol>
+      <div className={this.style.instructionsStepCard}>
+        <h4 className={this.style.instructionsStepHeading}>Step 3 - Uploading to nudj</h4>
+        <div className={this.style.instructionsGroup}>
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-07.png' alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <ol className={this.style.instructionsSteps}>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Go to where you saved the downloaded folder, open it up and locate on the <em className={this.style.instructionsCopyEmphasis}>Connections.csv</em> file. We only need this .csv  file, not the whole folder.</p>
+            </li>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Click next</p>
+            </li>
+          </ol>
+        </div>
       </div>
 
     </div>)
@@ -212,9 +207,8 @@ module.exports = class ComposePage extends React.Component {
     }
 
     return (<div className={className}>
-      <p className={this.style.instructionsCopy}>To be totally transparent, we wanted to show you the data that you’re uploading to our system, so you can check you’re happy with us using it</p>
-      <p className={this.style.instructionsMajorHeading}>Contacts found <span className={this.style.highlight}>({data.length})</span></p>
       <div className={this.style.instructionsCard}>
+        <p className={this.style.instructionsMajorHeading}>Contacts found <span className={this.style.highlight}>({data.length})</span></p>
         <table className={this.style.uploadTable}>
           <thead className={this.style.uploadTableHead}>
             <tr className={this.style.uploadTableRow}>
@@ -284,8 +278,8 @@ module.exports = class ComposePage extends React.Component {
     }
 
     return (<span>
-      <h5 className={this.style.dragAndDropHeading}>Drag &amp; drop</h5>
-      <p className={this.style.dragAndDropCopy}>Or click to select from computer</p>
+      <h5 className={this.style.dragAndDropHeading}>Drag &amp; drop Connections.csv</h5>
+      <p className={this.style.dragAndDropFakeLink}>Or click to select from computer</p>
     </span>)
   }
 
@@ -293,16 +287,18 @@ module.exports = class ComposePage extends React.Component {
     const disablePreview = true
     const multiple = false
     return (<div className={this.style.instructionsStepContainer}>
-      <Dropzone
-        accept='text/csv'
-        disablePreview={disablePreview}
-        multiple={multiple}
-        className={this.style.dragAndDrop}
-        activeClassName={this.style.dragAndDropOk}
-        rejectClassName={this.style.dragAndDropNotOk}
-        onDrop={this.onUploadFile.bind(this)}>
-        {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => this.dropzoneInternal({ isDragActive, isDragReject, acceptedFiles, rejectedFiles })}
-      </Dropzone>
+      <div className={this.style.instructionsCard}>
+        <Dropzone
+          accept='text/csv'
+          disablePreview={disablePreview}
+          multiple={multiple}
+          className={this.style.dragAndDrop}
+          activeClassName={this.style.dragAndDropOk}
+          rejectClassName={this.style.dragAndDropNotOk}
+          onDrop={this.onUploadFile.bind(this)}>
+          {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => this.dropzoneInternal({ isDragActive, isDragReject, acceptedFiles, rejectedFiles })}
+        </Dropzone>
+      </div>
     </div>)
   }
 
@@ -351,22 +347,22 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderCurrentTitles () {
-    // const active = this.state.active
+    const active = this.state.active
 
-    const titleText = 'Unlocking your network'
-    const subtitleText = 'A description of what this will help the hirer achieve'
+    let titleText = 'Exporting your contacts from LinkedIn'
+    let subtitleText = 'A description of what this will help the hirer achieve'
 
-    // switch (active) {
-    //   case 2:
-    //     titleText = ''
-    //     subtitleText = ''
-    //     break
-    //   case 3:
-    //     titleText = ''
-    //     subtitleText = ''
-    //     break
-    //   default:
-    // }
+    switch (active) {
+      case 2:
+        titleText = 'Upload your file'
+        subtitleText = 'Click the box, locate Connections.csv and select it (alternatively you can drag and drop Connections.csv into the box)'
+        break
+      case 3:
+        titleText = 'Check your data'
+        subtitleText = 'To be totally transparent, we wanted to show you the data that you’re uploading to our system, so you can check you’re happy with us using it'
+        break
+      default:
+    }
 
     const title = (<h3 className={this.style.pageHeadline}>{titleText}</h3>)
     const subtitle = (<p className={this.style.copy}>{subtitleText}</p>)
@@ -392,7 +388,7 @@ module.exports = class ComposePage extends React.Component {
       </Helmet>
       <input type='hidden' name='_csrf' value={this.props.csrfToken} />
       <PageHeader
-        title='Upload your contacts'
+        title='Unlocking your network'
         subtitle='LinkedIn'
       />
       {title}

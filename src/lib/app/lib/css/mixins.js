@@ -160,6 +160,14 @@ module.exports.typography = {
     color: variables.colors.royalBlue,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h5),
+  h6: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h6),
+  h7: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h7),
   p: merge({
     color: variables.colors.charcoal,
     margin: `0 0 ${variables.padding.d} 0`
@@ -447,7 +455,8 @@ module.exports.table.tableCellEvenFixedHeight = merge(module.exports.table.table
 const dragAndDropBase = {
   alignItems: 'center',
   alignContent: 'center',
-  border: `${variables.sizing.baseBorderWidth} dashed ${variables.colors.charcoal}`,
+  border: `${variables.sizing.baseBorderWidth} dashed ${variables.colors.royalBlue}`,
+  borderRadius: variables.sizing.baseBorderRadius,
   cursor: 'pointer',
   display: 'flex',
   flexDirection: 'column',
@@ -471,6 +480,12 @@ module.exports.dragAndDrop = {
   dragAndDropCopy: merge(module.exports.typography.p, {
     margin: '0',
     textAlign: 'center'
+  }),
+  dragAndDropFakeLink: merge(module.exports.typography.p, {
+    color: variables.colors.royalBlue,
+    margin: '0',
+    textAlign: 'center',
+    textDecoration: 'underline'
   }),
   dragAndDropCopyEmphasis: merge(module.exports.headings.pBold, {
     fontStyle: 'normal'
