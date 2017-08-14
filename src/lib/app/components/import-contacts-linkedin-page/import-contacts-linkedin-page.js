@@ -108,32 +108,11 @@ module.exports = class ComposePage extends React.Component {
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 1 - Requesting your data</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-01.png' alt='Your LinkedIn home page' />
+          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-03.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Log in to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/' target='_blank'>LinkedIn</a>.</p>
+              <p className={this.style.instructionsCopy}>Go to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>"Getting an archive of your data"</a> on LinkedIn (you may need to log in).</p>
             </li>
-            <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Click on your profile image (labeled "Me") in the top right hand corner of the page.</p>
-            </li>
-            <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Next, click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/' target='_blank'>"Settings &amp; Privacy"</a>.</p>
-            </li>
-          </ol>
-        </div>
-
-        <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-02.png' alt='The LinkedIn Settings &amp; Privacy page' />
-          <ol className={this.style.instructionsSteps} start='4'>
-            <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Scroll, down until <em className={this.style.instructionsCopyEmphasis}>"Getting an archive of your data"</em> and click on <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>Change</a>.</p>
-            </li>
-          </ol>
-        </div>
-
-        <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-03.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
-          <ol className={this.style.instructionsSteps} start='5'>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Make sure <em className={this.style.instructionsCopyEmphasis}>"Fast file only"</em> is selected, then click on <em className={this.style.instructionsCopyEmphasis}>"Request archive"</em>.</p>
             </li>
@@ -142,7 +121,7 @@ module.exports = class ComposePage extends React.Component {
 
         <div className={this.style.instructionsGroup}>
           <img className={this.style.instructionsImage} src='/assets/images/upload-contacts/linkedin-step-04.png' alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
-          <ol className={this.style.instructionsSteps} start='6'>
+          <ol className={this.style.instructionsSteps} start='3'>
             <li className={this.style.instructionsStep}>
               <p className={this.style.instructionsCopy}>Enter your password and hit <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - you should now see a green tick with Save next to it.</p>
             </li>
@@ -304,7 +283,7 @@ module.exports = class ComposePage extends React.Component {
 
   stepFinished () {
     return (<div className={this.style.done}>
-      <p className={this.style.doneCopy}>Great, we'll be in touch soon!</p>
+      <p className={this.style.doneCopy}>Thanks for sharing. We’re going through your connections now and will notify you as soon as we’ve identified key people to ask - it usually takes a couple of days.</p>
       <img src='/assets/images/ok-hand-2.svg' className={this.style.doneOkHand} alt='Ok' />
     </div>)
   }
