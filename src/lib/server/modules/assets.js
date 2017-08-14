@@ -14,7 +14,7 @@ function saveAsset ({assetType, location, person}) {
 }
 
 module.exports.post = function ({data, asset, assetType, fileName, person}) {
-  const timestamp = format(new Date(), 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+  const timestamp = format(new Date(), 'YYYYMMDDTHHmmssSSSZ')
   const filePath = `${person}/${assetType}/${timestamp}_${fileName}`
 
   data.asset = S3.post({asset, filePath})
