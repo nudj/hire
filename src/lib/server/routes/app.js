@@ -10,6 +10,7 @@ const assets = require('../modules/assets')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
+const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const { promiseMap } = require('../lib')
 
@@ -496,7 +497,8 @@ function fetchSurveyPrismicContent (data) {
 }
 
 function surveyPageHandler (req, res, next) {
-  fetchSurveyPrismicContent(clone(req.session.data))
+  surveys.getSurveyForCompany(clone(req.session.data))
+    .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))

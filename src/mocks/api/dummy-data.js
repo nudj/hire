@@ -7,7 +7,8 @@ const data = {
   applications: [],
   hirers: [],
   recommendations: [],
-  externalMessages: []
+  externalMessages: [],
+  surveys: []
 }
 data.companies = data.companies.concat([
   {
@@ -223,6 +224,15 @@ data.recommendations = data.recommendations.concat([
     person: 'person5',
     hirer: 'hirer1',
     source: 'NUDJ'
+  }
+])
+data.surveys = data.surveys.concat([
+  {
+    id: 'survey1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'http://surveymonkey.com/123'
   }
 ])
 
