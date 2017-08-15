@@ -521,7 +521,6 @@ function surveyPageSendHandler (req, res, next) {
   .catch(getErrorHandler(req, res, next))
 }
 
-
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
