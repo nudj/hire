@@ -10,6 +10,7 @@ const { merge } = require('../../../lib')
 const Form = require('../form/form')
 const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
 const Tooltip = require('../tooltip/tooltip')
+const ComposeEmail = require('../compose-email/compose-email')
 const {
   showDialog,
   hideDialog,
@@ -18,7 +19,12 @@ const {
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
-const ComposeEmail = require('../compose-email/compose-email')
+const permittedTags = {
+  'company.name': 'company.name',
+  'survey.link': 'survey.link',
+  'sender.firstname': 'person.firstName',
+  'sender.lastname': 'person.lastName'
+}
 
 module.exports = class SurveyPage extends React.Component {
   constructor (props) {
@@ -61,9 +67,12 @@ module.exports = class SurveyPage extends React.Component {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
+    const options = {
+      permittedTags: Object.keys(permittedTags)
+    }
     return ['subject', 'template'].reduce((newState, key) => {
       let value = get(this.state, key, get(this.state, `${key}Fallback`))
-      newState[`${key}Error`] = validators[key](value)
+      newState[`${key}Error`] = validators[key](value, options)
       return newState
     }, {})
   }
@@ -113,25 +122,25 @@ module.exports = class SurveyPage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
-    const companySlug = get(this.props, 'company.slug', '')
-    const jobSlug = get(this.props, 'job.slug', '')
+    const data = Object.keys(permittedTags).reduce((data, tag) => {
+      const keys = tag.split('.')
+      const path = permittedTags[tag]
+      const getter = typeof path === 'string' ? data => get(data, path, '') : path
+      let target = data
+      keys.forEach((key, index) => {
+        if (index + 1 === keys.length) {
+          target[key] = getter(this.props)
+        } else {
+          target[key] = target[key] || {}
+          target = target[key]
+        }
+      })
+      return data
+    }, {})
 
     return templater.render({
       template: template || get(this.state, 'template', ''),
-      data: {
-        company: {
-          name: get(this.props, 'company.name', '')
-        },
-        job: {
-          bonus: get(this.props, 'job.bonus', ''),
-          link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
-          title: get(this.props, 'job.title', '')
-        },
-        sender: {
-          firstname: get(this.props, 'person.firstName', ''),
-          lastname: get(this.props, 'person.lastName', '')
-        }
-      },
+      data,
       tagify: this.tagify,
       pify: this.pify,
       chunkify: this.chunkify,
