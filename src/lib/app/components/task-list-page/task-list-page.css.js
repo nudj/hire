@@ -1,7 +1,8 @@
 let {
   css,
   merge,
-  mixins
+  mixins,
+  variables
 } = require('../../lib/css')
 
 const listStyle = {
@@ -11,7 +12,12 @@ const listStyle = {
 }
 
 module.exports = css(merge(mixins.pageLayout, {
-  upload: mixins.buttonSecondary,
   jobs: listStyle,
-  nudj: mixins.button
+  taskGroupTitle: merge(mixins.typography.h6, {
+    padding: `0 0 0 ${variables.padding.d}`
+  }),
+  taskGroupTitleHighlight: mixins.highlightColour,
+  completedVisibleButton: merge(mixins.buttonSecondary, {
+    margin: `0 0 0 ${variables.padding.d}`
+  })
 }))

@@ -16,6 +16,13 @@ const styles = {
   text: merge(mixins.headings.p, {
     flexGrow: '1'
   }),
+  textDone: {
+    display: 'block',
+    textDecoration: 'line-through'
+  },
+  completedText: {
+    display: 'block'
+  },
   action: mixins.button
 }
 

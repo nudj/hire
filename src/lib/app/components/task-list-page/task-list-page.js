@@ -10,33 +10,71 @@ const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
 const TaskList = require('../tasks/task-list')
 
-const TaskListPage = (props) => {
-  const style = getStyle()
-  const jobs = get(props, 'jobs', [])
-  const tooltip = get(props, 'tooltip')
+module.exports = class TaskListPage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.style = getStyle()
+    const completedVisible = false
+    this.state = {completedVisible}
+  }
 
-  const firstName = get(props, 'person.firstName', '')
+  toggleCompletedVisible (event) {
+    event.preventDefault()
+    const completedVisible = !get(this.state, 'completedVisible', true)
+    this.setState({completedVisible})
+  }
 
-  // const completeTasks = get(props, 'tasks', []).filter(task => task.completed)
-  const incompleteTasks = get(props, 'tasks', []).filter(task => !task.completed)
+  renderCompletedVisible (completeTasks) {
+    if (!completeTasks.length) {
+      return (<span />)
+    }
 
-  return (
-    <div className={style.pageBody}>
-      <Helmet>
-        <title>{`nudj - Tasks`}</title>
-      </Helmet>
-      <PageHeader title='Tasks' />
-      <h3 className={style.pageHeadline}>Welcome, {firstName}! You have {incompleteTasks.length} <Plural singular='task' plural='tasks' count={incompleteTasks.length} /></h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          <TaskList tasks={incompleteTasks} />
+    const {completedVisible} = this.state
+
+    if (!completedVisible) {
+      return (<button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Show completed tasks</button>)
+    }
+
+    return (<div>
+      <h3 className={this.style.taskGroupTitle}>Completed tasks <span className={this.style.taskGroupTitleHighlight}>({completeTasks.length})</span></h3>
+      <div className={this.style.pageContent}>
+        <div className={this.style.pageMain}>
+          <TaskList tasks={completeTasks} />
         </div>
-        <div className={style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
+        <div className={this.style.pageSidebar} />
       </div>
-    </div>
-  )
-}
+      <button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Hide completed tasks</button>
+    </div>)
+  }
 
-module.exports = TaskListPage
+  render () {
+    const jobs = get(this.props, 'jobs', [])
+    const tooltip = get(this.props, 'tooltip')
+
+    const firstName = get(this.props, 'person.firstName', '')
+
+    const completeTasks = get(this.props, 'tasks', []).filter(task => task.completed)
+    const incompleteTasks = get(this.props, 'tasks', []).filter(task => !task.completed)
+
+    const completedVisibleContent = this.renderCompletedVisible(completeTasks)
+
+    return (
+      <div className={this.style.pageBody}>
+        <Helmet>
+          <title>{`nudj - Tasks`}</title>
+        </Helmet>
+        <PageHeader title='Tasks' />
+        <h3 className={this.style.pageHeadline}>Welcome, {firstName}! You have {incompleteTasks.length} <Plural singular='task' plural='tasks' count={incompleteTasks.length} /></h3>
+        <div className={this.style.pageContent}>
+          <div className={this.style.pageMain}>
+            <TaskList tasks={incompleteTasks} />
+          </div>
+          <div className={this.style.pageSidebar}>
+            {tooltip ? <Tooltip {...tooltip} /> : ''}
+          </div>
+        </div>
+        {completedVisibleContent}
+      </div>
+    )
+  }
+}

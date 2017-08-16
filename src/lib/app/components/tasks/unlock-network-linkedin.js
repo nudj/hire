@@ -1,16 +1,39 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const { distanceInWordsToNow, format, differenceInSeconds } = require('date-fns')
 
 const getStyle = require('./default.css')
 
-const TaskUnlockedNetworkLinkedIn = (props) => {
-  const style = getStyle()
-  const tasks = get(props, 'task')
-  return (<li className={style.task}>
-    <p className={style.text}>Unlock your network by uploading your LinkedIn contacts</p>
-    <Link className={style.action} to='/import-contacts'>Action</Link>
-  </li>)
-}
+module.exports = class TaskUnlockedNetworkLinkedIn extends React.Component {
+  constructor (props) {
+    super(props)
+    this.style = getStyle()
+  }
 
-module.exports = TaskUnlockedNetworkLinkedIn
+  renderComplete (task) {
+    const modified = get(task, 'modified')
+    const difference = differenceInSeconds(new Date(), modified)
+    const formattedModified = (difference < 120) ? 'just now' : `${distanceInWordsToNow(modified)} ago`
+
+    return (<li className={this.style.task}>
+      <p className={this.style.text}>
+        <span className={this.style.textDone}>Unlock your network by uploading your LinkedIn contacts</span>
+        <span className={this.style.completedText}>You completed this task {formattedModified}</span>
+      </p>
+    </li>)
+  }
+
+  renderIncomplete () {
+    return (<li className={this.style.task}>
+      <p className={this.style.text}>Unlock your network by uploading your LinkedIn contacts</p>
+      <Link className={this.style.action} to='/import-contacts'>Action</Link>
+    </li>)
+  }
+
+  render () {
+    const task = get(this.props, 'task')
+    const taskCompleted = get(task, 'completed', false)
+    return taskCompleted ? this.renderComplete(task) : this.renderIncomplete()
+  }
+}
