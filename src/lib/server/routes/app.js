@@ -524,8 +524,7 @@ function surveyPageSendHandler (req, res, next) {
         }
         return res.redirect('/survey-page')
       }
-      return surveys.getSurveyForCompany(data)
-        .then(fetchSurveyPrismicContent)
+      return fetchSurveyPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
         .then(getRenderer(req, res, next))
         .catch(getErrorHandler(req, res, next))
