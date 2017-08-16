@@ -21,7 +21,7 @@ const {
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
-const permittedTags = {
+const tagPaths = {
   'company.name': 'company.name',
   'job.bonus': 'job.bonus',
   'job.link': data => {
@@ -79,8 +79,9 @@ module.exports = class ComposePage extends React.Component {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
+    const permittedTags = get(this.props, 'permittedTags', [])
     const options = {
-      permittedTags: Object.keys(permittedTags)
+      permittedTags
     }
     return ['subject', 'template'].reduce((newState, key) => {
       let value = get(this.state, key, get(this.state, `${key}Fallback`))
@@ -140,9 +141,10 @@ module.exports = class ComposePage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
-    const data = Object.keys(permittedTags).reduce((data, tag) => {
+    const permittedTags = get(this.props, 'permittedTags', [])
+    const data = permittedTags.reduce((data, tag) => {
       const keys = tag.split('.')
-      const path = permittedTags[tag]
+      const path = tagPaths[tag]
       const getter = typeof path === 'string' ? data => get(data, path, '') : path
       let target = data
       keys.forEach((key, index) => {

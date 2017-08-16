@@ -159,6 +159,30 @@ function getRenderer (req, res, next) {
   }
 }
 
+const permittedTags = {
+  internal: [
+    'company.name',
+    'job.bonus',
+    'job.link',
+    'job.title',
+    'sender.firstname',
+    'sender.lastname'
+  ],
+  survey: [
+    'company.name',
+    'survey.link',
+    'sender.firstname',
+    'sender.lastname'
+  ]
+}
+
+function addPermittedTagsFor (type) {
+  return data => {
+    data.permittedTags = permittedTags[type]
+    return promiseMap(data)
+  }
+}
+
 function jobsHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -306,8 +330,8 @@ function fetchInternalPrismicContent (data) {
 }
 
 function internalHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+  addPermittedTagsFor('internal')(clone(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -315,9 +339,9 @@ function internalHandler (req, res, next) {
 }
 
 function internalSendHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then((data) => network.send(data, req.body))
+  addPermittedTagsFor('internal')(clone(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -483,21 +507,27 @@ function importContactsLinkedInSaveHandler (req, res, next) {
 }
 
 function fetchSurveyPrismicContent (data) {
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['survey']
+  }
   const dialogQuery = {
     'document.type': 'dialog',
-    'document.tags': ['sendInternal']
+    'document.tags': ['survey']
   }
   const tooltipQuery = {
     'document.type': 'tooltip',
-    'document.tags': ['sendInternal']
+    'document.tags': ['survey']
   }
+  data.compose = prismic.fetchContent(composeQuery, true)
   data.dialog = prismic.fetchContent(dialogQuery, true)
   data.tooltip = prismic.fetchContent(tooltipQuery, true)
   return promiseMap(data)
 }
 
 function surveyPageHandler (req, res, next) {
-  surveys.getSurveyForCompany(clone(req.session.data))
+  addPermittedTagsFor('survey')(clone(req.session.data))
+    .then(surveys.getSurveyForCompany)
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -505,22 +535,24 @@ function surveyPageHandler (req, res, next) {
 }
 
 function surveyPageSendHandler (req, res, next) {
-  network.send(clone(req.session.data), req.body)
-  .then(data => {
-    if (data.messages) {
-      // successful send
-      req.session.notification = {
-        type: 'success',
-        message: 'That’s the way, aha aha, I like it! 🎉'
+  addPermittedTagsFor('survey')(clone(req.session.data))
+    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        req.session.notification = {
+          type: 'success',
+          message: 'That’s the way, aha aha, I like it! 🎉'
+        }
+        return res.redirect('/survey-page')
       }
-      return res.redirect('/survey-page')
-    }
-    return fetchSurveyPrismicContent(data)
-      .then(getRenderDataBuilder(req, res, next))
-      .then(getRenderer(req, res, next))
-      .catch(getErrorHandler(req, res, next))
-  })
-  .catch(getErrorHandler(req, res, next))
+      return surveys.getSurveyForCompany(data)
+        .then(fetchSurveyPrismicContent)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
 }
 
 router.use(ensureLoggedIn)

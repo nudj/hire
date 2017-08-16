@@ -5,6 +5,7 @@ const some = require('lodash/some')
 const values = require('lodash/values')
 const getStyle = require('./survey-page.css')
 const PageHeader = require('../page-header/page-header')
+const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
 const { merge } = require('../../../lib')
 const Form = require('../form/form')
@@ -19,7 +20,7 @@ const {
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 
-const permittedTags = {
+const tagPaths = {
   'company.name': 'company.name',
   'survey.link': 'survey.link',
   'sender.firstname': 'person.firstName',
@@ -31,14 +32,18 @@ module.exports = class SurveyPage extends React.Component {
     super(props)
     this.style = getStyle()
 
+    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
+    let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
+    let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+
     this.state = {
       recipients: get(props, 'form.recipients.value'),
       recipientsError: get(props, 'form.recipients.error', false),
       subject: get(props, 'form.subject.value'),
-      subjectFallback: 'This is the subject',
+      subjectFallback: composeSubject,
       subjectError: get(props, 'form.subject.error', false),
       template: get(props, 'form.template.value'),
-      templateFallback: 'This is the message',
+      templateFallback: composeMessage,
       templateError: get(props, 'form.template.error', false),
       editing: true
     }
@@ -67,8 +72,9 @@ module.exports = class SurveyPage extends React.Component {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
+    const permittedTags = get(this.props, 'permittedTags')
     const options = {
-      permittedTags: Object.keys(permittedTags)
+      permittedTags
     }
     return ['subject', 'template'].reduce((newState, key) => {
       let value = get(this.state, key, get(this.state, `${key}Fallback`))
@@ -77,12 +83,18 @@ module.exports = class SurveyPage extends React.Component {
     }, {})
   }
   componentWillReceiveProps (props) {
+    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
+    let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
+    let composeMessage = (get(this.state, 'template', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+
     this.setState({
       recipients: get(this.state, 'recipients', get(props, 'form.recipients.value')),
       recipientsError: get(this.state, 'recipientsError', get(props, 'form.recipients.error', false)),
       subject: get(this.state, 'subject', get(props, 'form.subject.value')),
+      subjectFallback: composeSubject,
       subjectError: get(this.state, 'subjectError', get(props, 'form.subject.error', false)),
       template: get(this.state, 'template', get(props, 'form.template.value')),
+      templateFallback: composeMessage,
       templateError: get(this.state, 'templateError', get(props, 'form.template.error', false))
     })
   }
@@ -122,9 +134,10 @@ module.exports = class SurveyPage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
-    const data = Object.keys(permittedTags).reduce((data, tag) => {
+    const permittedTags = get(this.props, 'permittedTags')
+    const data = permittedTags.reduce((data, tag) => {
       const keys = tag.split('.')
-      const path = permittedTags[tag]
+      const path = tagPaths[tag]
       const getter = typeof path === 'string' ? data => get(data, path, '') : path
       let target = data
       keys.forEach((key, index) => {

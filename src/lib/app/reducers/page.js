@@ -20,7 +20,9 @@ function pageReducer (state = initialState, action) {
     case FETCHED_PAGE:
       return merge(action.data.page, {
         sending: false,
-        loading: false
+        loading: false,
+        // ensure notifications persist through multiple fetches (should only be dismissable by the user)
+        notification: action.data.page.notification || state.notification
       })
     case SHOW_DIALOG:
       return merge(state, { overlay: action.dialog })
