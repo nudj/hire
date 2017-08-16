@@ -12,6 +12,7 @@ const jobs = require('../modules/jobs')
 const network = require('../modules/network')
 const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
+const tasks = require('../modules/tasks')
 const { promiseMap } = require('../lib')
 const tags = require('../../lib/tags')
 
@@ -473,13 +474,16 @@ function sendImportEmail (data) {
 function importContactsLinkedInSaveHandler (req, res, next) {
   const data = clone(req.session.data)
 
-  const assetType = 'CONTACTS_LINKEDIN' // ENUM?
+  const assetType = 'CONTACTS_LINKEDIN'
   const person = data.person.id
   const asset = req.files.file.data
   const fileName = req.body.name
 
+  const taskType = 'UNLOCK_NETWORK_LINKEDIN'
+
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
+    .then(data => tasks.completeTaskByHirerAndType(data, data.hirer.id, taskType))
     .then(data => importContactsLinkedIn(req, res, next, data))
 }
 
