@@ -13,6 +13,7 @@ const network = require('../modules/network')
 const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const { promiseMap } = require('../lib')
+const tags = require('../../lib/tags')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
@@ -156,30 +157,6 @@ function getRenderer (req, res, next) {
         created_at: person && (getTime(person.created) / 1000)
       })
     }
-  }
-}
-
-const permittedTags = {
-  internal: [
-    'company.name',
-    'job.bonus',
-    'job.link',
-    'job.title',
-    'sender.firstname',
-    'sender.lastname'
-  ],
-  survey: [
-    'company.name',
-    'survey.link',
-    'sender.firstname',
-    'sender.lastname'
-  ]
-}
-
-function addPermittedTagsFor (type) {
-  return data => {
-    data.permittedTags = permittedTags[type]
-    return promiseMap(data)
   }
 }
 
@@ -330,7 +307,7 @@ function fetchInternalPrismicContent (data) {
 }
 
 function internalHandler (req, res, next) {
-  addPermittedTagsFor('internal')(clone(req.session.data))
+  Promise.resolve(clone(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -339,9 +316,9 @@ function internalHandler (req, res, next) {
 }
 
 function internalSendHandler (req, res, next) {
-  addPermittedTagsFor('internal')(clone(req.session.data))
+  Promise.resolve(clone(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
+    .then((data) => network.send(data, req.body, tags.internal))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -526,7 +503,7 @@ function fetchSurveyPrismicContent (data) {
 }
 
 function surveyPageHandler (req, res, next) {
-  addPermittedTagsFor('survey')(clone(req.session.data))
+  Promise.resolve(clone(req.session.data))
     .then(surveys.getSurveyForCompany)
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -535,8 +512,9 @@ function surveyPageHandler (req, res, next) {
 }
 
 function surveyPageSendHandler (req, res, next) {
-  addPermittedTagsFor('survey')(clone(req.session.data))
-    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
+  Promise.resolve(clone(req.session.data))
+    .then(surveys.getSurveyForCompany)
+    .then((data) => network.send(data, req.body, tags.survey))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -546,8 +524,7 @@ function surveyPageSendHandler (req, res, next) {
         }
         return res.redirect('/survey-page')
       }
-      return surveys.getSurveyForCompany(data)
-        .then(fetchSurveyPrismicContent)
+      return fetchSurveyPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
         .then(getRenderer(req, res, next))
         .catch(getErrorHandler(req, res, next))
