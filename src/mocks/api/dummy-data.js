@@ -8,7 +8,8 @@ const data = {
   hirers: [],
   recommendations: [],
   externalMessages: [],
-  surveys: []
+  surveys: [],
+  tasks: []
 }
 data.companies = data.companies.concat([
   {
@@ -233,6 +234,24 @@ data.surveys = data.surveys.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
     link: 'http://surveymonkey.com/123'
+  }
+])
+data.tasks = data.tasks.concat([
+  {
+    id: 'task1',
+    hirer: 'hirer1',
+    type: 'UNLOCK_NETWORK_LINKEDIN',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
+  },
+  {
+    id: 'task2',
+    company: 'company1',
+    type: 'SEND_SURVEY_INTERNAL',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
   }
 ])
 
