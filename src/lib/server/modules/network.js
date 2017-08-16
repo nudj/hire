@@ -9,10 +9,10 @@ const { merge } = require('../../lib')
 const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
 
-function validate (formData, data) {
+function validate (formData, data, options) {
   let invalid
   formData = mapValues(formData, (value, key) => {
-    const error = validators[key](value)
+    const error = validators[key](value, options)
     if (error) {
       invalid = true
     }
@@ -28,10 +28,10 @@ function validate (formData, data) {
   return data
 }
 
-function sendEmails ({ recipients, subject, template }) {
+function sendEmails ({ recipients, subject, template }, options) {
   return (data) => {
     try {
-      data = validate({ recipients, subject, template }, data)
+      data = validate({ recipients, subject, template }, data, options)
       let html = renderMessage({ data, template }).join('')
       data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
     } catch (error) {
@@ -87,8 +87,8 @@ function sendEmail ({ subject, html }) {
   })
 }
 
-module.exports.send = function (data, instructions) {
-  return sendEmails(instructions)(data)
+module.exports.send = function (data, instructions, options) {
+  return sendEmails(instructions, options)(data)
   .catch((error) => {
     logger.log('error', error)
     return merge(data, {

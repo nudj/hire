@@ -10,6 +10,7 @@ const assets = require('../modules/assets')
 const common = require('../modules/common')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
+const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const { promiseMap } = require('../lib')
 
@@ -155,6 +156,30 @@ function getRenderer (req, res, next) {
         created_at: person && (getTime(person.created) / 1000)
       })
     }
+  }
+}
+
+const permittedTags = {
+  internal: [
+    'company.name',
+    'job.bonus',
+    'job.link',
+    'job.title',
+    'sender.firstname',
+    'sender.lastname'
+  ],
+  survey: [
+    'company.name',
+    'survey.link',
+    'sender.firstname',
+    'sender.lastname'
+  ]
+}
+
+function addPermittedTagsFor (type) {
+  return data => {
+    data.permittedTags = permittedTags[type]
+    return promiseMap(data)
   }
 }
 
@@ -305,8 +330,8 @@ function fetchInternalPrismicContent (data) {
 }
 
 function internalHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+  addPermittedTagsFor('internal')(clone(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -314,9 +339,9 @@ function internalHandler (req, res, next) {
 }
 
 function internalSendHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then((data) => network.send(data, req.body))
+  addPermittedTagsFor('internal')(clone(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -481,6 +506,55 @@ function importContactsLinkedInSaveHandler (req, res, next) {
     .then(data => importContactsLinkedIn(req, res, next, data))
 }
 
+function fetchSurveyPrismicContent (data) {
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['survey']
+  }
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['survey']
+  }
+  const tooltipQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['survey']
+  }
+  data.compose = prismic.fetchContent(composeQuery, true)
+  data.dialog = prismic.fetchContent(dialogQuery, true)
+  data.tooltip = prismic.fetchContent(tooltipQuery, true)
+  return promiseMap(data)
+}
+
+function surveyPageHandler (req, res, next) {
+  addPermittedTagsFor('survey')(clone(req.session.data))
+    .then(surveys.getSurveyForCompany)
+    .then(fetchSurveyPrismicContent)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function surveyPageSendHandler (req, res, next) {
+  addPermittedTagsFor('survey')(clone(req.session.data))
+    .then((data) => network.send(data, req.body, { permittedTags: data.permittedTags }))
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        req.session.notification = {
+          type: 'success',
+          message: 'That’s the way, aha aha, I like it! 🎉'
+        }
+        return res.redirect('/survey-page')
+      }
+      return surveys.getSurveyForCompany(data)
+        .then(fetchSurveyPrismicContent)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
@@ -488,6 +562,8 @@ router.get('/', jobsHandler)
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
+router.get('/survey-page', surveyPageHandler)
+router.post('/survey-page', surveyPageSendHandler)
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)
 

@@ -1,10 +1,9 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const some = require('lodash/some')
 const values = require('lodash/values')
-const getStyle = require('./compose-page.css')
+const getStyle = require('./survey-page.css')
 const PageHeader = require('../page-header/page-header')
 const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
@@ -23,18 +22,12 @@ const { emails: validators } = require('../../../lib/validators')
 
 const tagPaths = {
   'company.name': 'company.name',
-  'job.bonus': 'job.bonus',
-  'job.link': data => {
-    const companySlug = get(data, 'company.slug', '')
-    const jobSlug = get(data, 'job.slug', '')
-    return `https://nudj.co/jobs/${companySlug}+${jobSlug}`
-  },
-  'job.title': 'job.title',
+  'survey.link': 'survey.link',
   'sender.firstname': 'person.firstName',
   'sender.lastname': 'person.lastName'
 }
 
-module.exports = class ComposePage extends React.Component {
+module.exports = class SurveyPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -79,7 +72,7 @@ module.exports = class ComposePage extends React.Component {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
-    const permittedTags = get(this.props, 'permittedTags', [])
+    const permittedTags = get(this.props, 'permittedTags')
     const options = {
       permittedTags
     }
@@ -141,7 +134,7 @@ module.exports = class ComposePage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
-    const permittedTags = get(this.props, 'permittedTags', [])
+    const permittedTags = get(this.props, 'permittedTags')
     const data = permittedTags.reduce((data, tag) => {
       const keys = tag.split('.')
       const path = tagPaths[tag]
@@ -170,7 +163,7 @@ module.exports = class ComposePage extends React.Component {
   onClickConfirm () {
     this.props.dispatch(showLoading())
     this.props.dispatch(postData({
-      url: `/${get(this.props, 'job.slug')}/internal`,
+      url: `/survey-page`,
       data: {
         recipients: get(this.state, 'recipients', ''),
         subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
@@ -195,14 +188,14 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const tooltip = get(this.props, 'tooltip')
     return (
-      <Form className={this.style.pageBody} action={`/${get(this.props, 'job.slug')}/internal`} method='POST'>
+      <Form className={this.style.pageBody} method='POST'>
         <Helmet>
-          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+          <title>{`nudj - Surveys ${get(this.props, 'company.name')}`}</title>
         </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title={<Link className={this.style.jobLink} to={`/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
+          title='Page Title'
+          subtitle='Subtitle'
         >
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
         </PageHeader>
