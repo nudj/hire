@@ -19,13 +19,10 @@ const {
   showLoading
 } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
-
-const tagPaths = {
-  'company.name': 'company.name',
-  'survey.link': 'survey.link',
-  'sender.firstname': 'person.firstName',
-  'sender.lastname': 'person.lastName'
-}
+const {
+  survey: tags,
+  getDataBuilderFor
+} = require('../../../lib/tags')
 
 module.exports = class SurveyPage extends React.Component {
   constructor (props) {
@@ -72,9 +69,8 @@ module.exports = class SurveyPage extends React.Component {
     return validators.recipients(get(this.state, 'recipients'))
   }
   validateEmail () {
-    const permittedTags = get(this.props, 'permittedTags')
     const options = {
-      permittedTags
+      permittedTags: Object.keys(tags)
     }
     return ['subject', 'template'].reduce((newState, key) => {
       let value = get(this.state, key, get(this.state, `${key}Fallback`))
@@ -134,26 +130,9 @@ module.exports = class SurveyPage extends React.Component {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
   renderMessage (template) {
-    const permittedTags = get(this.props, 'permittedTags')
-    const data = permittedTags.reduce((data, tag) => {
-      const keys = tag.split('.')
-      const path = tagPaths[tag]
-      const getter = typeof path === 'string' ? data => get(data, path, '') : path
-      let target = data
-      keys.forEach((key, index) => {
-        if (index + 1 === keys.length) {
-          target[key] = getter(this.props)
-        } else {
-          target[key] = target[key] || {}
-          target = target[key]
-        }
-      })
-      return data
-    }, {})
-
     return templater.render({
       template: template || get(this.state, 'template', ''),
-      data,
+      data: getDataBuilderFor(tags, this.props),
       tagify: this.tagify,
       pify: this.pify,
       chunkify: this.chunkify,

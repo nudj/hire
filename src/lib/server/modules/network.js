@@ -1,4 +1,3 @@
-const get = require('lodash/get')
 const mapValues = require('lodash/mapValues')
 const NudjError = require('../../lib/error')
 const request = require('../../lib/request')
@@ -8,11 +7,12 @@ const { promiseMap } = require('../lib')
 const { merge } = require('../../lib')
 const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
+const { getDataBuilderFor } = require('../../lib/tags')
 
-function validate (formData, data, options) {
+function validate (formData, data, tags) {
   let invalid
   formData = mapValues(formData, (value, key) => {
-    const error = validators[key](value, options)
+    const error = validators[key](value, { permittedTags: Object.keys(tags) })
     if (error) {
       invalid = true
     }
@@ -28,11 +28,11 @@ function validate (formData, data, options) {
   return data
 }
 
-function sendEmails ({ recipients, subject, template }, options) {
+function sendEmails ({ recipients, subject, template }, tags) {
   return (data) => {
     try {
-      data = validate({ recipients, subject, template }, data, options)
-      let html = renderMessage({ data, template }).join('')
+      data = validate({ recipients, subject, template }, data, tags)
+      let html = renderMessage({ data, template, tags }).join('')
       data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
     } catch (error) {
       if (error.name !== 'NudjError') {
@@ -54,26 +54,10 @@ function handleError (error, data) {
   return data
 }
 
-function renderMessage ({ data, template }) {
-  const companySlug = get(data, 'company.slug', '')
-  const jobSlug = get(data, 'job.slug', '')
-
+function renderMessage ({ data, template, tags }) {
   return templater.render({
     template,
-    data: {
-      company: {
-        name: get(data, 'company.name', '')
-      },
-      job: {
-        bonus: get(data, 'job.bonus', ''),
-        link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
-        title: get(data, 'job.title', '')
-      },
-      sender: {
-        firstname: get(data, 'person.firstName', ''),
-        lastname: get(data, 'person.lastName', '')
-      }
-    },
+    data: getDataBuilderFor(tags, data),
     pify: (contents, index, margin = 0) => `<p style="margin-top:${1.5 * margin}rem;">${contents.join('')}</p>`
   })
 }
@@ -87,8 +71,8 @@ function sendEmail ({ subject, html }) {
   })
 }
 
-module.exports.send = function (data, instructions, options) {
-  return sendEmails(instructions, options)(data)
+module.exports.send = function (data, instructions, tags) {
+  return sendEmails(instructions, tags)(data)
   .catch((error) => {
     logger.log('error', error)
     return merge(data, {
