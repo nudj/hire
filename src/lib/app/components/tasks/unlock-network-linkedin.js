@@ -1,8 +1,8 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
-const { distanceInWordsToNow, format, differenceInSeconds } = require('date-fns')
 
+const common = require('./common')
 const getStyle = require('./default.css')
 
 module.exports = class TaskUnlockedNetworkLinkedIn extends React.Component {
@@ -13,13 +13,16 @@ module.exports = class TaskUnlockedNetworkLinkedIn extends React.Component {
 
   renderComplete (task) {
     const modified = get(task, 'modified')
-    const difference = differenceInSeconds(new Date(), modified)
-    const formattedModified = (difference < 120) ? 'just now' : `${distanceInWordsToNow(modified)} ago`
+    const formattedModified = common.formattedModifiedDate(modified)
+
+    const completedHirer = get(task, 'completed')
+    const context = get(this.props, 'context')
+    const personName = common.personNameFromHirerId(completedHirer, context)
 
     return (<li className={this.style.task}>
       <p className={this.style.text}>
         <span className={this.style.textDone}>Unlock your network by uploading your LinkedIn contacts</span>
-        <span className={this.style.completedText}>You completed this task {formattedModified}</span>
+        <span className={this.style.completedText}>{personName} completed this task {formattedModified}</span>
       </p>
     </li>)
   }

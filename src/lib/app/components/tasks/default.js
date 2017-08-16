@@ -5,9 +5,10 @@ const getStyle = require('./default.css')
 
 const TaskDefault = (props) => {
   const style = getStyle()
-  const tasks = get(props, 'task')
+  const task = get(props, 'task')
+  const type = get(task, 'type')
   return (<li className={style.task}>
-    <p className={style.text}>DEFAULT</p>
+    <p className={style.text}>{type}</p>
   </li>)
 }
 

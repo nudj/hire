@@ -8,7 +8,7 @@ let {
 const styles = {
   task: merge(mixins.cardStyle, {
     alignContent: 'center',
-    alignItems: 'baseline',
+    alignItems: 'center',
     display: 'flex',
     justifyContent: 'space-between',
     margin: `0 0 ${variables.padding.d} 0`
@@ -21,7 +21,8 @@ const styles = {
     textDecoration: 'line-through'
   },
   completedText: {
-    display: 'block'
+    display: 'block',
+    margin: `${variables.padding.e} 0 0 0`
   },
   action: mixins.button
 }
