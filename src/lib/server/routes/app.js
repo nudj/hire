@@ -8,6 +8,7 @@ const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
+const hirers = require('../modules/hirers')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
 const surveys = require('../modules/surveys')
@@ -545,6 +546,11 @@ function tasksListHander (req, res, next) {
   const data = clone(req.session.data)
 
   tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
+    .then(data => hirers.getAllByCompany(data, data.company.id))
+    .then(data => {
+      data.people = common.fetchPeopleFromFragments(data.hirers)
+      return promiseMap(data)
+    })
     .then(data => {
       data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)

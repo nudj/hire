@@ -19,5 +19,8 @@ module.exports = css(merge(mixins.pageLayout, {
   taskGroupTitleHighlight: mixins.highlightColour,
   completedVisibleButton: merge(mixins.buttonSecondary, {
     margin: `0 0 0 ${variables.padding.d}`
+  }),
+  incompleteEmpty: merge(mixins.typography.p, {
+    padding: `0 0 0 ${variables.padding.d}`
   })
 }))
