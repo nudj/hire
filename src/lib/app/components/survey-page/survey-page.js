@@ -177,7 +177,7 @@ module.exports = class SurveyPage extends React.Component {
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
-          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+          <title>{`nudj - Surveys ${get(this.props, 'company.name')}`}</title>
         </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
