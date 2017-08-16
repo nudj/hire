@@ -7,7 +7,7 @@ const tagRegex = /\{\{.*?\}\}/g
 
 const isNotOfType = (type) => (value) => typeof value !== type // eslint-disable-line valid-typeof
 const hasNoLength = (value) => !value.length
-const isNotEmailList = (value) => some(filter(value.replace(' ', '').split(','), (val) => val !== ''), (email) => !isEmail(email))
+const isNotEmailList = (value) => some(filter(value.replace(/\s/g, '').split(','), (val) => val !== ''), (email) => !isEmail(email))
 const containsUnpermittedTags = (value, permittedTags) => some(value.match(tagRegex), (tag) => !permittedTags.includes(stripDelims(tag)))
 
 module.exports = {
