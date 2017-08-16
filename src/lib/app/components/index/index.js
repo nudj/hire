@@ -13,6 +13,7 @@ const SurveyPage = require('../survey-page/survey-page')
 const SelectReferrerExternalPage = require('../select-referrer-external-page/select-referrer-external-page')
 const ComposeExternalPage = require('../compose-external-page/compose-external-page')
 const ImportContactsLinkedInPage = require('../import-contacts-linkedin-page/import-contacts-linkedin-page')
+const TaskListPage = require('../task-list-page/task-list-page')
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
 const Status = require('../status/status')
@@ -51,6 +52,7 @@ const Index = () => {
           <Route exact path='/' component={PageWithState(JobsPage)} />
           <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
           <Route exact path='/survey-page' component={PageWithState(SurveyPage)} />
+          <Route exact path='/tasks' component={PageWithState(TaskListPage)} />
           <Route exact path='/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/:jobSlug/nudj' component={PageWithState(Nudj)} />
           <Route exact path='/:jobSlug/internal' component={PageWithState(ComposePage)} />
