@@ -536,6 +536,24 @@ function surveyPageSendHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function tasksListHander (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['taskList']
+  }
+
+  const data = clone(req.session.data)
+
+  tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', jobsHandler)
@@ -545,6 +563,9 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
+
+router.get('/tasks', tasksListHander)
+
 router.get('/:jobSlug', jobHandler)
 router.get('/:jobSlug/nudj', jobHandler)
 
