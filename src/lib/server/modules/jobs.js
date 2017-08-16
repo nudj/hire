@@ -61,7 +61,7 @@ function getJobActivity (dataCall, dataActivityKey) {
     trend: 0
   }
 
-  dataCall.then(dataActivity => {
+  return dataCall.then(dataActivity => {
     const data = dataActivity[dataActivityKey]
 
     activity.total = data.length
@@ -73,9 +73,8 @@ function getJobActivity (dataCall, dataActivityKey) {
     } else if (activity.thisWeek > activity.lastWeek) {
       activity.trend = 1
     }
+    return activity
   })
-
-  return activity
 }
 
 function getJobActivities (data, job) {
