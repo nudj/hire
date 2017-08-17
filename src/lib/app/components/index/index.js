@@ -49,15 +49,15 @@ const Index = () => {
         <Route path='*' component={WithState(Message)} />
         <Route path='*' component={WithState(Notification)} />
         <Switch>
-          <Route exact path='/' component={PageWithState(JobsPage)} />
+          <Route exact path='/' component={PageWithState(TaskListPage)} />
           <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
           <Route exact path='/survey-page' component={PageWithState(SurveyPage)} />
-          <Route exact path='/tasks' component={PageWithState(TaskListPage)} />
-          <Route exact path='/:jobSlug' component={PageWithState(JobPage)} />
-          <Route exact path='/:jobSlug/nudj' component={PageWithState(Nudj)} />
-          <Route exact path='/:jobSlug/internal' component={PageWithState(ComposePage)} />
-          <Route exact path='/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
-          <Route exact path='/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
+          <Route exact path='/jobs' component={PageWithState(JobsPage)} />
+          <Route exact path='/jobs/:jobSlug' component={PageWithState(JobPage)} />
+          <Route exact path='/jobs/:jobSlug/nudj' component={PageWithState(Nudj)} />
+          <Route exact path='/jobs/:jobSlug/internal' component={PageWithState(ComposePage)} />
+          <Route exact path='/jobs/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
+          <Route exact path='/jobs/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>

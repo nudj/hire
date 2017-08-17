@@ -65,7 +65,7 @@ function renderSentListItem ({jobSlug, person, index, style}) {
   const referrals = get(person, 'totalReferrals', 0).toString()
 
   // internal - how to specify someone?
-  const resendLink = source === 'external' ? `/${jobSlug}/external/${get(person, 'id')}` : `/${jobSlug}/internal`
+  const resendLink = source === 'external' ? `/jobs/${jobSlug}/external/${get(person, 'id')}` : `/jobs/${jobSlug}/internal`
   const resendButton = (<Link className={style.button} to={resendLink}>Resend</Link>)
   const actions = source === 'referral' ? [] : [resendButton]
 
@@ -128,7 +128,7 @@ const JobPage = (props) => {
   const sentComplete = get(props, 'sentComplete', [])
   const jobSlug = get(props, 'job.slug', '')
   const jobLink = `https://nudj.co/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
-  const nudjLink = `/${jobSlug}/nudj`
+  const nudjLink = `/jobs/${jobSlug}/nudj`
 
   if (!sentComplete.length) {
     return (<Redirect to={nudjLink} push />)

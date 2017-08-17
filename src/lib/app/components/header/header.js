@@ -1,9 +1,14 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
+const get = require('lodash/get')
 const getStyle = require('./header.css')
 
 const Header = (props) => {
   const style = getStyle()
+
+  const incompleteTasksCount = get(props, 'tasksIncomplete', []).length
+  const tasksLink = incompleteTasksCount ? (<Link className={style.tasks} to={'/'}>Tasks<span className={style.alertCount}>{incompleteTasksCount}</span></Link>) : (<Link className={style.tasks} to={'/'}>Tasks</Link>)
+
   return (
     <nav className={style.nav}>
       <div className={style.main}>
@@ -11,7 +16,8 @@ const Header = (props) => {
           <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
         </Link>
         <ul className={style.menu}>
-          <li className={style.menuItem}><Link className={style.jobs} to={'/'}>Jobs</Link></li>
+          <li className={style.menuItem}>{tasksLink}</li>
+          <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li>
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>

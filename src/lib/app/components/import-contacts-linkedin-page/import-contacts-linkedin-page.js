@@ -310,7 +310,7 @@ module.exports = class ComposePage extends React.Component {
         break
       case 4:
         step = this.stepFinished()
-        next = (<Link className={this.style.confirmButton} to='/tasks'>Finish</Link>)
+        next = (<Link className={this.style.confirmButton} to='/'>Finish</Link>)
         break
       default:
         step = this.stepInfo()
