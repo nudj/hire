@@ -483,14 +483,14 @@ function importContactsLinkedInSaveHandler (req, res, next) {
   const fileName = req.body.name
 
   const taskType = 'UNLOCK_NETWORK_LINKEDIN'
-  const event_name = 'linkedin network uploaded'
+  const eventName = 'linkedin network uploaded'
 
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
       return intercom.logEvent({
-        event_name,
+        event_name: eventName,
         email: data.person.email,
         metadata: {
           category: 'onboarding'
@@ -535,7 +535,7 @@ function surveyPageHandler (req, res, next) {
 
 function surveyPageSendHandler (req, res, next) {
   const taskType = 'SEND_SURVEY_INTERNAL'
-  const event_name = 'Survey sent'
+  const eventName = 'Survey sent'
 
   Promise.resolve(clone(req.session.data))
     .then(surveys.getSurveyForCompany)
@@ -545,7 +545,7 @@ function surveyPageSendHandler (req, res, next) {
       if (data.messages) {
         // successful send
         return intercom.logEvent({
-          event_name,
+          event_name: eventName,
           email: data.person.email,
           metadata: {
             category: 'onboarding'
