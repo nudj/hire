@@ -328,7 +328,7 @@ function internalSendHandler (req, res, next) {
           type: 'success',
           message: 'That’s the way, aha aha, I like it! 🎉'
         }
-        return res.redirect(`/${req.params.jobSlug}`)
+        return res.redirect(`/jobs/${req.params.jobSlug}`)
       }
       return fetchInternalPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
@@ -485,6 +485,7 @@ function importContactsLinkedInSaveHandler (req, res, next) {
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
+    .then(data => tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id))
     .then(data => importContactsLinkedIn(req, res, next, data))
 }
 
@@ -523,6 +524,7 @@ function surveyPageSendHandler (req, res, next) {
     .then(surveys.getSurveyForCompany)
     .then((data) => network.send(data, req.body, tags.survey))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
+    .then(data => tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -563,9 +565,21 @@ function tasksListHander (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function incompleteTaskCounter (req, res, next) {
+  const data = clone(req.session.data)
+  tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id)
+    .then(data => {
+      req.session.data = data
+      next()
+    })
+}
+
 router.use(ensureLoggedIn)
 
-router.get('/', jobsHandler)
+// To show the user how many outstanding tasks there are in the header this needs to load always
+router.use(incompleteTaskCounter)
+
+router.get('/', tasksListHander)
 
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
@@ -573,18 +587,18 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 
-router.get('/tasks', tasksListHander)
+router.get('/jobs', jobsHandler)
 
-router.get('/:jobSlug', jobHandler)
-router.get('/:jobSlug/nudj', jobHandler)
+router.get('/jobs/:jobSlug', jobHandler)
+router.get('/jobs/:jobSlug/nudj', jobHandler)
 
-router.get('/:jobSlug/internal', internalHandler)
-router.post('/:jobSlug/internal', internalSendHandler)
+router.get('/jobs/:jobSlug/internal', internalHandler)
+router.post('/jobs/:jobSlug/internal', internalSendHandler)
 
-router.get('/:jobSlug/external', externalHandler)
-router.get('/:jobSlug/external/:recipientId', externalComposeHandler)
-router.post('/:jobSlug/external/:recipientId', externalSaveHandler)
-router.patch('/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
+router.get('/jobs/:jobSlug/external', externalHandler)
+router.get('/jobs/:jobSlug/external/:recipientId', externalComposeHandler)
+router.post('/jobs/:jobSlug/external/:recipientId', externalSaveHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})

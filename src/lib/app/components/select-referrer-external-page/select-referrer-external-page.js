@@ -37,7 +37,7 @@ module.exports = class ComposePage extends React.Component {
         description: company
       }]}
       actions={[
-        <Link className={buttonClass} to={`/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
+        <Link className={buttonClass} to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
       ]}
     />)
   }

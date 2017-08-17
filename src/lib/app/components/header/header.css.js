@@ -69,6 +69,13 @@ module.exports = css({
       backgroundImage: mixins.linkImage('business-24-px-outline-briefcase-24.svg')
     }
   }),
+  tasks: merge(linkStyle, {
+    color: '#fff',
+    position: 'relative',
+    ':before': {
+      backgroundImage: mixins.linkImage('todo.svg')
+    }
+  }),
   candidates: merge(linkStyle, {
     color: '#fff',
     ':before': {
@@ -91,5 +98,17 @@ module.exports = css({
     ':before': {
       backgroundImage: mixins.linkImage('arrows-24-px-outline-2-circle-out.svg')
     }
+  }),
+  alertCount: merge(mixins.headings.p2Bold, {
+    background: variables.colors.midRed,
+    borderRadius: '100%',
+    color: variables.colors.white,
+    display: 'block',
+    height: variables.padding.d,
+    lineHeight: variables.padding.d,
+    position: 'absolute',
+    right: '0',
+    top: '0',
+    width: variables.padding.d
   })
 })

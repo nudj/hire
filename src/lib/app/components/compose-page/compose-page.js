@@ -143,7 +143,7 @@ module.exports = class ComposePage extends React.Component {
   onClickConfirm () {
     this.props.dispatch(showLoading())
     this.props.dispatch(postData({
-      url: `/${get(this.props, 'job.slug')}/internal`,
+      url: `/jobs/${get(this.props, 'job.slug')}/internal`,
       data: {
         recipients: get(this.state, 'recipients', ''),
         subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
@@ -168,13 +168,13 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const tooltip = get(this.props, 'tooltip')
     return (
-      <Form className={this.style.pageBody} action={`/${get(this.props, 'job.slug')}/internal`} method='POST'>
+      <Form className={this.style.pageBody} action={`/jobs/${get(this.props, 'job.slug')}/internal`} method='POST'>
         <Helmet>
           <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
         </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title={<Link className={this.style.jobLink} to={`/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         >
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>

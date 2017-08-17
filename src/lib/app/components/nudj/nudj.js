@@ -31,14 +31,14 @@ const JobPage = (props) => {
               <h4 className={style.title}>Ask your company</h4>
               <p className={style.description}>Encourage your team to explore their networks, make recommendations and get your job out there.</p>
             </div>
-            <Link className={style.button} to={`/${get(props, 'job.slug')}/internal`}>Select</Link>
+            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/internal`}>Select</Link>
           </div>
           <div className={style.external}>
             <div className={style.externalContent}>
               <h4 className={style.title}>Ask your network</h4>
               <p className={style.description}>We've identified key people from your network that will ensure your job gets in front of the best candidates.</p>
             </div>
-            <Link className={style.button} to={`/${get(props, 'job.slug')}/external`}>Select</Link>
+            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/external`}>Select</Link>
           </div>
         </div>
         <div className={style.pageSidebar}>
