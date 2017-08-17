@@ -82,9 +82,12 @@ function getRenderDataBuilder (req) {
       hostname: req.hostname,
       originalUrl: req.originalUrl
     }
-    return {
-      page: data
-    }
+
+    data.tasksIncomplete = tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id)
+
+    return promiseMap({
+      page: promiseMap(data)
+    })
   }
 }
 
@@ -482,7 +485,6 @@ function importContactsLinkedInSaveHandler (req, res, next) {
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
-    .then(data => tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id))
     .then(data => {
       req.session.notification = {
         type: 'success',
@@ -527,7 +529,6 @@ function surveyPageSendHandler (req, res, next) {
     .then(surveys.getSurveyForCompany)
     .then((data) => network.send(data, req.body, tags.survey))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
-    .then(data => tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -568,19 +569,7 @@ function tasksListHander (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function incompleteTaskCounter (req, res, next) {
-  const data = clone(req.session.data)
-  tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id)
-    .then(data => {
-      req.session.data = data
-      next()
-    })
-}
-
 router.use(ensureLoggedIn)
-
-// To show the user how many outstanding tasks there are in the header this needs to load always
-router.use(incompleteTaskCounter)
 
 router.get('/', tasksListHander)
 

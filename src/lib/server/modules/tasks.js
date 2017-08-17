@@ -54,10 +54,13 @@ module.exports.getAllByHirerAndCompany = function (data, hirer, company) {
   return promiseMap(data)
 }
 
-module.exports.getIncompleteByHirerAndCompany = function (data, hirer, company) {
-  data.tasksIncomplete = module.exports.getAllByHirerAndCompany({}, hirer, company)
+module.exports.getIncompleteByHirerAndCompanyExposed = function (hirer, company) {
+  return module.exports.getAllByHirerAndCompany({}, hirer, company)
     .then(data => data.tasks.filter(task => !task.completed))
+}
 
+module.exports.getIncompleteByHirerAndCompany = function (data, hirer, company) {
+  data.tasksIncomplete = module.exports.getIncompleteByHirerAndCompanyExposed(hirer, company)
   return promiseMap(data)
 }
 
