@@ -8,7 +8,9 @@ const TaskDefault = (props) => {
   const task = get(props, 'task')
   const type = get(task, 'type')
   return (<li className={style.task}>
-    <p className={style.text}>{type}</p>
+    <div className={style.textContainer}>
+      <p className={style.text}>{type}</p>
+    </div>
   </li>)
 }
 

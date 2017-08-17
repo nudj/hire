@@ -3,7 +3,6 @@ const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./task-list-page.css')
 const PageHeader = require('../page-header/page-header')
-const Plural = require('../plural/plural')
 const Tooltip = require('../tooltip/tooltip')
 const TaskList = require('../tasks/task-list')
 
@@ -29,7 +28,7 @@ module.exports = class TaskListPage extends React.Component {
     const {completedVisible} = this.state
 
     if (!completedVisible) {
-      return (<button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Show completed tasks</button>)
+      return (<button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Show completed ({completeTasks.length})</button>)
     }
 
     return (<div>
@@ -43,12 +42,12 @@ module.exports = class TaskListPage extends React.Component {
         </div>
         <div className={this.style.pageSidebar} />
       </div>
-      <button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Hide completed tasks</button>
+      <button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Hide completed</button>
     </div>)
   }
 
   renderIncompleteContent (incompleteTasks, tooltip) {
-    const outstanding = (<h3 className={this.style.taskGroupTitle}>Outstanding <span className={this.style.taskGroupTitleHighlight}>({incompleteTasks.length})</span></h3>)
+    const outstanding = (<h3 className={this.style.taskGroupTitle}>To do <span className={this.style.taskGroupTitleHighlight}>({incompleteTasks.length})</span></h3>)
 
     if (!incompleteTasks.length) {
       return (<div>
@@ -79,7 +78,6 @@ module.exports = class TaskListPage extends React.Component {
     const firstName = get(this.props, 'person.firstName', '')
 
     const incompleteTasks = get(this.props, 'tasks', []).filter(task => !task.completed)
-    const incompleteCountNotice = incompleteTasks.length ? (<span>You have {incompleteTasks.length} <Plural singular='task' plural='tasks' count={incompleteTasks.length} /></span>) : (<span />)
     const incompleteContent = this.renderIncompleteContent(incompleteTasks, tooltip)
 
     const completeTasks = get(this.props, 'tasks', []).filter(task => task.completed)
@@ -91,7 +89,7 @@ module.exports = class TaskListPage extends React.Component {
           <title>{`nudj - Tasks`}</title>
         </Helmet>
         <PageHeader title='Tasks' />
-        <h3 className={this.style.pageHeadline}>Welcome, {firstName}! {incompleteCountNotice}</h3>
+        <h3 className={this.style.pageHeadline}>Welcome, {firstName}!</h3>
         {incompleteContent}
         {completedVisibleContent}
       </div>

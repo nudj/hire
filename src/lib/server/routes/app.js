@@ -438,7 +438,9 @@ function externalSaveHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function importContactsLinkedIn (req, res, next, data) {
+function importContactsLinkedInHandler (req, res, next) {
+  const data = clone(req.session.data)
+
   const prismicQuery = {
     'document.type': 'tooltip',
     'document.tags': ['importContacts', 'linkedIn']
@@ -450,11 +452,6 @@ function importContactsLinkedIn (req, res, next, data) {
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
-}
-
-function importContactsLinkedInHandler (req, res, next) {
-  const data = clone(req.session.data)
-  importContactsLinkedIn(req, res, next, data)
 }
 
 function sendImportEmail (data) {
@@ -486,7 +483,13 @@ function importContactsLinkedInSaveHandler (req, res, next) {
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => tasks.getIncompleteByHirerAndCompany(data, data.hirer.id, data.company.id))
-    .then(data => importContactsLinkedIn(req, res, next, data))
+    .then(data => {
+      req.session.notification = {
+        type: 'success',
+        message: 'Nice. We’ll let you know when our machine has found some recommendations'
+      }
+      return res.redirect('/')
+    })
 }
 
 function fetchSurveyPrismicContent (data) {
@@ -530,9 +533,9 @@ function surveyPageSendHandler (req, res, next) {
         // successful send
         req.session.notification = {
           type: 'success',
-          message: 'That’s the way, aha aha, I like it! 🎉'
+          message: 'Great job. We’ll be in touch as soon as we hear back from your team'
         }
-        return res.redirect('/survey-page')
+        return res.redirect('/')
       }
       return fetchSurveyPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
