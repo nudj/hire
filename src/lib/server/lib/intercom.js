@@ -1,6 +1,7 @@
-let Intercom = require('intercom-client')
-let logger = require('./logger')
-let intercom = new Intercom.Client({
+const Intercom = require('intercom-client')
+const format = require('date-fns/format')
+const logger = require('./logger')
+const intercom = new Intercom.Client({
   token: process.env.INTERCOM_ACCESS_TOKEN
 })
 
@@ -52,12 +53,12 @@ function createUniqueLeadAndTag (data, tag) {
     .catch((error) => logger.log('error', 'Intercom', 'createUniqueLeadAndTag', data, tag, error))
 }
 
-const getUTCTimestamp = () => Math.floor((new Date()).getTime() / 1000)
+const getTimestampInSeconds = () => format(new Date(), 'X')
 
 function logEvent ({ event_name, email, metadata }) {
   logger.log('info', 'logEvent', event_name, email, metadata)
   return intercom.events.create({
-    created_at: getUTCTimestamp(),
+    created_at: getTimestampInSeconds(),
     event_name,
     email,
     metadata
