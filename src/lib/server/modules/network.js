@@ -28,12 +28,13 @@ function validate (formData, data, tags) {
   return data
 }
 
-function sendEmails ({ recipients, subject, template }, tags) {
+function sendEmails ({ fromLabel, recipients, subject, template }, tags) {
   return (data) => {
     try {
       data = validate({ recipients, subject, template }, data, tags)
-      let html = renderMessage({ data, template, tags }).join('')
-      data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
+      const html = renderMessage({ data, template, tags }).join('')
+      const fromLabel = `${data.person.firstName} ${data.person.lastName}`
+      data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ fromLabel, subject, html })))
     } catch (error) {
       if (error.name !== 'NudjError') {
         return Promise.reject(error)
@@ -62,9 +63,9 @@ function renderMessage ({ data, template, tags }) {
   })
 }
 
-function sendEmail ({ subject, html }) {
+function sendEmail ({ fromLabel, subject, html }) {
   return (to) => mailer.send({
-    from: 'hello@nudj.co',
+    from: `${fromLabel} <hello@nudj.co>`,
     to,
     subject,
     html
