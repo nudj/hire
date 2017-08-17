@@ -15,6 +15,11 @@ function fetchTasksByCompany (company) {
   return request(`tasks/filter?company=${company}`)
 }
 
+function fetchIncompleteTasksByCompanyAndType (company, type) {
+  return request(`tasks/filter?company=${company}&type=${type}`)
+    .then(results => results.filter(result => !result.completed) || [])
+}
+
 function fetchIncompleteTasksByHirerAndType (hirer, type) {
   return request(`tasks/filter?hirer=${hirer}&type=${type}`)
     .then(results => results.filter(result => !result.completed) || [])
@@ -57,5 +62,20 @@ module.exports.get = function (data, task) {
 module.exports.completeTaskByHirerAndType = function (data, hirer, type) {
   data.completedTasks = fetchIncompleteTasksByHirerAndType(hirer, type)
     .then(tasks => Promise.all(tasks.map(task => completeTask(task, hirer))))
+  return promiseMap(data)
+}
+
+module.exports.completeTaskByCompanyAndType = function (data, company, type, hirer) {
+  data.completedTasks = fetchIncompleteTasksByCompanyAndType(company, type)
+    .then(tasks => Promise.all(tasks.map(task => completeTask(task, hirer))))
+  return promiseMap(data)
+}
+
+module.exports.completeTaskByType = function (data, company, hirer, type) {
+  data.completedTasks = Promise.all([
+    module.exports.completeTaskByHirerAndType({}, hirer, type),
+    module.exports.completeTaskByCompanyAndType({}, company, type, hirer)
+  ]).then(completedTasks => [].concat.apply([], completedTasks || []))
+
   return promiseMap(data)
 }
