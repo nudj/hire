@@ -6,6 +6,7 @@ let getTime = require('date-fns/get_time')
 const { merge } = require('../../lib')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
+const intercom = require('../lib/intercom')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
 const hirers = require('../modules/hirers')
@@ -36,7 +37,8 @@ function spoofLoggedIn (req, res, next) {
     person: {
       id: 'person5',
       firstName: 'David',
-      lastName: 'Platt'
+      lastName: 'Platt',
+      email: 'nick@nudj.co'
     },
     company: {
       id: 'company1',
@@ -481,16 +483,25 @@ function importContactsLinkedInSaveHandler (req, res, next) {
   const fileName = req.body.name
 
   const taskType = 'UNLOCK_NETWORK_LINKEDIN'
+  const eventName = 'linkedin network uploaded'
 
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
-      req.session.notification = {
-        type: 'success',
-        message: 'Nice. We’ll let you know when our machine has found some recommendations'
-      }
-      return res.redirect('/')
+      return intercom.logEvent({
+        event_name: eventName,
+        email: data.person.email,
+        metadata: {
+          category: 'onboarding'
+        }
+      }).then(() => {
+        req.session.notification = {
+          type: 'success',
+          message: 'Nice. We’ll let you know when our machine has found some recommendations'
+        }
+        return res.redirect('/')
+      })
     })
 }
 
@@ -524,6 +535,7 @@ function surveyPageHandler (req, res, next) {
 
 function surveyPageSendHandler (req, res, next) {
   const taskType = 'SEND_SURVEY_INTERNAL'
+  const eventName = 'Survey sent'
 
   Promise.resolve(clone(req.session.data))
     .then(surveys.getSurveyForCompany)
@@ -532,11 +544,19 @@ function surveyPageSendHandler (req, res, next) {
     .then(data => {
       if (data.messages) {
         // successful send
-        req.session.notification = {
-          type: 'success',
-          message: 'Great job. We’ll be in touch as soon as we hear back from your team'
-        }
-        return res.redirect('/')
+        return intercom.logEvent({
+          event_name: eventName,
+          email: data.person.email,
+          metadata: {
+            category: 'onboarding'
+          }
+        }).then(() => {
+          req.session.notification = {
+            type: 'success',
+            message: 'Great job. We’ll be in touch as soon as we hear back from your team'
+          }
+          return res.redirect('/')
+        })
       }
       return fetchSurveyPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
