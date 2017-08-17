@@ -52,6 +52,20 @@ function createUniqueLeadAndTag (data, tag) {
     .catch((error) => logger.log('error', 'Intercom', 'createUniqueLeadAndTag', data, tag, error))
 }
 
+const getUTCTimestamp = () => Math.floor((new Date()).getTime() / 1000)
+
+function logEvent ({ event_name, email, metadata }) {
+  logger.log('info', 'logEvent', event_name, email, metadata)
+  return intercom.events.create({
+    created_at: getUTCTimestamp(),
+    event_name,
+    email,
+    metadata
+  })
+  .catch((error) => logger.log('error', 'Intercom', 'logEvent', event_name, email, metadata, error))
+}
+
 module.exports = {
-  createUniqueLeadAndTag
+  createUniqueLeadAndTag,
+  logEvent
 }
