@@ -484,7 +484,7 @@ function importContactsLinkedInSaveHandler (req, res, next) {
 
   assets.post({data, asset, assetType, fileName, person})
     .then(data => sendImportEmail(data))
-    .then(data => tasks.completeTaskByHirerAndType(data, data.hirer.id, taskType))
+    .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => importContactsLinkedIn(req, res, next, data))
 }
 
@@ -517,9 +517,12 @@ function surveyPageHandler (req, res, next) {
 }
 
 function surveyPageSendHandler (req, res, next) {
+  const taskType = 'SEND_SURVEY_INTERNAL'
+
   Promise.resolve(clone(req.session.data))
     .then(surveys.getSurveyForCompany)
     .then((data) => network.send(data, req.body, tags.survey))
+    .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
       if (data.messages) {
         // successful send
