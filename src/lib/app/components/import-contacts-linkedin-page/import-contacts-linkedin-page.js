@@ -3,7 +3,6 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const { Redirect } = require('react-router')
 const Dropzone = require('react-dropzone')
-const { Link } = require('react-router-dom')
 
 const Papa = require('papaparse')
 
@@ -282,13 +281,6 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 
-  stepFinished () {
-    return (<div className={this.style.done}>
-      <p className={this.style.doneCopy}>Thanks for sharing. We’re going through your connections now and will notify you as soon as we’ve identified key people to ask - it usually takes a couple of days.</p>
-      <img src='/assets/images/ok-hand-2.svg' className={this.style.doneOkHand} alt='Ok' />
-    </div>)
-  }
-
   renderCurrentStep () {
     const active = this.state.active
     const uploading = this.state.uploading
@@ -307,10 +299,6 @@ module.exports = class ComposePage extends React.Component {
       case 3:
         step = this.stepPreview()
         back = uploading ? (<span />) : (<button onClick={this.onClickStep(active - 1)} className={this.style.cancelButton}>Back</button>)
-        break
-      case 4:
-        step = this.stepFinished()
-        next = (<Link className={this.style.confirmButton} to='/'>Finish</Link>)
         break
       default:
         step = this.stepInfo()

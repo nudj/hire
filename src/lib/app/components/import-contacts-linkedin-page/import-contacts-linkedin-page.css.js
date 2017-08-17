@@ -161,17 +161,7 @@ const styles = {
   highlight: mixins.highlightColour,
   copy: merge(mixins.typography.p, {
     marginLeft: variables.padding.d
-  }),
-  done: mixins.cardStyle,
-  doneCopy: merge(mixins.typography.p, {
-    textAlign: 'center'
-  }),
-  doneOkHand: {
-    display: 'block',
-    margin: '0 auto',
-    position: 'relative',
-    top: variables.padding.d
-  }
+  })
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))
