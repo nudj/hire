@@ -28,7 +28,7 @@ function validate (formData, data, tags) {
   return data
 }
 
-function sendEmails ({ fromLabel, recipients, subject, template }, tags) {
+function sendEmails ({ recipients, subject, template }, tags) {
   return (data) => {
     try {
       data = validate({ recipients, subject, template }, data, tags)
