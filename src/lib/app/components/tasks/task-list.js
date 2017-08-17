@@ -1,24 +1,40 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const TaskDefault = require('./default')
-const TaskSendSurveyInternal = require('./send-survey-internal')
-const TaskUnlockedNetworkLinkedIn = require('./unlock-network-linkedin')
-
+const Task = require('./task')
 const getStyle = require('./task-list.css')
+
+const sendSurvey = {
+  action: 'Send survey',
+  actionLink: '/survey-page',
+  text: 'Send our bespoke survey to your team to help them discover people worth asking in their networks',
+  title: 'Ask your team for recommendations'
+}
+
+const unlockNetwork = {
+  action: 'Export contacts',
+  actionLink: '/import-contacts',
+  text: 'Export your connections from LinkedIn so we can highlight who we feel are the best people to ask',
+  title: 'Unlock your network'
+}
 
 function renderTask (task, context) {
   const key = get(task, 'id', '')
   const type = get(task, 'type', '')
 
+  let content = {}
+
   switch (type) {
     case 'SEND_SURVEY_INTERNAL':
-      return <TaskSendSurveyInternal task={task} context={context} key={key} />
+      content = sendSurvey
+      break
     case 'UNLOCK_NETWORK_LINKEDIN':
-      return <TaskUnlockedNetworkLinkedIn task={task} context={context} key={key} />
+      content = unlockNetwork
+      break
     default:
-      return <TaskDefault task={task} context={context} key={key} />
   }
+
+  return (<Task task={task} context={context} key={key} content={content} />)
 }
 
 const TaskList = (props) => {
