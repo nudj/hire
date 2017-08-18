@@ -2,7 +2,7 @@ IMAGE:=nudj/hire
 IMAGEDEV:=nudj/hire-dev
 CWD=$(shell pwd)
 
-.PHONY: build dev
+.PHONY: build ssh test
 
 build:
 	@docker build \
@@ -27,8 +27,8 @@ ssh:
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
-		-v $(CWD)/src/webpack.client.js:/usr/src/webpack.client.js \
-		-v $(CWD)/src/webpack.server.js:/usr/src/webpack.server.js \
+		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
+		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
 		$(IMAGEDEV) \
 		/bin/zsh
 
