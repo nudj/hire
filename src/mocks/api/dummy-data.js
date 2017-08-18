@@ -6,10 +6,12 @@ const data = {
   referrals: [],
   applications: [],
   hirers: [],
+  employees: [],
   recommendations: [],
   externalMessages: [],
   surveys: [],
-  tasks: []
+  tasks: [],
+  tokens: []
 }
 data.companies = data.companies.concat([
   {
@@ -169,6 +171,13 @@ data.hirers = data.hirers.concat([
     company: 'company1'
   }
 ])
+data.employees = data.employees.concat([
+  {
+    id: 'employee1',
+    person: 'person4',
+    company: 'company1'
+  }
+])
 data.referrals = data.referrals.concat([
   {
     id: 'referral1',
@@ -233,7 +242,8 @@ data.surveys = data.surveys.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
-    link: 'http://surveymonkey.com/123'
+    link: 'http://surveymonkey.com/123',
+    uuid: '123'
   }
 ])
 data.tasks = data.tasks.concat([
@@ -252,6 +262,16 @@ data.tasks = data.tasks.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     completed: null
+  }
+])
+data.tokens = data.tokens.concat([
+  {
+    id: 'token1',
+    token: 'nice-fat-hash',
+    type: 'TEST_TOKEN',
+    data: {
+      employee: 'employee1'
+    }
   }
 ])
 
