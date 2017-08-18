@@ -6,7 +6,4 @@ src/lib/server/assets/js/app.*
 src/lib/server/assets/js/vendors.*
 src/lib/server/build.*
 db.json
-.cache/*
-!.cache/readme.md
-!.cache/.npmrc
 src/vendors-manifest.json
