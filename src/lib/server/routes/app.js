@@ -9,12 +9,15 @@ const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
+const employees = require('../modules/employees')
 const hirers = require('../modules/hirers')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
+const people = require('../modules/people')
 const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
+const tokens = require('../modules/tokens')
 const { promiseMap } = require('../lib')
 const tags = require('../../lib/tags')
 
@@ -325,7 +328,7 @@ function internalHandler (req, res, next) {
 function internalSendHandler (req, res, next) {
   Promise.resolve(clone(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then((data) => network.send(data, req.body, tags.internal))
+    .then(data => network.send(data, req.body, tags.internal))
     .then(data => {
       if (data.messages) {
         // successful send
@@ -533,13 +536,55 @@ function surveyPageHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, subject, template, tags, survey) {
+  const recipients = recipient
+  const mailContent = {recipients, subject, template}
+
+  // Find person from email
+  // Create employee relation for this person
+  // Create token for `SURVEY_TYPEFORM_COMPLETE`
+  // Append token to link
+  return people.getOrCreateByEmail({}, recipient)
+    .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
+    .then(data => {
+      const tokenData = {
+        employee: data.employee.id,
+        survey: survey.id
+      }
+      const type = 'SURVEY_TYPEFORM_COMPLETE'
+      return tokens.post(data, type, tokenData)
+    })
+    .then(data => {
+      const token = data.newToken
+      const link = `${survey.link}?token=${token.token}`
+      data.survey = merge({}, survey, {link})
+      data.person = sender
+      return promiseMap(data)
+    })
+    .then(data => network.send(data, mailContent, tags))
+}
+
+function surveyCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
+  const company = data.company
+  const survey = data.survey
+
+  const sendMessages = recipients.map(recipient => surveyCreateAndMailUniqueLinkToRecipient(data.person, recipient, company, subject, template, tags, survey))
+
+  data.messages = Promise.all(sendMessages)
+    .then(messageResults => [].concat.apply([], messageResults || []))
+
+  return promiseMap(data)
+}
+
 function surveyPageSendHandler (req, res, next) {
   const taskType = 'SEND_SURVEY_INTERNAL'
   const eventName = 'Survey sent'
+  const { subject, template } = req.body
+  const recipients = req.body.recipients.replace(' ', '').split(',')
 
   Promise.resolve(clone(req.session.data))
-    .then(surveys.getSurveyForCompany)
-    .then((data) => network.send(data, req.body, tags.survey))
+    .then(data => surveys.getSurveyForCompany(data))
+    .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.survey))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
       if (data.messages) {
