@@ -15,7 +15,9 @@ steps:
     title: Test
     image: ${{build_test}}
     working_directory: 'IMAGE_WORK_DIR'
-    command: ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test
+    commands:
+      - ./node_modules/.bin/standard
+      - ./node_modules/.bin/mocha --recursive test
 
   build:
     title: Build
