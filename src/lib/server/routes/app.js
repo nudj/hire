@@ -46,7 +46,8 @@ function spoofLoggedIn (req, res, next) {
     company: {
       id: 'company1',
       name: 'Johns PLC',
-      slug: 'johns-plc'
+      slug: 'johns-plc',
+      onboarded: false
     }
   }
   return next()
@@ -634,6 +635,17 @@ function tasksListHander (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function ensureOnboarded (req, res, next) {
+  if (!req.session.data.company.onboarded) {
+    req.session.notification = {
+      type: 'error',
+      message: 'We haven\'t onboarded your company just yet. We will email you once it is done.'
+    }
+    return res.redirect('/')
+  }
+  return next()
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
@@ -644,18 +656,18 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 
-router.get('/jobs', jobsHandler)
+router.get('/jobs', ensureOnboarded, jobsHandler)
 
-router.get('/jobs/:jobSlug', jobHandler)
-router.get('/jobs/:jobSlug/nudj', jobHandler)
+router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
+router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
 
-router.get('/jobs/:jobSlug/internal', internalHandler)
-router.post('/jobs/:jobSlug/internal', internalSendHandler)
+router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
+router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
 
-router.get('/jobs/:jobSlug/external', externalHandler)
-router.get('/jobs/:jobSlug/external/:recipientId', externalComposeHandler)
-router.post('/jobs/:jobSlug/external/:recipientId', externalSaveHandler)
-router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
+router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
+router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
+router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})

@@ -8,6 +8,7 @@ const Header = (props) => {
 
   const incompleteTasksCount = get(props, 'tasksIncomplete', []).length
   const tasksLink = incompleteTasksCount ? (<Link className={style.tasks} to={'/'}>Tasks<span className={style.alertCount}>{incompleteTasksCount}</span></Link>) : (<Link className={style.tasks} to={'/'}>Tasks</Link>)
+  const onboarded = get(props, 'company.onboarded', false)
 
   return (
     <nav className={style.nav}>
@@ -17,7 +18,7 @@ const Header = (props) => {
         </Link>
         <ul className={style.menu}>
           <li className={style.menuItem}>{tasksLink}</li>
-          <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li>
+          {onboarded ? <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li> : ''}
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>
