@@ -639,7 +639,7 @@ function ensureOnboarded (req, res, next) {
   if (!req.session.data.company.onboarded) {
     req.session.notification = {
       type: 'error',
-      message: 'We haven\'t onboarded your company just yet. We will email you once it is done.'
+      message: 'We\'re still getting your company set-up, so you can\'t access your jobs just yet. Need more information? Let us know.'
     }
     return res.redirect('/')
   }
