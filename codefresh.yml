@@ -10,6 +10,7 @@ steps:
     dockerfile: Dockerfile.dev
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+    command: ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test
 
   test:
     title: Test
