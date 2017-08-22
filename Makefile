@@ -14,7 +14,6 @@ build:
 ssh:
 	-@docker rm -f hire-dev 2> /dev/null || true
 	@docker run --rm -it \
-		--add-host api:127.0.0.1 \
 		--env-file $(CWD)/.env \
 		--name hire-dev \
 		-e NPM_TOKEN=${NPM_TOKEN} \
@@ -35,7 +34,6 @@ ssh:
 inject:
 	-@docker rm -f hire-dev 2> /dev/null || true
 	@docker run --rm -it \
-		--add-host api:127.0.0.1 \
 		--env-file $(CWD)/.env \
 		--name hire-dev \
 		-e NPM_TOKEN=${NPM_TOKEN} \
