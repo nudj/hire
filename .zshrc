@@ -1,3 +1,5 @@
+source /root/.zsh/zsh-autosuggestions.zsh
+
 PROMPT='hire» '
 
 alias run="torus run -o nudj -p hire -e local -- node ."
@@ -31,3 +33,10 @@ bindkey "^X\\x7f" backward-kill-line
 
 # adds redo
 bindkey "^X^_" redo
+
+# history substring search
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
+
+source /root/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /root/.zsh/zsh-history-substring-search.zsh

@@ -21,6 +21,7 @@ ssh:
 		-p 0.0.0.0:90:80 \
 		-p 0.0.0.0:91:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
+		-v $(CWD)/.zsh:/root/.zsh \
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
