@@ -10,12 +10,12 @@ steps:
     dockerfile: Dockerfile.dev
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
-    command: ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test
 
   test:
     title: Test
     image: ${{build_test}}
     working_directory: 'IMAGE_WORK_DIR'
+    command: ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test
 
   build:
     title: Build
