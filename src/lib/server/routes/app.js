@@ -1,5 +1,6 @@
 const express = require('express')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
@@ -31,23 +32,11 @@ const router = express.Router()
 const clone = (obj) => Object.assign({}, obj)
 
 function spoofLoggedIn (req, res, next) {
+  const data = require('../../../mocks/api/dummy-data')
   req.session.data = {
-    hirer: {
-      id: 'hirer1',
-      company: 'company1',
-      person: 'person5'
-    },
-    person: {
-      id: 'person5',
-      firstName: 'David',
-      lastName: 'Platt',
-      email: 'nick@nudj.co'
-    },
-    company: {
-      id: 'company1',
-      name: 'Johns PLC',
-      slug: 'johns-plc'
-    }
+    hirer: find(data.hirers, { id: 'hirer1' }),
+    person: find(data.people, { id: 'person5' }),
+    company: find(data.companies, { id: 'company1' })
   }
   return next()
 }
@@ -634,6 +623,17 @@ function tasksListHander (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function ensureOnboarded (req, res, next) {
+  if (!req.session.data.company.onboarded) {
+    req.session.notification = {
+      type: 'error',
+      message: 'We\'re still getting your company set-up, so you can\'t access your jobs just yet. Need more information? Let us know.'
+    }
+    return res.redirect('/')
+  }
+  return next()
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
@@ -644,18 +644,18 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 
-router.get('/jobs', jobsHandler)
+router.get('/jobs', ensureOnboarded, jobsHandler)
 
-router.get('/jobs/:jobSlug', jobHandler)
-router.get('/jobs/:jobSlug/nudj', jobHandler)
+router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
+router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
 
-router.get('/jobs/:jobSlug/internal', internalHandler)
-router.post('/jobs/:jobSlug/internal', internalSendHandler)
+router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
+router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
 
-router.get('/jobs/:jobSlug/external', externalHandler)
-router.get('/jobs/:jobSlug/external/:recipientId', externalComposeHandler)
-router.post('/jobs/:jobSlug/external/:recipientId', externalSaveHandler)
-router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', externalSaveHandler)
+router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
+router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
+router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})

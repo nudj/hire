@@ -5,4 +5,4 @@ WORKDIR /usr/src
 COPY src /usr/src
 RUN npm i -g torus-cli && npm i && npm prune
 EXPOSE 80 81
-CMD ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test
+CMD ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p hire -e local -- node .
