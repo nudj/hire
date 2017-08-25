@@ -264,6 +264,14 @@ data.tasks = data.tasks.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     completed: null
+  },
+  {
+    id: 'task3',
+    company: 'company1',
+    type: 'SHARE_JOBS',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
   }
 ])
 data.tokens = data.tokens.concat([
