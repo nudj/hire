@@ -431,6 +431,12 @@ function externalSaveHandler (req, res, next) {
     .get(data, req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => {
+      if (sendMessage) {
+        return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+      }
+      return promiseMap(data)
+    })
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
