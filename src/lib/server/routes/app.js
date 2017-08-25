@@ -319,11 +319,15 @@ function internalSendHandler (req, res, next) {
     .then(data => {
       if (data.messages) {
         // successful send
-        req.session.notification = {
-          type: 'success',
-          message: 'That’s the way, aha aha, I like it! 🎉'
-        }
-        return res.redirect(`/jobs/${req.params.jobSlug}`)
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(`/jobs/${req.params.jobSlug}`)
+          })
       }
       return fetchInternalPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
