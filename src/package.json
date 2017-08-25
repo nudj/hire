@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@nudj/dummy": "0.6.0",
+    "@nudj/library": "0.5.0",
     "@nudj/react-router-redux": "0.1.1--5.0.0-alpha.6",
     "@nudj/schemas": "0.11.1",
     "aphrodite": "^1.2.0",
@@ -39,7 +40,6 @@
     "consolidate": "^0.14.5",
     "csurf": "^1.9.0",
     "date-fns": "^1.28.3",
-    "deepmerge": "^1.3.2",
     "escape-html": "^1.0.3",
     "express": "^4.14.1",
     "express-fileupload": "^0.1.4",

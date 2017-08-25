@@ -2,9 +2,12 @@ const express = require('express')
 const get = require('lodash/get')
 const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
-let getTime = require('date-fns/get_time')
+const getTime = require('date-fns/get_time')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
-const { merge } = require('../../lib')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
@@ -19,7 +22,6 @@ const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
-const { promiseMap } = require('../lib')
 const tags = require('../../lib/tags')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -29,11 +31,9 @@ const prismic = require('../modules/prismic')({accessToken, repo})
 const app = require('../../app/server')
 const router = express.Router()
 
-const clone = (obj) => Object.assign({}, obj)
-
 function spoofLoggedIn (req, res, next) {
   const data = require('../../../mocks/api/dummy-data')
-  req.session.data = {
+  req.session.data = req.session.data || {
     hirer: find(data.hirers, { id: 'hirer1' }),
     person: find(data.people, { id: 'person5' }),
     company: find(data.companies, { id: 'company1' })
@@ -166,7 +166,7 @@ function jobsHandler (req, res, next) {
   }
 
   jobs
-    .getAll(clone(req.session.data))
+    .getAll(merge(req.session.data))
     .then(data => {
       data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
@@ -263,7 +263,7 @@ function jobHandler (req, res, next) {
   }
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
@@ -306,7 +306,7 @@ function fetchInternalPrismicContent (data) {
 }
 
 function internalHandler (req, res, next) {
-  Promise.resolve(clone(req.session.data))
+  Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -315,17 +315,21 @@ function internalHandler (req, res, next) {
 }
 
 function internalSendHandler (req, res, next) {
-  Promise.resolve(clone(req.session.data))
+  Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => network.send(data, req.body, tags.internal))
     .then(data => {
       if (data.messages) {
         // successful send
-        req.session.notification = {
-          type: 'success',
-          message: 'That’s the way, aha aha, I like it! 🎉'
-        }
-        return res.redirect(`/jobs/${req.params.jobSlug}`)
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(`/jobs/${req.params.jobSlug}`)
+          })
       }
       return fetchInternalPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
@@ -342,7 +346,7 @@ function externalHandler (req, res, next) {
   }
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.get(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
@@ -403,7 +407,7 @@ function externalComposeHandler (req, res, next) {
   const recipient = req.params.recipientId
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
@@ -423,12 +427,18 @@ function externalSaveHandler (req, res, next) {
   const saveMethod = messageId && req.method === 'PATCH' ? externalMessages.patch : externalMessages.post
 
   const message = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
-  const data = merge({hirer, recipient, message}, clone(req.session.data))
+  const data = merge({hirer, recipient, message}, req.session.data)
 
   jobs
     .get(data, req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => {
+      if (sendMessage) {
+        return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+      }
+      return promiseMap(data)
+    })
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -436,7 +446,7 @@ function externalSaveHandler (req, res, next) {
 }
 
 function importContactsLinkedInHandler (req, res, next) {
-  const data = clone(req.session.data)
+  const data = merge(req.session.data)
 
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -467,7 +477,7 @@ function sendImportEmail (data) {
 }
 
 function importContactsLinkedInSaveHandler (req, res, next) {
-  const data = clone(req.session.data)
+  const data = merge(req.session.data)
 
   const assetType = 'CONTACTS_LINKEDIN'
   const person = data.person.id
@@ -517,7 +527,7 @@ function fetchSurveyPrismicContent (data) {
 }
 
 function surveyPageHandler (req, res, next) {
-  Promise.resolve(clone(req.session.data))
+  Promise.resolve(merge(req.session.data))
     .then(surveys.getSurveyForCompany)
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -571,7 +581,7 @@ function surveyPageSendHandler (req, res, next) {
   const { subject, template } = req.body
   const recipients = req.body.recipients.replace(' ', '').split(',')
 
-  Promise.resolve(clone(req.session.data))
+  Promise.resolve(merge(req.session.data))
     .then(data => surveys.getSurveyForCompany(data))
     .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.survey))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
@@ -606,7 +616,7 @@ function tasksListHander (req, res, next) {
     'document.tags': ['taskList']
   }
 
-  const data = clone(req.session.data)
+  const data = merge(req.session.data)
 
   tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
     .then(data => hirers.getAllByCompany(data, data.company.id))

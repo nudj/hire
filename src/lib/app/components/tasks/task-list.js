@@ -18,6 +18,13 @@ const unlockNetwork = {
   title: 'Unlock your network'
 }
 
+const shareJobs = {
+  action: 'Share jobs',
+  actionLink: '/jobs',
+  text: 'Share your jobs yo',
+  title: 'Share your jobs with your team and network'
+}
+
 function renderTask (task, context) {
   const key = get(task, 'id', '')
   const type = get(task, 'type', '')
@@ -30,6 +37,9 @@ function renderTask (task, context) {
       break
     case 'UNLOCK_NETWORK_LINKEDIN':
       content = unlockNetwork
+      break
+    case 'SHARE_JOBS':
+      content = shareJobs
       break
     default:
   }

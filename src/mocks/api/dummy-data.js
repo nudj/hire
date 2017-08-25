@@ -255,12 +255,20 @@ data.tasks = data.tasks.concat([
     type: 'UNLOCK_NETWORK_LINKEDIN',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: 'hirer1'
   },
   {
     id: 'task2',
     company: 'company1',
     type: 'SEND_SURVEY_INTERNAL',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: 'hirer1'
+  },
+  {
+    id: 'task3',
+    company: 'company1',
+    type: 'SHARE_JOBS',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     completed: null

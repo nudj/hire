@@ -1,7 +1,9 @@
-let request = require('../../lib/request')
-let { promiseMap } = require('../lib')
-let { merge } = require('../../lib')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
+const request = require('../../lib/request')
 const common = require('./common')
 
 function fetchSentMessages (hirer, job, recipient) {

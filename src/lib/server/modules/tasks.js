@@ -1,6 +1,9 @@
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
+
 const request = require('../../lib/request')
-const { merge } = require('../../lib')
-const { promiseMap } = require('../lib')
 
 function fetchTaskById (id) {
   return request(`tasks/filter?id=${id}`)
@@ -69,13 +72,13 @@ module.exports.get = function (data, task) {
   return promiseMap(data)
 }
 
-module.exports.completeTaskByHirerAndType = function (data, hirer, type) {
+const completeTaskByHirerAndType = function (data, hirer, type) {
   data.completedTasks = fetchIncompleteTasksByHirerAndType(hirer, type)
     .then(tasks => Promise.all(tasks.map(task => completeTask(task, hirer))))
   return promiseMap(data)
 }
 
-module.exports.completeTaskByCompanyAndType = function (data, company, type, hirer) {
+const completeTaskByCompanyAndType = function (data, company, type, hirer) {
   data.completedTasks = fetchIncompleteTasksByCompanyAndType(company, type)
     .then(tasks => Promise.all(tasks.map(task => completeTask(task, hirer))))
   return promiseMap(data)
@@ -83,8 +86,8 @@ module.exports.completeTaskByCompanyAndType = function (data, company, type, hir
 
 module.exports.completeTaskByType = function (data, company, hirer, type) {
   data.completedTasks = Promise.all([
-    module.exports.completeTaskByHirerAndType({}, hirer, type),
-    module.exports.completeTaskByCompanyAndType({}, company, type, hirer)
+    completeTaskByHirerAndType({}, hirer, type),
+    completeTaskByCompanyAndType({}, company, type, hirer)
   ]).then(completedTasks => [].concat.apply([], completedTasks || []))
 
   return promiseMap(data)
