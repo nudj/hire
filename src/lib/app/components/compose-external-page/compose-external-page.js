@@ -11,7 +11,7 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
-const { merge } = require('../../../lib')
+const { merge } = require('@nudj/library')
 
 const getStyle = require('./compose-external-page.css')
 

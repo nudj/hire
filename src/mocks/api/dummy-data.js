@@ -255,7 +255,7 @@ data.tasks = data.tasks.concat([
     type: 'UNLOCK_NETWORK_LINKEDIN',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: 'hirer1'
   },
   {
     id: 'task2',
@@ -263,7 +263,7 @@ data.tasks = data.tasks.concat([
     type: 'SEND_SURVEY_INTERNAL',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: 'hirer1'
   },
   {
     id: 'task3',

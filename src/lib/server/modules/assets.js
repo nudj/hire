@@ -2,7 +2,7 @@ const format = require('date-fns/format')
 
 const request = require('../../lib/request')
 const S3 = require('./assets-s3')
-const { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 
 function saveAsset ({assetType, location, person}) {
   const data = {assetType, location, person}

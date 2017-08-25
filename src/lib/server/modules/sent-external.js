@@ -1,5 +1,5 @@
 let request = require('../../lib/request')
-let { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 
 const common = require('./common')
 

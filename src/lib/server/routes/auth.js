@@ -2,7 +2,7 @@ let express = require('express')
 let passport = require('passport')
 let request = require('../../lib/request')
 let logger = require('../lib/logger')
-let { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 
 function cacheReturnTo (req, res, next) {
   if (!req.session.returnTo) {

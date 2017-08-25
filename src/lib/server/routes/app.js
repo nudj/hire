@@ -3,11 +3,9 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
-const {
-  promiseMap
-} = require('@nudj/library')
+const { promiseMap } = require('@nudj/library')
 
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
@@ -22,7 +20,6 @@ const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
-const { promiseMap } = require('../lib')
 const tags = require('../../lib/tags')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN

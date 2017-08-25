@@ -1,6 +1,6 @@
 const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 
 const FETCHED_PAGE = 'FETCHED_PAGE'
 module.exports.FETCHED_PAGE = FETCHED_PAGE
