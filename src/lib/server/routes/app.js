@@ -3,9 +3,11 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
-const { promiseMap } = require('@nudj/library')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
-const { merge } = require('@nudj/library')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
