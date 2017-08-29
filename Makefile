@@ -55,7 +55,7 @@ inject:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(HOME)/dev/nudj/api/src:/usr/src/api \
+		-v $(HOME)/dev/nudj/library/src:/usr/src/library \
 		$(IMAGEDEV) \
 		/bin/zsh
 

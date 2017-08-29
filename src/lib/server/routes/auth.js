@@ -3,13 +3,7 @@ let passport = require('passport')
 let request = require('../../lib/request')
 let logger = require('../lib/logger')
 const { promiseMap } = require('@nudj/library')
-
-function cacheReturnTo (req, res, next) {
-  if (!req.session.returnTo) {
-    req.session.returnTo = req.get('Referrer')
-  }
-  next()
-}
+const { cacheReturnTo } = require('@nudj/library/server')
 
 function fetchPerson (email) {
   let person = request(`people/first?email=${encodeURIComponent(email)}`)

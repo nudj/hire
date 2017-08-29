@@ -1,6 +1,7 @@
 const express = require('express')
 const get = require('lodash/get')
 const find = require('lodash/find')
+const isEmpty = require('lodash/isEmpty')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
 const {
@@ -11,8 +12,10 @@ const {
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
+const gmailer = require('../lib/gmailer')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
+const accounts = require('../modules/accounts')
 const employees = require('../modules/employees')
 const hirers = require('../modules/hirers')
 const internalMessages = require('../modules/internal-messages')
@@ -403,6 +406,22 @@ function internalSendHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function internalSendGmailHandler (req, res, next) {
+  if (isEmpty(req.body) && !req.session.postData) {
+    return next('Must have an email body')
+  }
+  const emailData = isEmpty(req.body) ? req.session.postData : req.body
+  const from = `${req.session.data.person.firstName} ${req.session.data.person.lastName} <${req.account.providers.google.email}>`
+  delete req.session.postData
+  gmailer
+    .send(merge(emailData, { from }), req.account.providers.google.accessToken)
+    .then(response => {
+      console.log(response)
+      res.redirect(req.originalUrl.split('/').slice(0, -1).join('/'))
+    })
+    .catch(next)
+}
+
 function externalHandler (req, res, next) {
   const selectReferrersQuery = {
     'document.type': 'tooltip',
@@ -708,6 +727,25 @@ function ensureOnboarded (req, res, next) {
   return next()
 }
 
+function ensureGoogleAuthenticated (req, res, next) {
+  if (!get(req, 'account.providers.google.accessToken')) {
+    return accounts
+      .getByFilters({
+        person: get(req, 'session.data.person.id')
+      })
+      .then(account => {
+        if (!account || !get(account, 'providers.google.accessToken')) {
+          req.session.postData = req.body
+          req.session.returnTo = req.originalUrl
+          return res.redirect('/auth/google')
+        }
+        req.account = account
+        next()
+      })
+  }
+  next()
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
@@ -725,6 +763,8 @@ router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
 
 router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
+router.get('/jobs/:jobSlug/internal/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, internalSendGmailHandler)
+router.post('/jobs/:jobSlug/internal/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, internalSendGmailHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
 router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)

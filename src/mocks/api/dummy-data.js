@@ -13,7 +13,8 @@ const data = {
   surveys: [],
   tasks: [],
   tokens: [],
-  employeeSurveys: []
+  employeeSurveys: [],
+  accounts: []
 }
 data.companies = data.companies.concat([
   {
@@ -155,9 +156,22 @@ data.people = data.people.concat([
     modified: '2000-01-17T02:51:58.000+00:00',
     firstName: 'David',
     lastName: 'Platt',
-    email: 'david@nudj.com',
+    email: 'david@nudj.co',
     url: 'http://not-a-real-person.com',
     title: 'Senior Fake User',
+    type: 'external',
+    company: 'nudj',
+    status: 'user'
+  },
+  {
+    id: 'person6',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    firstName: 'Tim',
+    lastName: 'Robinson',
+    email: 'tim@nudj.co',
+    url: 'http://not-a-real-person.com',
+    title: 'Junior Fake User',
     type: 'external',
     company: 'nudj',
     status: 'user'
@@ -172,6 +186,11 @@ data.hirers = data.hirers.concat([
   {
     id: 'hirer2',
     person: 'person1',
+    company: 'company1'
+  },
+  {
+    id: 'hirer3',
+    person: 'person6',
     company: 'company1'
   }
 ])
