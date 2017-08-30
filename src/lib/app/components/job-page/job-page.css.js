@@ -114,7 +114,7 @@ module.exports = css(merge(mixins.pageLayout, {
     color: variables.colors.midRed
   }),
   jobActivityHighlightNeutral: merge(jobActivityHighlight, {
-    color: variables.colors.midGrey
+    color: variables.colors.charcoal
   }),
   jobActivityFooter: merge(mixins.headings.small, {
     color: variables.colors.lightGrey

@@ -500,7 +500,7 @@ function importContactsLinkedInSaveHandler (req, res, next) {
       }).then(() => {
         req.session.notification = {
           type: 'success',
-          message: 'Nice. We’ll let you know when our machine has found some recommendations'
+          message: 'Nice. We\'ll let you know as soon as we find someone worth asking.'
         }
         return res.redirect('/')
       })
@@ -597,7 +597,7 @@ function surveyPageSendHandler (req, res, next) {
         }).then(() => {
           req.session.notification = {
             type: 'success',
-            message: 'Great job. We’ll be in touch as soon as we hear back from your team'
+            message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
           }
           return res.redirect('/')
         })

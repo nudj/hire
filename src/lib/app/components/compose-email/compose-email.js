@@ -13,7 +13,7 @@ module.exports = (props) => {
         <label className={style.addLabel}>Sending to</label>
         <div className={style.inputWrap}>
           {props.recipientsError ? errorLabel(style.errorLabel, props.recipientsError) : null}
-          <input className={style.recipients} id='recipients' name='recipients' value={get(props, 'recipients', '')} onChange={props.onChangeRecipients} onBlur={props.onBlurRecipients} placeholder='Enter employee’s email here' />
+          <input className={style.recipients} id='recipients' name='recipients' value={get(props, 'recipients', '')} onChange={props.onChangeRecipients} onBlur={props.onBlurRecipients} placeholder='Enter your team’s emails here. Use a comma to seperate multiple.' />
         </div>
       </div>
       <div className={style.email}>

@@ -20,7 +20,7 @@ const JobsPage = (props) => {
       <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
         <button className={style.upload} id='open-intercom'>Upload job</button>
       </PageHeader>
-      <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj...</h3>
+      <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj</h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <ul className={style.jobs}>
@@ -40,7 +40,7 @@ const JobsPage = (props) => {
                   description: `£${get(job, 'bonus')}`
                 }]}
                 actions={[
-                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>Get started</Link>
+                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>Get nudj'ing</Link>
                 ]}
               />
             ))}
