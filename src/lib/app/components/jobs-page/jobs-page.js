@@ -24,8 +24,10 @@ const JobsPage = (props) => {
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <ul className={style.jobs}>
-            {jobs.map((job) => (
-              <RowItem
+            {jobs.map((job) => {
+              const hasSent = get(job, 'hasSent', false)
+              const label = hasSent ? 'View job activity' : 'Get nudj\'ing'
+              return (<RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
                 uri={`//nudj.co/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
@@ -40,10 +42,10 @@ const JobsPage = (props) => {
                   description: `£${get(job, 'bonus')}`
                 }]}
                 actions={[
-                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>Get nudj'ing</Link>
+                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>{label}</Link>
                 ]}
-              />
-            ))}
+              />)
+            })}
           </ul>
         </div>
         <div className={style.pageSidebar}>

@@ -160,6 +160,24 @@ function getRenderer (req, res, next) {
   }
 }
 
+function jobHasSent (data, hirer, jobId) {
+  return Promise.all([
+    externalMessages.getAll({}, hirer, jobId),
+    internalMessages.getAll({}, hirer, jobId)
+  ])
+    .then(sentResults => {
+      const externalMessages = sentResults[0].externalMessages
+      const internalMessages = sentResults[1].internalMessages
+      return Boolean(externalMessages.length || internalMessages.length)
+    })
+    .then(hasSent => merge(data, {hasSent}))
+}
+
+function jobsHaveSent (data) {
+  data.jobs = Promise.all(data.jobs.map(job => jobHasSent(merge({}, job), data.hirer.id, job.id)))
+  return promiseMap(data)
+}
+
 function jobsHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -168,6 +186,7 @@ function jobsHandler (req, res, next) {
 
   jobs
     .getAll(merge(req.session.data))
+    .then(data => jobsHaveSent(data))
     .then(data => {
       data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
