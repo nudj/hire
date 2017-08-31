@@ -27,6 +27,10 @@ const styles = {
   pageContent: {
     padding: `0 0 ${variables.padding.d} 0`
   },
+  jobLink: {
+    color: variables.colors.royalBlue,
+    textDecoration: 'none'
+  },
   companyLink: mixins.deLink,
   tooltipFloating: merge(tooltipFloating, {
     top: '0'
