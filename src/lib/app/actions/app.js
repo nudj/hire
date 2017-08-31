@@ -44,15 +44,15 @@ module.exports.showLoading = () => {
 
 const SHOW_DIALOG = 'SHOW_DIALOG'
 module.exports.SHOW_DIALOG = SHOW_DIALOG
-function showDialog (overlay) {
+function showDialog (actions) {
   return {
     type: SHOW_DIALOG,
-    overlay
+    actions
   }
 }
-module.exports.showDialog = (overlay) => {
+module.exports.showDialog = (actions) => {
   return (dispatch, getState) => {
-    dispatch(showDialog(overlay))
+    dispatch(showDialog(actions))
   }
 }
 
@@ -71,15 +71,29 @@ module.exports.confirmStep = () => {
 
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
-function setActiveStep (stepNumber) {
+function setActiveStep (stepNumber, force) {
   return {
     type: SET_ACTIVE_STEP,
-    stepNumber
+    stepNumber,
+    force
   }
 }
-module.exports.setActiveStep = (stepNumber) => {
+module.exports.setActiveStep = (stepNumber, force) => {
   return (dispatch, getState) => {
-    dispatch(setActiveStep(stepNumber))
+    dispatch(setActiveStep(stepNumber, force))
+  }
+}
+
+const HIDE_CONFIRM = 'HIDE_CONFIRM'
+module.exports.HIDE_CONFIRM = HIDE_CONFIRM
+function hideConfirm () {
+  return {
+    type: HIDE_CONFIRM
+  }
+}
+module.exports.hideConfirm = () => {
+  return (dispatch, getState) => {
+    dispatch(hideConfirm())
   }
 }
 
@@ -95,6 +109,27 @@ function setStepData (stepName, stepData) {
 module.exports.setStepData = (stepName, stepData) => {
   return (dispatch, getState) => {
     dispatch(setStepData(stepName, stepData))
+  }
+}
+
+const SAVE_STEP_DATA = 'SAVE_STEP_DATA'
+module.exports.SAVE_STEP_DATA = SAVE_STEP_DATA
+function saveStepData (stepName, stepData) {
+  return {
+    type: SAVE_STEP_DATA,
+    stepName,
+    stepData
+  }
+}
+module.exports.saveStepData = (stepName, stepData) => {
+  return (dispatch, getState) => {
+    dispatch(saveStepData(stepName, stepData))
+  }
+}
+module.exports.saveSendData = (stepName, stepData, options) => {
+  if (options.url) window.open(options.url)
+  return (dispatch, getState) => {
+    dispatch(saveStepData(stepName, stepData))
   }
 }
 

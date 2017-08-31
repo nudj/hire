@@ -6,8 +6,7 @@ let {
   SHOW_LOADING,
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
-  CONFIRM_STEP,
-  EXTERNAL_MESSAGE_CONFIRM
+  SAVE_STEP_DATA
 } = require('../actions/app')
 const { merge } = require('@nudj/library')
 
@@ -29,19 +28,15 @@ function pageReducer (state = initialState, action) {
         notification: action.data.page.notification || state.notification
       })
     case SHOW_DIALOG:
-      return merge(state, { overlay: action.overlay })
+      return merge(state, { overlay: action.actions })
     case HIDE_DIALOG:
+    case SAVE_STEP_DATA:
+      return merge(state, { overlay: null })
       return merge(state, { overlay: null })
     case SHOW_NOTIFICATION:
       return merge(state, { notification: merge(action.notification, { hide: false }) })
     case HIDE_NOTIFICATION:
       return merge(state, { notification: { hide: true } })
-    case CONFIRM_STEP:
-      return merge(state, { overlay: null })
-    case EXTERNAL_MESSAGE_CONFIRM:
-      return merge(state, {
-        overlay: null
-      })
     default:
       return state
   }
