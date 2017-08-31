@@ -32,6 +32,7 @@ module.exports = class SurveyPage extends React.Component {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+    const cleanMessage = this.cleanTemplate(composeMessage)
 
     this.state = {
       recipients: get(props, 'form.recipients.value'),
@@ -40,7 +41,7 @@ module.exports = class SurveyPage extends React.Component {
       subjectFallback: composeSubject,
       subjectError: get(props, 'form.subject.error', false),
       template: get(props, 'form.template.value'),
-      templateFallback: composeMessage,
+      templateFallback: cleanMessage,
       templateError: get(props, 'form.template.error', false),
       editing: true
     }
@@ -82,6 +83,7 @@ module.exports = class SurveyPage extends React.Component {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'template', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+    const cleanMessage = this.cleanTemplate(composeMessage)
 
     this.setState({
       recipients: get(this.state, 'recipients', get(props, 'form.recipients.value')),
@@ -90,7 +92,7 @@ module.exports = class SurveyPage extends React.Component {
       subjectFallback: composeSubject,
       subjectError: get(this.state, 'subjectError', get(props, 'form.subject.error', false)),
       template: get(this.state, 'template', get(props, 'form.template.value')),
-      templateFallback: composeMessage,
+      templateFallback: cleanMessage,
       templateError: get(this.state, 'templateError', get(props, 'form.template.error', false))
     })
   }
@@ -119,6 +121,19 @@ module.exports = class SurveyPage extends React.Component {
     this.setState({
       template: event.target.value
     })
+  }
+  // Sub everything except the survey link into plain text
+  cleanTemplate (template) {
+    const tempTags = merge({}, tags)
+    Reflect.deleteProperty(tempTags, 'survey.link')
+    return templater.render({
+      template: template,
+      data: getDataBuilderFor(tempTags, this.props),
+      tagify: (content) => content,
+      pify: (content) => content.join(''),
+      chunkify: (content) => content,
+      brify: () => '\n'
+    }).join('\n\n')
   }
   chunkify (contents, index) {
     return <span className={this.style.chunk} key={`chunk${index}`}>{contents}</span>
