@@ -179,7 +179,7 @@ module.exports = class ComposePage extends React.Component {
         >
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
         </PageHeader>
-        <h3 className={this.style.pageHeadline}>Now compose your kick-ass message...</h3>
+        <h3 className={this.style.pageHeadline}>Compose your message</h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ComposeEmail

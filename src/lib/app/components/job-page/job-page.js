@@ -58,9 +58,15 @@ function renderJobActivities ({props, style}) {
 
 function renderSentListItem ({jobSlug, person, index, style}) {
   const personId = get(person, 'id', '')
+
   const firstName = get(person, 'firstName', '')
   const lastName = get(person, 'lastName', '')
+  const email = get(person, 'email', '')
+
+  const visibleName = firstName && lastName ? `${firstName} ${lastName}` : email
+
   const source = get(person, 'source', '')
+  const visibleSource = source === 'external' ? 'Network' : 'Team'
   const applications = get(person, 'totalApplications', 0).toString()
   const referrals = get(person, 'totalReferrals', 0).toString()
 
@@ -69,7 +75,7 @@ function renderSentListItem ({jobSlug, person, index, style}) {
   const resendButton = (<Link className={style.button} to={resendLink}>Resend</Link>)
   const actions = source === 'referral' ? [] : [resendButton]
 
-  let status = '🤷‍'
+  let status = 'Message sent'
 
   if (applications !== '0') {
     status = 'Referred applicant'
@@ -79,8 +85,8 @@ function renderSentListItem ({jobSlug, person, index, style}) {
 
   // Need to change this RowItem to use a table or something - alignment and also column headings
   return (<tr className={style.networkRow} key={`${personId}_${index}`}>
-    <td className={style.networkCellName}>{`${firstName} ${lastName}`}</td>
-    <td className={style.networkCellCapitalise}>{source}</td>
+    <td className={style.networkCellName}>{visibleName}</td>
+    <td className={style.networkCellCapitalise}>{visibleSource}</td>
     <td className={style.networkCell}>{status}</td>
     <td className={style.networkCell}>{referrals}</td>
     <td className={style.networkCell}>{applications}</td>
