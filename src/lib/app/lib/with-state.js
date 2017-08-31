@@ -32,7 +32,7 @@ const PageWithState = (Page) => {
         page = <Loading />
         break
       default:
-        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} /></ScrollTop>
+        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} externalMessagePage={props.externalMessages} /></ScrollTop>
     }
     return page
   })

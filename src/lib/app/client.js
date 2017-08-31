@@ -11,6 +11,7 @@ const { StyleSheet } = require('aphrodite/no-important')
 
 const App = require('./components/index')
 const { pageReducer } = require('./reducers/page')
+const { externalMessagesReducer } = require('./reducers/external-messages')
 const { setPage, showLoading } = require('./actions/app')
 const request = require('../lib/request')
 
@@ -19,7 +20,8 @@ const historyMiddleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
     router: routerReducer,
-    page: pageReducer
+    page: pageReducer,
+    externalMessages: externalMessagesReducer
   }),
   data,
   applyMiddleware(thunkMiddleware, historyMiddleware)

@@ -11,6 +11,12 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
+const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
+const {
+  showDialog,
+  hideDialog,
+  setActiveStep
+} = require('../../actions/app')
 const { merge } = require('@nudj/library')
 
 const getStyle = require('./compose-external-page.css')
@@ -22,13 +28,8 @@ module.exports = class ComposePage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const id = get(this.props, 'id')
     const data = get(this.props, 'externalMessage', {})
     const active = this.activeFromData(data)
-    const messages = get(this.props, 'messages', [])
-    const tooltips = get(this.props, 'tooltips', [])
-
-    this.state = {active, data, id, messages, tooltips}
 
     this.onSubmitStep = this.onSubmitStep.bind(this)
     this.onClickStep = this.onClickStep.bind(this)
@@ -39,7 +40,8 @@ module.exports = class ComposePage extends React.Component {
       {
         name: 'selectLength',
         component: FormStepLength,
-        resets: 'composeMessage'
+        resets: 'composeMessage',
+        confirm: true
       },
       {
         name: 'selectStyle',
@@ -52,18 +54,14 @@ module.exports = class ComposePage extends React.Component {
       },
       {
         name: 'sendMessage',
-        component: FormStepSend
+        component: FormStepSend,
+        confirm: true
       },
       {
         name: 'nextSteps',
         component: FormStepNext
       }
     ]
-  }
-
-  componentWillReceiveProps (props) {
-    const id = get(props, 'id')
-    this.setState({ id })
   }
 
   activeFromData (data) {
@@ -83,8 +81,8 @@ module.exports = class ComposePage extends React.Component {
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
-    const tooltip = this.state.tooltips.find(tooltip => tooltip.tags.includes(tooltipTag))
-    const activeName = this.steps[this.state.active].name
+    const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
+    const activeName = this.steps[this.props.externalMessagePage.active].name
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
     }
@@ -95,73 +93,91 @@ module.exports = class ComposePage extends React.Component {
 
   onChangeStep (step) {
     return (stepData) => {
-      this.setState({
-        data: merge(this.state.data, {[step]: stepData})
-      })
+      // this.setState({
+      //   data: merge(this.props.externalMessage, {[step]: stepData})
+      // })
+      this.props.dispatch(setStepData(step.name, stepData))
     }
+  }
+
+  onClickCancelDialog () {
+    this.props.dispatch(hideDialog())
   }
 
   onSubmitStep (step) {
     return (stepData) => {
-      const data = merge(this.state.data, {[step]: stepData})
-      const active = get(this.state, 'active') + 1
-      this.saveAndPostData({active, data})
+      if (step.confirm && !this.props.overlay) {
+        return this.props.dispatch(showDialog('externalMessageConfirm'))
+      }
+      // const data = merge(this.props.externalMessage, {[step.name]: stepData})
+      const active = get(this.props, 'externalMessagePage.active') + 1
+      const stepName = step.name
+      this.saveAndPostData({active, stepData, stepName})
+      this.props.dispatch(hideDialog())
     }
   }
 
-  saveAndPostData ({active, data}) {
-    this.setState({active, data}, () => {
-      let url = `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
-      let method = 'post'
-      const data = this.state.data
-
-      if (this.state.id) {
-        url = `${url}/${this.state.id}`
-        method = 'patch'
-      }
-
-      this.props.dispatch(postData({ url, data, method }))
-    })
+  saveAndPostData ({active, stepData, stepName}) {
+    // this.setState({active, stepData}, () => {
+    //   let url = `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
+    //   let method = 'post'
+    //   const data = this.props.externalMessage
+    //
+    //   if (this.props.id) {
+    //     url = `${url}/${this.props.id}`
+    //     method = 'patch'
+    //   }
+    //
+    //   this.props.dispatch(postData({ url, data, method }))
+    // })
+    this.props.dispatch(setActiveStep(active))
+    this.props.dispatch(setStepData(stepName, stepData))
   }
 
   onClickStep (step, index, steps) {
     return (event) => {
-      let active = this.state.active
+      let active = this.props.externalMessagePage.active
       if (active < 4) { // only allow skipping through steps before sending
         let confirm = null
-        if (index < this.state.active) {
-          if (step.resets && !!this.state.data[step.resets]) {
+        if (index < this.props.externalMessagePage.active) {
+          if (step.resets && !!this.props.externalMessage[step.resets]) {
             confirm = index
           } else {
             active = index
           }
-        } else if ((index > this.state.active && !!this.state.data[step.name]) || (steps[index - 1] && !!this.state.data[steps[index - 1].name])) {
+        } else if ((index > this.props.externalMessagePage.active && !!this.props.externalMessage[step.name]) || (steps[index - 1] && !!this.props.externalMessage[steps[index - 1].name])) {
           active = index
         }
-        this.setState({
-          active,
-          confirm
-        })
+        // this.setState({
+        //   active,
+        //   confirm
+        // })
+        this.props.dispatch(setActiveStep(active))
+        this.props.dispatch(showConfirmForStep(confirm))
       }
     }
   }
 
   onClickConfirm (event) {
     event.stopPropagation()
-    const data = this.state.data
-    data.composeMessage = null
-    this.setState({
-      active: this.state.confirm,
-      confirm: null,
-      data
-    })
+    // const data = this.props.externalMessage
+    // data.composeMessage = null
+    // this.setState({
+    //   active: this.props.externalMessagePage.confirm,
+    //   confirm: null,
+    //   data
+    // })
+    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm))
+    this.props.dispatch(setStepData('composeMessage', null))
+    this.props.dispatch(showConfirmForStep(null))
   }
 
   onClickCancel (event) {
     event.stopPropagation()
-    this.setState({
-      confirm: null
-    })
+    // this.setState({
+    //   confirm: null
+    // })
+    this.props.dispatch(showConfirmForStep(null))
   }
 
   renderConfirm () {
@@ -179,7 +195,7 @@ module.exports = class ComposePage extends React.Component {
 
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
-    const data = this.state.data
+    const data = this.props.externalMessage
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
@@ -202,15 +218,16 @@ module.exports = class ComposePage extends React.Component {
               <div className={this.style.pageMain}>
                 <Component
                   name={name}
-                  isActive={this.state.active === index}
+                  isActive={this.props.externalMessagePage.active === index}
                   index={index + 1}
-                  {...this.state.data}
-                  onSubmitStep={this.onSubmitStep(name)}
-                  onChangeStep={this.onChangeStep(name)}
-                  messages={this.state.messages}
+                  {...this.props.externalMessage}
+                  {...this.props.externalMessagePage}
+                  onSubmitStep={this.onSubmitStep(step)}
+                  onChangeStep={this.onChangeStep(step)}
+                  messages={get(this.props, 'messages', [])}
                   pageData={this.props}
                   onClick={this.onClickStep(step, index, steps)}
-                  confirm={this.state.confirm === index && this.renderConfirm()}
+                  confirm={this.props.externalMessagePage.confirm === index && this.renderConfirm()}
                   canSkipTo={canSkipTo}
                 />
               </div>

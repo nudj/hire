@@ -44,15 +44,70 @@ module.exports.showLoading = () => {
 
 const SHOW_DIALOG = 'SHOW_DIALOG'
 module.exports.SHOW_DIALOG = SHOW_DIALOG
-function showDialog (dialog) {
+function showDialog (overlay) {
   return {
     type: SHOW_DIALOG,
-    dialog
+    overlay
   }
 }
-module.exports.showDialog = (dialog) => {
+module.exports.showDialog = (overlay) => {
   return (dispatch, getState) => {
-    dispatch(showDialog(dialog))
+    dispatch(showDialog(overlay))
+  }
+}
+
+const CONFIRM_STEP = 'CONFIRM_STEP'
+module.exports.CONFIRM_STEP = CONFIRM_STEP
+function confirmStep () {
+  return {
+    type: CONFIRM_STEP
+  }
+}
+module.exports.confirmStep = () => {
+  return (dispatch, getState) => {
+    dispatch(confirmStep())
+  }
+}
+
+const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
+module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
+function setActiveStep (stepNumber) {
+  return {
+    type: SET_ACTIVE_STEP,
+    stepNumber
+  }
+}
+module.exports.setActiveStep = (stepNumber) => {
+  return (dispatch, getState) => {
+    dispatch(setActiveStep(stepNumber))
+  }
+}
+
+const SET_STEP_DATA = 'SET_STEP_DATA'
+module.exports.SET_STEP_DATA = SET_STEP_DATA
+function setStepData (stepName, stepData) {
+  return {
+    type: SET_STEP_DATA,
+    stepName,
+    stepData
+  }
+}
+module.exports.setStepData = (stepName, stepData) => {
+  return (dispatch, getState) => {
+    dispatch(setStepData(stepName, stepData))
+  }
+}
+
+const EXTERNAL_MESSAGE_CONFIRM = 'EXTERNAL_MESSAGE_CONFIRM'
+module.exports.EXTERNAL_MESSAGE_CONFIRM = EXTERNAL_MESSAGE_CONFIRM
+function externalMessageConfirm () {
+  return {
+    type: EXTERNAL_MESSAGE_CONFIRM
+  }
+}
+module.exports.externalMessageConfirm = () => {
+  return (dispatch, getState) => {
+    dispatch(externalMessageConfirm())
   }
 }
 

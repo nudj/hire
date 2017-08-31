@@ -331,6 +331,15 @@ function fetchInternalPrismicContent (data) {
   return promiseMap(data)
 }
 
+function fetchExternalPrismicContent (data) {
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendExternal']
+  }
+  data.dialog = prismic.fetchContent(dialogQuery, true)
+  return promiseMap(data)
+}
+
 function internalHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
@@ -493,6 +502,7 @@ function externalComposeHandler (req, res, next) {
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(getExternalComposeProperties)
+    .then(fetchExternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -523,6 +533,7 @@ function externalSaveHandler (req, res, next) {
       return promiseMap(data)
     })
     .then(getExternalComposeProperties)
+    .then(fetchExternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
