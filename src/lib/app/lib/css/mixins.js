@@ -337,7 +337,8 @@ module.exports.buttonSecondary = merge(module.exports.button, {
 
 module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
-  backgroundColor: variables.colors.grey
+  backgroundColor: variables.colors.grey,
+  borderColor: variables.colors.grey
 })
 
 module.exports.buttonClose = {

@@ -7,22 +7,22 @@ const getStyle = require('./task-list.css')
 const sendSurvey = {
   action: 'Send survey',
   actionLink: '/survey-page',
-  text: 'Send our bespoke survey to your team to help them discover people worth asking in their networks',
+  text: 'Send our bespoke survey to your team to help them discover people worth asking in their networks.',
   title: 'Ask your team for recommendations'
 }
 
 const unlockNetwork = {
   action: 'Export contacts',
   actionLink: '/import-contacts',
-  text: 'Export your connections from LinkedIn so we can highlight who we feel are the best people to ask',
+  text: 'Export your connections from LinkedIn so we can highlight who we feel are the best people to ask.',
   title: 'Unlock your network'
 }
 
 const shareJobs = {
   action: 'Share jobs',
   actionLink: '/jobs',
-  text: 'Share your jobs yo',
-  title: 'Share your jobs with your team and network'
+  text: 'We\'ve successfully identified some key people that are likely to give you some great recommendations.',
+  title: 'Share your jobs with network'
 }
 
 function renderTask (task, context) {
