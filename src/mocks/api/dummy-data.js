@@ -8,6 +8,7 @@ const data = {
   hirers: [],
   employees: [],
   recommendations: [],
+  internalMessages: [],
   externalMessages: [],
   surveys: [],
   tasks: [],
