@@ -15,6 +15,7 @@ const assets = require('../modules/assets')
 const common = require('../modules/common')
 const employees = require('../modules/employees')
 const hirers = require('../modules/hirers')
+const internalMessages = require('../modules/internal-messages')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
 const people = require('../modules/people')
@@ -314,10 +315,51 @@ function internalHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, tags) {
+  const recipients = recipient
+  const mailContent = {recipients, subject, template}
+
+  // Find or create person from email
+  // Create employee relation for this person
+  // Get or create referral for this person
+  // Append referral id to link
+  return people.getOrCreateByEmail({}, recipient)
+    .then(data => {
+      data.recipient = merge(data.person)
+      return promiseMap(data)
+    })
+    .then(data => employees.getOrCreateByPerson(data, data.recipient.id, company.id))
+    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, job.id))
+    .then(data => jobs.referral ? data : jobs.addReferral(data, job.id, data.recipient.id))
+    .then(data => {
+      data.company = company
+      data.job = job
+      data.person = sender
+      return promiseMap(data)
+    })
+    .then(data => network.send(data, mailContent, tags))
+    .then(data => internalMessages.post(data, hirer.id, data.job.id, data.recipient.id, subject, data.renderedMessage))
+}
+
+function internalMessageCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
+  const company = data.company
+  const job = data.job
+
+  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(data.person, data.hirer, recipient, company, job, subject, template, tags))
+
+  data.messages = Promise.all(sendMessages)
+    .then(messageResults => [].concat.apply([], messageResults || []))
+
+  return promiseMap(data)
+}
+
 function internalSendHandler (req, res, next) {
+  const { subject, template } = req.body
+  const recipients = req.body.recipients.replace(' ', '').split(',')
+
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => network.send(data, req.body, tags.internal))
+    .then(data => internalMessageCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.internal))
     .then(data => {
       if (data.messages) {
         // successful send

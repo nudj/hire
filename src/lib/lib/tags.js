@@ -24,7 +24,9 @@ const internal = {
   'job.link': data => {
     const companySlug = get(data, 'company.slug', '')
     const jobSlug = get(data, 'job.slug', '')
-    return `https://nudj.co/jobs/${companySlug}+${jobSlug}`
+    const referralId = get(data, 'referral.id', '')
+    const link = `https://nudj.co/jobs/${companySlug}+${jobSlug}`
+    return referralId ? `${link}+${referralId}` : link
   },
   'job.title': 'job.title',
   'sender.firstname': 'person.firstName',

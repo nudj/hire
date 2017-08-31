@@ -37,6 +37,7 @@ function sendEmails ({ recipients, subject, template }, tags) {
       data = validate({ recipients, subject, template }, data, tags)
       const html = renderMessage({ data, template, tags }).join('')
       const fromLabel = `${data.person.firstName} ${data.person.lastName}`
+      data.renderedMessage = html
       data.messages = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ fromLabel, subject, html })))
     } catch (error) {
       if (error.name !== 'NudjError') {
