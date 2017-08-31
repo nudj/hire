@@ -27,9 +27,23 @@ const cardContent = {
   }
 }
 
-const jobActivityHighlight = merge(mixins.pageLayout.pageHeadline, {
-  padding: '0'
-})
+const jobActivityHighlight = (colour = variables.colors.royalBlue, svg = 'arrow-up') => {
+  return merge(mixins.pageLayout.pageHeadline, {
+    color: colour,
+    padding: '0',
+    ':before': {
+      backgroundImage: mixins.linkImage(`${svg}.svg`),
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'contain',
+      content: '""',
+      display: 'inline-block',
+      height: `calc(${variables.padding.d} * .75)`,
+      margin: `0 ${variables.padding.f} 0 0`,
+      width: variables.padding.e
+    }
+  })
+}
 
 const networkCell = merge(mixins.cardStyle, {
   borderRadius: '0',
@@ -109,13 +123,9 @@ module.exports = css(merge(mixins.pageLayout, {
   }),
   jobActivityTitle: mixins.typography.p,
   jobActivitySummary: mixins.typography.p,
-  jobActivityHighlightPositive: jobActivityHighlight,
-  jobActivityHighlightNegative: merge(jobActivityHighlight, {
-    color: variables.colors.midRed
-  }),
-  jobActivityHighlightNeutral: merge(jobActivityHighlight, {
-    color: variables.colors.charcoal
-  }),
+  jobActivityHighlightPositive: jobActivityHighlight(),
+  jobActivityHighlightNegative: jobActivityHighlight(variables.colors.midRed, 'arrow-down'),
+  jobActivityHighlightNeutral: jobActivityHighlight(variables.colors.charcoal, 'arrow-no-change'),
   jobActivityFooter: merge(mixins.headings.small, {
     color: variables.colors.lightGrey
   })
