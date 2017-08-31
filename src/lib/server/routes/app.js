@@ -238,11 +238,13 @@ function aggregateSent (data) {
     return merge(sent, {source: 'external'})
   })
 
-  // Doesn't matter right now
-  const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
+  // All internal messages are complete
+  const internalMessages = data.internalMessages.map(sent => {
+    return merge(sent, {source: 'internal'})
+  })
 
   // Concat and sort external and external
-  const sentComplete = [].concat(externalMessagesComplete, sentInternalComplete)
+  const sentComplete = [].concat(externalMessagesComplete, internalMessages)
   sentComplete.sort(common.sortByModified)
 
   data.sentComplete = sentComplete.map(complete => {
@@ -266,13 +268,9 @@ function jobHandler (req, res, next) {
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
-    .then(data => {
-      // Add internal later
-      data.sentInternalComplete = []
-      return promiseMap(data)
-    })
     .then(data => aggregateSent(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)

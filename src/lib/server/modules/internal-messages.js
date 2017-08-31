@@ -19,11 +19,6 @@ function fetchSentMessagesForJob (data, hirer, job) {
   return request(`internalMessages/filter?hirer=${hirer}&job=${job}`)
 }
 
-function fetchCompleteSentMessagesForJob (data, hirer, job) {
-  return request(`internalMessages/filter?hirer=${hirer}&job=${job}`)
-    .then(results => results.filter(result => !!result.sendMessage))
-}
-
 function saveSentMessage (hirer, job, recipient, subject, message) {
   const data = {hirer, job, recipient, subject, message}
   const url = 'internalMessages'
@@ -38,13 +33,6 @@ module.exports.get = function (data, hirer, job, recipient) {
 
 module.exports.getAll = function (data, hirer, job) {
   data.internalMessages = fetchSentMessagesForJob(data, hirer, job)
-    .then(common.fetchPeopleFromFragments)
-
-  return promiseMap(data)
-}
-
-module.exports.getAllComplete = function (data, hirer, job) {
-  data.internalMessagesComplete = fetchCompleteSentMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)
