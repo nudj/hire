@@ -12,7 +12,8 @@ const data = {
   externalMessages: [],
   surveys: [],
   tasks: [],
-  tokens: []
+  tokens: [],
+  employeeSurveys: []
 }
 data.companies = data.companies.concat([
   {
@@ -264,7 +265,7 @@ data.tasks = data.tasks.concat([
     type: 'SEND_SURVEY_INTERNAL',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: 'hirer1'
+    completed: null
   },
   {
     id: 'task3',
@@ -281,8 +282,15 @@ data.tokens = data.tokens.concat([
     token: 'nice-fat-hash',
     type: 'TEST_TOKEN',
     data: {
-      employee: 'employee1'
+      employeeSurvey: 'employeeSurvey1'
     }
+  }
+])
+data.employeeSurveys = data.employeeSurveys.concat([
+  {
+    id: 'employeeSurvey1',
+    employee: 'employee1',
+    survey: 'survey1'
   }
 ])
 

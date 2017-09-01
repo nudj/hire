@@ -24,6 +24,7 @@ const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
 const tags = require('../../lib/tags')
+const employeeSurveys = require('../modules/employee-surveys')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
@@ -604,10 +605,10 @@ function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, s
   // Append token to link
   return people.getOrCreateByEmail({}, recipient)
     .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
+    .then(data => employeeSurveys.post(data, data.employee.id, survey.id))
     .then(data => {
       const tokenData = {
-        employee: data.employee.id,
-        survey: survey.id
+        employeeSurvey: data.newEmployeeSurvey.id
       }
       const type = 'SURVEY_TYPEFORM_COMPLETE'
       return tokens.post(data, type, tokenData)
