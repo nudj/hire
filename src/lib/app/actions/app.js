@@ -154,9 +154,7 @@ module.exports.saveStepData = (stepName, stepData) => {
 }
 module.exports.saveSendData = (stepName, stepData, options) => {
   if (options.url) window.open(options.url)
-  return (dispatch, getState) => {
-    dispatch(saveStepData(stepName, stepData))
-  }
+  return module.exports.saveStepData(stepName, stepData)
 }
 
 const EXTERNAL_MESSAGE_CONFIRM = 'EXTERNAL_MESSAGE_CONFIRM'
@@ -209,6 +207,20 @@ function hideNotification () {
 module.exports.hideNotification = () => {
   return (dispatch, getState) => {
     dispatch(hideNotification())
+  }
+}
+
+const INITIALISE = 'INITIALISE'
+module.exports.INITIALISE = INITIALISE
+function initialise (data) {
+  return {
+    type: INITIALISE,
+    data
+  }
+}
+module.exports.initialise = (data) => {
+  return (dispatch, getState) => {
+    dispatch(initialise(data))
   }
 }
 

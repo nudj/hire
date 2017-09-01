@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const isNil = require('lodash/isNil')
 const { Link } = require('react-router-dom')
 
 const Form = require('../form/form')
@@ -60,25 +61,12 @@ module.exports = class ComposePage extends React.Component {
     this.onClickCancel = this.onClickCancel.bind(this)
   }
 
-  activeFromData (data) {
-    let active = 0
-
-    if (data.sendMessage) {
-      active = 4
-    } else if (data.composeMessage) {
-      active = 3
-    } else if (data.selectStyle) {
-      active = 2
-    } else if (data.selectLength) {
-      active = 1
-    }
-
-    return active
-  }
-
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
-    const activeName = steps[this.props.externalMessagePage.active].name
+    const cacheActive = this.props.active
+    const pageActive = this.props.externalMessagePage.active
+    const active = (!isNil(pageActive) && pageActive) || (!isNil(cacheActive) && cacheActive) || 0
+    const activeName = steps[active].name
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
     }
@@ -107,21 +95,6 @@ module.exports = class ComposePage extends React.Component {
       }
       this.props.dispatch(actions[step.action || 'saveStepData'](stepName, stepData, options))
     }
-  }
-
-  saveAndPostData ({active, stepData, stepName}) {
-    this.setState({active, stepData}, () => {
-      let url = `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
-      let method = 'post'
-      const data = this.props.externalMessage
-
-      if (this.props.id) {
-        url = `${url}/${this.props.id}`
-        method = 'patch'
-      }
-
-      this.props.dispatch(postData({ url, data, method }))
-    })
   }
 
   onClickStep (index) {
@@ -154,6 +127,7 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = this.props.externalMessage
+    const active = this.props.externalMessagePage.active || this.props.active
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
@@ -176,7 +150,7 @@ module.exports = class ComposePage extends React.Component {
               <div className={this.style.pageMain}>
                 <Component
                   name={name}
-                  isActive={this.props.externalMessagePage.active === index}
+                  isActive={active === index}
                   index={index + 1}
                   {...this.props.externalMessage}
                   {...this.props.externalMessagePage}
