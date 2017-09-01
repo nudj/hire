@@ -20,7 +20,7 @@ const steps = [
     resets: 'composeMessage'
   },
   {
-    name: 'composeMessage',
+    name: 'composeMessage'
   },
   {
     name: 'sendMessage',
@@ -62,7 +62,7 @@ function externalMessagesReducer (state = initialState, action) {
         }
         return merge(state, {
           active,
-          confirm,
+          confirm
         }, resets)
       }
       return state

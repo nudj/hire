@@ -32,7 +32,6 @@ function pageReducer (state = initialState, action) {
     case HIDE_DIALOG:
     case SAVE_STEP_DATA:
       return merge(state, { overlay: null })
-      return merge(state, { overlay: null })
     case SHOW_NOTIFICATION:
       return merge(state, { notification: merge(action.notification, { hide: false }) })
     case HIDE_NOTIFICATION:

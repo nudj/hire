@@ -11,21 +11,16 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
-const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
 const actions = require('../../actions/app')
-const { merge } = require('@nudj/library')
 
 const getStyle = require('./compose-external-page.css')
 const { postData } = require('../../actions/app')
 
 const {
   showDialog,
-  hideDialog,
   setActiveStep,
   setStepData,
-  saveStepData,
-  hideConfirm,
-  saveSendData
+  hideConfirm
 } = actions
 const steps = [
   {
