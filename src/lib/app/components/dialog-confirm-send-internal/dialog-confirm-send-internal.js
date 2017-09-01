@@ -6,7 +6,7 @@ const PrismicReact = require('../../lib/prismic-react')
 
 const Dialog = (props) => {
   const style = getStyle()
-  const dialog = get(props, 'dialog')
+  const dialog = get(props, 'dialog', '')
 
   const prismicDialog = new PrismicReact(dialog)
 

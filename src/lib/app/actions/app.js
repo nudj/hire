@@ -1,6 +1,7 @@
 const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
 const { merge } = require('@nudj/library')
+const get = require('lodash/get')
 
 const FETCHED_PAGE = 'FETCHED_PAGE'
 module.exports.FETCHED_PAGE = FETCHED_PAGE
@@ -123,6 +124,31 @@ function saveStepData (stepName, stepData) {
 }
 module.exports.saveStepData = (stepName, stepData) => {
   return (dispatch, getState) => {
+    const state = getState()
+    const messageId = get(state, 'page.message.id')
+    let url = `/jobs/${get(state, 'page.job.slug')}/external/${get(state, 'page.recipient.id')}`
+    let method = 'post'
+    const {
+      selectLength,
+      selectStyle,
+      composeMessage,
+      sendMessage
+    } = state.externalMessages
+
+    if (messageId) {
+      url = `${url}/${messageId}`
+      method = 'patch'
+    }
+    dispatch(module.exports.postData({
+      url,
+      method,
+      data: merge({
+        selectLength,
+        selectStyle,
+        composeMessage,
+        sendMessage
+      }, {[stepName]: stepData})
+    }))
     dispatch(saveStepData(stepName, stepData))
   }
 }
