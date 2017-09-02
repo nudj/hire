@@ -1,6 +1,6 @@
 const React = require('react')
 const { Redirect } = require('react-router')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 const { Helmet } = require('react-helmet')

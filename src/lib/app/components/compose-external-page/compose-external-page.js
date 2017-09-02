@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 
 const Form = require('../form/form')
 const FormStepLength = require('../form-step-length/form-step-length')

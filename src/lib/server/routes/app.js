@@ -97,43 +97,36 @@ function getRenderDataBuilder (req) {
 function getErrorHandler (req, res, next) {
   return (error) => {
     try {
-      let data, errorMessage
+      let data, response = {}
+      logger.log('error', error.message, error)
       switch (error.message) {
         // renders with message
         case 'Invalid url':
-          errorMessage = {
+          response.message = {
             code: 400,
             error: 'error',
             message: 'Form submission data invalid'
           }
-          data = getRenderDataBuilder(req)({
-            message: errorMessage
-          })
-          getRenderer(req, res, next)(data)
           break
         // full page errors
-        default:
-          logger.log('error', error.message, error)
-          switch (error.message) {
-            case 'Not found':
-              errorMessage = {
-                code: 404,
-                type: 'error',
-                message: 'Not found'
-              }
-              break
-            default:
-              errorMessage = {
-                code: 500,
-                type: 'error',
-                message: 'Something went wrong'
-              }
+        case 'Not found':
+          response.error = {
+            code: 404,
+            type: 'error',
+            message: 'Not found'
           }
-          data = getRenderDataBuilder(req)({
-            error: errorMessage
-          })
-          getRenderer(req, res, next)(data)
+          break
+        default:
+          response.error = {
+            code: 500,
+            type: 'error',
+            message: 'Something went wrong'
+          }
       }
+      Promise.resolve(merge(req.session.data, response))
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(error => next(error))
     } catch (error) {
       logger.log('error', error)
       next(error)
@@ -797,7 +790,7 @@ router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSav
 router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
 
 router.get('*', (req, res) => {
-  let data = getRenderDataBuilder(req)({})
+  let data = getRenderDataBuilder(req)(merge(req.session.data))
   getRenderer(req, res)(data)
 })
 

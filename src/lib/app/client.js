@@ -27,38 +27,52 @@ const store = createStore(
   applyMiddleware(thunkMiddleware, historyMiddleware)
 )
 
+let latestRequestCache
+function makeRequest (location, hash, dispatch) {
+  return request(location)
+  .catch((error) => {
+    switch (error.message) {
+      case 'Unauthorized':
+        // refresh the page to trigger a login redirection when Unauthorized
+        window.location = ''
+        break
+      default:
+        console.error(error)
+    }
+  })
+  .then((data) => {
+    // only update page state if this is the latest request
+    console.log('feature/gmail-auth', 'response', hash, latestRequestCache.hash, hash === latestRequestCache.hash)
+    if (data && hash === latestRequestCache.hash) {
+      dispatch(setPage(data))
+    }
+  })
+}
+
 StyleSheet.rehydrate(renderedClassNames)
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history} onChange={(dispatch, location) => {
+      let response = Promise.resolve()
       // only fetch new page data if...
       // - history action is not PUSH
       // - history action is PUSH and requested url is not already in page data (page data is stale)
-      const newUrl = location.pathname
+      const url = location.pathname
+      const hash = location.key
       const oldUrl = store.getState().page.url.originalUrl
-      if (newUrl === '/logout') {
-        dispatch(showLoading())
-        window.location = `${newUrl}?returnTo=${encodeURIComponent(oldUrl)}`
-      } else if (newUrl !== oldUrl) {
-        dispatch(showLoading())
-        request(location.pathname)
-        .catch((error) => {
-          switch (error.message) {
-            case 'Unauthorized':
-              // refresh the page to trigger a login redirection when Unauthorized
-              window.location = ''
-              break
-            default:
-              console.log(error)
-          }
-        })
-        .then((data) => {
-          // only update page state if it is the date for the page we are currently viewing
-          if (data && data.page.url.originalUrl === store.getState().router.location.pathname) {
-            return dispatch(setPage(data))
-          }
-        })
+      if (url === '/logout') {
+        window.location = `${url}?returnTo=${encodeURIComponent(oldUrl)}`
+      } else {
+        if (latestRequestCache) {
+          dispatch(showLoading())
+          latestRequestCache = { hash, url }
+          console.log('feature/gmail-auth', 'request', hash)
+          response = makeRequest(url, hash, dispatch)
+        }
       }
+      // initialise latestRequestCache only after first location change has been ignored
+      latestRequestCache = latestRequestCache || {}
+      return response
     }}>
       <App />
     </ConnectedRouter>
