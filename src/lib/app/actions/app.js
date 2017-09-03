@@ -231,7 +231,7 @@ module.exports.postData = ({
 }) => {
   return (dispatch, getState) => {
     let state = getState()
-    dispatch(sending())
+    dispatch(showLoading())
     request(url, {
       method,
       data: merge(data, {
@@ -263,7 +263,7 @@ module.exports.postFile = ({
     const state = getState()
     formData.append('_csrf', state.page.csrfToken)
 
-    dispatch(sending())
+    dispatch(showLoading())
     request(url, {
       method,
       data: formData

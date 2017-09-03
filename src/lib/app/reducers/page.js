@@ -25,9 +25,8 @@ function pageReducer (state = initialState, action) {
       return merge(state, resetError, { loading: true })
     case FETCHED_PAGE:
       return merge(action.data.page, {
-        sending: false,
         loading: false,
-        // ensure notifications persist through multiple fetches (should only be dismissable by the user)
+        // ensure notifications persist through multiple fetches (should only be dismissable by the user or on timeout)
         notification: action.data.page.notification || state.notification
       })
     case SHOW_DIALOG:
