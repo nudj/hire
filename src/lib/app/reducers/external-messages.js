@@ -1,15 +1,8 @@
 const camelCase = require('lodash/camelCase')
 const isNil = require('lodash/isNil')
-const {
-  SET_ACTIVE_STEP,
-  SET_STEP_DATA,
-  SAVE_STEP_DATA,
-  HIDE_CONFIRM
-} = require('../actions/app')
 const { merge } = require('@nudj/library')
 
 const initialState = {}
-
 const steps = [
   {
     name: 'selectLength',

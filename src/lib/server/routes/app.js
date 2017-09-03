@@ -97,7 +97,7 @@ function getRenderDataBuilder (req) {
 function getErrorHandler (req, res, next) {
   return (error) => {
     try {
-      let data, response = {}
+      const response = {}
       logger.log('error', error.message, error)
       switch (error.message) {
         // renders with message

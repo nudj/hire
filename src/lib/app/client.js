@@ -70,7 +70,6 @@ ReactDOM.render(
     <ConnectedRouter history={history} onChange={(dispatch, location, historyAction) => {
       const url = location.pathname
       const hash = location.key
-      const oldUrl = store.getState().page.url.originalUrl
       // ignore replace actions to reserve them for updating the url only
       if (historyAction !== 'REPLACE') {
         dispatch(showLoading())
