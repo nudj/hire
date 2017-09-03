@@ -25,7 +25,7 @@
   "dependencies": {
     "@nudj/dummy": "0.7.0",
     "@nudj/library": "0.9.0",
-    "@nudj/react-router-redux": "0.1.1--5.0.0-alpha.6",
+    "@nudj/react-router-redux": "0.2.0--5.0.0-alpha.6",
     "@nudj/schemas": "0.11.1",
     "aphrodite": "^1.2.0",
     "aws-sdk": "^2.96.0",

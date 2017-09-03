@@ -139,6 +139,7 @@ function getRenderer (req, res, next) {
     delete req.session.logout
     delete req.session.returnTo
     if (req.xhr) {
+      res.set('Cache-Control': 'no-store')
       return res.json(data)
     }
     let staticContext = app(data)
@@ -291,6 +292,40 @@ function jobHandler (req, res, next) {
     .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
+    .then(data => aggregateSent(data))
+    .then(data => {
+      if (!data.sentComplete.length) {
+        return res.redirect(`/jobs/${data.job.slug}/nudj`)
+      }
+      data.activities = jobs.getJobActivities(data, data.job.id)
+      return promiseMap(data)
+        .then(data => {
+          data.tooltip = prismic.fetchContent(prismicQuery, true)
+          return promiseMap(data)
+        })
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function nudjHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobDashboard']
+  }
+
+  jobs
+    .get(merge(req.session.data), req.params.jobSlug)
+    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => jobs.getReferrals(data, data.job.id))
+    .then(data => jobs.getApplications(data, data.job.id))
+    .then(data => {
+      // Add internal later
+      data.sentInternalComplete = []
+      return promiseMap(data)
+    })
     .then(data => aggregateSent(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
@@ -777,7 +812,7 @@ router.post('/survey-page', surveyPageSendHandler)
 router.get('/jobs', ensureOnboarded, jobsHandler)
 
 router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
-router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
+router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 
 router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)

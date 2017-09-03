@@ -24,7 +24,7 @@ const Header = (props) => {
       </div>
       <div className={style.sub}>
         <ul className={style.menu}>
-          <li className={style.menuItem}><Link className={style.logout} to='/logout'>Log out</Link></li>
+          <li className={style.menuItem}><a className={style.logout} href='/logout'>Log out</a></li>
         </ul>
       </div>
     </nav>

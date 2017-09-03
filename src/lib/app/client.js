@@ -2,17 +2,29 @@
 
 const React = require('react')
 const ReactDOM = require('react-dom')
-const { createStore, combineReducers, applyMiddleware } = require('redux')
+const {
+  createStore,
+  combineReducers,
+  applyMiddleware
+} = require('redux')
 const { Provider } = require('react-redux')
 const { createBrowserHistory } = require('history')
-const { ConnectedRouter, routerMiddleware, routerReducer } = require('@nudj/react-router-redux')
+const {
+  ConnectedRouter,
+  routerMiddleware,
+  routerReducer,
+  replace
+} = require('@nudj/react-router-redux')
 const thunkMiddleware = require('redux-thunk').default
 const { StyleSheet } = require('aphrodite/no-important')
 
 const App = require('./components/index')
 const { pageReducer } = require('./reducers/page')
 const { externalMessagesReducer } = require('./reducers/external-messages')
-const { setPage, showLoading } = require('./actions/app')
+const {
+  setPage,
+  showLoading
+} = require('./actions/app')
 const request = require('../lib/request')
 
 const history = createBrowserHistory()
@@ -26,53 +38,48 @@ const store = createStore(
   data,
   applyMiddleware(thunkMiddleware, historyMiddleware)
 )
+const latestRequest = {}
 
-let latestRequestCache
-function makeRequest (location, hash, dispatch) {
+function fetchData (location, hash, dispatch) {
   return request(location)
-  .catch((error) => {
-    switch (error.message) {
-      case 'Unauthorized':
-        // refresh the page to trigger a login redirection when Unauthorized
+    .then((data) => {
+      console.log('feature/gmail-auth', 'response', hash, latestRequest.hash, hash === latestRequest.hash)
+      if (data) {
+        // only update page state if this is the latest request
+        if (hash === latestRequest.hash) {
+          dispatch(setPage(data))
+        }
+        // if the url inside the data does not match the original request it means a redirect has been followed by the browser so the url needs to be updated to match
+        if (data.page.url.originalUrl !== window.location.pathname) {
+          dispatch(replace(data.page.url.originalUrl))
+        }
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      if (error.message === 'Unauthorized') {
+        // refresh the page to trigger a login redirection
         window.location = ''
-        break
-      default:
-        console.error(error)
-    }
-  })
-  .then((data) => {
-    // only update page state if this is the latest request
-    console.log('feature/gmail-auth', 'response', hash, latestRequestCache.hash, hash === latestRequestCache.hash)
-    if (data && hash === latestRequestCache.hash) {
-      dispatch(setPage(data))
-    }
-  })
+      }
+    })
 }
 
 StyleSheet.rehydrate(renderedClassNames)
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history} onChange={(dispatch, location) => {
-      let response = Promise.resolve()
-      // only fetch new page data if...
-      // - history action is not PUSH
-      // - history action is PUSH and requested url is not already in page data (page data is stale)
+    <ConnectedRouter history={history} onChange={(dispatch, location, historyAction) => {
       const url = location.pathname
       const hash = location.key
       const oldUrl = store.getState().page.url.originalUrl
-      if (url === '/logout') {
-        window.location = `${url}?returnTo=${encodeURIComponent(oldUrl)}`
-      } else {
-        if (latestRequestCache) {
-          dispatch(showLoading())
-          latestRequestCache = { hash, url }
-          console.log('feature/gmail-auth', 'request', hash)
-          response = makeRequest(url, hash, dispatch)
-        }
+      // ignore replace actions to reserve them for updating the url only
+      if (historyAction !== 'REPLACE') {
+        dispatch(showLoading())
+        latestRequest.hash = hash
+        latestRequest.url = url
+        console.log('feature/gmail-auth', 'request', hash)
+        return fetchData(url, hash, dispatch)
       }
-      // initialise latestRequestCache only after first location change has been ignored
-      latestRequestCache = latestRequestCache || {}
-      return response
+      return Promise.resolve()
     }}>
       <App />
     </ConnectedRouter>
