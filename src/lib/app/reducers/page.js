@@ -1,5 +1,5 @@
 let {
-  SENDING,
+  SHOW_ERROR,
   FETCHED_PAGE,
   SHOW_DIALOG,
   HIDE_DIALOG,
@@ -13,13 +13,16 @@ const { merge } = require('@nudj/library')
 const initialState = {
   externalMessageActive: 0
 }
+const resetError = {
+  error: null
+}
 
 function pageReducer (state = initialState, action) {
   switch (action.type) {
-    case SENDING:
-      return merge(state, { sending: true, notification: null })
+    case SHOW_ERROR:
+      return { error: { code: 500 } }
     case SHOW_LOADING:
-      return merge(state, { loading: true })
+      return merge(state, resetError, { loading: true })
     case FETCHED_PAGE:
       return merge(action.data.page, {
         sending: false,
@@ -28,14 +31,14 @@ function pageReducer (state = initialState, action) {
         notification: action.data.page.notification || state.notification
       })
     case SHOW_DIALOG:
-      return merge(state, { overlay: action.actions })
+      return merge(state, resetError, { overlay: action.actions })
     case HIDE_DIALOG:
     case SAVE_STEP_DATA:
-      return merge(state, { overlay: null })
+      return merge(state, resetError, { overlay: null })
     case SHOW_NOTIFICATION:
-      return merge(state, { notification: merge(action.notification, { hide: false }) })
+      return merge(state, resetError, { notification: merge(action.notification, { hide: false }) })
     case HIDE_NOTIFICATION:
-      return merge(state, { notification: { hide: true } })
+      return merge(state, resetError, { notification: { hide: true } })
     default:
       return state
   }

@@ -23,7 +23,8 @@ const { pageReducer } = require('./reducers/page')
 const { externalMessagesReducer } = require('./reducers/external-messages')
 const {
   setPage,
-  showLoading
+  showLoading,
+  showError
 } = require('./actions/app')
 const request = require('../lib/request')
 
@@ -60,7 +61,9 @@ function fetchData (location, hash, dispatch) {
       if (error.message === 'Unauthorized') {
         // refresh the page to trigger a login redirection
         window.location = ''
+        return
       }
+      dispatch(showError())
     })
 }
 

@@ -17,16 +17,16 @@ module.exports.setPage = (data) => {
   }
 }
 
-const SENDING = 'SENDING'
-module.exports.SENDING = SENDING
-function sending () {
+const SHOW_ERROR = 'SHOW_ERROR'
+module.exports.SHOW_ERROR = SHOW_ERROR
+function showError () {
   return {
-    type: SENDING
+    type: SHOW_ERROR
   }
 }
-module.exports.sending = () => {
+module.exports.showError = () => {
   return (dispatch, getState) => {
-    dispatch(sending())
+    dispatch(showError())
   }
 }
 
