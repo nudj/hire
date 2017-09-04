@@ -95,13 +95,15 @@ module.exports = class ComposePage extends React.Component {
     }
   }
 
-  onClickStep (index) {
-    return event => this.props.dispatch(setActiveStep(index))
+  onClickStep (requestedStep) {
+    const currentStep = isNil(this.props.externalMessagePage.active) ? this.props.active : this.props.externalMessagePage.active
+    return event => this.props.dispatch(setActiveStep(requestedStep, currentStep))
   }
 
   onClickConfirm (event) {
     event.stopPropagation()
-    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, true))
+    const currentStep = isNil(this.props.externalMessagePage.active) ? this.props.active : this.props.externalMessagePage.active
+    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentStep, true))
   }
 
   onClickCancel (event) {
@@ -125,7 +127,7 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = this.props.externalMessage
-    const active = this.props.externalMessagePage.active || this.props.active
+    const active = isNil(this.props.externalMessagePage.active) ? this.props.active : this.props.externalMessagePage.active
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>

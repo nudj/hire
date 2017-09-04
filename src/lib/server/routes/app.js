@@ -139,7 +139,7 @@ function getRenderer (req, res, next) {
     delete req.session.logout
     delete req.session.returnTo
     if (req.xhr) {
-      res.set('Cache-Control': 'no-store')
+      res.set('Cache-Control', 'no-store')
       return res.json(data)
     }
     let staticContext = app(data)

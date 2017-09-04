@@ -26,8 +26,9 @@ const steps = [
 
 const setActiveStep = (state, action) => {
   const force = action.force
-  let active = isNil(state.active) ? 0 : state.active
-  let index = action.stepNumber
+  // let active = isNil(state.active) ? 0 : state.active
+  let active =  action.currentStep
+  let index = action.requestedStep
   let resets = {}
   const step = steps[index]
   if (active < 4) { // only allow skipping through steps before sending

@@ -72,16 +72,17 @@ module.exports.confirmStep = () => {
 
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
-function setActiveStep (stepNumber, force) {
+function setActiveStep (requestedStep, currentStep, force) {
   return {
     type: SET_ACTIVE_STEP,
-    stepNumber,
+    requestedStep,
+    currentStep,
     force
   }
 }
-module.exports.setActiveStep = (stepNumber, force) => {
+module.exports.setActiveStep = (requestedStep, currentStep, force) => {
   return (dispatch, getState) => {
-    dispatch(setActiveStep(stepNumber, force))
+    dispatch(setActiveStep(requestedStep, currentStep, force))
   }
 }
 
