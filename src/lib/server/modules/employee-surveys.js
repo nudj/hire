@@ -7,7 +7,7 @@ function createEmployeeSurvey (data) {
 }
 
 function fetchEmployeeSurvey (id) {
-  return request(`employeeSurveys/filter?id=${id}`)
+  return request(`employeeSurveys/${id}`)
     .then(results => results.pop())
 }
 
