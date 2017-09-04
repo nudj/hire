@@ -98,6 +98,7 @@ function getErrorHandler (req, res, next) {
   return (error) => {
     try {
       const response = {}
+      let responded
       logger.log('error', error.message, error)
       switch (error.message) {
         // renders with message
@@ -116,6 +117,10 @@ function getErrorHandler (req, res, next) {
             message: 'Not found'
           }
           break
+        case 'Unauthorized Google':
+          res.status(401).send('Unauthorized Google')
+          responded = true
+          break
         default:
           response.error = {
             code: 500,
@@ -123,10 +128,12 @@ function getErrorHandler (req, res, next) {
             message: 'Something went wrong'
           }
       }
-      Promise.resolve(merge(req.session.data, response))
-        .then(getRenderDataBuilder(req, res, next))
-        .then(getRenderer(req, res, next))
-        .catch(error => next(error))
+      if (!responded) {
+        Promise.resolve(merge(req.session.data, response))
+          .then(getRenderDataBuilder(req, res, next))
+          .then(getRenderer(req, res, next))
+          .catch(error => next(error))
+      }
     } catch (error) {
       logger.log('error', error)
       next(error)
@@ -459,6 +466,27 @@ function internalSendGmailHandler (req, res, next) {
     .catch(next)
 }
 
+function sendGmailHandler (req, res, next) {
+  Promise.resolve(merge(req.session.data))
+    .then(data => externalMessages.getById(data, req.params.messageId))
+    .then(data => {
+      const from = `${data.person.firstName} ${data.person.lastName} <${req.account.providers.google.email}>`
+      gmailer
+        .send({
+          body: 'HELLO',
+          from,
+          subject: 'SUCCESS',
+          to: 'tim@nudj.co'
+        }, req.account.providers.google.accessToken)
+        .then(response => {
+          next()
+        })
+        .catch(error => {
+          logger.log(error)
+        })
+    })
+}
+
 function externalHandler (req, res, next) {
   const selectReferrersQuery = {
     'document.type': 'tooltip',
@@ -523,6 +551,39 @@ function getExternalComposeProperties (data) {
     })
 }
 
+function getExternalMessageProperties (data, messageId) {
+  const composeExternalTooltips = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendExternal']
+  }
+  const composeExternalMessages = {
+    'document.type': 'composemessage',
+    'document.tags': ['external']
+  }
+
+  return Promise.resolve(data)
+    // .then(data => network.getById(data, data.hirer.id, data.job.id, data.recipient.id))
+    .then(data => {
+      data.recipient = common.fetchPersonFromFragment(data.recipient.id)
+      data.tooltips = prismic.fetchContent(composeExternalTooltips)
+      data.messages = prismic.fetchContent(composeExternalMessages)
+      return promiseMap(data)
+    })
+    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
+    .then(data => {
+      if (!data.referral) {
+        data.referral = jobs.addReferral(data, data.job.id, data.recipient.id)
+      }
+      return promiseMap(data)
+    })
+    .then(data => externalMessages.getById(data, messageId))
+    .then(data => {
+      data.externalMessage = data.message
+      data.id = data.message.id
+      return promiseMap(data)
+    })
+}
+
 function externalComposeHandler (req, res, next) {
   const recipient = req.params.recipientId
 
@@ -550,6 +611,65 @@ function externalComposeHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function externalMessageHandler (req, res, next) {
+  const recipient = req.params.recipientId
+
+  jobs
+    .get(merge(req.session.data), req.params.jobSlug)
+    .then(data => network.getRecipient(data, recipient))
+    .then(getExternalMessageProperties(data, req.params.messageId))
+    .then(fetchExternalPrismicContent)
+    .then(data => {
+      let active = 0
+      if (data.externalMessage.sendMessage) {
+        active = 4
+      } else if (data.externalMessage.composeMessage) {
+        active = 3
+      } else if (data.externalMessage.selectStyle) {
+        active = 2
+      } else if (data.externalMessage.selectLength) {
+        active = 1
+      }
+      data.active = active
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function getGoogleAccessToken (res, req, next, data) {
+  if (!get(req, 'account.providers.google.accessToken')) {
+    return accounts
+      .getByFilters({
+        person: get(req, 'session.data.person.id')
+      })
+      .then(account => {
+        if (!account || !get(account, 'providers.google.accessToken')) {
+          // req.session.postData = req.body
+          // req.session.returnTo = req.originalUrl
+          throw new Error('Unauthorized Google')
+        }
+        req.account = account
+        return promiseMap(data)
+      })
+  }
+  return promiseMap(data)
+}
+
+function sendGmail (data, accessToken) {
+  return gmailer
+    .send({
+      body: 'HELLO',
+      from: 'nick@nudj.co',
+      subject: 'SUCCESS',
+      to: 'tim@nudj.co'
+    }, accessToken)
+    .then(response => {
+      return promiseMap(data)
+    })
+}
+
 function externalSaveHandler (req, res, next) {
   const hirer = req.session.data.hirer
   const recipient = req.params.recipientId
@@ -568,6 +688,13 @@ function externalSaveHandler (req, res, next) {
     .get(data, req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => {
+      if (sendMessage === 'GMAIL') {
+        return getGoogleAccessToken(req, res, next, data)
+          .then(data => sendGmail(data, req.account.providers.google.accessToken))
+      }
+      return promiseMap(data)
+    })
     .then(data => {
       if (sendMessage) {
         return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
@@ -790,6 +917,9 @@ function ensureGoogleAuthenticated (req, res, next) {
         if (!account || !get(account, 'providers.google.accessToken')) {
           req.session.postData = req.body
           req.session.returnTo = req.originalUrl
+          if (req.xhr) {
+            return res.status(401).send()
+          }
           return res.redirect('/auth/google')
         }
         req.account = account
@@ -822,7 +952,9 @@ router.post('/jobs/:jobSlug/internal/send-gmail', ensureOnboarded, ensureGoogleA
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
 router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
 router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
+router.get('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalMessageHandler)
 router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
+router.get('/jobs/:jobSlug/external/:recipientId/:messageId/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, sendGmailHandler, externalSaveHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)(merge(req.session.data))

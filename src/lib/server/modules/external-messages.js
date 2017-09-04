@@ -61,6 +61,11 @@ module.exports.getAll = function (data, hirer, job) {
   return promiseMap(data)
 }
 
+module.exports.getById = function (data, id) {
+  data.message = request(`externalMessages/${id}`)
+  return promiseMap(data)
+}
+
 module.exports.getAllComplete = function (data, hirer, job) {
   data.externalMessagesComplete = fetchCompleteSentMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)

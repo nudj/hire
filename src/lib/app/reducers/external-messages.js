@@ -26,9 +26,9 @@ const steps = [
 
 const setActiveStep = (state, action) => {
   const force = action.force
-  // let active = isNil(state.active) ? 0 : state.active
-  let active =  action.currentStep
+  let active = action.currentStep
   let index = action.requestedStep
+  let currentMessage = action.currentMessage
   let resets = {}
   const step = steps[index]
   if (active < 4) { // only allow skipping through steps before sending
@@ -38,16 +38,16 @@ const setActiveStep = (state, action) => {
       resets[step.resets] = null // reset steps which depend on this step
     } else {
       if (index < active) { // only allow visited steps to be jumped to
-        if (step.resets && !!state[step.resets]) {
+        if (step.resets && !!currentMessage[step.resets]) {
           confirm = index // show confirm if step has dependents
         } else {
           active = index
         }
       } else if (
         // future steps that have been completed
-        (index > state.active && !!state[step.name]) ||
+        (index > active && !!currentMessage[step.name]) ||
         // TODO: not sure what this is checking for...
-        (steps[index - 1] && !!state[steps[index - 1].name])
+        (steps[index - 1] && !!currentMessage[steps[index - 1].name])
       ) {
         active = index
       }

@@ -1,9 +1,11 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const pick = require('lodash/pick')
 const isNil = require('lodash/isNil')
-const Link = require('../link/link')
+const { merge } = require('@nudj/library')
 
+const Link = require('../link/link')
 const Form = require('../form/form')
 const FormStepLength = require('../form-step-length/form-step-length')
 const FormStepStyle = require('../form-step-style/form-step-style')
@@ -97,13 +99,15 @@ module.exports = class ComposePage extends React.Component {
 
   onClickStep (requestedStep) {
     const currentStep = isNil(this.props.externalMessagePage.active) ? this.props.active : this.props.externalMessagePage.active
-    return event => this.props.dispatch(setActiveStep(requestedStep, currentStep))
+    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    return event => this.props.dispatch(setActiveStep(requestedStep, currentStep, currentMessage))
   }
 
   onClickConfirm (event) {
     event.stopPropagation()
     const currentStep = isNil(this.props.externalMessagePage.active) ? this.props.active : this.props.externalMessagePage.active
-    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentStep, true))
+    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentStep, currentMessage, true))
   }
 
   onClickCancel (event) {

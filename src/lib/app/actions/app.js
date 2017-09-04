@@ -72,17 +72,18 @@ module.exports.confirmStep = () => {
 
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
-function setActiveStep (requestedStep, currentStep, force) {
+function setActiveStep (requestedStep, currentStep, currentMessage, force) {
   return {
     type: SET_ACTIVE_STEP,
     requestedStep,
     currentStep,
+    currentMessage,
     force
   }
 }
-module.exports.setActiveStep = (requestedStep, currentStep, force) => {
+module.exports.setActiveStep = (requestedStep, currentStep, currentMessage, force) => {
   return (dispatch, getState) => {
-    dispatch(setActiveStep(requestedStep, currentStep, force))
+    dispatch(setActiveStep(requestedStep, currentStep, currentMessage, force))
   }
 }
 
@@ -154,7 +155,9 @@ module.exports.saveStepData = (stepName, stepData) => {
   }
 }
 module.exports.saveSendData = (stepName, stepData, options) => {
-  if (options.url) window.open(options.url)
+  if (stepData !== 'GMAIL' && options.url) {
+    window.open(options.url)
+  }
   return module.exports.saveStepData(stepName, stepData)
 }
 
@@ -244,6 +247,19 @@ module.exports.postData = ({
       if (data.page.url.originalUrl !== url) {
         dispatch(push(data.page.url.originalUrl))
       }
+    })
+    .catch((error) => {
+      console.error(error)
+      if (error.message === 'Unauthorized') {
+        // refresh the page to trigger a login redirection
+        window.location = ''
+        return
+      }
+      if (error.message === 'Unauthorized Google') {
+        window.location = '/auth/google'
+        return
+      }
+      dispatch(showError())
     })
   }
 }
