@@ -1,15 +1,30 @@
 const express = require('express')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
-let getTime = require('date-fns/get_time')
+const getTime = require('date-fns/get_time')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
-const { merge } = require('../../lib')
 const logger = require('../lib/logger')
+const mailer = require('../lib/mailer')
+const intercom = require('../lib/intercom')
+const assets = require('../modules/assets')
 const common = require('../modules/common')
+const employees = require('../modules/employees')
+const hirers = require('../modules/hirers')
+const internalMessages = require('../modules/internal-messages')
 const jobs = require('../modules/jobs')
 const network = require('../modules/network')
+const people = require('../modules/people')
+const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
-const { promiseMap } = require('../lib')
+const tasks = require('../modules/tasks')
+const tokens = require('../modules/tokens')
+const tags = require('../../lib/tags')
+const employeeSurveys = require('../modules/employee-surveys')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
@@ -18,25 +33,12 @@ const prismic = require('../modules/prismic')({accessToken, repo})
 const app = require('../../app/server')
 const router = express.Router()
 
-const clone = (obj) => Object.assign({}, obj)
-
 function spoofLoggedIn (req, res, next) {
-  req.session.data = {
-    hirer: {
-      id: 'hirer1',
-      company: 'company1',
-      person: 'person5'
-    },
-    person: {
-      id: 'person5',
-      firstName: 'David',
-      lastName: 'Platt'
-    },
-    company: {
-      id: 'company1',
-      name: 'Johns PLC',
-      slug: 'johns-plc'
-    }
+  const data = require('../../../mocks/api/dummy-data')
+  req.session.data = req.session.data || {
+    hirer: find(data.hirers, { id: 'hirer1' }),
+    person: find(data.people, { id: 'person5' }),
+    company: find(data.companies, { id: 'company1' })
   }
   return next()
 }
@@ -76,9 +78,12 @@ function getRenderDataBuilder (req) {
       hostname: req.hostname,
       originalUrl: req.originalUrl
     }
-    return {
-      page: data
-    }
+
+    data.tasksIncomplete = tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id)
+
+    return promiseMap({
+      page: promiseMap(data)
+    })
   }
 }
 
@@ -156,6 +161,24 @@ function getRenderer (req, res, next) {
   }
 }
 
+function jobHasSent (data, hirer, jobId) {
+  return Promise.all([
+    externalMessages.getAll({}, hirer, jobId),
+    internalMessages.getAll({}, hirer, jobId)
+  ])
+    .then(sentResults => {
+      const externalMessages = sentResults[0].externalMessages
+      const internalMessages = sentResults[1].internalMessages
+      return Boolean(externalMessages.length || internalMessages.length)
+    })
+    .then(hasSent => merge(data, {hasSent}))
+}
+
+function jobsHaveSent (data) {
+  data.jobs = Promise.all(data.jobs.map(job => jobHasSent(merge({}, job), data.hirer.id, job.id)))
+  return promiseMap(data)
+}
+
 function jobsHandler (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -163,7 +186,8 @@ function jobsHandler (req, res, next) {
   }
 
   jobs
-    .getAll(clone(req.session.data))
+    .getAll(merge(req.session.data))
+    .then(data => jobsHaveSent(data))
     .then(data => {
       data.tooltip = prismic.fetchContent(prismicQuery, true)
       return promiseMap(data)
@@ -234,11 +258,13 @@ function aggregateSent (data) {
     return merge(sent, {source: 'external'})
   })
 
-  // Doesn't matter right now
-  const sentInternalComplete = data.sentInternalComplete.map(sent => merge(sent, {source: 'internal'}))
+  // All internal messages are complete
+  const internalMessages = data.internalMessages.map(sent => {
+    return merge(sent, {source: 'internal'})
+  })
 
   // Concat and sort external and external
-  const sentComplete = [].concat(externalMessagesComplete, sentInternalComplete)
+  const sentComplete = [].concat(externalMessagesComplete, internalMessages)
   sentComplete.sort(common.sortByModified)
 
   data.sentComplete = sentComplete.map(complete => {
@@ -260,15 +286,11 @@ function jobHandler (req, res, next) {
   }
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
-    .then(data => {
-      // Add internal later
-      data.sentInternalComplete = []
-      return promiseMap(data)
-    })
     .then(data => aggregateSent(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
@@ -303,26 +325,71 @@ function fetchInternalPrismicContent (data) {
 }
 
 function internalHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+  Promise.resolve(merge(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
+function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, tags) {
+  const recipients = recipient
+  const mailContent = {recipients, subject, template}
+
+  // Find or create person from email
+  // Create employee relation for this person
+  // Get or create referral for this person
+  // Append referral id to link
+  return people.getOrCreateByEmail({}, recipient)
+    .then(data => {
+      data.recipient = merge(data.person)
+      return promiseMap(data)
+    })
+    .then(data => employees.getOrCreateByPerson(data, data.recipient.id, company.id))
+    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, job.id))
+    .then(data => jobs.referral ? data : jobs.addReferral(data, job.id, data.recipient.id))
+    .then(data => {
+      data.company = company
+      data.job = job
+      data.person = sender
+      return promiseMap(data)
+    })
+    .then(data => network.send(data, mailContent, tags))
+    .then(data => internalMessages.post(data, hirer.id, data.job.id, data.recipient.id, subject, data.renderedMessage))
+}
+
+function internalMessageCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
+  const company = data.company
+  const job = data.job
+
+  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(data.person, data.hirer, recipient, company, job, subject, template, tags))
+
+  data.messages = Promise.all(sendMessages)
+    .then(messageResults => [].concat.apply([], messageResults || []))
+
+  return promiseMap(data)
+}
+
 function internalSendHandler (req, res, next) {
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then((data) => network.send(data, req.body))
+  const { subject, template } = req.body
+  const recipients = req.body.recipients.replace(' ', '').split(',')
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => internalMessageCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.internal))
     .then(data => {
       if (data.messages) {
         // successful send
-        req.session.notification = {
-          type: 'success',
-          message: 'That’s the way, aha aha, I like it! 🎉'
-        }
-        return res.redirect(`/${req.params.jobSlug}`)
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(`/jobs/${req.params.jobSlug}`)
+          })
       }
       return fetchInternalPrismicContent(data)
         .then(getRenderDataBuilder(req, res, next))
@@ -339,7 +406,7 @@ function externalHandler (req, res, next) {
   }
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.get(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
@@ -400,7 +467,7 @@ function externalComposeHandler (req, res, next) {
   const recipient = req.params.recipientId
 
   jobs
-    .get(clone(req.session.data), req.params.jobSlug)
+    .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
@@ -420,27 +487,246 @@ function externalSaveHandler (req, res, next) {
   const saveMethod = messageId && req.method === 'PATCH' ? externalMessages.patch : externalMessages.post
 
   const message = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
-  const data = merge({hirer, recipient, message}, clone(req.session.data))
+  const data = merge({hirer, recipient, message}, req.session.data)
 
   jobs
     .get(data, req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => {
+      if (sendMessage) {
+        return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+      }
+      return promiseMap(data)
+    })
     .then(getExternalComposeProperties)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
-router.get('/', ensureLoggedIn, jobsHandler)
-router.get('/:jobSlug', ensureLoggedIn, jobHandler)
-router.get('/:jobSlug/nudj', ensureLoggedIn, jobHandler)
-router.get('/:jobSlug/internal', ensureLoggedIn, internalHandler)
-router.post('/:jobSlug/internal', ensureLoggedIn, internalSendHandler)
-router.get('/:jobSlug/external', ensureLoggedIn, externalHandler)
-router.get('/:jobSlug/external/:recipientId', ensureLoggedIn, externalComposeHandler)
-router.post('/:jobSlug/external/:recipientId', ensureLoggedIn, externalSaveHandler)
-router.patch('/:jobSlug/external/:recipientId/:messageId', ensureLoggedIn, externalSaveHandler)
+function importContactsLinkedInHandler (req, res, next) {
+  const data = merge(req.session.data)
+
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['importContacts', 'linkedIn']
+  }
+
+  data.tooltip = prismic.fetchContent(prismicQuery, true)
+
+  promiseMap(data)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function sendImportEmail (data) {
+  const name = `${get(data, 'person.firstName', '')} ${get(data, 'person.lastName', '')}`
+  const company = get(data, 'company.name', '')
+  const location = get(data, 'asset.location', '')
+
+  const subject = `${name} @ ${company} has uploaded their connections`
+  const html = `You can download it from ${location}`
+  const from = 'hello@nudj.co'
+  const to = process.env.NUDJ_INTERNAL_NOTIFICATION_EMAIL
+
+  mailer.send({from, to, subject, html})
+
+  return promiseMap(data)
+}
+
+function importContactsLinkedInSaveHandler (req, res, next) {
+  const data = merge(req.session.data)
+
+  const assetType = 'CONTACTS_LINKEDIN'
+  const person = data.person.id
+  const asset = req.files.file.data
+  const fileName = req.body.name
+
+  const taskType = 'UNLOCK_NETWORK_LINKEDIN'
+  const eventName = 'linkedin network uploaded'
+
+  assets.post({data, asset, assetType, fileName, person})
+    .then(data => sendImportEmail(data))
+    .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
+    .then(data => {
+      return intercom.logEvent({
+        event_name: eventName,
+        email: data.person.email,
+        metadata: {
+          category: 'onboarding'
+        }
+      }).then(() => {
+        req.session.notification = {
+          type: 'success',
+          message: 'Nice. We\'ll let you know as soon as we find someone worth asking.'
+        }
+        return res.redirect('/')
+      })
+    })
+}
+
+function fetchSurveyPrismicContent (data) {
+  const composeQuery = {
+    'document.type': 'composemessage',
+    'document.tags': ['survey']
+  }
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['survey']
+  }
+  const tooltipQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['survey']
+  }
+  data.compose = prismic.fetchContent(composeQuery, true)
+  data.dialog = prismic.fetchContent(dialogQuery, true)
+  data.tooltip = prismic.fetchContent(tooltipQuery, true)
+  return promiseMap(data)
+}
+
+function surveyPageHandler (req, res, next) {
+  Promise.resolve(merge(req.session.data))
+    .then(surveys.getSurveyForCompany)
+    .then(fetchSurveyPrismicContent)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, subject, template, tags, survey) {
+  const recipients = recipient
+  const mailContent = {recipients, subject, template}
+
+  // Find person from email
+  // Create employee relation for this person
+  // Create token for `SURVEY_TYPEFORM_COMPLETE`
+  // Append token to link
+  return people.getOrCreateByEmail({}, recipient)
+    .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
+    .then(data => employeeSurveys.post(data, data.employee.id, survey.id))
+    .then(data => {
+      const tokenData = {
+        employeeSurvey: data.newEmployeeSurvey.id
+      }
+      const type = 'SURVEY_TYPEFORM_COMPLETE'
+      return tokens.post(data, type, tokenData)
+    })
+    .then(data => {
+      const token = data.newToken
+      const link = `${survey.link}?token=${token.token}`
+      data.survey = merge({}, survey, {link})
+      data.person = sender
+      return promiseMap(data)
+    })
+    .then(data => network.send(data, mailContent, tags))
+}
+
+function surveyCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
+  const company = data.company
+  const survey = data.survey
+
+  const sendMessages = recipients.map(recipient => surveyCreateAndMailUniqueLinkToRecipient(data.person, recipient, company, subject, template, tags, survey))
+
+  data.messages = Promise.all(sendMessages)
+    .then(messageResults => [].concat.apply([], messageResults || []))
+
+  return promiseMap(data)
+}
+
+function surveyPageSendHandler (req, res, next) {
+  const taskType = 'SEND_SURVEY_INTERNAL'
+  const eventName = 'Survey sent'
+  const { subject, template } = req.body
+  const recipients = req.body.recipients.replace(' ', '').split(',')
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => surveys.getSurveyForCompany(data))
+    .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.survey))
+    .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        return intercom.logEvent({
+          event_name: eventName,
+          email: data.person.email,
+          metadata: {
+            category: 'onboarding'
+          }
+        }).then(() => {
+          req.session.notification = {
+            type: 'success',
+            message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
+          }
+          return res.redirect('/')
+        })
+      }
+      return fetchSurveyPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function tasksListHander (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['taskList']
+  }
+
+  const data = merge(req.session.data)
+
+  tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
+    .then(data => hirers.getAllByCompany(data, data.company.id))
+    .then(data => {
+      data.people = common.fetchPeopleFromFragments(data.hirers)
+      return promiseMap(data)
+    })
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function ensureOnboarded (req, res, next) {
+  if (!req.session.data.company.onboarded) {
+    req.session.notification = {
+      type: 'error',
+      message: 'We\'re still getting your company set-up, so you can\'t access your jobs just yet. Need more information? Let us know.'
+    }
+    return res.redirect('/')
+  }
+  return next()
+}
+
+router.use(ensureLoggedIn)
+
+router.get('/', tasksListHander)
+
+router.get('/import-contacts', importContactsLinkedInHandler)
+router.post('/import-contacts', importContactsLinkedInSaveHandler)
+
+router.get('/survey-page', surveyPageHandler)
+router.post('/survey-page', surveyPageSendHandler)
+
+router.get('/jobs', ensureOnboarded, jobsHandler)
+
+router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
+router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
+
+router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
+router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
+
+router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
+router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
+router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
+
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

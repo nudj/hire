@@ -11,7 +11,7 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
-const { merge } = require('../../../lib')
+const { merge } = require('@nudj/library')
 
 const getStyle = require('./compose-external-page.css')
 
@@ -111,7 +111,7 @@ module.exports = class ComposePage extends React.Component {
 
   saveAndPostData ({active, data}) {
     this.setState({active, data}, () => {
-      let url = `/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
+      let url = `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
       let method = 'post'
       const data = this.state.data
 
@@ -187,7 +187,7 @@ module.exports = class ComposePage extends React.Component {
         </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title={get(this.props, 'job.title')}
+          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>

@@ -17,6 +17,7 @@ class Notification extends React.Component {
     this.setState({
       js: true
     })
+    setTimeout(() => this.props.dispatch(hideNotification()), 5000)
   }
   render () {
     const notification = get(this.props, 'notification')

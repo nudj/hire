@@ -10,7 +10,7 @@ let config = {
 }
 try {
   if (process.title === 'node') {
-    config.baseURL = 'http://api:81/'
+    config.baseURL = `http://${process.env.API_HOST}:81/`
   }
 } catch (error) {
   console.log('Browser')

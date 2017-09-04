@@ -58,18 +58,24 @@ function renderJobActivities ({props, style}) {
 
 function renderSentListItem ({jobSlug, person, index, style}) {
   const personId = get(person, 'id', '')
+
   const firstName = get(person, 'firstName', '')
   const lastName = get(person, 'lastName', '')
+  const email = get(person, 'email', '')
+
+  const visibleName = firstName && lastName ? `${firstName} ${lastName}` : email
+
   const source = get(person, 'source', '')
+  const visibleSource = source === 'external' ? 'Network' : 'Team'
   const applications = get(person, 'totalApplications', 0).toString()
   const referrals = get(person, 'totalReferrals', 0).toString()
 
   // internal - how to specify someone?
-  const resendLink = source === 'external' ? `/${jobSlug}/external/${get(person, 'id')}` : `/${jobSlug}/internal`
+  const resendLink = source === 'external' ? `/jobs/${jobSlug}/external/${get(person, 'id')}` : `/jobs/${jobSlug}/internal`
   const resendButton = (<Link className={style.button} to={resendLink}>Resend</Link>)
   const actions = source === 'referral' ? [] : [resendButton]
 
-  let status = '🤷‍'
+  let status = 'Message sent'
 
   if (applications !== '0') {
     status = 'Referred applicant'
@@ -79,8 +85,8 @@ function renderSentListItem ({jobSlug, person, index, style}) {
 
   // Need to change this RowItem to use a table or something - alignment and also column headings
   return (<tr className={style.networkRow} key={`${personId}_${index}`}>
-    <td className={style.networkCellName}>{`${firstName} ${lastName}`}</td>
-    <td className={style.networkCellCapitalise}>{source}</td>
+    <td className={style.networkCellName}>{visibleName}</td>
+    <td className={style.networkCellCapitalise}>{visibleSource}</td>
     <td className={style.networkCell}>{status}</td>
     <td className={style.networkCell}>{referrals}</td>
     <td className={style.networkCell}>{applications}</td>
@@ -128,7 +134,7 @@ const JobPage = (props) => {
   const sentComplete = get(props, 'sentComplete', [])
   const jobSlug = get(props, 'job.slug', '')
   const jobLink = `https://nudj.co/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
-  const nudjLink = `/${jobSlug}/nudj`
+  const nudjLink = `/jobs/${jobSlug}/nudj`
 
   if (!sentComplete.length) {
     return (<Redirect to={nudjLink} push />)

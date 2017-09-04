@@ -75,7 +75,7 @@ module.exports = class NetworkPage extends React.Component {
   }
   render () {
     return (
-      <Form className={this.style.body} action={`/${get(this.props, 'job.slug')}/compose`} method='post'>
+      <Form className={this.style.body} action={`/jobs/${get(this.props, 'job.slug')}/compose`} method='post'>
         <Helmet>
           <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
         </Helmet>

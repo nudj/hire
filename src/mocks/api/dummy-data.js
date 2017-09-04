@@ -1,12 +1,19 @@
 const data = {
+  assets: [],
   companies: [],
   jobs: [],
   people: [],
   referrals: [],
   applications: [],
   hirers: [],
+  employees: [],
   recommendations: [],
-  externalMessages: []
+  internalMessages: [],
+  externalMessages: [],
+  surveys: [],
+  tasks: [],
+  tokens: [],
+  employeeSurveys: []
 }
 data.companies = data.companies.concat([
   {
@@ -19,7 +26,8 @@ data.companies = data.companies.concat([
     name: 'Fake Company',
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    onboarded: true
   },
   {
     id: 'company2',
@@ -31,7 +39,8 @@ data.companies = data.companies.concat([
     name: 'nudj',
     slug: 'nudj',
     url: 'https://nudj.co',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    onboarded: true
   }
 ])
 data.jobs = data.jobs.concat([
@@ -159,6 +168,18 @@ data.hirers = data.hirers.concat([
     id: 'hirer1',
     person: 'person5',
     company: 'company1'
+  },
+  {
+    id: 'hirer2',
+    person: 'person1',
+    company: 'company1'
+  }
+])
+data.employees = data.employees.concat([
+  {
+    id: 'employee1',
+    person: 'person4',
+    company: 'company1'
   }
 ])
 data.referrals = data.referrals.concat([
@@ -217,6 +238,59 @@ data.recommendations = data.recommendations.concat([
     person: 'person5',
     hirer: 'hirer1',
     source: 'NUDJ'
+  }
+])
+data.surveys = data.surveys.concat([
+  {
+    id: 'survey1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'https://nudj.typeform.com/to/gfAnDV',
+    uuid: 'gfAnDV'
+  }
+])
+data.tasks = data.tasks.concat([
+  {
+    id: 'task1',
+    hirer: 'hirer1',
+    type: 'UNLOCK_NETWORK_LINKEDIN',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: 'hirer1'
+  },
+  {
+    id: 'task2',
+    company: 'company1',
+    type: 'SEND_SURVEY_INTERNAL',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
+  },
+  {
+    id: 'task3',
+    company: 'company1',
+    type: 'SHARE_JOBS',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
+  }
+])
+data.tokens = data.tokens.concat([
+  {
+    id: 'token1',
+    token: 'nice-fat-hash',
+    type: 'TEST_TOKEN',
+    data: {
+      employeeSurvey: 'employeeSurvey1'
+    }
+  }
+])
+data.employeeSurveys = data.employeeSurveys.concat([
+  {
+    id: 'employeeSurvey1',
+    employee: 'employee1',
+    survey: 'survey1'
   }
 ])
 

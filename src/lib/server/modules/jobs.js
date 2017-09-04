@@ -1,9 +1,11 @@
 const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
-const { merge } = require('../../lib')
-let request = require('../../lib/request')
-let { promiseMap } = require('../lib')
+const request = require('../../lib/request')
 const common = require('./common')
 
 function fetchJob (data, jobSlug) {
@@ -61,7 +63,7 @@ function getJobActivity (dataCall, dataActivityKey) {
     trend: 0
   }
 
-  dataCall.then(dataActivity => {
+  return dataCall.then(dataActivity => {
     const data = dataActivity[dataActivityKey]
 
     activity.total = data.length
@@ -73,9 +75,8 @@ function getJobActivity (dataCall, dataActivityKey) {
     } else if (activity.thisWeek > activity.lastWeek) {
       activity.trend = 1
     }
+    return activity
   })
-
-  return activity
 }
 
 function getJobActivities (data, job) {

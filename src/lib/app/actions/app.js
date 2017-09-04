@@ -1,6 +1,6 @@
 const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 
 const FETCHED_PAGE = 'FETCHED_PAGE'
 module.exports.FETCHED_PAGE = FETCHED_PAGE
@@ -109,6 +109,36 @@ module.exports.postData = ({
       data: merge(data, {
         _csrf: state.page.csrfToken
       })
+    })
+    .then((data) => {
+      dispatch(fetchedPage(data))
+      if (data.page.url.originalUrl !== url) {
+        dispatch(push(data.page.url.originalUrl))
+      }
+    })
+  }
+}
+
+module.exports.postFile = ({
+  url,
+  method = 'post',
+  file,
+  data
+}) => {
+  const formData = new window.FormData()
+  formData.append('file', file)
+  Object.keys(data).forEach(key => {
+    formData.append(key, data[key])
+  })
+
+  return (dispatch, getState) => {
+    const state = getState()
+    formData.append('_csrf', state.page.csrfToken)
+
+    dispatch(sending())
+    request(url, {
+      method,
+      data: formData
     })
     .then((data) => {
       dispatch(fetchedPage(data))

@@ -20,12 +20,14 @@ const JobsPage = (props) => {
       <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
         <button className={style.upload} id='open-intercom'>Upload job</button>
       </PageHeader>
-      <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj...</h3>
+      <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj</h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <ul className={style.jobs}>
-            {jobs.map((job) => (
-              <RowItem
+            {jobs.map((job) => {
+              const hasSent = get(job, 'hasSent', false)
+              const label = hasSent ? 'View job activity' : 'Get nudj\'ing'
+              return (<RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
                 uri={`//nudj.co/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
@@ -40,10 +42,10 @@ const JobsPage = (props) => {
                   description: `£${get(job, 'bonus')}`
                 }]}
                 actions={[
-                  <Link className={style.nudj} to={`/${get(job, 'slug')}`}>Get started</Link>
+                  <Link className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>{label}</Link>
                 ]}
-              />
-            ))}
+              />)
+            })}
           </ul>
         </div>
         <div className={style.pageSidebar}>

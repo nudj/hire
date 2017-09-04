@@ -1,4 +1,4 @@
-const { merge } = require('../../../lib')
+const { merge } = require('@nudj/library')
 const variables = require('./variables')
 
 module.exports.variables = variables
@@ -160,6 +160,14 @@ module.exports.typography = {
     color: variables.colors.royalBlue,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h5),
+  h6: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h6),
+  h7: merge({
+    color: variables.colors.royalBlue,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.h7),
   p: merge({
     color: variables.colors.charcoal,
     margin: `0 0 ${variables.padding.d} 0`
@@ -175,7 +183,8 @@ module.exports.linkImage = linkImage
 module.exports.pageLayout = {
   pageBody: merge(headings.p, {
     background: variables.colors.grey,
-    minHeight: '100vh'
+    minHeight: '100vh',
+    padding: `0 0 ${variables.padding.c} 0`
   }),
   pageHeader: {
     display: 'flex',
@@ -294,7 +303,7 @@ module.exports.deLink = {
 }
 
 module.exports.button = merge(headings.pBold, {
-  border: '0',
+  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.royalBlue}`,
   borderRadius: variables.sizing.buttonBorderRadius,
   backgroundColor: variables.colors.royalBlue,
   color: variables.colors.white,
@@ -307,6 +316,7 @@ module.exports.button = merge(headings.pBold, {
   textAlign: 'center',
   ':disabled': {
     backgroundColor: variables.colors.royalBlueFade,
+    borderColor: variables.colors.royalBlueFade,
     cursor: 'default'
   },
   ':focus': {
@@ -327,7 +337,8 @@ module.exports.buttonSecondary = merge(module.exports.button, {
 
 module.exports.buttonTertiary = merge(module.exports.button, {
   color: variables.colors.charcoal,
-  backgroundColor: variables.colors.grey
+  backgroundColor: variables.colors.grey,
+  borderColor: variables.colors.grey
 })
 
 module.exports.buttonClose = {
@@ -381,4 +392,108 @@ module.exports.sectionDivider = {
   color: variables.colors.midGrey,
   height: variables.sizing.baseBorderWidth,
   margin: `0 ${variables.padding.d} 0 ${variables.padding.d}`
+}
+
+module.exports.table = {
+  table: {
+    borderCollapse: 'collapse',
+    margin: `0 0 ${variables.padding.d} 0`
+  },
+  tableHeader: merge(module.exports.headings.pBold, {
+    background: variables.colors.royalBlue,
+    color: variables.colors.white,
+    padding: variables.padding.e,
+    textAlign: 'left'
+  }),
+  tableRow: {},
+  tableCell: merge(module.exports.headings.p, {
+    background: variables.colors.white,
+    borderBottom: `${variables.sizing.detailSeparatorWidth} solid ${variables.colors.lightGrey}`,
+    colors: variables.colors.charcoal,
+    padding: `${variables.padding.d} ${variables.padding.e}`
+  })
+}
+
+module.exports.table.tableCellEven = merge(module.exports.table.tableCell, {
+  background: variables.colors.lighterGrey
+})
+
+// Fixed height body extras - this displays the table as block
+function tableBodyFixedHeight (fixedHeight = `calc(${variables.padding.a} * 2)`) {
+  return {
+    display: 'block',
+    maxHeight: fixedHeight,
+    overflowY: 'scroll'
+  }
+}
+
+module.exports.tableBodyFixedHeight = tableBodyFixedHeight
+
+module.exports.table.tableFixedHeight = merge(module.exports.table.table, {
+  display: 'block',
+  tableLayout: 'fixed',
+  width: '100%'
+})
+
+module.exports.table.tableRowBodyFixedHeight = {
+  display: 'flex'
+}
+
+module.exports.table.tableHeadFixedHeight = {
+  display: 'block'
+}
+
+const fixedCellBase = {
+  flexBasis: '0',
+  flexGrow: '1',
+  overflow: 'hidden',
+  width: '100%'
+}
+
+module.exports.table.tableHeaderFixedHeight = merge(module.exports.table.tableHeader, fixedCellBase)
+module.exports.table.tableCellFixedHeight = merge(module.exports.table.tableCell, fixedCellBase)
+module.exports.table.tableCellEvenFixedHeight = merge(module.exports.table.tableCellEven, fixedCellBase)
+
+const dragAndDropBase = {
+  alignItems: 'center',
+  alignContent: 'center',
+  border: `${variables.sizing.baseBorderWidth} dashed ${variables.colors.royalBlue}`,
+  borderRadius: variables.sizing.baseBorderRadius,
+  cursor: 'pointer',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  minHeight: variables.padding.a,
+  width: '100%'
+}
+
+module.exports.dragAndDrop = {
+  dragAndDrop: dragAndDropBase,
+  dragAndDropOk: merge(dragAndDropBase, {
+    borderColor: variables.colors.green
+    // Animation in the future?
+  }),
+  dragAndDropNotOk: merge(dragAndDropBase, {
+    borderColor: variables.colors.midRed
+  }),
+  dragAndDropHeading: merge(module.exports.typography.h5, {
+    textAlign: 'center'
+  }),
+  dragAndDropCopy: merge(module.exports.typography.p, {
+    margin: '0',
+    textAlign: 'center'
+  }),
+  dragAndDropFakeLink: merge(module.exports.typography.p, {
+    color: variables.colors.royalBlue,
+    margin: '0',
+    textAlign: 'center',
+    textDecoration: 'underline'
+  }),
+  dragAndDropCopyEmphasis: merge(module.exports.headings.pBold, {
+    fontStyle: 'normal'
+  })
+}
+
+module.exports.highlightColour = {
+  color: variables.colors.midRed
 }
