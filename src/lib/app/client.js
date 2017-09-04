@@ -44,7 +44,6 @@ const latestRequest = {}
 function fetchData (location, hash, dispatch) {
   return request(location)
     .then((data) => {
-      console.log('feature/gmail-auth', 'response', hash, latestRequest.hash, hash === latestRequest.hash)
       if (data) {
         // only update page state if this is the latest request
         if (hash === latestRequest.hash) {
@@ -78,7 +77,6 @@ ReactDOM.render(
         dispatch(showLoading())
         latestRequest.hash = hash
         latestRequest.url = url
-        console.log('feature/gmail-auth', 'request', hash)
         return fetchData(url, hash, dispatch)
       }
       return Promise.resolve()
