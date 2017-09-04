@@ -24,7 +24,7 @@ const PageWithState = (Page) => {
       case !!get(props, 'page.error'):
         page = (
           <Status code={get(props, 'page.error.code')}>
-            <ErrorPage {...props.page} />
+            <ErrorPage {...props.page.error} />
           </Status>
         )
         break

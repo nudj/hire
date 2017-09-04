@@ -371,6 +371,17 @@ function fetchExternalPrismicContent (data) {
     'document.type': 'dialog',
     'document.tags': ['sendExternal']
   }
+  const composeExternalTooltips = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendExternal']
+  }
+  const composeExternalMessages = {
+    'document.type': 'composemessage',
+    'document.tags': ['external']
+  }
+
+  data.tooltips = prismic.fetchContent(composeExternalTooltips)
+  data.messages = prismic.fetchContent(composeExternalMessages)
   data.dialog = prismic.fetchContent(dialogQuery, true)
   return promiseMap(data)
 }
@@ -450,43 +461,6 @@ function internalSendHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function internalSendGmailHandler (req, res, next) {
-  if (isEmpty(req.body) && !req.session.postData) {
-    return next('Must have an email body')
-  }
-  const emailData = isEmpty(req.body) ? req.session.postData : req.body
-  const from = `${req.session.data.person.firstName} ${req.session.data.person.lastName} <${req.account.providers.google.email}>`
-  delete req.session.postData
-  gmailer
-    .send(merge(emailData, { from }), req.account.providers.google.accessToken)
-    .then(response => {
-      console.log(response)
-      res.redirect(req.originalUrl.split('/').slice(0, -1).join('/'))
-    })
-    .catch(next)
-}
-
-function sendGmailHandler (req, res, next) {
-  Promise.resolve(merge(req.session.data))
-    .then(data => externalMessages.getById(data, req.params.messageId))
-    .then(data => {
-      const from = `${data.person.firstName} ${data.person.lastName} <${req.account.providers.google.email}>`
-      gmailer
-        .send({
-          body: 'HELLO',
-          from,
-          subject: 'SUCCESS',
-          to: 'tim@nudj.co'
-        }, req.account.providers.google.accessToken)
-        .then(response => {
-          next()
-        })
-        .catch(error => {
-          logger.log(error)
-        })
-    })
-}
-
 function externalHandler (req, res, next) {
   const selectReferrersQuery = {
     'document.type': 'tooltip',
@@ -525,12 +499,6 @@ function getExternalComposeProperties (data) {
   }
 
   return network.getById(data, data.hirer.id, data.job.id, data.recipient.id)
-    .then(data => {
-      data.recipient = common.fetchPersonFromFragment(data.recipient.id)
-      data.tooltips = prismic.fetchContent(composeExternalTooltips)
-      data.messages = prismic.fetchContent(composeExternalMessages)
-      return promiseMap(data)
-    })
     .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
       if (!data.referral) {
@@ -562,7 +530,6 @@ function getExternalMessageProperties (data, messageId) {
   }
 
   return Promise.resolve(data)
-    // .then(data => network.getById(data, data.hirer.id, data.job.id, data.recipient.id))
     .then(data => {
       data.recipient = common.fetchPersonFromFragment(data.recipient.id)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
@@ -581,6 +548,9 @@ function getExternalMessageProperties (data, messageId) {
       data.externalMessage = data.message
       data.id = data.message.id
       return promiseMap(data)
+    })
+    .catch(error => {
+      throw new Error('Not found')
     })
 }
 
@@ -618,6 +588,13 @@ function externalMessageHandler (req, res, next) {
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => getExternalMessageProperties(data, req.params.messageId))
+    .then(data => {
+      if (data.externalMessage.sendMessage === 'GMAIL') {
+        return getGoogleAccessToken(req, res, next, data)
+          .then(data => sendGmail(data, req.account.providers.google.accessToken))
+      }
+      return promiseMap(data)
+    })
     .then(fetchExternalPrismicContent)
     .then(data => {
       let active = 0
@@ -638,7 +615,7 @@ function externalMessageHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function getGoogleAccessToken (res, req, next, data) {
+function getGoogleAccessToken (req, res, next, data) {
   if (!get(req, 'account.providers.google.accessToken')) {
     return accounts
       .getByFilters({
@@ -656,14 +633,17 @@ function getGoogleAccessToken (res, req, next, data) {
 }
 
 function sendGmail (data, accessToken) {
+  const email = {
+    body: 'This is an email body, bro',
+    from: 'Tim Robinson <tim@nudj.co>',
+    subject: 'Awesome subject line',
+    to: 'nickcollings@gmail.com'
+  }
+
   return gmailer
-    .send({
-      body: 'HELLO',
-      from: 'nick@nudj.co',
-      subject: 'SUCCESS',
-      to: 'tim@nudj.co'
-    }, accessToken)
+    .send(email, accessToken)
     .then(response => {
+      logger.log('email response', response, email)
       return promiseMap(data)
     })
 }
@@ -676,16 +656,37 @@ function externalSaveHandler (req, res, next) {
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
 
-  const messageId = req.params.messageId
-  const saveMethod = messageId && req.method === 'PATCH' ? externalMessages.patch : externalMessages.post
-
   const message = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
   const data = merge({hirer, recipient, message}, req.session.data)
 
   jobs
     .get(data, req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
-    .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => externalMessages.post(data, data.hirer, data.job, data.recipient, data.message))
+    .then(data => {
+      if (!data.savedMessage) {
+        throw new Error('No message saved!')
+      }
+      return res.redirect(`/jobs/${data.job.slug}/external/${data.recipient.id}/${data.savedMessage.id}`)
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function externalPatchHandler (req, res, next) {
+  const recipient = req.params.recipientId
+  const composeMessage = req.body.composeMessage
+  const selectStyle = req.body.selectStyle
+  const selectLength = req.body.selectLength
+  const sendMessage = req.body.sendMessage
+
+  const messageId = req.params.messageId
+
+  const message = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
+
+  Promise.resolve(merge(req.session.data, {message}))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => network.getRecipient(data, recipient))
+    .then(data => externalMessages.patch(data, data.hirer, data.job, data.recipient, data.message, messageId))
     .then(data => {
       if (sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
@@ -905,28 +906,6 @@ function ensureOnboarded (req, res, next) {
   return next()
 }
 
-function ensureGoogleAuthenticated (req, res, next) {
-  if (!get(req, 'account.providers.google.accessToken')) {
-    return accounts
-      .getByFilters({
-        person: get(req, 'session.data.person.id')
-      })
-      .then(account => {
-        if (!account || !get(account, 'providers.google.accessToken')) {
-          req.session.postData = req.body
-          req.session.returnTo = req.originalUrl
-          if (req.xhr) {
-            return res.status(401).send()
-          }
-          return res.redirect('/auth/google')
-        }
-        req.account = account
-        next()
-      })
-  }
-  next()
-}
-
 router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
@@ -944,15 +923,12 @@ router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 
 router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
-router.get('/jobs/:jobSlug/internal/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, internalSendGmailHandler)
-router.post('/jobs/:jobSlug/internal/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, internalSendGmailHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
 router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
 router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
 router.get('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalMessageHandler)
-router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
-router.get('/jobs/:jobSlug/external/:recipientId/:messageId/send-gmail', ensureOnboarded, ensureGoogleAuthenticated, sendGmailHandler, externalSaveHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalPatchHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)(merge(req.session.data))
