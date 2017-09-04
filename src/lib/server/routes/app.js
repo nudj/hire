@@ -1,7 +1,6 @@
 const express = require('express')
 const get = require('lodash/get')
 const find = require('lodash/find')
-const isEmpty = require('lodash/isEmpty')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
 const {
@@ -489,15 +488,6 @@ function externalHandler (req, res, next) {
 }
 
 function getExternalComposeProperties (data) {
-  const composeExternalTooltips = {
-    'document.type': 'tooltip',
-    'document.tags': ['sendExternal']
-  }
-  const composeExternalMessages = {
-    'document.type': 'composemessage',
-    'document.tags': ['external']
-  }
-
   return network.getById(data, data.hirer.id, data.job.id, data.recipient.id)
     .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
@@ -550,6 +540,7 @@ function getExternalMessageProperties (data, messageId) {
       return promiseMap(data)
     })
     .catch(error => {
+      logger.log('error', error)
       throw new Error('Not found')
     })
 }
