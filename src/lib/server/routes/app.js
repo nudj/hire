@@ -617,7 +617,7 @@ function externalMessageHandler (req, res, next) {
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
-    .then(getExternalMessageProperties(data, req.params.messageId))
+    .then(data => getExternalMessageProperties(data, req.params.messageId))
     .then(fetchExternalPrismicContent)
     .then(data => {
       let active = 0
@@ -646,8 +646,6 @@ function getGoogleAccessToken (res, req, next, data) {
       })
       .then(account => {
         if (!account || !get(account, 'providers.google.accessToken')) {
-          // req.session.postData = req.body
-          // req.session.returnTo = req.originalUrl
           throw new Error('Unauthorized Google')
         }
         req.account = account
