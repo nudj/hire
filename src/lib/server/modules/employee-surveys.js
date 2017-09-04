@@ -6,13 +6,8 @@ function createEmployeeSurvey (data) {
   return request(`employeeSurveys`, { data, method })
 }
 
-function fetchEmployeeSurvey (id) {
-  return request(`employeeSurveys/${id}`)
-    .then(results => results.pop())
-}
-
 module.exports.get = function (data, id) {
-  data.employee = fetchEmployeeSurvey(id)
+  data.employeeSurvey = request(`employeeSurveys/${id}`)
   return promiseMap(data)
 }
 
