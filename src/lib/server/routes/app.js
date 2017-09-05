@@ -646,7 +646,7 @@ function surveyPageSendHandler (req, res, next) {
     .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.survey))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
-      if (data.messages) {
+      if (data.messages && data.messages.length) {
         // successful send
         return intercom.logEvent({
           event_name: eventName,

@@ -10,7 +10,7 @@ function renderMessage (content, data) {
   const jobSlug = get(data, 'job.slug', '')
   const referralId = get(data, 'referral.id', '')
 
-  const referralLink = `https://nudj.co/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const referralLink = `https://${get(data, 'url.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
     template: content,

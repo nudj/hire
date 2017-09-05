@@ -34,7 +34,7 @@ class FormStepCompose extends React.Component {
     const jobSlug = get(this.props, 'pageData.job.slug', '')
     const referralId = get(this.props, 'pageData.referral.id', '')
 
-    const referralLink = `https://nudj.co/jobs/${companySlug}+${jobSlug}+${referralId}`
+    const referralLink = `https://${get(this.props, 'pageData.url.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
     const options = {
       template: content,
