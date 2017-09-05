@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'production') {
     client: redis.createClient(6379, 'redis')
   })
 }
-if (process.env.USE_MOCKS) {
+if (process.env.USE_MOCKS === 'true') {
   // start mock api
   let mockApi = require('../../mocks/api')
   mockApi.listen(81, () => logger.log('info', 'Mock API running'))
