@@ -133,7 +133,7 @@ const JobPage = (props) => {
 
   const sentComplete = get(props, 'sentComplete', [])
   const jobSlug = get(props, 'job.slug', '')
-  const jobLink = `https://${get(props, 'url.hostname')}/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
+  const jobLink = `https://${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
   const nudjLink = `/jobs/${jobSlug}/nudj`
 
   if (!sentComplete.length) {

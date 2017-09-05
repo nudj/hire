@@ -25,7 +25,7 @@ const internal = {
     const companySlug = get(data, 'company.slug', '')
     const jobSlug = get(data, 'job.slug', '')
     const referralId = get(data, 'referral.id', '')
-    const hostname = get(data, 'url.hostname')
+    const hostname = get(data, 'web.hostname')
     const link = `https://${hostname}/jobs/${companySlug}+${jobSlug}`
     return referralId ? `${link}+${referralId}` : link
   },

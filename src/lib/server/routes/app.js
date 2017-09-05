@@ -78,6 +78,10 @@ function getRenderDataBuilder (req) {
       hostname: req.hostname,
       originalUrl: req.originalUrl
     }
+    data.web = {
+      protocol: req.protocol,
+      hostname: process.env.WEB_HOSTNAME
+    }
 
     data.tasksIncomplete = tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id)
 

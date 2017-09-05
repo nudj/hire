@@ -30,7 +30,7 @@ const JobsPage = (props) => {
               return (<RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
-                uri={`//${get(props, 'url.hostname')}/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
+                uri={`//${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
                 details={[{
                   term: 'Location',
                   description: get(job, 'location')
