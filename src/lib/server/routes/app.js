@@ -583,10 +583,6 @@ function externalMessageHandler (req, res, next) {
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
-          .then(data => {
-            data.hostname = req.headers.host
-            return promiseMap(data)
-          })
           .then(data => sendGmail(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
@@ -634,7 +630,7 @@ function sendGmail (data, accessToken) {
   const referralId = get(data, 'referral.id', '')
   const senderFirstName = get(data, 'person.firstName', '')
   const senderLastName = get(data, 'person.lastName', '')
-  const referralLink = `https://${get(data, 'hostname', '')}/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const referralLink = `https://${process.env.WEB_HOSTNAME}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
     template: get(data, 'message.composeMessage'),
@@ -718,10 +714,6 @@ function externalPatchHandler (req, res, next) {
     .then(data => {
       if (sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
-          .then(data => {
-            data.hostname = req.headers.host
-            return promiseMap(data)
-          })
           .then(data => sendGmail(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
