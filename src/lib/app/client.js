@@ -34,7 +34,7 @@ const store = createStore(
   combineReducers({
     router: routerReducer,
     page: pageReducer,
-    externalMessages: externalMessagesReducer
+    externalMessages: externalMessagesReducer(data)
   }),
   data,
   applyMiddleware(thunkMiddleware, historyMiddleware)

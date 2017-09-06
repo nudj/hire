@@ -2,7 +2,6 @@ const camelCase = require('lodash/camelCase')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 
-const initialState = {}
 const steps = [
   {
     name: 'selectLength',
@@ -26,7 +25,7 @@ const steps = [
 
 const setActiveStep = (state, action) => {
   const force = action.force
-  let active = action.currentStep
+  let active = state.active
   let index = action.requestedStep
   let currentMessage = action.currentMessage
   let resets = {}
@@ -87,7 +86,7 @@ const actions = {
   hideConfirm
 }
 
-const externalMessagesReducer = (state = initialState, action) => {
+const externalMessagesReducer = data => (state = { active: data.page.active || 0 }, action) => {
   const type = camelCase(action.type)
   return actions[type] ? actions[type](state, action) : state
 }

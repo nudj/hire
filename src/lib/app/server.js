@@ -14,7 +14,7 @@ module.exports = (data) => {
   const store = createStore(
     combineReducers({
       page: pageReducer,
-      externalMessages: externalMessagesReducer
+      externalMessages: externalMessagesReducer(data)
     }),
     data,
     applyMiddleware(thunkMiddleware)

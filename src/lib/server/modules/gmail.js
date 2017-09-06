@@ -13,7 +13,7 @@ const send = (data, accessToken) => {
   const referralLink = `https://${process.env.WEB_HOSTNAME}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
-    template: get(data, 'message.composeMessage'),
+    template: get(data, 'externalMessage.composeMessage'),
     pify: (para) => `<p>${para.join('')}</p>`,
     data: {
       company: {

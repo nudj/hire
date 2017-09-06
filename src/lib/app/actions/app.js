@@ -72,18 +72,17 @@ module.exports.confirmStep = () => {
 
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
-function setActiveStep (requestedStep, currentStep, currentMessage, force) {
+function setActiveStep (requestedStep, currentMessage, force) {
   return {
     type: SET_ACTIVE_STEP,
     requestedStep,
-    currentStep,
     currentMessage,
     force
   }
 }
-module.exports.setActiveStep = (requestedStep, currentStep, currentMessage, force) => {
+module.exports.setActiveStep = (requestedStep, currentMessage, force) => {
   return (dispatch, getState) => {
-    dispatch(setActiveStep(requestedStep, currentStep, currentMessage, force))
+    dispatch(setActiveStep(requestedStep, currentMessage, force))
   }
 }
 
@@ -127,7 +126,7 @@ function saveStepData (stepName, stepData) {
 module.exports.saveStepData = (stepName, stepData) => {
   return (dispatch, getState) => {
     const state = getState()
-    const messageId = get(state, 'page.message.id')
+    const messageId = get(state, 'page.externalMessage.id')
     let url = `/jobs/${get(state, 'page.job.slug')}/external/${get(state, 'page.recipient.id')}`
     let method = 'post'
     const {
