@@ -8,6 +8,7 @@ const {
   promiseMap
 } = require('@nudj/library')
 
+const templater = require('../../lib/templater')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
@@ -582,6 +583,10 @@ function externalMessageHandler (req, res, next) {
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
+          .then(data => {
+            data.hostname = req.headers.host
+            return promiseMap(data)
+          })
           .then(data => sendGmail(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
@@ -624,11 +629,43 @@ function getGoogleAccessToken (req, res, next, data) {
 }
 
 function sendGmail (data, accessToken) {
+  const companySlug = get(data, 'company.slug', '')
+  const jobSlug = get(data, 'job.slug', '')
+  const referralId = get(data, 'referral.id', '')
+  const senderFirstName = get(data, 'person.firstName', '')
+  const senderLastName = get(data, 'person.lastName', '')
+  const referralLink = `https://${get(data, 'hostname', '')}/jobs/${companySlug}+${jobSlug}+${referralId}`
+
+  const options = {
+    template: data.externalMessage.composeMessage,
+    pify: (para) => `<p>${para.join('')}</p>`,
+    data: {
+      company: {
+        name: get(data, 'company.name', '')
+      },
+      job: {
+        bonus: get(data, 'job.bonus', ''),
+        link: referralLink,
+        title: get(data, 'job.title', '')
+      },
+      recipient: {
+        firstname: get(data, 'recipient.firstName', ''),
+        lastname: get(data, 'recipient.lastName', '')
+      },
+      sender: {
+        firstname: senderFirstName,
+        lastname: senderLastName
+      }
+    }
+  }
+
+  const message = templater.render(options).join('\n\n')
+
   const email = {
-    body: 'This is an email body, bro',
-    from: 'Tim Robinson <tim@nudj.co>',
-    subject: 'Awesome subject line',
-    to: 'nickcollings@gmail.com'
+    body: message,
+    from: `${senderFirstName} ${senderLastName} <${get(data, 'person.email', '')}>`,
+    subject: 'Can you help me out?',
+    to: get(data, 'recipient.email')
   }
 
   return gmailer
@@ -681,6 +718,10 @@ function externalPatchHandler (req, res, next) {
     .then(data => {
       if (sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
+          .then(data => {
+            data.hostname = req.headers.host
+            return promiseMap(data)
+          })
           .then(data => sendGmail(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
