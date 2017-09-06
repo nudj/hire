@@ -8,11 +8,11 @@ const {
   promiseMap
 } = require('@nudj/library')
 
-const templater = require('../../lib/templater')
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
-const gmailer = require('../lib/gmailer')
+const tags = require('../../lib/tags')
+const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
 const accounts = require('../modules/accounts')
@@ -26,7 +26,6 @@ const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
-const tags = require('../../lib/tags')
 const employeeSurveys = require('../modules/employee-surveys')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -583,7 +582,7 @@ function externalMessageHandler (req, res, next) {
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
-          .then(data => sendGmail(data, req.account.providers.google.accessToken))
+          .then(data => gmail.send(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
     })
@@ -622,54 +621,6 @@ function getGoogleAccessToken (req, res, next, data) {
       })
   }
   return promiseMap(data)
-}
-
-function sendGmail (data, accessToken) {
-  const companySlug = get(data, 'company.slug', '')
-  const jobSlug = get(data, 'job.slug', '')
-  const referralId = get(data, 'referral.id', '')
-  const senderFirstName = get(data, 'person.firstName', '')
-  const senderLastName = get(data, 'person.lastName', '')
-  const referralLink = `https://${process.env.WEB_HOSTNAME}/jobs/${companySlug}+${jobSlug}+${referralId}`
-
-  const options = {
-    template: get(data, 'message.composeMessage'),
-    pify: (para) => `<p>${para.join('')}</p>`,
-    data: {
-      company: {
-        name: get(data, 'company.name', '')
-      },
-      job: {
-        bonus: get(data, 'job.bonus', ''),
-        link: referralLink,
-        title: get(data, 'job.title', '')
-      },
-      recipient: {
-        firstname: get(data, 'recipient.firstName', ''),
-        lastname: get(data, 'recipient.lastName', '')
-      },
-      sender: {
-        firstname: senderFirstName,
-        lastname: senderLastName
-      }
-    }
-  }
-
-  const message = templater.render(options).join('\n\n')
-
-  const email = {
-    body: message,
-    from: `${senderFirstName} ${senderLastName} <${get(data, 'person.email', '')}>`,
-    subject: 'Can you help me out?',
-    to: get(data, 'recipient.email')
-  }
-
-  return gmailer
-    .send(email, accessToken)
-    .then(response => {
-      logger.log('email response', response, email)
-      return promiseMap(data)
-    })
 }
 
 function externalSaveHandler (req, res, next) {
@@ -714,7 +665,7 @@ function externalPatchHandler (req, res, next) {
     .then(data => {
       if (sendMessage === 'GMAIL') {
         return getGoogleAccessToken(req, res, next, data)
-          .then(data => sendGmail(data, req.account.providers.google.accessToken))
+          .then(data => gmail.send(data, req.account.providers.google.accessToken))
       }
       return promiseMap(data)
     })
