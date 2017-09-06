@@ -637,7 +637,7 @@ function sendGmail (data, accessToken) {
   const referralLink = `https://${get(data, 'hostname', '')}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
-    template: data.externalMessage.composeMessage,
+    template: get(data, 'message.composeMessage'),
     pify: (para) => `<p>${para.join('')}</p>`,
     data: {
       company: {
