@@ -17,6 +17,7 @@ let RedisStore = require('connect-redis')(session)
 
 let authRoutes = require('./routes/auth')
 let appRoutes = require('./routes/app')
+let googleAuthRoutes = require('./routes/google-oauth')
 
 let strategy = new Auth0Strategy({
   domain: process.env.AUTH0_DOMAIN,
@@ -76,6 +77,7 @@ app.use((req, res, next) => {
 })
 
 app.use(authRoutes)
+app.use(googleAuthRoutes)
 app.use(appRoutes)
 
 app.use((req, res) => {

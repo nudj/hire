@@ -188,3 +188,10 @@ module.exports.addReferral = function (data, job, person) {
   data.referral = saveJobReferral(job, person)
   return promiseMap(data)
 }
+
+module.exports.getOrCreateReferralForPersonAndJob = function (data, person, job) {
+  data.referral = request(`referrals/filter?person=${person}&job=${job}`)
+    .then(referrals => Promise.all(referrals.map(transformReferralFragment)))
+    .then(referrals => referrals.pop() || saveJobReferral(job, person))
+  return promiseMap(data)
+}

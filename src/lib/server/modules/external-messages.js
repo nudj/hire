@@ -6,74 +6,78 @@ const {
 const request = require('../../lib/request')
 const common = require('./common')
 
-function fetchSentMessages (hirer, job, recipient) {
+function fetchExternalMessages (hirer, job, recipient) {
   return request(`externalMessages/filter?hirer=${hirer}&job=${job}&recipient=${recipient}`)
 }
 
-function fetchLatestSentMessage (hirer, job, recipient) {
-  return fetchSentMessages(hirer, job, recipient)
+function fetchLatestExternalMessage (hirer, job, recipient) {
+  return fetchExternalMessages(hirer, job, recipient)
     .then(results => {
+      console.log(results, hirer, job, recipient)
       results.sort(common.sortByModified)
       return results.pop()
     })
 }
 
-function fetchSentMessagesForJob (data, hirer, job) {
+function fetchExternalMessagesForJob (data, hirer, job) {
   return request(`externalMessages/filter?hirer=${hirer}&job=${job}`)
 }
 
-function fetchCompleteSentMessagesForJob (data, hirer, job) {
+function fetchCompleteExternalMessagesForJob (data, hirer, job) {
   return request(`externalMessages/filter?hirer=${hirer}&job=${job}`)
     .then(results => results.filter(result => !!result.sendMessage))
 }
 
-function makeMessage (hirer, job, recipient, sentMessage) {
-  return merge({
+function postExternalMessage (hirer, job, recipient, externalMessage) {
+  const data = merge({
     hirer: hirer.id,
     job: job.id,
     recipient: recipient.id
-  }, sentMessage)
+  }, externalMessage)
+
+  return request('externalMessages', {
+    method: 'post',
+    data
+  })
 }
 
-function saveSentMessage (hirer, job, recipient, sentMessage, id) {
-  const data = makeMessage(hirer, job, recipient, sentMessage)
-  let url = 'externalMessages'
-  let method = 'post'
-
-  if (id) {
-    url = `${url}/${id}`
-    method = 'patch'
-  }
-
-  const options = { data, method }
-  return request(url, options)
+function patchExternalMessage (id, externalMessage) {
+  return request(`externalMessages/${id}`, {
+    method: 'patch',
+    data: externalMessage
+  })
 }
 
 module.exports.get = function (data, hirer, job, recipient) {
-  data.message = fetchLatestSentMessage(hirer, job, recipient)
+  data.externalMessage = fetchLatestExternalMessage(hirer, job, recipient)
   return promiseMap(data)
 }
 
 module.exports.getAll = function (data, hirer, job) {
-  data.externalMessages = fetchSentMessagesForJob(data, hirer, job)
+  data.externalMessages = fetchExternalMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)
 
+  return promiseMap(data)
+}
+
+module.exports.getById = function (data, id) {
+  data.externalMessage = request(`externalMessages/${id}`)
   return promiseMap(data)
 }
 
 module.exports.getAllComplete = function (data, hirer, job) {
-  data.externalMessagesComplete = fetchCompleteSentMessagesForJob(data, hirer, job)
+  data.externalMessagesComplete = fetchCompleteExternalMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)
 
   return promiseMap(data)
 }
 
-module.exports.patch = function (data, hirer, job, recipient, sentMessage, id) {
-  data.savedMessage = saveSentMessage(hirer, job, recipient, sentMessage, id)
+module.exports.patch = function (data, id, externalMessage) {
+  data.externalMessage = patchExternalMessage(id, externalMessage)
   return promiseMap(data)
 }
 
-module.exports.post = function (data, hirer, job, recipient, sentMessage) {
-  data.savedMessage = saveSentMessage(hirer, job, recipient, sentMessage)
+module.exports.post = function (data, hirer, job, recipient, externalMessage) {
+  data.externalMessage = postExternalMessage(hirer, job, recipient, externalMessage)
   return promiseMap(data)
 }

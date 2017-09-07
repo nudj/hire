@@ -1,25 +1,26 @@
 const React = require('react')
+const get = require('lodash/get')
 const getStyle = require('./overlay.css')
-const { hideDialog } = require('../../actions/app')
-
-function onClickBackground (props) {
-  return (event) => props.dispatch(hideDialog())
-}
-
-function onClickClose (props) {
-  return (event) => props.dispatch(hideDialog())
-}
+const actions = require('../../actions/app')
+const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
 
 function onClickDialog (props) {
   return (event) => event.stopPropagation()
 }
 
+function onClick (props, action, args = []) {
+  return (event) => props.dispatch(actions[action](...args))
+}
+
 const Overlay = (props) => {
   const style = getStyle()
-  return <div className={props.overlay ? style.background : style.hidden} onClick={onClickBackground(props)}>
+  const onClickConfirm = onClick(props, get(props, 'overlay.confirm.action'), get(props, 'overlay.confirm.arguments', []))
+  const onClickCancel = onClick(props, get(props, 'overlay.cancel.action', 'hideDialog'), get(props, 'overlay.cancel.arguments', []))
+
+  return <div className={props.overlay ? style.background : style.hidden} onClick={onClickCancel}>
     <div className={style.dialog} onClick={onClickDialog(props)}>
-      <button className={style.close} onClick={onClickClose(props)} />
-      {props.overlay}
+      <button className={style.close} onClick={onClickCancel} />
+      <DialogConfirm {...props} onClickConfirm={onClickConfirm} onClickCancel={onClickCancel} />
     </div>
   </div>
 }

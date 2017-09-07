@@ -22,7 +22,13 @@ function request (uri, options) {
     .then((response) => response.data)
     .catch((error) => {
       if (get(error, 'response.status') === 401) {
-        throw new Error('Unauthorized')
+        console.log(error.response)
+        switch (error.response.data) {
+          case 'Unauthorized Google':
+            throw new Error('Unauthorized Google')
+          default:
+            throw new Error('Unauthorized')
+        }
       }
       console.log('error', error.message, `request - ${config.baseURL}${uri}`, options)
       throw new Error('Something went wrong')

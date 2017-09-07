@@ -1,8 +1,10 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const { Link } = require('react-router-dom')
+const pick = require('lodash/pick')
+const { merge } = require('@nudj/library')
 
+const Link = require('../link/link')
 const Form = require('../form/form')
 const FormStepLength = require('../form-step-length/form-step-length')
 const FormStepStyle = require('../form-step-style/form-step-style')
@@ -11,80 +13,57 @@ const FormStepSend = require('../form-step-send/form-step-send')
 const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
-const { merge } = require('@nudj/library')
-
+const actions = require('../../actions/app')
 const getStyle = require('./compose-external-page.css')
 
-const { postData } = require('../../actions/app')
+const {
+  showDialog,
+  setActiveStep,
+  setStepData,
+  hideConfirm
+} = actions
+const steps = [
+  {
+    name: 'selectLength',
+    component: FormStepLength,
+    resets: 'composeMessage'
+  },
+  {
+    name: 'selectStyle',
+    component: FormStepStyle,
+    resets: 'composeMessage'
+  },
+  {
+    name: 'composeMessage',
+    component: FormStepCompose
+  },
+  {
+    name: 'sendMessage',
+    component: FormStepSend,
+    confirm: 'GMAIL',
+    action: 'saveSendData'
+  },
+  {
+    name: 'nextSteps',
+    component: FormStepNext
+  }
+]
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
 
-    const id = get(this.props, 'id')
-    const data = get(this.props, 'externalMessage', {})
-    const active = this.activeFromData(data)
-    const messages = get(this.props, 'messages', [])
-    const tooltips = get(this.props, 'tooltips', [])
-
-    this.state = {active, data, id, messages, tooltips}
-
     this.onSubmitStep = this.onSubmitStep.bind(this)
     this.onClickStep = this.onClickStep.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
-
-    this.steps = [
-      {
-        name: 'selectLength',
-        component: FormStepLength,
-        resets: 'composeMessage'
-      },
-      {
-        name: 'selectStyle',
-        component: FormStepStyle,
-        resets: 'composeMessage'
-      },
-      {
-        name: 'composeMessage',
-        component: FormStepCompose
-      },
-      {
-        name: 'sendMessage',
-        component: FormStepSend
-      },
-      {
-        name: 'nextSteps',
-        component: FormStepNext
-      }
-    ]
-  }
-
-  componentWillReceiveProps (props) {
-    const id = get(props, 'id')
-    this.setState({ id })
-  }
-
-  activeFromData (data) {
-    let active = 0
-
-    if (data.sendMessage) {
-      active = 4
-    } else if (data.composeMessage) {
-      active = 3
-    } else if (data.selectStyle) {
-      active = 2
-    } else if (data.selectLength) {
-      active = 1
-    }
-
-    return active
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
-    const tooltip = this.state.tooltips.find(tooltip => tooltip.tags.includes(tooltipTag))
-    const activeName = this.steps[this.state.active].name
+    const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
+    const active = this.props.externalMessagePage.active
+    const activeName = steps[active].name
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
     }
@@ -94,74 +73,43 @@ module.exports = class ComposePage extends React.Component {
   }
 
   onChangeStep (step) {
-    return (stepData) => {
-      this.setState({
-        data: merge(this.state.data, {[step]: stepData})
-      })
-    }
+    return (stepData) => this.props.dispatch(setStepData(step.name, stepData))
   }
 
   onSubmitStep (step) {
-    return (stepData) => {
-      const data = merge(this.state.data, {[step]: stepData})
-      const active = get(this.state, 'active') + 1
-      this.saveAndPostData({active, data})
+    const stepName = step.name
+    return (stepData, options = {}) => {
+      if (step.confirm && step.confirm === stepData && !this.props.overlay) {
+        return this.props.dispatch(showDialog({
+          confirm: {
+            action: step.action || 'saveStepData',
+            arguments: [stepName, stepData, options]
+          },
+          cancel: {
+            action: 'hideDialog'
+          }
+        }))
+      }
+      this.props.dispatch(actions[step.action || 'saveStepData'](stepName, stepData, options))
     }
   }
 
-  saveAndPostData ({active, data}) {
-    this.setState({active, data}, () => {
-      let url = `/jobs/${get(this.props, 'job.slug')}/external/${get(this.props, 'recipient.id')}`
-      let method = 'post'
-      const data = this.state.data
-
-      if (this.state.id) {
-        url = `${url}/${this.state.id}`
-        method = 'patch'
-      }
-
-      this.props.dispatch(postData({ url, data, method }))
-    })
-  }
-
-  onClickStep (step, index, steps) {
-    return (event) => {
-      let active = this.state.active
-      if (active < 4) { // only allow skipping through steps before sending
-        let confirm = null
-        if (index < this.state.active) {
-          if (step.resets && !!this.state.data[step.resets]) {
-            confirm = index
-          } else {
-            active = index
-          }
-        } else if ((index > this.state.active && !!this.state.data[step.name]) || (steps[index - 1] && !!this.state.data[steps[index - 1].name])) {
-          active = index
-        }
-        this.setState({
-          active,
-          confirm
-        })
-      }
+  onClickStep (requestedStep) {
+    const currentMessage = merge(get(this.props, 'externalMessage', {}), pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    return event => {
+      this.props.dispatch(setActiveStep(requestedStep, currentMessage))
     }
   }
 
   onClickConfirm (event) {
     event.stopPropagation()
-    const data = this.state.data
-    data.composeMessage = null
-    this.setState({
-      active: this.state.confirm,
-      confirm: null,
-      data
-    })
+    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentMessage, true))
   }
 
   onClickCancel (event) {
     event.stopPropagation()
-    this.setState({
-      confirm: null
-    })
+    this.props.dispatch(hideConfirm())
   }
 
   renderConfirm () {
@@ -179,7 +127,8 @@ module.exports = class ComposePage extends React.Component {
 
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
-    const data = this.state.data
+    const data = get(this.props, 'externalMessage', {})
+    const active = this.props.externalMessagePage.active
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
@@ -191,7 +140,7 @@ module.exports = class ComposePage extends React.Component {
           subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
         />
         <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
-        {this.steps.map((step, index, steps) => {
+        {steps.map((step, index, steps) => {
           const {
             name,
             component: Component
@@ -202,15 +151,16 @@ module.exports = class ComposePage extends React.Component {
               <div className={this.style.pageMain}>
                 <Component
                   name={name}
-                  isActive={this.state.active === index}
+                  isActive={active === index}
                   index={index + 1}
-                  {...this.state.data}
-                  onSubmitStep={this.onSubmitStep(name)}
-                  onChangeStep={this.onChangeStep(name)}
-                  messages={this.state.messages}
+                  {...this.props.externalMessage}
+                  {...this.props.externalMessagePage}
+                  onSubmitStep={this.onSubmitStep(step)}
+                  onChangeStep={this.onChangeStep(step)}
+                  messages={get(this.props, 'messages', [])}
                   pageData={this.props}
-                  onClick={this.onClickStep(step, index, steps)}
-                  confirm={this.state.confirm === index && this.renderConfirm()}
+                  onClick={this.onClickStep(index)}
+                  confirm={this.props.externalMessagePage.confirm === index && this.renderConfirm()}
                   canSkipTo={canSkipTo}
                 />
               </div>

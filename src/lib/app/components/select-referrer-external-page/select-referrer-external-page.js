@@ -1,7 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')

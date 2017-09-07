@@ -1,5 +1,5 @@
 const React = require('react')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const get = require('lodash/get')
 const { distanceInWordsToNow, differenceInSeconds } = require('date-fns')
 

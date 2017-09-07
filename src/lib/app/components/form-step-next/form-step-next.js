@@ -1,6 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 
 const FormStep = require('../form-step/form-step')
 

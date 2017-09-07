@@ -57,13 +57,6 @@ function getComposeMessageBaseSubject (props) {
   return subject ? renderMessage(subject, props.pageData) : ''
 }
 
-function onSubmitSendMessage (url, onSubmitStep, sendMessage) {
-  if (url) {
-    window.open(url)
-  }
-  onSubmitStep(sendMessage)
-}
-
 const FormStepSend = (props) => {
   const recipient = encodeURIComponent(get(props, 'pageData.recipient.email', 'tech@nudj.com'))
   const defaultSubject = 'I need your help'
@@ -82,7 +75,7 @@ const FormStepSend = (props) => {
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'EMAIL')
+        props.onSubmitStep('EMAIL', { url: event.currentTarget.href })
       }
     },
     {
@@ -94,7 +87,7 @@ const FormStepSend = (props) => {
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'GMAIL')
+        props.onSubmitStep('GMAIL', { url: event.currentTarget.href })
       }
     }
   ]

@@ -8,11 +8,13 @@ let { StyleSheetServer } = require('aphrodite/no-important')
 let thunkMiddleware = require('redux-thunk').default
 
 let { pageReducer } = require('./reducers/page')
+let { externalMessagesReducer } = require('./reducers/external-messages')
 
 module.exports = (data) => {
   const store = createStore(
     combineReducers({
-      page: pageReducer
+      page: pageReducer,
+      externalMessages: externalMessagesReducer(data)
     }),
     data,
     applyMiddleware(thunkMiddleware)

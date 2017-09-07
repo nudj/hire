@@ -11,6 +11,8 @@ const {
 const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
+const tags = require('../../lib/tags')
+const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
 const employees = require('../modules/employees')
@@ -23,7 +25,6 @@ const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
-const tags = require('../../lib/tags')
 const employeeSurveys = require('../modules/employee-surveys')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
@@ -94,42 +95,42 @@ function getRenderDataBuilder (req) {
 function getErrorHandler (req, res, next) {
   return (error) => {
     try {
-      let data, errorMessage
+      const response = {}
+      let responded
+      logger.log('error', error.message, error)
       switch (error.message) {
         // renders with message
         case 'Invalid url':
-          errorMessage = {
+          response.message = {
             code: 400,
             error: 'error',
             message: 'Form submission data invalid'
           }
-          data = getRenderDataBuilder(req)({
-            message: errorMessage
-          })
-          getRenderer(req, res, next)(data)
           break
         // full page errors
-        default:
-          logger.log('error', error.message, error)
-          switch (error.message) {
-            case 'Not found':
-              errorMessage = {
-                code: 404,
-                type: 'error',
-                message: 'Not found'
-              }
-              break
-            default:
-              errorMessage = {
-                code: 500,
-                type: 'error',
-                message: 'Something went wrong'
-              }
+        case 'Not found':
+          response.error = {
+            code: 404,
+            type: 'error',
+            message: 'Not found'
           }
-          data = getRenderDataBuilder(req)({
-            error: errorMessage
-          })
-          getRenderer(req, res, next)(data)
+          break
+        case 'Unauthorized Google':
+          res.status(401).send('Unauthorized Google')
+          responded = true
+          break
+        default:
+          response.error = {
+            code: 500,
+            type: 'error',
+            message: 'Something went wrong'
+          }
+      }
+      if (!responded) {
+        Promise.resolve(merge(req.session.data, response))
+          .then(getRenderDataBuilder(req, res, next))
+          .then(getRenderer(req, res, next))
+          .catch(error => next(error))
       }
     } catch (error) {
       logger.log('error', error)
@@ -143,6 +144,7 @@ function getRenderer (req, res, next) {
     delete req.session.logout
     delete req.session.returnTo
     if (req.xhr) {
+      res.set('Cache-Control', 'no-store')
       return res.json(data)
     }
     let staticContext = app(data)
@@ -297,6 +299,41 @@ function jobHandler (req, res, next) {
     .then(data => jobs.getApplications(data, data.job.id))
     .then(data => aggregateSent(data))
     .then(data => {
+      if (!data.sentComplete.length) {
+        return res.redirect(`/jobs/${data.job.slug}/nudj`)
+      }
+      data.activities = jobs.getJobActivities(data, data.job.id)
+      return promiseMap(data)
+        .then(data => {
+          data.tooltip = prismic.fetchContent(prismicQuery, true)
+          return promiseMap(data)
+        })
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function nudjHandler (req, res, next) {
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['jobDashboard']
+  }
+
+  jobs
+    .get(merge(req.session.data), req.params.jobSlug)
+    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
+    .then(data => jobs.getReferrals(data, data.job.id))
+    .then(data => jobs.getApplications(data, data.job.id))
+    .then(data => {
+      // Add internal later
+      data.sentInternalComplete = []
+      return promiseMap(data)
+    })
+    .then(data => aggregateSent(data))
+    .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
       return promiseMap(data)
     })
@@ -325,6 +362,26 @@ function fetchInternalPrismicContent (data) {
   data.compose = prismic.fetchContent(composeQuery, true)
   data.dialog = prismic.fetchContent(dialogQuery, true)
   data.tooltip = prismic.fetchContent(tooltipQuery, true)
+  return promiseMap(data)
+}
+
+function fetchExternalPrismicContent (data) {
+  const dialogQuery = {
+    'document.type': 'dialog',
+    'document.tags': ['sendExternal']
+  }
+  const composeExternalTooltips = {
+    'document.type': 'tooltip',
+    'document.tags': ['sendExternal']
+  }
+  const composeExternalMessages = {
+    'document.type': 'composemessage',
+    'document.tags': ['external']
+  }
+
+  data.tooltips = prismic.fetchContent(composeExternalTooltips)
+  data.messages = prismic.fetchContent(composeExternalMessages)
+  data.dialog = prismic.fetchContent(dialogQuery, true)
   return promiseMap(data)
 }
 
@@ -430,7 +487,7 @@ function externalHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function getExternalComposeProperties (data) {
+function getExternalMessageProperties (data, messageId) {
   const composeExternalTooltips = {
     'document.type': 'tooltip',
     'document.tags': ['sendExternal']
@@ -440,7 +497,7 @@ function getExternalComposeProperties (data) {
     'document.tags': ['external']
   }
 
-  return network.getById(data, data.hirer.id, data.job.id, data.recipient.id)
+  return Promise.resolve(data)
     .then(data => {
       data.recipient = common.fetchPersonFromFragment(data.recipient.id)
       data.tooltips = prismic.fetchContent(composeExternalTooltips)
@@ -452,58 +509,110 @@ function getExternalComposeProperties (data) {
       if (!data.referral) {
         data.referral = jobs.addReferral(data, data.job.id, data.recipient.id)
       }
-      return data
-    })
-    .then(data => externalMessages.get(data, data.hirer.id, data.job.id, data.recipient.id))
-    .then(data => {
-      data.externalMessage = {}
-      data.id = undefined
-
-      if (data.message && !data.message.sendMessage) {
-        data.externalMessage = data.message
-        data.id = data.message.id
-      }
       return promiseMap(data)
+    })
+    .then(data => externalMessages.getById(data, messageId))
+    .catch(error => {
+      logger.log('error', error)
+      throw new Error('Not found')
     })
 }
 
-function externalComposeHandler (req, res, next) {
+function newExternalMessageHandler (req, res, next) {
   const recipient = req.params.recipientId
 
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  Promise.resolve(merge(req.session.data))
+    .then(data => jobs.get(merge(req.session.data), req.params.jobSlug))
     .then(data => network.getRecipient(data, recipient))
-    .then(getExternalComposeProperties)
+    .then(fetchExternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
-function externalSaveHandler (req, res, next) {
-  const hirer = req.session.data.hirer
+function getExternalMessageHandler (req, res, next) {
+  const person = get(req, 'session.data.person.id')
+  const recipient = req.params.recipientId
+
+  jobs
+    .get(merge(req.session.data), req.params.jobSlug)
+    .then(data => network.getRecipient(data, recipient))
+    .then(data => getExternalMessageProperties(data, req.params.messageId))
+    .then(data => {
+      if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
+        return gmail.send(data, person)
+      }
+      return promiseMap(data)
+    })
+    .then(fetchExternalPrismicContent)
+    .then(data => {
+      let active = 0
+      if (data.externalMessage.sendMessage) {
+        active = 4
+      } else if (data.externalMessage.composeMessage) {
+        active = 3
+      } else if (data.externalMessage.selectStyle) {
+        active = 2
+      } else if (data.externalMessage.selectLength) {
+        active = 1
+      }
+      data.active = active
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function saveExternalMessageHandler (req, res, next) {
   const recipient = req.params.recipientId
   const composeMessage = req.body.composeMessage
   const selectStyle = req.body.selectStyle
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
+  const externalMessage = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
 
-  const messageId = req.params.messageId
-  const saveMethod = messageId && req.method === 'PATCH' ? externalMessages.patch : externalMessages.post
-
-  const message = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
-  const data = merge({hirer, recipient, message}, req.session.data)
-
-  jobs
-    .get(data, req.params.jobSlug)
+  Promise.resolve(merge(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => network.getRecipient(data, recipient))
-    .then(data => saveMethod(data, data.hirer, data.job, data.recipient, data.message, messageId))
+    .then(data => externalMessages.post(data, data.hirer, data.job, data.recipient, externalMessage))
+    .then(data => {
+      if (!data.externalMessage) {
+        throw new Error('No message saved!')
+      }
+      return res.redirect(`/jobs/${data.job.slug}/external/${data.recipient.id}/${data.externalMessage.id}`)
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function patchExternalMessageHandler (req, res, next) {
+  const recipient = req.params.recipientId
+  const composeMessage = req.body.composeMessage
+  const selectStyle = req.body.selectStyle
+  const selectLength = req.body.selectLength
+  const sendMessage = req.body.sendMessage
+  const messageId = req.params.messageId
+  const externalMessage = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
+  const person = get(req, 'session.data.person.id')
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => network.getRecipient(data, recipient))
+    .then(data => externalMessages.patch(data, messageId, externalMessage))
+    .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
+    .then(data => {
+      if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
+        return gmail.send(data, person)
+      }
+      return promiseMap(data)
+    })
     .then(data => {
       if (sendMessage) {
         return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
       }
       return promiseMap(data)
     })
-    .then(getExternalComposeProperties)
+    .then(fetchExternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -721,18 +830,19 @@ router.post('/survey-page', surveyPageSendHandler)
 router.get('/jobs', ensureOnboarded, jobsHandler)
 
 router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
-router.get('/jobs/:jobSlug/nudj', ensureOnboarded, jobHandler)
+router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 
 router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
 router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
-router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalComposeHandler)
-router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, externalSaveHandler)
-router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, externalSaveHandler)
+router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, newExternalMessageHandler)
+router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, saveExternalMessageHandler)
+router.get('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, getExternalMessageHandler)
+router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, patchExternalMessageHandler)
 
 router.get('*', (req, res) => {
-  let data = getRenderDataBuilder(req)({})
+  let data = getRenderDataBuilder(req)(merge(req.session.data))
   getRenderer(req, res)(data)
 })
 
