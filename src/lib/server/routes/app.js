@@ -15,7 +15,6 @@ const tags = require('../../lib/tags')
 const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
-const accounts = require('../modules/accounts')
 const employees = require('../modules/employees')
 const hirers = require('../modules/hirers')
 const internalMessages = require('../modules/internal-messages')
@@ -325,6 +324,7 @@ function nudjHandler (req, res, next) {
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
     .then(data => {
@@ -531,6 +531,7 @@ function newExternalMessageHandler (req, res, next) {
 }
 
 function getExternalMessageHandler (req, res, next) {
+  const person = get(req, 'session.data.person.id')
   const recipient = req.params.recipientId
 
   jobs
@@ -539,9 +540,7 @@ function getExternalMessageHandler (req, res, next) {
     .then(data => getExternalMessageProperties(data, req.params.messageId))
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
-        return getGoogleAccessToken(req, res, next, data)
-          .then(data => gmail.send(data, req.account.providers.google.accessToken))
-          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
+        return gmail.send(data, person)
       }
       return promiseMap(data)
     })
@@ -563,23 +562,6 @@ function getExternalMessageHandler (req, res, next) {
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
-}
-
-function getGoogleAccessToken (req, res, next, data) {
-  if (!get(req, 'account.providers.google.accessToken')) {
-    return accounts
-      .getByFilters({
-        person: get(req, 'session.data.person.id')
-      })
-      .then(account => {
-        if (!account || !get(account, 'providers.google.accessToken')) {
-          throw new Error('Unauthorized Google')
-        }
-        req.account = account
-        return promiseMap(data)
-      })
-  }
-  return promiseMap(data)
 }
 
 function saveExternalMessageHandler (req, res, next) {
@@ -611,6 +593,7 @@ function patchExternalMessageHandler (req, res, next) {
   const sendMessage = req.body.sendMessage
   const messageId = req.params.messageId
   const externalMessage = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
+  const person = get(req, 'session.data.person.id')
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
@@ -619,9 +602,7 @@ function patchExternalMessageHandler (req, res, next) {
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
-        return getGoogleAccessToken(req, res, next, data)
-          .then(data => gmail.send(data, req.account.providers.google.accessToken))
-          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
+        return gmail.send(data, person)
       }
       return promiseMap(data)
     })

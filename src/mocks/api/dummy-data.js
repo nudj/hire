@@ -14,7 +14,8 @@ const data = {
   tasks: [],
   tokens: [],
   employeeSurveys: [],
-  accounts: []
+  accounts: [],
+  conversations: []
 }
 data.companies = data.companies.concat([
   {

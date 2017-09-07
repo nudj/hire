@@ -1,10 +1,38 @@
-const { promiseMap } = require('@nudj/library')
 const get = require('lodash/get')
 const gmailer = require('../lib/gmailer')
 const logger = require('../../lib/logger')
 const templater = require('../../lib/templater')
+const conversations = require('./conversations')
+const externalMessages = require('./external-messages')
+const accounts = require('./accounts')
 
-const send = (data, accessToken) => {
+const getAccessTokenForPerson = (person) => {
+  return accounts.getByFilters({ person })
+    .then(account => {
+      if (!account || !get(account, 'providers.google.accessToken')) {
+        throw new Error('Unauthorized Google')
+      }
+      return Promise.resolve(account.providers.google)
+    })
+}
+
+const sendGmailAndLogResponse = (email, accessToken) => {
+  return gmailer.send(email, accessToken)
+    .then(response => {
+      logger.log('email response', response, email)
+      const conversation = {
+        threadId: response.threadId
+      }
+      return conversation
+    })
+}
+
+const saveConversationAndMarkAsSent = (data, conversation) => {
+  return conversations.post(data, data.hirer, data.recipient, conversation, 'GMAIL')
+    .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
+}
+
+const send = (data, person) => {
   const companySlug = get(data, 'company.slug', '')
   const jobSlug = get(data, 'job.slug', '')
   const referralId = get(data, 'referral.id', '')
@@ -44,12 +72,9 @@ const send = (data, accessToken) => {
     to: get(data, 'recipient.email')
   }
 
-  return gmailer
-    .send(email, accessToken)
-    .then(response => {
-      logger.log('email response', response, email)
-      return promiseMap(data)
-    })
+  return getAccessTokenForPerson(person)
+    .then(account => sendGmailAndLogResponse(email, account.accessToken))
+    .then(conversation => saveConversationAndMarkAsSent(data, conversation))
 }
 
 module.exports = { send }

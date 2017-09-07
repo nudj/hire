@@ -26,13 +26,6 @@ const JobPage = (props) => {
       <h3 className={style.pageHeadline}>Who would you like to ask first?</h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          <form method='post' action={`/jobs/${get(props, 'job.slug')}/internal/send-gmail`}>
-            <input type='hidden' name='_csrf' value={props.csrfToken} />
-            <input type='hidden' name='to' value='tim@nudj.co' />
-            <input type='hidden' name='subject' value='test subject' />
-            <input type='hidden' name='body' value='test body' />
-            <button>Send email</button>
-          </form>
           <div className={style.internal}>
             <div className={style.internalContent}>
               <h4 className={style.title}>Ask your company</h4>
