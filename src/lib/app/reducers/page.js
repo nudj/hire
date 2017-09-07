@@ -10,9 +10,7 @@ let {
 } = require('../actions/app')
 const { merge } = require('@nudj/library')
 
-const initialState = {
-  externalMessageActive: 0
-}
+const initialState = {}
 const resetError = {
   error: null
 }
