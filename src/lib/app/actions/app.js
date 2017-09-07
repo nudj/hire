@@ -213,20 +213,6 @@ module.exports.hideNotification = () => {
   }
 }
 
-const INITIALISE = 'INITIALISE'
-module.exports.INITIALISE = INITIALISE
-function initialise (data) {
-  return {
-    type: INITIALISE,
-    data
-  }
-}
-module.exports.initialise = (data) => {
-  return (dispatch, getState) => {
-    dispatch(initialise(data))
-  }
-}
-
 module.exports.postData = ({
   url,
   method = 'post',
