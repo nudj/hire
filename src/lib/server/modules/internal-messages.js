@@ -38,6 +38,12 @@ module.exports.populateRecipients = function (data, recipients) {
   return promiseMap(data)
 }
 
+module.exports.getRecipientsEmailAdresses = function (data, recipients) {
+  data.recipients = Promise.all(recipients.map(recipient => people.get({}, recipient)
+    .then(result => result.person.email)))
+  return promiseMap(data)
+}
+
 module.exports.get = function (data, hirer, job, recipient) {
   data.message = fetchLatestSentMessage(hirer, job, recipient)
   return promiseMap(data)

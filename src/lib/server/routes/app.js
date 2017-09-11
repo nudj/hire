@@ -434,16 +434,10 @@ function sendSavedInternalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => internalMessages.getById(data, req.params.messageId))
     .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
     .then(data => {
-      const recipientEmailList = data.internalMessage.recipients.map(recipient => people.get({}, recipient).then(result => result.person.email))
-      const {
-        subject,
-        message,
-        type
-      } = data.internalMessage
-
-      return Promise.all(recipientEmailList)
-        .then(recipients => internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, message, type))
+      const { subject, message, type } = data.internalMessage
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, type)
     })
     .then(data => {
       if (data.messages) {

@@ -1,4 +1,5 @@
 const isAfter = require('date-fns/is_after')
+const flatten = require('lodash/flatten')
 
 let request = require('../../lib/request')
 
@@ -13,14 +14,8 @@ module.exports.fetchPeopleFromFragments = function (fragments) {
 }
 
 module.exports.fetchAllRecipientsFromFragments = function (fragments) {
-  let people = []
-  fragments.map((fragment) => {
-    fragment.recipients.map((recipient) => {
-      people.push(fetchPersonFromFragment(recipient))
-    })
-  })
-
-  return Promise.all(people)
+  const recipients = flatten(fragments.map((fragment) => fragment.recipients))
+  return Promise.all(recipients.map((recipient) => fetchPersonFromFragment(recipient)))
 }
 
 module.exports.sortByModified = function (a, b) {
