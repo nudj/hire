@@ -130,7 +130,6 @@ module.exports.getApplications = function (data, job) {
 }
 
 function transformReferralFragment (referral) {
-  console.log('HERE?', referral)
   return common.fetchPersonFromFragment(referral.person)
     .then(person => {
       const personDetails = {
