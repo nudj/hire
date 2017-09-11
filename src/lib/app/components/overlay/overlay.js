@@ -14,13 +14,12 @@ function onClick (props, action, args = []) {
 
 const Overlay = (props) => {
   const style = getStyle()
-  const onClickConfirm = onClick(props, get(props, 'overlay.confirm.action'), get(props, 'overlay.confirm.arguments', []))
-  const onClickCancel = onClick(props, get(props, 'overlay.cancel.action', 'hideDialog'), get(props, 'overlay.cancel.arguments', []))
+  const onClickCancel = onClick(props, 'hideDialog')
 
   return <div className={props.overlay ? style.background : style.hidden} onClick={onClickCancel}>
     <div className={style.dialog} onClick={onClickDialog(props)}>
       <button className={style.close} onClick={onClickCancel} />
-      <DialogConfirm {...props} onClickConfirm={onClickConfirm} onClickCancel={onClickCancel} />
+      <DialogConfirm {...props} options={get(props, 'overlay.options')} onClick={onClick} />
     </div>
   </div>
 }

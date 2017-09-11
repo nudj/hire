@@ -10,9 +10,9 @@ class PrismicModule {
   createElement ({block, props, index}) {
     // `block.type` contains information about the element type
     if (typeof props.element === 'object' && props.element.$$typeof) {
-      return (<props.element.type {...omit(props.element.props, ['element'])} {...omit(props, ['element'])} key={`${props.element.type}+${index}`}>{block.text}</props.element.type>)
+      return (<props.element.type {...omit(props.element.props, ['element'])} {...omit(props, ['element'])} key={`${props.element.type}+${index}`}>{props.title || block.text}</props.element.type>)
     } else {
-      return (<props.element {...omit(props, ['element'])} key={`${props.element}+${index}`}>{block.text}</props.element>)
+      return (<props.element {...omit(props, ['element'])} key={`${props.element}+${index}`}>{props.title || block.text}</props.element>)
     }
     // add a `key` property?
   }

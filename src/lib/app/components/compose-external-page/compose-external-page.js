@@ -81,13 +81,21 @@ module.exports = class ComposePage extends React.Component {
     return (stepData, options = {}) => {
       if (step.confirm && step.confirm === stepData && !this.props.overlay) {
         return this.props.dispatch(showDialog({
-          confirm: {
-            action: step.action || 'saveStepData',
-            arguments: [stepName, stepData, options]
-          },
-          cancel: {
-            action: 'hideDialog'
-          }
+          options: [
+            {
+              type: 'cancel',
+              action: {
+                name: 'hideDialog'
+              }
+            },
+            {
+              type: 'confirm',
+              action: {
+                name: step.action || 'saveStepData',
+                arguments: [stepName, stepData, options]
+              }
+            }
+          ]
         }))
       }
       this.props.dispatch(actions[step.action || 'saveStepData'](stepName, stepData, options))

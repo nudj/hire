@@ -13,7 +13,6 @@ function fetchExternalMessages (hirer, job, recipient) {
 function fetchLatestExternalMessage (hirer, job, recipient) {
   return fetchExternalMessages(hirer, job, recipient)
     .then(results => {
-      console.log(results, hirer, job, recipient)
       results.sort(common.sortByModified)
       return results.pop()
     })

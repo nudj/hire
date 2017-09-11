@@ -7,6 +7,7 @@ const PrismicReact = require('../../lib/prismic-react')
 const Dialog = (props) => {
   const style = getStyle()
   const dialog = get(props, 'dialog', '')
+  const options = get(props, 'options', [])
 
   const prismicDialog = new PrismicReact(dialog)
 
@@ -26,33 +27,27 @@ const Dialog = (props) => {
     }
   })
 
-  const dialogConfirmButton = (<button className={props.className} onClick={props.onClickConfirm} />)
-  const dialogCancelButton = (<button className={props.className} onClick={props.onClickCancel} />)
-
-  const dialogConfirm = prismicDialog.fragmentToReact({
-    fragment: 'dialog.dialogconfirmtext',
-    props: {
-      className: style.dialogConfirmButton,
-      element: dialogConfirmButton
-    }
-  })
-
-  const dialogCancel = prismicDialog.fragmentToReact({
-    fragment: 'dialog.dialogcanceltext',
-    props: {
-      className: style.dialogCancelButton,
-      element: dialogCancelButton
-    }
-  })
-
-  return (<div className={style.dialog}>
-    {dialogTitle}
-    {dialogText}
-    <div className={style.dialogButtons}>
-      {dialogCancel}
-      {dialogConfirm}
+  return (
+    <div className={style.dialog}>
+      {dialogTitle}
+      {dialogText}
+      <div className={style.dialogButtons}>
+        {
+          options.map(option => {
+            return prismicDialog.fragmentToReact({
+              fragment: `dialog.dialog${option.type}text`,
+              props: {
+                className: get(style, `${option.type}DialogButton`),
+                element: 'button',
+                title: option.title,
+                onClick: props.onClick(props, option.action.name, option.action.arguments)
+              }
+            })
+          })
+        }
+      </div>
     </div>
-  </div>)
+  )
 }
 
 module.exports = Dialog
