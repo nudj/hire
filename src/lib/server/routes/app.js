@@ -452,6 +452,10 @@ function sendSavedInternalMessageHandler (req, res, next) {
             return res.redirect(`/jobs/${req.params.jobSlug}`)
           })
       }
+      return fetchInternalPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
     })
     .catch(getErrorHandler(req, res, next))
 }
@@ -485,6 +489,10 @@ function internalMessageSaveHandler (req, res, next) {
             return res.redirect(`/jobs/${req.params.jobSlug}`)
           })
       }
+      return fetchInternalPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
     })
     .catch(getErrorHandler(req, res, next))
 }

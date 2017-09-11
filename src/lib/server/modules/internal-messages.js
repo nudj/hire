@@ -28,13 +28,13 @@ function saveSentMessage (hirer, job, recipients, subject, message, type) {
 }
 
 function fetchAllRecipients (recipients) {
-  return recipients.map(recipient => {
+  return Promise.all(recipients.map(recipient => {
     return people.getOrCreateByEmail({}, recipient).then(result => result.person.id)
-  })
+  }))
 }
 
 module.exports.populateRecipients = function (data, recipients) {
-  data.recipients = Promise.all(fetchAllRecipients(recipients))
+  data.recipients = fetchAllRecipients(recipients)
   return promiseMap(data)
 }
 

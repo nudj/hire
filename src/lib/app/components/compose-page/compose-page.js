@@ -172,7 +172,7 @@ module.exports = class ComposePage extends React.Component {
           type: 'confirm'
         },
         {
-          title: 'Send via GMail',
+          title: 'Send via Gmail',
           action: sendEmail('GMAIL'),
           type: 'confirm'
         },
