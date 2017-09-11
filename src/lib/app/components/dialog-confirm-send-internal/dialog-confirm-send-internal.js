@@ -27,6 +27,7 @@ const Dialog = (props) => {
   })
 
   const dialogConfirmButton = (<button className={props.className} onClick={props.onClickConfirm} />)
+  const dialogConfirmGmailButton = (<button className={props.className} onClick={props.onClickConfirmGmail} />)
   const dialogCancelButton = (<button className={props.className} onClick={props.onClickCancel} />)
 
   const dialogConfirm = prismicDialog.fragmentToReact({
@@ -34,6 +35,14 @@ const Dialog = (props) => {
     props: {
       className: style.dialogConfirmButton,
       element: dialogConfirmButton
+    }
+  })
+
+  const dialogConfirmGmail = prismicDialog.fragmentToReact({
+    fragment: 'dialog.dialogconfirmtext',
+    props: {
+      className: style.dialogConfirmGmailButton,
+      element: dialogConfirmGmailButton
     }
   })
 
@@ -51,6 +60,7 @@ const Dialog = (props) => {
     <div className={style.dialogButtons}>
       {dialogCancel}
       {dialogConfirm}
+      {get(props, 'compose.type') === 'composemessage' ? dialogConfirmGmail : ''}
     </div>
   </div>)
 }

@@ -1,4 +1,5 @@
 const get = require('lodash/get')
+const { merge } = require('@nudj/library')
 
 function getDataBuilderFor (tags, props) {
   return Object.keys(tags).reduce((data, tag) => {
@@ -25,14 +26,18 @@ const internal = {
     const companySlug = get(data, 'company.slug', '')
     const jobSlug = get(data, 'job.slug', '')
     const referralId = get(data, 'referral.id', '')
-    const hostname = get(data, 'web.hostname')
-    const link = `https://${hostname}/jobs/${companySlug}+${jobSlug}`
+    const link = `https://${process.env.WEB_HOSTNAME}/jobs/${companySlug}+${jobSlug}`
     return referralId ? `${link}+${referralId}` : link
   },
   'job.title': 'job.title',
   'sender.firstname': 'person.firstName',
   'sender.lastname': 'person.lastName'
 }
+
+const external = merge(internal, {
+  'recipient.firstname': 'recipient.firstName',
+  'recipient.lastname': 'recipient.lastName'
+})
 
 const survey = {
   'company.name': 'company.name',
@@ -44,5 +49,6 @@ const survey = {
 module.exports = {
   getDataBuilderFor,
   internal,
+  external,
   survey
 }

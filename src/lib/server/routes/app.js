@@ -385,7 +385,43 @@ function fetchExternalPrismicContent (data) {
   return promiseMap(data)
 }
 
-function internalHandler (req, res, next) {
+function internalMessageCreateAndMailUniqueLinkToRecipients (data, company, job, person, hirer, recipients, subject, template, type) {
+  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(person, hirer, recipient, company, job, subject, template, type))
+  data.messages = Promise.all(sendMessages)
+
+  return promiseMap(data)
+}
+
+function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, type) {
+  const mailContent = {
+    recipients: recipient,
+    subject,
+    template
+  }
+  const data = merge(mailContent, {
+    company,
+    job,
+    hirer
+  })
+  // Find or create person from email
+  // Create employee relation for this person
+  // Get or create referral for this person
+  // Append referral id to link
+  return people.getByEmail(data, recipient)
+    .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
+    .then(data => jobs.getReferralForPersonAndJob(data, data.person.id, job.id))
+    .then(data => data.referral ? data : jobs.addReferral(data, job.id, data.person.id))
+    .then(data => network.getRecipient(data, data.person.id))
+    .then(data => people.get(data, sender.id))
+    .then(data => {
+      if (type === 'GMAIL') {
+        return gmail.send(data, data.person.id)
+      }
+      return network.send(data, mailContent, tags.internal)
+    })
+}
+
+function internalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
@@ -394,70 +430,73 @@ function internalHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, tags) {
-  const recipients = recipient
-  const mailContent = {recipients, subject, template}
-
-  // Find or create person from email
-  // Create employee relation for this person
-  // Get or create referral for this person
-  // Append referral id to link
-  return people.getOrCreateByEmail({}, recipient)
-    .then(data => {
-      data.recipient = merge(data.person)
-      return promiseMap(data)
-    })
-    .then(data => employees.getOrCreateByPerson(data, data.recipient.id, company.id))
-    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, job.id))
-    .then(data => jobs.referral ? data : jobs.addReferral(data, job.id, data.recipient.id))
-    .then(data => {
-      data.company = company
-      data.job = job
-      data.person = sender
-      return promiseMap(data)
-    })
-    .then(data => network.send(data, mailContent, tags))
-    .then(data => internalMessages.post(data, hirer.id, data.job.id, data.recipient.id, subject, data.renderedMessage))
-}
-
-function internalMessageCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
-  const company = data.company
-  const job = data.job
-
-  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(data.person, data.hirer, recipient, company, job, subject, template, tags))
-
-  data.messages = Promise.all(sendMessages)
-    .then(messageResults => [].concat.apply([], messageResults || []))
-
-  return promiseMap(data)
-}
-
-function internalSendHandler (req, res, next) {
-  const { subject, template } = req.body
-  const recipients = req.body.recipients.replace(' ', '').split(',')
-
+function sendSavedInternalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
+    .then(data => internalMessages.getById(data, req.params.messageId))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => internalMessageCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.internal))
     .then(data => {
-      if (data.messages) {
-        // successful send
-        return tasks
-          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-          .then(() => {
-            req.session.notification = {
-              type: 'success',
-              message: 'That’s the way, aha aha, I like it! 🎉'
-            }
-            return res.redirect(`/jobs/${req.params.jobSlug}`)
-          })
-      }
-      return fetchInternalPrismicContent(data)
-        .then(getRenderDataBuilder(req, res, next))
-        .then(getRenderer(req, res, next))
+      const recipientEmailList = data.internalMessage.recipients.map(recipient => people.get({}, recipient).then(result => result.person.email))
+      const {
+        subject,
+        message,
+        type
+      } = data.internalMessage
+
+      return Promise.all(recipientEmailList)
+        .then(recipients => internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, message, type))
+    })
+    .then(data => {
+       if (data.messages) {
+         // successful send
+         return tasks
+           .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+           .then(() => {
+             req.session.notification = {
+               type: 'success',
+               message: 'That’s the way, aha aha, I like it! 🎉'
+             }
+             return res.redirect(`/jobs/${req.params.jobSlug}`)
+           })
+       }
+     })
+     .catch(getErrorHandler(req, res, next))
+}
+
+
+function internalMessageSaveHandler (req, res, next) {
+  const recipients = req.body.recipients.replace(/\s/g, '').split(',')
+  const recipientIdList = recipients.map(recipient => people.getOrCreateByEmail({}, recipient).then(data => data.person.id))
+  const {
+    subject,
+    template,
+    type
+  } = req.body
+
+  Promise.all(recipientIdList)
+    .then(recipientIds => {
+      Promise.resolve(merge(req.session.data))
+        .then(data => jobs.get(data, req.params.jobSlug))
+        .then(data => internalMessages.post(data, data.hirer.id, data.job.id, recipientIds, subject, template, type))
+        .then(data => {
+          req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.savedMessage.id}`
+          return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
+        })
+        .then(data => {
+           if (data.messages) {
+             // successful send
+             return tasks
+               .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+               .then(() => {
+                 req.session.notification = {
+                   type: 'success',
+                   message: 'That’s the way, aha aha, I like it! 🎉'
+                 }
+                 return res.redirect(`/jobs/${req.params.jobSlug}`)
+               })
+           }
+         })
         .catch(getErrorHandler(req, res, next))
     })
-    .catch(getErrorHandler(req, res, next))
 }
 
 function externalHandler (req, res, next) {
@@ -832,8 +871,9 @@ router.get('/jobs', ensureOnboarded, jobsHandler)
 router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
 router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 
-router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalHandler)
-router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalSendHandler)
+router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalMessageHandler)
+router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalMessageSaveHandler)
+router.get('/jobs/:jobSlug/internal/:messageId', ensureOnboarded, sendSavedInternalMessageHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
 router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, newExternalMessageHandler)

@@ -3,8 +3,8 @@ const { promiseMap } = require('@nudj/library')
 
 module.exports.post = (data, hirer, recipient, conversationData, type) => {
   const conversation = {
-    hirer: hirer.id,
-    recipient: recipient.id,
+    hirer,
+    recipient,
     type,
     data: conversationData
   }

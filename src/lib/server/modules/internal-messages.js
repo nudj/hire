@@ -19,8 +19,8 @@ function fetchSentMessagesForJob (data, hirer, job) {
   return request(`internalMessages/filter?hirer=${hirer}&job=${job}`)
 }
 
-function saveSentMessage (hirer, job, recipient, subject, message) {
-  const data = {hirer, job, recipient, subject, message}
+function saveSentMessage (hirer, job, recipients, subject, message, type) {
+  const data = {hirer, job, recipients, subject, message, type}
   const url = 'internalMessages'
   const method = 'post'
   return request(url, { data, method })
@@ -38,7 +38,14 @@ module.exports.getAll = function (data, hirer, job) {
   return promiseMap(data)
 }
 
-module.exports.post = function (data, hirer, job, recipient, subject, message) {
-  data.savedMessage = saveSentMessage(hirer, job, recipient, subject, message)
+module.exports.getById = function (data, messageId) {
+  data.internalMessage = request(`internalMessages/filter?id=${messageId}`)
+    .then(results => results.pop())
+
+  return promiseMap(data)
+}
+
+module.exports.post = function (data, hirer, job, recipients, subject, message, type = 'MAILGUN') {
+  data.savedMessage = saveSentMessage(hirer, job, recipients, subject, message, type)
   return promiseMap(data)
 }

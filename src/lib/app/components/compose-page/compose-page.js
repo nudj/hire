@@ -56,8 +56,6 @@ module.exports = class ComposePage extends React.Component {
     this.pify = this.pify.bind(this)
     this.chunkify = this.chunkify.bind(this)
     this.onClickSend = this.onClickSend.bind(this)
-    this.onClickConfirm = this.onClickConfirm.bind(this)
-    this.onClickCancel = this.onClickCancel.bind(this)
     this.onBlurRecipients = this.onBlurRecipients.bind(this)
   }
   componentDidMount () {
@@ -140,24 +138,32 @@ module.exports = class ComposePage extends React.Component {
       brify: (index) => <br key={`br${index}`} />
     })
   }
-  onClickConfirm () {
-    this.props.dispatch(showLoading())
-    this.props.dispatch(postData({
-      url: `/jobs/${get(this.props, 'job.slug')}/internal`,
-      data: {
-        recipients: get(this.state, 'recipients', ''),
-        subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
-        template: get(this.state, 'template', get(this.state, 'templateFallback', ''))
+  onClickSend (event) {
+    const sendEmail = (type) => {
+      return {
+        action: 'postData',
+        arguments: [
+          {
+            url: `/jobs/${get(this.props, 'job.slug')}/internal`,
+            data: {
+              template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
+              subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
+              recipients: get(this.state, 'recipients'),
+              type
+            }
+          }
+        ]
+      }
+    }
+
+    event.preventDefault()
+    this.props.dispatch(showDialog({
+      confirm: sendEmail('MAILGUN'),
+      confirmGmail: sendEmail('GMAIL'),
+      cancel: {
+        action: 'hideDialog'
       }
     }))
-    this.props.dispatch(hideDialog())
-  }
-  onClickCancel () {
-    this.props.dispatch(hideDialog())
-  }
-  onClickSend (event) {
-    event.preventDefault()
-    this.props.dispatch(showDialog(<DialogConfirm {...this.props} onClickConfirm={this.onClickConfirm} onClickCancel={this.onClickCancel} />))
   }
   renderSending () {
     return <div>Sending</div>
