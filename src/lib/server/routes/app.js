@@ -415,7 +415,7 @@ function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recip
     .then(data => people.get(data, sender.id))
     .then(data => {
       if (type === 'GMAIL') {
-        return gmail.send(data, data.person.id)
+        return gmail.send(data, data.person.id, tags.internal)
       }
       return network.send(data, mailContent, tags.internal)
     })
@@ -569,7 +569,7 @@ function getExternalMessageHandler (req, res, next) {
     .then(data => getExternalMessageProperties(data, req.params.messageId))
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
-        return gmail.send(data, person)
+        return gmail.send(data, person, tags.external)
           .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
       }
       return promiseMap(data)
@@ -632,7 +632,7 @@ function patchExternalMessageHandler (req, res, next) {
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
-        return gmail.send(data, person)
+        return gmail.send(data, person, tags.external)
           .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
       }
       return promiseMap(data)

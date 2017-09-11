@@ -4,7 +4,7 @@ const logger = require('../../lib/logger')
 const templater = require('../../lib/templater')
 const conversations = require('./conversations')
 const accounts = require('./accounts')
-const tags = require('../../lib/tags')
+const { getDataBuilderFor } = require('../../lib/tags')
 
 const getAccessTokenForPerson = (person) => {
   return accounts.getByFilters({ person })
@@ -31,13 +31,13 @@ const saveConversationAndMarkAsSent = (data, conversation) => {
   return conversations.post(data, data.hirer.id, data.recipient.id, conversation, 'GMAIL')
 }
 
-const send = (data, person) => {
+const send = (data, person, tags) => {
   const senderFirstName = get(data, 'person.firstName', 'FIRST_NAME')
   const senderLastName = get(data, 'person.lastName', 'SECOND_NAME')
 
   const message = templater.render(
     {
-      data: tags.getDataBuilderFor(tags.external, data),
+      data: getDataBuilderFor(tags, data),
       template: get(data, 'externalMessage.composeMessage', get(data, 'template')),
       pify: (contents) => `<p>${contents.join('')}</p>`
     }
