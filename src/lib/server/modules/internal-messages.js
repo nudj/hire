@@ -33,7 +33,7 @@ module.exports.get = function (data, hirer, job, recipient) {
 
 module.exports.getAll = function (data, hirer, job) {
   data.internalMessages = fetchSentMessagesForJob(data, hirer, job)
-    .then(common.fetchPeopleFromFragments)
+    .then(common.fetchAllRecipientsFromFragments)
 
   return promiseMap(data)
 }

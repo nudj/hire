@@ -40,12 +40,8 @@ const saveConversationAndMarkAsSent = (data, conversation) => {
 }
 
 const send = (data, person) => {
-  const companySlug = get(data, 'company.slug', '')
-  const jobSlug = get(data, 'job.slug', '')
-  const referralId = get(data, 'referral.id', '')
   const senderFirstName = get(data, 'person.firstName', 'FIRST_NAME')
   const senderLastName = get(data, 'person.lastName', 'SECOND_NAME')
-  const referralLink = `https://${process.env.WEB_HOSTNAME}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const message = templater.render(
     {

@@ -446,22 +446,21 @@ function sendSavedInternalMessageHandler (req, res, next) {
         .then(recipients => internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, message, type))
     })
     .then(data => {
-       if (data.messages) {
-         // successful send
-         return tasks
-           .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-           .then(() => {
-             req.session.notification = {
-               type: 'success',
-               message: 'That’s the way, aha aha, I like it! 🎉'
-             }
-             return res.redirect(`/jobs/${req.params.jobSlug}`)
-           })
-       }
-     })
-     .catch(getErrorHandler(req, res, next))
+      if (data.messages) {
+        // successful send
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(`/jobs/${req.params.jobSlug}`)
+          })
+      }
+    })
+    .catch(getErrorHandler(req, res, next))
 }
-
 
 function internalMessageSaveHandler (req, res, next) {
   const recipients = req.body.recipients.replace(/\s/g, '').split(',')
@@ -482,19 +481,19 @@ function internalMessageSaveHandler (req, res, next) {
           return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
         })
         .then(data => {
-           if (data.messages) {
-             // successful send
-             return tasks
-               .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-               .then(() => {
-                 req.session.notification = {
-                   type: 'success',
-                   message: 'That’s the way, aha aha, I like it! 🎉'
-                 }
-                 return res.redirect(`/jobs/${req.params.jobSlug}`)
-               })
-           }
-         })
+          if (data.messages) {
+          // successful send
+            return tasks
+              .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+              .then(() => {
+                req.session.notification = {
+                  type: 'success',
+                  message: 'That’s the way, aha aha, I like it! 🎉'
+                }
+                return res.redirect(`/jobs/${req.params.jobSlug}`)
+              })
+          }
+        })
         .catch(getErrorHandler(req, res, next))
     })
 }
