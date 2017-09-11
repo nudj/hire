@@ -464,38 +464,35 @@ function sendSavedInternalMessageHandler (req, res, next) {
 
 function internalMessageSaveHandler (req, res, next) {
   const recipients = req.body.recipients.replace(/\s/g, '').split(',')
-  const recipientIdList = recipients.map(recipient => people.getOrCreateByEmail({}, recipient).then(data => data.person.id))
   const {
     subject,
     template,
     type
   } = req.body
 
-  Promise.all(recipientIdList)
-    .then(recipientIds => {
-      Promise.resolve(merge(req.session.data))
-        .then(data => jobs.get(data, req.params.jobSlug))
-        .then(data => internalMessages.post(data, data.hirer.id, data.job.id, recipientIds, subject, template, type))
-        .then(data => {
-          req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.savedMessage.id}`
-          return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
-        })
-        .then(data => {
-          if (data.messages) {
-          // successful send
-            return tasks
-              .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-              .then(() => {
-                req.session.notification = {
-                  type: 'success',
-                  message: 'That’s the way, aha aha, I like it! 🎉'
-                }
-                return res.redirect(`/jobs/${req.params.jobSlug}`)
-              })
-          }
-        })
-        .catch(getErrorHandler(req, res, next))
+  Promise.resolve(merge(req.session.data))
+    .then(data => internalMessages.populateRecipients(data, recipients))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template, type))
+    .then(data => {
+      req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.savedMessage.id}`
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
     })
+    .then(data => {
+      if (data.messages) {
+      // successful send
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(`/jobs/${req.params.jobSlug}`)
+          })
+      }
+    })
+    .catch(getErrorHandler(req, res, next))
 }
 
 function externalHandler (req, res, next) {
@@ -579,6 +576,7 @@ function getExternalMessageHandler (req, res, next) {
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
         return gmail.send(data, person)
+          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
       }
       return promiseMap(data)
     })
@@ -641,6 +639,7 @@ function patchExternalMessageHandler (req, res, next) {
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
         return gmail.send(data, person)
+          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
       }
       return promiseMap(data)
     })

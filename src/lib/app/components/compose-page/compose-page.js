@@ -52,15 +52,18 @@ module.exports = class ComposePage extends React.Component {
     this.onClickSend = this.onClickSend.bind(this)
     this.onBlurRecipients = this.onBlurRecipients.bind(this)
   }
+
   componentDidMount () {
     this.setState({
       editing: false,
       js: true
     })
   }
+
   validateRecipients () {
     return validators.recipients(get(this.state, 'recipients'))
   }
+
   validateEmail () {
     const options = {
       permittedTags: Object.keys(tags)
@@ -71,6 +74,7 @@ module.exports = class ComposePage extends React.Component {
       return newState
     }, {})
   }
+
   componentWillReceiveProps (props) {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
@@ -87,41 +91,50 @@ module.exports = class ComposePage extends React.Component {
       templateError: get(this.state, 'templateError', get(props, 'form.template.error', false))
     })
   }
+
   onBlurRecipients (event) {
     this.setState({
       recipientsError: this.validateRecipients()
     })
   }
+
   onClickEdit (event) {
     event.preventDefault()
     this.setState(merge({
       editing: !this.state.editing
     }, this.validateEmail()))
   }
+
   onChangeRecipients (event) {
     this.setState({
       recipients: event.target.value
     })
   }
+
   onChangeSubject (event) {
     this.setState({
       subject: event.target.value
     })
   }
+
   onChangeMessage (event) {
     this.setState({
       template: event.target.value
     })
   }
+
   chunkify (contents, index) {
     return <span className={this.style.chunk} key={`chunk${index}`}>{contents}</span>
   }
+
   tagify (contents, ok, index) {
     return <span className={ok ? this.style.tagOk : this.style.tagError} key={`chunk${index}`}>{contents}</span>
   }
+
   pify (para, index, margin = 0) {
     return <p className={this.style.para} style={{ marginTop: `${1.5 * margin}rem` }} key={`para${index}`}>{para}</p>
   }
+
   renderMessage (template) {
     return templater.render({
       template: template || get(this.state, 'template', ''),
@@ -132,10 +145,11 @@ module.exports = class ComposePage extends React.Component {
       brify: (index) => <br key={`br${index}`} />
     })
   }
+
   onClickSend (event) {
     const sendEmail = (type) => {
       return {
-        action: 'postData',
+        name: 'postData',
         arguments: [
           {
             url: `/jobs/${get(this.props, 'job.slug')}/internal`,
@@ -149,22 +163,36 @@ module.exports = class ComposePage extends React.Component {
         ]
       }
     }
-
     event.preventDefault()
     this.props.dispatch(showDialog({
-      confirm: sendEmail('MAILGUN'),
-      confirmGmail: sendEmail('GMAIL'),
-      cancel: {
-        action: 'hideDialog'
-      }
+      options: [
+        {
+          title: 'Send via nudj',
+          action: sendEmail('MAILGUN'),
+          type: 'confirm'
+        },
+        {
+          title: 'Send via GMail',
+          action: sendEmail('GMAIL'),
+          type: 'confirm'
+        },
+        {
+          title: 'Cancel',
+          action: { name: 'hideDialog' },
+          type: 'cancel'
+        }
+      ]
     }))
   }
+
   renderSending () {
     return <div>Sending</div>
   }
+
   renderSuccess () {
     return <div>Success</div>
   }
+
   render () {
     const tooltip = get(this.props, 'tooltip')
     return (

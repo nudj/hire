@@ -14,11 +14,8 @@ module.exports = css({
     padding: `${variables.padding.d} 0 0 0`
   },
   dialogCloseButton: {},
-  dialogCancelButton: merge(mixins.buttonSecondary, {
+  cancelDialogButton: merge(mixins.buttonSecondary, {
     margin: `0 ${variables.padding.d} 0 0`
   }),
-  dialogConfirmButton: mixins.button,
-  dialogConfirmGmailButton: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`
-  })
+  confirmDialogButton: mixins.button
 })

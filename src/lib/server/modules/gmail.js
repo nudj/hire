@@ -1,10 +1,8 @@
-const { promiseMap } = require('@nudj/library')
 const get = require('lodash/get')
 const gmailer = require('../lib/gmailer')
 const logger = require('../../lib/logger')
 const templater = require('../../lib/templater')
 const conversations = require('./conversations')
-const externalMessages = require('./external-messages')
 const accounts = require('./accounts')
 const tags = require('../../lib/tags')
 
@@ -31,12 +29,6 @@ const sendGmailAndLogResponse = (email, accessToken) => {
 
 const saveConversationAndMarkAsSent = (data, conversation) => {
   return conversations.post(data, data.hirer.id, data.recipient.id, conversation, 'GMAIL')
-    .then(data => {
-      if (data.externalMessage) {
-        return externalMessages.patch(data, data.externalMessage.id, {sent: true})
-      }
-      return promiseMap(data)
-    })
 }
 
 const send = (data, person) => {
