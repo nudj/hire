@@ -9,15 +9,9 @@ const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../../lib/templater')
 const { merge } = require('@nudj/library')
 const Form = require('../form/form')
-const DialogConfirm = require('../dialog-confirm-send-internal/dialog-confirm-send-internal')
 const Tooltip = require('../tooltip/tooltip')
 const ComposeEmail = require('../compose-email/compose-email')
-const {
-  showDialog,
-  hideDialog,
-  postData,
-  showLoading
-} = require('../../actions/app')
+const { showDialog } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 const {
   survey: tags,
@@ -56,8 +50,6 @@ module.exports = class SurveyPage extends React.Component {
     this.pify = this.pify.bind(this)
     this.chunkify = this.chunkify.bind(this)
     this.onClickSend = this.onClickSend.bind(this)
-    this.onClickConfirm = this.onClickConfirm.bind(this)
-    this.onClickCancel = this.onClickCancel.bind(this)
     this.onBlurRecipients = this.onBlurRecipients.bind(this)
   }
   componentDidMount () {
@@ -154,24 +146,44 @@ module.exports = class SurveyPage extends React.Component {
       brify: (index) => <br key={`br${index}`} />
     })
   }
-  onClickConfirm () {
-    this.props.dispatch(showLoading())
-    this.props.dispatch(postData({
-      url: `/survey-page`,
-      data: {
-        recipients: get(this.state, 'recipients', ''),
-        subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
-        template: get(this.state, 'template', get(this.state, 'templateFallback', ''))
-      }
-    }))
-    this.props.dispatch(hideDialog())
-  }
-  onClickCancel () {
-    this.props.dispatch(hideDialog())
-  }
   onClickSend (event) {
+    const sendEmail = (type) => {
+      return {
+        name: 'postData',
+        arguments: [
+          {
+            url: `/survey-page`,
+            data: {
+              template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
+              subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
+              recipients: get(this.state, 'recipients', ''),
+              type
+            }
+          }
+        ]
+      }
+    }
     event.preventDefault()
-    this.props.dispatch(showDialog(<DialogConfirm {...this.props} onClickConfirm={this.onClickConfirm} onClickCancel={this.onClickCancel} />))
+    this.props.dispatch(showDialog({
+      options: [
+        {
+          type: 'cancel',
+          action: {
+            name: 'hideDialog'
+          }
+        },
+        {
+          title: 'Send via nudj',
+          type: 'confirm',
+          action: sendEmail('MAILGUN')
+        },
+        {
+          title: 'Send via Gmail',
+          type: 'confirm',
+          action: sendEmail('GMAIL')
+        }
+      ]
+    }))
   }
   renderSending () {
     return <div>Sending</div>

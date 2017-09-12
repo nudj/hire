@@ -10,6 +10,7 @@ const data = {
   recommendations: [],
   internalMessages: [],
   externalMessages: [],
+  surveyMessages: [],
   surveys: [],
   tasks: [],
   tokens: [],

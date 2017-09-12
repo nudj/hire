@@ -23,6 +23,7 @@ const network = require('../modules/network')
 const people = require('../modules/people')
 const surveys = require('../modules/surveys')
 const externalMessages = require('../modules/external-messages')
+const surveyMessages = require('../modules/survey-messages')
 const tasks = require('../modules/tasks')
 const tokens = require('../modules/tokens')
 const employeeSurveys = require('../modules/employee-surveys')
@@ -747,7 +748,7 @@ function surveyPageHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, subject, template, tags, survey) {
+function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, subject, template, type, survey) {
   const recipients = recipient
   const mailContent = {recipients, subject, template}
 
@@ -755,15 +756,16 @@ function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, s
   // Create employee relation for this person
   // Create token for `SURVEY_TYPEFORM_COMPLETE`
   // Append token to link
-  return people.getOrCreateByEmail({}, recipient)
+  return people.getOrCreateByEmail(mailContent, recipient)
     .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
     .then(data => employeeSurveys.post(data, data.employee.id, survey.id))
+    .then(data => network.getRecipient(data, data.employee.person))
     .then(data => {
       const tokenData = {
         employeeSurvey: data.newEmployeeSurvey.id
       }
-      const type = 'SURVEY_TYPEFORM_COMPLETE'
-      return tokens.post(data, type, tokenData)
+      const tokenType = 'SURVEY_TYPEFORM_COMPLETE'
+      return tokens.post(data, tokenType, tokenData)
     })
     .then(data => {
       const token = data.newToken
@@ -772,14 +774,19 @@ function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, s
       data.person = sender
       return promiseMap(data)
     })
-    .then(data => network.send(data, mailContent, tags))
+    .then(data => {
+      if (type === 'GMAIL') {
+        return gmail.send(data, data.person.id, tags.survey)
+      }
+      return network.send(data, mailContent, tags.survey)
+    })
 }
 
-function surveyCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, tags) {
+function surveyCreateAndMailUniqueLinkToRecipients (data, recipients, subject, template, type) {
   const company = data.company
   const survey = data.survey
 
-  const sendMessages = recipients.map(recipient => surveyCreateAndMailUniqueLinkToRecipient(data.person, recipient, company, subject, template, tags, survey))
+  const sendMessages = recipients.map(recipient => surveyCreateAndMailUniqueLinkToRecipient(data.person, recipient, company, subject, template, type, survey))
 
   data.messages = Promise.all(sendMessages)
     .then(messageResults => [].concat.apply([], messageResults || []))
@@ -787,15 +794,68 @@ function surveyCreateAndMailUniqueLinkToRecipients (data, recipients, subject, t
   return promiseMap(data)
 }
 
-function surveyPageSendHandler (req, res, next) {
+function sendSavedSurveyPageHandler (req, res, next) {
   const taskType = 'SEND_SURVEY_INTERNAL'
   const eventName = 'Survey sent'
-  const { subject, template } = req.body
-  const recipients = req.body.recipients.replace(' ', '').split(',')
 
   Promise.resolve(merge(req.session.data))
     .then(data => surveys.getSurveyForCompany(data))
-    .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, tags.survey))
+    .then(data => surveyMessages.getById(data, req.params.messageId))
+    .then(data => surveyMessages.getRecipientsEmailAdresses(data, data.surveyMessage.recipients))
+    .then(data => {
+      const { subject, message, type } = data.surveyMessage
+      if (data.surveyMessage.sent) {
+        req.session.notification = {
+          type: 'error',
+          message: 'You\'ve already sent this message.'
+        }
+        return res.redirect(`/survey-page`)
+      }
+      return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
+    })
+    .then(data => surveyMessages.patch(data, data.surveyMessage.id, {sent: true}))
+    .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
+    .then(data => {
+      if (data.messages && data.messages.length) {
+        // successful send
+        return intercom.logEvent({
+          event_name: eventName,
+          email: data.person.email,
+          metadata: {
+            category: 'onboarding'
+          }
+        }).then(() => {
+          req.session.notification = {
+            type: 'success',
+            message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
+          }
+          return res.redirect('/')
+        })
+      }
+      return fetchSurveyPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
+    .catch(getErrorHandler(req, res, next))
+}
+
+function surveyPageSendHandler (req, res, next) {
+  const taskType = 'SEND_SURVEY_INTERNAL'
+  const eventName = 'Survey sent'
+  const { subject, template, type } = req.body
+  const recipients = req.body.recipients.replace(/\s/g, '').split(',')
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => surveys.getSurveyForCompany(data))
+    .then(data => surveyMessages.populateRecipients(data, recipients))
+    .then(data => surveyMessages.post(data, data.hirer.id, data.survey.id, data.recipients, subject, template, type))
+    .then(data => {
+      req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
+      return promiseMap(data)
+    })
+    .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, type))
+    .then(data => surveyMessages.patch(data, data.surveyMessage.id, {sent: true}))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
       if (data.messages && data.messages.length) {
@@ -865,6 +925,7 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
+router.get('/survey-page/:messageId', sendSavedSurveyPageHandler)
 
 router.get('/jobs', ensureOnboarded, jobsHandler)
 
