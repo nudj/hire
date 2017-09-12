@@ -11,12 +11,7 @@ const { merge } = require('@nudj/library')
 const Form = require('../form/form')
 const Tooltip = require('../tooltip/tooltip')
 const ComposeEmail = require('../compose-email/compose-email')
-const {
-  showDialog,
-  hideDialog,
-  postData,
-  showLoading
-} = require('../../actions/app')
+const { showDialog } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
 const {
   survey: tags,

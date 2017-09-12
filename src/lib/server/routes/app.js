@@ -803,6 +803,9 @@ function sendSavedSurveyPageHandler (req, res, next) {
     .then(data => surveyMessages.getById(data, req.params.messageId))
     .then(data => {
       const { recipients, subject, message, type } = data.surveyMessage
+      if (data.surveyMessage.sent) {
+        return res.redirect(`/survey-page`)
+      }
       return surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, message, type)
     })
     .then(data => surveyMessages.patch(data, data.surveyMessage.id, {sent: true}))
