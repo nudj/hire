@@ -28,7 +28,7 @@ const sendGmailAndLogResponse = (email, accessToken) => {
 }
 
 const saveConversationAndMarkAsSent = (data, conversation) => {
-  return conversations.post(data, data.hirer.id, data.recipient.id, conversation, 'GMAIL')
+  return conversations.post(data, data.person.id, data.recipient.id, conversation, 'GMAIL')
 }
 
 const send = (data, person, tags) => {
