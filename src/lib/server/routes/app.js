@@ -801,12 +801,13 @@ function sendSavedSurveyPageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => surveys.getSurveyForCompany(data))
     .then(data => surveyMessages.getById(data, req.params.messageId))
+    .then(data => surveyMessages.getRecipientsEmailAdresses(data, data.surveyMessage.recipients))
     .then(data => {
-      const { recipients, subject, message, type } = data.surveyMessage
+      const { subject, message, type } = data.surveyMessage
       if (data.surveyMessage.sent) {
         return res.redirect(`/survey-page`)
       }
-      return surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, message, type)
+      return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
     })
     .then(data => surveyMessages.patch(data, data.surveyMessage.id, {sent: true}))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
@@ -843,7 +844,8 @@ function surveyPageSendHandler (req, res, next) {
 
   Promise.resolve(merge(req.session.data))
     .then(data => surveys.getSurveyForCompany(data))
-    .then(data => surveyMessages.post(data, data.hirer.id, recipients, subject, template, type))
+    .then(data => surveyMessages.populateRecipients(data, recipients))
+    .then(data => surveyMessages.post(data, data.hirer.id, data.survey.id, data.recipients, subject, template, type))
     .then(data => {
       req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
       return promiseMap(data)

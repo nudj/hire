@@ -167,6 +167,10 @@ module.exports = class ComposePage extends React.Component {
     this.props.dispatch(showDialog({
       options: [
         {
+          action: { name: 'hideDialog' },
+          type: 'cancel'
+        },
+        {
           title: 'Send via nudj',
           action: sendEmail('MAILGUN'),
           type: 'confirm'
@@ -175,11 +179,6 @@ module.exports = class ComposePage extends React.Component {
           title: 'Send via Gmail',
           action: sendEmail('GMAIL'),
           type: 'confirm'
-        },
-        {
-          title: 'Cancel',
-          action: { name: 'hideDialog' },
-          type: 'cancel'
         }
       ]
     }))
