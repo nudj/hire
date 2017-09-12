@@ -805,6 +805,10 @@ function sendSavedSurveyPageHandler (req, res, next) {
     .then(data => {
       const { subject, message, type } = data.surveyMessage
       if (data.surveyMessage.sent) {
+        req.session.notification = {
+          type: 'error',
+          message: 'You\'ve already sent this message.'
+        }
         return res.redirect(`/survey-page`)
       }
       return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)

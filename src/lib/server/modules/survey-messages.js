@@ -30,9 +30,9 @@ function fetchAllRecipients (recipients) {
 }
 
 function fetchEmailAdressesFromRecipients (recipients) {
-  return recipients.map(recipient => {
+  return Promise.all(recipients.map(recipient => {
     return people.get({}, recipient).then(result => result.person.email)
-  })
+  }))
 }
 
 module.exports.getById = function (data, id) {
@@ -56,6 +56,6 @@ module.exports.populateRecipients = function (data, recipients) {
 }
 
 module.exports.getRecipientsEmailAdresses = function (data, recipients) {
-  data.recipients = Promise.all(fetchEmailAdressesFromRecipients(recipients))
+  data.recipients = fetchEmailAdressesFromRecipients(recipients)
   return promiseMap(data)
 }
