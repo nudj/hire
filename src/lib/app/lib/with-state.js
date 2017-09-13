@@ -24,7 +24,7 @@ const PageWithState = (Page) => {
       case !!get(props, 'page.error'):
         page = (
           <Status code={get(props, 'page.error.code')}>
-            <ErrorPage {...props.page} />
+            <ErrorPage {...props.page.error} />
           </Status>
         )
         break
@@ -32,7 +32,7 @@ const PageWithState = (Page) => {
         page = <Loading />
         break
       default:
-        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} /></ScrollTop>
+        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} externalMessagePage={props.externalMessages} /></ScrollTop>
     }
     return page
   })

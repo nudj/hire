@@ -1,5 +1,8 @@
 const request = require('../../lib/request')
-const { promiseMap } = require('@nudj/library')
+const {
+  promiseMap,
+  toQs
+} = require('@nudj/library')
 
 function fetchPerson (person) {
   return request(`people/filter?id=${person}`)
@@ -24,6 +27,11 @@ module.exports.get = function (data, person) {
 module.exports.getByEmail = function (data, email) {
   data.person = fetchPersonByEmail(email)
   return promiseMap(data)
+}
+
+module.exports.getByFilters = function (filters) {
+  return request(`people/filter?${toQs(filters)}`)
+    .then(results => results.pop())
 }
 
 module.exports.getOrCreateByEmail = function (data, email) {

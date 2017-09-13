@@ -10,7 +10,7 @@ function renderMessage (content, data) {
   const jobSlug = get(data, 'job.slug', '')
   const referralId = get(data, 'referral.id', '')
 
-  const referralLink = `https://nudj.co/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const referralLink = `https://${get(data, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
 
   const options = {
     template: content,
@@ -57,13 +57,6 @@ function getComposeMessageBaseSubject (props) {
   return subject ? renderMessage(subject, props.pageData) : ''
 }
 
-function onSubmitSendMessage (url, onSubmitStep, sendMessage) {
-  if (url) {
-    window.open(url)
-  }
-  onSubmitStep(sendMessage)
-}
-
 const FormStepSend = (props) => {
   const recipient = encodeURIComponent(get(props, 'pageData.recipient.email', 'tech@nudj.com'))
   const defaultSubject = 'I need your help'
@@ -78,23 +71,23 @@ const FormStepSend = (props) => {
       link: emailLink,
       icon: 'mail-icons.png',
       title: 'Send it via your default email app',
-      text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
+      text: 'This will open your default mail client on your computer or device (for example, Mail app on Mac).',
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'EMAIL')
+        props.onSubmitStep('EMAIL', { url: event.currentTarget.href })
       }
     },
     {
       type: 'GMAIL',
       link: gmailLink,
       icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
-      title: 'Send it via Gmail',
-      text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
+      title: 'Sync and send it via Gmail',
+      text: 'Sync with your Gmail account to send the message from your personal address instantly.',
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
-        onSubmitSendMessage(event.currentTarget.href, props.onSubmitStep, 'GMAIL')
+        props.onSubmitStep('GMAIL', { url: event.currentTarget.href })
       }
     }
   ]

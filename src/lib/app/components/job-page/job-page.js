@@ -1,6 +1,5 @@
 const React = require('react')
-const { Redirect } = require('react-router')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 const { Helmet } = require('react-helmet')
@@ -130,15 +129,10 @@ function reduceSentComplete (accumulator, person) {
 const JobPage = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
-
   const sentComplete = get(props, 'sentComplete', [])
   const jobSlug = get(props, 'job.slug', '')
-  const jobLink = `https://nudj.co/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
+  const jobLink = `https://${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
   const nudjLink = `/jobs/${jobSlug}/nudj`
-
-  if (!sentComplete.length) {
-    return (<Redirect to={nudjLink} push />)
-  }
 
   // We only need one entry for each person
   const sent = sentComplete.length > 1 ? sentComplete.reduce(reduceSentComplete) : sentComplete

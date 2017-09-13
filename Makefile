@@ -11,6 +11,13 @@ build:
 		-f $(CWD)/Dockerfile.dev \
 		.
 
+buildLocal:
+	@docker build \
+		-t $(IMAGE):local \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
+		-f $(CWD)/Dockerfile \
+		.
+
 ssh:
 	-@docker rm -f hire-dev 2> /dev/null || true
 	@docker run --rm -it \
@@ -48,7 +55,8 @@ inject:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(HOME)/dev/nudj/api/src:/usr/src/api \
+		-v $(HOME)/dev/nudj/library/src:/usr/src/library \
+		-v $(HOME)/dev/nudj/react-router/packages/react-router-redux:/usr/src/react-router-redux \
 		$(IMAGEDEV) \
 		/bin/zsh
 

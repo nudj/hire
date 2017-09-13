@@ -22,11 +22,8 @@ module.exports = css({
     display: 'none'
   },
   dialog: merge(mixins.cardStyle, {
-    backgroundImage: mixins.linkImage('ok-hand.svg'),
-    backgroundPosition: 'calc(100% - 30px) bottom',
-    backgroundRepeat: 'no-repeat',
     cursor: 'auto',
-    padding: `${variables.padding.c} ${variables.padding.c} ${variables.padding.b} ${variables.padding.c}`,
+    padding: `${variables.padding.c}`,
     position: 'relative',
     width: variables.sizing.overlayDialogWidth
   }),

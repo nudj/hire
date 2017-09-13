@@ -11,11 +11,14 @@ module.exports = css({
   dialogText: mixins.typography.p,
   dialogButtons: {
     display: 'flex',
+    justifyContent: 'center',
     padding: `${variables.padding.d} 0 0 0`
   },
   dialogCloseButton: {},
-  dialogCancelButton: merge(mixins.buttonSecondary, {
-    margin: `0 ${variables.padding.d} 0 0`
+  cancelDialogButton: merge(mixins.buttonSecondary, {
+    margin: `${variables.padding.f}`
   }),
-  dialogConfirmButton: mixins.button
+  confirmDialogButton: merge(mixins.button, {
+    margin: `${variables.padding.f}`
+  })
 })

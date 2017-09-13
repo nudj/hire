@@ -1,5 +1,5 @@
 const React = require('react')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const get = require('lodash/get')
 const format = require('date-fns/format')
 const { Helmet } = require('react-helmet')
@@ -30,7 +30,7 @@ const JobsPage = (props) => {
               return (<RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
-                uri={`//nudj.co/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
+                uri={`//${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
                 details={[{
                   term: 'Location',
                   description: get(job, 'location')

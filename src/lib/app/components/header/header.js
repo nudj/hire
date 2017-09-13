@@ -1,13 +1,13 @@
 const React = require('react')
-const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const getStyle = require('./header.css')
+const Link = require('../link/link')
 
 const Header = (props) => {
   const style = getStyle()
 
   const incompleteTasksCount = get(props, 'tasksIncomplete', []).length
-  const tasksLink = incompleteTasksCount ? (<Link className={style.tasks} to={'/'}>Tasks<span className={style.alertCount}>{incompleteTasksCount}</span></Link>) : (<Link className={style.tasks} to={'/'}>Tasks</Link>)
+  const tasksLink = incompleteTasksCount ? (<Link className={style.tasks} to='/'>Tasks<span className={style.alertCount}>{incompleteTasksCount}</span></Link>) : (<Link className={style.tasks} to='/'>Tasks</Link>)
   const onboarded = get(props, 'company.onboarded', false)
 
   return (
@@ -18,13 +18,13 @@ const Header = (props) => {
         </Link>
         <ul className={style.menu}>
           <li className={style.menuItem}>{tasksLink}</li>
-          {onboarded ? <li className={style.menuItem}><Link className={style.jobs} to={'/jobs'}>Jobs</Link></li> : ''}
+          {onboarded ? <li className={style.menuItem}><Link className={style.jobs} to='/jobs'>Jobs</Link></li> : ''}
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>
       <div className={style.sub}>
         <ul className={style.menu}>
-          <li className={style.menuItem}><Link className={style.logout} to={'/logout'}>Log out</Link></li>
+          <li className={style.menuItem}><a className={style.logout} href='/logout'>Log out</a></li>
         </ul>
       </div>
     </nav>

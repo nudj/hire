@@ -1,6 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 
 const FormStep = require('../form-step/form-step')
 
@@ -15,7 +15,7 @@ const FormStepNext = (props) => {
     placeholder='Let us know what you’d like to do next.'
     content={() => (<div className={style.activeContainerCentered}>
       <p className={style.activeContainerTitle}>Congrats on sending your first message!<br /> What would you like to do next?</p>
-      <Link to={`/jobs/${jobSlug}`} className={style.nextStepDashboard}>View job</Link>
+      <Link to={`/jobs/${jobSlug}`} className={style.nextStepDashboard}>View job dashboard</Link>
       <Link to={`/jobs/${jobSlug}/external`} className={style.nextStepNudj}>Send another nudj</Link>
     </div>)}
   />

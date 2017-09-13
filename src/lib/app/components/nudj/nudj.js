@@ -1,5 +1,5 @@
 const React = require('react')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./nudj.css')
@@ -10,7 +10,7 @@ const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 const JobPage = (props) => {
   const style = getStyle()
   const tooltip = get(props, 'tooltip')
-  const jobLink = `https://nudj.co/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
+  const jobLink = `https://${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(props, 'job.slug')}`
 
   return (
     <div className={style.pageBody}>

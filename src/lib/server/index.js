@@ -17,6 +17,7 @@ let RedisStore = require('connect-redis')(session)
 
 let authRoutes = require('./routes/auth')
 let appRoutes = require('./routes/app')
+let googleAuthRoutes = require('./routes/google-oauth')
 
 let strategy = new Auth0Strategy({
   domain: process.env.AUTH0_DOMAIN,
@@ -46,7 +47,7 @@ if (process.env.NODE_ENV === 'production') {
     client: redis.createClient(6379, 'redis')
   })
 }
-if (process.env.USE_MOCKS) {
+if (process.env.USE_MOCKS === 'true') {
   // start mock api
   let mockApi = require('../../mocks/api')
   mockApi.listen(81, () => logger.log('info', 'Mock API running'))
@@ -76,6 +77,7 @@ app.use((req, res, next) => {
 })
 
 app.use(authRoutes)
+app.use(googleAuthRoutes)
 app.use(appRoutes)
 
 app.use((req, res) => {

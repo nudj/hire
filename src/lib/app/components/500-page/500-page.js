@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
+const Link = require('../link/link')
 const getStyle = require('./500-page.css')
 
 const ServerError = (props) => {

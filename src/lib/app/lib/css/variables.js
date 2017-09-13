@@ -22,7 +22,7 @@ module.exports.sizing = {
   fixedHeaderButtonSize: `${basePixelSize * 3.5}px`,
   fixedHeaderButtonIconSize: `${basePixelSize * 1.5}px`,
   genericBoxShadow: '0 0.5px 0.5px 0',
-  overlayDialogWidth: '500px',
+  overlayDialogWidth: '600px',
   sidebarWidth: '285px',
   squishedSidebarWidth: '160px',
   notificationTop: `${basePixelSize * 1.5}px`,
