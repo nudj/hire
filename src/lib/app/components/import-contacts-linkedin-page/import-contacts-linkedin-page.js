@@ -54,9 +54,9 @@ module.exports = class ComposePage extends React.Component {
 
   convertLinkedInToNudjPerson (person) {
     return {
-      email: get(person, 'EmailAddress', ''),
-      firstName: get(person, 'FirstName', ''),
-      lastName: get(person, 'LastName', ''),
+      email: get(person, 'Email Address', get(person, 'EmailAddress', '')),
+      firstName: get(person, 'First Name', get(person, 'FirstName', '')),
+      lastName: get(person, 'Last Name', get(person, 'LastName', '')),
       title: get(person, 'Position'),
       company: get(person, 'Company')
     }
