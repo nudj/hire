@@ -71,7 +71,7 @@ const FormStepSend = (props) => {
       link: emailLink,
       icon: 'mail-icons.png',
       title: 'Send it via your default email app',
-      text: 'This will open whatever you’ve set as the default mail client on your computer or device (for example, Mail on Mac).',
+      text: 'This will open your default mail client on your computer or device (for example, Mail app on Mac).',
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
@@ -82,8 +82,8 @@ const FormStepSend = (props) => {
       type: 'GMAIL',
       link: gmailLink,
       icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
-      title: 'Send it via Gmail',
-      text: 'This will open another window, for you to copy the message, so you can paste into the app of your choice.',
+      title: 'Sync and send it via Gmail',
+      text: 'Sync with your Gmail account to send the message from your personal address instantly.',
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
