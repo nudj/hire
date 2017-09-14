@@ -25,6 +25,10 @@ const sendGmailAndLogResponse = (email, accessToken) => {
       }
       return conversation
     })
+    .catch(error => {
+      logger.log('error', 'Error sending Gmail', error)
+      throw new Error('Unauthorized Google')
+    })
 }
 
 const saveConversationAndMarkAsSent = (data, conversation) => {
