@@ -1,5 +1,6 @@
-const Axios = require('axios')
+const axios = require('axios')
 const get = require('lodash/get')
+const { merge } = require('@nudj/library')
 
 let config = {
   baseURL: '/',
@@ -15,9 +16,9 @@ try {
 } catch (error) {
   console.log('Browser')
 }
-const axios = Axios.create(config)
 
-function request (uri, options) {
+function request (uri, options = {}) {
+  options = merge(config, options)
   return axios(uri, options)
     .then((response) => response.data)
     .catch((error) => {
@@ -30,7 +31,7 @@ function request (uri, options) {
             throw new Error('Unauthorized')
         }
       }
-      console.log('error', error.message, `request - ${config.baseURL}${uri}`, options)
+      console.log('error', error.message, `request - ${options.baseURL}${uri}`, options)
       throw new Error('Something went wrong')
     })
 }

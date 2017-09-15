@@ -7,7 +7,22 @@ const {
 
 function fetchAccessToken (provider, person) {
   return module.exports.getByFilters(person)
-    .then(account => get(account, `providers.${provider}.accessToken`))
+    .then(account => get(account, `providers.google.accessToken`))
+}
+
+function checkGoogleTokenValidity (token) {
+  return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
+    baseURL: 'https://www.googleapis.com/'
+  })
+    .catch(error => {
+      return { error } // Stored access token does not exist or is invalid
+    })
+}
+
+function verifyGoogleAccessToken (person) {
+  return fetchAccessToken(person)
+    .then(token => checkGoogleTokenValidity(token))
+    .then(response => !response.error)
 }
 
 module.exports.getByFilters = (filters) => {
@@ -16,7 +31,7 @@ module.exports.getByFilters = (filters) => {
 }
 
 module.exports.verifyGoogleAuthentication = (data, person) => {
-  data.googleAuthenticated = fetchAccessToken('google', person)
+  data.googleAuthenticated = verifyGoogleAccessToken(person)
   return promiseMap(data)
 }
 
