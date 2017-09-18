@@ -1,5 +1,6 @@
 const request = require('../../lib/request')
 const get = require('lodash/get')
+const logger = require('../../lib/logger')
 const {
   toQs,
   promiseMap
@@ -14,15 +15,18 @@ function checkGoogleTokenValidity (token) {
   return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
     baseURL: 'https://www.googleapis.com/'
   })
+    .then(response => {
+      return true
+    })
     .catch(error => {
-      return { error } // Stored access token does not exist or is invalid
+      logger.log('error', error)
+      return false // Stored access token does not exist or is invalid
     })
 }
 
 function verifyGoogleAccessToken (person) {
   return fetchAccessToken(person)
     .then(token => checkGoogleTokenValidity(token))
-    .then(response => !response.error)
 }
 
 module.exports.getByFilters = (filters) => {
