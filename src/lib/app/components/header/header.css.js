@@ -82,6 +82,12 @@ module.exports = css({
       backgroundImage: mixins.linkImage('candidates.svg')
     }
   }),
+  chat: merge(linkStyle, {
+    color: '#fff',
+    ':before': {
+      backgroundImage: mixins.linkImage('chat-round.svg')
+    }
+  }),
   help: merge(linkStyle, {
     color: '#fff',
     ':before': {
