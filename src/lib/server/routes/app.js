@@ -15,6 +15,7 @@ const tags = require('../../lib/tags')
 const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
+const accounts = require('../modules/accounts')
 const employees = require('../modules/employees')
 const hirers = require('../modules/hirers')
 const internalMessages = require('../modules/internal-messages')
@@ -424,6 +425,7 @@ function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recip
 
 function internalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -636,13 +638,20 @@ function patchExternalMessageHandler (req, res, next) {
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => network.getRecipient(data, recipient))
     .then(data => externalMessages.patch(data, messageId, externalMessage))
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
       if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
         return gmail.send(data, person, tags.external)
-          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
+          .then(data => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return externalMessages.patch(data, data.externalMessage.id, {sent: true})
+          })
       }
       return promiseMap(data)
     })
@@ -741,6 +750,7 @@ function fetchSurveyPrismicContent (data) {
 
 function surveyPageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(surveys.getSurveyForCompany)
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
