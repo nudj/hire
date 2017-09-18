@@ -20,7 +20,8 @@ const {
   showDialog,
   setActiveStep,
   setStepData,
-  hideConfirm
+  hideConfirm,
+  saveSendData
 } = actions
 const steps = [
   {
@@ -80,6 +81,9 @@ module.exports = class ComposePage extends React.Component {
     const stepName = step.name
     return (stepData, options = {}) => {
       if (step.confirm && step.confirm === stepData && !this.props.overlay) {
+        if (this.props.googleAuthenticated) {
+          return this.props.dispatch(saveSendData(stepName, stepData))
+        }
         return this.props.dispatch(showDialog({
           options: [
             {

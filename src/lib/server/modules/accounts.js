@@ -1,10 +1,44 @@
 const request = require('../../lib/request')
-const { toQs } = require('@nudj/library')
+const get = require('lodash/get')
+const logger = require('../../lib/logger')
+const {
+  toQs,
+  promiseMap
+} = require('@nudj/library')
+
+function fetchAccessToken (provider, person) {
+  return module.exports.getByFilters(person)
+    .then(account => get(account, `providers.google.accessToken`))
+}
+
+function checkGoogleTokenValidity (token) {
+  return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
+    baseURL: 'https://www.googleapis.com/'
+  })
+    .then(response => {
+      return true
+    })
+    .catch(error => {
+      logger.log('error', error)
+      return false // Stored access token does not exist or is invalid
+    })
+}
+
+function verifyGoogleAccessToken (person) {
+  return fetchAccessToken(person)
+    .then(token => checkGoogleTokenValidity(token))
+}
 
 module.exports.getByFilters = (filters) => {
   return request(`accounts/filter?${toQs(filters)}`)
     .then(results => results.pop())
 }
+
+module.exports.verifyGoogleAuthentication = (data, person) => {
+  data.googleAuthenticated = verifyGoogleAccessToken(person)
+  return promiseMap(data)
+}
+
 module.exports.createOrUpdate = (account) => {
   let response
   if (account.id) {

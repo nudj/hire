@@ -12,8 +12,11 @@ const { merge } = require('@nudj/library')
 const Form = require('../form/form')
 const Tooltip = require('../tooltip/tooltip')
 const ComposeEmail = require('../compose-email/compose-email')
-const { showDialog } = require('../../actions/app')
 const { emails: validators } = require('../../../lib/validators')
+const {
+  showDialog,
+  postData
+} = require('../../actions/app')
 const {
   internal: tags,
   getDataBuilderFor
@@ -147,38 +150,42 @@ module.exports = class ComposePage extends React.Component {
   }
 
   onClickSend (event) {
-    const sendEmail = (type) => {
+    const emailData = (type) => {
       return {
-        name: 'postData',
-        arguments: [
-          {
-            url: `/jobs/${get(this.props, 'job.slug')}/internal`,
-            data: {
-              template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
-              subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
-              recipients: get(this.state, 'recipients'),
-              type
-            }
-          }
-        ]
+        url: `/jobs/${get(this.props, 'job.slug')}/internal`,
+        data: {
+          template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
+          subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),
+          recipients: get(this.state, 'recipients'),
+          type
+        }
       }
     }
     event.preventDefault()
+    if (this.props.googleAuthenticated) {
+      return this.props.dispatch(postData(emailData('GMAIL')))
+    }
     this.props.dispatch(showDialog({
       options: [
         {
-          action: { name: 'hideDialog' },
-          type: 'cancel'
+          type: 'cancel',
+          action: { name: 'hideDialog' }
         },
         {
           title: 'Send via nudj',
-          action: sendEmail('MAILGUN'),
-          type: 'confirm'
+          type: 'confirm',
+          action: {
+            name: 'postData',
+            arguments: [emailData('MAILGUN')]
+          }
         },
         {
           title: 'Send via Gmail',
-          action: sendEmail('GMAIL'),
-          type: 'confirm'
+          type: 'confirm',
+          action: {
+            name: 'postData',
+            arguments: [emailData('GMAIL')]
+          }
         }
       ]
     }))
