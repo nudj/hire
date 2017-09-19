@@ -1,46 +1,43 @@
 const request = require('../../lib/request')
 const get = require('lodash/get')
-const gmailer = require('../lib/gmailer')
+const google = require('../lib/google')
 const logger = require('../../lib/logger')
 const {
   toQs,
   promiseMap
 } = require('@nudj/library')
 
-function fetchAccessToken (provider, person) {
-  return module.exports.getByFilters(person)
-    .then(account => get(account, `providers.google.accessToken`))
-}
-
-function checkGoogleTokenValidity (person, token) {
-  return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
-    baseURL: 'https://www.googleapis.com/'
-  })
-    .then(response => {
-      return true
+function verifyOrRefreshGoogleAuthenticationStatus (person) {
+  return getAccountByFilters(person)
+    .then(account => {
+      if (!get(account, 'providers.google.accessToken')) {
+        throw new Error('No access token')
+      }
+      return google.verifyOrRefreshAccessToken(person, account)
+        .then(accessToken => updateAccountAccessToken(account, accessToken))
+        .then(response => {
+          return true // User is successfully authorised with Google
+        })
     })
     .catch(error => {
-      logger.log('error', error)
-      return refreshGoogleAccessTokenAndVerify(person)
-    })
-}
-
-function refreshGoogleAccessTokenAndVerify (person) {
-  return module.exports.refreshGoogleAccessToken(person)
-    .then(response => {
-      return true // New valid accessToken has been set
-    })
-    .catch(error => {
-      logger.log('Google refresh token is invalid', error)
-      return removeStaleGoogleAccountTokensForPerson(person)
-        .then((account) => {
-          return false // Stale tokens have been removed and user has revoked Google authentication.
+      logger.log('Authentication error', error)
+      return removeStaleGoogleAccountForPerson(person)
+        .then(account => {
+          return false // User is not successfully authorised with Google
         })
     })
 }
 
-function removeStaleGoogleAccountTokensForPerson (person) {
-  return module.exports.getByFilters(person)
+function updateAccountAccessToken (account, accessToken) {
+  if (!get(account, 'providers.google')) {
+    throw new Error('No google account')
+  }
+  account.providers.google.accessToken = accessToken
+  return request(`accounts/${account.id}`, { method: 'patch', data: account })
+}
+
+function removeStaleGoogleAccountForPerson (person) {
+  return getAccountByFilters(person)
     .then(account => {
       if (account && get(account, 'providers.google')) {
         return request(`accounts/${account.id}`, { method: 'delete' })
@@ -49,36 +46,17 @@ function removeStaleGoogleAccountTokensForPerson (person) {
     })
 }
 
-function verifyOrRefreshGoogleAccessToken (person) {
-  return fetchAccessToken(person)
-    .then(token => checkGoogleTokenValidity(person, token))
+function getAccountByFilters (filters) {
+  return request(`accounts/filter?${toQs(filters)}`)
+  .then(results => results.pop())
 }
 
 module.exports.getByFilters = (filters) => {
-  return request(`accounts/filter?${toQs(filters)}`)
-    .then(results => results.pop())
+  return getAccountByFilters(filters)
 }
 
-module.exports.refreshGoogleAccessToken = (person) => {
-  return module.exports.getByFilters(person)
-    .then(account => {
-      const refreshToken = get(account, 'providers.google.refreshToken')
-      if (!refreshToken) {
-        throw new Error('No refresh token') // No refresh token has been stored or account was not found
-      }
-      return gmailer.getAccessTokenFromRefreshToken(refreshToken)
-        .then(accessToken => {
-          account.providers.google.accessToken = accessToken
-          return request(`accounts/${account.id}`, {
-            method: 'patch',
-            data: account
-          })
-        })
-    })
-}
-
-module.exports.verifyOrRefreshGoogleAuthentication = (data, person) => {
-  data.googleAuthenticated = verifyOrRefreshGoogleAccessToken(person)
+module.exports.verifyGoogleAuthentication = (data, person) => {
+  data.googleAuthenticated = verifyOrRefreshGoogleAuthenticationStatus(person)
   return promiseMap(data)
 }
 

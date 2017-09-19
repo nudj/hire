@@ -1,13 +1,37 @@
 const google = require('googleapis')
 const { Base64 } = require('js-base64')
+const get = require('lodash/get')
 const logger = require('../lib/logger')
+const request = require('../../lib/request')
 const { emailBuilder } = require('@nudj/library/server')
 
 const gmail = google.gmail('v1')
 const OAuth2 = google.auth.OAuth2
 const oauth2Client = new OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_AUTH_CALLBACK)
 
-module.exports.getAccessTokenFromRefreshToken = (refreshToken) => {
+const verifyOrRefreshAccessToken = (person, account) => {
+  const refreshToken = get(account, 'providers.google.refreshToken')
+  const accessToken = get(account, 'providers.google.accessToken')
+  return checkGoogleTokenValidity(person, accessToken, refreshToken)
+}
+
+const checkGoogleTokenValidity = (person, accessToken, refreshToken) => {
+  return request(`/oauth2/v1/tokeninfo?access_token=${accessToken}`, {
+    baseURL: 'https://www.googleapis.com/'
+  })
+    .then(response => {
+      return Promise.resolve(accessToken)
+    })
+    .catch(error => {
+      logger.log('error', error)
+      if (!refreshToken) {
+        return Promise.reject(error)
+      }
+      return getAccessTokenFromRefreshToken(refreshToken)
+    })
+}
+
+const getAccessTokenFromRefreshToken = (refreshToken) => {
   oauth2Client.setCredentials({
     refresh_token: refreshToken
   })
@@ -15,6 +39,7 @@ module.exports.getAccessTokenFromRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
     oauth2Client.refreshAccessToken((error, tokens) => {
       if (error) {
+        logger.log('Google authentication error', error)
         return reject(error)
       }
       resolve(tokens.access_token)
@@ -22,7 +47,7 @@ module.exports.getAccessTokenFromRefreshToken = (refreshToken) => {
   })
 }
 
-module.exports.send = (email, accessToken) => {
+const sendGmail = (email, accessToken) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
   oauth2Client.setCredentials({
@@ -44,4 +69,10 @@ module.exports.send = (email, accessToken) => {
       resolve(response)
     })
   })
+}
+
+module.exports = {
+  sendGmail,
+  getAccessTokenFromRefreshToken,
+  verifyOrRefreshAccessToken
 }
