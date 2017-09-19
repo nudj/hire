@@ -1,8 +1,8 @@
 const axios = require('axios')
 const get = require('lodash/get')
-const { merge } = require('@nudj/library')
 
-let config = {
+const shallowMerge = (...args) => Object.assign({}, ...args)
+const config = {
   baseURL: '/',
   headers: {
     'Accept': 'application/json',
@@ -18,7 +18,9 @@ try {
 }
 
 function request (uri, options = {}) {
-  options = merge(config, options)
+  options = shallowMerge(config, options, {
+    headers: shallowMerge(config.headers, options.headers)
+  })
   return axios(uri, options)
     .then((response) => response.data)
     .catch((error) => {
