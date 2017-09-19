@@ -21,14 +21,31 @@ function checkGoogleTokenValidity (person, token) {
     })
     .catch(error => {
       logger.log('error', error)
-      return module.exports.refreshGoogleAccessToken(person)
-        .then(response => {
-          return true
+      return refreshGoogleAccessTokenAndVerify(person)
+    })
+}
+
+function refreshGoogleAccessTokenAndVerify (person) {
+  return module.exports.refreshGoogleAccessToken(person)
+    .then(response => {
+      return true // New valid accessToken has been set
+    })
+    .catch(error => {
+      logger.log('Google refresh token is invalid', error)
+      return removeStaleGoogleAccountTokensForPerson(person)
+        .then((account) => {
+          return false // Stale tokens have been removed and user has revoked Google authentication.
         })
-        .catch(error => {
-          logger.log('Error with Google refresh token', error)
-          return false
-        })
+    })
+}
+
+function removeStaleGoogleAccountTokensForPerson (person) {
+  return module.exports.getByFilters(person)
+    .then(account => {
+      if (account && get(account, 'providers.google')) {
+        return request(`accounts/${account.id}`, { method: 'delete' })
+      }
+      return Promise.resolve(account)
     })
 }
 
