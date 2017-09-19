@@ -8,21 +8,23 @@ const {
 } = require('@nudj/library')
 
 function verifyOrRefreshGoogleAuthenticationStatus (person) {
-  return getAccountByFilters(person)
+  return getAccountByFilters({person})
     .then(account => {
       if (!get(account, 'providers.google.accessToken')) {
         throw new Error('No access token')
       }
-      return google.verifyOrRefreshAccessToken(person, account)
+      const accessToken = get(account, 'providers.google.accessToken')
+      const refreshToken = get(account, 'providers.google.refreshToken')
+      return google.verifyOrRefreshAccessToken(accessToken, refreshToken)
         .then(accessToken => updateAccountAccessToken(account, accessToken))
-        .then(response => {
+        .then(() => {
           return true // User is successfully authorised with Google
         })
     })
     .catch(error => {
       logger.log('Authentication error', error)
       return removeStaleGoogleAccountForPerson(person)
-        .then(account => {
+        .then(() => {
           return false // User is not successfully authorised with Google
         })
     })
@@ -37,12 +39,11 @@ function updateAccountAccessToken (account, accessToken) {
 }
 
 function removeStaleGoogleAccountForPerson (person) {
-  return getAccountByFilters(person)
+  return getAccountByFilters({person})
     .then(account => {
-      if (account && get(account, 'providers.google')) {
+      if (account) {
         return request(`accounts/${account.id}`, { method: 'delete' })
       }
-      return Promise.resolve(account)
     })
 }
 

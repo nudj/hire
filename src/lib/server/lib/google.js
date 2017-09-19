@@ -1,6 +1,5 @@
 const google = require('googleapis')
 const { Base64 } = require('js-base64')
-const get = require('lodash/get')
 const logger = require('../lib/logger')
 const request = require('../../lib/request')
 const { emailBuilder } = require('@nudj/library/server')
@@ -9,17 +8,11 @@ const gmail = google.gmail('v1')
 const OAuth2 = google.auth.OAuth2
 const oauth2Client = new OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_AUTH_CALLBACK)
 
-const verifyOrRefreshAccessToken = (person, account) => {
-  const refreshToken = get(account, 'providers.google.refreshToken')
-  const accessToken = get(account, 'providers.google.accessToken')
-  return checkGoogleTokenValidity(person, accessToken, refreshToken)
-}
-
-const checkGoogleTokenValidity = (person, accessToken, refreshToken) => {
+const verifyOrRefreshAccessToken = (accessToken, refreshToken) => {
   return request(`/oauth2/v1/tokeninfo?access_token=${accessToken}`, {
     baseURL: 'https://www.googleapis.com/'
   })
-    .then(response => {
+    .then(() => {
       return Promise.resolve(accessToken)
     })
     .catch(error => {
