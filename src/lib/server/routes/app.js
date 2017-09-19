@@ -425,7 +425,7 @@ function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recip
 
 function internalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
-    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
+    .then(data => accounts.verifyOrRefreshGoogleAuthentication(data, data.person.id))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
@@ -638,7 +638,11 @@ function patchExternalMessageHandler (req, res, next) {
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
+    .then(data => {
+      data.googleAuthenticated = true
+      return promiseMap(data)
+    })
+    .then(data => accounts.verifyOrRefreshGoogleAuthentication(data, data.person.id))
     .then(data => network.getRecipient(data, recipient))
     .then(data => externalMessages.patch(data, messageId, externalMessage))
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
@@ -750,7 +754,7 @@ function fetchSurveyPrismicContent (data) {
 
 function surveyPageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
-    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
+    .then(data => accounts.verifyOrRefreshGoogleAuthentication(data, data.person.id))
     .then(surveys.getSurveyForCompany)
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))

@@ -16,7 +16,19 @@ const getAccessTokenForPerson = (person) => {
     })
 }
 
-const sendGmailAndLogResponse = (email, accessToken) => {
+const refreshAccessTokenAndSend = (person, email) => {
+  return accounts.refreshGoogleAccessToken(person)
+    .then(account => {
+      const accessToken = get(account, 'providers.google.accessToken')
+      return sendGmailAndLogResponse(email, accessToken, person)
+    })
+    .catch(error => {
+      logger.log('error', error)
+      throw new Error('Unauthorized Google')
+    })
+}
+
+const sendGmailAndLogResponse = (email, accessToken, person) => {
   return gmailer.send(email, accessToken)
     .then(response => {
       logger.log('email response', response, email)
@@ -27,7 +39,7 @@ const sendGmailAndLogResponse = (email, accessToken) => {
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
-      throw new Error('Unauthorized Google')
+      return refreshAccessTokenAndSend(person, email)
     })
 }
 
@@ -55,7 +67,7 @@ const send = (data, person, tags) => {
   }
 
   return getAccessTokenForPerson(person)
-    .then(account => sendGmailAndLogResponse(email, account.accessToken))
+    .then(account => sendGmailAndLogResponse(email, account.accessToken, person))
     .then(conversation => saveConversationAndMarkAsSent(data, conversation))
 }
 

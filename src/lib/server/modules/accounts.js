@@ -1,5 +1,6 @@
 const request = require('../../lib/request')
 const get = require('lodash/get')
+const gmailer = require('../lib/gmailer')
 const logger = require('../../lib/logger')
 const {
   toQs,
@@ -11,7 +12,7 @@ function fetchAccessToken (provider, person) {
     .then(account => get(account, `providers.google.accessToken`))
 }
 
-function checkGoogleTokenValidity (token) {
+function checkGoogleTokenValidity (person, token) {
   return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
     baseURL: 'https://www.googleapis.com/'
   })
@@ -20,13 +21,20 @@ function checkGoogleTokenValidity (token) {
     })
     .catch(error => {
       logger.log('error', error)
-      return false // Stored access token does not exist or is invalid
+      return module.exports.refreshGoogleAccessToken(person)
+        .then(response => {
+          return true
+        })
+        .catch(error => {
+          logger.log('Error with Google refresh token', error)
+          return false
+        })
     })
 }
 
-function verifyGoogleAccessToken (person) {
+function verifyOrRefreshGoogleAccessToken (person) {
   return fetchAccessToken(person)
-    .then(token => checkGoogleTokenValidity(token))
+    .then(token => checkGoogleTokenValidity(person, token))
 }
 
 module.exports.getByFilters = (filters) => {
@@ -34,8 +42,26 @@ module.exports.getByFilters = (filters) => {
     .then(results => results.pop())
 }
 
-module.exports.verifyGoogleAuthentication = (data, person) => {
-  data.googleAuthenticated = verifyGoogleAccessToken(person)
+module.exports.refreshGoogleAccessToken = (person) => {
+  return module.exports.getByFilters(person)
+    .then(account => {
+      const refreshToken = get(account, 'providers.google.refreshToken')
+      if (!refreshToken) {
+        throw new Error('No refresh token') // No refresh token has been stored or account was not found
+      }
+      return gmailer.getAccessTokenFromRefreshToken(refreshToken)
+        .then(accessToken => {
+          account.providers.google.accessToken = accessToken
+          return request(`accounts/${account.id}`, {
+            method: 'patch',
+            data: account
+          })
+        })
+    })
+}
+
+module.exports.verifyOrRefreshGoogleAuthentication = (data, person) => {
+  data.googleAuthenticated = verifyOrRefreshGoogleAccessToken(person)
   return promiseMap(data)
 }
 

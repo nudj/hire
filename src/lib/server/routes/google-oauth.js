@@ -32,7 +32,7 @@ passport.use(new GoogleStrategy({
     {
       account: data => addProviderToAccountForPerson(
         'google',
-        { accessToken, email },
+        { accessToken, refreshToken, email },
         data.account,
         req.session.data.person
       )
@@ -46,7 +46,9 @@ router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/gmail.send'
-  ]
+  ],
+  accessType: 'offline',
+  approvalPrompt: 'force'
 }))
 
 router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/login' }), (req, res) => res.redirect(req.session.returnTo || '/'))

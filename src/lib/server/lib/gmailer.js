@@ -7,6 +7,21 @@ const gmail = google.gmail('v1')
 const OAuth2 = google.auth.OAuth2
 const oauth2Client = new OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_AUTH_CALLBACK)
 
+module.exports.getAccessTokenFromRefreshToken = (refreshToken) => {
+  oauth2Client.setCredentials({
+    refresh_token: refreshToken
+  })
+
+  return new Promise((resolve, reject) => {
+    oauth2Client.refreshAccessToken((error, tokens) => {
+      if (error) {
+        return reject(error)
+      }
+      resolve(tokens.access_token)
+    })
+  })
+}
+
 module.exports.send = (email, accessToken) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
