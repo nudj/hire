@@ -638,6 +638,10 @@ function patchExternalMessageHandler (req, res, next) {
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => {
+      data.googleAuthenticated = true
+      return promiseMap(data)
+    })
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => network.getRecipient(data, recipient))
     .then(data => externalMessages.patch(data, messageId, externalMessage))

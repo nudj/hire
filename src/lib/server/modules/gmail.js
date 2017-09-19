@@ -1,12 +1,12 @@
 const get = require('lodash/get')
-const gmailer = require('../lib/gmailer')
+const google = require('../lib/google')
 const logger = require('../../lib/logger')
 const templater = require('../../lib/templater')
 const conversations = require('./conversations')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
 
-const getAccessTokenForPerson = (person) => {
+const getAccountForPerson = (person) => {
   return accounts.getByFilters({ person })
     .then(account => {
       if (!account || !get(account, 'providers.google.accessToken')) {
@@ -16,8 +16,17 @@ const getAccessTokenForPerson = (person) => {
     })
 }
 
-const sendGmailAndLogResponse = (email, accessToken) => {
-  return gmailer.send(email, accessToken)
+const refreshAccessTokenAndSend = (email, refreshToken) => {
+  return google.getAccessTokenFromRefreshToken(refreshToken)
+    .then(accessToken => sendGmailAndLogResponse(email, accessToken, refreshToken))
+    .catch(error => {
+      logger.log('error', error)
+      throw new Error('Unauthorized Google')
+    })
+}
+
+const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
+  return google.sendGmail(email, accessToken)
     .then(response => {
       logger.log('email response', response, email)
       const conversation = {
@@ -27,7 +36,7 @@ const sendGmailAndLogResponse = (email, accessToken) => {
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
-      throw new Error('Unauthorized Google')
+      return refreshAccessTokenAndSend(email, refreshToken)
     })
 }
 
@@ -54,8 +63,8 @@ const send = (data, person, tags) => {
     to: get(data, 'recipient.email')
   }
 
-  return getAccessTokenForPerson(person)
-    .then(account => sendGmailAndLogResponse(email, account.accessToken))
+  return getAccountForPerson(person)
+    .then(account => sendGmailAndLogResponse(email, account.accessToken, account.refreshToken))
     .then(conversation => saveConversationAndMarkAsSent(data, conversation))
 }
 
