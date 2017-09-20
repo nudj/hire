@@ -51,6 +51,6 @@ router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
   approvalPrompt: 'force'
 }))
 
-router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/login' }), (req, res) => res.redirect(req.session.returnTo || '/'))
+router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/failure' }), (req, res) => res.redirect(req.session.returnTo || '/'))
 
 module.exports = router

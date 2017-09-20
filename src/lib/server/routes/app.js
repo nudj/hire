@@ -145,6 +145,7 @@ function getRenderer (req, res, next) {
   return (data) => {
     delete req.session.logout
     delete req.session.returnTo
+    delete req.session.returnFail
     if (req.xhr) {
       res.set('Cache-Control', 'no-store')
       return res.json(data)
@@ -477,6 +478,7 @@ function internalMessageSaveHandler (req, res, next) {
     .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template, type))
     .then(data => {
       req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.savedMessage.id}`
+      req.session.returnFail = `/jobs/${req.params.jobSlug}/internal/`
       return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
     })
     .then(data => {
@@ -638,10 +640,6 @@ function patchExternalMessageHandler (req, res, next) {
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => {
-      data.googleAuthenticated = true
-      return promiseMap(data)
-    })
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => network.getRecipient(data, recipient))
     .then(data => externalMessages.patch(data, messageId, externalMessage))
@@ -866,6 +864,7 @@ function surveyPageSendHandler (req, res, next) {
     .then(data => surveyMessages.post(data, data.hirer.id, data.survey.id, data.recipients, subject, template, type))
     .then(data => {
       req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
+      req.session.returnFail = `/survey-page`
       return promiseMap(data)
     })
     .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, type))
@@ -930,9 +929,21 @@ function ensureOnboarded (req, res, next) {
   return next()
 }
 
+function authenticationFailureHandler (req, res, next) {
+  req.session.notification = {
+    type: 'error',
+    message: 'Something went wrong during authentication.'
+  }
+  const failureRoute = req.session.returnFail
+  delete req.session.returnFail
+  res.redirect(failureRoute || '/')
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
+
+router.get('/failure', ensureOnboarded, authenticationFailureHandler)
 
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
