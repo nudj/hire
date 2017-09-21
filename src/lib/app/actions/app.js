@@ -42,7 +42,7 @@ function showDialog (actions) {
     actions
   }
 }
-module.exports.showDialog = () => quickDispatch(showDialog())
+module.exports.showDialog = (actions) => quickDispatch(showDialog(actions))
 
 const CONFIRM_STEP = 'CONFIRM_STEP'
 module.exports.CONFIRM_STEP = CONFIRM_STEP
@@ -224,7 +224,7 @@ function showNotification (notification) {
     notification
   }
 }
-module.exports.showNotification = () => quickDispatch(showNotification())
+module.exports.showNotification = (notification) => quickDispatch(showNotification(notification))
 
 const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION'
 module.exports.HIDE_NOTIFICATION = HIDE_NOTIFICATION
