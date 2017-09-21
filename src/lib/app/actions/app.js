@@ -11,6 +11,17 @@ function fetchedPage (data) {
     data
   }
 }
+module.exports.updatePage = (existingData) => {
+  const url = existingData.page.url.originalUrl
+  return (dispatch, getState) => {
+    const state = getState()
+    const data = merge(existingData, {
+      _csrf: state.page.csrfToken
+    })
+    request(url, {data})
+      .then(data => dispatch(fetchedPage(data)))
+  }
+}
 module.exports.setPage = (data) => {
   return (dispatch, getState) => {
     dispatch(fetchedPage(data))

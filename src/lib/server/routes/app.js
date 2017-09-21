@@ -896,6 +896,74 @@ function surveyPageSendHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function getOrCreateTokenByTokenData (tokenType, tokenData) {
+  return new Promise((resolve, reject) => {
+    tokens.getByData({}, tokenData)
+      .then(dataTemp => dataTemp.tokens.find(token => token.type === tokenType))
+      .then(token => {
+        if (token) {
+          return token
+        }
+        return tokens.post({}, tokenType, tokenData)
+          .then(dataTemp => dataTemp.newToken)
+      })
+      .then(token => resolve(token))
+      .catch(error => reject(error))
+  })
+}
+
+function getOrCreateEmployeeSurvey (employee, survey) {
+  return new Promise((resolve, reject) => {
+    employeeSurveys.getByEmployeeAndSurvey({}, employee, survey)
+      .then(tempData => {
+        if (tempData.employeeSurvey) {
+          return tempData.employeeSurvey
+        }
+        return employeeSurveys.post({}, employee, survey)
+          .then(tempData => tempData.newEmployeeSurvey)
+      })
+      .then(employeeSurvey => resolve(employeeSurvey))
+      .catch(error => reject(error))
+  })
+}
+
+function hirerSurveyHandler (req, res, next) {
+  const data = merge(req.session.data)
+
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['hirerSurvey']
+  }
+
+  employees.getOrCreateByPerson(data, data.person.id, data.company.id)
+    .then(data => surveys.getSurveyForCompany(data))
+    .then(data => {
+      data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)
+      return promiseMap(data)
+    })
+    .then(data => {
+      const tokenData = {
+        employeeSurvey: data.employeeSurvey.id
+      }
+      const tokenType = 'SURVEY_TYPEFORM_COMPLETE'
+      data.token = getOrCreateTokenByTokenData(tokenType, tokenData)
+      return promiseMap(data)
+    })
+    .then(data => {
+      const token = data.token
+      const link = `${data.survey.link}?token=${token.token}`
+      data.survey = merge({}, data.survey, {link})
+      return data
+    })
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function tasksListHander (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -940,6 +1008,8 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 router.get('/survey-page/:messageId', sendSavedSurveyPageHandler)
+
+router.get('/hirer-survey', hirerSurveyHandler)
 
 router.get('/jobs', ensureOnboarded, jobsHandler)
 

@@ -25,6 +25,13 @@ const shareJobs = {
   title: 'Share your jobs with network'
 }
 
+const hirerSurvey = {
+  action: 'Complete survey',
+  actionLink: '/hirer-survey',
+  text: 'Complete our bespoke survey to help you discover people worth asking in their networks.',
+  title: 'Survey?'
+}
+
 function renderTask (task, context) {
   const key = get(task, 'id', '')
   const type = get(task, 'type', '')
@@ -40,6 +47,9 @@ function renderTask (task, context) {
       break
     case 'SHARE_JOBS':
       content = shareJobs
+      break
+    case 'HIRER_SURVEY':
+      content = hirerSurvey
       break
     default:
   }
