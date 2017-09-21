@@ -23,6 +23,20 @@ const steps = [
   }
 ]
 
+function getActiveStep (externalMessage) {
+  let active = 0
+  if (externalMessage.sendMessage) {
+    active = 4
+  } else if (externalMessage.composeMessage) {
+    active = 3
+  } else if (externalMessage.selectStyle) {
+    active = 2
+  } else if (externalMessage.selectLength) {
+    active = 1
+  }
+  return active
+}
+
 const setActiveStep = (state, action) => {
   const force = action.force
   let active = state.active
@@ -67,9 +81,9 @@ const setStepData = (state, action) => {
 
 const saveStepData = (state, action) => {
   let active = isNil(state.active) ? 0 : state.active
+  delete state[action.stepName]
   return merge(state, {
-    active: active + 1,
-    [action.stepName]: action.stepData
+    active: active + 1
   })
 }
 
@@ -86,9 +100,11 @@ const actions = {
   hideConfirm
 }
 
-const externalMessagesReducer = data => (state = { active: data.page.active || 0 }, action) => {
-  const type = camelCase(action.type)
-  return actions[type] ? actions[type](state, action) : state
+const externalMessagesReducer = (data) => {
+  return (state = { active: data.app.externalMessage ? getActiveStep(data.app.externalMessage) : 0 }, action) => {
+    const type = camelCase(action.type)
+    return actions[type] ? actions[type](state, action) : state
+  }
 }
 
 module.exports = {

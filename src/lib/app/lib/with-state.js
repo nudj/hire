@@ -13,7 +13,7 @@ const withState = (callback) => {
 
 const WithState = (Component) => {
   return withState((props) => {
-    return <Component dispatch={props.dispatch} {...props.page} />
+    return <Component dispatch={props.dispatch} {...props.app} />
   })
 }
 
@@ -21,18 +21,18 @@ const PageWithState = (Page) => {
   return withState((props) => {
     let page
     switch (true) {
-      case !!get(props, 'page.error'):
+      case !!get(props, 'app.error'):
         page = (
-          <Status code={get(props, 'page.error.code')}>
-            <ErrorPage {...props.page.error} />
+          <Status code={get(props, 'app.error.code')}>
+            <ErrorPage {...props.app.error} />
           </Status>
         )
         break
-      case !!get(props, 'page.loading'):
+      case !!get(props, 'app.loading'):
         page = <Loading />
         break
       default:
-        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.page} externalMessagePage={props.externalMessages} /></ScrollTop>
+        page = <ScrollTop ignore={props.history.action === 'REPLACE'}><Page dispatch={props.dispatch} {...props.app} page={props.page} /></ScrollTop>
     }
     return page
   })

@@ -90,7 +90,7 @@ function getRenderDataBuilder (req) {
     data.tasksIncomplete = tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id)
 
     return promiseMap({
-      page: promiseMap(data)
+      app: promiseMap(data)
     })
   }
 }
@@ -592,20 +592,6 @@ function getExternalMessageHandler (req, res, next) {
       return promiseMap(data)
     })
     .then(fetchExternalPrismicContent)
-    .then(data => {
-      let active = 0
-      if (data.externalMessage.sendMessage) {
-        active = 4
-      } else if (data.externalMessage.composeMessage) {
-        active = 3
-      } else if (data.externalMessage.selectStyle) {
-        active = 2
-      } else if (data.externalMessage.selectLength) {
-        active = 1
-      }
-      data.active = active
-      return promiseMap(data)
-    })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))

@@ -126,15 +126,15 @@ function saveStepData (stepName, stepData) {
 module.exports.saveStepData = (stepName, stepData) => {
   return (dispatch, getState) => {
     const state = getState()
-    const messageId = get(state, 'page.externalMessage.id')
-    let url = `/jobs/${get(state, 'page.job.slug')}/external/${get(state, 'page.recipient.id')}`
+    const messageId = get(state, 'app.externalMessage.id')
+    let url = `/jobs/${get(state, 'app.job.slug')}/external/${get(state, 'app.recipient.id')}`
     let method = 'post'
     const {
       selectLength,
       selectStyle,
       composeMessage,
       sendMessage
-    } = state.externalMessages
+    } = state.page
 
     if (messageId) {
       url = `${url}/${messageId}`
@@ -224,13 +224,13 @@ module.exports.postData = ({
     request(url, {
       method,
       data: merge(data, {
-        _csrf: state.page.csrfToken
+        _csrf: state.app.csrfToken
       })
     })
     .then((data) => {
       dispatch(fetchedPage(data))
-      if (data.page.url.originalUrl !== url) {
-        dispatch(push(data.page.url.originalUrl))
+      if (data.app.url.originalUrl !== url) {
+        dispatch(push(data.app.url.originalUrl))
       }
     })
     .catch((error) => {
@@ -263,7 +263,7 @@ module.exports.postFile = ({
 
   return (dispatch, getState) => {
     const state = getState()
-    formData.append('_csrf', state.page.csrfToken)
+    formData.append('_csrf', state.app.csrfToken)
 
     dispatch(showLoading())
     request(url, {
@@ -272,8 +272,8 @@ module.exports.postFile = ({
     })
     .then((data) => {
       dispatch(fetchedPage(data))
-      if (data.page.url.originalUrl !== url) {
-        dispatch(push(data.page.url.originalUrl))
+      if (data.app.url.originalUrl !== url) {
+        dispatch(push(data.app.url.originalUrl))
       }
     })
   }

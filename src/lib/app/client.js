@@ -19,8 +19,8 @@ const thunkMiddleware = require('redux-thunk').default
 const { StyleSheet } = require('aphrodite/no-important')
 
 const App = require('./components/index')
+const { appReducer } = require('./reducers/app')
 const { pageReducer } = require('./reducers/page')
-const { externalMessagesReducer } = require('./reducers/external-messages')
 const {
   setPage,
   showLoading,
@@ -33,8 +33,8 @@ const historyMiddleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
     router: routerReducer,
-    page: pageReducer,
-    externalMessages: externalMessagesReducer(data)
+    app: appReducer,
+    page: pageReducer(data)
   }),
   data,
   applyMiddleware(thunkMiddleware, historyMiddleware)
@@ -50,8 +50,8 @@ function fetchData (location, hash, dispatch) {
           dispatch(setPage(data))
         }
         // if the url inside the data does not match the original request it means a redirect has been followed by the browser so the url needs to be updated to match
-        if (data.page.url.originalUrl !== window.location.pathname) {
-          dispatch(replace(data.page.url.originalUrl))
+        if (data.app.url.originalUrl !== window.location.pathname) {
+          dispatch(replace(data.app.url.originalUrl))
         }
       }
     })

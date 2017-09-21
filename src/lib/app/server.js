@@ -7,14 +7,14 @@ let { Helmet } = require('react-helmet')
 let { StyleSheetServer } = require('aphrodite/no-important')
 let thunkMiddleware = require('redux-thunk').default
 
+let { appReducer } = require('./reducers/app')
 let { pageReducer } = require('./reducers/page')
-let { externalMessagesReducer } = require('./reducers/external-messages')
 
 module.exports = (data) => {
   const store = createStore(
     combineReducers({
-      page: pageReducer,
-      externalMessages: externalMessagesReducer(data)
+      app: appReducer,
+      page: pageReducer(data)
     }),
     data,
     applyMiddleware(thunkMiddleware)
@@ -25,7 +25,7 @@ module.exports = (data) => {
     return ReactDOMServer.renderToString(
       <Provider store={store}>
         <StaticRouter
-          location={data.page.url.originalUrl}
+          location={data.app.url.originalUrl}
           context={context}
         >
           <App />
