@@ -19,7 +19,7 @@ module.exports = class ComposePage extends React.Component {
     this.state = {tooltips}
   }
 
-  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index}) {
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url}) {
     const personId = get(person, 'id', '')
     const firstName = get(person, 'firstName', '')
     const lastName = get(person, 'lastName', '')
@@ -37,7 +37,7 @@ module.exports = class ComposePage extends React.Component {
         description: company
       }]}
       actions={[
-        <Link className={buttonClass} to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
+        <Link className={buttonClass} to={url}>{buttonLabel}</Link>
       ]}
     />)
   }
@@ -56,6 +56,7 @@ module.exports = class ComposePage extends React.Component {
     return (<ul className={this.style.network}>
       {network.map((person, index) => {
         const personId = get(person, 'id')
+        const url = `/jobs/${jobSlug}/external/${personId}`
         let buttonLabel = 'Nudj'
         let buttonClass = this.style.nudjButton
 
@@ -66,7 +67,7 @@ module.exports = class ComposePage extends React.Component {
           buttonClass = this.style.continueButton
         }
 
-        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index})
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url})
       })}
     </ul>)
   }

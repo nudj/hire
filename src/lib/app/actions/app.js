@@ -2,6 +2,9 @@ const { push } = require('@nudj/react-router-redux')
 const request = require('../../lib/request')
 const { merge } = require('@nudj/library')
 const get = require('lodash/get')
+const isNil = require('lodash/isNil')
+
+const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
 
 const FETCHED_PAGE = 'FETCHED_PAGE'
 module.exports.FETCHED_PAGE = FETCHED_PAGE
@@ -11,11 +14,7 @@ function fetchedPage (data) {
     data
   }
 }
-module.exports.setPage = (data) => {
-  return (dispatch, getState) => {
-    dispatch(fetchedPage(data))
-  }
-}
+module.exports.setPage = (data) => quickDispatch(fetchedPage(data))
 
 const SHOW_ERROR = 'SHOW_ERROR'
 module.exports.SHOW_ERROR = SHOW_ERROR
@@ -24,11 +23,7 @@ function showError () {
     type: SHOW_ERROR
   }
 }
-module.exports.showError = () => {
-  return (dispatch, getState) => {
-    dispatch(showError())
-  }
-}
+module.exports.showError = () => quickDispatch(showError())
 
 const SHOW_LOADING = 'SHOW_LOADING'
 module.exports.SHOW_LOADING = SHOW_LOADING
@@ -37,11 +32,7 @@ function showLoading () {
     type: SHOW_LOADING
   }
 }
-module.exports.showLoading = () => {
-  return (dispatch, getState) => {
-    dispatch(showLoading())
-  }
-}
+module.exports.showLoading = () => quickDispatch(showLoading())
 
 const SHOW_DIALOG = 'SHOW_DIALOG'
 module.exports.SHOW_DIALOG = SHOW_DIALOG
@@ -51,11 +42,7 @@ function showDialog (actions) {
     actions
   }
 }
-module.exports.showDialog = (actions) => {
-  return (dispatch, getState) => {
-    dispatch(showDialog(actions))
-  }
-}
+module.exports.showDialog = () => quickDispatch(showDialog())
 
 const CONFIRM_STEP = 'CONFIRM_STEP'
 module.exports.CONFIRM_STEP = CONFIRM_STEP
@@ -64,25 +51,84 @@ function confirmStep () {
     type: CONFIRM_STEP
   }
 }
-module.exports.confirmStep = () => {
-  return (dispatch, getState) => {
-    dispatch(confirmStep())
-  }
-}
+module.exports.confirmStep = () => quickDispatch(confirmStep())
 
+const steps = [
+  {
+    name: 'selectLength',
+    resets: 'composeMessage'
+  },
+  {
+    name: 'selectStyle',
+    resets: 'composeMessage'
+  },
+  {
+    name: 'composeMessage'
+  },
+  {
+    name: 'sendMessage',
+    confirm: 'GMAIL'
+  },
+  {
+    name: 'nextSteps'
+  }
+]
+const getActiveStep = (externalMessage) => {
+  let active = 0
+  if (externalMessage.sendMessage) {
+    active = 4
+  } else if (externalMessage.composeMessage) {
+    active = 3
+  } else if (externalMessage.selectStyle) {
+    active = 2
+  } else if (externalMessage.selectLength) {
+    active = 1
+  }
+  return active
+}
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
-function setActiveStep (requestedStep, currentMessage, force) {
+function setActiveStep (active, confirm, resets) {
   return {
     type: SET_ACTIVE_STEP,
-    requestedStep,
-    currentMessage,
-    force
+    active,
+    confirm,
+    resets
   }
 }
 module.exports.setActiveStep = (requestedStep, currentMessage, force) => {
   return (dispatch, getState) => {
-    dispatch(setActiveStep(requestedStep, currentMessage, force))
+    const state = getState()
+    let active = get(state, 'externalMessagePage.active')
+    if (isNil(active)) {
+      active = getActiveStep(get(state, 'app.externalMessage', {}))
+    }
+    let index = requestedStep
+    let resets = {}
+    const step = steps[index]
+    if (active < 4) { // only allow skipping through steps before sending
+      let confirm = null
+      if (force) { // skip the confirm dialog
+        active = index
+        resets[step.resets] = null // reset steps which depend on this step
+      } else {
+        if (index < active) { // only allow visited steps to be jumped to
+          if (step.resets && !!currentMessage[step.resets]) {
+            confirm = index // show confirm if step has dependents
+          } else {
+            active = index
+          }
+        } else if (
+          // future steps that have been completed
+          (index > active && !!currentMessage[step.name]) ||
+          // TODO: not sure what this is checking for...
+          (steps[index - 1] && !!currentMessage[steps[index - 1].name])
+        ) {
+          active = index
+        }
+      }
+      dispatch(setActiveStep(active, confirm, resets))
+    }
   }
 }
 
@@ -93,11 +139,7 @@ function hideConfirm () {
     type: HIDE_CONFIRM
   }
 }
-module.exports.hideConfirm = () => {
-  return (dispatch, getState) => {
-    dispatch(hideConfirm())
-  }
-}
+module.exports.hideConfirm = () => quickDispatch(hideConfirm())
 
 const SET_STEP_DATA = 'SET_STEP_DATA'
 module.exports.SET_STEP_DATA = SET_STEP_DATA
@@ -108,11 +150,7 @@ function setStepData (stepName, stepData) {
     stepData
   }
 }
-module.exports.setStepData = (stepName, stepData) => {
-  return (dispatch, getState) => {
-    dispatch(setStepData(stepName, stepData))
-  }
-}
+module.exports.setStepData = (stepName, stepData) => quickDispatch(setStepData(stepName, stepData))
 
 const SAVE_STEP_DATA = 'SAVE_STEP_DATA'
 module.exports.SAVE_STEP_DATA = SAVE_STEP_DATA
@@ -134,7 +172,7 @@ module.exports.saveStepData = (stepName, stepData) => {
       selectStyle,
       composeMessage,
       sendMessage
-    } = state.page
+    } = state.externalMessagePage
 
     if (messageId) {
       url = `${url}/${messageId}`
@@ -167,11 +205,7 @@ function externalMessageConfirm () {
     type: EXTERNAL_MESSAGE_CONFIRM
   }
 }
-module.exports.externalMessageConfirm = () => {
-  return (dispatch, getState) => {
-    dispatch(externalMessageConfirm())
-  }
-}
+module.exports.externalMessageConfirm = () => quickDispatch(externalMessageConfirm())
 
 const HIDE_DIALOG = 'HIDE_DIALOG'
 module.exports.HIDE_DIALOG = HIDE_DIALOG
@@ -180,11 +214,7 @@ function hideDialog () {
     type: HIDE_DIALOG
   }
 }
-module.exports.hideDialog = () => {
-  return (dispatch, getState) => {
-    dispatch(hideDialog())
-  }
-}
+module.exports.hideDialog = () => quickDispatch(hideDialog())
 
 const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 module.exports.SHOW_NOTIFICATION = SHOW_NOTIFICATION
@@ -194,11 +224,7 @@ function showNotification (notification) {
     notification
   }
 }
-module.exports.showNotification = (notification) => {
-  return (dispatch, getState) => {
-    dispatch(showNotification(notification))
-  }
-}
+module.exports.showNotification = () => quickDispatch(showNotification())
 
 const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION'
 module.exports.HIDE_NOTIFICATION = HIDE_NOTIFICATION
@@ -207,11 +233,7 @@ function hideNotification () {
     type: HIDE_NOTIFICATION
   }
 }
-module.exports.hideNotification = () => {
-  return (dispatch, getState) => {
-    dispatch(hideNotification())
-  }
-}
+module.exports.hideNotification = () => quickDispatch(hideNotification())
 
 module.exports.postData = ({
   url,
@@ -219,7 +241,7 @@ module.exports.postData = ({
   data
 }) => {
   return (dispatch, getState) => {
-    let state = getState()
+    const state = getState()
     dispatch(showLoading())
     request(url, {
       method,

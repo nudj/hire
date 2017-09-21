@@ -1,76 +1,20 @@
 const camelCase = require('lodash/camelCase')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
+const RouteParser = require('route-parser')
 
-const steps = [
-  {
-    name: 'selectLength',
-    resets: 'composeMessage'
-  },
-  {
-    name: 'selectStyle',
-    resets: 'composeMessage'
-  },
-  {
-    name: 'composeMessage'
-  },
-  {
-    name: 'sendMessage',
-    confirm: 'GMAIL'
-  },
-  {
-    name: 'nextSteps'
-  }
-]
-
-function getActiveStep (externalMessage) {
-  let active = 0
-  if (externalMessage.sendMessage) {
-    active = 4
-  } else if (externalMessage.composeMessage) {
-    active = 3
-  } else if (externalMessage.selectStyle) {
-    active = 2
-  } else if (externalMessage.selectLength) {
-    active = 1
-  }
-  return active
-}
+const savedExternalMessageRoute = new RouteParser('/jobs/:jobSlug/external/:recipientId/:messageId')
 
 const setActiveStep = (state, action) => {
-  const force = action.force
-  let active = state.active
-  let index = action.requestedStep
-  let currentMessage = action.currentMessage
-  let resets = {}
-  const step = steps[index]
-  if (active < 4) { // only allow skipping through steps before sending
-    let confirm = null
-    if (force) { // skip the confirm dialog
-      active = index
-      resets[step.resets] = null // reset steps which depend on this step
-    } else {
-      if (index < active) { // only allow visited steps to be jumped to
-        if (step.resets && !!currentMessage[step.resets]) {
-          confirm = index // show confirm if step has dependents
-        } else {
-          active = index
-        }
-      } else if (
-        // future steps that have been completed
-        (index > active && !!currentMessage[step.name]) ||
-        // TODO: not sure what this is checking for...
-        (steps[index - 1] && !!currentMessage[steps[index - 1].name])
-      ) {
-        active = index
-      }
-    }
-    return merge(state, {
-      active,
-      confirm
-    }, resets)
-  }
-  return state
+  const {
+    active,
+    confirm,
+    resets
+  } = action
+  return merge(state, {
+    active,
+    confirm
+  }, resets)
 }
 
 const setStepData = (state, action) => {
@@ -80,11 +24,11 @@ const setStepData = (state, action) => {
 }
 
 const saveStepData = (state, action) => {
-  let active = isNil(state.active) ? 0 : state.active
+  if (!isNil(state.active)) {
+    state.active = state.active + 1
+  }
   delete state[action.stepName]
-  return merge(state, {
-    active: active + 1
-  })
+  return state
 }
 
 const hideConfirm = (state, action) => {
@@ -93,15 +37,28 @@ const hideConfirm = (state, action) => {
   })
 }
 
+const routerLocationChange = (state, action) => {
+  if (savedExternalMessageRoute.match(action.payload.pathname)) {
+    return state
+  }
+  return { active: null }
+}
+
 const actions = {
   setActiveStep,
   setStepData,
   saveStepData,
-  hideConfirm
+  hideConfirm,
+  routerLocationChange
+}
+
+const initialState = {
+  active: null,
+  confirm: null
 }
 
 const externalMessagesReducer = (data) => {
-  return (state = { active: data.app.externalMessage ? getActiveStep(data.app.externalMessage) : 0 }, action) => {
+  return (state = initialState, action) => {
     const type = camelCase(action.type)
     return actions[type] ? actions[type](state, action) : state
   }

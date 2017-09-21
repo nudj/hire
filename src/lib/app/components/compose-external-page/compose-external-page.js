@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const pick = require('lodash/pick')
+const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 
 const Link = require('../link/link')
@@ -50,6 +51,20 @@ const steps = [
   }
 ]
 
+const getActiveStep = (externalMessage) => {
+  let active = 0
+  if (externalMessage.sendMessage) {
+    active = 4
+  } else if (externalMessage.composeMessage) {
+    active = 3
+  } else if (externalMessage.selectStyle) {
+    active = 2
+  } else if (externalMessage.selectLength) {
+    active = 1
+  }
+  return active
+}
+
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
     super(props)
@@ -63,7 +78,10 @@ module.exports = class ComposePage extends React.Component {
 
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
-    const active = this.props.page.active
+    let active = get(this.props, 'externalMessagePage.active')
+    if (isNil(active)) {
+      active = getActiveStep(get(this.props, 'externalMessage', {}))
+    }
     const activeName = steps[active].name
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
@@ -107,7 +125,7 @@ module.exports = class ComposePage extends React.Component {
   }
 
   onClickStep (requestedStep) {
-    const currentMessage = merge(get(this.props, 'externalMessage', {}), pick(this.props.page, steps.map(step => step.name)))
+    const currentMessage = merge(get(this.props, 'externalMessage', {}), pick(this.props.externalMessagePage, steps.map(step => step.name)))
     return event => {
       this.props.dispatch(setActiveStep(requestedStep, currentMessage))
     }
@@ -115,8 +133,8 @@ module.exports = class ComposePage extends React.Component {
 
   onClickConfirm (event) {
     event.stopPropagation()
-    const currentMessage = merge(this.props.externalMessage, pick(this.props.page, steps.map(step => step.name)))
-    this.props.dispatch(setActiveStep(this.props.page.confirm, currentMessage, true))
+    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentMessage, true))
   }
 
   onClickCancel (event) {
@@ -140,7 +158,10 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
-    const active = this.props.page.active
+    let active = get(this.props, 'externalMessagePage.active')
+    if (isNil(active)) {
+      active = getActiveStep(get(this.props, 'externalMessage', {}))
+    }
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>
@@ -166,13 +187,13 @@ module.exports = class ComposePage extends React.Component {
                   isActive={active === index}
                   index={index + 1}
                   {...this.props.externalMessage}
-                  {...this.props.page}
+                  {...this.props.externalMessagePage}
                   onSubmitStep={this.onSubmitStep(step)}
                   onChangeStep={this.onChangeStep(step)}
                   messages={get(this.props, 'messages', [])}
                   pageData={this.props}
                   onClick={this.onClickStep(index)}
-                  confirm={this.props.page.confirm === index && this.renderConfirm()}
+                  confirm={this.props.externalMessagePage.confirm === index && this.renderConfirm()}
                   canSkipTo={canSkipTo}
                 />
               </div>
