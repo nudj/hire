@@ -1,6 +1,7 @@
 const express = require('express')
 const get = require('lodash/get')
 const find = require('lodash/find')
+const createHash = require('hash-generator')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
 const {
@@ -146,6 +147,7 @@ function getRenderer (req, res, next) {
     delete req.session.logout
     delete req.session.returnTo
     delete req.session.returnFail
+    delete req.session.gmailSecret
     if (req.xhr) {
       res.set('Cache-Control', 'no-store')
       return res.json(data)
@@ -154,8 +156,8 @@ function getRenderer (req, res, next) {
     if (staticContext.url) {
       res.redirect(staticContext.url)
     } else {
-      let status = get(data, 'page.error.code', staticContext.status || 200)
-      let person = get(data, 'page.person')
+      let status = get(data, 'app.error.code', staticContext.status || 200)
+      let person = get(data, 'app.person')
       res.status(status).render('app', {
         data: JSON.stringify(data),
         css: staticContext.css,
@@ -575,15 +577,17 @@ function newExternalMessageHandler (req, res, next) {
 function getExternalMessageHandler (req, res, next) {
   const person = get(req, 'session.data.person.id')
   const recipient = req.params.recipientId
+  const gmailSent = req.query.gmail && req.query.gmail === req.session.gmailSecret
 
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.getRecipient(data, recipient))
     .then(data => getExternalMessageProperties(data, req.params.messageId))
     .then(data => {
-      if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
+      if (!data.externalMessage.sendMessage && gmailSent) {
+        delete req.session.gmailSecret
         return gmail.send(data, person, tags.external)
-          .then(data => externalMessages.patch(data, data.externalMessage.id, {sent: true}))
+          .then(data => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL' }))
       }
       return promiseMap(data)
     })
@@ -635,7 +639,7 @@ function patchExternalMessageHandler (req, res, next) {
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
   const messageId = req.params.messageId
-  const externalMessage = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
+  const externalMessage = {recipient, composeMessage, selectStyle, selectLength}
   const person = get(req, 'session.data.person.id')
 
   Promise.resolve(merge(req.session.data))
@@ -645,17 +649,20 @@ function patchExternalMessageHandler (req, res, next) {
     .then(data => externalMessages.patch(data, messageId, externalMessage))
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
-      if (data.externalMessage.sendMessage === 'GMAIL' && !data.externalMessage.sent) {
+      if (sendMessage === 'GMAIL' && !data.externalMessage.sendMessage) {
+        req.session.gmailSecret = createHash(8)
+        req.session.returnFail = `/jobs/${data.job.slug}/external/${recipient}/${data.externalMessage.id}`
+        req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, person, tags.external)
           .then(data => {
             req.session.notification = {
               type: 'success',
               message: 'That’s the way, aha aha, I like it! 🎉'
             }
-            return externalMessages.patch(data, data.externalMessage.id, {sent: true})
+            return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
           })
       }
-      return promiseMap(data)
+      return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
     })
     .then(data => {
       if (sendMessage) {
@@ -667,6 +674,17 @@ function patchExternalMessageHandler (req, res, next) {
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
+}
+
+function authenticationFailureHandler (req, res, next) {
+  req.session.notification = {
+    type: 'error',
+    message: 'Something went wrong during authentication.'
+  }
+  const failureRoute = req.session.returnFail || '/'
+  delete req.session.gmailSecret
+  delete req.session.returnFail
+  res.redirect(failureRoute)
 }
 
 function importContactsLinkedInHandler (req, res, next) {
@@ -927,16 +945,6 @@ function ensureOnboarded (req, res, next) {
     return res.redirect('/')
   }
   return next()
-}
-
-function authenticationFailureHandler (req, res, next) {
-  req.session.notification = {
-    type: 'error',
-    message: 'Something went wrong during authentication.'
-  }
-  const failureRoute = req.session.returnFail
-  delete req.session.returnFail
-  res.redirect(failureRoute || '/')
 }
 
 router.use(ensureLoggedIn)
