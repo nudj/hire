@@ -57,11 +57,13 @@ function renderJobActivities ({props, style}) {
 }
 
 function resendExternalMessage ({props, person, jobSlug}) {
-  const recipient = get(person, 'id')
-  return props.dispatch(postData({
-    url: `/jobs/${jobSlug}/external`,
-    data: { recipient }
-  }))
+  return () => {
+    const recipient = get(person, 'id')
+    props.dispatch(postData({
+      url: `/jobs/${jobSlug}/external`,
+      data: { recipient }
+    }))
+  }
 }
 
 function renderSentListItem ({jobSlug, person, index, style, props}) {
@@ -80,7 +82,7 @@ function renderSentListItem ({jobSlug, person, index, style, props}) {
 
   // internal - how to specify someone?
   const resendInternalButton = (<Link className={style.button} to={`/jobs/${jobSlug}/internal`}>Resend</Link>)
-  const resendExternalButton = (<button className={style.button} onClick={() => resendExternalMessage({props, person, jobSlug})}>Resend</button>)
+  const resendExternalButton = (<button className={style.button} onClick={resendExternalMessage({props, person, jobSlug})}>Resend</button>)
   const resendButton = source === 'external' ? resendExternalButton : resendInternalButton
   const actions = source === 'referral' ? [] : [resendButton]
 

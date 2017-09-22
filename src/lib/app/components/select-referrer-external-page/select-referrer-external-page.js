@@ -21,13 +21,15 @@ module.exports = class ComposePage extends React.Component {
   }
 
   onClickSend (person) {
-    const jobSlug = get(this.props, 'job.slug', '')
-    return this.props.dispatch(postData({
-      url: `/jobs/${jobSlug}/external`,
-      data: {
-        recipient: person
-      }
-    }))
+    return () => {
+      const jobSlug = get(this.props, 'job.slug', '')
+      this.props.dispatch(postData({
+        url: `/jobs/${jobSlug}/external`,
+        data: {
+          recipient: person
+        }
+      }))
+    }
   }
 
   renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url}) {
@@ -37,7 +39,7 @@ module.exports = class ComposePage extends React.Component {
     const title = get(person, 'title', '')
     const company = get(person, 'company', '')
     const continueButton = <Link className={buttonClass} to={url}>{buttonLabel}</Link>
-    const newButton = <button className={buttonClass} onClick={() => this.onClickSend(personId)}>{buttonLabel}</button>
+    const newButton = <button className={buttonClass} onClick={this.onClickSend(personId)}>{buttonLabel}</button>
     let link = newButton
 
     if (buttonLabel === 'Continue') {
