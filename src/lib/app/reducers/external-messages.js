@@ -3,7 +3,7 @@ const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
 
-const savedExternalMessageRoute = new RouteParser('/jobs/:jobSlug/external/:recipientId/:messageId')
+const savedExternalMessageRoute = new RouteParser('/jobs/:jobSlug/external/:messageId')
 
 const setActiveStep = (state, action) => {
   const {

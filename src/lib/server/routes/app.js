@@ -563,27 +563,16 @@ function getExternalMessageProperties (data, messageId) {
     })
 }
 
-function newExternalMessageHandler (req, res, next) {
-  const recipient = req.params.recipientId
-
-  Promise.resolve(merge(req.session.data))
-    .then(data => jobs.get(merge(req.session.data), req.params.jobSlug))
-    .then(data => network.getRecipient(data, recipient))
-    .then(fetchExternalPrismicContent)
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 function getExternalMessageHandler (req, res, next) {
   const person = get(req, 'session.data.person.id')
-  const recipient = req.params.recipientId
+  const messageId = req.params.messageId
   const gmailSent = req.query.gmail && req.query.gmail === req.session.gmailSecret
 
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
-    .then(data => network.getRecipient(data, recipient))
-    .then(data => getExternalMessageProperties(data, req.params.messageId))
+    .then(data => externalMessages.getById(data, messageId))
+    .then(data => network.getRecipient(data, data.externalMessage.recipient))
+    .then(data => getExternalMessageProperties(data, messageId))
     .then(data => {
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
@@ -599,46 +588,48 @@ function getExternalMessageHandler (req, res, next) {
 }
 
 function saveExternalMessageHandler (req, res, next) {
-  const recipient = req.params.recipientId
-  const composeMessage = req.body.composeMessage
-  const selectStyle = req.body.selectStyle
-  const selectLength = req.body.selectLength
-  const sendMessage = req.body.sendMessage
-  const externalMessage = {recipient, composeMessage, selectStyle, selectLength, sendMessage}
+  const recipient = req.body.recipient
 
   Promise.resolve(merge(req.session.data))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => network.getRecipient(data, recipient))
-    .then(data => externalMessages.post(data, data.hirer, data.job, data.recipient, externalMessage))
+    .then(data => externalMessages.post(data, data.hirer, data.job, recipient))
     .then(data => {
       if (!data.externalMessage) {
         throw new Error('No message saved!')
       }
-      return res.redirect(`/jobs/${data.job.slug}/external/${data.recipient.id}/${data.externalMessage.id}`)
+      return res.redirect(`/jobs/${data.job.slug}/external/${data.externalMessage.id}`)
     })
     .catch(getErrorHandler(req, res, next))
 }
 
 function patchExternalMessageHandler (req, res, next) {
-  const recipient = req.params.recipientId
   const composeMessage = req.body.composeMessage
   const selectStyle = req.body.selectStyle
   const selectLength = req.body.selectLength
   const sendMessage = req.body.sendMessage
   const messageId = req.params.messageId
-  const externalMessage = {recipient, composeMessage, selectStyle, selectLength}
   const person = get(req, 'session.data.person.id')
 
   Promise.resolve(merge(req.session.data))
+    .then(data => externalMessages.getById(data, messageId))
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
-    .then(data => network.getRecipient(data, recipient))
-    .then(data => externalMessages.patch(data, messageId, externalMessage))
+    .then(data => network.getRecipient(data, data.externalMessage.recipient))
+    .then(data => {
+      const externalMessage = {
+        recipient: data.recipient.id,
+        composeMessage,
+        selectStyle,
+        selectLength
+      }
+      return externalMessages.patch(data, messageId, externalMessage)
+    })
     .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
     .then(data => {
       if (sendMessage === 'GMAIL' && !data.externalMessage.sendMessage) {
         req.session.gmailSecret = createHash(8)
-        req.session.returnFail = `/jobs/${data.job.slug}/external/${recipient}/${data.externalMessage.id}`
+        req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, person, tags.external)
           .then(data => {
@@ -957,10 +948,9 @@ router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalMessageSaveHandl
 router.get('/jobs/:jobSlug/internal/:messageId', ensureOnboarded, sendSavedInternalMessageHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
-router.get('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, newExternalMessageHandler)
-router.post('/jobs/:jobSlug/external/:recipientId', ensureOnboarded, saveExternalMessageHandler)
-router.get('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, getExternalMessageHandler)
-router.patch('/jobs/:jobSlug/external/:recipientId/:messageId', ensureOnboarded, patchExternalMessageHandler)
+router.post('/jobs/:jobSlug/external', ensureOnboarded, saveExternalMessageHandler)
+router.get('/jobs/:jobSlug/external/:messageId', ensureOnboarded, getExternalMessageHandler)
+router.patch('/jobs/:jobSlug/external/:messageId', ensureOnboarded, patchExternalMessageHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)(merge(req.session.data))

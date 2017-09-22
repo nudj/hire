@@ -32,12 +32,12 @@ function fetchIncompleteExternalMessagesForJob (data, hirer, job) {
     .then(results => results.filter(result => !result.sendMessage))
 }
 
-function postExternalMessage (hirer, job, recipient, externalMessage) {
+function postExternalMessage (hirer, job, recipient) {
   const data = merge({
     hirer: hirer.id,
     job: job.id,
-    recipient: recipient.id
-  }, externalMessage)
+    recipient
+  })
 
   return request('externalMessages', {
     method: 'post',
@@ -86,7 +86,7 @@ module.exports.patch = function (data, id, externalMessage) {
   return promiseMap(data)
 }
 
-module.exports.post = function (data, hirer, job, recipient, externalMessage) {
-  data.externalMessage = postExternalMessage(hirer, job, recipient, externalMessage)
+module.exports.post = function (data, hirer, job, recipient) {
+  data.externalMessage = postExternalMessage(hirer, job, recipient)
   return promiseMap(data)
 }

@@ -165,8 +165,8 @@ module.exports.saveStepData = (stepName, stepData) => {
   return (dispatch, getState) => {
     const state = getState()
     const messageId = get(state, 'app.externalMessage.id')
-    let url = `/jobs/${get(state, 'app.job.slug')}/external/${get(state, 'app.recipient.id')}`
-    let method = 'post'
+    const url = `/jobs/${get(state, 'app.job.slug')}/external/${messageId}`
+    const method = 'patch'
     const {
       selectLength,
       selectStyle,
@@ -174,10 +174,6 @@ module.exports.saveStepData = (stepName, stepData) => {
       sendMessage
     } = state.externalMessagePage
 
-    if (messageId) {
-      url = `${url}/${messageId}`
-      method = 'patch'
-    }
     dispatch(module.exports.postData({
       url,
       method,
