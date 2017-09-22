@@ -47,6 +47,7 @@ module.exports = class ComposePage extends React.Component {
     const network = get(this.props, 'network', [])
     const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
+    const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
     if (!network.length || (networkSent.length && !networkUnsent.length)) {
@@ -56,13 +57,15 @@ module.exports = class ComposePage extends React.Component {
     return (<ul className={this.style.network}>
       {network.map((person, index) => {
         const personId = get(person, 'id')
-        const url = `/jobs/${jobSlug}/external/${personId}`
+        let url = `/jobs/${jobSlug}/external/${personId}`
         let buttonLabel = 'Nudj'
         let buttonClass = this.style.nudjButton
 
         if (networkSent.includes(personId)) {
           return ''
         } else if (networkSaved.includes(personId)) {
+          const currentMessage = externalMessagesIncomplete.find((message) => message.recipient === personId)
+          url = `${url}/${currentMessage.id}`
           buttonLabel = 'Continue'
           buttonClass = this.style.continueButton
         }

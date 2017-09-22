@@ -515,6 +515,7 @@ function externalHandler (req, res, next) {
     .then(data => network.get(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAllIncomplete(data, data.hirer.id, data.job.id))
     .then(data => {
       data.networkSaved = data.externalMessages.map(person => person.id)
       data.networkSent = data.externalMessagesComplete.map(person => person.id)

@@ -27,6 +27,11 @@ function fetchCompleteExternalMessagesForJob (data, hirer, job) {
     .then(results => results.filter(result => !!result.sendMessage))
 }
 
+function fetchIncompleteExternalMessagesForJob (data, hirer, job) {
+  return request(`externalMessages/filter?hirer=${hirer}&job=${job}`)
+    .then(results => results.filter(result => !result.sendMessage))
+}
+
 function postExternalMessage (hirer, job, recipient, externalMessage) {
   const data = merge({
     hirer: hirer.id,
@@ -68,6 +73,11 @@ module.exports.getAllComplete = function (data, hirer, job) {
   data.externalMessagesComplete = fetchCompleteExternalMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)
 
+  return promiseMap(data)
+}
+
+module.exports.getAllIncomplete = function (data, hirer, job) {
+  data.externalMessagesIncomplete = fetchIncompleteExternalMessagesForJob(data, hirer, job)
   return promiseMap(data)
 }
 
