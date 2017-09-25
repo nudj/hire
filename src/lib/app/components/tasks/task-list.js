@@ -7,15 +7,15 @@ const getStyle = require('./task-list.css')
 const sendSurvey = {
   action: 'Send survey',
   actionLink: '/survey-page',
-  text: 'Send our bespoke survey to your team to help them discover people worth asking in their networks.',
+  text: 'Help jog your team’s memory by sending them this bespoke survey to uncover people for them to ask or hire.',
   title: 'Ask your team for recommendations'
 }
 
 const unlockNetwork = {
-  action: 'Export contacts',
+  action: 'Share connections',
   actionLink: '/import-contacts',
-  text: 'Export your connections from LinkedIn so we can highlight who we feel are the best people to ask.',
-  title: 'Unlock your network'
+  text: 'Instead of spamming all your LinkedIn connections, we help cherry pick those most likely to help you.',
+  title: 'Unlock your LinkedIn connections'
 }
 
 const shareJobs = {
@@ -23,6 +23,13 @@ const shareJobs = {
   actionLink: '/jobs',
   text: 'We\'ve successfully identified some key people that are likely to give you some great recommendations.',
   title: 'Share your jobs with network'
+}
+
+const hirerSurvey = {
+  action: 'Complete survey',
+  actionLink: '/hirer-survey',
+  text: 'Time to unlock your memory palace. This survey asks the questions that you might not ask yourself, helping uncover those hidden gems in your own network.',
+  title: 'Discover referrers in your network'
 }
 
 function renderTask (task, context) {
@@ -40,6 +47,9 @@ function renderTask (task, context) {
       break
     case 'SHARE_JOBS':
       content = shareJobs
+      break
+    case 'HIRER_SURVEY':
+      content = hirerSurvey
       break
     default:
   }

@@ -25,6 +25,10 @@ function fetchTokenById (id) {
     .then(results => results.pop())
 }
 
+function fetchTokensByData (data) {
+  return request(`tokens/filter?data=${data}`)
+}
+
 module.exports.get = function (data, token) {
   data.token = fetchToken(token)
   return promiseMap(data)
@@ -32,6 +36,11 @@ module.exports.get = function (data, token) {
 
 module.exports.getById = function (data, id) {
   data.token = fetchTokenById(id)
+  return promiseMap(data)
+}
+
+module.exports.getByData = function (data, tokenData) {
+  data.tokens = fetchTokensByData(tokenData)
   return promiseMap(data)
 }
 
