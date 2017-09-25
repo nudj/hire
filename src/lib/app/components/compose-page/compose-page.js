@@ -30,14 +30,19 @@ module.exports = class ComposePage extends React.Component {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+    let savedRecipients
+
+    if (get(props, 'recipients')) {
+      savedRecipients = props.recipients.join(', ')
+    }
 
     this.state = {
-      recipients: get(props, 'form.recipients.value'),
+      recipients: savedRecipients || get(props, 'form.recipients.value'),
       recipientsError: get(props, 'form.recipients.error', false),
-      subject: get(props, 'form.subject.value'),
+      subject: get(props, 'incompleteMessage.subject', get(props, 'form.subject.value')),
       subjectFallback: composeSubject,
       subjectError: get(props, 'form.subject.error', false),
-      template: get(props, 'form.template.value'),
+      template: get(props, 'incompleteMessage.message', get(props, 'form.template.value')),
       templateFallback: composeMessage,
       templateError: get(props, 'form.template.error', false),
       editing: true
@@ -151,8 +156,17 @@ module.exports = class ComposePage extends React.Component {
 
   onClickSend (event) {
     const emailData = (type) => {
+      let url = `/jobs/${get(this.props, 'job.slug')}/internal`
+      let method = 'post'
+
+      if (get(this.props, 'incompleteMessage.id')) {
+        url = `${url}/${get(this.props, 'incompleteMessage.id')}`
+        method = 'patch'
+      }
+
       return {
-        url: `/jobs/${get(this.props, 'job.slug')}/internal`,
+        url,
+        method,
         data: {
           template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
           subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),

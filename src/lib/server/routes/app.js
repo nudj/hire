@@ -269,13 +269,12 @@ function aggregateSent (data) {
     return merge(sent, {source: 'external'})
   })
 
-  // All internal messages are complete
-  const internalMessages = data.internalMessages.map(sent => {
+  const internalMessagesComplete = data.internalMessagesComplete.map(sent => {
     return merge(sent, {source: 'internal'})
   })
 
   // Concat and sort external and external
-  const sentComplete = [].concat(externalMessagesComplete, internalMessages)
+  const sentComplete = [].concat(externalMessagesComplete, internalMessagesComplete)
   sentComplete.sort(common.sortByModified)
 
   data.sentComplete = sentComplete.map(complete => {
@@ -299,7 +298,7 @@ function jobHandler (req, res, next) {
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
-    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
     .then(data => aggregateSent(data))
@@ -329,7 +328,7 @@ function nudjHandler (req, res, next) {
   jobs
     .get(merge(req.session.data), req.params.jobSlug)
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
-    .then(data => internalMessages.getAll(data, data.hirer.id, data.job.id))
+    .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
     .then(data => {
@@ -430,9 +429,52 @@ function internalMessageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => internalMessages.findIncompleteMessagesForHirer(data, data.hirer.id))
+    .then(data => {
+      if (data.incompleteMessage) {
+        return internalMessages.getRecipientsEmailAdresses(data, data.incompleteMessage.recipients)
+      }
+      return promiseMap(data)
+    })
     .then(fetchInternalPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function patchInternalMessageHandler (req, res, next) {
+  const { subject, template, type } = req.body
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => internalMessages.getById(data, req.params.messageId))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
+    .then(data => internalMessages.patch(data, req.params.messageId, { subject, message: template, recipients: data.internalMessage.recipients }))
+    .then(data => {
+      const { subject, message } = data.internalMessage
+      req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.internalMessage.id}`
+      req.session.returnFail = `/jobs/${req.params.jobSlug}/internal`
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, type)
+    })
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then((data) => internalMessages.patch(data, data.internalMessage.id, { sent: true, type }))
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(303, `/jobs/${req.params.jobSlug}`)
+          })
+      }
+      return fetchInternalPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
     .catch(getErrorHandler(req, res, next))
 }
 
@@ -442,14 +484,16 @@ function sendSavedInternalMessageHandler (req, res, next) {
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
     .then(data => {
-      const { subject, message, type } = data.internalMessage
-      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, type)
+      const { subject, message } = data.internalMessage
+      req.session.returnFail = `/jobs/${req.params.jobSlug}/internal/`
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, 'GMAIL')
     })
     .then(data => {
       if (data.messages) {
         // successful send
         return tasks
           .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then(data => internalMessages.patch(data, data.internalMessage.id, { sent: true, type: 'GMAIL' }))
           .then(() => {
             req.session.notification = {
               type: 'success',
@@ -477,7 +521,7 @@ function internalMessageSaveHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => internalMessages.populateRecipients(data, recipients))
     .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template, type))
+    .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template))
     .then(data => {
       req.session.returnTo = `/jobs/${req.params.jobSlug}/internal/${data.savedMessage.id}`
       req.session.returnFail = `/jobs/${req.params.jobSlug}/internal/`
@@ -488,6 +532,7 @@ function internalMessageSaveHandler (req, res, next) {
       // successful send
         return tasks
           .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then((data) => internalMessages.patch(data, data.savedMessage.id, { sent: true, type }))
           .then(() => {
             req.session.notification = {
               type: 'success',
@@ -652,17 +697,6 @@ function patchExternalMessageHandler (req, res, next) {
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
-}
-
-function authenticationFailureHandler (req, res, next) {
-  req.session.notification = {
-    type: 'error',
-    message: 'Something went wrong during authentication.'
-  }
-  const failureRoute = req.session.returnFail || '/'
-  delete req.session.gmailSecret
-  delete req.session.returnFail
-  res.redirect(failureRoute)
 }
 
 function importContactsLinkedInHandler (req, res, next) {
@@ -929,8 +963,6 @@ router.use(ensureLoggedIn)
 
 router.get('/', tasksListHander)
 
-router.get('/failure', ensureOnboarded, authenticationFailureHandler)
-
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
@@ -946,6 +978,7 @@ router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 router.get('/jobs/:jobSlug/internal', ensureOnboarded, internalMessageHandler)
 router.post('/jobs/:jobSlug/internal', ensureOnboarded, internalMessageSaveHandler)
 router.get('/jobs/:jobSlug/internal/:messageId', ensureOnboarded, sendSavedInternalMessageHandler)
+router.patch('/jobs/:jobSlug/internal/:messageId', ensureOnboarded, patchInternalMessageHandler)
 
 router.get('/jobs/:jobSlug/external', ensureOnboarded, externalHandler)
 router.post('/jobs/:jobSlug/external', ensureOnboarded, saveExternalMessageHandler)
