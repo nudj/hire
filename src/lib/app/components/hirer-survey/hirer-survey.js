@@ -9,13 +9,12 @@ const Tooltip = require('../tooltip/tooltip')
 const getStyle = require('./hirer-survey.css')
 
 const { updatePage } = require('../../actions/app')
+const { LONG_POLL_INTERVAL } = require('../../../lib/constants')
 
 module.exports = class HirerSurvey extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
-
-    this.pollInterval = 5000
 
     const completed = false
     const polling = null
@@ -64,7 +63,7 @@ module.exports = class HirerSurvey extends React.Component {
       const page = this.props
       this.props.dispatch(updatePage({page}))
       this.cancelPoll(() => this.poll())
-    }, this.pollInterval)
+    }, LONG_POLL_INTERVAL)
     this.setState({polling})
   }
 
