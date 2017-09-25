@@ -784,9 +784,53 @@ function surveyPageHandler (req, res, next) {
   Promise.resolve(merge(req.session.data))
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(surveys.getSurveyForCompany)
+    .then(data => surveyMessages.findIncompleteSurveyMessagesForHirer(data, data.hirer.id))
+    .then(data => {
+      if (data.incompleteSurveyMessage) {
+        return surveyMessages.getRecipientsEmailAdresses(data, data.incompleteSurveyMessage.recipients)
+      }
+      return promiseMap(data)
+    })
     .then(fetchSurveyPrismicContent)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function patchSurveyPageHandler (req, res, next) {
+  const { subject, template, type } = req.body
+
+  Promise.resolve(merge(req.session.data))
+    .then(data => surveyMessages.getById(data, req.params.messageId))
+    .then(data => surveys.getSurveyForCompany(data))
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => surveyMessages.getRecipientsEmailAdresses(data, data.surveyMessage.recipients))
+    .then(data => surveyMessages.patch(data, req.params.messageId, { subject, message: template, recipients: data.surveyMessage.recipients }))
+    .then(data => {
+      const { subject, message } = data.surveyMessage
+      req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
+      req.session.returnFail = `/survey-page`
+      return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
+    })
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        return tasks
+          .completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then((data) => surveyMessages.patch(data, data.surveyMessage.id, { sent: true, type }))
+          .then(() => {
+            req.session.notification = {
+              type: 'success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+            return res.redirect(303, `/`)
+          })
+      }
+      return fetchInternalPrismicContent(data)
+        .then(getRenderDataBuilder(req, res, next))
+        .then(getRenderer(req, res, next))
+        .catch(getErrorHandler(req, res, next))
+    })
     .catch(getErrorHandler(req, res, next))
 }
 
@@ -969,6 +1013,7 @@ router.post('/import-contacts', importContactsLinkedInSaveHandler)
 router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 router.get('/survey-page/:messageId', sendSavedSurveyPageHandler)
+router.patch('/survey-page/:messageId', patchSurveyPageHandler)
 
 router.get('/jobs', ensureOnboarded, jobsHandler)
 

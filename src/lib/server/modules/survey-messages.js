@@ -23,6 +23,10 @@ function patchSurveyMessage (id, message) {
   })
 }
 
+function fetchAllByHirer (hirer) {
+  return request(`surveyMessages/filter?hirer=${hirer}`)
+}
+
 function fetchAllRecipients (recipients) {
   return Promise.all(recipients.map(recipient => {
     return people.getOrCreateByEmail({}, recipient).then(result => result.person.id)
@@ -33,6 +37,16 @@ function fetchEmailAdressesFromRecipients (recipients) {
   return Promise.all(recipients.map(recipient => {
     return people.get({}, recipient).then(result => result.person.email)
   }))
+}
+
+function fetchLatestIncompleteSurveyMessage (hirer) {
+  return fetchAllByHirer(hirer)
+    .then(results => results.filter(message => !message.sent).pop())
+}
+
+module.exports.findIncompleteSurveyMessagesForHirer = function (data, hirer) {
+  data.incompleteSurveyMessage = fetchLatestIncompleteSurveyMessage(hirer)
+  return promiseMap(data)
 }
 
 module.exports.getById = function (data, id) {
