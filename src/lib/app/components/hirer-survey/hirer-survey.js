@@ -78,8 +78,8 @@ module.exports = class HirerSurvey extends React.Component {
       return (<Redirect to='/' push />)
     }
 
-    const title = 'Time to enter your mind palace...'
-    const subtitle = 'A description of what this will help the hirer achieve'
+    const title = 'Time to enter your mind palace'
+    const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking questions you wouldn’t necessarily ask yourself.'
 
     const surveyUrl = get(this.props, 'survey.link', 'about:blank')
     const surveyFrame = (<iframe src={surveyUrl} className={this.style.surveyFrame} />)
