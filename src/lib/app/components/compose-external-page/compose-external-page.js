@@ -4,7 +4,7 @@ const get = require('lodash/get')
 const pick = require('lodash/pick')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
-const { getActiveStep } = require('../../../lib/index')
+const { getActiveStep } = require('../../../lib')
 
 const Link = require('../link/link')
 const Form = require('../form/form')

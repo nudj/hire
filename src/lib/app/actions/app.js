@@ -1,6 +1,6 @@
 const { push } = require('@nudj/react-router-redux')
 const { merge } = require('@nudj/library')
-const { getActiveStep } = require('../../lib/index')
+const { getActiveStep } = require('../../lib')
 const request = require('../../lib/request')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
