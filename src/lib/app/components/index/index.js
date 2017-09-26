@@ -56,9 +56,9 @@ const Index = () => {
           <Route exact path='/jobs/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/jobs/:jobSlug/nudj' component={PageWithState(Nudj)} />
           <Route exact path='/jobs/:jobSlug/internal' component={PageWithState(ComposePage)} />
+          <Route exact path='/jobs/:jobSlug/internal/:messageId' component={PageWithState(ComposePage)} />
           <Route exact path='/jobs/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
-          <Route exact path='/jobs/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
-          <Route exact path='/jobs/:jobSlug/external/:recommendationId/:messageId' component={PageWithState(ComposeExternalPage)} />
+          <Route exact path='/jobs/:jobSlug/external/:messageId' component={PageWithState(ComposeExternalPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>

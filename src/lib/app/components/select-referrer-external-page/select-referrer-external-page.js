@@ -2,10 +2,10 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const Link = require('../link/link')
-
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
+const { postData } = require('../../actions/app')
 
 const getStyle = require('./select-referrer-external-page.css')
 
@@ -17,14 +17,34 @@ module.exports = class ComposePage extends React.Component {
     const tooltips = get(this.props, 'tooltips', [])
 
     this.state = {tooltips}
+    this.onClickSend = this.onClickSend.bind(this)
   }
 
-  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index}) {
+  onClickSend (person) {
+    return () => {
+      const jobSlug = get(this.props, 'job.slug', '')
+      this.props.dispatch(postData({
+        url: `/jobs/${jobSlug}/external`,
+        data: {
+          recipient: person
+        }
+      }))
+    }
+  }
+
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url}) {
     const personId = get(person, 'id', '')
     const firstName = get(person, 'firstName', '')
     const lastName = get(person, 'lastName', '')
     const title = get(person, 'title', '')
     const company = get(person, 'company', '')
+    const continueButton = <Link className={buttonClass} to={url}>{buttonLabel}</Link>
+    const newButton = <button className={buttonClass} onClick={this.onClickSend(personId)}>{buttonLabel}</button>
+    let link = newButton
+
+    if (buttonLabel === 'Continue') {
+      link = continueButton
+    }
 
     return (<RowItem
       key={`${personId}_${index}`}
@@ -37,7 +57,7 @@ module.exports = class ComposePage extends React.Component {
         description: company
       }]}
       actions={[
-        <Link className={buttonClass} to={`/jobs/${jobSlug}/external/${get(person, 'id')}`}>{buttonLabel}</Link>
+        link
       ]}
     />)
   }
@@ -47,6 +67,7 @@ module.exports = class ComposePage extends React.Component {
     const network = get(this.props, 'network', [])
     const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
+    const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
     if (!network.length || (networkSent.length && !networkUnsent.length)) {
@@ -56,17 +77,20 @@ module.exports = class ComposePage extends React.Component {
     return (<ul className={this.style.network}>
       {network.map((person, index) => {
         const personId = get(person, 'id')
+        let url = `/jobs/${jobSlug}/external`
         let buttonLabel = 'Nudj'
         let buttonClass = this.style.nudjButton
 
         if (networkSent.includes(personId)) {
           return ''
         } else if (networkSaved.includes(personId)) {
+          const currentMessage = externalMessagesIncomplete.find((message) => message.recipient === personId)
+          url = `${url}/${currentMessage.id}`
           buttonLabel = 'Continue'
           buttonClass = this.style.continueButton
         }
 
-        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index})
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url})
       })}
     </ul>)
   }
@@ -106,7 +130,7 @@ module.exports = class ComposePage extends React.Component {
 
   render () {
     return (
-      <form className={this.style.pageBody} action={`/${get(this.props, 'company.slug')}/${get(this.props, 'job.slug')}/send`} method='POST'>
+      <div className={this.style.pageBody}>
         <Helmet>
           <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
         </Helmet>
@@ -131,7 +155,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderNudjNetworkList()}
           </div>
         </div>
-      </form>
+      </div>
     )
   }
 }

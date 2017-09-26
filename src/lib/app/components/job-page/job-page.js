@@ -7,6 +7,7 @@ const getStyle = require('./job-page.css')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
+const { postData } = require('../../actions/app')
 
 function renderJobActivitiy ({activity, style}) {
   let trendStyle = style.jobActivityHighlightPositive
@@ -55,7 +56,17 @@ function renderJobActivities ({props, style}) {
   </div>)
 }
 
-function renderSentListItem ({jobSlug, person, index, style}) {
+function resendExternalMessage ({props, person, jobSlug}) {
+  return () => {
+    const recipient = get(person, 'id')
+    props.dispatch(postData({
+      url: `/jobs/${jobSlug}/external`,
+      data: { recipient }
+    }))
+  }
+}
+
+function renderSentListItem ({jobSlug, person, index, style, props}) {
   const personId = get(person, 'id', '')
 
   const firstName = get(person, 'firstName', '')
@@ -70,8 +81,9 @@ function renderSentListItem ({jobSlug, person, index, style}) {
   const referrals = get(person, 'totalReferrals', 0).toString()
 
   // internal - how to specify someone?
-  const resendLink = source === 'external' ? `/jobs/${jobSlug}/external/${get(person, 'id')}` : `/jobs/${jobSlug}/internal`
-  const resendButton = (<Link className={style.button} to={resendLink}>Resend</Link>)
+  const resendInternalButton = (<Link className={style.button} to={`/jobs/${jobSlug}/internal`}>Resend</Link>)
+  const resendExternalButton = (<button className={style.button} onClick={resendExternalMessage({props, person, jobSlug})}>Resend</button>)
+  const resendButton = source === 'external' ? resendExternalButton : resendInternalButton
   const actions = source === 'referral' ? [] : [resendButton]
 
   let status = 'Message sent'
@@ -107,7 +119,7 @@ function renderSentList ({sent, props, style}) {
       </tr>
     </thead>
     <tbody>
-      {sent.map((person, index) => renderSentListItem({jobSlug, person, index, style}))}
+      {sent.map((person, index) => renderSentListItem({jobSlug, person, index, style, props}))}
     </tbody>
   </table>)
 }

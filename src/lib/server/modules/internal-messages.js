@@ -8,6 +8,13 @@ function fetchSentMessages (hirer, job, recipient) {
   return request(`internalMessages/filter?hirer=${hirer}&job=${job}&recipient=${recipient}`)
 }
 
+function patchInternalMessage (id, internalMessage) {
+  return request(`internalMessages/${id}`, {
+    method: 'patch',
+    data: internalMessage
+  })
+}
+
 function fetchLatestSentMessage (hirer, job, recipient) {
   return fetchSentMessages(hirer, job, recipient)
     .then(results => {
@@ -18,6 +25,20 @@ function fetchLatestSentMessage (hirer, job, recipient) {
 
 function fetchSentMessagesForJob (data, hirer, job) {
   return request(`internalMessages/filter?hirer=${hirer}&job=${job}`)
+}
+
+function fetchAllMessagesForHirer (hirer) {
+  return request(`internalMessages/filter?hirer=${hirer}`)
+}
+
+function fetchLatestIncompleteMessage (hirer) {
+  return fetchAllMessagesForHirer(hirer)
+    .then(results => results.filter(message => !message.sent).pop())
+}
+
+function fetchCompleteInternalMessagesForJob (data, hirer, job) {
+  return request(`internalMessages/filter?hirer=${hirer}&job=${job}`)
+    .then(results => results.filter(result => !!result.sent))
 }
 
 function saveSentMessage (hirer, job, recipients, subject, message, type) {
@@ -44,6 +65,11 @@ module.exports.getRecipientsEmailAdresses = function (data, recipients) {
   return promiseMap(data)
 }
 
+module.exports.findIncompleteMessagesForHirer = function (data, hirer) {
+  data.incompleteMessage = fetchLatestIncompleteMessage(hirer)
+  return promiseMap(data)
+}
+
 module.exports.get = function (data, hirer, job, recipient) {
   data.message = fetchLatestSentMessage(hirer, job, recipient)
   return promiseMap(data)
@@ -56,6 +82,13 @@ module.exports.getAll = function (data, hirer, job) {
   return promiseMap(data)
 }
 
+module.exports.getAllComplete = function (data, hirer, job) {
+  data.internalMessagesComplete = fetchCompleteInternalMessagesForJob(data, hirer, job)
+    .then(common.fetchAllRecipientsFromFragments)
+
+  return promiseMap(data)
+}
+
 module.exports.getById = function (data, messageId) {
   data.internalMessage = request(`internalMessages/${messageId}`)
   return promiseMap(data)
@@ -63,5 +96,10 @@ module.exports.getById = function (data, messageId) {
 
 module.exports.post = function (data, hirer, job, recipients, subject, message, type = 'MAILGUN') {
   data.savedMessage = saveSentMessage(hirer, job, recipients, subject, message, type)
+  return promiseMap(data)
+}
+
+module.exports.patch = function (data, id, internalMessage) {
+  data.internalMessage = patchInternalMessage(id, internalMessage)
   return promiseMap(data)
 }
