@@ -4,6 +4,7 @@ const get = require('lodash/get')
 const pick = require('lodash/pick')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
+const { getActiveStep } = require('../../../lib/index')
 
 const Link = require('../link/link')
 const Form = require('../form/form')
@@ -50,20 +51,6 @@ const steps = [
     component: FormStepNext
   }
 ]
-
-const getActiveStep = (externalMessage) => {
-  let active = 0
-  if (externalMessage.sendMessage) {
-    active = 4
-  } else if (externalMessage.composeMessage) {
-    active = 3
-  } else if (externalMessage.selectStyle) {
-    active = 2
-  } else if (externalMessage.selectLength) {
-    active = 1
-  }
-  return active
-}
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {

@@ -1,6 +1,7 @@
 const { push } = require('@nudj/react-router-redux')
-const request = require('../../lib/request')
 const { merge } = require('@nudj/library')
+const { getActiveStep } = require('../../lib/index')
+const request = require('../../lib/request')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
@@ -73,19 +74,7 @@ const steps = [
     name: 'nextSteps'
   }
 ]
-const getActiveStep = (externalMessage) => {
-  let active = 0
-  if (externalMessage.sendMessage) {
-    active = 4
-  } else if (externalMessage.composeMessage) {
-    active = 3
-  } else if (externalMessage.selectStyle) {
-    active = 2
-  } else if (externalMessage.selectLength) {
-    active = 1
-  }
-  return active
-}
+
 const SET_ACTIVE_STEP = 'SET_ACTIVE_STEP'
 module.exports.SET_ACTIVE_STEP = SET_ACTIVE_STEP
 function setActiveStep (active, confirm, resets) {
