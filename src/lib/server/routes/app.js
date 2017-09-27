@@ -1008,8 +1008,8 @@ function hirerSurveyHandler (req, res, next) {
     'document.tags': ['hirerSurvey']
   }
 
-  employees.getOrCreateByPerson(data, data.person.id, data.company.id)
-    .then(data => surveys.getSurveyForCompany(data))
+  return employees.getOrCreateByPerson(data, data.person.id, data.company.id)
+    .then(data => surveys.getSurveyForCompany(data, 'HIRER_SURVEY'))
     .then(data => {
       data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)
       return promiseMap(data)

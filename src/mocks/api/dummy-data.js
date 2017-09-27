@@ -268,7 +268,17 @@ data.surveys = data.surveys.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
     link: 'https://nudj.typeform.com/to/gfAnDV',
-    uuid: 'gfAnDV'
+    uuid: 'gfAnDV',
+    type: 'EMPLOYEE_SURVEY'
+  },
+  {
+    id: 'survey2',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'https://nudj.typeform.com/to/gfAnDV',
+    uuid: 'gfAnDV',
+    type: 'HIRER_SURVEY'
   }
 ])
 data.tasks = data.tasks.concat([
