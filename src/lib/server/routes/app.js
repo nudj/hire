@@ -13,6 +13,7 @@ const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
 const tags = require('../../lib/tags')
+const {surveyTypes} = require('../../lib/constants')
 const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
@@ -969,6 +970,66 @@ function surveyPageSendHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function getOrCreateTokenByTokenData (tokenType, tokenData) {
+  return tokens.getByData({}, tokenData)
+    .then(dataTemp => dataTemp.tokens.find(token => token.type === tokenType))
+    .then(token => {
+      if (token) {
+        return token
+      }
+      return tokens.post({}, tokenType, tokenData)
+        .then(dataTemp => dataTemp.newToken)
+    })
+}
+
+function getOrCreateEmployeeSurvey (employee, survey) {
+  return employeeSurveys.getByEmployeeAndSurvey({}, employee, survey)
+    .then(tempData => {
+      if (tempData.employeeSurvey) {
+        return tempData.employeeSurvey
+      }
+      return employeeSurveys.post({}, employee, survey)
+        .then(tempData => tempData.newEmployeeSurvey)
+    })
+}
+
+function hirerSurveyHandler (req, res, next) {
+  const data = merge(req.session.data)
+
+  const prismicQuery = {
+    'document.type': 'tooltip',
+    'document.tags': ['hirerSurvey']
+  }
+
+  return employees.getOrCreateByPerson(data, data.person.id, data.company.id)
+    .then(data => surveys.getSurveyForCompany(data, surveyTypes.HIRER_SURVEY))
+    .then(data => {
+      data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)
+      return promiseMap(data)
+    })
+    .then(data => {
+      const tokenData = {
+        employeeSurvey: data.employeeSurvey.id
+      }
+      const tokenType = 'SURVEY_TYPEFORM_COMPLETE'
+      data.token = getOrCreateTokenByTokenData(tokenType, tokenData)
+      return promiseMap(data)
+    })
+    .then(data => {
+      const token = data.token
+      const link = `${data.survey.link}?token=${token.token}`
+      data.survey = merge({}, data.survey, {link})
+      return data
+    })
+    .then(data => {
+      data.tooltip = prismic.fetchContent(prismicQuery, true)
+      return promiseMap(data)
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function tasksListHander (req, res, next) {
   const prismicQuery = {
     'document.type': 'tooltip',
@@ -1014,6 +1075,8 @@ router.get('/survey-page', surveyPageHandler)
 router.post('/survey-page', surveyPageSendHandler)
 router.get('/survey-page/:messageId', sendSavedSurveyPageHandler)
 router.patch('/survey-page/:messageId', patchSurveyPageHandler)
+
+router.get('/hirer-survey', hirerSurveyHandler)
 
 router.get('/jobs', ensureOnboarded, jobsHandler)
 

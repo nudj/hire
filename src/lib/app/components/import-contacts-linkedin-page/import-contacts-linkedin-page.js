@@ -317,8 +317,8 @@ module.exports = class ComposePage extends React.Component {
   renderCurrentTitles () {
     const active = this.state.active
 
-    let titleText = 'Exporting your contacts from LinkedIn'
-    let subtitleText = 'A description of what this will help the hirer achieve'
+    let titleText = 'Exporting your connections from LinkedIn'
+    let subtitleText = 'Follow the step-by-step guide below to share your LinkedIn connections with nudj. If you get stuck, just contact us.'
 
     switch (active) {
       case 2:
