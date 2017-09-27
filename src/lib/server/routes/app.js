@@ -13,6 +13,7 @@ const logger = require('../lib/logger')
 const mailer = require('../lib/mailer')
 const intercom = require('../lib/intercom')
 const tags = require('../../lib/tags')
+const {surveyTypes} = require('../../lib/constants')
 const gmail = require('../modules/gmail')
 const assets = require('../modules/assets')
 const common = require('../modules/common')
@@ -970,34 +971,26 @@ function surveyPageSendHandler (req, res, next) {
 }
 
 function getOrCreateTokenByTokenData (tokenType, tokenData) {
-  return new Promise((resolve, reject) => {
-    tokens.getByData({}, tokenData)
-      .then(dataTemp => dataTemp.tokens.find(token => token.type === tokenType))
-      .then(token => {
-        if (token) {
-          return token
-        }
-        return tokens.post({}, tokenType, tokenData)
-          .then(dataTemp => dataTemp.newToken)
-      })
-      .then(token => resolve(token))
-      .catch(error => reject(error))
-  })
+  return tokens.getByData({}, tokenData)
+    .then(dataTemp => dataTemp.tokens.find(token => token.type === tokenType))
+    .then(token => {
+      if (token) {
+        return token
+      }
+      return tokens.post({}, tokenType, tokenData)
+        .then(dataTemp => dataTemp.newToken)
+    })
 }
 
 function getOrCreateEmployeeSurvey (employee, survey) {
-  return new Promise((resolve, reject) => {
-    employeeSurveys.getByEmployeeAndSurvey({}, employee, survey)
-      .then(tempData => {
-        if (tempData.employeeSurvey) {
-          return tempData.employeeSurvey
-        }
-        return employeeSurveys.post({}, employee, survey)
-          .then(tempData => tempData.newEmployeeSurvey)
-      })
-      .then(employeeSurvey => resolve(employeeSurvey))
-      .catch(error => reject(error))
-  })
+  return employeeSurveys.getByEmployeeAndSurvey({}, employee, survey)
+    .then(tempData => {
+      if (tempData.employeeSurvey) {
+        return tempData.employeeSurvey
+      }
+      return employeeSurveys.post({}, employee, survey)
+        .then(tempData => tempData.newEmployeeSurvey)
+    })
 }
 
 function hirerSurveyHandler (req, res, next) {
@@ -1009,7 +1002,7 @@ function hirerSurveyHandler (req, res, next) {
   }
 
   return employees.getOrCreateByPerson(data, data.person.id, data.company.id)
-    .then(data => surveys.getSurveyForCompany(data, 'HIRER_SURVEY'))
+    .then(data => surveys.getSurveyForCompany(data, surveyTypes.HIRER_SURVEY))
     .then(data => {
       data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)
       return promiseMap(data)
