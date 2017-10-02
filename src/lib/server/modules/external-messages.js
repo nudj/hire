@@ -27,12 +27,17 @@ function fetchCompleteExternalMessagesForJob (data, hirer, job) {
     .then(results => results.filter(result => !!result.sendMessage))
 }
 
-function postExternalMessage (hirer, job, recipient, externalMessage) {
+function fetchIncompleteExternalMessagesForJob (data, hirer, job) {
+  return request(`externalMessages/filter?hirer=${hirer}&job=${job}`)
+    .then(results => results.filter(result => !result.sendMessage))
+}
+
+function postExternalMessage (hirer, job, recipient) {
   const data = merge({
     hirer: hirer.id,
     job: job.id,
-    recipient: recipient.id
-  }, externalMessage)
+    recipient
+  })
 
   return request('externalMessages', {
     method: 'post',
@@ -71,12 +76,17 @@ module.exports.getAllComplete = function (data, hirer, job) {
   return promiseMap(data)
 }
 
+module.exports.getAllIncomplete = function (data, hirer, job) {
+  data.externalMessagesIncomplete = fetchIncompleteExternalMessagesForJob(data, hirer, job)
+  return promiseMap(data)
+}
+
 module.exports.patch = function (data, id, externalMessage) {
   data.externalMessage = patchExternalMessage(id, externalMessage)
   return promiseMap(data)
 }
 
-module.exports.post = function (data, hirer, job, recipient, externalMessage) {
-  data.externalMessage = postExternalMessage(hirer, job, recipient, externalMessage)
+module.exports.post = function (data, hirer, job, recipient) {
+  data.externalMessage = postExternalMessage(hirer, job, recipient)
   return promiseMap(data)
 }

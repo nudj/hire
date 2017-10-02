@@ -9,6 +9,17 @@ const { cacheReturnTo } = require('@nudj/library/server')
 const accounts = require('../modules/accounts')
 const router = express.Router()
 
+const authenticationFailureHandler = (req, res, next) => {
+  req.session.notification = {
+    type: 'error',
+    message: 'Something went wrong during authentication.'
+  }
+  const failureRoute = req.session.returnFail || '/'
+  delete req.session.gmailSecret
+  delete req.session.returnFail
+  res.redirect(failureRoute)
+}
+
 const addProviderToAccountForPerson = (name, data, account, person) => {
   account = account || {}
   account.person = person.id
@@ -32,7 +43,7 @@ passport.use(new GoogleStrategy({
     {
       account: data => addProviderToAccountForPerson(
         'google',
-        { accessToken, email },
+        { accessToken, refreshToken, email },
         data.account,
         req.session.data.person
       )
@@ -46,9 +57,12 @@ router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/gmail.send'
-  ]
+  ],
+  accessType: 'offline',
+  approvalPrompt: 'force'
 }))
 
-router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/login' }), (req, res) => res.redirect(req.session.returnTo || '/'))
+router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/failure' }), (req, res) => res.redirect(req.session.returnTo || '/'))
+router.get('/failure', authenticationFailureHandler)
 
 module.exports = router

@@ -29,15 +29,20 @@ module.exports = class SurveyPage extends React.Component {
     let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
     let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
     let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+    let savedRecipients
     const cleanMessage = this.cleanTemplate(composeMessage)
 
+    if (get(props, 'recipients')) {
+      savedRecipients = props.recipients.join(', ')
+    }
+
     this.state = {
-      recipients: get(props, 'form.recipients.value'),
+      recipients: savedRecipients || get(props, 'form.recipients.value'),
       recipientsError: get(props, 'form.recipients.error', false),
-      subject: get(props, 'form.subject.value'),
+      subject: get(props, 'incompleteSurveyMessage.subject', get(props, 'form.subject.value')),
       subjectFallback: composeSubject,
       subjectError: get(props, 'form.subject.error', false),
-      template: get(props, 'form.template.value'),
+      template: get(props, 'incompleteSurveyMessage.message', get(props, 'form.template.value')),
       templateFallback: cleanMessage,
       templateError: get(props, 'form.template.error', false),
       editing: true
@@ -151,8 +156,17 @@ module.exports = class SurveyPage extends React.Component {
   }
   onClickSend (event) {
     const emailData = (type) => {
+      let url = `/survey-page`
+      let method = 'post'
+
+      if (get(this.props, 'incompleteSurveyMessage.id')) {
+        url = `${url}/${get(this.props, 'incompleteSurveyMessage.id')}`
+        method = 'patch'
+      }
+
       return {
-        url: `/survey-page`,
+        url,
+        method,
         data: {
           template: get(this.state, 'template', get(this.state, 'templateFallback', '')),
           subject: get(this.state, 'subject', get(this.state, 'subjectFallback', '')),

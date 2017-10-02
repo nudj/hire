@@ -14,6 +14,7 @@ const SelectReferrerExternalPage = require('../select-referrer-external-page/sel
 const ComposeExternalPage = require('../compose-external-page/compose-external-page')
 const ImportContactsLinkedInPage = require('../import-contacts-linkedin-page/import-contacts-linkedin-page')
 const TaskListPage = require('../task-list-page/task-list-page')
+const HirerSurvey = require('../hirer-survey/hirer-survey')
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
 const Status = require('../status/status')
@@ -52,13 +53,14 @@ const Index = () => {
           <Route exact path='/' component={PageWithState(TaskListPage)} />
           <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
           <Route exact path='/survey-page' component={PageWithState(SurveyPage)} />
+          <Route exact path='/hirer-survey' component={PageWithState(HirerSurvey)} />
           <Route exact path='/jobs' component={PageWithState(JobsPage)} />
           <Route exact path='/jobs/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/jobs/:jobSlug/nudj' component={PageWithState(Nudj)} />
           <Route exact path='/jobs/:jobSlug/internal' component={PageWithState(ComposePage)} />
+          <Route exact path='/jobs/:jobSlug/internal/:messageId' component={PageWithState(ComposePage)} />
           <Route exact path='/jobs/:jobSlug/external' component={PageWithState(SelectReferrerExternalPage)} />
-          <Route exact path='/jobs/:jobSlug/external/:recommendationId' component={PageWithState(ComposeExternalPage)} />
-          <Route exact path='/jobs/:jobSlug/external/:recommendationId/:messageId' component={PageWithState(ComposeExternalPage)} />
+          <Route exact path='/jobs/:jobSlug/external/:messageId' component={PageWithState(ComposeExternalPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>

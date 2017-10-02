@@ -2,7 +2,9 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const pick = require('lodash/pick')
+const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
+const { getActiveStep } = require('../../../lib')
 
 const Link = require('../link/link')
 const Form = require('../form/form')
@@ -63,7 +65,10 @@ module.exports = class ComposePage extends React.Component {
 
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
-    const active = this.props.externalMessagePage.active
+    let active = get(this.props, 'externalMessagePage.active')
+    if (isNil(active)) {
+      active = getActiveStep(get(this.props, 'externalMessage', {}))
+    }
     const activeName = steps[active].name
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
@@ -140,7 +145,10 @@ module.exports = class ComposePage extends React.Component {
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
-    const active = this.props.externalMessagePage.active
+    let active = get(this.props, 'externalMessagePage.active')
+    if (isNil(active)) {
+      active = getActiveStep(get(this.props, 'externalMessage', {}))
+    }
     return (
       <Form className={this.style.pageBody} method='POST'>
         <Helmet>

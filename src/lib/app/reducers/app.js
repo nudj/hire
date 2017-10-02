@@ -15,17 +15,17 @@ const resetError = {
   error: null
 }
 
-function pageReducer (state = initialState, action) {
+function appReducer (state = initialState, action) {
   switch (action.type) {
     case SHOW_ERROR:
       return { error: { code: 500 } }
     case SHOW_LOADING:
       return merge(state, resetError, { loading: true })
     case FETCHED_PAGE:
-      return merge(action.data.page, {
+      return merge(action.data.app, {
         loading: false,
         // ensure notifications persist through multiple fetches (should only be dismissable by the user or on timeout)
-        notification: action.data.page.notification || state.notification
+        notification: action.data.app.notification || state.notification
       })
     case SHOW_DIALOG:
       return merge(state, resetError, { overlay: action.actions })
@@ -42,5 +42,5 @@ function pageReducer (state = initialState, action) {
 }
 
 module.exports = {
-  pageReducer
+  appReducer
 }

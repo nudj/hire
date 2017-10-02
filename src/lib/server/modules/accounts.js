@@ -1,41 +1,63 @@
 const request = require('../../lib/request')
 const get = require('lodash/get')
+const google = require('../lib/google')
 const logger = require('../../lib/logger')
 const {
   toQs,
   promiseMap
 } = require('@nudj/library')
 
-function fetchAccessToken (provider, person) {
-  return module.exports.getByFilters(person)
-    .then(account => get(account, `providers.google.accessToken`))
-}
-
-function checkGoogleTokenValidity (token) {
-  return request(`/oauth2/v1/tokeninfo?access_token=${token}`, {
-    baseURL: 'https://www.googleapis.com/'
-  })
-    .then(response => {
-      return true
+function verifyOrRefreshGoogleAuthenticationStatus (person) {
+  return getAccountByFilters({person})
+    .then(account => {
+      if (!get(account, 'providers.google.accessToken')) {
+        throw new Error('No access token')
+      }
+      const accessToken = get(account, 'providers.google.accessToken')
+      const refreshToken = get(account, 'providers.google.refreshToken')
+      return google.verifyOrRefreshAccessToken(accessToken, refreshToken)
+        .then(accessToken => updateAccountAccessToken(account, accessToken))
+        .then(() => {
+          return true // User is successfully authorised with Google
+        })
     })
     .catch(error => {
-      logger.log('error', error)
-      return false // Stored access token does not exist or is invalid
+      logger.log('Authentication error', error)
+      return removeStaleGoogleAccountForPerson(person)
+        .then(() => {
+          return false // User is not successfully authorised with Google
+        })
     })
 }
 
-function verifyGoogleAccessToken (person) {
-  return fetchAccessToken(person)
-    .then(token => checkGoogleTokenValidity(token))
+function updateAccountAccessToken (account, accessToken) {
+  if (!get(account, 'providers.google')) {
+    throw new Error('No google account')
+  }
+  account.providers.google.accessToken = accessToken
+  return request(`accounts/${account.id}`, { method: 'patch', data: account })
+}
+
+function removeStaleGoogleAccountForPerson (person) {
+  return getAccountByFilters({person})
+    .then(account => {
+      if (account) {
+        return request(`accounts/${account.id}`, { method: 'delete' })
+      }
+    })
+}
+
+function getAccountByFilters (filters) {
+  return request(`accounts/filter?${toQs(filters)}`)
+  .then(results => results.pop())
 }
 
 module.exports.getByFilters = (filters) => {
-  return request(`accounts/filter?${toQs(filters)}`)
-    .then(results => results.pop())
+  return getAccountByFilters(filters)
 }
 
 module.exports.verifyGoogleAuthentication = (data, person) => {
-  data.googleAuthenticated = verifyGoogleAccessToken(person)
+  data.googleAuthenticated = verifyOrRefreshGoogleAuthenticationStatus(person)
   return promiseMap(data)
 }
 
