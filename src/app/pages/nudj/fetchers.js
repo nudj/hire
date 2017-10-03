@@ -1,4 +1,5 @@
 const {
+  merge,
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
