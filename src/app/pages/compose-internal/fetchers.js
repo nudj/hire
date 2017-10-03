@@ -1,4 +1,5 @@
 const {
+  merge,
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
@@ -8,8 +9,14 @@ const {
 
 const accounts = require('../../server/modules/accounts')
 const jobs = require('../../server/modules/jobs')
+const people = require('../../server/modules/people')
+const employees = require('../../server/modules/employees')
+const network = require('../../server/modules/network')
+const gmail = require('../../server/modules/gmail')
+const tasks = require('../../server/modules/tasks')
 const internalMessages = require('../../server/modules/internal-messages')
 const prismic = require('../../server/lib/prismic')
+const tags = require('../../lib/tags')
 
 const composeOptions = {
   type: 'composemessage',
@@ -44,6 +51,42 @@ function fetchInternalPrismicContent (data) {
   data.dialog = prismic.fetchContent(dialogOptions).then(results => results[0])
   data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results[0])
   return promiseMap(data)
+}
+
+function internalMessageCreateAndMailUniqueLinkToRecipients (data, company, job, person, hirer, recipients, subject, template, type) {
+  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(person, hirer, recipient, company, job, subject, template, type))
+  data.messages = Promise.all(sendMessages)
+
+  return promiseMap(data)
+}
+
+function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, type) {
+  const mailContent = {
+    recipients: recipient,
+    subject,
+    template
+  }
+  const data = merge(mailContent, {
+    company,
+    job,
+    hirer
+  })
+  // Find or create person from email
+  // Create employee relation for this person
+  // Get or create referral for this person
+  // Append referral id to link
+  return people.getByEmail(data, recipient)
+    .then(data => employees.getOrCreateByPerson(data, data.person.id, company.id))
+    .then(data => jobs.getReferralForPersonAndJob(data, data.person.id, job.id))
+    .then(data => data.referral ? data : jobs.addReferral(data, job.id, data.person.id))
+    .then(data => network.getRecipient(data, data.person.id))
+    .then(data => people.get(data, sender.id))
+    .then(data => {
+      if (type === 'GMAIL') {
+        return gmail.send(data, data.person.id, tags.internal)
+      }
+      return network.send(data, mailContent, tags.internal)
+    })
 }
 
 const get = ({

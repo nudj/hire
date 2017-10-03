@@ -1,7 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./style.css')
-const actions = require('../../redux/actions')
+const actions = require('@nudj/framework/actions')
 const Dialog = require('../dialog')
 
 function onClickDialog (props) {
@@ -9,7 +9,7 @@ function onClickDialog (props) {
 }
 
 function onClick (props, action, args = []) {
-  return (event) => props.dispatch(actions[action](...args))
+  return (event) => props.dispatch(actions.app[action](...args))
 }
 
 const Overlay = (props) => {
