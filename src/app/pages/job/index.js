@@ -1,13 +1,15 @@
 const React = require('react')
-const Link = require('../link/link')
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./job-page.css')
-const PageHeader = require('../page-header/page-header')
-const Tooltip = require('../tooltip/tooltip')
-const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
-const { postData } = require('../../actions/app')
+const { postData } = require('@nudj/framework/actions')
+
+const getStyle = require('./style.css')
+const LayoutApp = require('../../components/layout-app')
+const Link = require('../../components/link/link')
+const PageHeader = require('../../components/page-header/page-header')
+const Tooltip = require('../../components/tooltip/tooltip')
+const CopyToClipboard = require('../../components/copy-to-clipboard/copy-to-clipboard')
 
 function renderJobActivitiy ({activity, style}) {
   let trendStyle = style.jobActivityHighlightPositive
@@ -154,7 +156,7 @@ const JobPage = (props) => {
   const jobActivity = renderJobActivities({props, style})
 
   return (
-    <div className={style.pageBody}>
+    <LayoutApp {...props} className={style.pageBody}>
       <Helmet>
         <title>{`nudj - ${get(props, 'job.title')} @ ${get(props, 'company.name')}`}</title>
       </Helmet>
@@ -181,7 +183,7 @@ const JobPage = (props) => {
           {tooltip ? <Tooltip {...tooltip} /> : ''}
         </div>
       </div>
-    </div>
+    </LayoutApp>
   )
 }
 

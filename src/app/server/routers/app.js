@@ -1065,8 +1065,6 @@ router.patch('/survey-page/:messageId', patchSurveyPageHandler)
 
 router.get('/hirer-survey', hirerSurveyHandler)
 
-router.get('/jobs', ensureOnboarded, jobsHandler)
-
 router.get('/jobs/:jobSlug', ensureOnboarded, jobHandler)
 router.get('/jobs/:jobSlug/nudj', ensureOnboarded, nudjHandler)
 

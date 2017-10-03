@@ -4,7 +4,7 @@ module.exports = {
   // '/survey-page': require('../pages/survey'),
   // '/hirer-survey': require('../pages/hirer-survey'),
   '/jobs': require('../pages/jobs'),
-  // '/jobs/:jobSlug': require('../pages/job'),
+  '/jobs/:jobSlug': require('../pages/job'),
   // '/jobs/:jobSlug/nudj': require('../pages/network'),
   // '/jobs/:jobSlug/internal': require('../pages/compose'),
   // '/jobs/:jobSlug/internal/:messageId': require('../pages/compose'),
