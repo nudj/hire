@@ -1,9 +1,10 @@
 const React = require('react')
-const Textarea = require('react-textarea-autosize')
+const ReactTextAreaAutosize = require('react-textarea-autosize')
 const get = require('lodash/get')
 const getStyle = require('./compose-email.css')
 
 const errorLabel = (className, template) => <p className={className}>{template}</p>
+const Textarea = ReactTextAreaAutosize.default || ReactTextAreaAutosize
 
 module.exports = (props) => {
   const style = getStyle()

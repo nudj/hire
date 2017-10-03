@@ -3,18 +3,18 @@ const { mixins, variables } = require('../../lib/css')
 
 module.exports = css({
   dialog: {},
-  dialogTitle: mixins.typography.h3,
-  dialogText: mixins.typography.p,
-  dialogButtons: {
+  title: mixins.typography.h3,
+  text: mixins.typography.p,
+  buttons: {
     display: 'flex',
     justifyContent: 'center',
     padding: `${variables.padding.d} 0 0 0`
   },
-  dialogCloseButton: {},
-  cancelDialogButton: merge(mixins.buttonSecondary, {
+  closeButton: {},
+  cancel: merge(mixins.buttonSecondary, {
     margin: `${variables.padding.f}`
   }),
-  confirmDialogButton: merge(mixins.button, {
+  confirm: merge(mixins.button, {
     margin: `${variables.padding.f}`
   })
 })

@@ -23,6 +23,7 @@ const expressRouters = {
     require('./pages/jobs/router'),
     require('./pages/job/router'),
     require('./pages/nudj/router'),
+    require('./pages/compose-internal/router'),
     // require('./server/routers/catch-all')
   ]
 }

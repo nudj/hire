@@ -13,7 +13,7 @@ const Page = (props) => {
     <ScrollTop ignore={props.history.action === 'REPLACE'}>
       <div className={`${props.className} ${style.body}`}>
         <Notification notification={props.notification} dispatch={props.dispatch} />
-        <Overlay overlay={props.overlay} dispatch={props.dispatch} />
+        <Overlay overlay={props.overlay} dialog={props.dialog} dispatch={props.dispatch} />
         <header className={style.header}>
           <Header {...props} />
         </header>

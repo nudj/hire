@@ -1,9 +1,5 @@
-let {
-  css,
-  merge,
-  mixins,
-  variables
-} = require('../../lib/css')
+const { css, merge } = require('@nudj/framework/css')
+const { mixins, variables } = require('../../lib/css')
 
 const fieldStyle = {
   display: 'flex',

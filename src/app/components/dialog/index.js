@@ -2,48 +2,22 @@ const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./style.css')
 
-const PrismicReact = require('../../lib/prismic-react')
-
 const Dialog = (props) => {
   const style = getStyle()
-  const dialog = get(props, 'dialog', '')
-  const options = get(props, 'options', [])
-
-  const prismicDialog = new PrismicReact(dialog)
-
-  const dialogTitle = prismicDialog.fragmentToReact({
-    fragment: 'dialog.dialogtitle',
-    props: {
-      className: style.dialogTitle,
-      element: 'h1'
-    }
-  })
-
-  const dialogText = prismicDialog.fragmentToReact({
-    fragment: 'dialog.dialogtext',
-    props: {
-      className: style.dialogText,
-      element: 'p'
-    }
-  })
+  const dialog = get(props, 'dialog', {})
+  const title = get(dialog, 'title', '')
+  const text = get(dialog, 'text', '')
+  const options = get(props, 'overlay.options', [])
 
   return (
     <div className={style.dialog}>
-      {dialogTitle}
-      {dialogText}
-      <div className={style.dialogButtons}>
+      <h1 className={style.title}>{title}</h1>
+      <p className={style.text}>{text}</p>
+      <div className={style.buttons}>
         {
-          options.map(option => {
-            return prismicDialog.fragmentToReact({
-              fragment: `dialog.dialog${option.type}text`,
-              props: {
-                className: get(style, `${option.type}DialogButton`),
-                element: 'button',
-                title: option.title,
-                onClick: props.onClick(props, option.action.name, option.action.arguments)
-              }
-            })
-          })
+          options.map((option, index) => (
+            <button key={`${option.type}${index}`} className={get(style, option.type)} title={option.title || get(dialog, option.type)} onClick={props.onClick(props, option.action.name, option.action.arguments)}>{option.title || get(dialog, option.type)}</button>
+          ))
         }
       </div>
     </div>

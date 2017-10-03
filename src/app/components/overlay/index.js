@@ -19,7 +19,7 @@ const Overlay = (props) => {
   return <div className={props.overlay ? style.background : style.hidden} onClick={onClickCancel}>
     <div className={style.dialog} onClick={onClickDialog(props)}>
       <button className={style.close} onClick={onClickCancel} />
-      <Dialog {...props} options={get(props, 'overlay.options')} onClick={onClick} />
+      <Dialog {...props} onClick={onClick} />
     </div>
   </div>
 }

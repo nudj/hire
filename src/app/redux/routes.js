@@ -6,7 +6,7 @@ module.exports = {
   '/jobs': require('../pages/jobs'),
   '/jobs/:jobSlug': require('../pages/job'),
   '/jobs/:jobSlug/nudj': require('../pages/nudj'),
-  // '/jobs/:jobSlug/internal': require('../pages/compose'),
+  '/jobs/:jobSlug/internal': require('../pages/compose-internal'),
   // '/jobs/:jobSlug/internal/:messageId': require('../pages/compose'),
   // '/jobs/:jobSlug/external': require('../pages/select-referrer-external'),
   // '/jobs/:jobSlug/external/:messageId': require('../pages/compose-external')
