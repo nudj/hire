@@ -5,7 +5,7 @@ const Link = require('../link/link')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
-const { postData } = require('../../actions/app')
+const { postData } = require('@nudj/framework/actions')
 
 const getStyle = require('./select-referrer-external-page.css')
 

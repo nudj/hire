@@ -11,7 +11,7 @@ const Router = ({
   router.use(ensureLoggedIn)
   router.use(ensureOnboarded)
 
-  router.getHandlers('/jobs/:jobSlug', respondWith(fetchers.get))
+  router.getHandlers('/jobs/:jobSlug/nudj', respondWith(fetchers.get))
 
   return router
 }

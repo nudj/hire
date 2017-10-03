@@ -22,6 +22,7 @@ const expressRouters = {
     require('./pages/task-list/router'),
     require('./pages/jobs/router'),
     require('./pages/job/router'),
+    require('./pages/nudj/router'),
     // require('./server/routers/catch-all')
   ]
 }

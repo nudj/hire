@@ -2,7 +2,6 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
-const { LogThenRedirect } = require('@nudj/framework/errors')
 
 const common = require('../../server/modules/common')
 const jobs = require('../../server/modules/jobs')
@@ -84,19 +83,14 @@ const get = ({
   params
 }) => {
   return jobs.get(data, params.jobSlug)
-    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
-    .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
-    .then(data => jobs.getReferrals(data, data.job.id))
-    .then(data => jobs.getApplications(data, data.job.id))
-    .then(aggregateSent)
-    .then(data => {
-      if (!data.sentComplete.length) {
-        throw new LogThenRedirect('No nudj\'s sent yet', `/jobs/${data.job.slug}/nudj`, 'for', data.company.name, '-', data.job.title)
-      }
-      return data
-    })
-    .then(addDataKeyValue('activities', data => jobs.getJobActivities(data, data.job.id)))
-    .then(addDataKeyValue('tooltip', () => prismic.fetchContent(prismicQuery, true)))
+      .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+      .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+      .then(data => jobs.getReferrals(data, data.job.id))
+      .then(data => jobs.getApplications(data, data.job.id))
+      .then(addDataKeyValue('sentInternalComplete', () => []))
+      .then(aggregateSent)
+      .then(addDataKeyValue('activities', data => jobs.getJobActivities(data, data.job.id)))
+      .then(addDataKeyValue('tooltip', () => prismic.fetchContent(prismicQuery, true)))
 }
 
 module.exports = {

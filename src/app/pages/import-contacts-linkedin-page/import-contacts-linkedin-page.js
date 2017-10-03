@@ -12,7 +12,7 @@ const Tooltip = require('../tooltip/tooltip')
 const getStyle = require('./import-contacts-linkedin-page.css')
 const loadingStyle = require('../loading/loading.css')()
 
-const { postFile } = require('../../actions/app')
+const { postFile } = require('@nudj/framework/actions')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {

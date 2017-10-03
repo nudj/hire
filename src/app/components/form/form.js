@@ -2,7 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
 const omit = require('lodash/omit')
-const { postData } = require('../../actions/app')
+const { postData } = require('@nudj/framework/actions')
 
 function getSubmitHandler (props) {
   return (event) => {

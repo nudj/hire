@@ -16,7 +16,7 @@ const { emails: validators } = require('../../../lib/validators')
 const {
   showDialog,
   postData
-} = require('../../actions/app')
+} = require('@nudj/framework/actions')
 const {
   internal: tags,
   getDataBuilderFor
