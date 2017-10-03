@@ -1,19 +1,20 @@
 const React = require('react')
-const Link = require('../link/link')
 const get = require('lodash/get')
 const format = require('date-fns/format')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./jobs-page.css')
-const PageHeader = require('../page-header/page-header')
-const RowItem = require('../row-item/row-item')
-const Tooltip = require('../tooltip/tooltip')
+const getStyle = require('./style.css')
+const LayoutApp = require('../../components/layout-app')
+const Link = require('../../components/link/link')
+const PageHeader = require('../../components/page-header/page-header')
+const RowItem = require('../../components/row-item/row-item')
+const Tooltip = require('../../components/tooltip/tooltip')
 
 const JobsPage = (props) => {
   const style = getStyle()
   const jobs = get(props, 'jobs', [])
   const tooltip = get(props, 'tooltip')
   return (
-    <div className={style.pageBody}>
+    <LayoutApp {...props} className={style.pageBody}>
       <Helmet>
         <title>{`nudj - Jobs @ ${get(props, 'company.name')}`}</title>
       </Helmet>
@@ -52,7 +53,7 @@ const JobsPage = (props) => {
           {tooltip ? <Tooltip {...tooltip} /> : ''}
         </div>
       </div>
-    </div>
+    </LayoutApp>
   )
 }
 

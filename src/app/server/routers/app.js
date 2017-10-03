@@ -1042,29 +1042,6 @@ function hirerSurveyHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function tasksListHander (req, res, next) {
-  const prismicQuery = {
-    'document.type': 'tooltip',
-    'document.tags': ['taskList']
-  }
-
-  const data = merge(req.session.data)
-
-  tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
-    .then(data => hirers.getAllByCompany(data, data.company.id))
-    .then(data => {
-      data.people = common.fetchPeopleFromFragments(data.hirers)
-      return promiseMap(data)
-    })
-    .then(data => {
-      data.tooltip = prismic.fetchContent(prismicQuery, true)
-      return promiseMap(data)
-    })
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 function ensureOnboarded (req, res, next) {
   if (!req.session.data.company.onboarded) {
     req.session.notification = {
@@ -1077,8 +1054,6 @@ function ensureOnboarded (req, res, next) {
 }
 
 router.use(ensureLoggedIn)
-
-router.get('/', tasksListHander)
 
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)

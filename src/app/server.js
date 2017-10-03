@@ -20,6 +20,7 @@ const expressRouters = {
   secure: [
     require('./server/routers/auth'),
     require('./pages/task-list/router'),
+    require('./pages/jobs/router'),
     // require('./server/routers/catch-all')
   ]
 }

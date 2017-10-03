@@ -3,7 +3,7 @@ module.exports = {
   // '/import-contacts': require('../pages/import-contacts-linkedin'),
   // '/survey-page': require('../pages/survey'),
   // '/hirer-survey': require('../pages/hirer-survey'),
-  // '/jobs': require('../pages/jobs'),
+  '/jobs': require('../pages/jobs'),
   // '/jobs/:jobSlug': require('../pages/job'),
   // '/jobs/:jobSlug/nudj': require('../pages/network'),
   // '/jobs/:jobSlug/internal': require('../pages/compose'),
