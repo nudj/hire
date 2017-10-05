@@ -242,13 +242,13 @@ module.exports.postData = ({
     })
     .catch((error) => {
       console.error(error)
-      if (error.message === 'Unauthorized') {
-        // refresh the page to trigger a login redirection
-        window.location = ''
-        return
+      const authorities = {
+        nudj: '',
+        Google: '/auth/google'
       }
-      if (error.message === 'Unauthorized Google') {
-        window.location = '/auth/google'
+      if (error.message.startsWith('Unauthorized')) {
+        const authority = error.message.split(' ')[1]
+        window.location = (authority && authorities[authority]) || authorities.nudj
         return
       }
       dispatch(showError())

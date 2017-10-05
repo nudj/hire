@@ -1,5 +1,6 @@
 const axios = require('axios')
 const get = require('lodash/get')
+const { ErrorThenUnauthorized } = require('@nudj/framework/errors')
 
 const shallowMerge = (...args) => Object.assign({}, ...args)
 const config = {
@@ -27,10 +28,10 @@ function request (uri, options = {}) {
       if (get(error, 'response.status') === 401) {
         console.log(error.response)
         switch (error.response.data) {
-          case 'Unauthorized Google':
-            throw new Error('Unauthorized Google')
+          case 'Google':
+            throw new ErrorThenUnauthorized('Google')
           default:
-            throw new Error('Unauthorized')
+            throw new ErrorThenUnauthorized('nudj')
         }
       }
       console.log('error', error.message, `request - ${options.baseURL}${uri}`, options)

@@ -7,7 +7,6 @@ const { actionMapAssign } = require('@nudj/library')
 const { cacheReturnTo } = require('@nudj/library/server')
 
 const accounts = require('../modules/accounts')
-const router = express.Router()
 
 const authenticationFailureHandler = (req, res, next) => {
   req.session.notification = {
@@ -52,17 +51,25 @@ passport.use(new GoogleStrategy({
   .then(data => cb(null, data.account))
 }))
 
-router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
-  scope: [
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/gmail.send'
-  ],
-  accessType: 'offline',
-  approvalPrompt: 'force'
-}))
+const Router = ({
+  ensureLoggedIn,
+  respondWith
+}) => {
+  let router = express.Router()
 
-router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/failure' }), (req, res) => res.redirect(req.session.returnTo || '/'))
-router.get('/failure', authenticationFailureHandler)
+  router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/gmail.send'
+    ],
+    accessType: 'offline',
+    approvalPrompt: 'force'
+  }))
+  router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/auth/google/failure' }), (req, res) => res.redirect(req.session.returnTo || '/'))
+  router.get('/auth/google/failure', authenticationFailureHandler)
 
-module.exports = router
+  return router
+}
+
+module.exports = Router

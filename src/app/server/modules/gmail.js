@@ -5,12 +5,13 @@ const templater = require('../../lib/templater')
 const conversations = require('./conversations')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
+const { ErrorThenUnauthorized } = require('@nudj/framework/errors')
 
 const getAccountForPerson = (person) => {
   return accounts.getByFilters({ person })
     .then(account => {
       if (!account || !get(account, 'providers.google.accessToken')) {
-        throw new Error('Unauthorized Google')
+        throw new ErrorThenUnauthorized('Google')
       }
       return Promise.resolve(account.providers.google)
     })
@@ -20,8 +21,7 @@ const refreshAccessTokenAndSend = (email, refreshToken) => {
   return google.getAccessTokenFromRefreshToken(refreshToken)
     .then(accessToken => sendGmailAndLogResponse(email, accessToken, refreshToken))
     .catch(error => {
-      logger.log('error', error)
-      throw new Error('Unauthorized Google')
+      throw new ErrorThenUnauthorized('Google')
     })
 }
 

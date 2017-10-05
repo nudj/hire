@@ -19,6 +19,7 @@ const expressRouters = {
   insecure: [],
   secure: [
     require('./server/routers/auth'),
+    require('./server/routers/google-oauth'),
     require('./pages/task-list/router'),
     require('./pages/jobs/router'),
     require('./pages/job/router'),

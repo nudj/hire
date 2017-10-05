@@ -13,8 +13,8 @@ const Router = ({
 
   router.getHandlers('/jobs/:jobSlug/internal', respondWith(fetchers.get))
   router.postHandlers('/jobs/:jobSlug/internal', respondWith(fetchers.post)) //internalMessageSaveHandler)
-  // router.getHandlers('/jobs/:jobSlug/internal/:messageId', respondWith(fetchers.getMessage)) //sendSavedInternalMessageHandler)
-  // router.patchHandlers('/jobs/:jobSlug/internal/:messageId', respondWith(fetchers.patchMessage)) //patchInternalMessageHandler)
+  router.getHandlers('/jobs/:jobSlug/internal/:messageId', respondWith(fetchers.getMessage)) //sendSavedInternalMessageHandler)
+  router.patchHandlers('/jobs/:jobSlug/internal/:messageId', respondWith(fetchers.patchMessage)) //patchInternalMessageHandler)
 
   return router
 }

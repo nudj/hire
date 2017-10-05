@@ -119,8 +119,8 @@ function getErrorHandler (req, res, next) {
             message: 'Not found'
           }
           break
-        case 'Unauthorized Google':
-          res.status(401).send('Unauthorized Google')
+        case 'Google':
+          res.status(401).send('Google')
           responded = true
           break
         default:

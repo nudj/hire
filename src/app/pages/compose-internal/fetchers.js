@@ -47,9 +47,9 @@ const tooltipOptions = {
 }
 
 function fetchInternalPrismicContent (data) {
-  data.compose = prismic.fetchContent(composeOptions).then(results => results[0])
-  data.dialog = prismic.fetchContent(dialogOptions).then(results => results[0])
-  data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results[0])
+  data.compose = prismic.fetchContent(composeOptions).then(results => results && results[0])
+  data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
+  data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
   return promiseMap(data)
 }
 
@@ -111,19 +111,19 @@ const post = ({
   body,
   req
 }) => {
-  const recipients = req.body.recipients.replace(/\s/g, '').split(',')
+  const recipients = body.recipients.replace(/\s/g, '').split(',')
   const {
     subject,
     template,
     type
-  } = req.body
+  } = body
 
   return internalMessages.populateRecipients(data, recipients)
   .then(data => jobs.get(data, params.jobSlug))
   .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template))
   .then(data => {
     req.session.returnTo = `/jobs/${params.jobSlug}/internal/${data.savedMessage.id}`
-    req.session.returnFail = `/jobs/${params.jobSlug}/internal/`
+    req.session.returnFail = `/jobs/${params.jobSlug}/internal`
     return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
   })
   .then(data => {
@@ -139,7 +139,35 @@ const post = ({
   })
 }
 
+const getMessage = ({
+  data,
+  params,
+  req
+}) => {
+  return internalMessages.getById(data, params.messageId)
+  .then(data => jobs.get(data, params.jobSlug))
+  .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
+  .then(data => {
+    const { subject, message } = data.internalMessage
+    req.session.returnFail = `/jobs/${params.jobSlug}/internal`
+    return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, 'GMAIL')
+  })
+  .then(data => {
+    if (data.messages) {
+      // successful send
+      return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+        .then(data => internalMessages.patch(data, data.internalMessage.id, { sent: true, type: 'GMAIL' }))
+        .then(() => {
+          throw new SuccessThenRedirect('That’s the way, aha aha, I like it! 🎉', `/jobs/${params.jobSlug}`)
+        })
+    }
+    return fetchInternalPrismicContent(data)
+  })
+}
+
+
 module.exports = {
   get,
-  post
+  post,
+  getMessage
 }
