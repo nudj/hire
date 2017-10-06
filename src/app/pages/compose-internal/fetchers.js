@@ -165,9 +165,39 @@ const getMessage = ({
   })
 }
 
+const patchMessage = ({
+  data,
+  params,
+  req
+}) => {
+  const { subject, template, type } = body
+
+  return internalMessages.getById(data, params.messageId)
+    .then(data => jobs.get(data, params.jobSlug))
+    .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
+    .then(data => internalMessages.patch(data, params.messageId, { subject, message: template, recipients: data.internalMessage.recipients }))
+    .then(data => {
+      const { subject, message } = data.internalMessage
+      req.session.returnTo = `/jobs/${params.jobSlug}/internal/${data.internalMessage.id}`
+      req.session.returnFail = `/jobs/${params.jobSlug}/internal`
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, type)
+    })
+    .then(data => {
+      if (data.messages) {
+        // successful send
+        return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+          .then((data) => internalMessages.patch(data, data.internalMessage.id, { sent: true, type }))
+          .then(() => {
+            throw new SuccessThenRedirect('That’s the way, aha aha, I like it! 🎉', `/jobs/${params.jobSlug}`)
+          })
+      }
+      return fetchInternalPrismicContent(data)
+    })
+}
 
 module.exports = {
   get,
   post,
-  getMessage
+  getMessage,
+  patchMessage
 }

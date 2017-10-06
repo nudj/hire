@@ -4,8 +4,8 @@ const get = require('lodash/get')
 const pick = require('lodash/pick')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
-const { getActiveStep } = require('../../../lib')
 
+const { getActiveStep } = require('../../../lib')
 const Link = require('../link/link')
 const Form = require('../form/form')
 const FormStepLength = require('../form-step-length/form-step-length')
@@ -16,7 +16,7 @@ const FormStepNext = require('../form-step-next/form-step-next')
 const PageHeader = require('../page-header/page-header')
 const Tooltip = require('../tooltip/tooltip')
 const actions = require('@nudj/framework/actions')
-const getStyle = require('./compose-external-page.css')
+const getStyle = require('./style.css')
 
 const {
   showDialog,
@@ -52,7 +52,7 @@ const steps = [
   }
 ]
 
-module.exports = class ComposePage extends React.Component {
+class ComposeExternalPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -194,3 +194,5 @@ module.exports = class ComposePage extends React.Component {
     )
   }
 }
+
+module.exports = ComposeExternalPage
