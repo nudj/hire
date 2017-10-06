@@ -419,6 +419,9 @@ function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recip
     .then(data => network.getRecipient(data, data.person.id))
     .then(data => people.get(data, sender.id))
     .then(data => {
+      data.web = {
+        hostname: process.env.WEB_HOSTNAME
+      }
       if (type === 'GMAIL') {
         return gmail.send(data, data.person.id, tags.internal)
       }
@@ -622,6 +625,9 @@ function getExternalMessageHandler (req, res, next) {
     .then(data => {
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
+        data.web = {
+          hostname: process.env.WEB_HOSTNAME
+        }
         return gmail.send(data, person, tags.external)
           .then(data => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL' }))
       }
@@ -677,6 +683,9 @@ function patchExternalMessageHandler (req, res, next) {
         req.session.gmailSecret = createHash(8)
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
+        data.web = {
+          hostname: process.env.WEB_HOSTNAME
+        }
         return gmail.send(data, person, tags.external)
           .then(data => {
             req.session.notification = {
@@ -862,6 +871,9 @@ function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, s
       return promiseMap(data)
     })
     .then(data => {
+      data.web = {
+        hostname: process.env.WEB_HOSTNAME
+      }
       if (type === 'GMAIL') {
         return gmail.send(data, data.person.id, tags.survey)
       }
