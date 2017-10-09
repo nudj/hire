@@ -7,6 +7,7 @@ const {
   AppError,
   Redirect
 } = require('@nudj/framework/errors')
+const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
 const accounts = require('../../server/modules/accounts')
@@ -49,10 +50,18 @@ const messageOptions = {
   }
 }
 
+const fetchExternalPrismicContent = (data) => {
+  data.tooltips = prismic.fetchContent(tooltipOptions)
+  data.messages = prismic.fetchContent(messageOptions)
+  data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
+  return promiseMap(data)
+}
+
 const get = ({
   data,
   params,
-  query
+  query,
+  req
 }) => {
   const messageId = params.messageId
   const gmailSent = query.gmail && query.gmail === req.session.gmailSecret
@@ -72,15 +81,13 @@ const get = ({
       }
       return promiseMap(data)
     })
+    .then(fetchExternalPrismicContent)
 }
 
 function getExternalMessageProperties (data, messageId) {
   return Promise.resolve(data)
     .then(data => {
       data.recipient = common.fetchPersonFromFragment(data.recipient.id)
-      data.tooltips = prismic.fetchContent(tooltipOptions)
-      data.messages = prismic.fetchContent(messageOptions)
-      data.dialog = prismic.fetchContent(dialogOptions)
       return promiseMap(data)
     })
     .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
@@ -148,12 +155,7 @@ const patch = ({
       }
       return promiseMap(data)
     })
-    .then(data => {
-      data.tooltips = prismic.fetchContent(tooltipOptions)
-      data.messages = prismic.fetchContent(messageOptions)
-      data.dialog = prismic.fetchContent(dialogOptions)
-      return promiseMap(data)
-    })
+    .then(fetchExternalPrismicContent)
 }
 
 module.exports = {

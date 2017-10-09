@@ -137,3 +137,12 @@ module.exports.saveSendData = (stepName, stepData, options) => {
   }
   return module.exports.saveStepData(stepName, stepData)
 }
+
+const HIDE_CONFIRM = 'HIDE_CONFIRM'
+module.exports.HIDE_CONFIRM = HIDE_CONFIRM
+function hideConfirm () {
+  return {
+    type: HIDE_CONFIRM
+  }
+}
+module.exports.hideConfirm = () => quickDispatch(hideConfirm())

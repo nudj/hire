@@ -21,12 +21,12 @@ const Tooltip = require('../../components/tooltip/tooltip')
 const getStyle = require('./style.css')
 
 const {
-  showDialog,
-  hideConfirm
+  showDialog
 } = actions.app
 const {
   setActiveStep,
   setStepData,
+  hideConfirm,
   saveSendData
 } = pageActions
 const steps = [

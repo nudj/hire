@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./style.css')
 const actions = require('@nudj/framework/actions')
+const externalComposeActions = require('../../pages/external-compose/actions')
 const Dialog = require('../dialog')
 
 function onClickDialog (props) {
@@ -9,7 +10,10 @@ function onClickDialog (props) {
 }
 
 function onClick (props, action, args = []) {
-  return (event) => props.dispatch(actions.app[action](...args))
+  return (event) => {
+    const actionFunction = externalComposeActions[action] || actions.app[action]
+    props.dispatch(actionFunction(...args))
+  }
 }
 
 const Overlay = (props) => {

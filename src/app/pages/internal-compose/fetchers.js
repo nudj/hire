@@ -4,7 +4,7 @@ const {
   addDataKeyValue
 } = require('@nudj/library')
 const {
-  SuccessThenRedirect
+  Redirect
 } = require('@nudj/framework/errors')
 
 const accounts = require('../../server/modules/accounts')
@@ -132,7 +132,13 @@ const post = ({
       return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
         .then((data) => internalMessages.patch(data, data.savedMessage.id, { sent: true, type }))
         .then(() => {
-          throw new SuccessThenRedirect('That’s the way, aha aha, I like it! 🎉', `/jobs/${params.jobSlug}`)
+          throw new Redirect({
+            url: `/jobs/${params.jobSlug}`,
+            notification: {
+              type: 'Success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+          })
         })
     }
     return fetchInternalPrismicContent(data)
@@ -158,7 +164,13 @@ const getMessage = ({
       return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
         .then(data => internalMessages.patch(data, data.internalMessage.id, { sent: true, type: 'GMAIL' }))
         .then(() => {
-          throw new SuccessThenRedirect('That’s the way, aha aha, I like it! 🎉', `/jobs/${params.jobSlug}`)
+          throw new Redirect({
+            url: `/jobs/${params.jobSlug}`,
+            notification: {
+              type: 'Success',
+              message: 'That’s the way, aha aha, I like it! 🎉'
+            }
+          })
         })
     }
     return fetchInternalPrismicContent(data)
@@ -188,7 +200,13 @@ const patchMessage = ({
         return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
           .then((data) => internalMessages.patch(data, data.internalMessage.id, { sent: true, type }))
           .then(() => {
-            throw new SuccessThenRedirect('That’s the way, aha aha, I like it! 🎉', `/jobs/${params.jobSlug}`)
+            throw new Redirect({
+              url: `/jobs/${params.jobSlug}`,
+              notification: {
+                type: 'Success',
+                message: 'That’s the way, aha aha, I like it! 🎉'
+              }
+            })
           })
       }
       return fetchInternalPrismicContent(data)
