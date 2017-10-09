@@ -213,6 +213,9 @@ module.exports = class SurveyPage extends React.Component {
     return <div>Success</div>
   }
   render () {
+    const title = 'Craft a message to send to your team'
+    const subtitle = 'We\'ve created the message below to get you started, but feel free to customise it suit your team - after all you know them best!'
+
     const tooltip = get(this.props, 'tooltip')
     return (
       <Form className={this.style.pageBody} method='POST'>
@@ -221,12 +224,13 @@ module.exports = class SurveyPage extends React.Component {
         </Helmet>
         <input type='hidden' name='_csrf' value={this.props.csrfToken} />
         <PageHeader
-          title='Ask your team for recommendations'
-          subtitle='Send survey'
+          title='Asking your team for recommendations'
+          subtitle='On-boarding'
         >
           <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
         </PageHeader>
-        <h3 className={this.style.pageHeadline}>Compose your message</h3>
+        <h3 className={this.style.pageHeadline}>{title}</h3>
+        <p className={this.style.copy}>{subtitle}</p>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ComposeEmail

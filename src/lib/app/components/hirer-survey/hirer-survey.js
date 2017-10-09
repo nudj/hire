@@ -19,19 +19,20 @@ module.exports = class HirerSurvey extends React.Component {
   }
 
   render () {
-    const title = 'Time to enter your mind palace'
-    const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking questions you wouldn’t necessarily ask yourself.'
+    const title = 'Complete our survey and jog your memory'
+    const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking you questions you wouldn’t necessarily ask yourself.'
 
     const surveyUrl = get(this.props, 'survey.link', 'about:blank')
     const surveyFrame = (<iframe src={surveyUrl} className={this.style.surveyFrame} />)
 
     return (<div className={this.style.pageBody}>
       <Helmet>
-        <title>nudj - Complete your survey</title>
+        <title>nudj - Discover referrers in your network</title>
       </Helmet>
       <input type='hidden' name='_csrf' value={this.props.csrfToken} />
       <PageHeader
-        title='Complete your survey'
+        title='Discover referrers in your network'
+        subtitle='On-boarding'
       />
       <h3 className={this.style.pageHeadline}>{title}</h3>
       <p className={this.style.copy}>{subtitle}</p>
