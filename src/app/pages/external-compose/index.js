@@ -4,27 +4,31 @@ const get = require('lodash/get')
 const pick = require('lodash/pick')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
-
-const { getActiveStep } = require('../../../lib')
-const Link = require('../link/link')
-const Form = require('../form/form')
-const FormStepLength = require('../form-step-length/form-step-length')
-const FormStepStyle = require('../form-step-style/form-step-style')
-const FormStepCompose = require('../form-step-compose/form-step-compose')
-const FormStepSend = require('../form-step-send/form-step-send')
-const FormStepNext = require('../form-step-next/form-step-next')
-const PageHeader = require('../page-header/page-header')
-const Tooltip = require('../tooltip/tooltip')
 const actions = require('@nudj/framework/actions')
+
+const pageActions = require('./actions')
+const { getActiveStep } = require('../../lib')
+const LayoutApp = require('../../components/layout-app')
+const Link = require('../../components/link/link')
+const Form = require('../../components/form/form')
+const FormStepLength = require('../../components/form-step-length/form-step-length')
+const FormStepStyle = require('../../components/form-step-style/form-step-style')
+const FormStepCompose = require('../../components/form-step-compose/form-step-compose')
+const FormStepSend = require('../../components/form-step-send/form-step-send')
+const FormStepNext = require('../../components/form-step-next/form-step-next')
+const PageHeader = require('../../components/page-header/page-header')
+const Tooltip = require('../../components/tooltip/tooltip')
 const getStyle = require('./style.css')
 
 const {
   showDialog,
+  hideConfirm
+} = actions.app
+const {
   setActiveStep,
   setStepData,
-  hideConfirm,
   saveSendData
-} = actions
+} = pageActions
 const steps = [
   {
     name: 'selectLength',
@@ -65,7 +69,7 @@ class ComposeExternalPage extends React.Component {
 
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
-    let active = get(this.props, 'externalMessagePage.active')
+    let active = get(this.props, 'externalComposePage.active')
     if (isNil(active)) {
       active = getActiveStep(get(this.props, 'externalMessage', {}))
     }
@@ -107,12 +111,12 @@ class ComposeExternalPage extends React.Component {
           ]
         }))
       }
-      this.props.dispatch(actions[step.action || 'saveStepData'](stepName, stepData, options))
+      this.props.dispatch(pageActions[step.action || 'saveStepData'](stepName, stepData, options))
     }
   }
 
   onClickStep (requestedStep) {
-    const currentMessage = merge(get(this.props, 'externalMessage', {}), pick(this.props.externalMessagePage, steps.map(step => step.name)))
+    const currentMessage = merge(get(this.props, 'externalMessage', {}), pick(this.props.externalComposePage, steps.map(step => step.name)))
     return event => {
       this.props.dispatch(setActiveStep(requestedStep, currentMessage))
     }
@@ -120,8 +124,8 @@ class ComposeExternalPage extends React.Component {
 
   onClickConfirm (event) {
     event.stopPropagation()
-    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalMessagePage, steps.map(step => step.name)))
-    this.props.dispatch(setActiveStep(this.props.externalMessagePage.confirm, currentMessage, true))
+    const currentMessage = merge(this.props.externalMessage, pick(this.props.externalComposePage, steps.map(step => step.name)))
+    this.props.dispatch(setActiveStep(this.props.externalComposePage.confirm, currentMessage, true))
   }
 
   onClickCancel (event) {
@@ -145,52 +149,54 @@ class ComposeExternalPage extends React.Component {
   render () {
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
-    let active = get(this.props, 'externalMessagePage.active')
+    let active = get(this.props, 'externalComposePage.active')
     if (isNil(active)) {
       active = getActiveStep(get(this.props, 'externalMessage', {}))
     }
     return (
-      <Form className={this.style.pageBody} method='POST'>
-        <Helmet>
-          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
-        </Helmet>
-        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-        <PageHeader
-          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
-        />
-        <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
-        {steps.map((step, index, steps) => {
-          const {
-            name,
-            component: Component
-          } = step
-          const canSkipTo = !!(steps[index - 1] && !!data[steps[index - 1].name])
-          return (
-            <div className={this.style.pageContent} key={name}>
-              <div className={this.style.pageMain}>
-                <Component
-                  name={name}
-                  isActive={active === index}
-                  index={index + 1}
-                  {...this.props.externalMessage}
-                  {...this.props.externalMessagePage}
-                  onSubmitStep={this.onSubmitStep(step)}
-                  onChangeStep={this.onChangeStep(step)}
-                  messages={get(this.props, 'messages', [])}
-                  pageData={this.props}
-                  onClick={this.onClickStep(index)}
-                  confirm={this.props.externalMessagePage.confirm === index && this.renderConfirm()}
-                  canSkipTo={canSkipTo}
-                />
+      <LayoutApp {...this.props} className={this.style.pageBody}>
+        <Form method='POST'>
+          <Helmet>
+            <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+          </Helmet>
+          <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+          <PageHeader
+            title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+            subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
+          />
+          <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
+          {steps.map((step, index, steps) => {
+            const {
+              name,
+              component: Component
+            } = step
+            const canSkipTo = !!(steps[index - 1] && !!data[steps[index - 1].name])
+            return (
+              <div className={this.style.pageContent} key={name}>
+                <div className={this.style.pageMain}>
+                  <Component
+                    name={name}
+                    isActive={active === index}
+                    index={index + 1}
+                    {...this.props.externalMessage}
+                    {...this.props.externalComposePage}
+                    onSubmitStep={this.onSubmitStep(step)}
+                    onChangeStep={this.onChangeStep(step)}
+                    messages={get(this.props, 'messages', [])}
+                    pageData={this.props}
+                    onClick={this.onClickStep(index)}
+                    confirm={this.props.externalComposePage.confirm === index && this.renderConfirm()}
+                    canSkipTo={canSkipTo}
+                  />
+                </div>
+                <div className={this.style.pageSidebar}>
+                  {this.renderTooltip(name)}
+                </div>
               </div>
-              <div className={this.style.pageSidebar}>
-                {this.renderTooltip(name)}
-              </div>
-            </div>
-          )
-        })}
-      </Form>
+            )
+          })}
+        </Form>
+      </LayoutApp>
     )
   }
 }

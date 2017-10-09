@@ -1,9 +1,5 @@
-let {
-  css,
-  merge,
-  variables,
-  mixins
-} = require('../../lib/css')
+const { css, merge } = require('@nudj/framework/css')
+const { mixins, variables } = require('../../lib/css')
 
 const nextToTitleContainer = {
   width: `calc(100% - ${variables.padding.a})`

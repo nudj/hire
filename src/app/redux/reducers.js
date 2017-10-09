@@ -1,5 +1,5 @@
-// const peoplePage = require('../pages/people/reducer')
+const externalComposePage = require('../pages/external-compose/reducer')
 
 module.exports = {
-  // peoplePage
+  externalComposePage
 }

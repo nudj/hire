@@ -3,7 +3,7 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
-const { ErrorThenRedirect } = require('@nudj/framework/errors')
+const { Redirect } = require('@nudj/framework/errors')
 
 const common = require('../../server/modules/common')
 const jobs = require('../../server/modules/jobs')
@@ -92,7 +92,13 @@ const get = ({
     .then(aggregateSent)
     .then(data => {
       if (!data.sentComplete.length) {
-        throw new ErrorThenRedirect('No nudj\'s sent yet', `/jobs/${data.job.slug}/nudj`, 'for', data.company.name, '-', data.job.title)
+        throw new Redirect({
+          url: `/jobs/${data.job.slug}/nudj`,
+          notification: {
+            type: 'error',
+            message: 'No nudj\'s sent yet'
+          }
+        }, 'No nudj\'s sent yet for', data.company.name, '-', data.job.title)
       }
       return data
     })

@@ -1,13 +1,15 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const Link = require('../link/link')
-const PageHeader = require('../page-header/page-header')
-const RowItem = require('../row-item/row-item')
-const Tooltip = require('../tooltip/tooltip')
-const { postData } = require('@nudj/framework/actions')
+const actions = require('@nudj/framework/actions')
 
-const getStyle = require('./select-referrer-external-page.css')
+const LayoutApp = require('../../components/layout-app')
+const Link = require('../../components/link/link')
+const PageHeader = require('../../components/page-header/page-header')
+const RowItem = require('../../components/row-item/row-item')
+const Tooltip = require('../../components/tooltip/tooltip')
+
+const getStyle = require('./style.css')
 
 module.exports = class ComposePage extends React.Component {
   constructor (props) {
@@ -23,7 +25,7 @@ module.exports = class ComposePage extends React.Component {
   onClickSend (person) {
     return () => {
       const jobSlug = get(this.props, 'job.slug', '')
-      this.props.dispatch(postData({
+      this.props.dispatch(actions.app.postData({
         url: `/jobs/${jobSlug}/external`,
         data: {
           recipient: person
@@ -130,7 +132,7 @@ module.exports = class ComposePage extends React.Component {
 
   render () {
     return (
-      <div className={this.style.pageBody}>
+      <LayoutApp {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
         </Helmet>
@@ -155,7 +157,7 @@ module.exports = class ComposePage extends React.Component {
             {this.renderNudjNetworkList()}
           </div>
         </div>
-      </div>
+      </LayoutApp>
     )
   }
 }

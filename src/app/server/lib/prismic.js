@@ -1,5 +1,6 @@
 const Prismic = require('prismic.io')
 const mapValues = require('lodash/mapValues')
+const { merge } = require('@nudj/library')
 
 const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
 const repo = process.env.PRISMICIO_REPO
@@ -17,7 +18,9 @@ function fetchContent ({
   const request = Prismic.api(repoUrl, { accessToken })
     .then(api => queryDocuments({api, query}))
     .then(response => response.results.map(doc => {
-      return mapValues(keys, value => fragmentToText(doc.get(`${type}.${value}`)))
+      return merge(mapValues(keys, value => fragmentToText(doc.get(`${type}.${value}`))), {
+        tags: doc.tags
+      })
     }))
     .catch(error => handleErrors(error))
 

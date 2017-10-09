@@ -57,13 +57,9 @@ const initialState = {
   confirm: null
 }
 
-const externalMessagesReducer = (data) => {
-  return (state = initialState, action) => {
-    const type = camelCase(action.type)
-    return actions[type] ? actions[type](state, action) : state
-  }
+const reducer = (state = initialState, action) => {
+  const type = camelCase(action.type)
+  return actions[type] ? actions[type](state, action) : state
 }
 
-module.exports = {
-  externalMessagesReducer
-}
+module.exports = reducer

@@ -1,9 +1,9 @@
 const React = require('react')
 const get = require('lodash/get')
-const Textarea = require('react-textarea-autosize')
+const Textarea = require('react-textarea-autosize').default
 
 const PrismicReact = require('../../lib/prismic-react')
-const templater = require('../../../lib/templater')
+const templater = require('../../lib/templater')
 const FormStep = require('../form-step/form-step')
 
 const getStyle = require('./form-step-compose.css')
@@ -117,12 +117,8 @@ class FormStepCompose extends React.Component {
     const lengthTag = this.props.selectLength.toLowerCase()
     const styleTag = this.props.selectStyle.toLowerCase()
     const prismicMessage = this.props.messages.find(message => message.tags.includes(lengthTag) && message.tags.includes(styleTag))
-    const prismicCompose = new PrismicReact(prismicMessage)
 
-    const message = prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})
-    const subject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
-
-    return {message, subject}
+    return prismicMessage
   }
 
   getComposeMessageBaseSubject () {

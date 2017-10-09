@@ -86,7 +86,7 @@ function renderSentListItem ({jobSlug, person, index, style, props}) {
   const resendInternalButton = (<Link className={style.button} to={`/jobs/${jobSlug}/internal`}>Resend</Link>)
   const resendExternalButton = (<button className={style.button} onClick={resendExternalMessage({props, person, jobSlug})}>Resend</button>)
   const resendButton = source === 'external' ? resendExternalButton : resendInternalButton
-  const actions = source === 'referral' ? [] : [resendButton]
+  const actions = source === 'referral' ? '' : resendButton
 
   let status = 'Message sent'
 

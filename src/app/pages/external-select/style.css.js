@@ -1,4 +1,5 @@
-let { css, merge, mixins, variables } = require('../../lib/css')
+const { css, merge } = require('@nudj/framework/css')
+const { mixins, variables } = require('../../lib/css')
 
 const mainNetworkPaddingRight = `calc(${variables.sizing.sidebarWidth} + ${variables.padding.b} + ${variables.padding.e})`
 
