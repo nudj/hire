@@ -2,7 +2,7 @@ module.exports = {
   '/': require('../pages/tasks'),
   // '/import-contacts': require('../pages/import-contacts-linkedin'),
   '/send-survey': require('../pages/survey-compose'),
-  // '/hirer-survey': require('../pages/hirer-survey'),
+  '/survey': require('../pages/survey'),
   '/jobs': require('../pages/jobs'),
   '/jobs/:jobSlug': require('../pages/job'),
   '/jobs/:jobSlug/nudj': require('../pages/nudj'),

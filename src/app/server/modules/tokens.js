@@ -1,6 +1,7 @@
 const createHash = require('hash-generator')
-const request = require('../../lib/request')
 const { promiseMap } = require('@nudj/library')
+
+const request = require('../../lib/request')
 
 const hashLength = 16
 
@@ -25,8 +26,8 @@ function fetchTokenById (id) {
     .then(results => results.pop())
 }
 
-function fetchTokensByData (data) {
-  return request(`tokens/filter?data=${data}`)
+function fetchTokensByType (type) {
+  return request(`tokens/filter?type=${type}`)
 }
 
 module.exports.get = function (data, token) {
@@ -39,8 +40,8 @@ module.exports.getById = function (data, id) {
   return promiseMap(data)
 }
 
-module.exports.getByData = function (data, tokenData) {
-  data.tokens = fetchTokensByData(tokenData)
+module.exports.getByType = function (data, tokenData) {
+  data.tokens = fetchTokensByType(tokenData)
   return promiseMap(data)
 }
 
