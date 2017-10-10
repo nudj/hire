@@ -6,7 +6,7 @@ const getStyle = require('./task-list.css')
 
 const sendSurvey = {
   action: 'Send survey',
-  actionLink: '/survey-page',
+  actionLink: '/send-survey',
   text: 'Help jog your team’s memory by sending them this bespoke survey to uncover people for them to ask or hire.',
   title: 'Ask your team for recommendations'
 }

@@ -20,7 +20,8 @@ const expressRouters = {
   secure: [
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
-    require('./pages/task-list/router'),
+    require('./pages/tasks/router'),
+    require('./pages/survey-compose/router'),
     require('./pages/jobs/router'),
     require('./pages/job/router'),
     require('./pages/nudj/router'),

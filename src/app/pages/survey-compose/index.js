@@ -3,34 +3,32 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const some = require('lodash/some')
 const values = require('lodash/values')
-const getStyle = require('./survey-page.css')
-const PageHeader = require('../page-header/page-header')
-const PrismicReact = require('../../lib/prismic-react')
-const templater = require('../../../lib/templater')
 const { merge } = require('@nudj/library')
-const Form = require('../form/form')
-const Tooltip = require('../tooltip/tooltip')
-const ComposeEmail = require('../compose-email/compose-email')
-const { emails: validators } = require('../../../lib/validators')
-const {
-  showDialog,
-  postData
-} = require('@nudj/framework/actions')
+const actions = require('@nudj/framework/actions')
+
+const getStyle = require('./style.css')
+const PrismicReact = require('../../lib/prismic-react')
+const templater = require('../../lib/templater')
+const { emails: validators } = require('../../lib/validators')
 const {
   survey: tags,
   getDataBuilderFor
-} = require('../../../lib/tags')
+} = require('../../lib/tags')
+const LayoutApp = require('../../components/layout-app')
+const PageHeader = require('../../components/page-header/page-header')
+const Form = require('../../components/form/form')
+const Tooltip = require('../../components/tooltip/tooltip')
+const ComposeEmail = require('../../components/compose-email/compose-email')
 
-module.exports = class SurveyPage extends React.Component {
+class SurveyPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
 
-    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
-    let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
-    let composeMessage = (get(this.state, 'message', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
-    let savedRecipients
+    const composeSubject = get(props, 'compose.subject', '')
+    const composeMessage = get(props, 'compose.message', '').replace('\r\n', '\n')
     const cleanMessage = this.cleanTemplate(composeMessage)
+    let savedRecipients
 
     if (get(props, 'recipients')) {
       savedRecipients = props.recipients.join(', ')
@@ -80,9 +78,8 @@ module.exports = class SurveyPage extends React.Component {
     }, {})
   }
   componentWillReceiveProps (props) {
-    let prismicCompose = get(props, 'compose') && new PrismicReact(props.compose)
-    let composeSubject = (get(this.state, 'subject', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})) || '')
-    let composeMessage = (get(this.state, 'template', prismicCompose && prismicCompose.fragmentToText({fragment: 'composemessage.composetext'})) || '').replace('\r\n', '\n')
+    const composeSubject = get(props, 'compose.subject', '')
+    const composeMessage = get(props, 'compose.message', '').replace('\r\n', '\n')
     const cleanMessage = this.cleanTemplate(composeMessage)
 
     this.setState({
@@ -156,7 +153,7 @@ module.exports = class SurveyPage extends React.Component {
   }
   onClickSend (event) {
     const emailData = (type) => {
-      let url = `/survey-page`
+      let url = `/send-survey`
       let method = 'post'
 
       if (get(this.props, 'incompleteSurveyMessage.id')) {
@@ -177,9 +174,9 @@ module.exports = class SurveyPage extends React.Component {
     }
     event.preventDefault()
     if (this.props.googleAuthenticated) {
-      return this.props.dispatch(postData(emailData('GMAIL')))
+      return this.props.dispatch(actions.app.postData(emailData('GMAIL')))
     }
-    this.props.dispatch(showDialog({
+    this.props.dispatch(actions.app.showDialog({
       options: [
         {
           type: 'cancel',
@@ -206,53 +203,51 @@ module.exports = class SurveyPage extends React.Component {
       ]
     }))
   }
-  renderSending () {
-    return <div>Sending</div>
-  }
-  renderSuccess () {
-    return <div>Success</div>
-  }
   render () {
     const tooltip = get(this.props, 'tooltip')
     return (
-      <Form className={this.style.pageBody} method='POST'>
-        <Helmet>
-          <title>{`nudj - Surveys ${get(this.props, 'company.name')}`}</title>
-        </Helmet>
-        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-        <PageHeader
-          title='Ask your team for recommendations'
-          subtitle='Send survey'
-        >
-          <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
-        </PageHeader>
-        <h3 className={this.style.pageHeadline}>Compose your message</h3>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            <ComposeEmail
-              recipients={get(this.state, 'recipients')}
-              recipientsError={get(this.state, 'recipientsError')}
-              subject={get(this.state, 'subject')}
-              subjectError={get(this.state, 'subjectError')}
-              js={get(this.state, 'js')}
-              editing={get(this.state, 'editing')}
-              templateFallback={get(this.state, 'templateFallback')}
-              template={get(this.state, 'template')}
-              templateError={get(this.state, 'templateError')}
-              subjectFallback={get(this.state, 'subjectFallback')}
-              onChangeRecipients={this.onChangeRecipients}
-              onBlurRecipients={this.onBlurRecipients}
-              onClickEdit={this.onClickEdit}
-              onChangeMessage={this.onChangeMessage}
-              renderMessage={this.renderMessage}
-              onChangeSubject={this.onChangeSubject}
-            />
+      <LayoutApp {...this.props} className={this.style.pageBody}>
+        <Form method='POST'>
+          <Helmet>
+            <title>{`nudj - Surveys ${get(this.props, 'company.name')}`}</title>
+          </Helmet>
+          <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+          <PageHeader
+            title='Ask your team for recommendations'
+            subtitle='Send survey'
+          >
+            <button className={this.style.submit} onClick={this.onClickSend} disabled={get(this.state, 'js') && (this.validateRecipients() || some(values(this.validateEmail()), (value) => !!value))}>Send message</button>
+          </PageHeader>
+          <h3 className={this.style.pageHeadline}>Compose your message</h3>
+          <div className={this.style.pageContent}>
+            <div className={this.style.pageMain}>
+              <ComposeEmail
+                recipients={get(this.state, 'recipients')}
+                recipientsError={get(this.state, 'recipientsError')}
+                subject={get(this.state, 'subject')}
+                subjectError={get(this.state, 'subjectError')}
+                js={get(this.state, 'js')}
+                editing={get(this.state, 'editing')}
+                templateFallback={get(this.state, 'templateFallback')}
+                template={get(this.state, 'template')}
+                templateError={get(this.state, 'templateError')}
+                subjectFallback={get(this.state, 'subjectFallback')}
+                onChangeRecipients={this.onChangeRecipients}
+                onBlurRecipients={this.onBlurRecipients}
+                onClickEdit={this.onClickEdit}
+                onChangeMessage={this.onChangeMessage}
+                renderMessage={this.renderMessage}
+                onChangeSubject={this.onChangeSubject}
+              />
+            </div>
+            <div className={this.style.pageSidebar}>
+              {tooltip ? <Tooltip {...tooltip} /> : ''}
+            </div>
           </div>
-          <div className={this.style.pageSidebar}>
-            {tooltip ? <Tooltip {...tooltip} /> : ''}
-          </div>
-        </div>
-      </Form>
+        </Form>
+      </LayoutApp>
     )
   }
 }
+
+module.exports = SurveyPage

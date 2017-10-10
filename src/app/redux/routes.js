@@ -1,7 +1,7 @@
 module.exports = {
-  '/': require('../pages/task-list'),
+  '/': require('../pages/tasks'),
   // '/import-contacts': require('../pages/import-contacts-linkedin'),
-  // '/survey-page': require('../pages/survey'),
+  '/send-survey': require('../pages/survey-compose'),
   // '/hirer-survey': require('../pages/hirer-survey'),
   '/jobs': require('../pages/jobs'),
   '/jobs/:jobSlug': require('../pages/job'),

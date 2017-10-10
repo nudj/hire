@@ -52,7 +52,7 @@ const Index = () => {
         <Switch>
           <Route exact path='/' component={PageWithState(TaskListPage)} />
           <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
-          <Route exact path='/survey-page' component={PageWithState(SurveyPage)} />
+          <Route exact path='/send-survey' component={PageWithState(SurveyPage)} />
           <Route exact path='/hirer-survey' component={PageWithState(HirerSurvey)} />
           <Route exact path='/jobs' component={PageWithState(JobsPage)} />
           <Route exact path='/jobs/:jobSlug' component={PageWithState(JobPage)} />

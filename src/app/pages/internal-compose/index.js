@@ -201,14 +201,6 @@ class ComposeInternalPage extends React.Component {
     }))
   }
 
-  renderSending () {
-    return <div>Sending</div>
-  }
-
-  renderSuccess () {
-    return <div>Success</div>
-  }
-
   render () {
     const tooltip = get(this.props, 'tooltip')
     return (

@@ -818,8 +818,8 @@ function patchSurveyPageHandler (req, res, next) {
     .then(data => surveyMessages.patch(data, req.params.messageId, { subject, message: template, recipients: data.surveyMessage.recipients }))
     .then(data => {
       const { subject, message } = data.surveyMessage
-      req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
-      req.session.returnFail = `/survey-page`
+      req.session.returnTo = `/send-survey/${data.surveyMessage.id}`
+      req.session.returnFail = `/send-survey`
       return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
     })
     .then(data => {
@@ -908,7 +908,7 @@ function sendSavedSurveyPageHandler (req, res, next) {
           type: 'error',
           message: 'You\'ve already sent this message.'
         }
-        return res.redirect(`/survey-page`)
+        return res.redirect(`/send-survey`)
       }
       return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
     })
@@ -950,8 +950,8 @@ function surveyPageSendHandler (req, res, next) {
     .then(data => surveyMessages.populateRecipients(data, recipients))
     .then(data => surveyMessages.post(data, data.hirer.id, data.survey.id, data.recipients, subject, template, type))
     .then(data => {
-      req.session.returnTo = `/survey-page/${data.surveyMessage.id}`
-      req.session.returnFail = `/survey-page`
+      req.session.returnTo = `/send-survey/${data.surveyMessage.id}`
+      req.session.returnFail = `/send-survey`
       return promiseMap(data)
     })
     .then(data => surveyCreateAndMailUniqueLinkToRecipients(data, recipients, subject, template, type))
@@ -1058,10 +1058,10 @@ router.use(ensureLoggedIn)
 router.get('/import-contacts', importContactsLinkedInHandler)
 router.post('/import-contacts', importContactsLinkedInSaveHandler)
 
-router.get('/survey-page', surveyPageHandler)
-router.post('/survey-page', surveyPageSendHandler)
-router.get('/survey-page/:messageId', sendSavedSurveyPageHandler)
-router.patch('/survey-page/:messageId', patchSurveyPageHandler)
+router.get('/send-survey', surveyPageHandler)
+router.post('/send-survey', surveyPageSendHandler)
+router.get('/send-survey/:messageId', sendSavedSurveyPageHandler)
+router.patch('/send-survey/:messageId', patchSurveyPageHandler)
 
 router.get('/hirer-survey', hirerSurveyHandler)
 
