@@ -93,11 +93,7 @@ const get = ({
     .then(data => {
       if (!data.sentComplete.length) {
         throw new Redirect({
-          url: `/jobs/${data.job.slug}/nudj`,
-          notification: {
-            type: 'error',
-            message: 'No nudj\'s sent yet'
-          }
+          url: `/jobs/${data.job.slug}/nudj`
         }, 'No nudj\'s sent yet for', data.company.name, '-', data.job.title)
       }
       return data

@@ -2,7 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 const { Helmet } = require('react-helmet')
-const { postData } = require('@nudj/framework/actions')
+const actions = require('@nudj/framework/actions')
 
 const getStyle = require('./style.css')
 const LayoutApp = require('../../components/layout-app')
@@ -61,7 +61,7 @@ function renderJobActivities ({props, style}) {
 function resendExternalMessage ({props, person, jobSlug}) {
   return () => {
     const recipient = get(person, 'id')
-    props.dispatch(postData({
+    props.dispatch(actions.app.postData({
       url: `/jobs/${jobSlug}/external`,
       data: { recipient }
     }))

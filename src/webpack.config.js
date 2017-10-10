@@ -52,6 +52,9 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    mainFields: ["main"]
+  },
   plugins,
   stats: {
     colors: true,
