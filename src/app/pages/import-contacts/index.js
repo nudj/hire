@@ -3,18 +3,16 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const { Redirect } = require('react-router')
 const Dropzone = require('react-dropzone')
-
 const Papa = require('papaparse')
 
-const PageHeader = require('../page-header/page-header')
-const Tooltip = require('../tooltip/tooltip')
+const actions = require('@nudj/framework/actions')
+const PageHeader = require('../../components/page-header/page-header')
+const Tooltip = require('../../components/tooltip/tooltip')
+// const loadingStyle = require('../../components/loading/loading.css')()
+const getStyle = require('./style.css')
 
-const getStyle = require('./import-contacts-linkedin-page.css')
-const loadingStyle = require('../loading/loading.css')()
 
-const { postFile } = require('@nudj/framework/actions')
-
-module.exports = class ComposePage extends React.Component {
+class ImportContactsPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -94,7 +92,7 @@ module.exports = class ComposePage extends React.Component {
     const uploading = true
     this.setState({uploading})
 
-    this.props.dispatch(postFile({ url, data, method, file }))
+    this.props.dispatch(actions.app.postFile({ url, data, method, file }))
   }
 
   cancelUpload (event) {
@@ -182,7 +180,7 @@ module.exports = class ComposePage extends React.Component {
 
     if (uploading) {
       className = this.style.uploadPreviewUploading
-      overlay = (<div className={this.style.loadingOverlay}><div className={loadingStyle.spinner} /></div>)
+      overlay = (<div className={this.style.loadingOverlay}><div className='spinner' /></div>)
     }
 
     return (<div className={className}>
@@ -232,7 +230,7 @@ module.exports = class ComposePage extends React.Component {
 
     // this is just for show
     if (acceptedFiles.length && parsing) {
-      return (<div className={loadingStyle.spinner} />)
+      return (<div className='spinner' />)
     }
 
     if (acceptedFiles.length && data.length) {
@@ -370,3 +368,5 @@ module.exports = class ComposePage extends React.Component {
     </div>)
   }
 }
+
+module.exports = ImportContactsPage

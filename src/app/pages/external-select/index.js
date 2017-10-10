@@ -11,7 +11,7 @@ const Tooltip = require('../../components/tooltip/tooltip')
 
 const getStyle = require('./style.css')
 
-module.exports = class ComposePage extends React.Component {
+class ExternalSelectPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -161,3 +161,5 @@ module.exports = class ComposePage extends React.Component {
     )
   }
 }
+
+module.exports = ExternalSelectPage

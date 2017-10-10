@@ -1,6 +1,6 @@
 module.exports = {
   '/': require('../pages/tasks'),
-  // '/import-contacts': require('../pages/import-contacts-linkedin'),
+  '/import-contacts': require('../pages/import-contacts'),
   '/send-survey': require('../pages/survey-compose'),
   '/survey': require('../pages/survey'),
   '/jobs': require('../pages/jobs'),
