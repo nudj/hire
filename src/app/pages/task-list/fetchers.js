@@ -1,16 +1,22 @@
-const { promiseMap } = require('@nudj/library')
+const {
+  promiseMap,
+  addDataKeyValue
+} = require('@nudj/library')
 const logger = require('@nudj/framework/logger')
 
 const common = require('../../server/modules/common')
 const tasks = require('../../server/modules/tasks')
 const hirers = require('../../server/modules/hirers')
+const prismic = require('../../server/lib/prismic')
 
-const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
-const repo = process.env.PRISMICIO_REPO
-const prismic = require('../../server/modules/prismic')({accessToken, repo})
-const prismicQuery = {
-  'document.type': 'tooltip',
-  'document.tags': ['taskList']
+const tooltipOptions = {
+  type: 'tooltip',
+  tags: ['taskList'],
+  keys: {
+    title: 'tooltiptitle',
+    text: 'tooltiptext',
+    intercom: 'tooltipintercombutton'
+  }
 }
 
 const get = ({
@@ -18,14 +24,8 @@ const get = ({
   req
 }) => tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id)
 .then(data => hirers.getAllByCompany(data, data.company.id))
-.then(data => {
-  data.people = common.fetchPeopleFromFragments(data.hirers)
-  return promiseMap(data)
-})
-.then(data => {
-  data.tooltip = prismic.fetchContent(prismicQuery, true)
-  return promiseMap(data)
-})
+.then(addDataKeyValue('people', data => common.fetchPeopleFromFragments(data.hirers)))
+.then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
 
 module.exports = {
   get

@@ -8,13 +8,16 @@ const logger = require('@nudj/framework/logger')
 const jobs = require('../../server/modules/jobs')
 const externalMessages = require('../../server/modules/external-messages')
 const internalMessages = require('../../server/modules/internal-messages')
+const prismic = require('../../server/lib/prismic')
 
-const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
-const repo = process.env.PRISMICIO_REPO
-const prismic = require('../../server/modules/prismic')({accessToken, repo})
-const prismicQuery = {
-  'document.type': 'tooltip',
-  'document.tags': ['jobsDashboard']
+const tooltipOptions = {
+  type: 'tooltip',
+  tags: ['jobsDashboard'],
+  keys: {
+    title: 'tooltiptitle',
+    text: 'tooltiptext',
+    intercom: 'tooltipintercombutton'
+  }
 }
 
 function jobsHaveSent (data) {
@@ -40,7 +43,7 @@ const get = ({
   req
 }) => jobs.getAll(data)
 .then(jobsHaveSent)
-.then(addDataKeyValue('tooltip', () => prismic.fetchContent(prismicQuery, true)))
+.then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
 
 module.exports = {
   get
