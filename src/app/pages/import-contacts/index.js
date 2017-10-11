@@ -12,7 +12,6 @@ const Tooltip = require('../../components/tooltip/tooltip')
 // const loadingStyle = require('../../components/loading/loading.css')()
 const getStyle = require('./style.css')
 
-
 class ImportContactsPage extends React.Component {
   constructor (props) {
     super(props)

@@ -1,11 +1,9 @@
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
-const { push } = require('@nudj/react-router-redux')
 const { merge } = require('@nudj/library')
 const actions = require('@nudj/framework/actions')
 
 const { getActiveStep } = require('../../lib')
-const request = require('../../lib/request')
 
 const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
 

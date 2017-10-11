@@ -84,6 +84,25 @@ function compoundCount ({accumulator, current, compoundKey}) {
   return accumulator
 }
 
+function compoundCounting ({family, familyTotals, parent, applicationCounts, referralCounts}) {
+  const children = family[parent]
+  const initial = {
+    applications: applicationCounts[parent] || 0,
+    referrals: referralCounts[parent] || 0
+  }
+  const totals = childCompoundCounting(children, applicationCounts, referralCounts, family, initial)
+  familyTotals[parent] = totals
+}
+
+function childCompoundCounting (children, applicationCounts, referralCounts, family, initial) {
+  return (children || []).reduce((accumulator, child) => {
+    return childCompoundCounting(family[child], applicationCounts, referralCounts, family, {
+      applications: accumulator.applications + (applicationCounts[child] || 0),
+      referrals: accumulator.referrals + (referralCounts[child] || 0)
+    })
+  }, initial)
+}
+
 const get = ({
   data,
   params

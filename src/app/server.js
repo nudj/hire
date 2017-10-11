@@ -31,7 +31,7 @@ const expressRouters = {
     require('./pages/internal-compose/router'),
     require('./pages/external-select/router'),
     require('./pages/external-compose/router'),
-    // require('./server/routers/catch-all')
+    require('./server/routers/catch-all')
   ]
 }
 const expressAssetPath = path.join(__dirname, 'server/assets')

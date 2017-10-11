@@ -12,7 +12,6 @@ const employees = require('../../server/modules/employees')
 const network = require('../../server/modules/network')
 const gmail = require('../../server/modules/gmail')
 const tasks = require('../../server/modules/tasks')
-const internalMessages = require('../../server/modules/internal-messages')
 const surveys = require('../../server/modules/surveys')
 const surveyMessages = require('../../server/modules/survey-messages')
 const employeeSurveys = require('../../server/modules/employee-surveys')
@@ -211,7 +210,8 @@ const getMessage = ({
 const patchMessage = ({
   data,
   params,
-  body
+  body,
+  req
 }) => {
   const { subject, template, type } = body
 
@@ -241,7 +241,7 @@ const patchMessage = ({
       }
       return data
     })
-    .then(fetchInternalPrismicContent)
+    .then(fetchSurveyPrismicContent)
 }
 
 module.exports = {

@@ -7,7 +7,6 @@ const { merge } = require('@nudj/library')
 const actions = require('@nudj/framework/actions')
 
 const getStyle = require('./style.css')
-const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../lib/templater')
 const { emails: validators } = require('../../lib/validators')
 const {

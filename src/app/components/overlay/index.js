@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 const getStyle = require('./style.css')
 const actions = require('@nudj/framework/actions')
 const externalComposeActions = require('../../pages/external-compose/actions')

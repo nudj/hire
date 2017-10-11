@@ -20,7 +20,7 @@ const getAccountForPerson = (person) => {
 const refreshAccessTokenAndSend = (email, refreshToken) => {
   return google.getAccessTokenFromRefreshToken(refreshToken)
     .then(accessToken => sendGmailAndLogResponse(email, accessToken, refreshToken))
-    .catch(error => {
+    .catch(() => {
       throw new Unauthorized({ type: 'Google' })
     })
 }

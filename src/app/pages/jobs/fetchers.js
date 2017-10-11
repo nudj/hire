@@ -3,7 +3,6 @@ const {
   addDataKeyValue,
   merge
 } = require('@nudj/library')
-const logger = require('@nudj/framework/logger')
 
 const jobs = require('../../server/modules/jobs')
 const tasks = require('../../server/modules/tasks')

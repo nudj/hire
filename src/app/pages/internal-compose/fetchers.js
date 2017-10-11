@@ -179,6 +179,7 @@ const getMessage = ({
 const patchMessage = ({
   data,
   params,
+  body,
   req
 }) => {
   const { subject, template, type } = body

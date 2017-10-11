@@ -1,8 +1,4 @@
-const {
-  promiseMap,
-  addDataKeyValue
-} = require('@nudj/library')
-const logger = require('@nudj/framework/logger')
+const { addDataKeyValue } = require('@nudj/library')
 
 const common = require('../../server/modules/common')
 const tasks = require('../../server/modules/tasks')

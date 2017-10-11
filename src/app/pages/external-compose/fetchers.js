@@ -1,23 +1,15 @@
 const {
-  merge,
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
-const {
-  AppError,
-  Redirect
-} = require('@nudj/framework/errors')
 const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
 const accounts = require('../../server/modules/accounts')
 const jobs = require('../../server/modules/jobs')
-const people = require('../../server/modules/people')
-const employees = require('../../server/modules/employees')
 const network = require('../../server/modules/network')
 const gmail = require('../../server/modules/gmail')
 const tasks = require('../../server/modules/tasks')
-const internalMessages = require('../../server/modules/internal-messages')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
@@ -67,7 +59,7 @@ const get = ({
   const messageId = params.messageId
   const gmailSent = query.gmail && query.gmail === req.session.gmailSecret
 
-  return addDataKeyValue('tasksIncomplete', data =>       tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getById(data, messageId))
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
