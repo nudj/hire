@@ -17,6 +17,7 @@ const surveys = require('../../server/modules/surveys')
 const surveyMessages = require('../../server/modules/survey-messages')
 const employeeSurveys = require('../../server/modules/employee-surveys')
 const tokens = require('../../server/modules/tokens')
+const { createNotification } = require('../../lib')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
 const intercom = require('../../lib/intercom')
@@ -59,7 +60,8 @@ function fetchSurveyPrismicContent (data) {
 const get = ({
   data
 }) => {
-  return accounts.verifyGoogleAuthentication(data, data.person.id)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(surveys.getSurveyForCompany)
     .then(data => surveyMessages.findIncompleteSurveyMessagesForHirer(data, data.hirer.id))
     .then(data => {
@@ -81,7 +83,8 @@ const post = ({
   const { subject, template, type } = body
   const recipients = body.recipients.replace(/\s/g, '').split(',')
 
-  return surveys.getSurveyForCompany(data)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => surveys.getSurveyForCompany(data))
     .then(data => surveyMessages.populateRecipients(data, recipients))
     .then(data => surveyMessages.post(data, data.hirer.id, data.survey.id, data.recipients, subject, template, type))
     .then(data => {
@@ -105,10 +108,7 @@ const post = ({
         .then(() => {
           throw new Redirect({
             url: '/',
-            notification: {
-              type: 'success',
-              message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
-            }
+            notification: createNotification('success', 'Great job! We’ll be in touch as soon as we hear back from your team.')
           })
         })
       }
@@ -144,9 +144,6 @@ function surveyCreateAndMailUniqueLinkToRecipient (sender, recipient, company, s
       return promiseMap(data)
     })
     .then(data => {
-      data.web = {
-        hostname: process.env.WEB_HOSTNAME
-      }
       if (type === 'GMAIL') {
         return gmail.send(data, data.person.id, tags.survey)
       }
@@ -173,7 +170,8 @@ const getMessage = ({
   const taskType = 'SEND_SURVEY_INTERNAL'
   const eventName = 'Survey sent'
 
-  return surveys.getSurveyForCompany(data)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => surveys.getSurveyForCompany(data))
     .then(data => surveyMessages.getById(data, params.messageId))
     .then(data => surveyMessages.getRecipientsEmailAdresses(data, data.surveyMessage.recipients))
     .then(data => {
@@ -181,10 +179,7 @@ const getMessage = ({
       if (data.surveyMessage.sent) {
         throw new Redirect({
           url: '/send-survey',
-          notification: {
-            type: 'error',
-            message: 'You\'ve already sent this message.'
-          }
+          notification: createNotification('error', 'You\'ve already sent this message.')
         })
       }
       return surveyCreateAndMailUniqueLinkToRecipients(data, data.recipients, subject, message, type)
@@ -204,10 +199,7 @@ const getMessage = ({
         .then(() => {
           throw new Redirect({
             url: '/',
-            notification: {
-              type: 'success',
-              message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
-            }
+            notification: createNotification('success', 'Great job! We’ll be in touch as soon as we hear back from your team.')
           })
         })
       }
@@ -223,7 +215,8 @@ const patchMessage = ({
 }) => {
   const { subject, template, type } = body
 
-  return surveyMessages.getById(data, params.messageId)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => surveyMessages.getById(data, params.messageId))
     .then(data => surveys.getSurveyForCompany(data))
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => surveyMessages.getRecipientsEmailAdresses(data, data.surveyMessage.recipients))
@@ -242,10 +235,7 @@ const patchMessage = ({
           .then(() => {
             throw new Redirect({
               url: '/',
-              notification: {
-                type: 'success',
-                message: 'Great job! We’ll be in touch as soon as we hear back from your team.'
-              }
+              notification: createNotification('success', 'Great job! We’ll be in touch as soon as we hear back from your team.')
             })
           })
       }

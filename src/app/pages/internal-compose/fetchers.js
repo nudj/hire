@@ -17,6 +17,7 @@ const tasks = require('../../server/modules/tasks')
 const internalMessages = require('../../server/modules/internal-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
+const { createNotification } = require('../../lib')
 
 const composeOptions = {
   type: 'composemessage',
@@ -53,14 +54,14 @@ function fetchInternalPrismicContent (data) {
   return promiseMap(data)
 }
 
-function internalMessageCreateAndMailUniqueLinkToRecipients (data, company, job, person, hirer, recipients, subject, template, type) {
-  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(person, hirer, recipient, company, job, subject, template, type))
+function internalMessageCreateAndMailUniqueLinkToRecipients (data, company, job, person, hirer, web, recipients, subject, template, type) {
+  const sendMessages = recipients.map(recipient => internalMessageCreateAndMailUniqueLinkToRecipient(person, hirer, web, recipient, company, job, subject, template, type))
   data.messages = Promise.all(sendMessages)
 
   return promiseMap(data)
 }
 
-function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recipient, company, job, subject, template, type) {
+function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, web, recipient, company, job, subject, template, type) {
   const mailContent = {
     recipients: recipient,
     subject,
@@ -69,7 +70,8 @@ function internalMessageCreateAndMailUniqueLinkToRecipient (sender, hirer, recip
   const data = merge(mailContent, {
     company,
     job,
-    hirer
+    hirer,
+    web
   })
   // Find or create person from email
   // Create employee relation for this person
@@ -93,7 +95,8 @@ const get = ({
   data,
   params
 }) => {
-  return accounts.verifyGoogleAuthentication(data, data.person.id)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
   .then(data => jobs.get(data, params.jobSlug))
   .then(data => internalMessages.findIncompleteMessagesForHirer(data, data.hirer.id))
   .then(data => {
@@ -118,13 +121,14 @@ const post = ({
     type
   } = body
 
-  return internalMessages.populateRecipients(data, recipients)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  .then(data => internalMessages.populateRecipients(data, recipients))
   .then(data => jobs.get(data, params.jobSlug))
   .then(data => internalMessages.post(data, data.hirer.id, data.job.id, data.recipients, subject, template))
   .then(data => {
     req.session.returnTo = `/jobs/${params.jobSlug}/internal/${data.savedMessage.id}`
     req.session.returnFail = `/jobs/${params.jobSlug}/internal`
-    return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, recipients, subject, template, type)
+    return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.web, recipients, subject, template, type)
   })
   .then(data => {
     if (data.messages) {
@@ -134,10 +138,7 @@ const post = ({
         .then(() => {
           throw new Redirect({
             url: `/jobs/${params.jobSlug}`,
-            notification: {
-              type: 'Success',
-              message: 'That’s the way, aha aha, I like it! 🎉'
-            }
+            notification: createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
           })
         })
     }
@@ -150,13 +151,14 @@ const getMessage = ({
   params,
   req
 }) => {
-  return internalMessages.getById(data, params.messageId)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  .then(data => internalMessages.getById(data, params.messageId))
   .then(data => jobs.get(data, params.jobSlug))
   .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
   .then(data => {
     const { subject, message } = data.internalMessage
     req.session.returnFail = `/jobs/${params.jobSlug}/internal`
-    return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, 'GMAIL')
+    return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.web, data.recipients, subject, message, 'GMAIL')
   })
   .then(data => {
     if (data.messages) {
@@ -166,10 +168,7 @@ const getMessage = ({
         .then(() => {
           throw new Redirect({
             url: `/jobs/${params.jobSlug}`,
-            notification: {
-              type: 'Success',
-              message: 'That’s the way, aha aha, I like it! 🎉'
-            }
+            notification: createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
           })
         })
     }
@@ -184,7 +183,8 @@ const patchMessage = ({
 }) => {
   const { subject, template, type } = body
 
-  return internalMessages.getById(data, params.messageId)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => internalMessages.getById(data, params.messageId))
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => internalMessages.getRecipientsEmailAdresses(data, data.internalMessage.recipients))
     .then(data => internalMessages.patch(data, params.messageId, { subject, message: template, recipients: data.internalMessage.recipients }))
@@ -192,7 +192,7 @@ const patchMessage = ({
       const { subject, message } = data.internalMessage
       req.session.returnTo = `/jobs/${params.jobSlug}/internal/${data.internalMessage.id}`
       req.session.returnFail = `/jobs/${params.jobSlug}/internal`
-      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.recipients, subject, message, type)
+      return internalMessageCreateAndMailUniqueLinkToRecipients(data, data.company, data.job, data.person, data.hirer, data.web, data.recipients, subject, message, type)
     })
     .then(data => {
       if (data.messages) {
@@ -202,10 +202,7 @@ const patchMessage = ({
           .then(() => {
             throw new Redirect({
               url: `/jobs/${params.jobSlug}`,
-              notification: {
-                type: 'Success',
-                message: 'That’s the way, aha aha, I like it! 🎉'
-              }
+              notification: createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
             })
           })
       }

@@ -53,7 +53,7 @@ const Index = () => {
           <Route exact path='/' component={PageWithState(TaskListPage)} />
           <Route exact path='/import-contacts' component={PageWithState(ImportContactsLinkedInPage)} />
           <Route exact path='/send-survey' component={PageWithState(SurveyPage)} />
-          <Route exact path='/hirer-survey' component={PageWithState(HirerSurvey)} />
+          <Route exact path='/survey' component={PageWithState(HirerSurvey)} />
           <Route exact path='/jobs' component={PageWithState(JobsPage)} />
           <Route exact path='/jobs/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/jobs/:jobSlug/nudj' component={PageWithState(Nudj)} />

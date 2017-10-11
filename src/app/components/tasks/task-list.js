@@ -27,7 +27,7 @@ const shareJobs = {
 
 const hirerSurvey = {
   action: 'Complete survey',
-  actionLink: '/hirer-survey',
+  actionLink: '/survey',
   text: 'Time to unlock your memory palace. This survey asks the questions that you might not ask yourself, helping uncover those hidden gems in your own network.',
   title: 'Discover referrers in your network'
 }

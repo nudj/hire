@@ -41,7 +41,8 @@ function fetchPrismicContent (data) {
 const get = ({
   data
 }) => {
-  return employees.getOrCreateByPerson(data, data.person.id, data.company.id)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => employees.getOrCreateByPerson(data, data.person.id, data.company.id))
     .then(data => surveys.getSurveyForCompany(data, surveyTypes.HIRER_SURVEY))
     .then(data => {
       data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)

@@ -6,6 +6,7 @@ const Dropzone = require('react-dropzone')
 const Papa = require('papaparse')
 
 const actions = require('@nudj/framework/actions')
+const LayoutApp = require('../../components/layout-app')
 const PageHeader = require('../../components/page-header/page-header')
 const Tooltip = require('../../components/tooltip/tooltip')
 // const loadingStyle = require('../../components/loading/loading.css')()
@@ -348,7 +349,7 @@ class ImportContactsPage extends React.Component {
     const step = this.renderCurrentStep()
     const {title, subtitle} = this.renderCurrentTitles()
 
-    return (<div className={this.style.pageBody}>
+    return (<LayoutApp {...this.props} className={this.style.pageBody}>
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>
@@ -365,7 +366,7 @@ class ImportContactsPage extends React.Component {
           {this.renderTooltip()}
         </div>
       </div>
-    </div>)
+    </LayoutApp>)
   }
 }
 

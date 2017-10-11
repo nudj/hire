@@ -7,12 +7,10 @@ const { actionMapAssign } = require('@nudj/library')
 const { cacheReturnTo } = require('@nudj/library/server')
 
 const accounts = require('../modules/accounts')
+const { createNotification } = require('../../lib')
 
 const authenticationFailureHandler = (req, res, next) => {
-  req.session.notification = {
-    type: 'error',
-    message: 'Something went wrong during authentication.'
-  }
+  req.session.notification = createNotification('error', 'Something went wrong during authentication.')
   const failureRoute = req.session.returnFail || '/'
   delete req.session.gmailSecret
   delete req.session.returnFail

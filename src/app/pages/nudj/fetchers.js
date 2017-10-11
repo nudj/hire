@@ -6,6 +6,7 @@ const {
 
 const common = require('../../server/modules/common')
 const jobs = require('../../server/modules/jobs')
+const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const internalMessages = require('../../server/modules/internal-messages')
 const prismic = require('../../server/lib/prismic')
@@ -86,7 +87,8 @@ const get = ({
   data,
   params
 }) => {
-  return jobs.get(data, params.jobSlug)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))

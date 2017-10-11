@@ -6,6 +6,7 @@ const {
 const logger = require('@nudj/framework/logger')
 
 const jobs = require('../../server/modules/jobs')
+const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const internalMessages = require('../../server/modules/internal-messages')
 const prismic = require('../../server/lib/prismic')
@@ -41,7 +42,8 @@ function jobHasSent (data, hirer, jobId) {
 const get = ({
   data,
   req
-}) => jobs.getAll(data)
+}) => addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+.then(data => jobs.getAll(data))
 .then(jobsHaveSent)
 .then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
 

@@ -34,7 +34,8 @@ const get = ({
   data,
   params
 }) => {
-  return jobs.get(data, params.jobSlug)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => jobs.get(data, params.jobSlug))
     .then(data => network.get(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
@@ -58,7 +59,8 @@ const post = ({
 }) => {
   const recipient = body.recipient
 
-  return jobs.get(data, params.jobSlug)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => jobs.get(data, params.jobSlug))
     .then(data => network.getRecipient(data, recipient))
     .then(data => externalMessages.post(data, data.hirer, data.job, recipient))
     .then(data => {

@@ -21,6 +21,7 @@ const internalMessages = require('../../server/modules/internal-messages')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
+const { createNotification } = require('../../lib')
 
 const dialogOptions = {
   type: 'dialog',
@@ -66,16 +67,14 @@ const get = ({
   const messageId = params.messageId
   const gmailSent = query.gmail && query.gmail === req.session.gmailSecret
 
-  return jobs.get(data, params.jobSlug)
+  return addDataKeyValue('tasksIncomplete', data =>       tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getById(data, messageId))
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
     .then(data => getExternalMessageProperties(data, messageId))
     .then(data => {
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
-        data.web = {
-          hostname: process.env.WEB_HOSTNAME
-        }
         return gmail.send(data, data.person.id, tags.external)
           .then(data => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL' }))
       }
@@ -116,7 +115,8 @@ const patch = ({
   const sendMessage = body.sendMessage
   const messageId = params.messageId
 
-  return externalMessages.getById(data, messageId)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => externalMessages.getById(data, messageId))
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
@@ -135,15 +135,9 @@ const patch = ({
         req.session.gmailSecret = createHash(8)
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
-        data.web = {
-          hostname: process.env.WEB_HOSTNAME
-        }
         return gmail.send(data, data.person.id, tags.external)
           .then(data => {
-            req.session.notification = {
-              type: 'success',
-              message: 'That’s the way, aha aha, I like it! 🎉'
-            }
+            req.session.notification = createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
             return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
           })
       }

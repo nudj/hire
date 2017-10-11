@@ -3,14 +3,15 @@ const {
   merge,
   promiseMap
 } = require('@nudj/library')
+const logger = require('@nudj/framework/logger')
 
 const NudjError = require('../../lib/error')
 const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
-const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
 const { getDataBuilderFor } = require('../../lib/tags')
+const { createNotification } = require('../../lib')
 
 function validate (formData, data, tags) {
   let invalid
@@ -52,10 +53,7 @@ function sendEmails ({ recipients, subject, template }, tags) {
 function handleError (error, data) {
   delete data.messages
   data.form = error.data
-  data.notification = {
-    type: 'error',
-    message: error.message
-  }
+  data.notification = createNotification('error', error.message)
   return data
 }
 

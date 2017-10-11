@@ -21,6 +21,7 @@ const employeeSurveys = require('../../server/modules/employee-surveys')
 const tokens = require('../../server/modules/tokens')
 const assets = require('../../server/modules/assets')
 const prismic = require('../../server/lib/prismic')
+const { createNotification } = require('../../lib')
 const tags = require('../../lib/tags')
 const intercom = require('../../lib/intercom')
 const mailer = require('../../server/lib/mailer')
@@ -39,8 +40,11 @@ const tooltipOptions = {
 const get = ({
   data
 }) => {
-  data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
-  return promiseMap(data)
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  .then(data => {
+    data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
+    return promiseMap(data)
+  })
 }
 
 function sendImportEmail (data) {
@@ -70,7 +74,8 @@ const post = ({
   const taskType = 'UNLOCK_NETWORK_LINKEDIN'
   const eventName = 'linkedin network uploaded'
 
-  return assets.post({data, asset, assetType, fileName, person})
+  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+    .then(data => assets.post({data, asset, assetType, fileName, person}))
     .then(data => sendImportEmail(data))
     .then(data => tasks.completeTaskByType(data, data.company.id, data.hirer.id, taskType))
     .then(data => {
@@ -84,10 +89,7 @@ const post = ({
       .then(() => {
         throw new Redirect({
           url: '/',
-          notification: {
-            type: 'success',
-            message: 'Nice. We\'ll let you know as soon as we find someone worth asking.'
-          }
+          notification: createNotification('success', 'Nice. We\'ll let you know as soon as we find someone worth asking.')
         })
       })
     })

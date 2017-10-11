@@ -15,6 +15,7 @@ const find = require('lodash/find')
 const App = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
+const LoadingComponent = require('./components/loading/loading')
 const expressRouters = {
   insecure: [],
   secure: [
@@ -34,6 +35,7 @@ const expressRouters = {
   ]
 }
 const expressAssetPath = path.join(__dirname, 'server/assets')
+const buildAssetPath = path.join(__dirname, 'server/build')
 const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
   req.session.data = req.session.data || {
@@ -50,7 +52,9 @@ server({
   reduxReducers,
   mockData,
   expressAssetPath,
+  buildAssetPath,
   expressRouters,
   spoofLoggedIn,
-  errorHandlers
+  errorHandlers,
+  LoadingComponent
 })
