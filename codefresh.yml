@@ -36,10 +36,10 @@ steps:
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
-    when:
-      branch:
-        only:
-          - develop
+    # when:
+    #   branch:
+    #     only:
+    #       - develop
 
   push_release:
     title: Push Release
