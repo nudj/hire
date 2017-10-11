@@ -19,19 +19,25 @@ steps:
       - ./node_modules/.bin/standard
       - ./node_modules/.bin/mocha --recursive test
 
-  build:
-    title: Build
+  build_latest:
+    title: Build Latest
     type: build
     image_name: nudj/hire
     tag: latest
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - NODE_ENV=production
+      - DEBUG=true
+    # when:
+    #   branch:
+    #     only:
+    #       - develop
 
   push_latest:
     title: Push Latest
     type: push
-    candidate: '${{build}}'
+    candidate: '${{build_latest}}'
     tag: latest
     credentials:
       username: '${{dockerUsername}}'
@@ -41,8 +47,22 @@ steps:
     #     only:
     #       - develop
 
-  push_release:
-    title: Push Release
+  build:
+    title: Build
+    type: build
+    image_name: nudj/hire
+    tag: production
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - NODE_ENV=production
+    when:
+      branch:
+        only:
+          - master
+
+  push:
+    title: Push
     type: push
     candidate: '${{build}}'
     tag: 2.3.1
