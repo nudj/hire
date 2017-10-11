@@ -1,6 +1,6 @@
 const Intercom = require('intercom-client')
 const format = require('date-fns/format')
-const logger = require('./logger')
+const logger = require('@nudj/framework/logger')
 const intercom = new Intercom.Client({
   token: process.env.INTERCOM_ACCESS_TOKEN
 })

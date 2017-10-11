@@ -1,6 +1,6 @@
 const google = require('googleapis')
 const { Base64 } = require('js-base64')
-const logger = require('../lib/logger')
+const logger = require('@nudj/framework/logger')
 const request = require('../../lib/request')
 const { emailBuilder } = require('@nudj/library/server')
 

@@ -1,5 +1,5 @@
 let Mailgun = require('mailgun-js')
-let logger = require('../lib/logger')
+let logger = require('@nudj/framework/logger')
 var mailgun = Mailgun({
   apiKey: process.env.MAILGUN_API_KEY,
   domain: process.env.MAILGUN_DOMAIN

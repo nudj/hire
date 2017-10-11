@@ -1,6 +1,6 @@
 const get = require('lodash/get')
 const google = require('../lib/google')
-const logger = require('../../lib/logger')
+const logger = require('@nudj/framework/logger')
 const templater = require('../../lib/templater')
 const conversations = require('./conversations')
 const accounts = require('./accounts')

@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const logger = require('@nudj/framework/logger')
 
 function NudjError (message, type, data) {
   this.message = message

@@ -1,7 +1,7 @@
 const request = require('../../lib/request')
 const get = require('lodash/get')
 const google = require('../lib/google')
-const logger = require('../../lib/logger')
+const logger = require('@nudj/framework/logger')
 const {
   toQs,
   promiseMap
