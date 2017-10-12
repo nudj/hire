@@ -1,8 +1,14 @@
-const camelCase = require('lodash/camelCase')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
+const {
+  SET_ACTIVE_STEP,
+  SET_STEP_DATA,
+  SAVE_STEP_DATA,
+  HIDE_CONFIRM
+} = require('./actions')
 
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const savedExternalMessageRoute = new RouteParser('/jobs/:jobSlug/external/:messageId')
 
 const setActiveStep = (state, action) => {
@@ -45,11 +51,11 @@ const routerLocationChange = (state, action) => {
 }
 
 const actions = {
-  setActiveStep,
-  setStepData,
-  saveStepData,
-  hideConfirm,
-  routerLocationChange
+  [SET_ACTIVE_STEP]: setActiveStep,
+  [SET_STEP_DATA]: setStepData,
+  [SAVE_STEP_DATA]: saveStepData,
+  [HIDE_CONFIRM]: hideConfirm,
+  [ROUTER_LOCATION_CHANGE]: routerLocationChange
 }
 
 const initialState = {
@@ -58,7 +64,7 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  const type = camelCase(action.type)
+  const type = action.type
   return actions[type] ? actions[type](state, action) : state
 }
 
