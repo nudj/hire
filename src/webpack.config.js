@@ -1,13 +1,28 @@
 var path = require('path')
 var webpack = require('webpack')
-var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 process.noDeprecation = true
+
+console.log('Building for environment:', process.env.NODE_ENV)
+
+let plugins = [
+  new webpack.DllReferencePlugin({
+    context: '.',
+    manifest: require('./vendors-manifest.json')
+  }),
+  new webpack.EnvironmentPlugin(['NODE_ENV'])
+]
+if (process.env.DEBUG !== 'true') {
+  plugins = plugins.concat([
+    new UglifyJSPlugin()
+  ])
+}
 
 module.exports = {
   cache: true,
   entry: {
-    'lib/server/assets/js/app': './lib/app/client'
+    'app/server/build/app': './app/client'
   },
   output: {
     path: __dirname,
@@ -20,9 +35,9 @@ module.exports = {
       {
         test: /\.js$/,
         include: [
-            path.join(__dirname, 'lib')
+          path.join(__dirname, 'app'),
+          path.join(__dirname, 'node_modules', '@nudj')
         ],
-        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           presets: [
@@ -37,17 +52,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new webpack.DllReferencePlugin({
-      context: '.',
-      manifest: require('./vendors-manifest.json')
-    })
-  ],
   resolve: {
-    plugins: [
-      new DirectoryNamedWebpackPlugin()
-    ]
+    mainFields: ["main"]
   },
+  plugins,
   stats: {
     colors: true,
     cached: false,
