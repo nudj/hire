@@ -1,7 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const PrismicReact = require('../../lib/prismic-react')
 const templater = require('../../lib/templater')
 const FormStep = require('../form-step/form-step')
 
