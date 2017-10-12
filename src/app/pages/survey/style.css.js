@@ -23,15 +23,17 @@ const styles = {
   }),
   highlight: mixins.highlightColour,
   copy: merge(mixins.typography.p, {
-    marginLeft: variables.padding.d
+    marginLeft: variables.padding.d,
+    width: '75%'
   }),
-  surveyFrame: {
+  surveyFrame: merge(mixins.cardStyle, {
+    padding: `${variables.padding.f}`,
     border: '0',
     height: '100%',
-    minHeight: '60vh',
+    minHeight: '70vh',
     outline: '0',
     width: '100%'
-  }
+  })
 }
 
 module.exports = css(merge(mixins.pageLayout, styles))

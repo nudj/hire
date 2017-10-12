@@ -161,7 +161,8 @@ const styles = {
   dragAndDropCopyEmphasis: mixins.dragAndDrop.dragAndDropCopyEmphasis,
   highlight: mixins.highlightColour,
   copy: merge(mixins.typography.p, {
-    marginLeft: variables.padding.d
+    marginLeft: variables.padding.d,
+    width: '75%'
   })
 }
 

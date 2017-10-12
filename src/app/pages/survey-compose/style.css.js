@@ -27,6 +27,10 @@ module.exports = css(merge(mixins.pageLayout, {
     color: variables.colors.royalBlue,
     textDecoration: 'none'
   },
+  copy: merge(mixins.typography.p, {
+    marginLeft: variables.padding.d,
+    width: '75%'
+  }),
   companyLink: mixins.deLink,
   submit: mixins.button,
   chunk: {},

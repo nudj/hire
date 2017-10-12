@@ -315,8 +315,8 @@ class ImportContactsPage extends React.Component {
   renderCurrentTitles () {
     const active = this.state.active
 
-    let titleText = 'Exporting your connections from LinkedIn'
-    let subtitleText = 'Follow the step-by-step guide below to share your LinkedIn connections with nudj. If you get stuck, just contact us.'
+    let titleText = 'Export your connections from LinkedIn'
+    let subtitleText = 'Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we\'ll analyse them to discover who the best people to ask for recommendations are.'
 
     switch (active) {
       case 2:
@@ -355,7 +355,7 @@ class ImportContactsPage extends React.Component {
       <input type='hidden' name='_csrf' value={this.props.csrfToken} />
       <PageHeader
         title='Unlocking your network'
-        subtitle='LinkedIn'
+        subtitle='On-boarding'
       />
       {title}
       {subtitle}
