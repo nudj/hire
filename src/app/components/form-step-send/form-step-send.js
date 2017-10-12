@@ -50,11 +50,10 @@ function getComposeMessageBaseSubject (props) {
   }
 
   const prismicMessage = messages.find(message => message.tags.includes(selectLength.toLowerCase()) && message.tags.includes(selectStyle.toLowerCase()))
-  const prismicCompose = new PrismicReact(prismicMessage)
 
-  const subject = prismicCompose.fragmentToText({fragment: 'composemessage.composesubject'})
+  const subject = prismicMessage.subject
 
-  return subject ? renderMessage(subject, props.pageData) : ''
+  return subject
 }
 
 const FormStepSend = (props) => {

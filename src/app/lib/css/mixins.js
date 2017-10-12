@@ -183,8 +183,7 @@ module.exports.linkImage = linkImage
 module.exports.pageLayout = {
   pageBody: merge(headings.p, {
     background: variables.colors.grey,
-    minHeight: '100vh',
-    padding: `0 0 ${variables.padding.c} 0`
+    minHeight: '100vh'
   }),
   pageHeader: {
     display: 'flex',
