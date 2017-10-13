@@ -22,6 +22,12 @@ const HirerSurvey = (props) => {
 
   const handlePageLeave = (event) => {
     event.preventDefault()
+    let url = event.target.getAttribute('href')
+
+    if (!url) {
+      url = '/'
+    }
+
     return props.dispatch(showDialog({
       options: [
         {
@@ -33,15 +39,13 @@ const HirerSurvey = (props) => {
         {
           type: 'confirm',
           action: {
-            name: 'saveStepData',
-            arguments: 'aplsmd'
+            name: 'redirect',
+            url
           }
         }
       ]
     }))
   }
-
-  console.log('Survey page', props)
 
   return (
     <LayoutApp {...props} onPageLeave={handlePageLeave} className={style.pageBody}>

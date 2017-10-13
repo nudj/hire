@@ -13,7 +13,7 @@ const Header = (props) => {
   return (
     <nav className={style.nav}>
       <div className={style.main}>
-        <Link className={style.home} to='/'>
+        <Link className={style.home} onClick={props.onPageLeave} to='/'>
           <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
         </Link>
         <ul className={style.menu}>

@@ -15,9 +15,12 @@ const Dialog = (props) => {
       <p className={style.text}>{text}</p>
       <div className={style.buttons}>
         {
-          options.map((option, index) => (
-            <button key={`${option.type}${index}`} className={get(style, option.type)} title={option.title || get(dialog, option.type)} onClick={props.onClick(props, option.action.name, option.action.arguments)}>{option.title || get(dialog, option.type)}</button>
-          ))
+          options.map((option, index) => {
+            if (option.action.name !== 'redirect') {
+              return (<button key={`${option.type}${index}`} className={get(style, option.type)} title={option.title || get(dialog, option.type)} onClick={props.onClick(props, option.action.name, option.action.arguments)}>{option.title || get(dialog, option.type)}</button>)
+            }
+            return (<a key={`${option.type}${index}`} href={option.action.url || '/'} className={get(style, option.type)}>{option.title || get(dialog, option.type)}</a>)
+          })
         }
       </div>
     </div>
