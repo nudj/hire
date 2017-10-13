@@ -23,6 +23,13 @@ const tooltipOptions = {
   }
 }
 
+const exitSurveyPageDialog = {
+  title: 'Discard your answers?',
+  text: ' If you leave this page before completing the survey you will lose all of your answers.',
+  cancel: 'Cancel',
+  confirm: 'Discard'
+}
+
 function fetchPrismicContent (data) {
   data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
   return promiseMap(data)
@@ -49,6 +56,7 @@ const get = ({
     .then(data => {
       const token = data.token
       const link = `${data.survey.link}?token=${token.token}`
+      data.dialog = exitSurveyPageDialog
       data.survey = merge(data.survey, {link})
       return promiseMap(data)
     })
