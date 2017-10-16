@@ -6,7 +6,7 @@ const Notification = require('../notification')
 const Overlay = require('../overlay')
 const ScrollTop = require('../scroll-top')
 
-const Page = (props) => {
+const LayoutApp = (props) => {
   const style = getStyle()
 
   return (
@@ -25,4 +25,4 @@ const Page = (props) => {
   )
 }
 
-module.exports = Page
+module.exports = LayoutApp

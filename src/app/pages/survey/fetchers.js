@@ -23,8 +23,20 @@ const tooltipOptions = {
   }
 }
 
+const dialogOptions = {
+  type: 'dialog',
+  tags: ['hirerSurveyPageLeave'],
+  keys: {
+    title: 'dialogtitle',
+    text: 'dialogtext',
+    cancel: 'dialogcanceltext',
+    link: 'dialogconfirmtext'
+  }
+}
+
 function fetchPrismicContent (data) {
   data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
+  data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
   return promiseMap(data)
 }
 

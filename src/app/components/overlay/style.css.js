@@ -5,6 +5,7 @@ module.exports = css({
   background: {
     alignItems: 'center',
     background: variables.colors.genericOverlayCover,
+    zIndex: variables.zIndicies.overlay,
     cursor: 'pointer',
     display: 'flex',
     height: '100vh',

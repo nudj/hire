@@ -1,10 +1,14 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const actions = require('@nudj/framework/actions')
 
 const LayoutApp = require('../../components/layout-app')
 const PageHeader = require('../../components/page-header/page-header')
 const Tooltip = require('../../components/tooltip/tooltip')
+const {
+  showDialog
+} = actions.app
 
 const getStyle = require('./style.css')
 
@@ -16,8 +20,32 @@ const HirerSurvey = (props) => {
   const surveyUrl = get(props, 'survey.link', 'about:blank')
   const surveyFrame = (<iframe src={surveyUrl} className={style.surveyFrame} />)
 
+  const handlePageLeave = (event) => {
+    event.preventDefault()
+    let url = event.target.getAttribute('href')
+
+    if (!url) {
+      url = '/'
+    }
+
+    return props.dispatch(showDialog({
+      options: [
+        {
+          type: 'cancel',
+          action: {
+            name: 'hideDialog'
+          }
+        },
+        {
+          type: 'link',
+          url
+        }
+      ]
+    }))
+  }
+
   return (
-    <LayoutApp {...props} className={style.pageBody}>
+    <LayoutApp {...props} onPageLeave={handlePageLeave} className={style.pageBody}>
       <Helmet>
         <title>nudj - Discover referrers in your network</title>
       </Helmet>
