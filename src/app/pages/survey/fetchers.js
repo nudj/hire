@@ -25,7 +25,7 @@ const tooltipOptions = {
 
 const dialogOptions = {
   type: 'dialog',
-  tags: ['hirerSurvey'],
+  tags: ['hirerSurveyPageLeave'],
   keys: {
     title: 'dialogtitle',
     text: 'dialogtext',
