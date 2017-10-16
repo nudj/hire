@@ -26,8 +26,8 @@ const tooltipOptions = {
 const exitSurveyPageDialog = {
   title: 'Discard your answers?',
   text: 'If you leave this page before completing the survey you will lose all of your answers.',
-  cancel: 'Cancel',
-  confirm: 'Discard'
+  link: 'Discard',
+  cancel: 'Cancel'
 }
 
 function fetchPrismicContent (data) {

@@ -37,11 +37,8 @@ const HirerSurvey = (props) => {
           }
         },
         {
-          type: 'confirm',
-          action: {
-            name: 'redirect',
-            url
-          }
+          type: 'link',
+          url
         }
       ]
     }))
