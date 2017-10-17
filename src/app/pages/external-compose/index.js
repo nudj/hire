@@ -147,12 +147,55 @@ class ComposeExternalPage extends React.Component {
   }
 
   render () {
+    const sentMessage = this.props.externalMessage.sendMessage // If this entry exists, this message has been sent.
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
     let active = get(this.props, 'externalComposePage.active')
     if (isNil(active)) {
       active = getActiveStep(get(this.props, 'externalMessage', {}))
     }
+
+    const composeMessage = steps.map((step, index, steps) => {
+      const {
+        name,
+        component: Component
+      } = step
+      const canSkipTo = !!(steps[index - 1] && !!data[steps[index - 1].name])
+      return (
+        <div className={this.style.pageContent} key={name}>
+          <div className={this.style.pageMain}>
+            <Component
+              name={name}
+              isActive={active === index}
+              index={index + 1}
+              {...this.props.externalMessage}
+              {...this.props.externalComposePage}
+              onSubmitStep={this.onSubmitStep(step)}
+              onChangeStep={this.onChangeStep(step)}
+              messages={get(this.props, 'messages', [])}
+              pageData={this.props}
+              onClick={this.onClickStep(index)}
+              confirm={this.props.externalComposePage.confirm === index && this.renderConfirm()}
+              canSkipTo={canSkipTo}
+            />
+          </div>
+          <div className={this.style.pageSidebar}>
+            {this.renderTooltip(name)}
+          </div>
+        </div>
+      )
+    })
+
+    const conversation = (
+      <div className={this.style.pageContent}>
+        <div className={this.style.pageMain}>
+          // Placeholder
+        </div>
+      </div>
+    )
+
+    const pageBody = sentMessage ? conversation : composeMessage
+
     return (
       <LayoutApp {...this.props} className={this.style.pageBody}>
         <Form method='POST'>
@@ -165,36 +208,7 @@ class ComposeExternalPage extends React.Component {
             subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}
           />
           <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
-          {steps.map((step, index, steps) => {
-            const {
-              name,
-              component: Component
-            } = step
-            const canSkipTo = !!(steps[index - 1] && !!data[steps[index - 1].name])
-            return (
-              <div className={this.style.pageContent} key={name}>
-                <div className={this.style.pageMain}>
-                  <Component
-                    name={name}
-                    isActive={active === index}
-                    index={index + 1}
-                    {...this.props.externalMessage}
-                    {...this.props.externalComposePage}
-                    onSubmitStep={this.onSubmitStep(step)}
-                    onChangeStep={this.onChangeStep(step)}
-                    messages={get(this.props, 'messages', [])}
-                    pageData={this.props}
-                    onClick={this.onClickStep(index)}
-                    confirm={this.props.externalComposePage.confirm === index && this.renderConfirm()}
-                    canSkipTo={canSkipTo}
-                  />
-                </div>
-                <div className={this.style.pageSidebar}>
-                  {this.renderTooltip(name)}
-                </div>
-              </div>
-            )
-          })}
+          {pageBody}
         </Form>
       </LayoutApp>
     )
