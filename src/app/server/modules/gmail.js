@@ -31,22 +31,24 @@ const refreshAccessTokenAndSend = (email, refreshToken) => {
 
 const formatThreadMessages = (messages) => {
   return messages.map(messageData => {
-    let encryptedBody = get(messageData.payload, 'body.data')
+    const headers = messageData.payload.headers
+    const sender = get(find(headers, { name: 'From' }), 'value')
+    const date = get(find(headers, { name: 'Date' }), 'value')
 
+    let encryptedBody = get(messageData.payload, 'body.data')
     if (!encryptedBody) {
       const parts = messageData.payload.parts
       encryptedBody = get(parts.shift(), 'body.data')
     }
 
-    const headers = messageData.payload.headers
     const decodedMessage = Base64.decode(encryptedBody)
-    const sender = get(find(headers, { name: 'From' }), 'value')
-    const date = get(find(headers, { name: 'Date' }), 'value')
     const message = parser(decodedMessage).getVisibleText()
+    const body = message.replace(/<p>/g, '').replace(/<\/p>/g, '') // Remove basic paragraph tags in favour of later template rendering for consistent styling
     return {
+      id: messageData.id, // For React component keys
       sender,
       date,
-      message
+      body
     }
   })
 }

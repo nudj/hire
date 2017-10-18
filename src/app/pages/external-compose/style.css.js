@@ -60,6 +60,31 @@ const styles = {
   tagError: {
     color: 'red'
   },
+  conversationBox: {
+    backgroundColor: variables.colors.white,
+    height: '70vh',
+    position: 'relative',
+    padding: variables.padding.de
+  },
+  messageInput: {
+    borderTop: '2px solid black',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    padding: variables.padding.d
+  },
+  conversationMessage: merge(mixins.typography.p, {
+    padding: '10px',
+    backgroundColor: '#429aff',
+    color: variables.colors.white,
+    margin: '10px'
+  }),
+  conversationParagraph: merge(mixins.typography.p, {
+    fontWeight: 'bold',
+    ':last-child': {
+      margin: '0'
+    }
+  }),
   composeMessageSave: merge(mixins.button, {
     display: 'inline-block'
   }),

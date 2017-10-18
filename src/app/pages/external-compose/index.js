@@ -8,6 +8,7 @@ const actions = require('@nudj/framework/actions')
 
 const pageActions = require('./actions')
 const { getActiveStep } = require('../../lib')
+const templater = require('../../lib/templater')
 const LayoutApp = require('../../components/layout-app')
 const Link = require('../../components/link/link')
 const Form = require('../../components/form/form')
@@ -147,7 +148,8 @@ class ComposeExternalPage extends React.Component {
   }
 
   render () {
-    const sentMessage = this.props.externalMessage.sendMessage // If this entry exists, this message has been sent.
+    const sentMessage = get(this.props, 'externalMessage.sendMessage') // If this entry exists, this message has been sent.
+    const conversation = get(this.props, 'conversationMessages', [])
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
     let active = get(this.props, 'externalComposePage.active')
@@ -186,15 +188,34 @@ class ComposeExternalPage extends React.Component {
       )
     })
 
-    const conversation = (
+    const conversationBody = (
       <div className={this.style.pageContent}>
         <div className={this.style.pageMain}>
-          // Placeholder
+          <div className={this.style.conversationBox}>
+            {conversation.map(message => {
+              const options = {
+                template: message.body,
+                data: {},
+                pify: (para, index, margin = 0) => `<p class='${this.style.conversationParagraph}' key='${message.id}-para${index}' style="margin-top:${1.5 * margin}rem;">${para.join('')}</p>`,
+                brify: () => '\n'
+              }
+              const body = templater.render(options).join('\n\n')
+
+              return (<div className={this.style.conversationMessage} key={`${message.id}-container`}>
+                <p key={`${message.id}-sender`}>{message.sender}</p>
+                <p key={`${message.id}-date`}>{message.date}</p>
+                <p key={`${message.id}-body`} dangerouslySetInnerHTML={{ __html: body }} />
+              </div>)
+            })}
+            <div className={this.style.messageInput}>
+              <p>Compose Message</p>
+            </div>
+          </div>
         </div>
       </div>
     )
 
-    const pageBody = sentMessage ? conversation : composeMessage
+    const pageBody = sentMessage ? conversationBody : composeMessage
 
     return (
       <LayoutApp {...this.props} className={this.style.pageBody}>
