@@ -1,4 +1,7 @@
+const get = require('lodash/get')
+const find = require('lodash/find')
 const google = require('googleapis')
+const parser = require('node-email-reply-parser')
 const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
 const request = require('../../lib/request')
@@ -40,6 +43,46 @@ const getAccessTokenFromRefreshToken = (refreshToken) => {
   })
 }
 
+const getThread = (threadId, accessToken) => {
+  oauth2Client.setCredentials({
+    access_token: accessToken
+  })
+
+  return new Promise((resolve, reject) => {
+    gmail.users.threads.get({
+      auth: oauth2Client,
+      userId: 'me',
+      id: threadId
+    }, (error, response) => {
+      if (error) {
+        logger.log('error', 'Error retrieving Gmail thread', error)
+        return reject(error)
+      }
+      const messages = response.messages.map(messageData => {
+        const headers = messageData.payload.headers
+        let body = get(messageData.payload, 'body.data')
+
+        if (!body) {
+          const parts = messageData.payload.parts
+          body = get(parts.shift(), 'body.data')
+        }
+
+        const decodedMessage = Base64.decode(body)
+        const sender = get(find(headers, { name: 'From' }), 'value')
+        const date = get(find(headers, { name: 'Date' }), 'value')
+        const message = parser(decodedMessage).getVisibleText()
+        return {
+          sender,
+          date,
+          message
+        }
+      })
+
+      resolve(messages)
+    })
+  })
+}
+
 const sendGmail = (email, accessToken) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
@@ -66,6 +109,7 @@ const sendGmail = (email, accessToken) => {
 
 module.exports = {
   sendGmail,
+  getThread,
   getAccessTokenFromRefreshToken,
   verifyOrRefreshAccessToken
 }

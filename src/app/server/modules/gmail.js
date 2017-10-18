@@ -1,6 +1,7 @@
 const get = require('lodash/get')
 const google = require('../lib/google')
 const logger = require('@nudj/framework/logger')
+const { promiseMap } = require('@nudj/library')
 const templater = require('../../lib/templater')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
@@ -21,6 +22,14 @@ const refreshAccessTokenAndSend = (email, refreshToken) => {
     .then(accessToken => sendGmailAndLogResponse(email, accessToken, refreshToken))
     .catch(() => {
       throw new Unauthorized({ type: 'Google' })
+    })
+}
+
+const getThread = (data, threadId, person) => {
+  return getAccountForPerson(person)
+    .then(account => {
+      data.conversationMessages = google.getThread(threadId, account.accessToken)
+      return promiseMap(data)
     })
 }
 
@@ -59,4 +68,7 @@ const send = (data, person, tags) => {
     .then(account => sendGmailAndLogResponse(email, account.accessToken, account.refreshToken))
 }
 
-module.exports = { send }
+module.exports = {
+  send,
+  getThread
+}
