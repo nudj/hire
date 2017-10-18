@@ -2,7 +2,6 @@ const get = require('lodash/get')
 const google = require('../lib/google')
 const logger = require('@nudj/framework/logger')
 const templater = require('../../lib/templater')
-const conversations = require('./conversations')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
 const { Unauthorized } = require('@nudj/framework/errors')
@@ -29,19 +28,12 @@ const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
   return google.sendGmail(email, accessToken)
     .then(response => {
       logger.log('email response', response, email)
-      const conversation = {
-        threadId: response.threadId
-      }
-      return conversation
+      return response.threadId
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
       return refreshAccessTokenAndSend(email, refreshToken)
     })
-}
-
-const saveConversationAndMarkAsSent = (data, conversation) => {
-  return conversations.post(data, data.person.id, data.recipient.id, conversation, 'GMAIL')
 }
 
 const send = (data, person, tags) => {
@@ -65,7 +57,6 @@ const send = (data, person, tags) => {
 
   return getAccountForPerson(person)
     .then(account => sendGmailAndLogResponse(email, account.accessToken, account.refreshToken))
-    .then(conversation => saveConversationAndMarkAsSent(data, conversation))
 }
 
 module.exports = { send }

@@ -68,7 +68,7 @@ const get = ({
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
         return gmail.send(data, data.person.id, tags.external)
-          .then(data => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL' }))
+          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId }))
       }
       return promiseMap(data)
     })
@@ -128,9 +128,9 @@ const patch = ({
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, data.person.id, tags.external)
-          .then(data => {
+          .then(threadId => {
             req.session.notification = createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
-            return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
+            return externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId })
           })
       }
       return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
