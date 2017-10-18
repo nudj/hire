@@ -1,11 +1,15 @@
 const get = require('lodash/get')
-const google = require('../lib/google')
+const find = require('lodash/find')
+const parser = require('node-email-reply-parser')
+const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
+const { Unauthorized } = require('@nudj/framework/errors')
 const { promiseMap } = require('@nudj/library')
+
+const google = require('../lib/google')
 const templater = require('../../lib/templater')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
-const { Unauthorized } = require('@nudj/framework/errors')
 
 const getAccountForPerson = (person) => {
   return accounts.getByFilters({ person })
@@ -25,12 +29,37 @@ const refreshAccessTokenAndSend = (email, refreshToken) => {
     })
 }
 
-const getThread = (data, threadId, person) => {
+const formatThreadMessages = (messages) => {
+  return messages.map(messageData => {
+    let encryptedBody = get(messageData.payload, 'body.data')
+
+    if (!encryptedBody) {
+      const parts = messageData.payload.parts
+      encryptedBody = get(parts.shift(), 'body.data')
+    }
+
+    const headers = messageData.payload.headers
+    const decodedMessage = Base64.decode(encryptedBody)
+    const sender = get(find(headers, { name: 'From' }), 'value')
+    const date = get(find(headers, { name: 'Date' }), 'value')
+    const message = parser(decodedMessage).getVisibleText()
+    return {
+      sender,
+      date,
+      message
+    }
+  })
+}
+
+const fetchMessagesByThread = (threadId, person) => {
   return getAccountForPerson(person)
-    .then(account => {
-      data.conversationMessages = google.getThread(threadId, account.accessToken)
-      return promiseMap(data)
-    })
+    .then(account => google.getThread(threadId, account.accessToken))
+    .then(response => formatThreadMessages(response.messages))
+}
+
+const getThreadMessages = (data, threadId, person) => {
+  data.conversationMessages = fetchMessagesByThread(threadId, person)
+  return promiseMap(data)
 }
 
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
@@ -70,5 +99,5 @@ const send = (data, person, tags) => {
 
 module.exports = {
   send,
-  getThread
+  getThreadMessages
 }

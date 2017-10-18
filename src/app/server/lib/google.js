@@ -1,7 +1,4 @@
-const get = require('lodash/get')
-const find = require('lodash/find')
 const google = require('googleapis')
-const parser = require('node-email-reply-parser')
 const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
 const request = require('../../lib/request')
@@ -58,27 +55,7 @@ const getThread = (threadId, accessToken) => {
         logger.log('error', 'Error retrieving Gmail thread', error)
         return reject(error)
       }
-      const messages = response.messages.map(messageData => {
-        const headers = messageData.payload.headers
-        let body = get(messageData.payload, 'body.data')
-
-        if (!body) {
-          const parts = messageData.payload.parts
-          body = get(parts.shift(), 'body.data')
-        }
-
-        const decodedMessage = Base64.decode(body)
-        const sender = get(find(headers, { name: 'From' }), 'value')
-        const date = get(find(headers, { name: 'Date' }), 'value')
-        const message = parser(decodedMessage).getVisibleText()
-        return {
-          sender,
-          date,
-          message
-        }
-      })
-
-      resolve(messages)
+      resolve(response)
     })
   })
 }
