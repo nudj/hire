@@ -13,6 +13,7 @@ const Router = ({
 
   router.getHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.get))//, getExternalMessageHandler)
   router.patchHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.patch))//, patchExternalMessageHandler)
+  router.postHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.post))
 
   return router
 }

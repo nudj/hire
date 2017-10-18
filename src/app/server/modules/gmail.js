@@ -64,6 +64,11 @@ const getThreadMessages = (data, threadId, person) => {
   return promiseMap(data)
 }
 
+const sendByThread = (email, person, threadId) => {
+  return getAccountForPerson(person)
+    .then(account => google.sendGmailByThread(email, account.accessToken, account.refreshToken, threadId))
+}
+
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
   return google.sendGmail(email, accessToken)
     .then(response => {
@@ -101,5 +106,6 @@ const send = (data, person, tags) => {
 
 module.exports = {
   send,
+  sendByThread,
   getThreadMessages
 }

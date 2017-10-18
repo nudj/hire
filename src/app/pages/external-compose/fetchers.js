@@ -2,6 +2,7 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
+const { Redirect } = require('@nudj/framework/errors')
 const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
@@ -148,7 +149,28 @@ const patch = ({
     .then(fetchExternalPrismicContent)
 }
 
+const post = ({
+  data,
+  params,
+  body
+}) => {
+  const email = {
+    body: body.message,
+    from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
+    subject: body.subject,
+    to: body.recipient
+  }
+
+  return gmail.sendByThread(email, data.person.id, body.thread)
+    .then(response => {
+      throw new Redirect({
+        url: `/jobs/${params.jobSlug}/external/${params.messageId}`
+      })
+    })
+}
+
 module.exports = {
   get,
+  post,
   patch
 }

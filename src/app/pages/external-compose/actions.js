@@ -94,6 +94,16 @@ function setStepData (stepName, stepData) {
 }
 module.exports.setStepData = (stepName, stepData) => quickDispatch(setStepData(stepName, stepData))
 
+const SAVE_MESSAGE_DRAFT = 'SAVE_MESSAGE_DRAFT'
+module.exports.SAVE_MESSAGE_DRAFT = SAVE_MESSAGE_DRAFT
+function saveMessageDraft (body) {
+  return {
+    type: SAVE_MESSAGE_DRAFT,
+    body
+  }
+}
+module.exports.saveMessageDraft = (body) => quickDispatch(saveMessageDraft(body))
+
 const SAVE_STEP_DATA = 'SAVE_STEP_DATA'
 module.exports.SAVE_STEP_DATA = SAVE_STEP_DATA
 function saveStepData (stepName, stepData) {

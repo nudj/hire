@@ -22,13 +22,15 @@ const Tooltip = require('../../components/tooltip/tooltip')
 const getStyle = require('./style.css')
 
 const {
-  showDialog
+  showDialog,
+  postData
 } = actions.app
 const {
   setActiveStep,
   setStepData,
   hideConfirm,
-  saveSendData
+  saveSendData,
+  saveMessageDraft
 } = pageActions
 const steps = [
   {
@@ -66,6 +68,8 @@ class ComposeExternalPage extends React.Component {
     this.onClickStep = this.onClickStep.bind(this)
     this.onClickConfirm = this.onClickConfirm.bind(this)
     this.onClickCancel = this.onClickCancel.bind(this)
+    this.onSendThreadMessage = this.onSendThreadMessage.bind(this)
+    this.onDraftChange = this.onDraftChange.bind(this)
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
@@ -132,6 +136,27 @@ class ComposeExternalPage extends React.Component {
   onClickCancel (event) {
     event.stopPropagation()
     this.props.dispatch(hideConfirm())
+  }
+
+  onSendThreadMessage (conversation) {
+    return () => {
+      const url = `/jobs/${this.props.job.slug}/external/${this.props.externalMessage.id}`
+      const subject = conversation.length > 1 ? 'Re: Can you help me out?' : 'Can you help me out?' // Temporary solution.  Subject must match for threads, including 'Re:'.
+      this.props.dispatch(postData({
+        url,
+        method: 'post',
+        data: {
+          message: this.props.externalComposePage.draft,
+          thread: this.props.externalMessage.threadId,
+          recipient: this.props.recipient.email,
+          subject
+        }
+      }))
+    }
+  }
+
+  onDraftChange (event) {
+    this.props.dispatch(saveMessageDraft(event.target.value))
   }
 
   renderConfirm () {
@@ -208,7 +233,8 @@ class ComposeExternalPage extends React.Component {
               </div>)
             })}
             <div className={this.style.messageInput}>
-              <p>Compose Message</p>
+              <input type='text' onChange={this.onDraftChange} placeholder='Compose message' />
+              <input type='button' onClick={this.onSendThreadMessage(conversation)} className={this.style.confirmButton} value='Send' />
             </div>
           </div>
         </div>

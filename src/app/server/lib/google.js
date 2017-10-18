@@ -60,6 +60,31 @@ const getThread = (threadId, accessToken) => {
   })
 }
 
+const sendGmailByThread = (email, accessToken, refreshToken, threadId) => {
+  const mimeEmail = emailBuilder(email)
+  const base64EncodedEmail = Base64.encodeURI(mimeEmail)
+  oauth2Client.setCredentials({
+    access_token: accessToken
+  })
+
+  return new Promise((resolve, reject) => {
+    gmail.users.messages.send({
+      auth: oauth2Client,
+      userId: 'me',
+      resource: {
+        raw: base64EncodedEmail,
+        threadId
+      }
+    }, (error, response) => {
+      if (error) {
+        logger.log('error', 'Error sending Gmail', error)
+        return reject(error)
+      }
+      resolve(response)
+    })
+  })
+}
+
 const sendGmail = (email, accessToken) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
@@ -86,6 +111,7 @@ const sendGmail = (email, accessToken) => {
 
 module.exports = {
   sendGmail,
+  sendGmailByThread,
   getThread,
   getAccessTokenFromRefreshToken,
   verifyOrRefreshAccessToken
