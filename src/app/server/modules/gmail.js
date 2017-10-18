@@ -1,6 +1,7 @@
 const get = require('lodash/get')
 const find = require('lodash/find')
 const parser = require('node-email-reply-parser')
+const distanceInWordsToNow = require('date-fns/distance_in_words_to_now')
 const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
 const { Unauthorized } = require('@nudj/framework/errors')
@@ -33,7 +34,7 @@ const formatThreadMessages = (messages) => {
   return messages.map(messageData => {
     const headers = messageData.payload.headers
     const sender = get(find(headers, { name: 'From' }), 'value')
-    const date = get(find(headers, { name: 'Date' }), 'value')
+    const date = `${distanceInWordsToNow(new Date(Number(messageData.internalDate)))} ago`
 
     let encryptedBody = get(messageData.payload, 'body.data')
     if (!encryptedBody) {
