@@ -9,7 +9,6 @@ const actions = require('@nudj/framework/actions')
 
 const pageActions = require('./actions')
 const { getActiveStep } = require('../../lib')
-const templater = require('../../lib/templater')
 const LayoutApp = require('../../components/layout-app')
 const Link = require('../../components/link/link')
 const Form = require('../../components/form/form')
@@ -20,6 +19,7 @@ const FormStepSend = require('../../components/form-step-send/form-step-send')
 const FormStepNext = require('../../components/form-step-next/form-step-next')
 const PageHeader = require('../../components/page-header/page-header')
 const Tooltip = require('../../components/tooltip/tooltip')
+const ConversationBox = require('../../components/conversation-box/conversation-box')
 const getStyle = require('./style.css')
 
 const {
@@ -177,7 +177,6 @@ class ComposeExternalPage extends React.Component {
 
   render () {
     const sentMessage = get(this.props, 'externalMessage.sendMessage') // If this entry exists, this message has been sent.
-    const conversation = get(this.props, 'conversationMessages', [])
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
     const data = get(this.props, 'externalMessage', {})
     let active = get(this.props, 'externalComposePage.active')
@@ -219,29 +218,7 @@ class ComposeExternalPage extends React.Component {
     const conversationBody = (
       <div className={this.style.pageContent}>
         <div className={this.style.pageMain}>
-          <div className={this.style.conversationBox}>
-            {conversation.map(message => {
-              const renderOptions = {
-                template: message.body,
-                data: {},
-                pify: (para, index, margin = 0) => `<p class='${this.style.conversationParagraph}' key='${message.id}-para${index}' style="margin-top:${1.5 * margin}rem;">${para.join('')}</p>`,
-                brify: () => '\n'
-              }
-              const body = templater.render(renderOptions).join('\n\n')
-              const isRecipient = message.sender.includes(this.props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
-              const sender = isRecipient ? this.props.recipient : this.props.person
-
-              return (<div className={this.style.conversationMessage} key={`${message.id}-container`}>
-                <p key={`${message.id}-sender`}>{`${sender.firstName} ${sender.lastName}`}</p>
-                <p key={`${message.id}-date`}>{message.date}</p>
-                <p key={`${message.id}-body`} dangerouslySetInnerHTML={{ __html: body }} />
-              </div>)
-            })}
-            <div className={this.style.messageInput}>
-              <input type='text' onChange={this.onDraftChange} placeholder='Compose message' />
-              <input type='button' onClick={this.onSendThreadMessage(conversation)} className={this.style.confirmButton} value='Send' />
-            </div>
-          </div>
+          <ConversationBox onDraftChange={this.onDraftChange} onSendMessage={this.onSendThreadMessage} {...this.props} />
         </div>
       </div>
     )
