@@ -67,7 +67,7 @@ const getThreadMessages = (data, threadId, person) => {
 
 const sendByThread = (email, person, threadId) => {
   return getAccountForPerson(person)
-    .then(account => google.sendGmailByThread(email, account.accessToken, account.refreshToken, threadId))
+    .then(account => google.sendGmail(email, account.accessToken, threadId))
 }
 
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
