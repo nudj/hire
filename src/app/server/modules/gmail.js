@@ -44,7 +44,7 @@ const formatThreadMessages = (messages) => {
 
     const decodedMessage = Base64.decode(encryptedBody)
     const message = parser(decodedMessage).getVisibleText()
-    const body = message.replace(/<p>/g, '').replace(/<\/p>/g, '') // Remove basic paragraph tags in favour of later template rendering for consistent styling
+    const body = message.replace(/(<p>|<\/p>)/g, '') // Remove basic paragraph tags in favour of later template rendering for consistent styling
     return {
       id: messageData.id, // For React component keys
       sender,

@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const pick = require('lodash/pick')
+const find = require('lodash/find')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 const actions = require('@nudj/framework/actions')
@@ -140,8 +141,10 @@ class ComposeExternalPage extends React.Component {
 
   onSendThreadMessage (conversation) {
     return () => {
+      const hasReply = isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
       const url = `/jobs/${this.props.job.slug}/external/${this.props.externalMessage.id}`
-      const subject = conversation.length > 1 ? 'Re: Can you help me out?' : 'Can you help me out?' // Temporary solution.  Subject must match for threads, including 'Re:'.
+      const subject = hasReply ? 'Re: Can you help me out?' : 'Can you help me out?' // Subject must match for emails to chain, including 'Re:'.
+
       this.props.dispatch(postData({
         url,
         method: 'post',
@@ -218,16 +221,18 @@ class ComposeExternalPage extends React.Component {
         <div className={this.style.pageMain}>
           <div className={this.style.conversationBox}>
             {conversation.map(message => {
-              const options = {
+              const renderOptions = {
                 template: message.body,
                 data: {},
                 pify: (para, index, margin = 0) => `<p class='${this.style.conversationParagraph}' key='${message.id}-para${index}' style="margin-top:${1.5 * margin}rem;">${para.join('')}</p>`,
                 brify: () => '\n'
               }
-              const body = templater.render(options).join('\n\n')
+              const body = templater.render(renderOptions).join('\n\n')
+              const isRecipient = message.sender.includes(this.props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
+              const sender = isRecipient ? this.props.recipient : this.props.person
 
               return (<div className={this.style.conversationMessage} key={`${message.id}-container`}>
-                <p key={`${message.id}-sender`}>{message.sender}</p>
+                <p key={`${message.id}-sender`}>{`${sender.firstName} ${sender.lastName}`}</p>
                 <p key={`${message.id}-date`}>{message.date}</p>
                 <p key={`${message.id}-body`} dangerouslySetInnerHTML={{ __html: body }} />
               </div>)
