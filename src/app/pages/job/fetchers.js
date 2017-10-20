@@ -110,6 +110,7 @@ const get = ({
   return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getAllCompleteRecipients(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
