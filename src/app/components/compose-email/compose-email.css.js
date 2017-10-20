@@ -53,6 +53,7 @@ module.exports = css(merge(mixins.pageLayout, {
   template: merge(mixins.formElements.inputBoxBorderless, {
     flexGrow: '1',
     padding: 0,
+    resize: 'none',
     lineHeight: variables.sizing.textEditorLineHeight
   }),
   errorLabel: {

@@ -53,6 +53,7 @@
     "intercom-client": "^2.8.7",
     "js-base64": "^2.1.9",
     "json-server": "^0.9.6",
+    "linkifyjs": "^2.1.5",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.9.1",
     "morgan": "^1.8.2",

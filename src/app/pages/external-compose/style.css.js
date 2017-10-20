@@ -26,14 +26,14 @@ const tooltipFloating = {
 
 const styles = {
   pageContent: {
-    padding: `0 0 ${variables.padding.d} 0`
+    padding: `0 0 ${variables.padding.de} 0`
   },
   jobLink: {
     color: variables.colors.royalBlue,
     textDecoration: 'none'
   },
   headerLink: merge({
-    margin: `0 0 0 ${variables.padding.d}`
+    margin: `0 ${variables.padding.d} 0 0`
   }, mixins.button),
   companyLink: mixins.deLink,
   tooltipFloating: merge(tooltipFloating, {

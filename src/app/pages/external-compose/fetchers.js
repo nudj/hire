@@ -69,7 +69,11 @@ const get = ({
         delete req.session.gmailSecret
         return gmail.send(data, data.person.id, tags.external)
           .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId }))
-          .then(data => gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id))
+          .then(data => {
+            throw new Redirect({
+              url: `/jobs/${params.jobSlug}/external/${messageId}`
+            })
+          })
       }
       if (data.externalMessage.sendMessage === 'GMAIL') {
         return gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id)

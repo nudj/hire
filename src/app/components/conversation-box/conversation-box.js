@@ -1,6 +1,7 @@
 const React = require('react')
 const Textarea = require('react-textarea-autosize')
 const get = require('lodash/get')
+const linkify = require('linkifyjs/html')
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
 
@@ -14,8 +15,9 @@ const ConversationBox = (props) => {
       template: message.body,
       pify: (para, index, margin = 0) => `<p style='color: ${fontColor};' class='${style.conversationParagraph}' key='${message.id}-para${index}'>${para.join('')}</p>`
     }
+    const renderedMessage = templater.render(options).join('\n\n')
 
-    return templater.render(options).join('\n\n')
+    return linkify(renderedMessage, { defaultProtocol: 'https' })
   }
 
   const renderTaggedMessage = (message) => {
@@ -47,7 +49,8 @@ const ConversationBox = (props) => {
       pify: (para, index, margin = 0) => `<p style='color: white;' class='${style.conversationParagraph}' key='${message.id}-para${index}'>${para.join('')}</p>`
     }
 
-    return templater.render(options).join('\n\n')
+    const renderedMessage = templater.render(options).join('\n\n')
+    return linkify(renderedMessage, { defaultProtocol: 'https' })
   }
 
   const activeConversationBody = conversation.map(message => {
