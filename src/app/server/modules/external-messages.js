@@ -69,10 +69,15 @@ module.exports.getById = function (data, id) {
   return promiseMap(data)
 }
 
-module.exports.getAllComplete = function (data, hirer, job) {
-  data.externalMessagesComplete = fetchCompleteExternalMessagesForJob(data, hirer, job)
+module.exports.getAllCompleteRecipients = function (data, hirer, job) {
+  data.externalMessagesCompleteRecipients = fetchCompleteExternalMessagesForJob(data, hirer, job)
     .then(common.fetchPeopleFromFragments)
 
+  return promiseMap(data)
+}
+
+module.exports.getAllComplete = function (data, hirer, job) {
+  data.externalMessagesComplete = fetchCompleteExternalMessagesForJob(data, hirer, job)
   return promiseMap(data)
 }
 

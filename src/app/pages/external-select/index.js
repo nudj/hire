@@ -44,7 +44,7 @@ class ExternalSelectPage extends React.Component {
     const newButton = <button className={buttonClass} onClick={this.onClickSend(personId)}>{buttonLabel}</button>
     let link = newButton
 
-    if (buttonLabel === 'Continue') {
+    if (buttonLabel === 'Continue' || buttonLabel === 'Chat') { // Need a more robust solution
       link = continueButton
     }
 
@@ -70,6 +70,7 @@ class ExternalSelectPage extends React.Component {
     const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
     const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
+    const externalMessagesComplete = get(this.props, 'externalMessagesComplete', [])
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
     if (!network.length || (networkSent.length && !networkUnsent.length)) {
@@ -84,7 +85,10 @@ class ExternalSelectPage extends React.Component {
         let buttonClass = this.style.nudjButton
 
         if (networkSent.includes(personId)) {
-          return ''
+          const currentMessage = externalMessagesComplete.find((message) => message.recipient === personId)
+          url = `${url}/${currentMessage.id}`
+          buttonLabel = 'Chat'
+          buttonClass = this.style.continueButton
         } else if (networkSaved.includes(personId)) {
           const currentMessage = externalMessagesIncomplete.find((message) => message.recipient === personId)
           url = `${url}/${currentMessage.id}`

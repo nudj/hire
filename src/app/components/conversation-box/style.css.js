@@ -7,44 +7,67 @@ const styles = {
     borderRadius: variables.sizing.baseBorderRadius,
     height: '70vh',
     position: 'relative',
-    padding: variables.padding.de
+    padding: variables.padding.de,
+    overflowY: 'scroll'
   },
-  messageInput: {
-    borderTop: '2px solid black',
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
-    padding: variables.padding.d
+  nameSection: {
+    padding: '15px 10px 0',
+    textAlign: 'center',
+    verticalAlign: 'middle'
   },
-  userMessage: merge(mixins.typography.p, {
-    padding: '10px 20px',
-    borderRadius: variables.sizing.messageBorderRadius,
-    backgroundColor: '#429aff',
-    float: 'right',
-    display: 'inline-block',
-    maxWidth: '50%',
-    color: variables.colors.white,
-    margin: '10px'
+  messageDate: merge(mixins.headings.small, {
+    padding: '0 10px 0'
   }),
-  recipientMessage: merge(mixins.typography.p, {
-    padding: '10px 20px',
-    borderRadius: '6px',
+  message: {
     display: 'inline-block',
     maxWidth: '60%',
-    color: variables.colors.white,
-    margin: '10px'
+    paddingBottom: '5px'
+  },
+  messageTextarea: merge(mixins.formElements.inputBoxBorderless, {
+    height: '20rem',
+    minHeight: '61px',
+    padding: `${variables.padding.d}`,
+    resize: 'none',
+    display: 'inline',
+    width: '100%'
   }),
+  messageBody: merge(mixins.typography.p, {
+    padding: '15px 20px 1px',
+    borderRadius: variables.sizing.messageBorderRadius,
+    border: '1px solid black',
+    boxShadow: `0px 5px 10px ${variables.colors.genericBoxShadow}`,
+    margin: '5px',
+    clear: 'both'
+  }),
+  name: merge(mixins.headings.small, {
+    display: 'block'
+  }),
+  messageInputContainer: {
+    display: 'flex',
+    borderTop: '1px solid black',
+    width: '100%',
+    minHeight: '61px',
+    backgroundColor: variables.colors.white,
+    position: 'sticky'
+  },
+  textareaContainer: {
+    flex: 10
+  },
   messageContainer: {
     overflow: 'hidden'
   },
-  conversationParagraph: merge(mixins.typography.p, {
-    fontWeight: 'bold',
-    ':last-child': {
-      margin: '0'
-    }
-  }),
+  conversationParagraph: mixins.typography.p,
+  buttonContainer: {
+    flex: 1,
+    position: 'relative',
+    alignContent: 'flex-end',
+    padding: '10px'
+  },
   confirmButton: merge(mixins.button, {
-    margin: `0 ${variables.padding.e}`
+    margin: '0 auto',
+    position: 'absolute',
+    bottom: '10px',
+    left: '0'
   })
 }
 

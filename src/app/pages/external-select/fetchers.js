@@ -32,6 +32,7 @@ const get = ({
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => network.get(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAll(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAllCompleteRecipients(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => externalMessages.getAllIncomplete(data, data.hirer.id, data.job.id))
     .then(data => {
@@ -41,7 +42,7 @@ const get = ({
       })
       data.tooltips = prismic.fetchContent(referrerTooltipOptions)
       data.networkSaved = data.externalMessages.map(person => person.id)
-      data.networkSent = data.externalMessagesComplete.map(person => person.id)
+      data.networkSent = data.externalMessagesCompleteRecipients.map(person => person.id)
       return promiseMap(data)
     })
 }

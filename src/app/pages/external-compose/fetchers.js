@@ -14,7 +14,6 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
-const { createNotification } = require('../../lib')
 
 const dialogOptions = {
   type: 'dialog',
@@ -133,10 +132,8 @@ const patch = ({
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, data.person.id, tags.external)
-          .then(threadId => {
-            req.session.notification = createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
-            return externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId })
-          })
+          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId }))
+          .then(data => gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id))
       }
       return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
     })
