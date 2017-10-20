@@ -44,7 +44,7 @@ const styles = {
   }),
   messageInputContainer: {
     display: 'flex',
-    borderTop: '1px solid black',
+    borderTop: `1px solid ${variables.colors.royalBlue}`,
     width: '100%',
     minHeight: '61px',
     backgroundColor: variables.colors.white,
@@ -58,16 +58,22 @@ const styles = {
   },
   conversationParagraph: mixins.typography.p,
   buttonContainer: {
-    flex: 1,
+    flex: 3,
     position: 'relative',
     alignContent: 'flex-end',
-    padding: '10px'
+    padding: '10px',
+    [mixins.breakpoints.l]: {
+      flex: 2
+    }
   },
   confirmButton: merge(mixins.button, {
     margin: '0 auto',
     position: 'absolute',
-    bottom: '10px',
-    left: '0'
+    bottom: '12px',
+    right: '20px',
+    [mixins.breakpoints.l]: {
+      right: '50px'
+    }
   })
 }
 

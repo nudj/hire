@@ -32,6 +32,9 @@ const styles = {
     color: variables.colors.royalBlue,
     textDecoration: 'none'
   },
+  headerLink: merge({
+    margin: `0 0 0 ${variables.padding.d}`
+  }, mixins.button),
   companyLink: mixins.deLink,
   tooltipFloating: merge(tooltipFloating, {
     top: '0'
