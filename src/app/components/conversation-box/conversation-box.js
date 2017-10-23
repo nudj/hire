@@ -153,10 +153,10 @@ class ConversationBox extends React.Component {
         </div>
         <div className={this.style.messageInputContainer}>
           <div className={this.style.textareaContainer}>
-            <Textarea className={this.style.messageTextarea} name='template' placeholder={authenticated ? 'Compose message' : 'Authenticate and send with Gmail to carry on the conversation here!'} onChange={this.props.onDraftChange} />
+            <Textarea className={this.style.messageTextarea} name='template' placeholder={authenticated ? 'Compose message' : 'Want to continue your conversation here?  Next time, try sending with Gmail!'} onChange={this.props.onDraftChange} disabled={!authenticated} />
           </div>
           <div className={this.style.buttonContainer}>
-            <input type='button' onClick={authenticated ? this.props.onSendMessage(conversation) : this.props.onSendBasicMail} className={this.style.confirmButton} value='Send' />
+            <input type='button' onClick={this.props.onSendMessage(conversation)} className={this.style.confirmButton} value='Send' disabled={!authenticated} />
           </div>
         </div>
       </div>
