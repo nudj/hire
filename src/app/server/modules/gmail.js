@@ -108,5 +108,6 @@ const send = (data, person, tags) => {
 module.exports = {
   send,
   sendByThread,
-  getThreadMessages
+  getThreadMessages,
+  getAccountForPerson
 }

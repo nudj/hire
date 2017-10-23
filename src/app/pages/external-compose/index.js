@@ -71,6 +71,7 @@ class ComposeExternalPage extends React.Component {
     this.onClickCancel = this.onClickCancel.bind(this)
     this.onSendThreadMessage = this.onSendThreadMessage.bind(this)
     this.onDraftChange = this.onDraftChange.bind(this)
+    this.handlePageLeave = this.handlePageLeave.bind(this)
   }
 
   renderTooltip (tooltipTag, anchorBottom) {
@@ -162,6 +163,31 @@ class ComposeExternalPage extends React.Component {
     this.props.dispatch(saveMessageDraft(event.target.value))
   }
 
+  handlePageLeave (event) {
+    event.preventDefault()
+    let url = event.target.getAttribute('href')
+
+    if (!url) {
+      url = '/'
+    }
+
+    return this.props.dispatch(showDialog({
+      options: [
+        {
+          type: 'cancel',
+          action: {
+            name: 'hideDialog'
+          }
+        },
+        {
+          type: 'link',
+          url
+        }
+      ],
+      dialog: this.props.exitDialog
+    }))
+  }
+
   renderConfirm () {
     return (
       <div className={this.style.confirm}>
@@ -224,9 +250,10 @@ class ComposeExternalPage extends React.Component {
     )
 
     const pageBody = sentMessage ? conversationBody : composeMessage
+    const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
     return (
-      <LayoutApp {...this.props} className={this.style.pageBody}>
+      <LayoutApp {...this.props} onPageLeave={unfinishedDraft ? this.handlePageLeave : ''} className={this.style.pageBody}>
         <Form method='POST'>
           <Helmet>
             <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
@@ -235,8 +262,8 @@ class ComposeExternalPage extends React.Component {
           <PageHeader
             title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
             subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
-            <Link className={this.style.headerLink} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
-            <Link className={this.style.headerLink} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
+            <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
+            <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
           </PageHeader>
           <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3>
           {pageBody}

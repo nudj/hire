@@ -34,7 +34,7 @@ const styles = {
   messageBody: merge(mixins.typography.p, {
     padding: '15px 20px 1px',
     borderRadius: variables.sizing.messageBorderRadius,
-    border: '1px solid black',
+    border: '1px solid #000',
     boxShadow: `0px 5px 10px ${variables.colors.genericBoxShadow}`,
     margin: '5px',
     clear: 'both'
@@ -44,7 +44,7 @@ const styles = {
   }),
   messageInputContainer: {
     display: 'flex',
-    borderTop: `1px solid ${variables.colors.royalBlue}`,
+    borderTop: '1px solid #000',
     width: '100%',
     minHeight: '61px',
     backgroundColor: variables.colors.white,

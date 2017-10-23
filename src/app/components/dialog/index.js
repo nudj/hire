@@ -4,7 +4,7 @@ const getStyle = require('./style.css')
 
 const Dialog = (props) => {
   const style = getStyle()
-  const dialog = get(props, 'dialog', {})
+  const dialog = get(props, 'overlay.dialog', get(props, 'dialog', {}))
   const title = get(dialog, 'title', '')
   const text = get(dialog, 'text', '')
   const options = get(props, 'overlay.options', [])

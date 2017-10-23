@@ -14,6 +14,7 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
+const { createNotification } = require('../../lib')
 
 const dialogOptions = {
   type: 'dialog',
@@ -47,6 +48,18 @@ const fetchExternalPrismicContent = (data) => {
   data.tooltips = prismic.fetchContent(tooltipOptions)
   data.messages = prismic.fetchContent(messageOptions)
   data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
+  data.exitDialog = {
+    title: 'Discard your draft?',
+    text: 'If you leave this page, any unsent text will be discarded. Continue?',
+    link: 'Discard',
+    cancel: 'Cancel'
+  }
+  data.authenticationPromptDialog = {
+    title: 'Tracking your conversations',
+    text: 'Want to see their replies in here? Then we recommend syncing with Gmail.',
+    link: 'Sync with Gmail',
+    cancel: 'No, thanks'
+  }
   return promiseMap(data)
 }
 
@@ -63,6 +76,7 @@ const get = ({
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getById(data, messageId))
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => getExternalMessageProperties(data, messageId))
     .then(data => {
       if (!data.externalMessage.sendMessage && gmailSent) {
@@ -170,8 +184,32 @@ const post = ({
     })
 }
 
+const getAuthentication = ({
+  data,
+  params,
+  query,
+  req
+}) => {
+  return gmail.getAccountForPerson(data.person.id)
+    .then(response => {
+      throw new Redirect({
+        url: `/jobs/${params.jobSlug}/external/${params.messageId}`,
+        notification: createNotification('success', 'You\'ve already authenticated with Google.')
+      })
+    })
+    .catch(error => {
+      console.log('Failed to retrieve account', error)
+      req.session.returnFail = `/jobs/${params.jobSlug}/external/${params.messageId}`
+      throw new Redirect({
+        url: `/auth/google`,
+        notification: createNotification('success', 'You\'ve successfully authenticated with Google!')
+      })
+    })
+}
+
 module.exports = {
   get,
+  getAuthentication,
   post,
   patch
 }
