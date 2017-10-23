@@ -2,13 +2,16 @@ const { css, merge } = require('@nudj/framework/css')
 const { mixins, variables } = require('../../lib/css')
 
 const styles = {
+  conversationBoxContainer: {
+    padding: `${variables.padding.de}`,
+    paddingBottom: '0px'
+  },
   conversationBox: {
     backgroundColor: variables.colors.white,
     borderRadius: variables.sizing.baseBorderRadius,
-    height: '70vh',
+    minHeight: '70vh',
     position: 'relative',
-    padding: variables.padding.de,
-    overflowY: 'scroll'
+    padding: variables.padding.de
   },
   nameSection: {
     padding: '15px 10px 0',
@@ -48,7 +51,8 @@ const styles = {
     width: '100%',
     minHeight: '61px',
     backgroundColor: variables.colors.white,
-    position: 'sticky'
+    position: 'sticky',
+    bottom: '0'
   },
   textareaContainer: {
     flex: 10

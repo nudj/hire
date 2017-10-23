@@ -255,6 +255,7 @@ class ComposeExternalPage extends React.Component {
           </Helmet>
           <input type='hidden' name='_csrf' value={this.props.csrfToken} />
           <PageHeader
+            fixed={sentMessage}
             title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
             subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
             <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>

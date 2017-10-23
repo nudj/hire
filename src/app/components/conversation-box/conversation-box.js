@@ -147,7 +147,7 @@ class ConversationBox extends React.Component {
     const authenticated = get(this.props, 'externalMessage.sendMessage') !== 'EMAIL'
     const conversationBody = authenticated ? activeConversationBody : staticConversationBody(originalMessage)
     return (
-      <div>
+      <div className={this.style.conversationBoxContainer}>
         <div className={this.style.conversationBox}>
           {conversationBody}
         </div>
