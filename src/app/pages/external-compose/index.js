@@ -16,7 +16,6 @@ const FormStepLength = require('../../components/form-step-length/form-step-leng
 const FormStepStyle = require('../../components/form-step-style/form-step-style')
 const FormStepCompose = require('../../components/form-step-compose/form-step-compose')
 const FormStepSend = require('../../components/form-step-send/form-step-send')
-const FormStepNext = require('../../components/form-step-next/form-step-next')
 const PageHeader = require('../../components/page-header/page-header')
 const Tooltip = require('../../components/tooltip/tooltip')
 const ConversationBox = require('../../components/conversation-box/conversation-box')
@@ -53,10 +52,6 @@ const steps = [
     component: FormStepSend,
     confirm: 'GMAIL',
     action: 'saveSendData'
-  },
-  {
-    name: 'nextSteps',
-    component: FormStepNext
   }
 ]
 
@@ -80,7 +75,7 @@ class ComposeExternalPage extends React.Component {
     if (isNil(active)) {
       active = getActiveStep(get(this.props, 'externalMessage', {}))
     }
-    const activeName = steps[active].name
+    const activeName = get(steps[active], 'name')
     if (!tooltip || activeName !== tooltipTag) {
       return ('')
     }

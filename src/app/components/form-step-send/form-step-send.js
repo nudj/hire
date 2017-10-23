@@ -62,8 +62,8 @@ const FormStepSend = (props) => {
   const subject = encodeURIComponent(prismicSubject || defaultSubject)
   const message = encodeURIComponent(renderMessage(props.composeMessage || '', props.pageData))
   const emailLink = `mailto:${recipient}?subject=${subject}&body=${message}`
-  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${message}`
-  const options = [
+
+  let options = [
     {
       type: 'EMAIL',
       link: emailLink,
@@ -78,7 +78,6 @@ const FormStepSend = (props) => {
     },
     {
       type: 'GMAIL',
-      link: gmailLink,
       icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
       title: 'Sync and send it via Gmail',
       text: 'Sync with your Gmail account to send the message from your personal address instantly.',
@@ -89,6 +88,22 @@ const FormStepSend = (props) => {
       }
     }
   ]
+
+  if (props.pageData.googleAuthenticated) {
+    options = [
+      {
+        type: 'GMAIL',
+        icon: 'New_Logo_Gmail-padding.svg',
+        title: 'Send it via Gmail',
+        text: 'Send the message from your personal address instantly.',
+        onClick: (event) => {
+          event.stopPropagation()
+          event.preventDefault()
+          props.onSubmitStep('GMAIL', { url: event.currentTarget.href })
+        }
+      }
+    ]
+  }
 
   return <FormStep
     {...props}
