@@ -1,5 +1,6 @@
 const React = require('react')
 const Textarea = require('react-textarea-autosize')
+const { ThreeBounce } = require('better-react-spinkit')
 const get = require('lodash/get')
 const linkify = require('linkifyjs/html')
 const templater = require('../../lib/templater')
@@ -17,6 +18,8 @@ class ConversationBox extends React.Component {
     }
     this.renderGmailMessage = this.renderGmailMessage.bind(this)
     this.renderTaggedMessage = this.renderTaggedMessage.bind(this)
+    this.renderActiveConversation = this.renderActiveConversation.bind(this)
+    this.renderStaticConversation = this.renderStaticConversation.bind(this)
   }
 
   componentDidMount () {
@@ -86,11 +89,8 @@ class ConversationBox extends React.Component {
     return linkify(renderedMessage, { defaultProtocol: 'https' })
   }
 
-  render () {
-    const conversation = get(this.props, 'conversationMessages', [])
-    const originalMessage = get(this.props, 'externalMessage.composeMessage', '')
-
-    const activeConversationBody = conversation.map(message => {
+  renderActiveConversation (conversation) {
+    const allMessages = conversation.map(message => {
       const isRecipient = message.sender.includes(this.props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
       const sender = isRecipient ? this.props.recipient : this.props.person
       const id = message.id
@@ -124,12 +124,20 @@ class ConversationBox extends React.Component {
       )
     })
 
-    const staticConversationBody = (message) => {
-      const body = this.renderTaggedMessage(message)
-      const layoutStyle = { float: 'right' }
-      const messageBubbleColor = { backgroundColor: '#6681aa' }
+    return (
+      <div className={this.style.conversationBox}>
+        {allMessages}
+      </div>
+    )
+  }
 
-      return (
+  renderStaticConversation (message) {
+    const body = this.renderTaggedMessage(message)
+    const layoutStyle = { float: 'right' }
+    const messageBubbleColor = { backgroundColor: '#6681aa' }
+
+    return (
+      <div className={this.style.conversationBox}>
         <div className={this.style.messageContainer}>
           <div style={layoutStyle} className={this.style.nameSection}>
             <span className={this.style.name}>{this.props.person.firstName}</span>
@@ -141,22 +149,26 @@ class ConversationBox extends React.Component {
             </div>
           </div>
         </div>
-      )
-    }
+      </div>
+    )
+  }
 
+  render () {
+    const conversation = get(this.props, 'conversationMessages', [])
+    const originalMessage = get(this.props, 'externalMessage.composeMessage', '')
     const authenticated = get(this.props, 'externalMessage.sendMessage') !== 'EMAIL'
-    const conversationBody = authenticated ? activeConversationBody : staticConversationBody(originalMessage)
+    const conversationBody = authenticated ? this.renderActiveConversation(conversation) : this.renderStaticConversation(originalMessage)
+
+    const buttonText = get(this.props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
     return (
       <div className={this.style.conversationBoxContainer}>
-        <div className={this.style.conversationBox}>
-          {conversationBody}
-        </div>
+        {conversationBody}
         <div className={this.style.messageInputContainer}>
           <div className={this.style.textareaContainer}>
             <Textarea className={this.style.messageTextarea} name='template' placeholder={authenticated ? 'Compose message' : 'Want to continue your conversation here?  Next time, try sending with Gmail!'} onChange={this.props.onDraftChange} disabled={!authenticated} />
           </div>
           <div className={this.style.buttonContainer}>
-            <input type='button' onClick={this.props.onSendMessage(conversation)} className={this.style.confirmButton} value='Send' disabled={!authenticated} />
+            <button type='button' onClick={this.props.onSendMessage(conversation)} className={this.style.confirmButton} disabled={!authenticated}>{buttonText}</button>
           </div>
         </div>
       </div>

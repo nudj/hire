@@ -12,6 +12,7 @@ const { getActiveStep } = require('../../lib')
 const LayoutApp = require('../../components/layout-app')
 const Link = require('../../components/link/link')
 const Form = require('../../components/form/form')
+const Loading = require('../../components/loading/loading')
 const FormStepLength = require('../../components/form-step-length/form-step-length')
 const FormStepStyle = require('../../components/form-step-style/form-step-style')
 const FormStepCompose = require('../../components/form-step-compose/form-step-compose')
@@ -244,10 +245,11 @@ class ComposeExternalPage extends React.Component {
       </div>
     )
 
+    const loading = get(this.props, 'loading') && !sentMessage
     const pageBody = sentMessage ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
-    return (
+    let page = (
       <LayoutApp {...this.props} onPageLeave={unfinishedDraft ? this.handlePageLeave : ''} className={this.style.pageBody}>
         <Form method='POST'>
           <Helmet>
@@ -266,7 +268,15 @@ class ComposeExternalPage extends React.Component {
         </Form>
       </LayoutApp>
     )
+
+    if (loading) {
+      page = (<Loading {...this.props} />)
+    }
+
+    return page
   }
 }
+
+ComposeExternalPage.handlesLoading = true
 
 module.exports = ComposeExternalPage
