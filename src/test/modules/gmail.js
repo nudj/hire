@@ -1,7 +1,6 @@
+/* global expect */
 /* eslint-env mocha */
-const chai = require('chai')
 const nock = require('nock')
-const expect = chai.expect
 const { Unauthorized } = require('@nudj/framework/errors')
 
 const gmail = require('../../app/server/modules/gmail')
