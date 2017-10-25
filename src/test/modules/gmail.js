@@ -1,16 +1,10 @@
 /* eslint-env mocha */
 const chai = require('chai')
-const proxyquire = require('proxyquire')
 const nock = require('nock')
 const expect = chai.expect
+const { Unauthorized } = require('@nudj/framework/errors')
 
-const {
-  Unauthorized
-} = require('@nudj/framework/errors')
-
-const gmail = proxyquire('../../app/server/modules/gmail', {
-  '../../lib/templater': { render: () => ['Rendered', 'Message', 'Template'] }
-})
+const gmail = require('../../app/server/modules/gmail')
 
 describe('Gmail module', () => {
   const api = nock('http://127.0.0.1:81')
@@ -28,7 +22,7 @@ describe('Gmail module', () => {
   const googleAccounts = nock('https://accounts.google.com')
 
   nock.emitter.on('no match', function (req) {
-    console.log('No match on URL:', req)
+    console.log('No match for request:', req)
   })
 
   beforeEach(() => {
@@ -114,15 +108,15 @@ describe('Gmail module', () => {
     })
 
     it('throws an unauthorized error when no account exists', () => {
-      return expect(gmail.send({}, 'unauthorizedId', 'threadId')).to.eventually.be.rejectedWith(Unauthorized)
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'unauthorizedId', 'threadId')).to.eventually.be.rejectedWith(Unauthorized)
     })
 
-    it('sends an email if the accessToken is valid', () => {
-      return expect(gmail.send({}, 'personId', 'threadId')).to.eventually.deep.equal('gmailThread')
+    it('sends an email and returns the new threadId if the accessToken is valid', () => {
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'personId', 'threadId')).to.eventually.deep.equal('gmailThread')
     })
 
     it('refreshes access token if invalid', () => {
-      return gmail.send({}, 'expiredId', 'threadId').then(threadId => {
+      return gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'expiredId', 'threadId').then(threadId => {
         expect(threadId).to.equal('gmailThread')
       })
     })
