@@ -22,14 +22,6 @@ const getAccountForPerson = (person) => {
     })
 }
 
-const refreshAccessTokenAndSend = (email, refreshToken) => {
-  return google.getAccessTokenFromRefreshToken(refreshToken)
-    .then(accessToken => sendGmailAndLogResponse(email, accessToken, refreshToken))
-    .catch(() => {
-      throw new Unauthorized({ type: 'Google' })
-    })
-}
-
 const formatThreadMessages = (messages) => {
   return messages.map(messageData => {
     const headers = messageData.payload.headers
@@ -39,7 +31,7 @@ const formatThreadMessages = (messages) => {
     let encryptedBody = get(messageData.payload, 'body.data')
     if (!encryptedBody) {
       const parts = messageData.payload.parts
-      encryptedBody = get(parts.shift(), 'body.data')
+      encryptedBody = get(parts.shift(), 'body.data') // First part always contians message body.
     }
 
     const decodedMessage = Base64.decode(encryptedBody)
@@ -55,9 +47,22 @@ const formatThreadMessages = (messages) => {
 }
 
 const fetchMessagesByThread = (threadId, person) => {
+  let refreshToken
+
   return getAccountForPerson(person)
-    .then(account => google.getThread(threadId, account.accessToken))
+    .then(account => {
+      refreshToken = account.refreshToken
+      return google.getThread({ threadId, accessToken: account.accessToken })
+    })
     .then(response => formatThreadMessages(response.messages))
+    .catch(error => {
+      if (error.name !== 'Unauthorized') {
+        logger.log('Error fetching thread', error)
+        return refreshAccessTokenAndContinue(refreshToken, google.getThread, { threadId })
+        .then(response => formatThreadMessages(response.messages))
+      }
+      throw new Unauthorized({ type: 'Google' })
+    })
 }
 
 const getThreadMessages = (data, threadId, person) => {
@@ -66,19 +71,43 @@ const getThreadMessages = (data, threadId, person) => {
 }
 
 const sendByThread = (email, person, threadId) => {
+  let refreshToken
+
   return getAccountForPerson(person)
-    .then(account => google.sendGmail(email, account.accessToken, threadId))
+    .then(account => {
+      refreshToken = account.refreshToken
+      return google.sendGmail({ email, accessToken: account.accessToken, threadId })
+    })
+    .catch(error => {
+      if (error.name !== 'Unauthorized') {
+        logger.log('Error sending to Gmail thread', error)
+        return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email, threadId })
+      }
+      throw new Unauthorized({ type: 'Google' })
+    })
+}
+
+const refreshAccessTokenAndContinue = (refreshToken, callback, args) => {
+  return google.getAccessTokenFromRefreshToken(refreshToken)
+    .then(accessToken => {
+      args.accessToken = accessToken
+      return callback(args)
+    })
+    .catch(() => {
+      throw new Unauthorized({ type: 'Google' })
+    })
 }
 
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
-  return google.sendGmail(email, accessToken)
+  return google.sendGmail({ email, accessToken })
     .then(response => {
       logger.log('email response', response, email)
       return response.threadId
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
-      return refreshAccessTokenAndSend(email, refreshToken)
+      return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email })
+        .then(response => response.threadId)
     })
 }
 

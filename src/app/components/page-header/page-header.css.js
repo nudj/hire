@@ -22,7 +22,7 @@ module.exports = css({
   header: baseHeader,
   fixedHeader: merge(baseHeader, {
     position: 'fixed',
-    zIndex: variables.zIndicies.tooltip
+    zIndex: variables.zIndicies.header
   }),
   main: {
 

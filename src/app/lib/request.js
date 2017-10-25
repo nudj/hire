@@ -15,7 +15,7 @@ const config = {
   }
 }
 try {
-  if (process.title === 'node') {
+  if (process.title.includes('node')) {
     config.baseURL = `http://${process.env.API_HOST}:81/`
   }
 } catch (error) {

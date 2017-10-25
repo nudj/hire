@@ -88,11 +88,16 @@
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.3.2",
     "babel-preset-env": "^1.1.10",
-    "chai": "^3.5.0",
+    "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
     "dirty-chai": "^1.2.2",
     "mocha": "^3.2.0",
+    "nock": "^9.0.25",
     "nodemon": "^1.11.0",
-    "standard": "^9.0.0",
+    "proxyquire": "^1.8.0",
+    "sinon": "4.0.1",
+    "sinon-chai": "2.14.0",
+    "standard": "^10.0.3",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^2.2.1"
   }

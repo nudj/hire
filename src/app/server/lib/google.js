@@ -40,7 +40,7 @@ const getAccessTokenFromRefreshToken = (refreshToken) => {
   })
 }
 
-const getThread = (threadId, accessToken) => {
+const getThread = ({ threadId, accessToken }) => {
   oauth2Client.setCredentials({
     access_token: accessToken
   })
@@ -60,7 +60,7 @@ const getThread = (threadId, accessToken) => {
   })
 }
 
-const sendGmail = (email, accessToken, threadId) => {
+const sendGmail = ({ email, accessToken, threadId }) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
   oauth2Client.setCredentials({

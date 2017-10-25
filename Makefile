@@ -42,6 +42,7 @@ ssh:
 test:
 	-@docker rm -f hire-test 2> /dev/null || true
 	@docker run --rm -it \
+		--env-file $(CWD)/.env \
 		--name hire-test \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \

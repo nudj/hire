@@ -147,6 +147,7 @@ module.exports.fontSizes = {
 }
 
 module.exports.zIndicies = {
+  header: '50',
   overlay: '100',
   tooltip: '900'
 }
