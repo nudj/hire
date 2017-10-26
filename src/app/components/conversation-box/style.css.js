@@ -1,6 +1,30 @@
 const { css, merge } = require('@nudj/framework/css')
 const { mixins, variables } = require('../../lib/css')
 
+const baseNameSection = {
+  padding: '15px 10px 0',
+  textAlign: 'center',
+  verticalAlign: 'middle'
+}
+
+const baseMessageDate = merge(mixins.headings.small, {
+  padding: '0 10px 0'
+})
+
+const baseMessage = {
+  display: 'inline-block',
+  maxWidth: '60%',
+  paddingBottom: '5px'
+}
+
+const baseMessageBubble = merge(mixins.typography.p, {
+  padding: '15px 20px 1px',
+  borderRadius: variables.sizing.messageBorderRadius,
+  boxShadow: `0px 5px 10px ${variables.colors.genericBoxShadow}`,
+  margin: '5px',
+  clear: 'both'
+})
+
 const styles = {
   conversationBoxContainer: {
     padding: `${variables.padding.b} ${variables.padding.de}`,
@@ -13,19 +37,24 @@ const styles = {
     minHeight: '70vh',
     position: 'relative'
   },
-  nameSection: {
-    padding: '15px 10px 0',
-    textAlign: 'center',
-    verticalAlign: 'middle'
-  },
-  messageDate: merge(mixins.headings.small, {
-    padding: '0 10px 0'
+  hirerNameSection: merge(baseNameSection, {
+    float: 'right'
   }),
-  message: {
-    display: 'inline-block',
-    maxWidth: '60%',
-    paddingBottom: '5px'
-  },
+  recipientNameSection: merge(baseNameSection, {
+    float: 'left'
+  }),
+  hirerMessageDate: merge(baseMessageDate, {
+    float: 'right'
+  }),
+  recipientMessageDate: merge(baseMessageDate, {
+    float: 'left'
+  }),
+  hirerMessage: merge(baseMessage, {
+    float: 'right'
+  }),
+  recipientMessage: merge(baseMessage, {
+    float: 'left'
+  }),
   messageTextarea: merge(mixins.formElements.inputBoxBorderless, {
     height: '20rem',
     minHeight: '61px',
@@ -34,12 +63,11 @@ const styles = {
     display: 'inline',
     width: '100%'
   }),
-  messageBody: merge(mixins.typography.p, {
-    padding: '15px 20px 1px',
-    borderRadius: variables.sizing.messageBorderRadius,
-    boxShadow: `0px 5px 10px ${variables.colors.genericBoxShadow}`,
-    margin: '5px',
-    clear: 'both'
+  hirerMessageBubble: merge(baseMessageBubble, {
+    backgroundColor: '#0B1D27'
+  }),
+  recipientMessageBubble: merge(baseMessageBubble, {
+    backgroundColor: '#E9E9E8'
   }),
   name: merge(mixins.headings.small, {
     display: 'block'
@@ -72,6 +100,10 @@ const styles = {
     textDecoration: 'none',
     margin: 0
   }),
+  messageLink: {
+    textDecoration: 'none',
+    color: variables.colors.pink
+  },
   textareaContainer: {
     flex: 10
   },
@@ -79,7 +111,12 @@ const styles = {
     padding: `${variables.padding.d}`,
     overflow: 'hidden'
   },
-  conversationParagraph: mixins.typography.p,
+  hirerParagraph: merge(mixins.typography.p, {
+    color: '#FFF'
+  }),
+  recipientParagraph: merge(mixins.typography.p, {
+    color: '#000'
+  }),
   buttonContainer: {
     flex: 3,
     position: 'relative',

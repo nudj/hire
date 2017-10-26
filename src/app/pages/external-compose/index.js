@@ -251,7 +251,7 @@ class ComposeExternalPage extends React.Component {
     )
 
     const loading = get(this.props, 'loading') && !sentMessage
-    const pageBody = sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
+    const pageBody = !sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
     let page = (
