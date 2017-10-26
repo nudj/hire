@@ -95,12 +95,12 @@ class ConversationBox extends React.Component {
       const sender = isRecipient ? this.props.recipient : this.props.person
       const id = message.id
 
-      let messageBubbleColor = { backgroundColor: '#6681aa' }
+      let messageBubbleColor = { backgroundColor: '#0B1D27' }
       let fontColor = '#FFF'
       let layoutStyle = { float: 'right' }
 
       if (isRecipient) {
-        messageBubbleColor = { backgroundColor: '#f7f7f6' }
+        messageBubbleColor = { backgroundColor: '#E9E9E8' }
         fontColor = '#000'
         layoutStyle = { float: 'left' }
       }
@@ -109,8 +109,7 @@ class ConversationBox extends React.Component {
       return (
         <div className={this.style.messageContainer} key={`${id}-container`}>
           <div key={`${id}-name`} style={layoutStyle} className={this.style.nameSection}>
-            <span key={`${id}-firstName`} className={this.style.name}>{sender.firstName}</span>
-            <span key={`${id}-lastName`} className={this.style.name}>{sender.lastName}</span>
+            <span key={`${id}-firstName`} className={this.style.name}>{isRecipient ? sender.firstName : 'You'}</span>
           </div>
           <div key={`${id}-message`} style={layoutStyle} className={this.style.message}>
             <div style={messageBubbleColor} className={this.style.messageBody} key={`${id}-messageBody`}>
@@ -126,6 +125,12 @@ class ConversationBox extends React.Component {
 
     return (
       <div className={this.style.conversationBox}>
+        <div className={this.style.header}>
+          <div className={this.style.main}>
+            <h1 className={this.style.title}>{`${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`}</h1>
+            <h2 className={this.style.subtitle}>{`${get(this.props, 'recipient.title', '')} @ ${get(this.props, 'recipient.company')}`}</h2>
+          </div>
+        </div>
         {allMessages}
       </div>
     )
@@ -141,7 +146,6 @@ class ConversationBox extends React.Component {
         <div className={this.style.messageContainer}>
           <div style={layoutStyle} className={this.style.nameSection}>
             <span className={this.style.name}>{this.props.person.firstName}</span>
-            <span className={this.style.name}>{this.props.person.lastName}</span>
           </div>
           <div style={layoutStyle} className={this.style.message}>
             <div style={messageBubbleColor} className={this.style.messageBody}>
