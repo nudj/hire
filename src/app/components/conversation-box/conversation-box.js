@@ -6,9 +6,6 @@ const linkify = require('linkifyjs/html')
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
 
-const actions = require('@nudj/framework/actions')
-const { showDialog } = actions.app
-
 class ConversationBox extends React.Component {
   constructor (props) {
     super(props)
@@ -16,76 +13,17 @@ class ConversationBox extends React.Component {
     this.state = {
 
     }
-    this.renderGmailMessage = this.renderGmailMessage.bind(this)
-    this.renderTaggedMessage = this.renderTaggedMessage.bind(this)
+    this.renderMessage = this.renderMessage.bind(this)
     this.renderActiveConversation = this.renderActiveConversation.bind(this)
-    this.renderStaticConversation = this.renderStaticConversation.bind(this)
   }
 
-  componentDidMount () {
-    if (get(this.props, 'externalMessage.sendMessage') === 'EMAIL' && !get(this.props, 'googleAuthenticated')) {
-      const messageId = get(this.props, 'externalMessage.id')
-      const jobSlug = get(this.props, 'job.slug')
-      const url = `/jobs/${jobSlug}/external/${messageId}/authenticate`
-
-      this.props.dispatch(showDialog({
-        options: [
-          {
-            type: 'cancel',
-            action: {
-              name: 'hideDialog'
-            }
-          },
-          {
-            type: 'link',
-            url
-          }
-        ],
-        dialog: get(this.props, 'authenticationPromptDialog', '')
-      }))
-    }
-  }
-
-  renderGmailMessage (message, fontColor) {
+  renderMessage (message, fontColor) {
     const options = {
       template: message.body,
       pify: (para, index, margin = 0) => `<p style='color: ${fontColor};' class='${this.style.conversationParagraph}' key='${message.id}-para${index}'>${para.join('')}</p>`
     }
     const renderedMessage = templater.render(options).join('\n\n')
 
-    return linkify(renderedMessage, { defaultProtocol: 'https' })
-  }
-
-  renderTaggedMessage (message) {
-    const companySlug = get(this.props, 'company.slug', '')
-    const jobSlug = get(this.props, 'job.slug', '')
-    const referralId = get(this.props, 'referral.id', '')
-
-    const referralLink = `https://${get(this.props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
-    const options = {
-      template: message,
-      data: {
-        company: {
-          name: get(this.props, 'company.name', '')
-        },
-        job: {
-          bonus: get(this.props, 'job.bonus', ''),
-          link: referralLink,
-          title: get(this.props, 'job.title', '')
-        },
-        recipient: {
-          firstname: get(this.props, 'recipient.firstName', ''),
-          lastname: get(this.props, 'recipient.lastName', '')
-        },
-        sender: {
-          firstname: get(this.props, 'person.firstName', ''),
-          lastname: get(this.props, 'person.lastName', '')
-        }
-      },
-      pify: (para, index, margin = 0) => `<p style='color: white;' class='${this.style.conversationParagraph}' key='${message.id}-para${index}'>${para.join('')}</p>`
-    }
-
-    const renderedMessage = templater.render(options).join('\n\n')
     return linkify(renderedMessage, { defaultProtocol: 'https' })
   }
 
@@ -105,7 +43,7 @@ class ConversationBox extends React.Component {
         layoutStyle = { float: 'left' }
       }
 
-      const body = this.renderGmailMessage(message, fontColor)
+      const body = this.renderMessage(message, fontColor)
       return (
         <div className={this.style.messageContainer} key={`${id}-container`}>
           <div key={`${id}-name`} style={layoutStyle} className={this.style.nameSection}>
@@ -136,43 +74,19 @@ class ConversationBox extends React.Component {
     )
   }
 
-  renderStaticConversation (message) {
-    const body = this.renderTaggedMessage(message)
-    const layoutStyle = { float: 'right' }
-    const messageBubbleColor = { backgroundColor: '#6681aa' }
-
-    return (
-      <div className={this.style.conversationBox}>
-        <div className={this.style.messageContainer}>
-          <div style={layoutStyle} className={this.style.nameSection}>
-            <span className={this.style.name}>{this.props.person.firstName}</span>
-          </div>
-          <div style={layoutStyle} className={this.style.message}>
-            <div style={messageBubbleColor} className={this.style.messageBody}>
-              <p dangerouslySetInnerHTML={{ __html: body }} />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   render () {
     const conversation = get(this.props, 'conversationMessages', [])
-    const originalMessage = get(this.props, 'externalMessage.composeMessage', '')
-    const authenticated = get(this.props, 'externalMessage.sendMessage') !== 'EMAIL'
-    const conversationBody = authenticated ? this.renderActiveConversation(conversation) : this.renderStaticConversation(originalMessage)
 
     const buttonText = get(this.props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
     return (
       <div className={this.style.conversationBoxContainer}>
-        {conversationBody}
+        {this.renderActiveConversation(conversation)}
         <div className={this.style.messageInputContainer}>
           <div className={this.style.textareaContainer}>
-            <Textarea className={this.style.messageTextarea} name='template' placeholder={authenticated ? 'Compose message' : 'Want to continue your conversation here?  Next time, try sending with Gmail!'} onChange={this.props.onDraftChange} disabled={!authenticated} />
+            <Textarea className={this.style.messageTextarea} name='template' placeholder='Compose message' onChange={this.props.onDraftChange} />
           </div>
           <div className={this.style.buttonContainer}>
-            <button type='button' onClick={this.props.onSendMessage(conversation)} className={this.style.confirmButton} disabled={!authenticated}>{buttonText}</button>
+            <button type='button' onClick={this.props.onSendMessage(conversation)} className={this.style.confirmButton}>{buttonText}</button>
           </div>
         </div>
       </div>
