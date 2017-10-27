@@ -35,6 +35,9 @@ const styles = {
   headerLink: merge({
     margin: `0 ${variables.padding.d} 0 0`
   }, mixins.button),
+  headerLinkDashboard: merge({
+    margin: `0 ${variables.padding.d} 0 0`
+  }, mixins.buttonSecondary),
   companyLink: mixins.deLink,
   tooltipFloating: merge(tooltipFloating, {
     top: '0'

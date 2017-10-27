@@ -251,7 +251,7 @@ class ComposeExternalPage extends React.Component {
     )
 
     const loading = get(this.props, 'loading') && !sentMessage
-    const pageBody = !sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
+    const pageBody = sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
     let page = (
@@ -262,13 +262,13 @@ class ComposeExternalPage extends React.Component {
           </Helmet>
           <input type='hidden' name='_csrf' value={this.props.csrfToken} />
           <PageHeader
-            fixed={sentMessage}
+            fixed={!!sentMessage}
             title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
             subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
-            <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
+            <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
             <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
           </PageHeader>
-          { sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
+          { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
           {pageBody}
         </Form>
       </LayoutApp>

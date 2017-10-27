@@ -41,21 +41,25 @@ const ConversationBox = (props) => {
 
   return (
     <div className={style.conversationBoxContainer}>
-      <div className={style.conversationBox}>
+      <div className={style.headerContainer}>
         <div className={style.header}>
           <div className={style.main}>
             <h1 className={style.title}>{`${get(props, 'recipient.firstName', '')} ${get(props, 'recipient.lastName', '')}`}</h1>
             <h2 className={style.subtitle}>{`${get(props, 'recipient.title', '')} @ ${get(props, 'recipient.company')}`}</h2>
           </div>
         </div>
+      </div>
+      <div className={style.conversationBox}>
         {conversation.map(message => renderIndividualMessage(message))}
       </div>
       <div className={style.messageInputContainer}>
-        <div className={style.textareaContainer}>
-          <Textarea className={style.messageTextarea} name='template' placeholder='Compose message' onChange={props.onDraftChange} />
-        </div>
-        <div className={style.buttonContainer}>
-          <button type='button' onClick={props.onSendMessage(conversation)} className={style.confirmButton}>{buttonText}</button>
+        <div className={style.inputContainer}>
+          <div className={style.textareaContainer}>
+            <Textarea className={style.messageTextarea} name='template' placeholder='Write message' onChange={props.onDraftChange} />
+          </div>
+          <div className={style.buttonContainer}>
+            <button onClick={props.onSendMessage(conversation)} className={style.confirmButton} disabled={!get(props, 'externalComposePage.draft')} >{buttonText}</button>
+          </div>
         </div>
       </div>
     </div>
