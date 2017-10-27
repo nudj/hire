@@ -14,7 +14,6 @@ const Router = ({
   router.getHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.get))
   router.patchHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.patch))
   router.postHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.post))
-  router.getHandlers('/jobs/:jobSlug/external/:messageId/authenticate', respondWith(fetchers.getAuthentication))
 
   return router
 }

@@ -31,8 +31,11 @@ const hirerAlign = { float: 'right' }
 const styles = {
   conversationBoxContainer: {
     padding: `${variables.padding.b} ${variables.padding.de}`,
-    margin: `0 ${variables.padding.a}`,
-    paddingBottom: '0px'
+    margin: `0 ${variables.padding.c}`,
+    paddingBottom: '0px',
+    [mixins.breakpoints.l]: {
+      margin: `0 ${variables.padding.a}`
+    }
   },
   conversationBox: {
     backgroundColor: variables.colors.lighterGrey,
@@ -120,7 +123,7 @@ const styles = {
   }),
   messageLink: {
     textDecoration: 'none',
-    color: '#49c5ee'
+    color: variables.colors.midRed
   },
   textareaContainer: {
     height: '100%',

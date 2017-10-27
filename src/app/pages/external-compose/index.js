@@ -212,6 +212,9 @@ class ComposeExternalPage extends React.Component {
     }
 
     const composeMessage = steps.map((step, index, steps) => {
+      if (step.name === 'nextSteps' && this.props.googleAuthenticated) {
+        return
+      }
       const {
         name,
         component: Component

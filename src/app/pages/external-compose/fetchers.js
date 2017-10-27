@@ -14,7 +14,6 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
-const { createNotification } = require('../../lib')
 
 const dialogOptions = {
   type: 'dialog',
@@ -184,32 +183,8 @@ const post = ({
     })
 }
 
-const getAuthentication = ({
-  data,
-  params,
-  query,
-  req
-}) => {
-  return gmail.getAccountForPerson(data.person.id)
-    .then(response => {
-      throw new Redirect({
-        url: `/jobs/${params.jobSlug}/external/${params.messageId}`,
-        notification: createNotification('success', 'You\'ve already authenticated with Google.')
-      })
-    })
-    .catch(error => {
-      console.log('Failed to retrieve account', error)
-      req.session.returnFail = `/jobs/${params.jobSlug}/external/${params.messageId}`
-      throw new Redirect({
-        url: `/auth/google`,
-        notification: createNotification('success', 'You\'ve successfully authenticated with Google!')
-      })
-    })
-}
-
 module.exports = {
   get,
-  getAuthentication,
   post,
   patch
 }

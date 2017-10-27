@@ -89,7 +89,9 @@ const FormStepSend = (props) => {
     }
   ]
 
-  if (props.pageData.googleAuthenticated) {
+  const googleAuthenticated = get(props, 'pageData.googleAuthenticated')
+
+  if (googleAuthenticated) {
     options = [
       {
         type: 'GMAIL',
@@ -109,7 +111,7 @@ const FormStepSend = (props) => {
     {...props}
     options={options}
     title='Send message'
-    placeholder='Tell us how you want to send it, so we can deliver it to you in the format you need.'
+    placeholder={googleAuthenticated ? 'Send your message.' : 'Tell us how you want to send it, so we can deliver it to you in the format you need.'}
   />
 }
 
