@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const filter = require('lodash/filter')
 const actions = require('@nudj/framework/actions')
 
 const LayoutApp = require('../../components/layout-app')
@@ -71,9 +72,10 @@ class ExternalSelectPage extends React.Component {
     const networkSent = get(this.props, 'networkSent', [])
     const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
     const externalMessagesComplete = get(this.props, 'externalMessagesComplete', [])
+    const activeConversations = filter(externalMessagesComplete, (message) => message.threadId)
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
-    if (!network.length || (networkSent.length && !networkUnsent.length)) {
+    if (!network.length || (networkSent.length && !networkUnsent.length && !activeConversations.length)) {
       return (<p className={this.style.copy}>Doesn't look like we could find anyone relevant in your network, but we’ll be sure to notify you as soon as we do.</p>)
     }
 
@@ -86,6 +88,9 @@ class ExternalSelectPage extends React.Component {
 
         if (networkSent.includes(personId)) {
           const currentMessage = externalMessagesComplete.find((message) => message.recipient === personId)
+          if (!currentMessage.threadId) {
+            return '' // Completed messages without a threadId aren't ongoing conversations.
+          }
           url = `${url}/${currentMessage.id}`
           buttonLabel = 'Chat'
           buttonClass = this.style.continueButton

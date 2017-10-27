@@ -11,7 +11,6 @@ const pageActions = require('./actions')
 const { getActiveStep } = require('../../lib')
 const LayoutApp = require('../../components/layout-app')
 const Link = require('../../components/link/link')
-const Form = require('../../components/form/form')
 const Loading = require('../../components/loading/loading')
 const FormStepLength = require('../../components/form-step-length/form-step-length')
 const FormStepStyle = require('../../components/form-step-style/form-step-style')
@@ -259,21 +258,19 @@ class ComposeExternalPage extends React.Component {
 
     let page = (
       <LayoutApp {...this.props} onPageLeave={unfinishedDraft ? this.handlePageLeave : ''} className={this.style.pageBody}>
-        <Form method='POST'>
-          <Helmet>
-            <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
-          </Helmet>
-          <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-          <PageHeader
-            fixed={!!sentMessage}
-            title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-            subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
-            <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
-            <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
-          </PageHeader>
-          { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
-          {pageBody}
-        </Form>
+        <Helmet>
+          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+        </Helmet>
+        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+        <PageHeader
+          fixed={!!sentMessage}
+          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
+          <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
+          <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
+        </PageHeader>
+        { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
+        {pageBody}
       </LayoutApp>
     )
 
