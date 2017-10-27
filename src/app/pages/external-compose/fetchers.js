@@ -25,6 +25,16 @@ const dialogOptions = {
     confirm: 'dialogconfirmtext'
   }
 }
+const leavePageDialogOptions = {
+  type: 'dialog',
+  tags: ['leaveSendExternalPage'],
+  keys: {
+    title: 'dialogtitle',
+    text: 'dialogtext',
+    cancel: 'dialogcanceltext',
+    link: 'dialogconfirmtext'
+  }
+}
 const tooltipOptions = {
   type: 'tooltip',
   tags: ['sendExternal'],
@@ -47,18 +57,7 @@ const fetchExternalPrismicContent = (data) => {
   data.tooltips = prismic.fetchContent(tooltipOptions)
   data.messages = prismic.fetchContent(messageOptions)
   data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
-  data.exitDialog = {
-    title: 'Discard your draft?',
-    text: 'If you leave this page, any unsent text will be discarded. Continue?',
-    link: 'Discard',
-    cancel: 'Cancel'
-  }
-  data.authenticationPromptDialog = {
-    title: 'Tracking your conversations',
-    text: 'Want to see their replies in here? Then we recommend syncing with Gmail.',
-    link: 'Sync with Gmail',
-    cancel: 'No, thanks'
-  }
+  data.exitDialog = prismic.fetchContent(leavePageDialogOptions).then(results => results && results[0])
   return promiseMap(data)
 }
 
