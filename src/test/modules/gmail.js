@@ -160,31 +160,30 @@ describe('Gmail module', () => {
         })
     })
 
-    it('places conversationMessages on to passed data object', () => {
-      return expect(gmail.getThreadMessages({ existingData: true }, 'threadId', 'personId')).to.eventually.deep.equal({
-        existingData: true,
-        conversationMessages: [
-          {
-            body: 'THAT AWESOME',
-            date: 'almost NaN years ago',
-            id: 'MessageId',
-            sender: 'Sender Name'
-          }
-        ]
-      })
+    it('places conversationMessages on to data object', () => {
+      return gmail.getThreadMessages({}, 'threadId', 'personId')
+        .then(response => {
+          const message = response.conversationMessages.pop()
+          expect(message).to.have.property('body', 'THAT AWESOME')
+          expect(message).to.have.property('id', 'MessageId')
+          expect(message).to.have.property('sender', 'Sender Name')
+          expect(message.date).to.be.a('string')
+        })
+    })
+
+    it('retains existing data on the data object', () => {
+      return expect(gmail.getThreadMessages({ existingData: true }, 'threadId', 'personId')).to.eventually.have.property('existingData', true)
     })
 
     it('refreshes access token if invalid and continues', () => {
-      return expect(gmail.getThreadMessages({}, 'threadId', 'expiredId')).to.eventually.deep.equal({
-        conversationMessages: [
-          {
-            body: 'THAT AWESOME',
-            date: 'almost NaN years ago',
-            id: 'MessageId',
-            sender: 'Sender Name'
-          }
-        ]
-      })
+      return gmail.getThreadMessages({}, 'threadId', 'expiredId')
+        .then(response => {
+          const message = response.conversationMessages.pop()
+          expect(message).to.have.property('body', 'THAT AWESOME')
+          expect(message).to.have.property('id', 'MessageId')
+          expect(message).to.have.property('sender', 'Sender Name')
+          expect(message.date).to.be.a('string')
+        })
     })
   })
 })

@@ -56,7 +56,7 @@ const fetchMessagesByThread = (threadId, person) => {
     })
     .then(response => formatThreadMessages(response.messages))
     .catch(error => {
-      if (error.name !== 'Unauthorized') {
+      if (!(error instanceof Unauthorized)) {
         logger.log('Error fetching thread', error)
         return refreshAccessTokenAndContinue(refreshToken, google.getThread, { threadId })
         .then(response => formatThreadMessages(response.messages))
@@ -79,7 +79,7 @@ const sendByThread = (email, person, threadId) => {
       return google.sendGmail({ email, accessToken: account.accessToken, threadId })
     })
     .catch(error => {
-      if (error.name !== 'Unauthorized') {
+      if (!(error instanceof Unauthorized)) {
         logger.log('Error sending to Gmail thread', error)
         return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email, threadId })
       }

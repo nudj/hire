@@ -257,26 +257,28 @@ class ComposeExternalPage extends React.Component {
     const pageBody = sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
-    let page = (
-      <LayoutApp {...this.props} onPageLeave={unfinishedDraft ? this.handlePageLeave : ''} className={this.style.pageBody}>
-        <Helmet>
-          <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
-        </Helmet>
-        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-        <PageHeader
-          fixed={!!sentMessage}
-          title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
-          subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
-          <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
-          <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
-        </PageHeader>
-        { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
-        {pageBody}
-      </LayoutApp>
-    )
+    let page
 
     if (loading) {
       page = (<Loading {...this.props} />)
+    } else {
+      page = (
+        <LayoutApp {...this.props} onPageLeave={unfinishedDraft ? this.handlePageLeave : ''} className={this.style.pageBody}>
+          <Helmet>
+            <title>{`nudj - ${get(this.props, 'job.title')} @ ${get(this.props, 'company.name')}`}</title>
+          </Helmet>
+          <input type='hidden' name='_csrf' value={this.props.csrfToken} />
+          <PageHeader
+            fixed={!!sentMessage}
+            title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
+            subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
+            <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
+            <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
+          </PageHeader>
+          { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
+          {pageBody}
+        </LayoutApp>
+      )
     }
 
     return page

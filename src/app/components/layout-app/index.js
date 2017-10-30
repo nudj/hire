@@ -9,8 +9,6 @@ const ScrollTop = require('../scroll-top')
 const LayoutApp = (props) => {
   const style = getStyle()
 
-  console.log(props.history.action)
-
   return (
     <ScrollTop ignore={props.history.action === 'REPLACE'}>
       <div className={`${props.className} ${style.body}`}>

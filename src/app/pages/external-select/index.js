@@ -35,7 +35,7 @@ class ExternalSelectPage extends React.Component {
     }
   }
 
-  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url}) {
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url, ongoing}) {
     const personId = get(person, 'id', '')
     const firstName = get(person, 'firstName', '')
     const lastName = get(person, 'lastName', '')
@@ -43,11 +43,7 @@ class ExternalSelectPage extends React.Component {
     const company = get(person, 'company', '')
     const continueButton = <Link className={buttonClass} to={url}>{buttonLabel}</Link>
     const newButton = <button className={buttonClass} onClick={this.onClickSend(personId)}>{buttonLabel}</button>
-    let link = newButton
-
-    if (buttonLabel === 'Continue' || buttonLabel === 'Chat') { // Need a more robust solution
-      link = continueButton
-    }
+    const link = ongoing ? continueButton : newButton
 
     return (<RowItem
       key={`${personId}_${index}`}
@@ -85,23 +81,26 @@ class ExternalSelectPage extends React.Component {
         let url = `/jobs/${jobSlug}/external`
         let buttonLabel = 'Nudj'
         let buttonClass = this.style.nudjButton
+        let ongoing = false
 
         if (networkSent.includes(personId)) {
           const currentMessage = externalMessagesComplete.find((message) => message.recipient === personId)
           if (!currentMessage.threadId) {
             return '' // Completed messages without a threadId aren't ongoing conversations.
           }
+          ongoing = true
           url = `${url}/${currentMessage.id}`
           buttonLabel = 'Chat'
           buttonClass = this.style.continueButton
         } else if (networkSaved.includes(personId)) {
           const currentMessage = externalMessagesIncomplete.find((message) => message.recipient === personId)
+          ongoing = true
           url = `${url}/${currentMessage.id}`
           buttonLabel = 'Continue'
           buttonClass = this.style.continueButton
         }
 
-        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url})
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url, ongoing})
       })}
     </ul>)
   }
