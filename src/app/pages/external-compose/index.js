@@ -245,10 +245,11 @@ class ComposeExternalPage extends React.Component {
     })
 
     const conversationBody = (
-      <div className={this.style.pageContent}>
+      <div className={this.style.conversationPageContent}>
         <div className={this.style.pageMain}>
           <ConversationBox onDraftChange={this.onDraftChange} onSendMessage={this.onSendThreadMessage} {...this.props} />
         </div>
+        <div className={this.style.pageSidebar} />
       </div>
     )
 

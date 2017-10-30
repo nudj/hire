@@ -28,6 +28,9 @@ const styles = {
   pageContent: {
     padding: `0 0 ${variables.padding.de} 0`
   },
+  conversationPageContent: merge(mixins.pageLayout.pageContent, {
+    padding: '0'
+  }),
   jobLink: {
     color: variables.colors.royalBlue,
     textDecoration: 'none'

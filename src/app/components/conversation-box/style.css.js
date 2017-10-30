@@ -31,15 +31,10 @@ const hirerAlign = { float: 'right' }
 const styles = {
   conversationBoxContainer: {
     padding: `${variables.padding.b} ${variables.padding.de}`,
-    margin: `0 ${variables.padding.c}`,
-    paddingBottom: '0px',
-    [mixins.breakpoints.l]: {
-      margin: `0 ${variables.padding.a}`
-    }
+    paddingBottom: '0px'
   },
   conversationBox: {
     backgroundColor: variables.colors.lighterGrey,
-    borderRadius: variables.sizing.baseBorderRadius,
     overflow: 'hidden',
     minHeight: '70vh',
     position: 'relative'
