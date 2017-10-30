@@ -40,7 +40,27 @@ const getAccessTokenFromRefreshToken = (refreshToken) => {
   })
 }
 
-const sendGmail = (email, accessToken) => {
+const getThread = ({ threadId, accessToken }) => {
+  oauth2Client.setCredentials({
+    access_token: accessToken
+  })
+
+  return new Promise((resolve, reject) => {
+    gmail.users.threads.get({
+      auth: oauth2Client,
+      userId: 'me',
+      id: threadId
+    }, (error, response) => {
+      if (error) {
+        logger.log('error', 'Error retrieving Gmail thread', error)
+        return reject(error)
+      }
+      resolve(response)
+    })
+  })
+}
+
+const sendGmail = ({ email, accessToken, threadId }) => {
   const mimeEmail = emailBuilder(email)
   const base64EncodedEmail = Base64.encodeURI(mimeEmail)
   oauth2Client.setCredentials({
@@ -52,7 +72,8 @@ const sendGmail = (email, accessToken) => {
       auth: oauth2Client,
       userId: 'me',
       resource: {
-        raw: base64EncodedEmail
+        raw: base64EncodedEmail,
+        threadId
       }
     }, (error, response) => {
       if (error) {
@@ -66,6 +87,7 @@ const sendGmail = (email, accessToken) => {
 
 module.exports = {
   sendGmail,
+  getThread,
   getAccessTokenFromRefreshToken,
   verifyOrRefreshAccessToken
 }

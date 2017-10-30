@@ -1,8 +1,8 @@
 const React = require('react')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const isEqual = require('lodash/isEqual')
 const { Helmet } = require('react-helmet')
-const actions = require('@nudj/framework/actions')
 
 const getStyle = require('./style.css')
 const LayoutApp = require('../../components/layout-app')
@@ -58,18 +58,10 @@ function renderJobActivities ({props, style}) {
   </div>)
 }
 
-function resendExternalMessage ({props, person, jobSlug}) {
-  return () => {
-    const recipient = get(person, 'id')
-    props.dispatch(actions.app.postData({
-      url: `/jobs/${jobSlug}/external`,
-      data: { recipient }
-    }))
-  }
-}
-
 function renderSentListItem ({jobSlug, person, index, style, props}) {
   const personId = get(person, 'id', '')
+  const completeExternalMessages = get(props, 'externalMessagesComplete', [])
+  const externalMessage = find(completeExternalMessages, { recipient: personId })
 
   const firstName = get(person, 'firstName', '')
   const lastName = get(person, 'lastName', '')
@@ -84,7 +76,7 @@ function renderSentListItem ({jobSlug, person, index, style, props}) {
 
   // internal - how to specify someone?
   const resendInternalButton = (<Link className={style.button} to={`/jobs/${jobSlug}/internal`}>Resend</Link>)
-  const resendExternalButton = (<button className={style.button} onClick={resendExternalMessage({props, person, jobSlug})}>Resend</button>)
+  const resendExternalButton = (<Link className={style.button} to={`/jobs/${jobSlug}/external/${get(externalMessage, 'id')}`}>Message</Link>)
   const resendButton = source === 'external' ? resendExternalButton : resendInternalButton
   const actions = source === 'referral' ? '' : resendButton
 

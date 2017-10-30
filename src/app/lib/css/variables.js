@@ -26,6 +26,7 @@ module.exports.sizing = {
   sidebarWidth: '285px',
   squishedSidebarWidth: '160px',
   notificationTop: `${basePixelSize * 1.5}px`,
+  messageBorderRadius: '6px',
   textEditorLineHeight: '1.5rem',
   buttonMinWidth: '120px'
 }
@@ -146,6 +147,7 @@ module.exports.fontSizes = {
 }
 
 module.exports.zIndicies = {
+  header: '50',
   overlay: '100',
   tooltip: '900'
 }

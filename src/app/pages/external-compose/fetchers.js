@@ -2,6 +2,7 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
+const { Redirect } = require('@nudj/framework/errors')
 const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
@@ -13,7 +14,6 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
-const { createNotification } = require('../../lib')
 
 const dialogOptions = {
   type: 'dialog',
@@ -23,6 +23,16 @@ const dialogOptions = {
     text: 'dialogtext',
     cancel: 'dialogcanceltext',
     confirm: 'dialogconfirmtext'
+  }
+}
+const leavePageDialogOptions = {
+  type: 'dialog',
+  tags: ['leaveSendExternalPage'],
+  keys: {
+    title: 'dialogtitle',
+    text: 'dialogtext',
+    cancel: 'dialogcanceltext',
+    link: 'dialogconfirmtext'
   }
 }
 const tooltipOptions = {
@@ -47,6 +57,7 @@ const fetchExternalPrismicContent = (data) => {
   data.tooltips = prismic.fetchContent(tooltipOptions)
   data.messages = prismic.fetchContent(messageOptions)
   data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
+  data.exitDialog = prismic.fetchContent(leavePageDialogOptions).then(results => results && results[0])
   return promiseMap(data)
 }
 
@@ -63,12 +74,21 @@ const get = ({
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getById(data, messageId))
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
+    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => getExternalMessageProperties(data, messageId))
     .then(data => {
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
         return gmail.send(data, data.person.id, tags.external)
-          .then(data => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL' }))
+          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId }))
+          .then(data => {
+            throw new Redirect({
+              url: `/jobs/${params.jobSlug}/external/${messageId}`
+            })
+          })
+      }
+      if (data.externalMessage.sendMessage === 'GMAIL') {
+        return gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id)
       }
       return promiseMap(data)
     })
@@ -128,10 +148,8 @@ const patch = ({
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, data.person.id, tags.external)
-          .then(data => {
-            req.session.notification = createNotification('success', 'That’s the way, aha aha, I like it! 🎉')
-            return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
-          })
+          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId }))
+          .then(data => gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id))
       }
       return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
     })
@@ -144,7 +162,28 @@ const patch = ({
     .then(fetchExternalPrismicContent)
 }
 
+const post = ({
+  data,
+  params,
+  body
+}) => {
+  const email = {
+    body: body.message,
+    from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
+    subject: body.subject,
+    to: body.recipient
+  }
+
+  return gmail.sendByThread(email, data.person.id, body.thread)
+    .then(response => {
+      throw new Redirect({
+        url: `/jobs/${params.jobSlug}/external/${params.messageId}`
+      })
+    })
+}
+
 module.exports = {
   get,
+  post,
   patch
 }

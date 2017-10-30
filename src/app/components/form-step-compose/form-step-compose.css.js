@@ -15,7 +15,8 @@ const styles = {
   messageTextarea: merge(mixins.formElements.inputBoxBorderless, {
     height: '20rem',
     padding: `0 0 ${variables.padding.d} 0`,
-    width: '100%'
+    width: '100%',
+    resize: 'none'
   }),
   tagOk: {
     color: 'green'

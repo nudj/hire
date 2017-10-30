@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const filter = require('lodash/filter')
 const actions = require('@nudj/framework/actions')
 
 const LayoutApp = require('../../components/layout-app')
@@ -34,7 +35,7 @@ class ExternalSelectPage extends React.Component {
     }
   }
 
-  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url}) {
+  renderNetworkListRowItem ({buttonClass = this.style.nudjButton, buttonLabel, jobSlug, person, index, url, ongoing}) {
     const personId = get(person, 'id', '')
     const firstName = get(person, 'firstName', '')
     const lastName = get(person, 'lastName', '')
@@ -42,11 +43,7 @@ class ExternalSelectPage extends React.Component {
     const company = get(person, 'company', '')
     const continueButton = <Link className={buttonClass} to={url}>{buttonLabel}</Link>
     const newButton = <button className={buttonClass} onClick={this.onClickSend(personId)}>{buttonLabel}</button>
-    let link = newButton
-
-    if (buttonLabel === 'Continue') {
-      link = continueButton
-    }
+    const link = ongoing ? continueButton : newButton
 
     return (<RowItem
       key={`${personId}_${index}`}
@@ -70,9 +67,11 @@ class ExternalSelectPage extends React.Component {
     const networkSaved = get(this.props, 'networkSaved', [])
     const networkSent = get(this.props, 'networkSent', [])
     const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
+    const externalMessagesComplete = get(this.props, 'externalMessagesComplete', [])
+    const activeConversations = filter(externalMessagesComplete, (message) => message.threadId)
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
-    if (!network.length || (networkSent.length && !networkUnsent.length)) {
+    if (!network.length || (networkSent.length && !networkUnsent.length && !activeConversations.length)) {
       return (<p className={this.style.copy}>Doesn't look like we could find anyone relevant in your network, but we’ll be sure to notify you as soon as we do.</p>)
     }
 
@@ -82,17 +81,26 @@ class ExternalSelectPage extends React.Component {
         let url = `/jobs/${jobSlug}/external`
         let buttonLabel = 'Nudj'
         let buttonClass = this.style.nudjButton
+        let ongoing = false
 
         if (networkSent.includes(personId)) {
-          return ''
+          const currentMessage = externalMessagesComplete.find((message) => message.recipient === personId)
+          if (!currentMessage.threadId) {
+            return '' // Completed messages without a threadId aren't ongoing conversations.
+          }
+          ongoing = true
+          url = `${url}/${currentMessage.id}`
+          buttonLabel = 'Chat'
+          buttonClass = this.style.continueButton
         } else if (networkSaved.includes(personId)) {
           const currentMessage = externalMessagesIncomplete.find((message) => message.recipient === personId)
+          ongoing = true
           url = `${url}/${currentMessage.id}`
           buttonLabel = 'Continue'
           buttonClass = this.style.continueButton
         }
 
-        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url})
+        return this.renderNetworkListRowItem({buttonClass, buttonLabel, jobSlug, person, index, url, ongoing})
       })}
     </ul>)
   }

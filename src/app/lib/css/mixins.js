@@ -171,7 +171,11 @@ module.exports.typography = {
   p: merge({
     color: variables.colors.charcoal,
     margin: `0 0 ${variables.padding.d} 0`
-  }, headings.p)
+  }, headings.p),
+  p2: merge({
+    color: variables.colors.charcoal,
+    margin: `0 0 ${variables.padding.d} 0`
+  }, headings.p2)
 }
 
 const linkImage = function (imagePath) {

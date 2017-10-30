@@ -5,7 +5,8 @@ const {
   SET_ACTIVE_STEP,
   SET_STEP_DATA,
   SAVE_STEP_DATA,
-  HIDE_CONFIRM
+  HIDE_CONFIRM,
+  SAVE_MESSAGE_DRAFT
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -50,12 +51,17 @@ const routerLocationChange = (state, action) => {
   return { active: null }
 }
 
+const saveMessageDraft = (state, action) => {
+  return merge(state, { draft: action.body })
+}
+
 const actions = {
   [SET_ACTIVE_STEP]: setActiveStep,
   [SET_STEP_DATA]: setStepData,
   [SAVE_STEP_DATA]: saveStepData,
   [HIDE_CONFIRM]: hideConfirm,
-  [ROUTER_LOCATION_CHANGE]: routerLocationChange
+  [ROUTER_LOCATION_CHANGE]: routerLocationChange,
+  [SAVE_MESSAGE_DRAFT]: saveMessageDraft
 }
 
 const initialState = {

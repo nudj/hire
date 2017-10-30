@@ -11,8 +11,9 @@ const Router = ({
   router.use(ensureLoggedIn)
   router.use(ensureOnboarded)
 
-  router.getHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.get))//, getExternalMessageHandler)
-  router.patchHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.patch))//, patchExternalMessageHandler)
+  router.getHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.get))
+  router.patchHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.patch))
+  router.postHandlers('/jobs/:jobSlug/external/:messageId', respondWith(fetchers.post))
 
   return router
 }

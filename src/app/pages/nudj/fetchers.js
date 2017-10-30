@@ -35,7 +35,7 @@ function aggregateSent (data) {
   const familyTotals = {}
   Object.keys(family).forEach(parent => compoundCounting({family, familyTotals, parent, applicationCounts, referralCounts}))
 
-  const externalMessagesComplete = data.externalMessagesComplete.map(sent => {
+  const externalMessagesCompleteRecipients = data.externalMessagesCompleteRecipients.map(sent => {
     return merge(sent, {source: 'external'})
   })
 
@@ -44,7 +44,7 @@ function aggregateSent (data) {
   })
 
   // Concat and sort external and external
-  const sentComplete = [].concat(externalMessagesComplete, internalMessagesComplete)
+  const sentComplete = [].concat(externalMessagesCompleteRecipients, internalMessagesComplete)
   sentComplete.sort(common.sortByModified)
 
   data.sentComplete = sentComplete.map(complete => {
@@ -108,7 +108,7 @@ const get = ({
 }) => {
   return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
     .then(data => jobs.get(data, params.jobSlug))
-    .then(data => externalMessages.getAllComplete(data, data.hirer.id, data.job.id))
+    .then(data => externalMessages.getAllCompleteRecipients(data, data.hirer.id, data.job.id))
     .then(data => internalMessages.getAllComplete(data, data.hirer.id, data.job.id))
     .then(data => jobs.getReferrals(data, data.job.id))
     .then(data => jobs.getApplications(data, data.job.id))
