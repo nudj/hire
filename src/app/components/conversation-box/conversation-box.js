@@ -2,7 +2,7 @@ const React = require('react')
 const Textarea = require('react-textarea-autosize')
 const { ThreeBounce } = require('better-react-spinkit')
 const get = require('lodash/get')
-const linkify = require('linkifyjs/html')
+const Linkify = require('linkifyjs/react')
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
 
@@ -11,6 +11,11 @@ const ConversationBox = (props) => {
   const conversation = get(props, 'conversationMessages', [])
   const buttonText = get(props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
 
+  const pify = (textStyle, key) => {
+    const options = { className: style.messageLink }
+    return (para, index, margin = 0) => <Linkify className={textStyle} key={`${key}-para${index}`} tagName='p' options={options}>{para.join('')}</Linkify>
+  }
+
   const renderIndividualMessage = (message) => {
     const isRecipient = message.sender.includes(props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
     const messageStyle = isRecipient ? 'recipient' : 'hirer'
@@ -18,9 +23,10 @@ const ConversationBox = (props) => {
     const textStyle = style[`${messageStyle}Paragraph`]
     const options = {
       template: message.body,
-      pify: (para, index, margin = 0) => `<p class='${textStyle}' key='${key}-para${index}'>${para.join('')}</p>`
+      pify: pify(textStyle, key),
+      brify: (index) => <br key={`br${index}`} />
     }
-    const renderedMessage = linkify(templater.render(options).join('\n\n'), { defaultProtocol: 'https', linkClass: style.messageLink })
+    const renderedMessage = templater.render(options)
 
     return (
       <div className={style.messageContainer} key={`${key}-container`}>
@@ -29,7 +35,7 @@ const ConversationBox = (props) => {
         </div>
         <div key={`${key}-message`} className={style[`${messageStyle}Message`]}>
           <div className={style[`${messageStyle}MessageBubble`]} key={`${key}-messageBody`}>
-            <p key={`${key}-body`} dangerouslySetInnerHTML={{ __html: renderedMessage }} />
+            {renderedMessage}
           </div>
           <div className={style[`${messageStyle}MessageDate`]} key={`${key}-date`}>
             {message.date}
