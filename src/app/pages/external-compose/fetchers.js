@@ -9,6 +9,7 @@ const common = require('../../server/modules/common')
 const accounts = require('../../server/modules/accounts')
 const jobs = require('../../server/modules/jobs')
 const network = require('../../server/modules/network')
+const conversations = require('../../server/modules/conversations')
 const gmail = require('../../server/modules/gmail')
 const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
@@ -80,7 +81,8 @@ const get = ({
       if (!data.externalMessage.sendMessage && gmailSent) {
         delete req.session.gmailSecret
         return gmail.send(data, data.person.id, tags.external)
-          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId }))
+          .then(response => conversations.post(response, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, response.threadId, 'GMAIL'))
+          .then(response => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId: response.threadId }))
           .then(data => {
             throw new Redirect({
               url: `/jobs/${params.jobSlug}/external/${messageId}`
@@ -148,7 +150,7 @@ const patch = ({
         req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
         req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
         return gmail.send(data, data.person.id, tags.external)
-          .then(threadId => externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId }))
+          .then(response => externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId: response.threadId }))
           .then(data => gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id))
       }
       return externalMessages.patch(data, data.externalMessage.id, { sendMessage })

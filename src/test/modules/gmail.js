@@ -111,13 +111,19 @@ describe('Gmail module', () => {
     })
 
     it('sends an email and returns the new threadId if the accessToken is valid', () => {
-      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'personId', 'threadId')).to.eventually.deep.equal('gmailThread')
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'personId', 'threadId')).to.eventually.have.property('threadId', 'gmailThread')
+    })
+
+    it('returns the google response body after sending', () => {
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'personId', 'threadId')).to.eventually.have.property('response', 'gmailSentResponse')
+    })
+
+    it('returns the appended pixelToken in the response', () => {
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'personId', 'threadId')).to.eventually.have.property('pixelToken')
     })
 
     it('refreshes access token if invalid', () => {
-      return gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'expiredId', 'threadId').then(threadId => {
-        expect(threadId).to.equal('gmailThread')
-      })
+      return expect(gmail.send({ template: 'FirstLine\n\nSecondLine' }, 'expiredId', 'threadId')).to.eventually.have.property('threadId', 'gmailThread')
     })
   })
 

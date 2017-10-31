@@ -1,6 +1,7 @@
 const data = {
   assets: [],
   companies: [],
+  conversations: [],
   jobs: [],
   people: [],
   referrals: [],
@@ -15,7 +16,8 @@ const data = {
   tasks: [],
   tokens: [],
   employeeSurveys: [],
-  accounts: []
+  accounts: [],
+  messages: []
 }
 data.companies = data.companies.concat([
   {
