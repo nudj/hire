@@ -1,22 +1,19 @@
-const createHash = require('hash-generator')
 const { promiseMap } = require('@nudj/library')
 
 const request = require('../../lib/request')
 
-const hashLength = 16
-
-function createPixel (pixelData) {
-  const token = createHash(hashLength)
+function createMessage (conversation, providerId, pixelToken) {
   const data = {
-    token,
-    count: 0,
-    data: pixelData
+    conversation,
+    providerId,
+    pixelToken,
+    readCount: 0
   }
   const method = 'post'
   return request(`messages`, { data, method })
 }
 
-module.exports.post = function (data, pixelData) {
-  data.pixel = createPixel(pixelData)
+module.exports.post = function (data, conversation, providerId, pixelToken) {
+  data.message = createMessage(conversation, providerId, pixelToken)
   return promiseMap(data)
 }

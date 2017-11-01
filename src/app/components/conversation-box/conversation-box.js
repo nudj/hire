@@ -3,6 +3,8 @@ const Textarea = require('react-textarea-autosize')
 const { ThreeBounce } = require('better-react-spinkit')
 const get = require('lodash/get')
 const Linkify = require('linkifyjs/react')
+const striptags = require('striptags')
+
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
 
@@ -21,10 +23,11 @@ const ConversationBox = (props) => {
     const messageStyle = isRecipient ? 'recipient' : 'hirer'
     const key = message.id
     const textStyle = style[`${messageStyle}Paragraph`]
+    const body = message.body.replace(/(<br \/>)/g, '\n\n')
     const options = {
-      template: message.body,
+      template: striptags(body), // There should be no html tags here - including pixel tracking img tags.
       pify: pify(textStyle, key),
-      brify: (index) => <br key={`br${index}`} />
+      brify: (index) => '\n'
     }
     const renderedMessage = templater.render(options)
 

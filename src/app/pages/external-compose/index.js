@@ -151,7 +151,7 @@ class ComposeExternalPage extends React.Component {
         method: 'post',
         data: {
           message: this.props.externalComposePage.draft,
-          thread: this.props.externalMessage.threadId,
+          thread: this.props.conversation.threadId,
           recipient: this.props.recipient.email,
           subject
         }

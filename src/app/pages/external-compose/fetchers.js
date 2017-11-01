@@ -10,6 +10,7 @@ const accounts = require('../../server/modules/accounts')
 const jobs = require('../../server/modules/jobs')
 const network = require('../../server/modules/network')
 const conversations = require('../../server/modules/conversations')
+const messages = require('../../server/modules/messages')
 const gmail = require('../../server/modules/gmail')
 const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
@@ -54,15 +55,15 @@ const messageOptions = {
   }
 }
 
-const fetchExternalPrismicContent = (data) => {
-  data.tooltips = prismic.fetchContent(tooltipOptions)
-  data.messages = prismic.fetchContent(messageOptions)
-  data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
-  data.exitDialog = prismic.fetchContent(leavePageDialogOptions).then(results => results && results[0])
+const fetchExternalPrismicContent = async (data) => {
+  data.tooltips = await prismic.fetchContent(tooltipOptions)
+  data.messages = await prismic.fetchContent(messageOptions)
+  data.dialog = await prismic.fetchContent(dialogOptions).then(results => results && results[0])
+  data.exitDialog = await prismic.fetchContent(leavePageDialogOptions).then(results => results && results[0])
   return promiseMap(data)
 }
 
-const get = ({
+const get = async ({
   data,
   params,
   query,
@@ -71,53 +72,48 @@ const get = ({
   const messageId = params.messageId
   const gmailSent = query.gmail && query.gmail === req.session.gmailSecret
 
-  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
-    .then(data => jobs.get(data, params.jobSlug))
-    .then(data => externalMessages.getById(data, messageId))
-    .then(data => network.getRecipient(data, data.externalMessage.recipient))
-    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
-    .then(data => getExternalMessageProperties(data, messageId))
-    .then(data => {
-      if (!data.externalMessage.sendMessage && gmailSent) {
-        delete req.session.gmailSecret
-        return gmail.send(data, data.person.id, tags.external)
-          .then(response => conversations.post(response, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, response.threadId, 'GMAIL'))
-          .then(response => externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', threadId: response.threadId }))
-          .then(data => {
-            throw new Redirect({
-              url: `/jobs/${params.jobSlug}/external/${messageId}`
-            })
-          })
-      }
-      if (data.externalMessage.sendMessage === 'GMAIL') {
-        return gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id)
-      }
-      return promiseMap(data)
+  data = await addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  data = await jobs.get(data, params.jobSlug)
+  data = await externalMessages.getById(data, messageId)
+  data = await network.getRecipient(data, data.externalMessage.recipient)
+  data = await accounts.verifyGoogleAuthentication(data, data.person.id)
+  data = await getExternalMessageProperties(data, messageId)
+
+  if (!data.externalMessage.sendMessage && gmailSent) {
+    delete req.session.gmailSecret
+    let gmailResponse = await gmail.send(data, data.person.id, tags.external)
+    data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
+    data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
+    data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', conversation: data.conversation.id })
+    data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+    throw new Redirect({
+      url: `/jobs/${params.jobSlug}/external/${messageId}`
     })
-    .then(fetchExternalPrismicContent)
+  }
+
+  if (data.externalMessage.sendMessage === 'GMAIL' && data.externalMessage.conversation) {
+    data = await conversations.getById(data, data.externalMessage.conversation)
+    data = await fetchExternalPrismicContent(data)
+    return gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
+  }
+  return fetchExternalPrismicContent(data)
 }
 
-function getExternalMessageProperties (data, messageId) {
-  return Promise.resolve(data)
-    .then(data => {
-      data.recipient = common.fetchPersonFromFragment(data.recipient.id)
-      return promiseMap(data)
-    })
-    .then(data => jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id))
-    .then(data => {
-      if (!data.referral) {
-        data.referral = jobs.addReferral(data, data.job.id, data.recipient.id)
-      }
-      return promiseMap(data)
-    })
-    .then(data => externalMessages.getById(data, messageId))
-    .catch(error => {
-      console.log('error', error)
-      throw new Error('Not found')
-    })
+async function getExternalMessageProperties (data, messageId) {
+  try {
+    data.recipient = await common.fetchPersonFromFragment(data.recipient.id)
+    data = await jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id)
+    if (!data.referral) {
+      data = await jobs.addReferral(data, data.job.id, data.recipient.id)
+    }
+    return externalMessages.getById(data, messageId)
+  } catch (error) {
+    console.log('error', error)
+    throw new Error('Not found')
+  }
 }
 
-const patch = ({
+const patch = async ({
   data,
   params,
   body,
@@ -129,42 +125,43 @@ const patch = ({
   const sendMessage = body.sendMessage
   const messageId = params.messageId
 
-  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
-    .then(data => externalMessages.getById(data, messageId))
-    .then(data => jobs.get(data, params.jobSlug))
-    .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
-    .then(data => network.getRecipient(data, data.externalMessage.recipient))
-    .then(data => {
-      const externalMessage = {
-        recipient: data.recipient.id,
-        composeMessage,
-        selectStyle,
-        selectLength
-      }
-      return externalMessages.patch(data, messageId, externalMessage)
-    })
-    .then(data => jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id))
-    .then(data => {
-      if (sendMessage === 'GMAIL' && !data.externalMessage.sendMessage) {
-        req.session.gmailSecret = createHash(8)
-        req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
-        req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
-        return gmail.send(data, data.person.id, tags.external)
-          .then(response => externalMessages.patch(data, data.externalMessage.id, { sendMessage, threadId: response.threadId }))
-          .then(data => gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id))
-      }
-      return externalMessages.patch(data, data.externalMessage.id, { sendMessage })
-    })
-    .then(data => {
-      if (sendMessage) {
-        return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-      }
-      return promiseMap(data)
-    })
-    .then(fetchExternalPrismicContent)
+  data = await addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
+  data = await externalMessages.getById(data, messageId)
+  data = await jobs.get(data, params.jobSlug)
+  data = await accounts.verifyGoogleAuthentication(data, data.person.id)
+  data = await network.getRecipient(data, data.externalMessage.recipient)
+  const externalMessage = {
+    recipient: data.recipient.id,
+    composeMessage,
+    selectStyle,
+    selectLength
+  }
+  data = await externalMessages.patch(data, messageId, externalMessage)
+  data = await jobs.getOrCreateReferralForPersonAndJob(data, data.recipient.id, data.job.id)
+  data = await fetchExternalPrismicContent(data)
+
+  if (sendMessage === 'GMAIL' && !data.externalMessage.sendMessage) {
+    req.session.gmailSecret = createHash(8)
+    req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
+    req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
+    const gmailResponse = await gmail.send(data, data.person.id, tags.external)
+    data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
+    data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
+    data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage, conversation: data.conversation.id })
+    data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+    data = await gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
+  } else {
+    data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage })
+  }
+
+  if (sendMessage) {
+    return tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+  }
+
+  return promiseMap(data)
 }
 
-const post = ({
+const post = async ({
   data,
   params,
   body
@@ -173,15 +170,13 @@ const post = ({
     body: body.message,
     from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
     subject: body.subject,
-    to: body.recipient
+    to: process.env.TEST_EMAIL_ADDRESS // body.recipient
   }
 
-  return gmail.sendByThread(email, data.person.id, body.thread)
-    .then(response => {
-      throw new Redirect({
-        url: `/jobs/${params.jobSlug}/external/${params.messageId}`
-      })
-    })
+  await gmail.sendByThread(email, data.person.id, body.thread)
+  throw new Redirect({
+    url: `/jobs/${params.jobSlug}/external/${params.messageId}`
+  })
 }
 
 module.exports = {
