@@ -63,6 +63,31 @@ const fetchExternalPrismicContent = async (data) => {
   return promiseMap(data)
 }
 
+const getExternalMessageProperties = async (data, messageId) => {
+  try {
+    data.recipient = await common.fetchPersonFromFragment(data.recipient.id)
+    data = await jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id)
+    if (!data.referral) {
+      data = await jobs.addReferral(data, data.job.id, data.recipient.id)
+    }
+    return externalMessages.getById(data, messageId)
+  } catch (error) {
+    console.log('error', error)
+    throw new Error('Not found')
+  }
+}
+
+const startNewGmailConversation = async (data) => {
+  const gmailResponse = await gmail.send(data, data.person.id, tags.external)
+  data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
+  data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
+  data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', conversation: data.conversation.id })
+  data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
+  throw new Redirect({
+    url: `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
+  })
+}
+
 const get = async ({
   data,
   params,
@@ -79,38 +104,17 @@ const get = async ({
   data = await accounts.verifyGoogleAuthentication(data, data.person.id)
   data = await getExternalMessageProperties(data, messageId)
 
-  if (!data.externalMessage.sendMessage && gmailSent) {
+  if (!data.externalMessage.sendMessage && gmailSent) { // New message to be sent
     delete req.session.gmailSecret
-    let gmailResponse = await gmail.send(data, data.person.id, tags.external)
-    data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
-    data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
-    data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', conversation: data.conversation.id })
-    data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-    throw new Redirect({
-      url: `/jobs/${params.jobSlug}/external/${messageId}`
-    })
+    return startNewGmailConversation(data)
   }
 
-  if (data.externalMessage.sendMessage === 'GMAIL' && data.externalMessage.conversation) {
+  if (data.externalMessage.conversation) { // Ongoing conversation
     data = await conversations.getById(data, data.externalMessage.conversation)
     data = await fetchExternalPrismicContent(data)
     return gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
   }
   return fetchExternalPrismicContent(data)
-}
-
-async function getExternalMessageProperties (data, messageId) {
-  try {
-    data.recipient = await common.fetchPersonFromFragment(data.recipient.id)
-    data = await jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id)
-    if (!data.referral) {
-      data = await jobs.addReferral(data, data.job.id, data.recipient.id)
-    }
-    return externalMessages.getById(data, messageId)
-  } catch (error) {
-    console.log('error', error)
-    throw new Error('Not found')
-  }
 }
 
 const patch = async ({
@@ -144,12 +148,7 @@ const patch = async ({
     req.session.gmailSecret = createHash(8)
     req.session.returnFail = `/jobs/${data.job.slug}/external/${data.externalMessage.id}`
     req.session.returnTo = `${req.session.returnFail}?gmail=${req.session.gmailSecret}`
-    const gmailResponse = await gmail.send(data, data.person.id, tags.external)
-    data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
-    data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
-    data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage, conversation: data.conversation.id })
-    data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
-    data = await gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
+    return startNewGmailConversation(data)
   } else {
     data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage })
   }
