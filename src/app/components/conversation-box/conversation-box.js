@@ -9,6 +9,7 @@ const getStyle = require('./style.css')
 const ConversationBox = (props) => {
   const style = getStyle()
   const conversation = get(props, 'conversationMessages', [])
+  const company = get(props, 'recipient.company')
   const buttonText = get(props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
 
   const renderIndividualMessage = (message) => {
@@ -45,7 +46,7 @@ const ConversationBox = (props) => {
         <div className={style.header}>
           <div className={style.main}>
             <h1 className={style.title}>{`${get(props, 'recipient.firstName', '')} ${get(props, 'recipient.lastName', '')}`}</h1>
-            <h2 className={style.subtitle}>{`${get(props, 'recipient.title', '')} @ ${get(props, 'recipient.company')}`}</h2>
+            <h2 className={style.subtitle}>{company ? `${get(props, 'recipient.title', '')} @ ${company}` : `${get(props, 'recipient.title', '')}`}</h2>
           </div>
         </div>
       </div>
