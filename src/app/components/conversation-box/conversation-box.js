@@ -10,7 +10,7 @@ const ConversationBox = (props) => {
   const style = getStyle()
   const conversation = get(props, 'conversationMessages', [])
   const company = get(props, 'recipient.company', '')
-  const title = get(props, 'recipient.company', '')
+  const title = get(props, 'recipient.title', '')
   const buttonText = get(props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
 
   const renderIndividualMessage = (message) => {

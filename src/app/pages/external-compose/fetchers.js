@@ -2,7 +2,10 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
-const { Redirect } = require('@nudj/framework/errors')
+const {
+  Redirect,
+  NotFound
+} = require('@nudj/framework/errors')
 const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
@@ -73,6 +76,12 @@ const get = ({
   return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
     .then(data => jobs.get(data, params.jobSlug))
     .then(data => externalMessages.getById(data, messageId))
+    .then(data => {
+      if (data.externalMessage.hirer !== data.hirer.id) {
+        throw new NotFound('Hirer attempted to access external message that doesn\'t belong to them')
+      }
+      return data
+    })
     .then(data => network.getRecipient(data, data.externalMessage.recipient))
     .then(data => accounts.verifyGoogleAuthentication(data, data.person.id))
     .then(data => getExternalMessageProperties(data, messageId))
@@ -87,7 +96,7 @@ const get = ({
             })
           })
       }
-      if (data.externalMessage.sendMessage === 'GMAIL') {
+      if (data.externalMessage.sendMessage === 'GMAIL' && data.externalMessage.threadId) {
         return gmail.getThreadMessages(data, data.externalMessage.threadId, data.person.id)
       }
       return promiseMap(data)
