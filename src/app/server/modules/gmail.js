@@ -48,7 +48,6 @@ const formatThreadMessages = (messages) => {
 
 const fetchMessagesByThread = (threadId, person) => {
   let refreshToken
-
   return getAccountForPerson(person)
     .then(account => {
       refreshToken = account.refreshToken
@@ -56,8 +55,8 @@ const fetchMessagesByThread = (threadId, person) => {
     })
     .then(response => formatThreadMessages(response.messages))
     .catch(error => {
-      if (!(error instanceof Unauthorized)) {
-        logger.log('Error fetching thread', error)
+      if (error.name !== Unauthorized.name) {
+        logger.log('error', 'Error fetching thread', error)
         return refreshAccessTokenAndContinue(refreshToken, google.getThread, { threadId })
         .then(response => formatThreadMessages(response.messages))
       }
@@ -79,8 +78,8 @@ const sendByThread = (email, person, threadId) => {
       return google.sendGmail({ email, accessToken: account.accessToken, threadId })
     })
     .catch(error => {
-      if (!(error instanceof Unauthorized)) {
-        logger.log('Error sending to Gmail thread', error)
+      if (error.name !== Unauthorized.name) {
+        logger.log('warn', 'Error sending to Gmail thread', error)
         return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email, threadId })
       }
       throw new Unauthorized({ type: 'Google' })
@@ -93,7 +92,8 @@ const refreshAccessTokenAndContinue = (refreshToken, callback, args) => {
       args.accessToken = accessToken
       return callback(args)
     })
-    .catch(() => {
+    .catch((error) => {
+      logger.log('error', 'Error refreshing access token', error)
       throw new Unauthorized({ type: 'Google' })
     })
 }
@@ -101,7 +101,7 @@ const refreshAccessTokenAndContinue = (refreshToken, callback, args) => {
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
   return google.sendGmail({ email, accessToken })
     .then(response => {
-      logger.log('email response', response, email)
+      logger.log('warn', 'email response', response, email)
       return response.threadId
     })
     .catch(error => {
