@@ -17,6 +17,7 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
+const templater = require('../../lib/templater')
 
 const dialogOptions = {
   type: 'dialog',
@@ -176,8 +177,15 @@ const post = ({
   params,
   body
 }) => {
+  const messageBody = templater.render(
+    {
+      template: body.message,
+      pify: (contents) => `<p>${contents.join('')}</p>`
+    }
+  ).join('\n\n')
+
   const email = {
-    body: body.message,
+    body: messageBody,
     from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
     subject: body.subject,
     to: body.recipient

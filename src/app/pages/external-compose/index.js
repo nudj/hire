@@ -74,6 +74,12 @@ class ComposeExternalPage extends React.Component {
     this.handlePageLeave = this.handlePageLeave.bind(this)
   }
 
+  componentDidMount () {
+    if (get(this.props, 'externalMessage.threadId')) {
+      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100)
+    }
+  }
+
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
     let active = get(this.props, 'externalComposePage.active')
@@ -142,7 +148,7 @@ class ComposeExternalPage extends React.Component {
 
   onSendThreadMessage (conversation) {
     return () => {
-      const hasReply = isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
+      const hasReply = !isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
       const url = `/jobs/${this.props.job.slug}/external/${this.props.externalMessage.id}`
       const subject = hasReply ? 'Re: Can you help me out?' : 'Can you help me out?' // Subject must match for emails to chain, including 'Re:'.
 
@@ -155,6 +161,9 @@ class ComposeExternalPage extends React.Component {
           recipient: this.props.recipient.email,
           subject
         }
+      }, () => {
+        this.props.dispatch(saveMessageDraft(''))
+        window.scrollTo(0, document.body.scrollHeight)
       }))
     }
   }
