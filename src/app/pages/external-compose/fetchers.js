@@ -111,6 +111,7 @@ const get = async ({
 
   if (data.externalMessage.conversation) { // Ongoing conversation
     data = await conversations.getById(data, data.externalMessage.conversation)
+    data = await messages.getByConversation(data, data.conversation.id)
     data = await fetchExternalPrismicContent(data)
     return gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
   }

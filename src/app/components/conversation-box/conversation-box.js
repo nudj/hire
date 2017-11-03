@@ -2,34 +2,44 @@ const React = require('react')
 const Textarea = require('react-textarea-autosize')
 const { ThreeBounce } = require('better-react-spinkit')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const Linkify = require('linkifyjs/react')
 const striptags = require('striptags')
+const distanceInWordsToNow = require('date-fns/distance_in_words_to_now')
 
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
 
 const ConversationBox = (props) => {
   const style = getStyle()
-  const conversation = get(props, 'conversationMessages', [])
+  const conversation = get(props, 'threadMessages', [])
+  const savedMessages = get(props, 'conversationMessages', [])
   const buttonText = get(props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
 
   const pify = (textStyle, key) => {
     const options = { className: style.messageLink }
-    return (para, index, margin = 0) => <Linkify className={textStyle} key={`${key}-para${index}`} tagName='p' options={options}>{para.join('')}</Linkify>
+    return (para, index, margin = 0) => <Linkify className={textStyle} key={`${key}-para${index}`} tagName='p' options={options}>{para}</Linkify>
   }
 
   const renderIndividualMessage = (message) => {
     const isRecipient = message.sender.includes(props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
     const messageStyle = isRecipient ? 'recipient' : 'hirer'
+    const currentMessage = find(savedMessages, { providerId: message.id })
+    const sendDate = `sent ${distanceInWordsToNow(new Date(Number(message.date)))} ago`
     const key = message.id
     const textStyle = style[`${messageStyle}Paragraph`]
     const body = message.body.replace(/(<br \/>)/g, '\n\n')
     const options = {
       template: striptags(body), // There should be no html tags here - including pixel tracking img tags.
       pify: pify(textStyle, key),
-      brify: (index) => '\n'
+      brify: (index) => <br key={`br${index}`} />
     }
     const renderedMessage = templater.render(options)
+
+    let date = sendDate
+    if (currentMessage && currentMessage.readCount) {
+      date = `seen ${distanceInWordsToNow(new Date(currentMessage.modified))} ago`
+    }
 
     return (
       <div className={style.messageContainer} key={`${key}-container`}>
@@ -41,7 +51,7 @@ const ConversationBox = (props) => {
             {renderedMessage}
           </div>
           <div className={style[`${messageStyle}MessageDate`]} key={`${key}-date`}>
-            {message.date}
+            {date}
           </div>
         </div>
       </div>

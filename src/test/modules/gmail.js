@@ -53,6 +53,7 @@ const mockGmailThreads = () => {
       messages: [
         {
           id: 'MessageId',
+          internalDate: 'test_date',
           payload: {
             headers: [{ name: 'From', value: 'Sender Name' }],
             parts: [{ body: { data: 'VEhBVCBBV0VTT01FD' } }]
@@ -156,13 +157,13 @@ describe('Gmail', () => {
 
     it('decrypts and formats the thread message body', asyncTest(async () => {
       const data = await gmail.getThreadMessages({}, 'threadId', 'personId')
-      const threadMessage = data.conversationMessages.pop()
+      const threadMessage = data.threadMessages.pop()
       expect(threadMessage.body).to.equal('THAT AWESOME')
     }))
 
-    it('places conversationMessages on to data object', asyncTest(async () => {
+    it('places threadMessages on to data object', asyncTest(async () => {
       const data = await gmail.getThreadMessages({}, 'threadId', 'personId')
-      const message = data.conversationMessages.pop()
+      const message = data.threadMessages.pop()
       expect(message).to.have.property('body', 'THAT AWESOME')
       expect(message).to.have.property('id', 'MessageId')
       expect(message).to.have.property('sender', 'Sender Name')
@@ -176,7 +177,7 @@ describe('Gmail', () => {
 
     it('refreshes access token if invalid and continues', asyncTest(async () => {
       const data = await gmail.getThreadMessages({}, 'threadId', 'expiredId')
-      const message = data.conversationMessages.pop()
+      const message = data.threadMessages.pop()
       expect(message).to.have.property('body', 'THAT AWESOME')
       expect(message).to.have.property('id', 'MessageId')
       expect(message).to.have.property('sender', 'Sender Name')
