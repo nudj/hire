@@ -74,12 +74,6 @@ class ComposeExternalPage extends React.Component {
     this.handlePageLeave = this.handlePageLeave.bind(this)
   }
 
-  componentDidMount () {
-    if (get(this.props, 'externalMessage.threadId')) {
-      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100)
-    }
-  }
-
   renderTooltip (tooltipTag, anchorBottom) {
     const tooltip = get(this.props, 'tooltips', []).find(tooltip => tooltip.tags.includes(tooltipTag))
     let active = get(this.props, 'externalComposePage.active')
