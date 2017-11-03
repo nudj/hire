@@ -132,7 +132,7 @@ const send = (data, person, tags) => {
     body: message,
     from: `${senderFirstName} ${senderLastName} <${get(data, 'person.email', '')}>`,
     subject: get(data, 'subject', 'Can you help me out?'),
-    to: process.env.TEST_EMAIL_ADDRESS // get(data, 'recipient.email')
+    to: get(data, 'recipient.email')
   }
 
   return getAccountForPerson(person)

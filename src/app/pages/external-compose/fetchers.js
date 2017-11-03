@@ -179,15 +179,18 @@ const post = async ({
       pify: (contents) => `<p>${contents.join('')}</p>`
     }
   ).join('\n\n')
-
   const email = {
     body: messageBody,
     from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
     subject: body.subject,
-    to: process.env.TEST_EMAIL_ADDRESS // body.recipient
+    to: body.recipient
   }
 
-  await gmail.sendByThread(email, data.person.id, body.thread)
+  const hashLength = 16
+  const pixelToken = createHash(hashLength)
+  const trackedMessage = templater.appendTrackingToken(email, pixelToken)
+  const gmailMessage = await gmail.sendByThread(trackedMessage, data.person.id, body.conversation.threadId)
+  await messages.post(data, body.conversation.id, gmailMessage.id, pixelToken)
   throw new Redirect({
     url: `/jobs/${params.jobSlug}/external/${params.messageId}`
   })

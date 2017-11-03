@@ -151,7 +151,7 @@ class ComposeExternalPage extends React.Component {
         method: 'post',
         data: {
           message: this.props.externalComposePage.draft,
-          thread: this.props.conversation.threadId,
+          conversation: this.props.conversation,
           recipient: this.props.recipient.email,
           subject
         }
@@ -257,7 +257,7 @@ class ComposeExternalPage extends React.Component {
     )
 
     const loading = get(this.props, 'loading') && !sentMessage
-    const ongoingConversationMessage = get(this.props, 'externalMessage.threadId')
+    const ongoingConversationMessage = get(this.props, 'externalMessage.conversation')
     const pageBody = sentMessage && sentMessage !== 'EMAIL' && ongoingConversationMessage ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
