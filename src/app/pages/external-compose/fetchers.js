@@ -2,7 +2,10 @@ const {
   promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
-const { Redirect } = require('@nudj/framework/errors')
+const {
+  Redirect,
+  NotFound
+} = require('@nudj/framework/errors')
 const createHash = require('hash-generator')
 
 const common = require('../../server/modules/common')
@@ -16,6 +19,7 @@ const tasks = require('../../server/modules/tasks')
 const externalMessages = require('../../server/modules/external-messages')
 const prismic = require('../../server/lib/prismic')
 const tags = require('../../lib/tags')
+const templater = require('../../lib/templater')
 
 const dialogOptions = {
   type: 'dialog',
@@ -100,6 +104,9 @@ const get = async ({
   data = await addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
   data = await jobs.get(data, params.jobSlug)
   data = await externalMessages.getById(data, messageId)
+  if (data.externalMessage.hirer !== data.hirer.id) {
+    throw new NotFound('Hirer attempted to access external message that doesn\'t belong to them')
+  }
   data = await network.getRecipient(data, data.externalMessage.recipient)
   data = await accounts.verifyGoogleAuthentication(data, data.person.id)
   data = await getExternalMessageProperties(data, messageId)
@@ -166,8 +173,15 @@ const post = async ({
   params,
   body
 }) => {
+  const messageBody = templater.render(
+    {
+      template: body.message,
+      pify: (contents) => `<p>${contents.join('')}</p>`
+    }
+  ).join('\n\n')
+
   const email = {
-    body: body.message,
+    body: messageBody,
     from: `${data.person.firstName} ${data.person.lastName} <${data.person.email}>`,
     subject: body.subject,
     to: process.env.TEST_EMAIL_ADDRESS // body.recipient

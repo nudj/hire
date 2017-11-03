@@ -31,7 +31,7 @@ const {
   setStepData,
   hideConfirm,
   saveSendData,
-  saveMessageDraft
+  setMessageDraft
 } = pageActions
 const steps = [
   {
@@ -142,7 +142,7 @@ class ComposeExternalPage extends React.Component {
 
   onSendThreadMessage (conversation) {
     return () => {
-      const hasReply = isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
+      const hasReply = !isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
       const url = `/jobs/${this.props.job.slug}/external/${this.props.externalMessage.id}`
       const subject = hasReply ? 'Re: Can you help me out?' : 'Can you help me out?' // Subject must match for emails to chain, including 'Re:'.
 
@@ -155,12 +155,15 @@ class ComposeExternalPage extends React.Component {
           recipient: this.props.recipient.email,
           subject
         }
+      }, () => {
+        this.props.dispatch(setMessageDraft(''))
+        window.scrollTo(0, document.body.scrollHeight)
       }))
     }
   }
 
   onDraftChange (event) {
-    this.props.dispatch(saveMessageDraft(event.target.value))
+    this.props.dispatch(setMessageDraft(event.target.value))
   }
 
   handlePageLeave (event) {
@@ -254,7 +257,8 @@ class ComposeExternalPage extends React.Component {
     )
 
     const loading = get(this.props, 'loading') && !sentMessage
-    const pageBody = sentMessage && sentMessage !== 'EMAIL' ? conversationBody : composeMessage
+    const ongoingConversationMessage = get(this.props, 'externalMessage.threadId')
+    const pageBody = sentMessage && sentMessage !== 'EMAIL' && ongoingConversationMessage ? conversationBody : composeMessage
     const unfinishedDraft = get(this.props, 'externalComposePage.draft')
 
     let page
@@ -269,13 +273,13 @@ class ComposeExternalPage extends React.Component {
           </Helmet>
           <input type='hidden' name='_csrf' value={this.props.csrfToken} />
           <PageHeader
-            fixed={!!sentMessage}
+            fixed={!!ongoingConversationMessage}
             title={<Link className={this.style.jobLink} to={`/jobs/${get(this.props, 'job.slug')}`}>{get(this.props, 'job.title')}</Link>}
             subtitle={<span>@ <Link className={this.style.companyLink} to={'/'}>{get(this.props, 'company.name')}</Link></span>}>
             <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
             <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
           </PageHeader>
-          { !sentMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
+          { !ongoingConversationMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
           {pageBody}
         </LayoutApp>
       )

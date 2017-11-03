@@ -1,8 +1,8 @@
 const google = require('googleapis')
 const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
-const request = require('../../lib/request')
 const { emailBuilder } = require('@nudj/library/server')
+const request = require('../../lib/request')
 
 const gmail = google.gmail('v1')
 const OAuth2 = google.auth.OAuth2
@@ -32,7 +32,7 @@ const getAccessTokenFromRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
     oauth2Client.refreshAccessToken((error, tokens) => {
       if (error) {
-        logger.log('Google authentication error', error)
+        logger.log('error', 'Google authentication error', error)
         return reject(error)
       }
       resolve(tokens.access_token)

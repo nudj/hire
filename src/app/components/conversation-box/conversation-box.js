@@ -14,6 +14,8 @@ const ConversationBox = (props) => {
   const style = getStyle()
   const conversation = get(props, 'threadMessages', [])
   const savedMessages = get(props, 'conversationMessages', [])
+  const company = get(props, 'recipient.company', '')
+  const title = get(props, 'recipient.title', '')
   const buttonText = get(props, 'loading') ? (<ThreeBounce color='white' />) : 'Send'
 
   const pify = (textStyle, key) => {
@@ -64,7 +66,7 @@ const ConversationBox = (props) => {
         <div className={style.header}>
           <div className={style.main}>
             <h1 className={style.title}>{`${get(props, 'recipient.firstName', '')} ${get(props, 'recipient.lastName', '')}`}</h1>
-            <h2 className={style.subtitle}>{`${get(props, 'recipient.title', '')} @ ${get(props, 'recipient.company')}`}</h2>
+            <h2 className={style.subtitle}>{company ? `${title} @ ${company}` : `${title}`}</h2>
           </div>
         </div>
       </div>
@@ -74,7 +76,7 @@ const ConversationBox = (props) => {
       <div className={style.messageInputContainer}>
         <div className={style.inputContainer}>
           <div className={style.textareaContainer}>
-            <Textarea className={style.messageTextarea} name='template' placeholder='Write message' onChange={props.onDraftChange} />
+            <Textarea className={style.messageTextarea} name='template' placeholder='Write message' onChange={props.onDraftChange} value={get(props, 'externalComposePage.draft')} />
           </div>
           <div className={style.buttonContainer}>
             <button onClick={props.onSendMessage(conversation)} className={style.confirmButton} disabled={!get(props, 'externalComposePage.draft')} >{buttonText}</button>
