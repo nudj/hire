@@ -57,7 +57,7 @@ const ConversationBox = (props) => {
       <div className={style.messageInputContainer}>
         <div className={style.inputContainer}>
           <div className={style.textareaContainer}>
-            <Textarea className={style.messageTextarea} name='template' placeholder='Write message' onChange={props.onDraftChange} />
+            <Textarea className={style.messageTextarea} name='template' placeholder='Write message' onChange={props.onDraftChange} value={get(props, 'externalComposePage.draft')} />
           </div>
           <div className={style.buttonContainer}>
             <button onClick={props.onSendMessage(conversation)} className={style.confirmButton} disabled={!get(props, 'externalComposePage.draft')} >{buttonText}</button>

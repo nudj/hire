@@ -31,7 +31,7 @@ const {
   setStepData,
   hideConfirm,
   saveSendData,
-  saveMessageDraft
+  setMessageDraft
 } = pageActions
 const steps = [
   {
@@ -142,7 +142,7 @@ class ComposeExternalPage extends React.Component {
 
   onSendThreadMessage (conversation) {
     return () => {
-      const hasReply = isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
+      const hasReply = !isNil(find(conversation, (email) => email.sender.includes(this.props.recipient.email))) // Check if any part of the thread was sent by the recipient
       const url = `/jobs/${this.props.job.slug}/external/${this.props.externalMessage.id}`
       const subject = hasReply ? 'Re: Can you help me out?' : 'Can you help me out?' // Subject must match for emails to chain, including 'Re:'.
 
@@ -155,12 +155,15 @@ class ComposeExternalPage extends React.Component {
           recipient: this.props.recipient.email,
           subject
         }
+      }, () => {
+        this.props.dispatch(setMessageDraft(''))
+        window.scrollTo(0, document.body.scrollHeight)
       }))
     }
   }
 
   onDraftChange (event) {
-    this.props.dispatch(saveMessageDraft(event.target.value))
+    this.props.dispatch(setMessageDraft(event.target.value))
   }
 
   handlePageLeave (event) {

@@ -76,7 +76,6 @@ const styles = {
     position: 'sticky',
     top: '80px',
     borderTop: `40px solid ${variables.colors.grey}`,
-    height: '120px',
     width: '100%',
     zIndex: '10',
     background: variables.colors.grey
