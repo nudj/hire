@@ -31,7 +31,7 @@ const {
   setStepData,
   hideConfirm,
   saveSendData,
-  saveMessageDraft
+  setMessageDraft
 } = pageActions
 const steps = [
   {
@@ -156,14 +156,14 @@ class ComposeExternalPage extends React.Component {
           subject
         }
       }, () => {
-        this.props.dispatch(saveMessageDraft(''))
+        this.props.dispatch(setMessageDraft(''))
         window.scrollTo(0, document.body.scrollHeight)
       }))
     }
   }
 
   onDraftChange (event) {
-    this.props.dispatch(saveMessageDraft(event.target.value))
+    this.props.dispatch(setMessageDraft(event.target.value))
   }
 
   handlePageLeave (event) {

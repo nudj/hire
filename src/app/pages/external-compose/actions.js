@@ -94,15 +94,15 @@ function setStepData (stepName, stepData) {
 }
 module.exports.setStepData = (stepName, stepData) => quickDispatch(setStepData(stepName, stepData))
 
-const SAVE_MESSAGE_DRAFT = 'SAVE_MESSAGE_DRAFT'
-module.exports.SAVE_MESSAGE_DRAFT = SAVE_MESSAGE_DRAFT
-function saveMessageDraft (body) {
+const SET_MESSAGE_DRAFT = 'SET_MESSAGE_DRAFT'
+module.exports.SET_MESSAGE_DRAFT = SET_MESSAGE_DRAFT
+function setMessageDraft (body) {
   return {
-    type: SAVE_MESSAGE_DRAFT,
+    type: SET_MESSAGE_DRAFT,
     body
   }
 }
-module.exports.saveMessageDraft = (body) => quickDispatch(saveMessageDraft(body))
+module.exports.setMessageDraft = (body) => quickDispatch(setMessageDraft(body))
 
 const SAVE_STEP_DATA = 'SAVE_STEP_DATA'
 module.exports.SAVE_STEP_DATA = SAVE_STEP_DATA
