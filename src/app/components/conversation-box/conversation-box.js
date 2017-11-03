@@ -40,7 +40,8 @@ const ConversationBox = (props) => {
 
     let date = sendDate
     if (currentMessage && currentMessage.readCount) {
-      date = `seen ${distanceInWordsToNow(new Date(currentMessage.modified))} ago`
+      const currentMessageDate = get(currentMessage, 'modified')
+      date = currentMessageDate ? `seen ${distanceInWordsToNow(currentMessageDate)} ago` : `seen`
     }
 
     return (
