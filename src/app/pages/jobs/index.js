@@ -11,14 +11,15 @@ const Tooltip = require('../../components/tooltip/tooltip')
 
 const JobsPage = (props) => {
   const style = getStyle()
-  const jobs = get(props, 'jobs', [])
+  const company = get(props, 'person.company')
+  const jobs = get(company, 'jobs', [])
   const tooltip = get(props, 'tooltip')
   return (
     <LayoutApp {...props} className={style.pageBody}>
       <Helmet>
-        <title>{`nudj - Jobs @ ${get(props, 'company.name')}`}</title>
+        <title>{`nudj - Jobs @ ${get(company, 'name')}`}</title>
       </Helmet>
-      <PageHeader title='Jobs' subtitle={`@ ${get(props, 'company.name')}`}>
+      <PageHeader title='Jobs' subtitle={`@ ${get(company, 'name')}`}>
         <button className={style.upload} id='open-intercom'>Upload job</button>
       </PageHeader>
       <h3 className={style.pageHeadline}>You currently have {jobs.length} jobs listed on nudj</h3>
@@ -26,12 +27,12 @@ const JobsPage = (props) => {
         <div className={style.pageMain}>
           <ul className={style.jobs}>
             {jobs.map((job) => {
-              const hasSent = get(job, 'hasSent', false)
+              const hasSent = !![].concat(get(job, 'internalMessages', []), get(job, 'externalMessages', [])).length
               const label = hasSent ? 'View job activity' : 'Get nudj\'ing'
               return (<RowItem
                 key={get(job, 'slug')}
                 title={get(job, 'title')}
-                uri={`//${get(props, 'web.hostname')}/jobs/${get(props, 'company.slug')}+${get(job, 'slug')}`}
+                uri={`//${get(props, 'web.hostname')}/jobs/${get(company, 'slug')}+${get(job, 'slug')}`}
                 details={[{
                   term: 'Location',
                   description: get(job, 'location')

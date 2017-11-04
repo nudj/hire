@@ -1,13 +1,6 @@
-const {
-  promiseMap,
-  addDataKeyValue,
-  merge
-} = require('@nudj/library')
+const { merge } = require('@nudj/library')
 
-const jobs = require('../../server/modules/jobs')
-const tasks = require('../../server/modules/tasks')
-const externalMessages = require('../../server/modules/external-messages')
-const internalMessages = require('../../server/modules/internal-messages')
+const request = require('../../lib/request')
 const prismic = require('../../server/lib/prismic')
 
 const tooltipOptions = {
@@ -20,31 +13,53 @@ const tooltipOptions = {
   }
 }
 
-function jobsHaveSent (data) {
-  data.jobs = Promise.all(data.jobs.map(job => jobHasSent(merge({}, job), data.hirer.id, job.id)))
-  return promiseMap(data)
-}
-
-function jobHasSent (data, hirer, jobId) {
-  return Promise.all([
-    externalMessages.getAll({}, hirer, jobId),
-    internalMessages.getAll({}, hirer, jobId)
-  ])
-  .then(sentResults => {
-    const externalMessages = sentResults[0].externalMessages
-    const internalMessages = sentResults[1].internalMessages
-    return Boolean(externalMessages.length || internalMessages.length)
+const get = async ({
+  data
+}) => {
+  const query = `
+    query jobsPage ($personId: ID) {
+      person (id: $personId) {
+        id
+        firstName
+        lastName
+        incompleteTaskCount
+        company: hirerForCompany {
+          id
+          name
+          slug
+          onboarded
+          jobs {
+            id
+            created
+            title
+            slug
+            location
+            bonus
+            internalMessages {
+              id
+            }
+            externalMessages {
+              id
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    personId: data.person.id
+  }
+  const responseData = await request('/', {
+    baseURL: `http://${process.env.API_HOST}:82`,
+    method: 'post',
+    data: {
+      query,
+      variables
+    }
   })
-  .then(hasSent => merge(data, {hasSent}))
+  const tooltip = await prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])
+  return merge(data, responseData.data, { tooltip })
 }
-
-const get = ({
-  data,
-  req
-}) => addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
-.then(data => jobs.getAll(data))
-.then(jobsHaveSent)
-.then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
 
 module.exports = {
   get

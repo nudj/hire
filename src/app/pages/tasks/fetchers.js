@@ -21,6 +21,7 @@ const get = async ({
         id
         firstName
         lastName
+        incompleteTaskCount
         tasks {
           id
           modified
