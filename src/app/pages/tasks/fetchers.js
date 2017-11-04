@@ -1,4 +1,5 @@
-const { addDataKeyValue } = require('@nudj/library')
+const { merge, addDataKeyValue } = require('@nudj/library')
+const request = require('../../lib/request')
 
 const common = require('../../server/modules/common')
 const tasks = require('../../server/modules/tasks')
@@ -15,9 +16,55 @@ const tooltipOptions = {
   }
 }
 
+const gql = async ({
+  data
+}) => {
+  const query = `
+    query tasksPage ($companyId: ID, $personId: ID) {
+      company (id: $companyId) {
+        id
+        name
+        slug
+        tasks {
+          id
+          type
+          completed
+          completedBy {
+            id
+            firstName
+            lastName
+          }
+        }
+        hirer: hirerById (id: $personId) {
+          id
+          firstName
+          lastName
+          tasks {
+            id
+            type
+            completed
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    companyId: data.company.id,
+    personId: data.person.id
+  }
+  const responseData = await request('/', {
+    baseURL: `http://${process.env.API_HOST}:82`,
+    method: 'post',
+    data: {
+      query,
+      variables
+    }
+  })
+  return merge(data, responseData.data)
+}
+
 const get = ({
-  data,
-  req
+  data
 }) => addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
 .then(data => tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id))
 .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -25,5 +72,6 @@ const get = ({
 .then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
 
 module.exports = {
-  get
+  get,
+  gql
 }
