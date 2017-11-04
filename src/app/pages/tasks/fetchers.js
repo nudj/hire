@@ -1,9 +1,5 @@
 const { merge, addDataKeyValue } = require('@nudj/library')
 const request = require('../../lib/request')
-
-const common = require('../../server/modules/common')
-const tasks = require('../../server/modules/tasks')
-const hirers = require('../../server/modules/hirers')
 const prismic = require('../../server/lib/prismic')
 
 const tooltipOptions = {
@@ -16,40 +12,42 @@ const tooltipOptions = {
   }
 }
 
-const gql = async ({
+const get = async ({
   data
 }) => {
   const query = `
-    query tasksPage ($companyId: ID, $personId: ID) {
-      company (id: $companyId) {
+    query tasksPage ($personId: ID) {
+      person (id: $personId) {
         id
-        name
-        slug
+        firstName
+        lastName
         tasks {
           id
+          modified
           type
           completed
-          completedBy {
-            id
-            firstName
-            lastName
-          }
         }
-        hirer: hirerById (id: $personId) {
+        company: hirerForCompany {
           id
-          firstName
-          lastName
+          name
+          slug
+          onboarded
           tasks {
             id
+            modified
             type
             completed
+            completedBy {
+              id
+              firstName
+              lastName
+            }
           }
         }
       }
     }
   `
   const variables = {
-    companyId: data.company.id,
     personId: data.person.id
   }
   const responseData = await request('/', {
@@ -60,18 +58,10 @@ const gql = async ({
       variables
     }
   })
-  return merge(data, responseData.data)
+  const tooltip = await prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])
+  return merge(data, responseData.data, { tooltip })
 }
 
-const get = ({
-  data
-}) => addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
-.then(data => tasks.getAllByHirerAndCompany(data, data.hirer.id, data.company.id))
-.then(data => hirers.getAllByCompany(data, data.company.id))
-.then(addDataKeyValue('people', data => common.fetchPeopleFromFragments(data.hirers)))
-.then(addDataKeyValue('tooltip', () => prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])))
-
 module.exports = {
-  get,
-  gql
+  get
 }

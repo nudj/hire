@@ -16,10 +16,10 @@ const styles = {
     margin: `0 0 ${variables.padding.e} 0`
   }),
   text: mixins.headings.p,
-  textDone: {
+  textDone: merge(mixins.headings.p, {
     display: 'block',
     margin: `${variables.padding.e} 0 0 0`
-  },
+  }),
   action: merge(mixins.button, {
     flexShrink: '0',
     margin: `0 0 0 ${variables.padding.d}`

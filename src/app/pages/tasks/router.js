@@ -9,7 +9,7 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/', respondWith(fetchers.gql))
+  router.getHandlers('/', respondWith(fetchers.get))
 
   return router
 }

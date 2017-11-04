@@ -6,9 +6,13 @@ const Link = require('../link/link')
 const Header = (props) => {
   const style = getStyle()
 
-  const incompleteTasksCount = get(props, 'tasksIncomplete', []).length
+  const personTasks = get(props, 'person.tasks', [])
+  const companyTasks = get(props, 'person.company.tasks', [])
+  const allTasks = personTasks.concat(companyTasks)
+  const allIncompleteTasks = allTasks.filter(task => !task.completed)
+  const incompleteTasksCount = allIncompleteTasks.length
   const tasksLink = incompleteTasksCount ? (<Link className={style.tasks} onClick={props.onPageLeave} to='/'>Tasks<span className={style.alertCount}>{incompleteTasksCount}</span></Link>) : (<Link className={style.tasks} to='/'>Tasks</Link>)
-  const onboarded = get(props, 'company.onboarded', false)
+  const onboarded = get(props, 'person.company.onboarded', false)
 
   return (
     <nav className={style.nav}>
