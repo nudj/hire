@@ -13,7 +13,8 @@ const data = {
   externalMessages: [],
   surveyMessages: [],
   surveys: [],
-  tasks: [],
+  companyTasks: [],
+  personTasks: [],
   tokens: [],
   employeeSurveys: [],
   accounts: [],
@@ -183,16 +184,22 @@ data.people = data.people.concat([
 data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
     company: 'company1'
   },
   {
     id: 'hirer2',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person1',
     company: 'company1'
   },
   {
     id: 'hirer3',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person6',
     company: 'company1'
   }
@@ -200,6 +207,8 @@ data.hirers = data.hirers.concat([
 data.employees = data.employees.concat([
   {
     id: 'employee1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person4',
     company: 'company1'
   }
@@ -282,38 +291,42 @@ data.surveys = data.surveys.concat([
     type: 'HIRER_SURVEY'
   }
 ])
-data.tasks = data.tasks.concat([
+data.companyTasks = data.companyTasks.concat([
   {
-    id: 'task1',
-    hirer: 'hirer1',
-    type: 'UNLOCK_NETWORK_LINKEDIN',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    completed: 'hirer1'
-  },
-  {
-    id: 'task2',
+    id: 'companyTask2',
     company: 'company1',
     type: 'SEND_SURVEY_INTERNAL',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: true,
+    completedBy: 'person2'
   },
   {
-    id: 'task3',
+    id: 'companyTask3',
     company: 'company1',
     type: 'SHARE_JOBS',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: false,
+    completedBy: null
+  }
+])
+data.personTasks = data.personTasks.concat([
+  {
+    id: 'personTask1',
+    person: 'person5',
+    type: 'UNLOCK_NETWORK_LINKEDIN',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: false
   },
   {
-    id: 'task4',
-    hirer: 'hirer1',
+    id: 'personTask4',
+    person: 'person5',
     type: 'HIRER_SURVEY',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: true
   }
 ])
 data.tokens = data.tokens.concat([

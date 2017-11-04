@@ -27,6 +27,7 @@ ssh:
 		-e NPM_TOKEN=${NPM_TOKEN} \
 		-p 0.0.0.0:90:80 \
 		-p 0.0.0.0:91:81 \
+		-p 0.0.0.0:92:82 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
