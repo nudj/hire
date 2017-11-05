@@ -1,4 +1,5 @@
 const _omit = require('lodash/omit')
+const _pick = require('lodash/pick')
 const {
   merge,
   promiseMap,
@@ -73,65 +74,137 @@ const get = async ({
   })
   return merge(data, responseData.data.person.hirer)
 
-
-  return actionMapAssign(
-    data,
-    {
-      survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
-    }
-  )
+  // return actionMapAssign(
+  //   data,
+  //   {
+  //     survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
+  //   }
+  // )
 }
 
-const post = ({
+const post = async ({
   data,
   params,
   body
 }) => {
-  return actionMapAssign(
-    data,
-    {
-      survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
-    },
-    {
-      people: data => Promise.all(body.connections.map(connection => {
-        return request('people', {
-          params: {
-            email: connection.email
-          }
-        })
-        .then(people => people[0])
-        .then(person => {
-          if (person) return person
-          return request('people', {
-            method: 'post',
-            data: _omit(connection, ['tags'])
-          })
-        })
-      }))
-    },
-    {
-      connections: data => Promise.all(data.people.map(person => {
-        return request('connections', {
-          params: {
-            from: data.person.id,
-            to: person.id
-          }
-        })
-        .then(connections => connections[0])
-        .then(connection => {
-          if (connection) return connection
-          return request('connections', {
-            method: 'post',
-            data: {
-              from: data.person.id,
-              to: person.id,
-              source: body.source
+  const mutation = `
+    mutation AddConnections ($userEmail: String!, $to: [PersonCreateInput!]!) {
+      person: personByFilters (filters: {
+        email: $userEmail
+      }) {
+        hirer {
+          ...Global
+          ...Page
+          person {
+            newConnections: getOrCreateConnections (
+              to: $to
+            ) {
+              id
+              to {
+                id
+                firstName
+                lastName
+                email
+              }
             }
-          })
-        })
-      }))
+          }
+        }
+      }
     }
-  )
+    fragment Global on Hirer {
+      person {
+        incompleteTaskCount
+      }
+      company {
+        onboarded
+      }
+    }
+    fragment Page on Hirer {
+      company {
+        survey: surveyByFilters (filters: {
+          slug: "aided-recall-baby"
+        }) {
+          id
+          slug
+          sections: surveySections {
+            id
+            title
+            description
+            questions: surveyQuestions {
+              id
+              title
+              description
+              name
+              type
+              required
+              dependencies
+              options
+              tags
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    userEmail: data.user.email,
+    to: body.connections.map(connection => _pick(connection, ['firstName', 'lastName', 'email']))
+  }
+  const responseData = await request('/', {
+    baseURL: `http://${process.env.API_HOST}:82`,
+    method: 'post',
+    data: {
+      query: mutation,
+      variables
+    }
+  })
+  return merge(data, responseData.data.person.hirer)
+
+  // return actionMapAssign(
+  //   data,
+  //   {
+  //     survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
+  //   },
+  //   {
+  //     people: data => Promise.all(body.connections.map(connection => {
+  //       return request('people', {
+  //         params: {
+  //           email: connection.email
+  //         }
+  //       })
+  //       .then(people => people[0])
+  //       .then(person => {
+  //         if (person) return person
+  //         return request('people', {
+  //           method: 'post',
+  //           data: _omit(connection, ['tags'])
+  //         })
+  //       })
+  //     }))
+  //   },
+  //   {
+  //     connections: data => Promise.all(data.people.map(person => {
+  //       return request('connections', {
+  //         params: {
+  //           from: data.person.id,
+  //           to: person.id
+  //         }
+  //       })
+  //       .then(connections => connections[0])
+  //       .then(connection => {
+  //         if (connection) return connection
+  //         return request('connections', {
+  //           method: 'post',
+  //           data: {
+  //             from: data.person.id,
+  //             to: person.id,
+  //             source: body.source
+  //           }
+  //         })
+  //       })
+  //     }))
+  //   }
+  // )
 }
 
 module.exports = {

@@ -36,7 +36,8 @@ const data = {
   tokens: [],
   employeeSurveys: [],
   accounts: [],
-  messages: []
+  messages: [],
+  connections: []
 }
 data.companies = data.companies.concat([
   {
