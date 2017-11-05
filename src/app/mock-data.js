@@ -577,7 +577,6 @@ data.surveyQuestions = data.surveyQuestions.concat([
     type: FREETEXT,
     required: false,
     dependencies: {},
-    tags: [],
     options: {
       placeholder: 'Answers go here...'
     },
