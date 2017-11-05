@@ -22,11 +22,7 @@ function renderIncompleteContent (incompleteTasks, props, style) {
   if (!incompleteTasks.length) {
     content = <p className={style.incompleteEmpty}>Doesn't look like there are any tasks for you to complete, check back soon.</p>
   } else {
-    content = <TaskList tasks={incompleteTasks}
-      hirers={get(props, 'hirers', [])}
-      people={get(props, 'people', [])}
-      person={get(props, 'person')}
-    />
+    content = <TaskList tasks={incompleteTasks} person={get(props, 'person')} />
   }
 
   return (
@@ -41,11 +37,7 @@ function renderCompletedContent (completeTasks, props, style) {
   return (
     <div>
       <h3 className={style.taskGroupTitle}>Completed tasks <span className={style.taskGroupTitleHighlight}>({completeTasks.length})</span></h3>
-      <TaskList tasks={completeTasks}
-        hirers={get(props, 'hirers', [])}
-        people={get(props, 'people', [])}
-        person={get(props, 'person')}
-      />
+      <TaskList tasks={completeTasks} person={get(props, 'person')} />
     </div>
   )
 }
@@ -59,7 +51,7 @@ const TasksPage = (props) => {
   const completedVisible = get(state, 'completedVisible')
 
   const personTasks = get(props, 'person.tasks', [])
-  const companyTasks = get(props, 'person.company.tasks', [])
+  const companyTasks = get(props, 'company.tasks', [])
   const allTasks = personTasks.concat(companyTasks)
   const allIncompleteTasks = allTasks.filter(task => !task.completed)
   const allCompleteTasks = allTasks.filter(task => task.completed)
@@ -84,6 +76,46 @@ const TasksPage = (props) => {
       </div>
     </LayoutApp>
   )
+}
+TasksPage.gql = {
+  Page: `
+    query tasksPage ($personId: ID) {
+      person (id: $personId) {
+        id
+        firstName
+        lastName
+        incompleteTaskCount
+        company: hirerForCompany {
+          id
+          name
+          slug
+          onboarded
+        }
+        ...Page
+      }
+    }
+    fragment Page on Person {
+      tasks {
+        id
+        modified
+        type
+        completed
+      }
+      company: hirerForCompany {
+        tasks {
+          id
+          modified
+          type
+          completed
+          completedBy {
+            id
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  `
 }
 
 module.exports = TasksPage

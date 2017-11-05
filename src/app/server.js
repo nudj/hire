@@ -39,9 +39,10 @@ const buildAssetPath = path.join(__dirname, 'server/build')
 const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
   req.session.data = req.session.data || {
-    hirer: find(mockData.hirers, { id: 'hirer1' }),
-    person: find(mockData.people, { id: 'person5' }),
-    company: find(mockData.companies, { id: 'company1' })
+    user: {
+      email: find(mockData.people, { id: 'person5' }).email,
+      type: 'HIRER'
+    }
   }
   next()
 }

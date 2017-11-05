@@ -17,37 +17,45 @@ const get = async ({
   data
 }) => {
   const query = `
-    query jobsPage ($personId: ID) {
-      person (id: $personId) {
-        id
-        firstName
-        lastName
+    query PageData ($userEmail: String) {
+      person: personByFilters (filters: {
+        email: $userEmail
+      }) {
+        hirer {
+          ...Global
+          ...Page
+        }
+      }
+    }
+    fragment Global on Hirer {
+      person {
         incompleteTaskCount
-        company: hirerForCompany {
+      }
+      company {
+        onboarded
+      }
+    }
+    fragment Page on Hirer {
+      company {
+        jobs {
           id
-          name
+          created
+          title
           slug
-          onboarded
-          jobs {
+          location
+          bonus
+          internalMessages {
             id
-            created
-            title
-            slug
-            location
-            bonus
-            internalMessages {
-              id
-            }
-            externalMessages {
-              id
-            }
+          }
+          externalMessages {
+            id
           }
         }
       }
     }
   `
   const variables = {
-    personId: data.person.id
+    userEmail: data.user.email
   }
   const responseData = await request('/', {
     baseURL: `http://${process.env.API_HOST}:82`,
@@ -58,7 +66,7 @@ const get = async ({
     }
   })
   const tooltip = await prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])
-  return merge(data, responseData.data, { tooltip })
+  return merge(data, responseData.data.person.hirer, { tooltip })
 }
 
 module.exports = {

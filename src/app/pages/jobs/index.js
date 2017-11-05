@@ -11,7 +11,7 @@ const Tooltip = require('../../components/tooltip/tooltip')
 
 const JobsPage = (props) => {
   const style = getStyle()
-  const company = get(props, 'person.company')
+  const company = get(props, 'company')
   const jobs = get(company, 'jobs', [])
   const tooltip = get(props, 'tooltip')
   return (

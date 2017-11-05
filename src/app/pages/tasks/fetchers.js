@@ -16,40 +16,51 @@ const get = async ({
   data
 }) => {
   const query = `
-    query tasksPage ($personId: ID) {
-      person (id: $personId) {
-        id
-        firstName
-        lastName
+    query PageData ($userEmail: String) {
+      person: personByFilters (filters: {
+        email: $userEmail
+      }) {
+        hirer {
+          ...Global
+          ...Page
+        }
+      }
+    }
+    fragment Global on Hirer {
+      person {
         incompleteTaskCount
+      }
+      company {
+        onboarded
+      }
+    }
+    fragment Page on Hirer {
+      person {
+        id
         tasks {
           id
           modified
           type
           completed
         }
-        company: hirerForCompany {
+      }
+      company {
+        tasks {
           id
-          name
-          slug
-          onboarded
-          tasks {
+          modified
+          type
+          completed
+          completedBy {
             id
-            modified
-            type
-            completed
-            completedBy {
-              id
-              firstName
-              lastName
-            }
+            firstName
+            lastName
           }
         }
       }
     }
   `
   const variables = {
-    personId: data.person.id
+    userEmail: data.user.email
   }
   const responseData = await request('/', {
     baseURL: `http://${process.env.API_HOST}:82`,
@@ -60,7 +71,7 @@ const get = async ({
     }
   })
   const tooltip = await prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])
-  return merge(data, responseData.data, { tooltip })
+  return merge(data, responseData.data.person.hirer, { tooltip })
 }
 
 module.exports = {
