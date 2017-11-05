@@ -37,6 +37,7 @@ const get = async ({
     fragment Page on Hirer {
       person {
         id
+        firstName
         tasks {
           id
           modified

@@ -2,28 +2,28 @@ const express = require('express')
 const passport = require('passport')
 const request = require('../../lib/request')
 const logger = require('@nudj/framework/logger')
-const { promiseMap } = require('@nudj/library')
 const { cacheReturnTo } = require('@nudj/library/server')
 
 async function fetchPerson (email) {
-  const person = await request(`people/first?email=${encodeURIComponent(email)}`)
-  if (!person) throw new Error('Person not found')
-  if (person.error) throw new Error('Unable to fetch person')
-  return person
+  try {
+    const person = await request(`people/first?email=${encodeURIComponent(email)}`)
+    if (!person) throw new Error('Person not found')
+    if (person.error) throw new Error('Unable to fetch person')
+    return person
+  } catch (error) {
+    throw new Error('Error fetching person')
+  }
 }
 
 async function fetchHirer (personId) {
-  const hirer = await request(`hirers/first?person=${personId}`)
-  if (!hirer) throw new Error('Not a registered hirer')
-  if (hirer.error) throw new Error('Error fetching hirer')
-  return hirer
-}
-
-async function fetchCompany (companyId) {
-  const company = await request(`companies/${data.hirer.company}`)
-  if (!company) throw new Error('Company not found')
-  if (company.error) throw new Error('Error fetching company')
-  return company
+  try {
+    const hirer = await request(`hirers/first?person=${personId}`)
+    if (!hirer) throw new Error('Not a registered hirer')
+    if (hirer.error) throw new Error('Error fetching hirer')
+    return hirer
+  } catch (error) {
+    throw new Error('Error fetching hirer')
+  }
 }
 
 const Router = ({
@@ -57,8 +57,7 @@ const Router = ({
 
       try {
         const person = await fetchPerson(req.user._json.email)
-        const hirer = await fetchHirer(person.id)
-        const company = await fetchCompany(hirer.company)
+        await fetchHirer(person.id) // ensure hirer exists
         req.session.data = {
           user: {
             email: req.user._json.email,

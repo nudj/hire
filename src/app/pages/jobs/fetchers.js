@@ -37,6 +37,7 @@ const get = async ({
     }
     fragment Page on Hirer {
       company {
+        name
         jobs {
           id
           created
