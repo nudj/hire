@@ -29,10 +29,10 @@ async function ensureOnboarded (req, res, next) {
     }
   })
   if (!get(responseData, 'data.person.hirer.company.onboarded')) {
-    throw new Redirect({
+    next(new Redirect({
       url: '/',
       notification: createNotification('error', 'We\'re still getting your company set-up, so you can\'t access your jobs just yet. Need more information? Let us know.')
-    })
+    }))
   }
   return next()
 }

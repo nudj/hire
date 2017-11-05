@@ -32,7 +32,7 @@ data.companies = data.companies.concat([
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    onboarded: false
   },
   {
     id: 'company2',
@@ -186,7 +186,7 @@ data.hirers = data.hirers.concat([
     id: 'hirer1',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    person: 'person53',
+    person: 'person5',
     company: 'company1'
   },
   {
