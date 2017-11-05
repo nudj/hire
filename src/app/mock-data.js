@@ -10,8 +10,7 @@ const {
 const {
   TEXT,
   FREETEXT,
-  CHOICE,
-  MULTICHOICE
+  CHOICE
 } = questionTypes
 
 const data = {
@@ -51,7 +50,7 @@ data.companies = data.companies.concat([
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: false
+    onboarded: true
   },
   {
     id: 'company2',
@@ -297,7 +296,7 @@ data.companyTasks = data.companyTasks.concat([
     type: 'SEND_SURVEY_INTERNAL',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: true,
+    completed: false,
     completedBy: 'person2'
   },
   {
@@ -306,7 +305,7 @@ data.companyTasks = data.companyTasks.concat([
     type: 'SHARE_JOBS',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: false,
+    completed: true,
     completedBy: null
   }
 ])
@@ -325,7 +324,7 @@ data.personTasks = data.personTasks.concat([
     type: 'HIRER_SURVEY',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: true
+    completed: false
   }
 ])
 data.tokens = data.tokens.concat([

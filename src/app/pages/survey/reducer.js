@@ -1,11 +1,15 @@
 const reject = require('lodash/reject')
 const concat = require('lodash/concat')
 const { merge } = require('@nudj/library')
+const RouteParser = require('route-parser')
+
 const {
   SET_VALUE,
   SET_ANSWER,
   TOGGLE_ANSWER
 } = require('./actions')
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
+const surveyRoute = new RouteParser('/surveys/:surveySlug')
 
 const removeFromArray = (arr, itemToRemove) => reject(arr, item => itemToRemove === item)
 const addToArray = concat
@@ -33,10 +37,18 @@ const toggleAnswer = (state, action) => {
   return merge(state)
 }
 
+const routerLocationChange = (state, action) => {
+  if (surveyRoute.match(action.payload.pathname)) {
+    return state
+  }
+  return merge(initialState)
+}
+
 const actions = {
   [SET_VALUE]: setValue,
   [SET_ANSWER]: setAnswer,
-  [TOGGLE_ANSWER]: toggleAnswer
+  [TOGGLE_ANSWER]: toggleAnswer,
+  [ROUTER_LOCATION_CHANGE]: routerLocationChange
 }
 
 const initialState = {

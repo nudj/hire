@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 const ReactTextAreaAutosize = require('react-textarea-autosize')
 
 const getStyle = require('./style.css')
@@ -10,12 +9,10 @@ const QuestionFreetext = (props) => {
   const {
     name,
     title,
-    type,
     options,
     value,
     onChange
   } = props
-  let html
 
   return (
     <div>

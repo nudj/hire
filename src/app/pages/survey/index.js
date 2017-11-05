@@ -1,14 +1,11 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const humanparser = require('humanparser')
 const _get = require('lodash/get')
 const _pick = require('lodash/pick')
-const { merge } = require('@nudj/library')
 
 const {
   previous,
   next,
-  setValue,
   setAnswer,
   toggleAnswer,
   finishSurvey,
@@ -76,7 +73,8 @@ const RecallSurvey = (props) => {
 
   const headerProps = {
     title: 'Complete survey',
-    subtitle: 'To impress Robyn and Jamie'
+    subtitle: 'To impress Robyn and Jamie',
+    children: connections ? <button className={style.upload} onClick={onClickSubmit(dispatch)}>Upload</button> : ''
   }
 
   let content
@@ -95,13 +93,12 @@ const RecallSurvey = (props) => {
           connections={connections}
           onChange={onChangeConnection(dispatch)}
         />
-        <button onClick={onClickSubmit(dispatch)}>Submit</button>
       </div>
     )
   }
 
   return (
-    <LayoutPage {...props} header={headerProps}>
+    <LayoutPage {...props} header={headerProps} headline='Welcome to Aided Recall 🤔'>
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>

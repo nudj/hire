@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 
 const getStyle = require('./style.css')
 
@@ -8,12 +7,10 @@ const QuestionText = (props) => {
   const {
     name,
     title,
-    type,
     options,
     value,
     onChange
   } = props
-  let html
 
   return (
     <div>

@@ -22,10 +22,13 @@ const expressRouters = {
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
     require('./pages/tasks/router'),
+    require('./pages/jobs/router'),
+    require('./pages/connections/router'),
+
+    // old
     require('./pages/import-contacts/router'),
     require('./pages/survey-compose/router'),
     require('./pages/survey/router'),
-    require('./pages/jobs/router'),
     require('./pages/job/router'),
     require('./pages/nudj/router'),
     require('./pages/internal-compose/router'),

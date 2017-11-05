@@ -3,9 +3,7 @@ const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 
 const getStyle = require('./style.css')
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
+const LayoutPage = require('../../components/layout-page')
 const TaskList = require('../../components/tasks/task-list')
 const { toggleCompleted } = require('./actions')
 
@@ -46,7 +44,6 @@ const TasksPage = (props) => {
   const style = getStyle()
   const dispatch = get(props, 'dispatch')
   const state = get(props, 'tasksPage')
-  const tooltip = get(props, 'tooltip')
   const firstName = get(props, 'person.firstName', '')
   const completedVisible = get(state, 'completedVisible')
 
@@ -56,66 +53,20 @@ const TasksPage = (props) => {
   const allIncompleteTasks = allTasks.filter(task => !task.completed)
   const allCompleteTasks = allTasks.filter(task => task.completed)
   const incompleteContent = renderIncompleteContent(allIncompleteTasks, props, style)
+  const headerProps = {
+    title: 'Tasks'
+  }
 
   return (
-    <LayoutApp {...props} className={style.pageBody}>
+    <LayoutPage {...props} header={headerProps} headline={`Welcome, ${firstName}!`}>
       <Helmet>
         <title>nudj - Tasks</title>
       </Helmet>
-      <PageHeader title='Tasks' />
-      <h3 className={style.pageHeadline}>Welcome, {firstName}!</h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          {incompleteContent}
-          {completedVisible ? renderCompletedContent(allCompleteTasks, props, style) : ''}
-          {allCompleteTasks.length ? <button onClick={onClickToggleCompleted(dispatch)} className={style.completedVisibleButton}>{completedVisible ? 'Hide' : 'Show'} completed</button> : ''}
-        </div>
-        <div className={style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
-      </div>
-    </LayoutApp>
+      {incompleteContent}
+      {completedVisible ? renderCompletedContent(allCompleteTasks, props, style) : ''}
+      {allCompleteTasks.length ? <button onClick={onClickToggleCompleted(dispatch)} className={style.completedVisibleButton}>{completedVisible ? 'Hide' : 'Show'} completed</button> : ''}
+    </LayoutPage>
   )
-}
-TasksPage.gql = {
-  Page: `
-    query tasksPage ($personId: ID) {
-      person (id: $personId) {
-        id
-        firstName
-        lastName
-        incompleteTaskCount
-        company: hirerForCompany {
-          id
-          name
-          slug
-          onboarded
-        }
-        ...Page
-      }
-    }
-    fragment Page on Person {
-      tasks {
-        id
-        modified
-        type
-        completed
-      }
-      company: hirerForCompany {
-        tasks {
-          id
-          modified
-          type
-          completed
-          completedBy {
-            id
-            firstName
-            lastName
-          }
-        }
-      }
-    }
-  `
 }
 
 module.exports = TasksPage

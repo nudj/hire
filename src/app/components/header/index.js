@@ -7,8 +7,13 @@ const Header = (props) => {
   const style = getStyle()
   const onPageLeave = get(props, 'onPageLeave')
   const incompleteTaskCount = get(props, 'incompleteTaskCount')
-  const tasksLink = incompleteTaskCount ? (<Link className={style.tasks} onClick={onPageLeave} to='/'>Tasks<span className={style.alertCount}>{incompleteTaskCount}</span></Link>) : (<Link className={style.tasks} to='/'>Tasks</Link>)
   const onboarded = get(props, 'onboarded', false)
+
+  const tasksLink = (
+    <Link className={style.tasks} onClick={onPageLeave} to='/'>
+      Tasks{incompleteTaskCount ? <span className={style.alertCount}>{incompleteTaskCount}</span> : ''}
+    </Link>
+  )
 
   return (
     <nav className={style.nav}>
@@ -19,6 +24,8 @@ const Header = (props) => {
         <ul className={style.menu}>
           <li className={style.menuItem}>{tasksLink}</li>
           {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/jobs'>Jobs</Link></li> : ''}
+          {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/connections'>Connections</Link></li> : ''}
+          {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.chat} to='/conversations'>Conversations</Link></li> : ''}
           <li className={style.menuItem}><a className={style.chat} href='mailto:help@nudj.co' id='open-intercom'>Chat</a></li>
           <li className={style.menuItem}><a onClick={onPageLeave} className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>

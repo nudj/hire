@@ -1,4 +1,4 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { css } = require('@nudj/framework/css')
+const { mixins } = require('../../lib/css')
 
 module.exports = css(mixins.pageLayout)

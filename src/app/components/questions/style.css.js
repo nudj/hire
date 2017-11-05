@@ -1,7 +1,5 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { css } = require('@nudj/framework/css')
 
-const styles = {
-}
+const styles = {}
 
 module.exports = css(styles)

@@ -10,11 +10,12 @@ const LayoutPage = (props) => {
   const style = getStyle()
   const tooltip = _get(props, 'tooltip')
   const header = _get(props, 'header')
-  const subtitle = _get(props, 'subtitle')
+  const headline = _get(props, 'headline')
 
   return (
     <LayoutApp {...props} className={style.pageBody}>
       <PageHeader {...header} />
+      {headline ? <h3 className={style.pageHeadline}>{headline}</h3> : ''}
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           {props.children}

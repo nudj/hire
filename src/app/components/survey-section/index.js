@@ -1,7 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const getStyle = require('./style.css')
 const QuestionChoice = require('../../components/questions/choice')
 const QuestionMultichoice = require('../../components/questions/multichoice')
 const QuestionText = require('../../components/questions/text')

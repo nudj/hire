@@ -1,8 +1,5 @@
 const React = require('react')
 const _get = require('lodash/get')
-const camelCase = require('lodash/camelCase')
-
-const getStyle = require('./style.css')
 
 const Recipients = (props) => {
   const onChange = _get(props, 'onChange')
@@ -25,7 +22,6 @@ const Recipients = (props) => {
         {connections.map(person => {
           const {
             id,
-            selected,
             firstName,
             lastName,
             title,
