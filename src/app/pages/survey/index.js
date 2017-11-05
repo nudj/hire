@@ -1,71 +1,113 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
-const actions = require('@nudj/framework/actions')
+const humanparser = require('humanparser')
+const _get = require('lodash/get')
+const _pick = require('lodash/pick')
+const { merge } = require('@nudj/library')
 
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
 const {
-  showDialog
-} = actions.app
-
+  previous,
+  next,
+  setValue,
+  setAnswer,
+  toggleAnswer,
+  finishSurvey,
+  setConnectionValue,
+  submitConnections
+} = require('./actions')
 const getStyle = require('./style.css')
+const LayoutPage = require('../../components/layout-page')
+const SurveySection = require('../../components/survey-section')
+const ConnectionsEditor = require('../../components/connections-editor')
 
-const HirerSurvey = (props) => {
+function onChangeChoice (dispatch) {
+  return (name, value) => (event) => {
+    dispatch(setAnswer(name, value))
+    dispatch(next())
+  }
+}
+
+function onChangeMultiChoice (dispatch) {
+  return (name, value) => (event) => dispatch(toggleAnswer(name, value, event.target.checked))
+}
+
+function onChangeText (dispatch) {
+  return (name) => (event) => dispatch(setAnswer(name, event.target.value))
+}
+
+function onClickPrevious (dispatch) {
+  return (event) => dispatch(previous())
+}
+
+function onClickNext (dispatch) {
+  return (event) => dispatch(next())
+}
+
+function onClickFinish (dispatch) {
+  return (event) => dispatch(finishSurvey())
+}
+
+function onChangeConnection (dispatch) {
+  return (id, name) => (event) => {
+    dispatch(setConnectionValue(id, name, event.target.type === 'checkbox' ? event.target.checked : event.target.value))
+  }
+}
+
+function onClickSubmit (dispatch) {
+  return (event) => dispatch(submitConnections())
+}
+
+const RecallSurvey = (props) => {
   const style = getStyle()
-  const title = 'Complete our survey and jog your memory'
-  const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking you questions you wouldn’t necessarily ask yourself.'
-  const tooltip = get(props, 'tooltip')
-  const surveyUrl = get(props, 'survey.link', 'about:blank')
-  const surveyFrame = (<iframe src={surveyUrl} className={style.surveyFrame} />)
+  const dispatch = _get(props, 'dispatch')
+  const survey = _get(props, 'company.survey')
+  const state = _get(props, 'surveyPage')
+  const handlers = {
+    onChangeChoice: onChangeChoice(dispatch),
+    onChangeMultiChoice: onChangeMultiChoice(dispatch),
+    onChangeText: onChangeText(dispatch)
+  }
+  const stepIndex = _get(state, 'step')
+  const steps = _get(survey, 'sections', []).reduce((steps, section) => {
+    return steps.concat(_pick(section, ['id', 'title', 'description']), ...section.questions)
+  }, [])
+  const step = _get(steps, stepIndex)
+  const connections = _get(state, 'connections')
 
-  const handlePageLeave = (event) => {
-    event.preventDefault()
-    let url = event.target.getAttribute('href')
+  const headerProps = {
+    title: 'Complete survey',
+    subtitle: 'To impress Robyn and Jamie'
+  }
 
-    if (!url) {
-      url = '/'
-    }
-
-    return props.dispatch(showDialog({
-      options: [
-        {
-          type: 'cancel',
-          action: {
-            name: 'hideDialog'
-          }
-        },
-        {
-          type: 'link',
-          url
-        }
-      ]
-    }))
+  let content
+  if (!connections) {
+    content = (
+      <div>
+        <SurveySection {...step} handlers={handlers} answers={_get(props, 'surveyPage.answers')} />
+        {stepIndex ? <button onClick={onClickPrevious(dispatch)}>Previous</button> : ''}
+        {stepIndex < steps.length - 1 ? <button onClick={onClickNext(dispatch)}>Next</button> : <button onClick={onClickFinish(dispatch)}>Finish</button>}
+      </div>
+    )
+  } else {
+    content = (
+      <div>
+        <ConnectionsEditor
+          connections={connections}
+          onChange={onChangeConnection(dispatch)}
+        />
+        <button onClick={onClickSubmit(dispatch)}>Submit</button>
+      </div>
+    )
   }
 
   return (
-    <LayoutApp {...props} onPageLeave={handlePageLeave} className={style.pageBody}>
+    <LayoutPage {...props} header={headerProps}>
       <Helmet>
-        <title>nudj - Discover referrers in your network</title>
+        <title>nudj - Complete survey</title>
       </Helmet>
-      <input type='hidden' name='_csrf' value={props.csrfToken} />
-      <PageHeader
-        title='Discover referrers in your network'
-        subtitle='On-boarding'
-      />
-      <h3 className={style.pageHeadline}>{title}</h3>
-      <p className={style.copy}>{subtitle}</p>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          {surveyFrame}
-        </div>
-        <div className={style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
-      </div>
-    </LayoutApp>
+      {content}
+    </LayoutPage>
   )
 }
 
-module.exports = HirerSurvey
+module.exports = RecallSurvey

@@ -8,8 +8,20 @@ const notificationTypes = [
   'warn',
   'error'
 ]
+const booleanChoices = {
+  YES: 'YES',
+  NO: 'NO'
+}
+const questionTypes = {
+  TEXT: 'TEXT',
+  FREETEXT: 'FREETEXT',
+  CHOICE: 'CHOICE',
+  MULTICHOICE: 'MULTICHOICE'
+}
 
 module.exports = {
   surveyTypes,
-  notificationTypes
+  notificationTypes,
+  booleanChoices,
+  questionTypes
 }

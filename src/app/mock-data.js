@@ -1,3 +1,19 @@
+const {
+  booleanChoices,
+  questionTypes
+} = require('./lib/constants')
+
+const {
+  YES,
+  NO
+} = booleanChoices
+const {
+  TEXT,
+  FREETEXT,
+  CHOICE,
+  MULTICHOICE
+} = questionTypes
+
 const data = {
   assets: [],
   companies: [],
@@ -13,6 +29,8 @@ const data = {
   externalMessages: [],
   surveyMessages: [],
   surveys: [],
+  surveySections: [],
+  surveyQuestions: [],
   companyTasks: [],
   personTasks: [],
   tokens: [],
@@ -271,26 +289,6 @@ data.recommendations = data.recommendations.concat([
     source: 'NUDJ'
   }
 ])
-data.surveys = data.surveys.concat([
-  {
-    id: 'survey1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    company: 'company1',
-    link: 'https://nudj.typeform.com/to/gfAnDV',
-    uuid: 'gfAnDV',
-    type: 'EMPLOYEE_SURVEY'
-  },
-  {
-    id: 'survey2',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    company: 'company1',
-    link: 'https://nudj.typeform.com/to/gfAnDV',
-    uuid: 'gfAnDV',
-    type: 'HIRER_SURVEY'
-  }
-])
 data.companyTasks = data.companyTasks.concat([
   {
     id: 'companyTask2',
@@ -344,6 +342,469 @@ data.employeeSurveys = data.employeeSurveys.concat([
     id: 'employeeSurvey1',
     employee: 'employee1',
     survey: 'survey1'
+  }
+])
+data.surveys = data.surveys.concat([
+  {
+    id: 'survey1',
+    slug: 'aided-recall-baby',
+    company: 'company1'
+  }
+])
+data.surveySections = data.surveySections.concat([
+  {
+    id: 'section1',
+    survey: 'survey1',
+    title: 'Aided recall on acid baby',
+    description: 'Consequat domesticarum te pariatur a nescius de malis expetendis.'
+  },
+  {
+    id: 'section2',
+    survey: 'survey1',
+    title: 'Professional + Previous Employers',
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+  },
+  {
+    id: 'section3',
+    survey: 'survey1',
+    title: 'Friends & Family',
+    description: ''
+  },
+  {
+    id: 'section4',
+    survey: 'survey1',
+    title: 'Events & Networks',
+    description: ''
+  },
+  {
+    id: 'section5',
+    survey: 'survey1',
+    title: 'Thanks for your answers',
+    description: 'Fore ubi nescius aut do ipsum e anim.'
+  }
+])
+data.surveyQuestions = data.surveyQuestions.concat([
+  {
+    id: 'question1',
+    surveySection: 'section2',
+    name: 'workBefore',
+    title: 'Where did you work before BEAR?',
+    description: 'Please list all of your previous employers. Thanks!',
+    type: FREETEXT,
+    required: false,
+    dependencies: {},
+    tags: [],
+    options: {
+      placeholder: 'Answers go here...'
+    }
+  },
+  {
+    id: 'question2',
+    surveySection: 'section2',
+    name: 'knowAccountManagers',
+    title: 'Were there any stand-out Account Managers at any of your previous companies?',
+    description: 'Remember, the we\'re trying to find people to ask for recommendations as well as hire, so don\'t worry if they don\'t match the skill set your currently looking for?',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question3',
+    surveySection: 'section2',
+    name: 'accountManagers',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Account Management'],
+    dependencies: {
+      knowAccountManagers: YES
+    }
+  },
+  {
+    id: 'question4',
+    surveySection: 'section2',
+    name: 'knowSales',
+    title: 'What about people that worked in broader Sales roles (e.g. Biz Dev, Customer Success etc.)?',
+    description: 'Again, we\'re only trying to find people to ask for recommendations as well as hire, so don\'t worry if they\'re too senior for the role you\'re currently looking for!',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question5',
+    surveySection: 'section2',
+    name: 'sales',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Sales'],
+    dependencies: {
+      knowSales: YES
+    }
+  },
+  {
+    id: 'question6',
+    surveySection: 'section2',
+    name: 'knowGraduates',
+    title: 'Did you come across or manage any good graduates?',
+    description: '',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question7',
+    surveySection: 'section2',
+    name: 'graduates',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Graduate'],
+    dependencies: {
+      knowGraduates: YES
+    }
+  },
+  {
+    id: 'question8',
+    surveySection: 'section2',
+    name: 'knowWorkWithGraduates',
+    title: 'What about people who might manage or work with graduates?',
+    description: '',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question9',
+    surveySection: 'section2',
+    name: 'workWithGraduates',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Work with graduates'],
+    dependencies: {
+      knowWorkWithGraduates: YES
+    }
+  },
+  {
+    id: 'question10',
+    surveySection: 'section2',
+    name: 'best',
+    title: 'In general, who was the best person you worked with?',
+    description: 'Ignoring their role entirely, we just want to know who the best person you\'ve worked with. Maybe you worked with a few awesome people? If so, feel free to add them all below.',
+    type: TEXT,
+    required: false,
+    dependencies: {},
+    options: {
+      placeholder: 'Answer goes here...'
+    },
+    tags: ['Best']
+  },
+  {
+    id: 'question11',
+    surveySection: 'section2',
+    name: 'managed',
+    title: 'Who were the stand-out people that you managed?',
+    description: 'We want to know all the people that you managed previously that you thought were going to have your job someday!',
+    type: FREETEXT,
+    required: false,
+    dependencies: {},
+    tags: [],
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Subordinate']
+  },
+  {
+    id: 'question12',
+    surveySection: 'section3',
+    name: 'knowFriendsFmcg',
+    title: 'Do any of your friends work in the FMCG space?',
+    description: 'Maybe they work for an established brand. Or perhaps they work for a start-up. It might not strictly speaking be FMCG, but still has a sales team and works in the area of food (e.g. Farmdrop).',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question13',
+    surveySection: 'section3',
+    name: 'friendsFmcg',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['FMCG'],
+    dependencies: {
+      knowFriendsFmcg: YES
+    }
+  },
+  {
+    id: 'question14',
+    surveySection: 'section3',
+    name: 'knowFamilyFmcg',
+    title: 'Do any of your family work in the FMCG space?',
+    description: 'There might not be anyone in your immediate family, but try to think broader, such as your cousins.',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question15',
+    surveySection: 'section3',
+    name: 'familyFmcg',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['FMCG'],
+    dependencies: {
+      knowFamilyFmcg: YES
+    }
+  },
+  {
+    id: 'question16',
+    surveySection: 'section3',
+    name: 'knowSiblingGraduates',
+    title: 'Have any of your friend\'s siblings graduated in the last few years?',
+    description: 'This is to see if we can uncover an junior, but eager, sales person - after all grads are likely to know other grads!',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question17',
+    surveySection: 'section3',
+    name: 'graduates',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['Graduate'],
+    dependencies: {
+      knowSiblingGraduates: YES
+    }
+  },
+  {
+    id: 'question18',
+    surveySection: 'section4',
+    name: 'events',
+    title: 'Have you attended any work related events recently?',
+    description: '',
+    type: FREETEXT,
+    required: false,
+    dependencies: {},
+    tags: [],
+    options: {
+      placeholder: 'Answers go here...'
+    }
+  },
+  {
+    id: 'question19',
+    surveySection: 'section4',
+    name: 'knowFromEvents',
+    title: 'Did you meet anyone there that might be suitable (or might know someone suitable) for BEAR\'s job?',
+    description: 'Perhaps you met someone while working at an event that had an interest in what BEAR was doing.',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question20',
+    surveySection: 'section4',
+    name: 'fromEvents',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['events'],
+    dependencies: {
+      knowFromEvents: YES
+    }
+  },
+  {
+    id: 'question21',
+    surveySection: 'section4',
+    name: 'clubs',
+    title: 'Are you part of any clubs or networking groups outside of work?',
+    description: '',
+    type: FREETEXT,
+    required: false,
+    dependencies: {},
+    tags: [],
+    options: {
+      placeholder: 'Answers go here...'
+    }
+  },
+  {
+    id: 'question22',
+    surveySection: 'section4',
+    name: 'knowFromClubs',
+    title: 'Is there anyone there that might be suitable for the job?',
+    description: '',
+    type: CHOICE,
+    required: true,
+    dependencies: {},
+    tags: [],
+    options: {
+      choices: [
+        {
+          title: 'Yes',
+          name: YES
+        },
+        {
+          title: 'No',
+          name: NO
+        }
+      ]
+    }
+  },
+  {
+    id: 'question23',
+    surveySection: 'section4',
+    name: 'fromClubs',
+    title: 'Great! Please add their name(s) below.',
+    description: '',
+    type: FREETEXT,
+    required: true,
+    options: {
+      placeholder: 'Answers go here...'
+    },
+    tags: ['clubs'],
+    dependencies: {
+      knowFromClubs: YES
+    }
   }
 ])
 

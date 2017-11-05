@@ -1,92 +1,140 @@
+const _omit = require('lodash/omit')
 const {
   merge,
   promiseMap,
-  addDataKeyValue
+  actionMapAssign
 } = require('@nudj/library')
-const isEqual = require('lodash/isEqual')
+const {
+  Redirect,
+  NotFound
+} = require('@nudj/framework/errors')
+const request = require('../../lib/request')
 
-const employees = require('../../server/modules/employees')
-const tasks = require('../../server/modules/tasks')
-const surveys = require('../../server/modules/surveys')
-const employeeSurveys = require('../../server/modules/employee-surveys')
-const tokens = require('../../server/modules/tokens')
-const prismic = require('../../server/lib/prismic')
-const {surveyTypes} = require('../../lib/constants')
-
-const tooltipOptions = {
-  type: 'tooltip',
-  tags: ['hirerSurvey'],
-  keys: {
-    title: 'tooltiptitle',
-    text: 'tooltiptext',
-    intercom: 'tooltipintercombutton'
-  }
-}
-
-const dialogOptions = {
-  type: 'dialog',
-  tags: ['hirerSurveyPageLeave'],
-  keys: {
-    title: 'dialogtitle',
-    text: 'dialogtext',
-    cancel: 'dialogcanceltext',
-    link: 'dialogconfirmtext'
-  }
-}
-
-function fetchPrismicContent (data) {
-  data.tooltip = prismic.fetchContent(tooltipOptions).then(results => results && results[0])
-  data.dialog = prismic.fetchContent(dialogOptions).then(results => results && results[0])
-  return promiseMap(data)
-}
-
-const get = ({
-  data
+const get = async ({
+  data,
+  params
 }) => {
-  return addDataKeyValue('tasksIncomplete', data => tasks.getIncompleteByHirerAndCompanyExposed(data.hirer.id, data.company.id))(data)
-    .then(data => employees.getOrCreateByPerson(data, data.person.id, data.company.id))
-    .then(data => surveys.getSurveyForCompany(data, surveyTypes.HIRER_SURVEY))
-    .then(data => {
-      data.employeeSurvey = getOrCreateEmployeeSurvey(data.employee.id, data.survey.id)
-      return promiseMap(data)
-    })
-    .then(data => {
-      const tokenData = {
-        employeeSurvey: data.employeeSurvey.id
+  const query = `
+    query PageData ($userEmail: String) {
+      person: personByFilters (filters: {
+        email: $userEmail
+      }) {
+        hirer {
+          ...Global
+          ...Page
+        }
       }
-      const tokenType = 'SURVEY_TYPEFORM_COMPLETE'
-      data.token = getOrCreateTokenByTokenData(tokenType, tokenData)
-      return promiseMap(data)
-    })
-    .then(data => {
-      const token = data.token
-      const link = `${data.survey.link}?token=${token.token}`
-      data.survey = merge(data.survey, {link})
-      return promiseMap(data)
-    })
-    .then(fetchPrismicContent)
+    }
+    fragment Global on Hirer {
+      person {
+        incompleteTaskCount
+      }
+      company {
+        onboarded
+      }
+    }
+    fragment Page on Hirer {
+      company {
+        survey: surveyByFilters (filters: {
+          slug: "aided-recall-baby"
+        }) {
+          id
+          slug
+          sections: surveySections {
+            id
+            title
+            description
+            questions: surveyQuestions {
+              id
+              title
+              description
+              name
+              type
+              required
+              dependencies
+              options
+              tags
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    userEmail: data.user.email
+  }
+  const responseData = await request('/', {
+    baseURL: `http://${process.env.API_HOST}:82`,
+    method: 'post',
+    data: {
+      query,
+      variables
+    }
+  })
+  return merge(data, responseData.data.person.hirer)
+
+
+  return actionMapAssign(
+    data,
+    {
+      survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
+    }
+  )
 }
 
-function getOrCreateTokenByTokenData (tokenType, tokenData) {
-  return tokens.getByType({}, tokenType)
-    .then(dataTemp => dataTemp.tokens.find(token => token.data && isEqual(token.data, tokenData)))
-    .then(token => {
-      return token || tokens.post({}, tokenType, tokenData)
-        .then(dataTemp => dataTemp.newToken)
-    })
-}
-
-function getOrCreateEmployeeSurvey (employee, survey) {
-  return employeeSurveys.getByEmployeeAndSurvey({}, employee, survey)
-    .then(tempData => {
-      if (tempData.employeeSurvey) {
-        return tempData.employeeSurvey
-      }
-      return employeeSurveys.post({}, employee, survey)
-        .then(tempData => tempData.newEmployeeSurvey)
-    })
+const post = ({
+  data,
+  params,
+  body
+}) => {
+  return actionMapAssign(
+    data,
+    {
+      survey: () => request(`surveys?slug=${params.surveySlug}`).then(surveys => surveys[0] || Promise.reject(new NotFound(`Survey with slug ${params.surveySlug} not found`)))
+    },
+    {
+      people: data => Promise.all(body.connections.map(connection => {
+        return request('people', {
+          params: {
+            email: connection.email
+          }
+        })
+        .then(people => people[0])
+        .then(person => {
+          if (person) return person
+          return request('people', {
+            method: 'post',
+            data: _omit(connection, ['tags'])
+          })
+        })
+      }))
+    },
+    {
+      connections: data => Promise.all(data.people.map(person => {
+        return request('connections', {
+          params: {
+            from: data.person.id,
+            to: person.id
+          }
+        })
+        .then(connections => connections[0])
+        .then(connection => {
+          if (connection) return connection
+          return request('connections', {
+            method: 'post',
+            data: {
+              from: data.person.id,
+              to: person.id,
+              source: body.source
+            }
+          })
+        })
+      }))
+    }
+  )
 }
 
 module.exports = {
-  get
+  get,
+  post
 }

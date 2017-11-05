@@ -1,9 +1,11 @@
 module.exports = {
   '/': require('../pages/tasks'),
+  '/jobs': require('../pages/jobs'),
+  '/surveys/:surveySlug': require('../pages/survey'),
+
+  // old
   '/import-contacts': require('../pages/import-contacts'),
   '/send-survey': require('../pages/survey-compose'),
-  '/survey': require('../pages/survey'),
-  '/jobs': require('../pages/jobs'),
   '/jobs/:jobSlug': require('../pages/job'),
   '/jobs/:jobSlug/nudj': require('../pages/nudj'),
   '/jobs/:jobSlug/internal': require('../pages/internal-compose'),
