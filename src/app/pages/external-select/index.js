@@ -69,7 +69,6 @@ class ExternalSelectPage extends React.Component {
     const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
     const externalMessagesComplete = get(this.props, 'externalMessagesComplete', [])
     const activeConversations = filter(externalMessagesComplete, (message) => message.conversation)
-    console.log(activeConversations)
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
     if (!network.length || (networkSent.length && !networkUnsent.length && !activeConversations.length)) {
