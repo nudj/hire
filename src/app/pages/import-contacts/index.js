@@ -106,22 +106,19 @@ class ImportContactsPage extends React.Component {
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 1 - Requesting your data</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-03.png`} alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-new-03.png`} alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Go to <a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>"Getting an archive of your data"</a> on LinkedIn (you may need to log in).</p>
+              <p className={this.style.instructionsCopy}>Click this link - &nbsp; &#x1F449; &nbsp;<a className={this.style.instructionsCopyLink} href='https://www.linkedin.com/psettings/member-data' target='_blank'>Go to LinkedIn settings</a>&nbsp; &#x1F448; &nbsp; - to go to your LinkedIn setting page (you may need to log in).</p>
             </li>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Make sure <em className={this.style.instructionsCopyEmphasis}>"Fast file only"</em> is selected, then click on <em className={this.style.instructionsCopyEmphasis}>"Request archive"</em>.</p>
+              <p className={this.style.instructionsCopy}>Next, select <em className={this.style.instructionsCopyEmphasis}>"Pick and choose"</em>.</p>
             </li>
-          </ol>
-        </div>
-
-        <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-04.png`} alt='The LinkedIn Settings &amp; Privacy page with the "Getting an archive of your data" section open and a green "Done" tick displayed' />
-          <ol className={this.style.instructionsSteps} start='3'>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Enter your password and hit <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - you should now see a green tick with Save next to it.</p>
+              <p className={this.style.instructionsCopy}>Then select <em className={this.style.instructionsCopyEmphasis}>"Connections"</em> and click on <em className={this.style.instructionsCopyEmphasis}>"Request archive"</em>.</p>
+            </li>
+            <li className={this.style.instructionsStep}>
+              <p className={this.style.instructionsCopy}>Enter your password and click <em className={this.style.instructionsCopyEmphasis}>"Done"</em> - the button text will then change to <em className={this.style.instructionsCopyEmphasis}>"Request pending"</em>.</p>
             </li>
           </ol>
         </div>
@@ -143,10 +140,10 @@ class ImportContactsPage extends React.Component {
         </div>
 
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-06.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-new-06.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
           <ol className={this.style.instructionsSteps} start='3'>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Click on the Download button and save it where ever you like.</p>
+              <p className={this.style.instructionsCopy}>Click on the <em className={this.style.instructionsCopyEmphasis}>"Download archive"</em> button and save it where ever you like.</p>
             </li>
           </ol>
         </div>
@@ -155,13 +152,13 @@ class ImportContactsPage extends React.Component {
       <div className={this.style.instructionsStepCard}>
         <h4 className={this.style.instructionsStepHeading}>Step 3 - Uploading to nudj</h4>
         <div className={this.style.instructionsGroup}>
-          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-07.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
+          <img className={this.style.instructionsImage} src={`${imageRoot}/linkedin-step-new-07.png`} alt='The LinkedIn Settings &amp; Privacy page with a link to download your data' />
           <ol className={this.style.instructionsSteps}>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Go to where you saved the downloaded folder, open it up and locate on the <em className={this.style.instructionsCopyEmphasis}>Connections.csv</em> file. We only need this .csv  file, not the whole folder.</p>
+              <p className={this.style.instructionsCopy}>Navigate to where you saved the downloaded file on your computer.</p>
             </li>
             <li className={this.style.instructionsStep}>
-              <p className={this.style.instructionsCopy}>Click next</p>
+              <p className={this.style.instructionsCopy}>Then click the <em className={this.style.instructionsCopyEmphasis}>"Next"</em> button below.</p>
             </li>
           </ol>
         </div>
