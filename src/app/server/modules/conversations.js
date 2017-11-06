@@ -1,8 +1,10 @@
-const { promiseMap } = require('@nudj/library')
-
 const request = require('../../lib/request')
 
-function createConversation (hirer, recipient, job, threadId, provider) {
+const getById = (id) => {
+  return request(`conversations/${id}`)
+}
+
+const post = (hirer, recipient, job, threadId, provider) => {
   const data = {
     hirer,
     recipient,
@@ -14,12 +16,7 @@ function createConversation (hirer, recipient, job, threadId, provider) {
   return request(`conversations`, { data, method })
 }
 
-module.exports.post = function (data, hirer, recipient, job, threadId, provider) {
-  data.conversation = createConversation(hirer, recipient, job, threadId, provider)
-  return promiseMap(data)
-}
-
-module.exports.getById = function (data, id) {
-  data.conversation = request(`conversations/${id}`)
-  return promiseMap(data)
+module.exports = {
+  post,
+  getById
 }

@@ -39,7 +39,8 @@ describe('Conversations', () => {
 
   describe('post', () => {
     it('creates new conversation', asyncTest(async () => {
-      const data = await conversations.post({}, 'hirer1', 'recipient1', 'job1', 'thread1', 'GMAIL')
+      const data = {}
+      data.conversation = await conversations.post('hirer1', 'recipient1', 'job1', 'thread1', 'GMAIL')
       expect(data).to.deep.equal({
         conversation: {
           id: 1,
@@ -52,8 +53,9 @@ describe('Conversations', () => {
       })
     }))
 
-    it('appends to existing data', asyncTest(async () => {
-      const data = await conversations.post({ existingData: 'test_data' }, 'hirer1', 'recipient1', 'job1', 'thread1', 'GMAIL')
+    it('can append to existing data', asyncTest(async () => {
+      const data = { existingData: 'test_data' }
+      data.conversation = await conversations.post('hirer1', 'recipient1', 'job1', 'thread1', 'GMAIL')
       expect(data.conversation).to.exist()
       expect(data.existingData).to.equal('test_data')
     }))

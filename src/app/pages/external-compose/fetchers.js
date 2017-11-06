@@ -68,23 +68,18 @@ const fetchExternalPrismicContent = async (data) => {
 }
 
 const getExternalMessageProperties = async (data, messageId) => {
-  try {
-    data.recipient = await common.fetchPersonFromFragment(data.recipient.id)
-    data = await jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id)
-    if (!data.referral) {
-      data = await jobs.addReferral(data, data.job.id, data.recipient.id)
-    }
-    return externalMessages.getById(data, messageId)
-  } catch (error) {
-    console.log('error', error)
-    throw new Error('Not found')
+  data.recipient = await common.fetchPersonFromFragment(data.recipient.id)
+  data = await jobs.getReferralForPersonAndJob(data, data.recipient.id, data.job.id)
+  if (!data.referral) {
+    data = await jobs.addReferral(data, data.job.id, data.recipient.id)
   }
+  return externalMessages.getById(data, messageId)
 }
 
 const startNewGmailConversation = async (data) => {
   const gmailResponse = await gmail.send(data, data.person.id, tags.external)
-  data = await conversations.post(data, data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
-  data = await messages.post(data, data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
+  data.conversation = await conversations.post(data.externalMessage.hirer, data.externalMessage.recipient, data.job.id, gmailResponse.threadId, 'GMAIL')
+  data.message = await messages.post(data.conversation.id, gmailResponse.id, gmailResponse.pixelToken)
   data = await externalMessages.patch(data, data.externalMessage.id, { sendMessage: 'GMAIL', conversation: data.conversation.id })
   data = await tasks.completeTaskByType(data, data.company.id, data.hirer.id, 'SHARE_JOBS')
   throw new Redirect({
@@ -117,8 +112,8 @@ const get = async ({
   }
 
   if (data.externalMessage.conversation) { // Ongoing conversation
-    data = await conversations.getById(data, data.externalMessage.conversation)
-    data = await messages.getByConversation(data, data.conversation.id)
+    data.conversation = await conversations.getById(data.externalMessage.conversation)
+    data.conversationMessages = await messages.getByConversation(data.conversation.id)
     data = await fetchExternalPrismicContent(data)
     return gmail.getThreadMessages(data, data.conversation.threadId, data.person.id)
   }
@@ -190,7 +185,7 @@ const post = async ({
   const pixelToken = createHash(hashLength)
   const trackedMessage = templater.appendTrackingToken(email, pixelToken)
   const gmailMessage = await gmail.sendByThread(trackedMessage, data.person.id, body.conversation.threadId)
-  await messages.post(data, body.conversation.id, gmailMessage.id, pixelToken)
+  await messages.post(body.conversation.id, gmailMessage.id, pixelToken)
   throw new Redirect({
     url: `/jobs/${params.jobSlug}/external/${params.messageId}`
   })

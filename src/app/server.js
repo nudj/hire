@@ -1,4 +1,4 @@
-// require('envkey')
+require('envkey')
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {

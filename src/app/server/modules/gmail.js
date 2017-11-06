@@ -106,7 +106,7 @@ const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
 
   return google.sendGmail({ email: trackedEmail, accessToken })
     .then(response => {
-      logger.log('email response', response, email)
+      logger.log('warn', 'email response', response, email)
       return merge(response, { pixelToken })
     })
     .catch(error => {
