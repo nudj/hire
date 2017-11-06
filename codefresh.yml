@@ -29,6 +29,10 @@ steps:
       - NPM_TOKEN=${{NPM_TOKEN}}
       - NODE_ENV=production
       - DEBUG=true
+    when:
+      branch:
+        only:
+          - develop
 
   push_latest:
     title: Push Latest
@@ -38,6 +42,10 @@ steps:
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - develop
 
   build:
     title: Build
