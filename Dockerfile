@@ -1,4 +1,4 @@
-FROM node:6.11.3-alpine
+FROM node:8-alpine
 ARG NPM_TOKEN
 ARG NODE_ENV
 ARG DEBUG

@@ -68,7 +68,7 @@ class ExternalSelectPage extends React.Component {
     const networkSent = get(this.props, 'networkSent', [])
     const externalMessagesIncomplete = get(this.props, 'externalMessagesIncomplete', [])
     const externalMessagesComplete = get(this.props, 'externalMessagesComplete', [])
-    const activeConversations = filter(externalMessagesComplete, (message) => message.threadId)
+    const activeConversations = filter(externalMessagesComplete, (message) => message.conversation)
     const networkUnsent = network.filter(person => !networkSent.includes(person.id))
 
     if (!network.length || (networkSent.length && !networkUnsent.length && !activeConversations.length)) {
@@ -85,8 +85,8 @@ class ExternalSelectPage extends React.Component {
 
         if (networkSent.includes(personId)) {
           const currentMessage = externalMessagesComplete.find((message) => message.recipient === personId)
-          if (!currentMessage.threadId) {
-            return '' // Completed messages without a threadId aren't ongoing conversations.
+          if (!currentMessage.conversation) {
+            return '' // Completed messages without a conversation aren't ongoing.
           }
           ongoing = true
           url = `${url}/${currentMessage.id}`

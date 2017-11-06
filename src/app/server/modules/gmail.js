@@ -1,16 +1,18 @@
 const get = require('lodash/get')
 const find = require('lodash/find')
 const parser = require('node-email-reply-parser')
-const distanceInWordsToNow = require('date-fns/distance_in_words_to_now')
 const { Base64 } = require('js-base64')
+const createHash = require('hash-generator')
 const logger = require('@nudj/framework/logger')
 const { Unauthorized } = require('@nudj/framework/errors')
-const { promiseMap } = require('@nudj/library')
+const { merge, promiseMap } = require('@nudj/library')
 
 const google = require('../lib/google')
 const templater = require('../../lib/templater')
 const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
+
+const hashLength = 16
 
 const getAccountForPerson = (person) => {
   return accounts.getByFilters({ person })
@@ -26,7 +28,7 @@ const formatThreadMessages = (messages) => {
   return messages.map(messageData => {
     const headers = messageData.payload.headers
     const sender = get(find(headers, { name: 'From' }), 'value')
-    const date = `${distanceInWordsToNow(new Date(Number(messageData.internalDate)))} ago`
+    const date = messageData.internalDate
 
     let encryptedBody = get(messageData.payload, 'body.data')
     if (!encryptedBody) {
@@ -58,14 +60,14 @@ const fetchMessagesByThread = (threadId, person) => {
       if (error.name !== Unauthorized.name) {
         logger.log('error', 'Error fetching thread', error)
         return refreshAccessTokenAndContinue(refreshToken, google.getThread, { threadId })
-        .then(response => formatThreadMessages(response.messages))
+          .then(response => formatThreadMessages(response.messages))
       }
       throw new Unauthorized({ type: 'Google' })
     })
 }
 
 const getThreadMessages = (data, threadId, person) => {
-  data.conversationMessages = fetchMessagesByThread(threadId, person)
+  data.threadMessages = fetchMessagesByThread(threadId, person)
   return promiseMap(data)
 }
 
@@ -99,15 +101,18 @@ const refreshAccessTokenAndContinue = (refreshToken, callback, args) => {
 }
 
 const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
-  return google.sendGmail({ email, accessToken })
+  const pixelToken = createHash(hashLength)
+  const trackedEmail = templater.appendTrackingToken(email, pixelToken)
+
+  return google.sendGmail({ email: trackedEmail, accessToken })
     .then(response => {
       logger.log('warn', 'email response', response, email)
-      return response.threadId
+      return merge(response, { pixelToken })
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
-      return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email })
-        .then(response => response.threadId)
+      return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email: trackedEmail })
+        .then(response => merge(response, { pixelToken }))
     })
 }
 
