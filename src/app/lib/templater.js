@@ -18,7 +18,7 @@ const applyTags = (para, data, tagify, chunkify, indexStart) => {
 }
 
 module.exports.appendTrackingToken = (email, pixelToken) => {
-  const trackedBody = { body: `${email.body} <img src="http://${process.env.DOMAIN}/tracker/${pixelToken}/pixel.png" />` }
+  const trackedBody = { body: `${email.body} <img src="http://${process.env.WEB_HOSTNAME}/tracker/${pixelToken}/pixel.png" />` }
   return merge(email, trackedBody)
 }
 
