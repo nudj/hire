@@ -9,7 +9,7 @@ const RowItem = require('../../components/row-item/row-item')
 
 const JobsPage = (props) => {
   const style = getStyle()
-  const company = get(props, 'company')
+  const company = get(props, 'person.hirer.company')
   const jobs = get(company, 'jobs', [])
   const headerProps = {
     title: 'Jobs',

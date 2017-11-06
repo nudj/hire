@@ -57,7 +57,7 @@ function onClickSubmit (dispatch) {
 const RecallSurvey = (props) => {
   const style = getStyle()
   const dispatch = _get(props, 'dispatch')
-  const survey = _get(props, 'company.survey')
+  const survey = _get(props, 'person.hirer.company.survey')
   const state = _get(props, 'surveyPage')
   const handlers = {
     onChangeChoice: onChangeChoice(dispatch),

@@ -2,6 +2,7 @@ const _pick = require('lodash/pick')
 const { merge } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
 const request = require('../../lib/request')
+const { GlobalFragment } = require('../../lib/graphql')
 
 const get = async ({
   data,
@@ -12,46 +13,36 @@ const get = async ({
       person: personByFilters (filters: {
         email: $userEmail
       }) {
+        ...Global
         hirer {
-          ...Global
-          ...Page
-        }
-      }
-    }
-    fragment Global on Hirer {
-      person {
-        incompleteTaskCount
-      }
-      company {
-        onboarded
-      }
-    }
-    fragment Page on Hirer {
-      company {
-        survey: surveyByFilters (filters: {
-          slug: "aided-recall-baby"
-        }) {
-          id
-          slug
-          sections: surveySections {
-            id
-            title
-            description
-            questions: surveyQuestions {
+          company {
+            survey: surveyByFilters (filters: {
+              slug: "aided-recall-baby"
+            }) {
               id
-              title
-              description
-              name
-              type
-              required
-              dependencies
-              options
-              tags
+              slug
+              sections: surveySections {
+                id
+                title
+                description
+                questions: surveyQuestions {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                  dependencies
+                  options
+                  tags
+                }
+              }
             }
           }
         }
       }
     }
+    ${GlobalFragment}
   `
   const variables = {
     userEmail: data.user.email
@@ -64,7 +55,7 @@ const get = async ({
       variables
     }
   })
-  return merge(data, responseData.data.person.hirer)
+  return merge(data, responseData.data)
 }
 
 const post = async ({

@@ -31,7 +31,7 @@ function getSteps (sections = []) {
 }
 
 function getStepIndex (state, indexModifier, validate) {
-  const steps = getSteps(_get(state, 'app.company.survey.sections'))
+  const steps = getSteps(_get(state, 'app.person.hirer.company.survey.sections'))
   const answers = _get(state, 'surveyPage.answers')
   const originalIndex = _get(state, 'surveyPage.step')
   let index = originalIndex
@@ -90,7 +90,7 @@ function setAnswer (name, value, resets = []) {
   }
 }
 module.exports.setAnswer = (name, value) => (dispatch, getState) => {
-  const resets = getResets(_get(getState(), 'app.company.survey.sections'), name)
+  const resets = getResets(_get(getState(), 'app.person.hirer.company.survey.sections'), name)
   return dispatch(setAnswer(name, value, resets))
 }
 
@@ -106,13 +106,13 @@ function toggleAnswer (name, value, toggle, resets) {
   }
 }
 module.exports.toggleAnswer = (name, value, toggle) => (dispatch, getState) => {
-  const resets = getResets(_get(getState(), 'app.company.survey.sections'), name)
+  const resets = getResets(_get(getState(), 'app.person.hirer.company.survey.sections'), name)
   return dispatch(toggleAnswer(name, value, toggle, resets))
 }
 
 module.exports.finishSurvey = () => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.company.survey', {})
+  const survey = _get(state, 'app.person.hirer.company.survey', {})
   const answers = _get(state, 'surveyPage.answers', {})
   const connections = getConnections(getQuestions(survey), answers)
   return dispatch(setValue('connections', connections))
@@ -120,7 +120,7 @@ module.exports.finishSurvey = () => (dispatch, getState) => {
 
 module.exports.submitConnections = () => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.company.survey', {})
+  const survey = _get(state, 'app.person.hirer.company.survey', {})
   const connections = _get(state, 'surveyPage.connections', []).map(connection => _omit(connection, ['id']))
   return dispatch(actions.app.postData({
     url: `/surveys/${_get(survey, 'slug')}`,

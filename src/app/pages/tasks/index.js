@@ -48,7 +48,7 @@ const TasksPage = (props) => {
   const completedVisible = get(state, 'completedVisible')
 
   const personTasks = get(props, 'person.tasks', [])
-  const companyTasks = get(props, 'company.tasks', [])
+  const companyTasks = get(props, 'person.hirer.company.tasks', [])
   const allTasks = personTasks.concat(companyTasks)
   const allIncompleteTasks = allTasks.filter(task => !task.completed)
   const allCompleteTasks = allTasks.filter(task => task.completed)

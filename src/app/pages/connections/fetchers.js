@@ -1,5 +1,6 @@
 const { merge } = require('@nudj/library')
 const request = require('../../lib/request')
+const { GlobalFragment } = require('../../lib/graphql')
 
 const get = async ({
   data
@@ -9,22 +10,7 @@ const get = async ({
       person: personByFilters (filters: {
         email: $userEmail
       }) {
-        hirer {
-          ...Global
-          ...Page
-        }
-      }
-    }
-    fragment Global on Hirer {
-      person {
-        incompleteTaskCount
-      }
-      company {
-        onboarded
-      }
-    }
-    fragment Page on Hirer {
-      person {
+        ...Global
         id
         connections {
           id
@@ -38,6 +24,7 @@ const get = async ({
         }
       }
     }
+    ${GlobalFragment}
   `
   const variables = {
     userEmail: data.user.email
@@ -50,7 +37,7 @@ const get = async ({
       variables
     }
   })
-  return merge(data, responseData.data.person.hirer)
+  return merge(data, responseData.data)
 }
 
 module.exports = {

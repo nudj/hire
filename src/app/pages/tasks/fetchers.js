@@ -1,6 +1,7 @@
 const { merge } = require('@nudj/library')
 const request = require('../../lib/request')
 const prismic = require('../../server/lib/prismic')
+const { GlobalFragment } = require('../../lib/graphql')
 
 const tooltipOptions = {
   type: 'tooltip',
@@ -20,22 +21,7 @@ const get = async ({
       person: personByFilters (filters: {
         email: $userEmail
       }) {
-        hirer {
-          ...Global
-          ...Page
-        }
-      }
-    }
-    fragment Global on Hirer {
-      person {
-        incompleteTaskCount
-      }
-      company {
-        onboarded
-      }
-    }
-    fragment Page on Hirer {
-      person {
+        ...Global
         id
         firstName
         tasks {
@@ -44,21 +30,27 @@ const get = async ({
           type
           completed
         }
-      }
-      company {
-        tasks {
-          id
-          modified
-          type
-          completed
-          completedBy {
-            id
-            firstName
-            lastName
+        company: hirerForCompany {
+          name
+        }
+        hirer {
+          company {
+            tasks {
+              id
+              modified
+              type
+              completed
+              completedBy {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
       }
     }
+    ${GlobalFragment}
   `
   const variables = {
     userEmail: data.user.email
@@ -72,7 +64,7 @@ const get = async ({
     }
   })
   const tooltip = await prismic.fetchContent(tooltipOptions).then(tooltips => tooltips && tooltips[0])
-  return merge(data, responseData.data.person.hirer, { tooltip })
+  return merge(data, responseData.data, { tooltip })
 }
 
 module.exports = {
