@@ -110,11 +110,8 @@ const styles = {
   instructionsMajorHeading: merge(mixins.typography.h6),
   instructionsCopy: merge(mixins.typography.p),
   instructionsCopyLink: merge(mixins.headings.pBold, {
-    color: variables.colors.royalBlue,
-    textDecoration: 'none',
-    ':hover': {
-      textDecoration: 'underline'
-    }
+    color: variables.colors.midRed,
+    textDecoration: 'underline'
   }),
   instructionsCopyEmphasis: {},
   instructionsImage: {
