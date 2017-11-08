@@ -10,6 +10,7 @@ const _camelCase = require('lodash/camelCase')
 const _omit = require('lodash/omit')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
+const createHash = require('hash-generator')
 const PREFIX = 'RECALL_SURVEY'
 
 function getResets (steps, questionName) {
@@ -36,15 +37,15 @@ function getStepIndex (state, indexModifier, validate) {
   const originalIndex = _get(state, 'surveyPage.step')
   let index = originalIndex
   let nextIndex
-  if (
-    validate &&
-    steps[originalIndex].required &&
-    steps[originalIndex].name &&
-    !answers[steps[originalIndex].name]
-  ) {
-    // required answer not given
-    return originalIndex
-  }
+  // if (
+  //   validate &&
+  //   steps[originalIndex].required &&
+  //   steps[originalIndex].name &&
+  //   !answers[steps[originalIndex].name]
+  // ) {
+  //   // required answer not given
+  //   return originalIndex
+  // }
   while (_isUndefined(nextIndex)) {
     const testIndex = indexModifier(index)
     const testSection = steps[testIndex]
@@ -164,15 +165,46 @@ function createConnection (tags) {
   }
 }
 
-module.exports.setConnectionValue = (id, name, value) => (dispatch, getState) => {
-  const state = getState()
-  let connections = _get(state, 'surveyPage.connections')
-  connections = connections.map(connection => {
-    if (connection.id === id) {
-      connection[name] = value
-    }
-    return connection
-  })
+const SET_NEW_CONNECTION_VALUE = `${PREFIX}_SET_NEW_CONNECTION_VALUE`
+module.exports.SET_NEW_CONNECTION_VALUE = SET_NEW_CONNECTION_VALUE
+function setNewConnectionValue (name, value) {
+  return {
+    type: SET_NEW_CONNECTION_VALUE,
+    name,
+    value
+  }
+}
+module.exports.setNewConnectionValue = (name, value) => (dispatch, getState) => {
+  return dispatch(setNewConnectionValue(name, value))
+}
 
-  return dispatch(setValue('connections', connections))
+const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
+module.exports.ADD_CONNECTION = ADD_CONNECTION
+function addConnection (questionId, newConnection) {
+  return {
+    type: ADD_CONNECTION,
+    questionId,
+    newConnection
+  }
+}
+module.exports.addConnection = (questionId) => (dispatch, getState) => {
+  const state = getState()
+  const newConnection = merge(_get(state, 'surveyPage.newConnection'), {
+    id: createHash(16) // simulate a saved connection
+  })
+  return dispatch(addConnection(questionId, newConnection))
+}
+
+const TOGGLE_CONNECTION = `${PREFIX}_TOGGLE_CONNECTION`
+module.exports.TOGGLE_CONNECTION = TOGGLE_CONNECTION
+function toggleConnection (questionId, connectionId, value) {
+  return {
+    type: TOGGLE_CONNECTION,
+    questionId,
+    connectionId,
+    value
+  }
+}
+module.exports.toggleConnection = (questionId, connectionId, value) => (dispatch, getState) => {
+  return dispatch(toggleConnection(questionId, connectionId, value))
 }

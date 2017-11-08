@@ -1,22 +1,14 @@
-const reject = require('lodash/reject')
-const concat = require('lodash/concat')
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
 
 const {
   SET_VALUE,
-  SET_ANSWER,
-  TOGGLE_ANSWER
+  SET_NEW_CONNECTION_VALUE,
+  ADD_CONNECTION,
+  TOGGLE_CONNECTION
 } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const surveyRoute = new RouteParser('/surveys/:surveySlug')
-
-const removeFromArray = (arr, itemToRemove) => reject(arr, item => itemToRemove === item)
-const addToArray = concat
-const filterFormByResets = (survey, resets) => {
-  resets.forEach((field) => Reflect.deleteProperty(survey, field))
-  return survey
-}
 
 const setValue = (state, action) => {
   return merge(state, {
@@ -24,16 +16,35 @@ const setValue = (state, action) => {
   })
 }
 
-const setAnswer = (state, action) => {
-  state.answers = filterFormByResets(state.answers, action.resets)
-  state.answers[action.name] = action.value
+const setNewConnectionValue = (state, action) => {
+  state.newConnection[action.name] = action.value
   return merge(state)
 }
 
-const toggleAnswer = (state, action) => {
-  const modifierFunction = action.toggle ? addToArray : removeFromArray
-  state.answers = filterFormByResets(state.answers, action.resets)
-  state.answers[action.name] = modifierFunction(state.answers[action.name] || [], action.value)
+const addConnection = (state, action) => {
+  let connections = state.connections || []
+  connections = connections.concat(action.newConnection)
+  state.connections = connections
+
+  let questionConnections = state.questions[action.questionId] || []
+  questionConnections = questionConnections.concat(action.newConnection.id)
+  state.questions[action.questionId] = questionConnections
+
+  state.newConnection = {}
+
+  return merge(state)
+}
+
+const toggleConnection = (state, action) => {
+  let questionConnections = state.questions[action.questionId] || []
+  if (action.value) {
+    if (!questionConnections.some(id => id === action.connectionId)) {
+      questionConnections = questionConnections.concat(action.connectionId)
+    }
+  } else {
+    questionConnections = questionConnections.filter(id => id !== action.connectionId)
+  }
+  state.questions[action.questionId] = questionConnections
   return merge(state)
 }
 
@@ -46,15 +57,17 @@ const routerLocationChange = (state, action) => {
 
 const actions = {
   [SET_VALUE]: setValue,
-  [SET_ANSWER]: setAnswer,
-  [TOGGLE_ANSWER]: toggleAnswer,
-  [ROUTER_LOCATION_CHANGE]: routerLocationChange
+  [SET_NEW_CONNECTION_VALUE]: setNewConnectionValue,
+  [ADD_CONNECTION]: addConnection,
+  [ROUTER_LOCATION_CHANGE]: routerLocationChange,
+  [TOGGLE_CONNECTION]: toggleConnection
 }
 
 const initialState = {
   step: 0,
-  answers: {},
-  connections: null
+  newConnection: {},
+  questions: {},
+  connections: []
 }
 
 const reducer = (state = initialState, action) => {
