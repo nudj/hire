@@ -1,7 +1,6 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
-const { ensureOnboarded } = require('../../server/lib/middleware')
 
 const Router = ({
   ensureLoggedIn,
@@ -9,10 +8,8 @@ const Router = ({
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
-  router.use(ensureOnboarded)
 
-  router.getHandlers('/jobs/:jobSlug/external', respondWith(fetchers.get))
-  router.postHandlers('/jobs/:jobSlug/external', respondWith(fetchers.post))
+  router.getHandlers('/conversations', respondWith(fetchers.get))
 
   return router
 }

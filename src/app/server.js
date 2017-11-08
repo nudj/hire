@@ -24,16 +24,8 @@ const expressRouters = {
     require('./pages/tasks/router'),
     require('./pages/jobs/router'),
     require('./pages/connections/router'),
-
-    // old
-    require('./pages/import-contacts/router'),
-    require('./pages/survey-compose/router'),
     require('./pages/survey/router'),
-    require('./pages/job/router'),
-    require('./pages/nudj/router'),
-    require('./pages/internal-compose/router'),
-    require('./pages/external-select/router'),
-    require('./pages/external-compose/router'),
+    require('./pages/conversations/router'),
     require('./server/routers/catch-all')
   ]
 }

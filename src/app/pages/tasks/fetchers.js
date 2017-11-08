@@ -1,6 +1,10 @@
-const get = () => {
-  const fragment = `
-    fragment Page on Mutation {
+const { Global } = require('../../lib/graphql')
+
+const get = ({
+  session
+}) => {
+  const gql = `
+    query TasksPage ($userEmail: String) {
       person: personByFilters (filters: {
         email: $userEmail
       }) {
@@ -28,10 +32,13 @@ const get = () => {
           }
         }
       }
+      ${Global}
     }
   `
-  const variables = {}
-  return { fragment, variables }
+  const variables = {
+    userEmail: session.userEmail
+  }
+  return { gql, variables }
 }
 
 module.exports = {

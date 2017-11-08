@@ -5,21 +5,6 @@ const get = ({
 }) => {
   const gql = `
     query TasksPage ($userEmail: String) {
-      person: personByFilters (filters: {
-        email: $userEmail
-      }) {
-        id
-        connections {
-          id
-          to {
-            id
-            firstName
-            lastName
-            title
-            company
-          }
-        }
-      }
       ${Global}
     }
   `
