@@ -364,18 +364,18 @@ data.surveySections = data.surveySections.concat([
     title: 'Professional + Previous Employers',
     description: 'First up, the places that you\'ve worked before and the people you know professionally.'
   },
-  {
-    id: 'section3',
-    survey: 'survey1',
-    title: 'Friends & Family',
-    description: ''
-  },
-  {
-    id: 'section4',
-    survey: 'survey1',
-    title: 'Events & Networks',
-    description: ''
-  },
+  // {
+  //   id: 'section3',
+  //   survey: 'survey1',
+  //   title: 'Friends & Family',
+  //   description: ''
+  // },
+  // {
+  //   id: 'section4',
+  //   survey: 'survey1',
+  //   title: 'Events & Networks',
+  //   description: ''
+  // },
   {
     id: 'section5',
     survey: 'survey1',
@@ -437,151 +437,151 @@ data.surveyQuestions = data.surveyQuestions.concat([
       knowAccountManagers: YES
     }
   },
-  {
-    id: 'question4',
-    surveySection: 'section2',
-    name: 'knowSales',
-    title: 'What about people that worked in broader Sales roles (e.g. Biz Dev, Customer Success etc.)?',
-    description: 'Again, we\'re only trying to find people to ask for recommendations as well as hire, so don\'t worry if they\'re too senior for the role you\'re currently looking for!',
-    type: CHOICE,
-    required: true,
-    dependencies: {},
-    tags: [],
-    options: {
-      choices: [
-        {
-          title: 'Yes',
-          name: YES
-        },
-        {
-          title: 'No',
-          name: NO
-        }
-      ]
-    }
-  },
-  {
-    id: 'question5',
-    surveySection: 'section2',
-    name: 'sales',
-    title: 'Great! Please add their name(s) below.',
-    description: '',
-    type: FREETEXT,
-    required: true,
-    options: {
-      placeholder: 'Answers go here...'
-    },
-    tags: ['Sales'],
-    dependencies: {
-      knowSales: YES
-    }
-  },
-  {
-    id: 'question6',
-    surveySection: 'section2',
-    name: 'knowGraduates',
-    title: 'Did you come across or manage any good graduates?',
-    description: '',
-    type: CHOICE,
-    required: true,
-    dependencies: {},
-    tags: [],
-    options: {
-      choices: [
-        {
-          title: 'Yes',
-          name: YES
-        },
-        {
-          title: 'No',
-          name: NO
-        }
-      ]
-    }
-  },
-  {
-    id: 'question7',
-    surveySection: 'section2',
-    name: 'graduates',
-    title: 'Great! Please add their name(s) below.',
-    description: '',
-    type: FREETEXT,
-    required: true,
-    options: {
-      placeholder: 'Answers go here...'
-    },
-    tags: ['Graduate'],
-    dependencies: {
-      knowGraduates: YES
-    }
-  },
-  {
-    id: 'question8',
-    surveySection: 'section2',
-    name: 'knowWorkWithGraduates',
-    title: 'What about people who might manage or work with graduates?',
-    description: '',
-    type: CHOICE,
-    required: true,
-    dependencies: {},
-    tags: [],
-    options: {
-      choices: [
-        {
-          title: 'Yes',
-          name: YES
-        },
-        {
-          title: 'No',
-          name: NO
-        }
-      ]
-    }
-  },
-  {
-    id: 'question9',
-    surveySection: 'section2',
-    name: 'workWithGraduates',
-    title: 'Great! Please add their name(s) below.',
-    description: '',
-    type: FREETEXT,
-    required: true,
-    options: {
-      placeholder: 'Answers go here...'
-    },
-    tags: ['Work with graduates'],
-    dependencies: {
-      knowWorkWithGraduates: YES
-    }
-  },
-  {
-    id: 'question10',
-    surveySection: 'section2',
-    name: 'best',
-    title: 'In general, who was the best person you worked with?',
-    description: 'Ignoring their role entirely, we just want to know who the best person you\'ve worked with. Maybe you worked with a few awesome people? If so, feel free to add them all below.',
-    type: TEXT,
-    required: false,
-    dependencies: {},
-    options: {
-      placeholder: 'Answer goes here...'
-    },
-    tags: ['Best']
-  },
-  {
-    id: 'question11',
-    surveySection: 'section2',
-    name: 'managed',
-    title: 'Who were the stand-out people that you managed?',
-    description: 'We want to know all the people that you managed previously that you thought were going to have your job someday!',
-    type: FREETEXT,
-    required: false,
-    dependencies: {},
-    options: {
-      placeholder: 'Answers go here...'
-    },
-    tags: ['Subordinate']
-  },
+  // {
+  //   id: 'question4',
+  //   surveySection: 'section2',
+  //   name: 'knowSales',
+  //   title: 'What about people that worked in broader Sales roles (e.g. Biz Dev, Customer Success etc.)?',
+  //   description: 'Again, we\'re only trying to find people to ask for recommendations as well as hire, so don\'t worry if they\'re too senior for the role you\'re currently looking for!',
+  //   type: CHOICE,
+  //   required: true,
+  //   dependencies: {},
+  //   tags: [],
+  //   options: {
+  //     choices: [
+  //       {
+  //         title: 'Yes',
+  //         name: YES
+  //       },
+  //       {
+  //         title: 'No',
+  //         name: NO
+  //       }
+  //     ]
+  //   }
+  // },
+  // {
+  //   id: 'question5',
+  //   surveySection: 'section2',
+  //   name: 'sales',
+  //   title: 'Great! Please add their name(s) below.',
+  //   description: '',
+  //   type: FREETEXT,
+  //   required: true,
+  //   options: {
+  //     placeholder: 'Answers go here...'
+  //   },
+  //   tags: ['Sales'],
+  //   dependencies: {
+  //     knowSales: YES
+  //   }
+  // },
+  // {
+  //   id: 'question6',
+  //   surveySection: 'section2',
+  //   name: 'knowGraduates',
+  //   title: 'Did you come across or manage any good graduates?',
+  //   description: '',
+  //   type: CHOICE,
+  //   required: true,
+  //   dependencies: {},
+  //   tags: [],
+  //   options: {
+  //     choices: [
+  //       {
+  //         title: 'Yes',
+  //         name: YES
+  //       },
+  //       {
+  //         title: 'No',
+  //         name: NO
+  //       }
+  //     ]
+  //   }
+  // },
+  // {
+  //   id: 'question7',
+  //   surveySection: 'section2',
+  //   name: 'graduates',
+  //   title: 'Great! Please add their name(s) below.',
+  //   description: '',
+  //   type: FREETEXT,
+  //   required: true,
+  //   options: {
+  //     placeholder: 'Answers go here...'
+  //   },
+  //   tags: ['Graduate'],
+  //   dependencies: {
+  //     knowGraduates: YES
+  //   }
+  // },
+  // {
+  //   id: 'question8',
+  //   surveySection: 'section2',
+  //   name: 'knowWorkWithGraduates',
+  //   title: 'What about people who might manage or work with graduates?',
+  //   description: '',
+  //   type: CHOICE,
+  //   required: true,
+  //   dependencies: {},
+  //   tags: [],
+  //   options: {
+  //     choices: [
+  //       {
+  //         title: 'Yes',
+  //         name: YES
+  //       },
+  //       {
+  //         title: 'No',
+  //         name: NO
+  //       }
+  //     ]
+  //   }
+  // },
+  // {
+  //   id: 'question9',
+  //   surveySection: 'section2',
+  //   name: 'workWithGraduates',
+  //   title: 'Great! Please add their name(s) below.',
+  //   description: '',
+  //   type: FREETEXT,
+  //   required: true,
+  //   options: {
+  //     placeholder: 'Answers go here...'
+  //   },
+  //   tags: ['Work with graduates'],
+  //   dependencies: {
+  //     knowWorkWithGraduates: YES
+  //   }
+  // },
+  // {
+  //   id: 'question10',
+  //   surveySection: 'section2',
+  //   name: 'best',
+  //   title: 'In general, who was the best person you worked with?',
+  //   description: 'Ignoring their role entirely, we just want to know who the best person you\'ve worked with. Maybe you worked with a few awesome people? If so, feel free to add them all below.',
+  //   type: TEXT,
+  //   required: false,
+  //   dependencies: {},
+  //   options: {
+  //     placeholder: 'Answer goes here...'
+  //   },
+  //   tags: ['Best']
+  // },
+  // {
+  //   id: 'question11',
+  //   surveySection: 'section2',
+  //   name: 'managed',
+  //   title: 'Who were the stand-out people that you managed?',
+  //   description: 'We want to know all the people that you managed previously that you thought were going to have your job someday!',
+  //   type: FREETEXT,
+  //   required: false,
+  //   dependencies: {},
+  //   options: {
+  //     placeholder: 'Answers go here...'
+  //   },
+  //   tags: ['Subordinate']
+  // },
   {
     id: 'question12',
     surveySection: 'section3',

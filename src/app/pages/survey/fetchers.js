@@ -1,23 +1,80 @@
 const _pick = require('lodash/pick')
-const { merge } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
-const request = require('../../lib/request')
-const { GlobalFragment } = require('../../lib/graphql')
+const { merge } = require('@nudj/library')
 
-const get = async ({
-  data,
-  params
-}) => {
-  const query = `
-    query PageData ($userEmail: String) {
+const pageFragment = `
+  fragment Page on Mutation {
+    person: personByFilters (filters: {
+      email: $userEmail
+    }) {
+      hirer {
+        company {
+          survey: surveyByFilters (filters: {
+            slug: $surveySlug
+          }) {
+            id
+            slug
+            sections: surveySections {
+              id
+              title
+              description
+              questions: surveyQuestions {
+                id
+                title
+                description
+                name
+                type
+                required
+                dependencies
+                options
+                tags
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+function getPageVariables (ctx) {
+  return {
+    surveySlug: {
+      type: 'String',
+      value: ctx.params.surveySlug
+    }
+  }
+}
+
+function get (ctx) {
+  return {
+    fragment: pageFragment,
+    variables: getPageVariables(ctx)
+  }
+}
+
+function post (ctx) {
+  const fragment = `
+    fragment Page on Mutation {
       person: personByFilters (filters: {
         email: $userEmail
       }) {
-        ...Global
         hirer {
+          person {
+            newConnections: getOrCreateConnections (
+              to: $connections
+            ) {
+              id
+              to {
+                id
+                firstName
+                lastName
+                email
+              }
+            }
+          }
           company {
             survey: surveyByFilters (filters: {
-              slug: "aided-recall-baby"
+              slug: $surveySlug
             }) {
               id
               slug
@@ -42,105 +99,26 @@ const get = async ({
         }
       }
     }
-    ${GlobalFragment}
   `
-  const variables = {
-    userEmail: data.user.email
-  }
-  const responseData = await request('/', {
-    baseURL: `http://${process.env.API_HOST}:82`,
-    method: 'post',
-    data: {
-      query,
-      variables
+  const variables = merge(getPageVariables(ctx), {
+    connections: {
+      type: '[PersonCreateInput!]!',
+      value: ctx.body.connections.map(connection => _pick(connection, ['firstName', 'lastName', 'email', 'title', 'company']))
     }
   })
-  return merge(data, responseData.data)
-}
-
-const post = async ({
-  data,
-  params,
-  body
-}) => {
-  const mutation = `
-    mutation AddConnections ($userEmail: String!, $to: [PersonCreateInput!]!) {
-      person: personByFilters (filters: {
-        email: $userEmail
-      }) {
-        hirer {
-          ...Global
-          ...Page
-          person {
-            newConnections: getOrCreateConnections (
-              to: $to
-            ) {
-              id
-              to {
-                id
-                firstName
-                lastName
-                email
-              }
-            }
-          }
+  return {
+    fragment,
+    variables,
+    respond: () => {
+      throw new Redirect({
+        url: '/connections',
+        notification: {
+          type: 'success',
+          message: 'Connections uploaded successfully 😎'
         }
-      }
+      })
     }
-    fragment Global on Hirer {
-      person {
-        incompleteTaskCount
-      }
-      company {
-        onboarded
-      }
-    }
-    fragment Page on Hirer {
-      company {
-        survey: surveyByFilters (filters: {
-          slug: "aided-recall-baby"
-        }) {
-          id
-          slug
-          sections: surveySections {
-            id
-            title
-            description
-            questions: surveyQuestions {
-              id
-              title
-              description
-              name
-              type
-              required
-              dependencies
-              options
-              tags
-            }
-          }
-        }
-      }
-    }
-  `
-  const variables = {
-    userEmail: data.user.email,
-    to: body.connections.map(connection => _pick(connection, ['firstName', 'lastName', 'email', 'title', 'company']))
   }
-  await request('/', {
-    baseURL: `http://${process.env.API_HOST}:82`,
-    method: 'post',
-    data: {
-      query: mutation,
-      variables
-    }
-  })
-  throw new Redirect({
-    url: '/connections',
-    notification: {
-      type: 'success',
-      message: 'Connections uploaded successfully 😎'
-    }
-  })
 }
 
 module.exports = {

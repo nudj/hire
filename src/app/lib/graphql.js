@@ -1,14 +1,18 @@
-const GlobalFragment = `
-  fragment Global on Person {
-    incompleteTaskCount
-    hirer {
-      company {
-        onboarded
+const globalFragment = `
+  fragment Global on Mutation {
+    person: personByFilters (filters: {
+      email: $userEmail
+    }) {
+      incompleteTaskCount
+      hirer {
+        company {
+          onboarded
+        }
       }
     }
   }
 `
 
 module.exports = {
-  GlobalFragment
+  globalFragment
 }

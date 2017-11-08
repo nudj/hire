@@ -41,15 +41,11 @@ const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
 const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
-  req.session.data = req.session.data || {
-    user: {
-      email: find(mockData.people, { id: 'person5' }).email,
-      type: 'HIRER'
-    }
-  }
+  req.session.userEmail = find(mockData.people, { id: 'person5' }).email
   next()
 }
 const errorHandlers = {}
+const gqlFragments = require('./lib/graphql')
 server({
   App,
   reduxRoutes,
@@ -60,5 +56,6 @@ server({
   expressRouters,
   spoofLoggedIn,
   errorHandlers,
+  gqlFragments,
   LoadingComponent
 })

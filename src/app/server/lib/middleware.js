@@ -1,7 +1,7 @@
 const { Redirect } = require('@nudj/framework/errors')
 const get = require('lodash/get')
 const { createNotification } = require('../../lib')
-const request = require('../../lib/request')
+const request = require('../../lib/requestGql')
 
 async function ensureOnboarded (req, res, next) {
   const query = `
@@ -18,17 +18,10 @@ async function ensureOnboarded (req, res, next) {
     }
   `
   const variables = {
-    userEmail: req.session.data.user.email
+    userEmail: req.session.userEmail
   }
-  const responseData = await request('/', {
-    baseURL: `http://${process.env.API_HOST}:82`,
-    method: 'post',
-    data: {
-      query,
-      variables
-    }
-  })
-  if (!get(responseData, 'data.person.hirer.company.onboarded')) {
+  const responseData = await request(query, variables)
+  if (!get(responseData, 'person.hirer.company.onboarded')) {
     next(new Redirect({
       url: '/',
       notification: createNotification('error', 'We\'re still getting your company set-up, so you can\'t access your jobs just yet. Need more information? Let us know.')

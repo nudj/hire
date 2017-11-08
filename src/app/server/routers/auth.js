@@ -58,12 +58,7 @@ const Router = ({
       try {
         const person = await fetchPerson(req.user._json.email)
         await fetchHirer(person.id) // ensure hirer exists
-        req.session.data = {
-          user: {
-            email: req.user._json.email,
-            type: 'HIRER'
-          }
-        }
+        req.session.userEmail = req.user._json.email
         res.redirect(req.session.returnTo || '/')
       } catch (error) {
         logger.log('error', error)

@@ -1,16 +1,9 @@
-const { merge } = require('@nudj/library')
-const request = require('../../lib/request')
-const { GlobalFragment } = require('../../lib/graphql')
-
-const get = async ({
-  data
-}) => {
-  const query = `
-    query PageData ($userEmail: String) {
+const get = () => {
+  const fragment = `
+    fragment Page on Mutation {
       person: personByFilters (filters: {
         email: $userEmail
       }) {
-        ...Global
         id
         connections {
           id
@@ -24,20 +17,9 @@ const get = async ({
         }
       }
     }
-    ${GlobalFragment}
   `
-  const variables = {
-    userEmail: data.user.email
-  }
-  const responseData = await request('/', {
-    baseURL: `http://${process.env.API_HOST}:82`,
-    method: 'post',
-    data: {
-      query,
-      variables
-    }
-  })
-  return merge(data, responseData.data)
+  const variables = {}
+  return { fragment, variables }
 }
 
 module.exports = {
