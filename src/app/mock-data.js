@@ -8,7 +8,7 @@ const {
   NO
 } = booleanChoices
 const {
-  TEXT,
+  // TEXT,
   FREETEXT,
   CHOICE
 } = questionTypes
