@@ -207,6 +207,7 @@ class ComposeExternalPage extends React.Component {
   render () {
     const sentMessage = get(this.props, 'externalMessage.sendMessage') // If this entry exists, this message has been sent.
     const recipientName = `${get(this.props, 'recipient.firstName', '')} ${get(this.props, 'recipient.lastName', '')}`
+    const recipientEmail = `${get(this.props, 'recipient.email')}`
     const data = get(this.props, 'externalMessage', {})
     let active = get(this.props, 'externalComposePage.active')
     if (isNil(active)) {
@@ -279,7 +280,7 @@ class ComposeExternalPage extends React.Component {
             <Link className={this.style.headerLinkDashboard} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}`}>View job dashboard</Link>
             <Link className={this.style.headerLink} onClick={unfinishedDraft ? this.handlePageLeave : ''} to={`/jobs/${get(this.props, 'job.slug')}/nudj`}>Nudj job</Link>
           </PageHeader>
-          { !ongoingConversationMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName}</h3> : '' }
+          { !ongoingConversationMessage ? <h3 className={this.style.pageHeadline}>Sending a message to {recipientName} ({recipientEmail})</h3> : '' }
           {pageBody}
         </LayoutApp>
       )
