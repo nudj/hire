@@ -23,7 +23,7 @@ steps:
     title: Build Latest
     type: build
     image_name: nudj/hire
-    tag: latest
+    tag: LEGACY-V1
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
@@ -32,20 +32,20 @@ steps:
     when:
       branch:
         only:
-          - develop
+          - LEGACY-V1
 
   push_latest:
     title: Push Latest
     type: push
     candidate: '${{build_latest}}'
-    tag: latest
+    tag: LEGACY-V1
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
     when:
       branch:
         only:
-          - develop
+          - LEGACY-V1
 
   build:
     title: Build
