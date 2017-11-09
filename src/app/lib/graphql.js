@@ -1,7 +1,5 @@
 const Global = `
-  person: personByFilters (filters: {
-    email: $userEmail
-  }) {
+  user (email: $userEmail) {
     incompleteTaskCount
     hirer {
       company {

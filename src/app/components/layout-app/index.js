@@ -9,8 +9,8 @@ const ScrollTop = require('../scroll-top')
 
 const LayoutApp = (props) => {
   const style = getStyle()
-  const incompleteTaskCount = get(props, 'person.incompleteTaskCount')
-  const onboarded = get(props, 'person.hirer.company.onboarded', false)
+  const incompleteTaskCount = get(props, 'user.incompleteTaskCount')
+  const onboarded = get(props, 'user.hirer.company.onboarded', false)
 
   return (
     <ScrollTop ignore={props.history.action === 'REPLACE'}>

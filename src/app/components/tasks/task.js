@@ -40,7 +40,7 @@ function formattedModifiedDate (modified) {
 const Task = (props) => {
   const style = getStyle()
   const completed = get(props, 'completed', false)
-  const person = get(props, 'person')
+  const user = get(props, 'user')
   const options = typeOptions[get(props, 'type')]
   const title = get(options, 'title', '')
 
@@ -49,17 +49,17 @@ const Task = (props) => {
     const modified = get(props, 'modified')
     const completedBy = get(props, 'completedBy')
     const completedDate = formattedModifiedDate(modified)
-    let personName = 'You'
+    let userName = 'You'
 
-    if (completedBy && completedBy.id !== person.id) {
-      personName = `${get(completedBy, 'firstName', '')} ${get(completedBy, 'lastName', '')}`
+    if (completedBy && completedBy.id !== user.id) {
+      userName = `${get(completedBy, 'firstName', '')} ${get(completedBy, 'lastName', '')}`
     }
 
     content = (
       <li className={style.task}>
         <div className={style.textContainer}>
           <h5 className={style.titleDone}>{title}</h5>
-          <p className={style.textDone}>{personName} completed this task {completedDate}</p>
+          <p className={style.textDone}>{userName} completed this task {completedDate}</p>
         </div>
       </li>
     )

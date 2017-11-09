@@ -20,7 +20,7 @@ function renderIncompleteContent (incompleteTasks, props, style) {
   if (!incompleteTasks.length) {
     content = <p className={style.incompleteEmpty}>Doesn't look like there are any tasks for you to complete, check back soon.</p>
   } else {
-    content = <TaskList tasks={incompleteTasks} person={get(props, 'person')} />
+    content = <TaskList tasks={incompleteTasks} user={get(props, 'user')} />
   }
 
   return (
@@ -35,7 +35,7 @@ function renderCompletedContent (completeTasks, props, style) {
   return (
     <div>
       <h3 className={style.taskGroupTitle}>Completed tasks <span className={style.taskGroupTitleHighlight}>({completeTasks.length})</span></h3>
-      <TaskList tasks={completeTasks} person={get(props, 'person')} />
+      <TaskList tasks={completeTasks} user={get(props, 'user')} />
     </div>
   )
 }
@@ -44,12 +44,12 @@ const TasksPage = (props) => {
   const style = getStyle()
   const dispatch = get(props, 'dispatch')
   const state = get(props, 'tasksPage')
-  const firstName = get(props, 'person.firstName', '')
+  const firstName = get(props, 'user.firstName', '')
   const completedVisible = get(state, 'completedVisible')
 
-  const personTasks = get(props, 'person.tasks', [])
-  const companyTasks = get(props, 'person.hirer.company.tasks', [])
-  const allTasks = personTasks.concat(companyTasks)
+  const userTasks = get(props, 'user.tasks', [])
+  const companyTasks = get(props, 'user.hirer.company.tasks', [])
+  const allTasks = userTasks.concat(companyTasks)
   const allIncompleteTasks = allTasks.filter(task => !task.completed)
   const allCompleteTasks = allTasks.filter(task => task.completed)
   const incompleteContent = renderIncompleteContent(allIncompleteTasks, props, style)

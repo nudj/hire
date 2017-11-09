@@ -63,23 +63,19 @@ const post = ({
       $surveySlug: String,
       $connections: [PersonCreateInput!]!
     ) {
-      person: personByFilters (filters: {
-        email: $userEmail
-      }) {
-        hirer {
-          person {
-            newConnections: getOrCreateConnections (
-              to: $connections
-            ) {
-              id
-              to {
-                id
-                firstName
-                lastName
-                email
-              }
-            }
+      user (email: $userEmail) {
+        newConnections: getOrCreateConnections (
+          to: $connections
+        ) {
+          id
+          to {
+            id
+            firstName
+            lastName
+            email
           }
+        }
+        hirer {
           company {
             survey: surveyByFilters (filters: {
               slug: $surveySlug

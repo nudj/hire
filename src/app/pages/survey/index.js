@@ -45,7 +45,7 @@ function onChangeCheckbox (dispatch, questionId, connectionId) {
 const RecallSurvey = (props) => {
   // const style = getStyle()
   const dispatch = _get(props, 'dispatch')
-  const survey = _get(props, 'person.hirer.company.survey')
+  const survey = _get(props, 'user.hirer.company.survey')
   const state = _get(props, 'surveyPage')
   const stepIndex = _get(state, 'step')
   const steps = _get(survey, 'sections', []).reduce((steps, section) => {

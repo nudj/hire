@@ -4,10 +4,8 @@ const get = ({
   session
 }) => {
   const gql = `
-    query TasksPage ($userEmail: String) {
-      person: personByFilters (filters: {
-        email: $userEmail
-      }) {
+    query TasksPage ($userEmail: String!) {
+      user (email: $userEmail) {
         hirer {
           company {
             name

@@ -9,7 +9,7 @@ const RowItem = require('../../components/row-item/row-item')
 
 const ConnectionsPage = (props) => {
   const style = getStyle()
-  const connections = get(props, 'person.connections', [])
+  const connections = get(props, 'user.connections', [])
   const headerProps = {
     title: 'Your little black book',
     subtitle: 'All your connections at your bec and call',
