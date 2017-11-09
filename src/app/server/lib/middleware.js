@@ -5,8 +5,8 @@ const request = require('../../lib/requestGql')
 
 async function ensureOnboarded (req, res, next) {
   const query = `
-    query EnsureOnboarded ($userEmail: String!) {
-      user (email: $userEmail) {
+    query EnsureOnboarded ($userId: ID!) {
+      user (id: $userId) {
         hirer {
           company {
             onboarded
@@ -16,7 +16,7 @@ async function ensureOnboarded (req, res, next) {
     }
   `
   const variables = {
-    userEmail: req.session.userEmail
+    userId: req.session.userId
   }
   const responseData = await request(query, variables)
   if (!get(responseData, 'user.hirer.company.onboarded')) {

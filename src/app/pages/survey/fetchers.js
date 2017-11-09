@@ -9,12 +9,10 @@ const get = ({
 }) => {
   const gql = `
     query SurveyPage (
-      $userEmail: String,
+      $userId: ID!,
       $surveySlug: String
     ) {
-      person: personByFilters (filters: {
-        email: $userEmail
-      }) {
+      user (id: $userId) {
         hirer {
           company {
             survey: surveyByFilters (filters: {
@@ -46,7 +44,7 @@ const get = ({
     }
   `
   const variables = {
-    userEmail: session.userEmail,
+    userId: session.userId,
     surveySlug: params.surveySlug
   }
   return { gql, variables }
@@ -59,11 +57,11 @@ const post = ({
 }) => {
   const gql = `
     mutation AddConnections (
-      $userEmail: String,
+      $userId: ID!,
       $surveySlug: String,
       $connections: [PersonCreateInput!]!
     ) {
-      user (email: $userEmail) {
+      user (email: $userId) {
         newConnections: getOrCreateConnections (
           to: $connections
         ) {
@@ -106,7 +104,7 @@ const post = ({
     }
   `
   const variables = {
-    userEmail: session.userEmail,
+    userId: session.userId,
     surveySlug: params.surveySlug,
     connections: body.connections.map(connection => _pick(connection, ['firstName', 'lastName', 'email', 'title', 'company']))
   }

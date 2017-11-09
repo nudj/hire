@@ -4,8 +4,8 @@ const get = ({
   session
 }) => {
   const gql = `
-    query TasksPage ($userEmail: String!) {
-      user (email: $userEmail) {
+    query TasksPage ($userId: ID!) {
+      user (id: $userId) {
         connections {
           id
           to {
@@ -21,7 +21,7 @@ const get = ({
     }
   `
   const variables = {
-    userEmail: session.userEmail
+    userId: session.userId
   }
   return { gql, variables }
 }

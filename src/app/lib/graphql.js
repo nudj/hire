@@ -1,5 +1,5 @@
 const Global = `
-  user (email: $userEmail) {
+  user (id: $userId) {
     incompleteTaskCount
     hirer {
       company {

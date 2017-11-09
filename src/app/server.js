@@ -10,7 +10,6 @@ require('babel-register')({
 })
 const path = require('path')
 const server = require('@nudj/framework/server')
-const find = require('lodash/find')
 
 const App = require('./redux')
 const reduxRoutes = require('./redux/routes')
@@ -33,7 +32,7 @@ const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
 const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
-  req.session.userEmail = find(mockData.people, { id: 'person5' }).email
+  req.session.userId = 'person5'
   next()
 }
 const errorHandlers = {}

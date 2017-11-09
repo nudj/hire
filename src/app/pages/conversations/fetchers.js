@@ -4,12 +4,12 @@ const get = ({
   session
 }) => {
   const gql = `
-    query TasksPage ($userEmail: String!) {
+    query TasksPage ($userId: ID!) {
       ${Global}
     }
   `
   const variables = {
-    userEmail: session.userEmail
+    userId: session.userId
   }
   return { gql, variables }
 }
