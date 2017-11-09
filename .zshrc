@@ -13,6 +13,7 @@ alias tdd='./node_modules/.bin/nodemon \
 
 alias ifradev="npm i ./framework && dev"
 alias iapidev="npm i ./api && dev"
+alias ifrapidev="npm i ./framework ./api && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"

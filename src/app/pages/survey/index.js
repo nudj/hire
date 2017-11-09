@@ -102,7 +102,8 @@ const RecallSurvey = (props) => {
                 lastName,
                 title,
                 company,
-                email
+                person,
+                source
               } = connection
 
               return (
@@ -112,8 +113,8 @@ const RecallSurvey = (props) => {
                   <td>{lastName}</td>
                   <td>{title}</td>
                   <td>{company}</td>
-                  <td>{email}</td>
-                  <td>Survey</td>
+                  <td>{person.email}</td>
+                  <td>{source}</td>
                 </tr>
               )
             })}

@@ -1,5 +1,3 @@
-const _pick = require('lodash/pick')
-
 const { Global } = require('../../lib/graphql')
 
 const get = ({
@@ -18,7 +16,8 @@ const get = ({
           lastName
           title
           company
-          to {
+          source
+          person: to {
             id
             email
           }
@@ -69,18 +68,21 @@ const post = ({
     mutation AddConnection (
       $userId: ID!,
       $surveySlug: String,
-      $connection: PersonCreateInput!
+      $connection: PersonCreateInput!,
+      $source: String!
     ) {
       user (id: $userId) {
         newConnection: getOrCreateConnection (
-          to: $connection
+          to: $connection,
+          source: $source
         ) {
           id
           firstName
           lastName
           title
           company
-          to {
+          source
+          person: to {
             id
             email
           }
@@ -91,7 +93,8 @@ const post = ({
           lastName
           title
           company
-          to {
+          source
+          person: to {
             id
             email
           }
@@ -129,7 +132,8 @@ const post = ({
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
-    connection: _pick(body.connection, ['firstName', 'lastName', 'email', 'title', 'company'])
+    connection: body.connection,
+    source: body.source
   }
   return { gql, variables }
 }
