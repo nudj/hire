@@ -70,7 +70,7 @@ const RecallSurvey = (props) => {
       </div>
     )
   } else {
-    const connections = _get(state, `connections`, [])
+    const connections = _get(props, 'user.connections', []).concat(_get(props, 'user.newConnection', []))
     const questionConnections = _get(state, `questions[${step.id}]`, [])
     const newConnection = _get(state, 'newConnection', {})
     stepContent = (

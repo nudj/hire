@@ -1,5 +1,4 @@
 const _pick = require('lodash/pick')
-const { Redirect } = require('@nudj/framework/errors')
 
 const { Global } = require('../../lib/graphql')
 
@@ -13,6 +12,17 @@ const get = ({
       $surveySlug: String
     ) {
       user (id: $userId) {
+        connections {
+          id
+          firstName
+          lastName
+          title
+          company
+          to {
+            id
+            email
+          }
+        }
         hirer {
           company {
             survey: surveyByFilters (filters: {
@@ -56,20 +66,33 @@ const post = ({
   body
 }) => {
   const gql = `
-    mutation AddConnections (
+    mutation AddConnection (
       $userId: ID!,
       $surveySlug: String,
-      $connections: [PersonCreateInput!]!
+      $connection: PersonCreateInput!
     ) {
-      user (email: $userId) {
-        newConnections: getOrCreateConnections (
-          to: $connections
+      user (id: $userId) {
+        newConnection: getOrCreateConnection (
+          to: $connection
         ) {
           id
+          firstName
+          lastName
+          title
+          company
           to {
             id
-            firstName
-            lastName
+            email
+          }
+        }
+        connections {
+          id
+          firstName
+          lastName
+          title
+          company
+          to {
+            id
             email
           }
         }
@@ -106,18 +129,9 @@ const post = ({
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
-    connections: body.connections.map(connection => _pick(connection, ['firstName', 'lastName', 'email', 'title', 'company']))
+    connection: _pick(body.connection, ['firstName', 'lastName', 'email', 'title', 'company'])
   }
-  const respond = (data) => {
-    throw new Redirect({
-      url: '/connections',
-      notification: {
-        type: 'success',
-        message: `${data.person.hirer.person.newConnections.length} connections uploaded successfully 😎`
-      }
-    })
-  }
-  return { gql, variables, respond }
+  return { gql, variables }
 }
 
 module.exports = {

@@ -2,7 +2,6 @@ const humanparser = require('humanparser')
 const _get = require('lodash/get')
 const _isEmpty = require('lodash/isEmpty')
 const _reduce = require('lodash/reduce')
-const _flatten = require('lodash/flatten')
 const _isUndefined = require('lodash/isUndefined')
 const _pick = require('lodash/pick')
 const _filter = require('lodash/filter')
@@ -10,13 +9,7 @@ const _camelCase = require('lodash/camelCase')
 const _omit = require('lodash/omit')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
-const createHash = require('hash-generator')
 const PREFIX = 'RECALL_SURVEY'
-
-function getResets (steps, questionName) {
-  const dependantSections = _filter(steps, section => Object.keys(section.dependencies || {}).includes(questionName))
-  return _flatten(dependantSections.map(section => section.questions.map(question => question.name)))
-}
 
 function matchesDependencies (dependencies, answers) {
   if (_isEmpty(dependencies)) return true
@@ -78,37 +71,6 @@ module.exports.previous = () => (dispatch, getState) => {
 module.exports.next = () => (dispatch, getState) => {
   dispatch(actions.app.hideNotification())
   return dispatch(setValue('step', getStepIndex(getState(), i => i + 1, true)))
-}
-
-const SET_ANSWER = `${PREFIX}_SET_ANSWER`
-module.exports.SET_ANSWER = SET_ANSWER
-function setAnswer (name, value, resets = []) {
-  return {
-    type: SET_ANSWER,
-    name,
-    value,
-    resets
-  }
-}
-module.exports.setAnswer = (name, value) => (dispatch, getState) => {
-  const resets = getResets(_get(getState(), 'app.user.hirer.company.survey.sections'), name)
-  return dispatch(setAnswer(name, value, resets))
-}
-
-const TOGGLE_ANSWER = `${PREFIX}_TOGGLE_ANSWER`
-module.exports.TOGGLE_ANSWER = TOGGLE_ANSWER
-function toggleAnswer (name, value, toggle, resets) {
-  return {
-    type: TOGGLE_ANSWER,
-    name,
-    value,
-    toggle,
-    resets
-  }
-}
-module.exports.toggleAnswer = (name, value, toggle) => (dispatch, getState) => {
-  const resets = getResets(_get(getState(), 'app.user.hirer.company.survey.sections'), name)
-  return dispatch(toggleAnswer(name, value, toggle, resets))
 }
 
 module.exports.finishSurvey = () => (dispatch, getState) => {
@@ -189,10 +151,20 @@ function addConnection (questionId, newConnection) {
 }
 module.exports.addConnection = (questionId) => (dispatch, getState) => {
   const state = getState()
-  const newConnection = merge(_get(state, 'surveyPage.newConnection'), {
-    id: createHash(16) // simulate a saved connection
-  })
-  return dispatch(addConnection(questionId, newConnection))
+  const survey = _get(state, 'app.user.hirer.company.survey', {})
+  const connection = _get(state, 'surveyPage.newConnection')
+  return dispatch(actions.app.postData({
+    url: `/surveys/${_get(survey, 'slug')}`,
+    method: 'post',
+    data: {
+      connection,
+      source: 'survey'
+    }
+  }, () => {
+    const state = getState()
+    const newConnection = _get(state, 'app.user.newConnection')
+    dispatch(addConnection(questionId, newConnection))
+  }))
 }
 
 const TOGGLE_CONNECTION = `${PREFIX}_TOGGLE_CONNECTION`
