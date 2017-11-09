@@ -80,7 +80,7 @@ const FormStepSend = (props) => {
       type: 'GMAIL',
       icon: 'New_Logo_Gmail-padding.svg', // includes extra padding so it's the same height as mail-icons.png
       title: 'Sync and send it via Gmail',
-      text: 'Sync with your Gmail account to send the message from your personal address instantly.',
+      text: 'Sync with your Gmail account to send the message instantly and view the responses in our app.',
       onClick: (event) => {
         event.stopPropagation()
         event.preventDefault()
