@@ -9,13 +9,15 @@ const {
   next,
   setNewItemValue,
   addConnection,
-  addCompany,
+  addFormerEmployer,
   toggleItem
 } = require('./actions')
 // const getStyle = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
-const SurveyQuestionConnections = require('../../components/question-connections')
-const ConnectionEditor = require('../../components/connection-editor')
+const FormCompany = require('../../components/form-company')
+const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
+const FormConnection = require('../../components/form-connection')
+const AccumulatorConnections = require('../../components/accumulator-connections')
 const { questionTypes } = require('../../lib/constants')
 
 function onClickPrevious (dispatch) {
@@ -31,7 +33,7 @@ function onChangeNewItem (dispatch, itemType) {
 }
 
 function onAddCompany (dispatch, questionId) {
-  return () => dispatch(addCompany(questionId))
+  return () => dispatch(addFormerEmployer(questionId))
 }
 
 function onAddConnection (dispatch, questionId) {
@@ -70,29 +72,32 @@ const SurveyPage = (props) => {
     const questionType = _get(step, 'type')
     switch (questionType) {
       case questionTypes.COMPANIES:
+        const formerEmployers = _get(props, 'user.formerEmployers', []).concat(_get(props, 'user.newFormerEmployer', []))
         questionContent = (
           <div>
-            <SurveyQuestionConnections
-              question={step}
-              items={[]}
-              basket={_get(state, `questions[${step.id}]`, [])}
-              onToggle={onToggleItem(dispatch)}
-              onRemove={onRemoveItemBasket(dispatch)}
+            <FormCompany
+              onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
+              onSubmit={onAddCompany(dispatch, step.id)}
+              company={_get(state, 'newFormerEmployer', {})}
+            />
+            <AccumulatorFormerEmployers
+              formerEmployers={formerEmployers}
             />
           </div>
         )
         break
       case questionTypes.CONNECTIONS:
+        const connections = _get(props, 'user.connections', []).concat(_get(props, 'user.newConnection', []))
         questionContent = (
           <div>
-            <ConnectionEditor
+            <FormConnection
               onChange={onChangeNewItem(dispatch, 'newConnection')}
-              onAdd={onAddConnection(dispatch, step.id)}
+              onSubmit={onAddConnection(dispatch, step.id)}
               connection={_get(state, 'newConnection', {})}
             />
-            <SurveyQuestionConnections
+            <AccumulatorConnections
               question={step}
-              items={_get(props, 'user.connections', []).concat(_get(props, 'user.newConnection', []))}
+              connections={connections}
               basket={_get(state, `questions[${step.id}]`, [])}
               onToggle={onToggleItem(dispatch)}
               onRemove={onRemoveItemBasket(dispatch)}

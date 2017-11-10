@@ -5,7 +5,7 @@ const {
   SET_VALUE,
   SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
-  ADD_COMPANY,
+  ADD_FORMER_EMPLOYER,
   TOGGLE_ITEM
 } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -18,7 +18,7 @@ const setValue = (state, action) => {
 }
 
 const setNewItemValue = (state, action) => {
-  state[action.itemType][action.name] = action.value
+  state[action.name][action.key] = action.value
   return merge(state)
 }
 
@@ -36,12 +36,12 @@ const addConnection = (state, action) => {
   return merge(state)
 }
 
-const addCompany = (state, action) => {
-  let companies = state.companies || []
-  companies = companies.concat(action.newItem)
-  state.companies = companies
+const addFormerEmployer = (state, action) => {
+  let formerEmployers = state.formerEmployers || []
+  formerEmployers = formerEmployers.concat(action.newItem)
+  state.formerEmployers = formerEmployers
 
-  state.newCompany = {}
+  state.newFormerEmployer = {}
 
   return merge(state)
 }
@@ -69,7 +69,7 @@ const routerLocationChange = (state, action) => {
 const actions = {
   [SET_VALUE]: setValue,
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
-  [ADD_COMPANY]: addCompany,
+  [ADD_FORMER_EMPLOYER]: addFormerEmployer,
   [ADD_CONNECTION]: addConnection,
   [ROUTER_LOCATION_CHANGE]: routerLocationChange,
   [TOGGLE_ITEM]: toggleItem
@@ -78,8 +78,8 @@ const actions = {
 const initialState = {
   step: 0,
   questions: {},
-  newCompany: {},
-  companies: [],
+  newFormerEmployer: {},
+  formerEmployers: [],
   newConnection: {},
   connections: []
 }

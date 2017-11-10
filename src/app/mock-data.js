@@ -35,7 +35,8 @@ const data = {
   employeeSurveys: [],
   accounts: [],
   messages: [],
-  connections: []
+  connections: [],
+  formerEmployers: []
 }
 data.companies = data.companies.concat([
   {

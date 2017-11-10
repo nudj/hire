@@ -129,16 +129,16 @@ function createConnection (tags) {
 
 const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
 module.exports.SET_NEW_ITEM_VALUE = SET_NEW_ITEM_VALUE
-function setNewItemValue (itemType, name, value) {
+function setNewItemValue (name, key, value) {
   return {
     type: SET_NEW_ITEM_VALUE,
-    itemType,
     name,
+    key,
     value
   }
 }
-module.exports.setNewItemValue = (itemType, name, value) => (dispatch, getState) => {
-  return dispatch(setNewItemValue(itemType, name, value))
+module.exports.setNewItemValue = (name, key, value) => (dispatch, getState) => {
+  return dispatch(setNewItemValue(name, key, value))
 }
 
 const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
@@ -155,7 +155,7 @@ module.exports.addConnection = (questionId) => (dispatch, getState) => {
   const survey = _get(state, 'app.user.hirer.company.survey', {})
   const connection = _get(state, 'surveyPage.newConnection')
   return dispatch(actions.app.postData({
-    url: `/surveys/${_get(survey, 'slug')}`,
+    url: `/surveys/${_get(survey, 'slug')}/connection`,
     method: 'post',
     data: {
       connection,
@@ -168,31 +168,31 @@ module.exports.addConnection = (questionId) => (dispatch, getState) => {
   }))
 }
 
-const ADD_COMPANY = `${PREFIX}_ADD_COMPANY`
-module.exports.ADD_COMPANY = ADD_COMPANY
-function addCompany (questionId, newItem) {
+const ADD_FORMER_EMPLOYER = `${PREFIX}_ADD_FORMER_EMPLOYER`
+module.exports.ADD_FORMER_EMPLOYER = ADD_FORMER_EMPLOYER
+function addFormerEmployer (questionId, newItem) {
   return {
-    type: ADD_COMPANY,
+    type: ADD_FORMER_EMPLOYER,
     questionId,
     newItem
   }
 }
-module.exports.addCompany = (questionId) => (dispatch, getState) => {
+module.exports.addFormerEmployer = (questionId) => (dispatch, getState) => {
   const state = getState()
   const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const company = _get(state, 'surveyPage.newCompany')
-  // return dispatch(actions.app.postData({
-  //   url: `/surveys/${_get(survey, 'slug')}`,
-  //   method: 'post',
-  //   data: {
-  //     company,
-  //     source: 'survey'
-  //   }
-  // }, () => {
-  //   const state = getState()
-  //   const newConnection = _get(state, 'app.user.newConnection')
-  //   dispatch(addCompany(questionId, newConnection))
-  // }))
+  const formerEmployer = _get(state, 'surveyPage.newFormerEmployer')
+  return dispatch(actions.app.postData({
+    url: `/surveys/${_get(survey, 'slug')}/formerEmployer`,
+    method: 'post',
+    data: {
+      formerEmployer,
+      source: 'survey'
+    }
+  }, () => {
+    const state = getState()
+    const newFormerEmployer = _get(state, 'app.user.newFormerEmployer')
+    dispatch(addFormerEmployer(questionId, newFormerEmployer))
+  }))
 }
 
 const TOGGLE_ITEM = `${PREFIX}_TOGGLE_ITEM`

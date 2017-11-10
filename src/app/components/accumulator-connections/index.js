@@ -7,7 +7,7 @@ const _find = require('lodash/find')
 const SurveyQuestionConnections = (props) => {
   // const style = getStyle()
   const question = _get(props, 'question')
-  const items = _get(props, 'items')
+  const connections = _get(props, 'connections')
   const basket = _get(props, 'basket')
   const onToggle = _get(props, 'onToggle')
   const onRemove = _get(props, 'onRemove')
@@ -27,7 +27,7 @@ const SurveyQuestionConnections = (props) => {
           </tr>
         </thead>
         <tbody>
-          {items.map((connection, index) => {
+          {connections.map((connection, index) => {
             const {
               id,
               firstName,
@@ -56,8 +56,8 @@ const SurveyQuestionConnections = (props) => {
         <h4>Basket</h4>
         <ul>
           {basket.map(id => {
-            const item = _find(items, { id })
-            return <li key={item.id}>{item.firstName} {item.lastName} <button onClick={onRemove(question.id, id)}>Remove</button></li>
+            const connection = _find(connections, { id })
+            return <li key={connection.id}>{connection.firstName} {connection.lastName} <button onClick={onRemove(question.id, id)}>Remove</button></li>
           })}
         </ul>
       </div>

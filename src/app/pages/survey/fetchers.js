@@ -22,6 +22,14 @@ const get = ({
             email
           }
         }
+        formerEmployers {
+          id
+          source
+          company {
+            id
+            name
+          }
+        }
         hirer {
           company {
             survey: surveyByFilters (filters: {
@@ -59,7 +67,90 @@ const get = ({
   return { gql, variables }
 }
 
-const post = ({
+const postFormerEmployer = ({
+  session,
+  params,
+  body
+}) => {
+  const gql = `
+    mutation AddFormerEmployer (
+      $userId: ID!,
+      $surveySlug: String,
+      $formerEmployer: CompanyCreateInput!,
+      $source: String!
+    ) {
+      user (id: $userId) {
+        newFormerEmployer: getOrCreateFormerEmployer (
+          formerEmployer: $formerEmployer,
+          source: $source
+        ) {
+          id
+          source
+          company {
+            id
+            name
+          }
+        }
+        connections {
+          id
+          firstName
+          lastName
+          title
+          company
+          source
+          person {
+            id
+            email
+          }
+        }
+        formerEmployers {
+          id
+          source
+          company {
+            id
+            name
+          }
+        }
+        hirer {
+          company {
+            survey: surveyByFilters (filters: {
+              slug: $surveySlug
+            }) {
+              id
+              slug
+              sections: surveySections {
+                id
+                title
+                description
+                questions: surveyQuestions {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                  dependencies
+                  options
+                  tags
+                }
+              }
+            }
+          }
+        }
+      }
+      ${Global}
+    }
+  `
+  const variables = {
+    userId: session.userId,
+    surveySlug: params.surveySlug,
+    formerEmployer: body.formerEmployer,
+    source: body.source
+  }
+  return { gql, variables }
+}
+
+const postConnection = ({
   session,
   params,
   body
@@ -97,6 +188,14 @@ const post = ({
           person {
             id
             email
+          }
+        }
+        formerEmployers {
+          id
+          source
+          company {
+            id
+            name
           }
         }
         hirer {
@@ -140,5 +239,6 @@ const post = ({
 
 module.exports = {
   get,
-  post
+  postFormerEmployer,
+  postConnection
 }
