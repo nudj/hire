@@ -1,12 +1,12 @@
 const {
-  booleanChoices,
+  // booleanChoices,
   questionTypes
 } = require('./lib/constants')
 
-const {
-  YES,
-  NO
-} = booleanChoices
+// const {
+//   YES,
+//   NO
+// } = booleanChoices
 const {
   COMPANIES,
   CONNECTIONS
