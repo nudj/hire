@@ -17,29 +17,27 @@ const LayoutPage = require('../../components/layout-page')
 const ConnectionEditor = require('../../components/connection-editor')
 
 function onClickPrevious (dispatch) {
-  return (event) => dispatch(previous())
+  return event => dispatch(previous())
 }
 
 function onClickNext (dispatch) {
-  return (event) => dispatch(next())
+  return event => dispatch(next())
 }
 
 function onChangeNewConnection (dispatch) {
-  return (name) => (event) => {
-    dispatch(setNewConnectionValue(name, event.target.value))
-  }
+  return name => event => dispatch(setNewConnectionValue(name, event.target.value))
 }
 
 function onAddConnection (dispatch, questionId) {
-  return () => {
-    dispatch(addConnection(questionId))
-  }
+  return () => dispatch(addConnection(questionId))
 }
 
-function onChangeCheckbox (dispatch, questionId, connectionId) {
-  return event => {
-    dispatch(toggleConnection(questionId, connectionId, event.target.checked))
-  }
+function onToggleConnection (dispatch, questionId, connectionId) {
+  return event => dispatch(toggleConnection(questionId, connectionId, event.target.checked))
+}
+
+function onRemoveConnectionBasket (dispatch, questionId, connectionId) {
+  return event => dispatch(toggleConnection(questionId, connectionId, false))
 }
 
 const RecallSurvey = (props) => {
@@ -108,7 +106,7 @@ const RecallSurvey = (props) => {
 
               return (
                 <tr key={id}>
-                  <td><input type='checkbox' checked={questionConnections.includes(connection.id)} onChange={onChangeCheckbox(dispatch, step.id, connection.id)} /></td>
+                  <td><input type='checkbox' checked={questionConnections.includes(connection.id)} onChange={onToggleConnection(dispatch, step.id, connection.id)} /></td>
                   <td>{firstName}</td>
                   <td>{lastName}</td>
                   <td>{title}</td>
@@ -125,7 +123,7 @@ const RecallSurvey = (props) => {
           <ul>
             {questionConnections.map(connectionId => {
               const connection = _find(connections, { id: connectionId })
-              return <li key={connection.id}>{connection.firstName} {connection.lastName}</li>
+              return <li key={connection.id}>{connection.firstName} {connection.lastName} <button onClick={onRemoveConnectionBasket(dispatch, step.id, connectionId)}>Remove</button></li>
             })}
           </ul>
         </div>

@@ -17,7 +17,7 @@ const get = ({
           title
           company
           source
-          person: to {
+          person {
             id
             email
           }
@@ -82,7 +82,7 @@ const post = ({
           title
           company
           source
-          person: to {
+          person {
             id
             email
           }
@@ -94,7 +94,7 @@ const post = ({
           title
           company
           source
-          person: to {
+          person {
             id
             email
           }
