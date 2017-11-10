@@ -2,19 +2,21 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const _get = require('lodash/get')
 const _pick = require('lodash/pick')
-const _find = require('lodash/find')
 const { merge } = require('@nudj/library')
 
 const {
   previous,
   next,
-  setNewConnectionValue,
+  setNewItemValue,
   addConnection,
-  toggleConnection
+  addCompany,
+  toggleItem
 } = require('./actions')
 // const getStyle = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
+const SurveyQuestionConnections = require('../../components/question-connections')
 const ConnectionEditor = require('../../components/connection-editor')
+const { questionTypes } = require('../../lib/constants')
 
 function onClickPrevious (dispatch) {
   return event => dispatch(previous())
@@ -24,23 +26,27 @@ function onClickNext (dispatch) {
   return event => dispatch(next())
 }
 
-function onChangeNewConnection (dispatch) {
-  return name => event => dispatch(setNewConnectionValue(name, event.target.value))
+function onChangeNewItem (dispatch, itemType) {
+  return name => event => dispatch(setNewItemValue(itemType, name, event.target.value))
+}
+
+function onAddCompany (dispatch, questionId) {
+  return () => dispatch(addCompany(questionId))
 }
 
 function onAddConnection (dispatch, questionId) {
   return () => dispatch(addConnection(questionId))
 }
 
-function onToggleConnection (dispatch, questionId, connectionId) {
-  return event => dispatch(toggleConnection(questionId, connectionId, event.target.checked))
+function onToggleItem (dispatch) {
+  return (questionId, itemId) => event => dispatch(toggleItem(questionId, itemId, event.target.checked))
 }
 
-function onRemoveConnectionBasket (dispatch, questionId, connectionId) {
-  return event => dispatch(toggleConnection(questionId, connectionId, false))
+function onRemoveItemBasket (dispatch) {
+  return (questionId, itemId) => event => dispatch(toggleItem(questionId, itemId, false))
 }
 
-const RecallSurvey = (props) => {
+const SurveyPage = (props) => {
   // const style = getStyle()
   const dispatch = _get(props, 'dispatch')
   const survey = _get(props, 'user.hirer.company.survey')
@@ -59,82 +65,50 @@ const RecallSurvey = (props) => {
     subtitle: 'To impress Robyn and Jamie'
   }
 
-  let stepContent
-  if (step.displayType === 'section') {
-    stepContent = (
-      <div>
-        <h3>{step.title}</h3>
-        <p>{step.description}</p>
-      </div>
-    )
-  } else {
-    const connections = _get(props, 'user.connections', []).concat(_get(props, 'user.newConnection', []))
-    const questionConnections = _get(state, `questions[${step.id}]`, [])
-    const newConnection = _get(state, 'newConnection', {})
-    stepContent = (
-      <div>
-        <h3>{step.title}</h3>
-        <p>{step.description}</p>
-        <ConnectionEditor
-          onChange={onChangeNewConnection(dispatch)}
-          onAdd={onAddConnection(dispatch, step.id)}
-          connection={newConnection}
-        />
-        <table>
-          <thead>
-            <tr>
-              <th />
-              <th>First name</th>
-              <th>Last name</th>
-              <th>Job title</th>
-              <th>Company</th>
-              <th>Email</th>
-              <th>Source</th>
-            </tr>
-          </thead>
-          <tbody>
-            {connections.map((connection, index) => {
-              const {
-                id,
-                firstName,
-                lastName,
-                title,
-                company,
-                person,
-                source
-              } = connection
-
-              return (
-                <tr key={id}>
-                  <td><input type='checkbox' checked={questionConnections.includes(connection.id)} onChange={onToggleConnection(dispatch, step.id, connection.id)} /></td>
-                  <td>{firstName}</td>
-                  <td>{lastName}</td>
-                  <td>{title}</td>
-                  <td>{company}</td>
-                  <td>{person.email}</td>
-                  <td>{source}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        <div>
-          <h4>Basket</h4>
-          <ul>
-            {questionConnections.map(connectionId => {
-              const connection = _find(connections, { id: connectionId })
-              return <li key={connection.id}>{connection.firstName} {connection.lastName} <button onClick={onRemoveConnectionBasket(dispatch, step.id, connectionId)}>Remove</button></li>
-            })}
-          </ul>
-        </div>
-      </div>
-    )
+  let questionContent
+  if (step.displayType === 'question') {
+    const questionType = _get(step, 'type')
+    switch (questionType) {
+      case questionTypes.COMPANIES:
+        questionContent = (
+          <div>
+            <SurveyQuestionConnections
+              question={step}
+              items={[]}
+              basket={_get(state, `questions[${step.id}]`, [])}
+              onToggle={onToggleItem(dispatch)}
+              onRemove={onRemoveItemBasket(dispatch)}
+            />
+          </div>
+        )
+        break
+      case questionTypes.CONNECTIONS:
+        questionContent = (
+          <div>
+            <ConnectionEditor
+              onChange={onChangeNewItem(dispatch, 'newConnection')}
+              onAdd={onAddConnection(dispatch, step.id)}
+              connection={_get(state, 'newConnection', {})}
+            />
+            <SurveyQuestionConnections
+              question={step}
+              items={_get(props, 'user.connections', []).concat(_get(props, 'user.newConnection', []))}
+              basket={_get(state, `questions[${step.id}]`, [])}
+              onToggle={onToggleItem(dispatch)}
+              onRemove={onRemoveItemBasket(dispatch)}
+            />
+          </div>
+        )
+        break
+    }
   }
   const content = (
     <div>
       {stepIndex ? <button onClick={onClickPrevious(dispatch)}>Previous</button> : ''}
       {stepIndex < steps.length - 1 ? <button onClick={onClickNext(dispatch)}>Next</button> : ''}
-      {stepContent}
+      <h3>{step.title}</h3>
+      <p>{step.description}</p>
+      {questionContent}
     </div>
   )
 
@@ -148,4 +122,4 @@ const RecallSurvey = (props) => {
   )
 }
 
-module.exports = RecallSurvey
+module.exports = SurveyPage

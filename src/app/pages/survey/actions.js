@@ -9,7 +9,7 @@ const _camelCase = require('lodash/camelCase')
 const _omit = require('lodash/omit')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
-const PREFIX = 'RECALL_SURVEY'
+const PREFIX = 'SURVEY'
 
 function matchesDependencies (dependencies, answers) {
   if (_isEmpty(dependencies)) return true
@@ -127,26 +127,27 @@ function createConnection (tags) {
   }
 }
 
-const SET_NEW_CONNECTION_VALUE = `${PREFIX}_SET_NEW_CONNECTION_VALUE`
-module.exports.SET_NEW_CONNECTION_VALUE = SET_NEW_CONNECTION_VALUE
-function setNewConnectionValue (name, value) {
+const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
+module.exports.SET_NEW_ITEM_VALUE = SET_NEW_ITEM_VALUE
+function setNewItemValue (itemType, name, value) {
   return {
-    type: SET_NEW_CONNECTION_VALUE,
+    type: SET_NEW_ITEM_VALUE,
+    itemType,
     name,
     value
   }
 }
-module.exports.setNewConnectionValue = (name, value) => (dispatch, getState) => {
-  return dispatch(setNewConnectionValue(name, value))
+module.exports.setNewItemValue = (itemType, name, value) => (dispatch, getState) => {
+  return dispatch(setNewItemValue(itemType, name, value))
 }
 
 const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
 module.exports.ADD_CONNECTION = ADD_CONNECTION
-function addConnection (questionId, newConnection) {
+function addConnection (questionId, newItem) {
   return {
     type: ADD_CONNECTION,
     questionId,
-    newConnection
+    newItem
   }
 }
 module.exports.addConnection = (questionId) => (dispatch, getState) => {
@@ -167,16 +168,43 @@ module.exports.addConnection = (questionId) => (dispatch, getState) => {
   }))
 }
 
-const TOGGLE_CONNECTION = `${PREFIX}_TOGGLE_CONNECTION`
-module.exports.TOGGLE_CONNECTION = TOGGLE_CONNECTION
-function toggleConnection (questionId, connectionId, value) {
+const ADD_COMPANY = `${PREFIX}_ADD_COMPANY`
+module.exports.ADD_COMPANY = ADD_COMPANY
+function addCompany (questionId, newItem) {
   return {
-    type: TOGGLE_CONNECTION,
+    type: ADD_COMPANY,
     questionId,
-    connectionId,
+    newItem
+  }
+}
+module.exports.addCompany = (questionId) => (dispatch, getState) => {
+  const state = getState()
+  const survey = _get(state, 'app.user.hirer.company.survey', {})
+  const company = _get(state, 'surveyPage.newCompany')
+  // return dispatch(actions.app.postData({
+  //   url: `/surveys/${_get(survey, 'slug')}`,
+  //   method: 'post',
+  //   data: {
+  //     company,
+  //     source: 'survey'
+  //   }
+  // }, () => {
+  //   const state = getState()
+  //   const newConnection = _get(state, 'app.user.newConnection')
+  //   dispatch(addCompany(questionId, newConnection))
+  // }))
+}
+
+const TOGGLE_ITEM = `${PREFIX}_TOGGLE_ITEM`
+module.exports.TOGGLE_ITEM = TOGGLE_ITEM
+function toggleItem (questionId, itemId, value) {
+  return {
+    type: TOGGLE_ITEM,
+    questionId,
+    itemId,
     value
   }
 }
-module.exports.toggleConnection = (questionId, connectionId, value) => (dispatch, getState) => {
-  return dispatch(toggleConnection(questionId, connectionId, value))
+module.exports.toggleItem = (questionId, itemId, value) => (dispatch, getState) => {
+  return dispatch(toggleItem(questionId, itemId, value))
 }

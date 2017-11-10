@@ -13,10 +13,8 @@ const booleanChoices = {
   NO: 'NO'
 }
 const questionTypes = {
-  TEXT: 'TEXT',
-  FREETEXT: 'FREETEXT',
-  CHOICE: 'CHOICE',
-  MULTICHOICE: 'MULTICHOICE'
+  COMPANIES: 'COMPANIES',
+  CONNECTIONS: 'CONNECTIONS'
 }
 
 module.exports = {

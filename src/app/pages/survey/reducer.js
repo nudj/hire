@@ -3,9 +3,10 @@ const RouteParser = require('route-parser')
 
 const {
   SET_VALUE,
-  SET_NEW_CONNECTION_VALUE,
+  SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
-  TOGGLE_CONNECTION
+  ADD_COMPANY,
+  TOGGLE_ITEM
 } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const surveyRoute = new RouteParser('/surveys/:surveySlug')
@@ -16,35 +17,45 @@ const setValue = (state, action) => {
   })
 }
 
-const setNewConnectionValue = (state, action) => {
-  state.newConnection[action.name] = action.value
+const setNewItemValue = (state, action) => {
+  state[action.itemType][action.name] = action.value
   return merge(state)
 }
 
 const addConnection = (state, action) => {
   let connections = state.connections || []
-  connections = connections.concat(action.newConnection)
+  connections = connections.concat(action.newItem)
   state.connections = connections
 
-  let questionConnections = state.questions[action.questionId] || []
-  questionConnections = questionConnections.concat(action.newConnection.id)
-  state.questions[action.questionId] = questionConnections
+  let questionItems = state.questions[action.questionId] || []
+  questionItems = questionItems.concat(action.newItem.id)
+  state.questions[action.questionId] = questionItems
 
   state.newConnection = {}
 
   return merge(state)
 }
 
-const toggleConnection = (state, action) => {
-  let questionConnections = state.questions[action.questionId] || []
+const addCompany = (state, action) => {
+  let companies = state.companies || []
+  companies = companies.concat(action.newItem)
+  state.companies = companies
+
+  state.newCompany = {}
+
+  return merge(state)
+}
+
+const toggleItem = (state, action) => {
+  let questionItems = state.questions[action.questionId] || []
   if (action.value) {
-    if (!questionConnections.some(id => id === action.connectionId)) {
-      questionConnections = questionConnections.concat(action.connectionId)
+    if (!questionItems.some(id => id === action.itemId)) {
+      questionItems = questionItems.concat(action.itemId)
     }
   } else {
-    questionConnections = questionConnections.filter(id => id !== action.connectionId)
+    questionItems = questionItems.filter(id => id !== action.itemId)
   }
-  state.questions[action.questionId] = questionConnections
+  state.questions[action.questionId] = questionItems
   return merge(state)
 }
 
@@ -57,16 +68,19 @@ const routerLocationChange = (state, action) => {
 
 const actions = {
   [SET_VALUE]: setValue,
-  [SET_NEW_CONNECTION_VALUE]: setNewConnectionValue,
+  [SET_NEW_ITEM_VALUE]: setNewItemValue,
+  [ADD_COMPANY]: addCompany,
   [ADD_CONNECTION]: addConnection,
   [ROUTER_LOCATION_CHANGE]: routerLocationChange,
-  [TOGGLE_CONNECTION]: toggleConnection
+  [TOGGLE_ITEM]: toggleItem
 }
 
 const initialState = {
   step: 0,
-  newConnection: {},
   questions: {},
+  newCompany: {},
+  companies: [],
+  newConnection: {},
   connections: []
 }
 
