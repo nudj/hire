@@ -2,7 +2,11 @@ require('envkey')
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/app/) || filename.match(/framework/)) {
+    if (
+      filename.match(/@nudj/) ||
+      filename.match(/app/) ||
+      filename.match(/framework/)
+    ) {
       return false
     }
     return true
@@ -23,6 +27,7 @@ const expressRouters = {
     require('./pages/tasks/router'),
     require('./pages/jobs/router'),
     require('./pages/connections/router'),
+    require('./pages/import/router'),
     require('./pages/survey/router'),
     require('./pages/conversations/router'),
     require('./server/routers/catch-all')

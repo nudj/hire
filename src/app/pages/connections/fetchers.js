@@ -1,19 +1,17 @@
 const { Global } = require('../../lib/graphql')
 
-const get = ({
-  session
-}) => {
+const get = ({ session }) => {
   const gql = `
-    query TasksPage ($userId: ID!) {
+    query ConnectionsPage ($userId: ID!) {
       user (id: $userId) {
         connections {
           id
-          to {
+          firstName
+          lastName
+          title
+          company
+          person {
             id
-            firstName
-            lastName
-            title
-            company
           }
         }
       }
