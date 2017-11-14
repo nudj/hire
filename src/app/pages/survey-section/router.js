@@ -6,9 +6,8 @@ const Router = ({ ensureLoggedIn, respondWith }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/surveys/:surveySlug', respondWith(fetchers.get))
   router.getHandlers(
-    '/surveys/:surveySlug/complete',
+    '/surveys/:surveySlug/sections/:sectionId',
     respondWith(fetchers.get)
   )
 

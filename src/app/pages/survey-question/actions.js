@@ -13,21 +13,28 @@ const PREFIX = 'SURVEY'
 
 function matchesDependencies (dependencies, answers) {
   if (_isEmpty(dependencies)) return true
-  return _reduce(dependencies, (result, value, key) => {
-    return result ? answers[key] === value : false
-  }, true)
+  return _reduce(
+    dependencies,
+    (result, value, key) => {
+      return result ? answers[key] === value : false
+    },
+    true
+  )
 }
 
 function getSteps (sections = []) {
   return sections.reduce((steps, section) => {
-    return steps.concat(_pick(section, ['id', 'title', 'description']), ...section.questions)
+    return steps.concat(
+      _pick(section, ['id', 'title', 'description']),
+      ...section.questions
+    )
   }, [])
 }
 
 function getStepIndex (state, indexModifier, validate) {
   const steps = getSteps(_get(state, 'app.user.hirer.company.survey.sections'))
-  const answers = _get(state, 'surveyPage.answers')
-  const originalIndex = _get(state, 'surveyPage.step')
+  const answers = _get(state, 'surveyQuestionPage.answers')
+  const originalIndex = _get(state, 'surveyQuestionPage.step')
   let index = originalIndex
   let nextIndex
   // if (
@@ -76,7 +83,7 @@ module.exports.next = () => (dispatch, getState) => {
 module.exports.finishSurvey = () => (dispatch, getState) => {
   const state = getState()
   const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const answers = _get(state, 'surveyPage.answers', {})
+  const answers = _get(state, 'surveyQuestionPage.answers', {})
   const connections = getConnections(getQuestions(survey), answers)
   return dispatch(setValue('connections', connections))
 }
@@ -84,15 +91,19 @@ module.exports.finishSurvey = () => (dispatch, getState) => {
 module.exports.submitConnections = () => (dispatch, getState) => {
   const state = getState()
   const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const connections = _get(state, 'surveyPage.connections', []).map(connection => _omit(connection, ['id']))
-  return dispatch(actions.app.postData({
-    url: `/surveys/${_get(survey, 'slug')}`,
-    method: 'post',
-    data: {
-      connections,
-      source: 'survey'
-    }
-  }))
+  const connections = _get(state, 'surveyQuestionPage.connections', []).map(
+    connection => _omit(connection, ['id'])
+  )
+  return dispatch(
+    actions.app.postData({
+      url: `/surveys/${_get(survey, 'slug')}`,
+      method: 'post',
+      data: {
+        connections,
+        source: 'survey'
+      }
+    })
+  )
 }
 
 function getQuestions (survey) {
@@ -102,7 +113,9 @@ function getQuestions (survey) {
 }
 
 function getConnections (questions, answers) {
-  const nameQuestions = _filter(questions, question => _get(question, 'tags.length'))
+  const nameQuestions = _filter(questions, question =>
+    _get(question, 'tags.length')
+  )
   const connections = nameQuestions.reduce((connections, question) => {
     return connections.concat(getConnectionsForQuestion(question, answers))
   }, [])
@@ -110,20 +123,26 @@ function getConnections (questions, answers) {
 }
 
 function getConnectionsForQuestion (question, answers) {
-  return _get(answers, question.name, '').split('\n').reduce((connections, connection) => {
-    if (connection.length) {
-      connections = connections.concat(connection)
-    }
-    return connections
-  }, []).map(createConnection(question.tags))
+  return _get(answers, question.name, '')
+    .split('\n')
+    .reduce((connections, connection) => {
+      if (connection.length) {
+        connections = connections.concat(connection)
+      }
+      return connections
+    }, [])
+    .map(createConnection(question.tags))
 }
 
 function createConnection (tags) {
   return connection => {
-    return merge({
-      id: _camelCase(connection),
-      tags
-    }, _omit(humanparser.parseName(connection), ['fullName']))
+    return merge(
+      {
+        id: _camelCase(connection),
+        tags
+      },
+      _omit(humanparser.parseName(connection), ['fullName'])
+    )
   }
 }
 
@@ -150,22 +169,31 @@ function addConnection (questionId, newItem) {
     newItem
   }
 }
-module.exports.addConnection = (questionId) => (dispatch, getState) => {
+module.exports.addConnection = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const connection = _get(state, 'surveyPage.newConnection')
-  return dispatch(actions.app.postData({
-    url: `/surveys/${_get(survey, 'slug')}/connection`,
-    method: 'post',
-    data: {
-      connection,
-      source: 'survey'
-    }
-  }, () => {
-    const state = getState()
-    const newConnection = _get(state, 'app.user.newConnection')
-    dispatch(addConnection(questionId, newConnection))
-  }))
+  const section = _get(survey, 'section')
+  const question = _get(section, 'question')
+  const connection = _get(state, 'surveyQuestionPage.newConnection')
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+          question.id
+        }`,
+        method: 'post',
+        data: {
+          connection,
+          source: 'survey'
+        }
+      },
+      () => {
+        const state = getState()
+        const newConnection = _get(state, 'app.user.newConnection')
+        dispatch(addConnection(questionId, newConnection))
+      }
+    )
+  )
 }
 
 const ADD_FORMER_EMPLOYER = `${PREFIX}_ADD_FORMER_EMPLOYER`
@@ -177,22 +205,31 @@ function addFormerEmployer (questionId, newItem) {
     newItem
   }
 }
-module.exports.addFormerEmployer = (questionId) => (dispatch, getState) => {
+module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const formerEmployer = _get(state, 'surveyPage.newFormerEmployer')
-  return dispatch(actions.app.postData({
-    url: `/surveys/${_get(survey, 'slug')}/formerEmployer`,
-    method: 'post',
-    data: {
-      formerEmployer,
-      source: 'survey'
-    }
-  }, () => {
-    const state = getState()
-    const newFormerEmployer = _get(state, 'app.user.newFormerEmployer')
-    dispatch(addFormerEmployer(questionId, newFormerEmployer))
-  }))
+  const section = _get(survey, 'section')
+  const question = _get(section, 'question')
+  const formerEmployer = _get(state, 'surveyQuestionPage.newFormerEmployer')
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${survey.slug}/sections/${section.id}/companies/${
+          question.id
+        }`,
+        method: 'post',
+        data: {
+          formerEmployer,
+          source: 'survey'
+        }
+      },
+      () => {
+        const state = getState()
+        const newFormerEmployer = _get(state, 'app.user.newFormerEmployer')
+        dispatch(addFormerEmployer(questionId, newFormerEmployer))
+      }
+    )
+  )
 }
 
 const TOGGLE_ITEM = `${PREFIX}_TOGGLE_ITEM`
@@ -205,6 +242,9 @@ function toggleItem (questionId, itemId, value) {
     value
   }
 }
-module.exports.toggleItem = (questionId, itemId, value) => (dispatch, getState) => {
+module.exports.toggleItem = (questionId, itemId, value) => (
+  dispatch,
+  getState
+) => {
   return dispatch(toggleItem(questionId, itemId, value))
 }

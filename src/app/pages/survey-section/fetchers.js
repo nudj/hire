@@ -2,10 +2,11 @@ const { Global } = require('../../lib/graphql')
 
 const get = ({ session, params }) => {
   const gql = `
-    query SurveyPage (
+    query SurveySectionPage (
       $userId: ID!,
-      $surveySlug: String
-    ) {
+      $surveySlug: String,
+      $sectionId: ID!
+      ) {
       user (id: $userId) {
         hirer {
           company {
@@ -16,6 +17,19 @@ const get = ({ session, params }) => {
               slug
               sections: surveySections {
                 id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+              }
+              section: surveySectionById (id: $sectionId) {
+                id
+                title
+                description
+                questions: surveyQuestions {
+                  id
+                  type
+                }
               }
             }
           }
@@ -26,7 +40,8 @@ const get = ({ session, params }) => {
   `
   const variables = {
     userId: session.userId,
-    surveySlug: params.surveySlug
+    surveySlug: params.surveySlug,
+    sectionId: params.sectionId
   }
   return { gql, variables }
 }

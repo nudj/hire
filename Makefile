@@ -38,6 +38,7 @@ ssh:
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
 		-v $(CWD)/../framework/src:/usr/src/framework \
 		-v $(CWD)/../api/src:/usr/src/api \
+		-v $(CWD)/../library/src:/usr/src/library \
 		$(IMAGEDEV) \
 		/bin/zsh
 

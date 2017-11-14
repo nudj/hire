@@ -1,7 +1,7 @@
 const tasksPage = require('../pages/tasks/reducer')
-const surveyPage = require('../pages/survey/reducer')
+const surveyQuestionPage = require('../pages/survey-question/reducer')
 
 module.exports = {
   tasksPage,
-  surveyPage
+  surveyQuestionPage
 }

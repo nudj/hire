@@ -29,6 +29,8 @@ const expressRouters = {
     require('./pages/connections/router'),
     require('./pages/import/router'),
     require('./pages/survey/router'),
+    require('./pages/survey-section/router'),
+    require('./pages/survey-question/router'),
     require('./pages/conversations/router'),
     require('./server/routers/catch-all')
   ]
