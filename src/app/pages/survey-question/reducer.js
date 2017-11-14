@@ -60,7 +60,8 @@ const toggleItem = (state, action) => {
 }
 
 const routerLocationChange = (state, action) => {
-  if (surveyRoute.match(action.payload.pathname)) {
+  const baseSurveyUrlSegments = action.payload.pathname.split('/').slice(0, 3).join('/')
+  if (surveyRoute.match(baseSurveyUrlSegments)) {
     return state
   }
   return merge(initialState)
