@@ -15,11 +15,13 @@
   "homepage": "https://github.com/nudj/web#readme",
   "standard": {
     "parser": "babel-eslint",
+    "plugins": [ "flowtype" ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",
       "app/node_modules",
-      "webpack*"
+      "webpack*",
+      "@nudj"
     ]
   },
   "dependencies": {
@@ -29,6 +31,7 @@
     "aphrodite": "^1.2.0",
     "aws-sdk": "^2.96.0",
     "axios": "^0.16.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.24.1",
     "better-react-spinkit": "^2.0.2",
@@ -45,6 +48,7 @@
     "express-fileupload": "^0.1.4",
     "express-session": "^1.15.1",
     "express-urlrewrite": "^1.2.0",
+    "flow-bin": "^0.59.0",
     "font-awesome": "^4.7.0",
     "form-serialize": "^0.7.1",
     "googleapis": "^21.3.0",
@@ -93,6 +97,7 @@
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^1.2.2",
+    "eslint-plugin-flowtype": "2.39.1",
     "mocha": "^3.2.0",
     "nock": "^9.0.25",
     "nodemon": "^1.11.0",

@@ -31,6 +31,7 @@ ssh:
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
@@ -52,4 +53,6 @@ test:
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		$(IMAGEDEV) \
-		/bin/sh -c './node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test'
+		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
+		  && ./node_modules/.bin/flow --quiet \
+		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
