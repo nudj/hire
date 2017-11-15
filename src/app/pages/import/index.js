@@ -6,11 +6,26 @@ const Dropzone = require('react-dropzone')
 const Papa = require('papaparse')
 
 const actions = require('@nudj/framework/actions')
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
-// const loadingStyle = require('../../components/loading/loading.css')()
+const LayoutPage = require('../../components/layout-page')
 const getStyle = require('./style.css')
+
+const networkChoices = [
+  {
+    name: 'linkedin',
+    label: 'LinkedIn',
+    selected: true
+  },
+  {
+    name: 'facebook',
+    label: 'Facebook',
+    disabled: true
+  },
+  {
+    name: 'google',
+    label: 'Google Contacts',
+    disabled: true
+  }
+]
 
 class ImportPage extends React.Component {
   constructor (props) {
@@ -105,7 +120,7 @@ class ImportPage extends React.Component {
     this.setState({ leaving })
   }
 
-  stepInfo () {
+  stepInfoRequest () {
     const imageRoot =
       'https://assets.nudj.co/assets/images/hire/upload-linkedin-contacts'
     return (
@@ -168,7 +183,15 @@ class ImportPage extends React.Component {
             </ol>
           </div>
         </div>
+      </div>
+    )
+  }
 
+  stepInfoDownload () {
+    const imageRoot =
+      'https://assets.nudj.co/assets/images/hire/upload-linkedin-contacts'
+    return (
+      <div className={this.style.instructionsStepContainer}>
         <div className={this.style.instructionsStepCard}>
           <h4 className={this.style.instructionsStepHeading}>
             Step 2 - Downloading your data
@@ -220,7 +243,15 @@ class ImportPage extends React.Component {
             </ol>
           </div>
         </div>
+      </div>
+    )
+  }
 
+  stepInfoUpload () {
+    const imageRoot =
+      'https://assets.nudj.co/assets/images/hire/upload-linkedin-contacts'
+    return (
+      <div className={this.style.instructionsStepContainer}>
         <div className={this.style.instructionsStepCard}>
           <h4 className={this.style.instructionsStepHeading}>
             Step 3 - Uploading to nudj
@@ -449,22 +480,50 @@ class ImportPage extends React.Component {
     const active = this.state.active
     const uploading = this.state.uploading
 
-    let back = <span />
-    let next = <span />
+    let back = (
+      <button
+        onClick={this.onClickStep(active - 1)}
+        className={this.style.cancelButton}
+      >
+        Back
+      </button>
+    )
+    let next = (
+      <button
+        onClick={this.onClickStep(active + 1)}
+        className={this.style.confirmButton}
+      >
+        Next
+      </button>
+    )
 
     let step
 
     switch (active) {
-      case 2:
-        step = this.stepUpload()
-        back = (
-          <button
-            onClick={this.onClickStep(active - 1)}
-            className={this.style.cancelButton}
-          >
-            Back
-          </button>
+      case 1:
+        step = (
+          <ul>
+            {networkChoices.map(network => (
+              <li key={network.name}>
+                <input id={network.name} value={network.name} name='source' type='radio' defaultChecked={!!network.selected} disabled={!!network.disabled} />
+                <label htmlFor={network.name}>{network.label}</label>
+              </li>
+            ))}
+          </ul>
         )
+        back = ''
+        break
+      case 2:
+        step = this.stepInfoRequest()
+        break
+      case 3:
+        step = this.stepInfoDownload()
+        break
+      case 4:
+        step = this.stepInfoUpload()
+        break
+      case 5:
+        step = this.stepUpload()
         next = this.state.connections.length ? (
           <button
             onClick={this.onClickStep(active + 1)}
@@ -478,7 +537,7 @@ class ImportPage extends React.Component {
           </button>
         )
         break
-      case 3:
+      case 6:
         step = this.stepPreview()
         back = uploading ? (
           <span />
@@ -490,17 +549,8 @@ class ImportPage extends React.Component {
             Back
           </button>
         )
+        next = ''
         break
-      default:
-        step = this.stepInfo()
-        next = (
-          <button
-            onClick={this.onClickStep(active + 1)}
-            className={this.style.confirmButton}
-          >
-            Next
-          </button>
-        )
     }
 
     return (
@@ -516,18 +566,25 @@ class ImportPage extends React.Component {
 
   renderCurrentTitles () {
     const active = this.state.active
-
-    let titleText = 'Export your connections from LinkedIn'
-    let subtitleText =
-      "Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we'll analyse them to discover who the best people to ask for recommendations are."
+    let titleText, subtitleText
 
     switch (active) {
+      case 1:
+        titleText = 'Choose your network'
+        subtitleText = 'One of these'
+        break
       case 2:
+      case 3:
+      case 4:
+        titleText = 'Export your connections from LinkedIn'
+        subtitleText = "Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we'll analyse them to discover who the best people to ask for recommendations are."
+        break
+      case 5:
         titleText = 'Upload your file'
         subtitleText =
           'Click the box, locate Connections.csv and select it (alternatively you can drag and drop Connections.csv into the box)'
         break
-      case 3:
+      case 6:
         titleText = 'Check your data'
         subtitleText =
           'To be totally transparent, we wanted to show you the data that you’re uploading to our system, so you can check you’re happy with us using it'
@@ -535,14 +592,7 @@ class ImportPage extends React.Component {
       default:
     }
 
-    const title = <h3 className={this.style.pageHeadline}>{titleText}</h3>
-    const subtitle = <p className={this.style.copy}>{subtitleText}</p>
-    return { title, subtitle }
-  }
-
-  renderTooltip () {
-    const tooltip = get(this.props, 'tooltip')
-    return !tooltip ? <span /> : <Tooltip {...tooltip} />
+    return { titleText, subtitleText }
   }
 
   render () {
@@ -551,22 +601,20 @@ class ImportPage extends React.Component {
     }
 
     const step = this.renderCurrentStep()
-    const { title, subtitle } = this.renderCurrentTitles()
+    const { titleText, subtitleText } = this.renderCurrentTitles()
+    const headerProps = {
+      title: 'Unlocking your network',
+      subtitle: 'On-boarding'
+    }
 
     return (
-      <LayoutApp {...this.props} className={this.style.pageBody}>
+      <LayoutPage {...this.props} header={headerProps} headline={titleText}>
         <Helmet>
           <title>nudj - upload your LinkedIn contacts</title>
         </Helmet>
-        <input type='hidden' name='_csrf' value={this.props.csrfToken} />
-        <PageHeader title='Unlocking your network' subtitle='On-boarding' />
-        {title}
-        {subtitle}
-        <div className={this.style.pageContent}>
-          {step}
-          <div className={this.style.pageSidebar}>{this.renderTooltip()}</div>
-        </div>
-      </LayoutApp>
+        <p className={this.style.copy}>{subtitleText}</p>
+        {step}
+      </LayoutPage>
     )
   }
 }
