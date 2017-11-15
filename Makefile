@@ -36,9 +36,10 @@ ssh:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/../framework/src:/usr/src/framework \
-		-v $(CWD)/../api/src:/usr/src/api \
-		-v $(CWD)/../library/src:/usr/src/library \
+		-v $(CWD)/../framework/src:/usr/src/@nudj/framework \
+		-v $(CWD)/../api/src:/usr/src/@nudj/api \
+		-v $(CWD)/../library/src:/usr/src/@nudj/library \
+		-v $(CWD)/../components/src:/usr/src/@nudj/components \
 		$(IMAGEDEV) \
 		/bin/zsh
 

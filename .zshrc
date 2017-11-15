@@ -11,7 +11,7 @@ alias tdd='./node_modules/.bin/nodemon \
 	--delay 250ms \
 	-x "./node_modules/.bin/mocha --recursive test || exit 1"'
 
-alias idev="npm i ./framework ./api ./library && dev"
+alias idev="npm i ./@nudj/framework ./@nudj/api ./@nudj/library ./@nudj/components && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"
