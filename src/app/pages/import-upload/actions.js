@@ -61,9 +61,10 @@ function convertLinkedInToNudjPerson (person) {
 
 module.exports.upload = () => (dispatch, getState) => {
   const state = getState()
+  const segment = state.app.user.onboarded ? 'connections' : 'onboarding'
   const source = state.importPage.network
   const connections = state.importUploadPage.connections
-  const url = '/connections/import/upload'
+  const url = `/${segment}/import/upload`
   const method = 'post'
   const data = { connections, source }
   dispatch(actions.app.postData({ url, data, method }))

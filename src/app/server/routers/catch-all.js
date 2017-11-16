@@ -3,7 +3,7 @@ const { Global } = require('../../lib/graphql')
 
 const get = ({ session }) => {
   const gql = `
-    query ImportPage ($userId: ID!) {
+    query Page ($userId: ID!) {
       user (id: $userId) {
         hirer {
           id

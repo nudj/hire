@@ -9,6 +9,7 @@ const Link = require('../../components/link/link')
 const SurveyPage = props => {
   // const style = getStyle()
   const survey = _get(props, 'user.hirer.company.survey')
+  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
 
   const headerProps = {
     title: 'Complete survey',
@@ -23,15 +24,16 @@ const SurveyPage = props => {
     if (previousQuestionsLength) {
       const previousQuestion =
         previousSection.questions[previousQuestionsLength - 1]
-      previousUri = `/surveys/${survey.slug}/sections/${
+      previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
         previousSection.id
       }/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
     } else {
-      previousUri = `/surveys/${survey.slug}/sections/${previousSection.id}`
+      previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${previousSection.id}`
     }
   } else {
-    previousUri = `/surveys/${survey.slug}`
+    previousUri = `${onboardingSegment}/surveys/${survey.slug}`
   }
+  const nextUri = _get(props, 'user.hirer.onboarded') ? '/connections' : '/'
 
   return (
     <LayoutPage
@@ -45,7 +47,7 @@ const SurveyPage = props => {
       <Link to={previousUri}>
         Back
       </Link>
-      <Link to='/connections'>Finish</Link>
+      <Link to={nextUri}>Finish</Link>
       <h3>{survey.outroTitle}</h3>
       <p>{survey.outroDescription}</p>
     </LayoutPage>

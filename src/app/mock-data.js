@@ -15,12 +15,14 @@ const {
 const data = {
   assets: [],
   companies: [],
+  companyOnboardeds: [],
   conversations: [],
   jobs: [],
   people: [],
   referrals: [],
   applications: [],
   hirers: [],
+  hirerOnboardeds: [],
   employees: [],
   recommendations: [],
   internalMessages: [],
@@ -49,8 +51,7 @@ data.companies = data.companies.concat([
     name: 'Fake Company',
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
   },
   {
     id: 'company2',
@@ -62,8 +63,15 @@ data.companies = data.companies.concat([
     name: 'nudj',
     slug: 'nudj',
     url: 'https://nudj.co',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+  }
+])
+data.companyOnboardeds = data.companyOnboardeds.concat([
+  {
+    id: 'companyOnboarded1',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    company: 'company1'
   }
 ])
 data.jobs = data.jobs.concat([
@@ -221,6 +229,14 @@ data.hirers = data.hirers.concat([
     person: 'person6',
     company: 'company1'
   }
+])
+data.hirerOnboardeds = data.hirerOnboardeds.concat([
+  // {
+  //   id: 'hirerOnboarded1',
+  //   created: '1986-07-06T07:34:54.000+00:00',
+  //   modified: '2000-01-17T02:51:58.000+00:00',
+  //   hirer: 'hirer1'
+  // }
 ])
 data.employees = data.employees.concat([
   {

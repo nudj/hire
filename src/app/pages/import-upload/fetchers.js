@@ -65,6 +65,9 @@ const post = async ({ session, body, files }) => {
           completed
         }
         hirer {
+          onboarded {
+            created
+          }
           company {
             name
           }
@@ -100,12 +103,11 @@ const post = async ({ session, body, files }) => {
           }
         })
       ])
+      const url = data.user.hirer.onboarded ? '/connections' : '/onboarding/surveys/aided-recall-baby'
+      const message = data.user.hirer.onboarded ? "Nice. We'll let you know as soon as we find someone worth asking." : 'Thanks! Next up, let\'s try some aided recall'
       throw new Redirect({
-        url: '/connections',
-        notification: createNotification(
-          'success',
-          "Nice. We'll let you know as soon as we find someone worth asking."
-        )
+        url,
+        notification: createNotification('success', message)
       })
     }
   }

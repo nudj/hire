@@ -178,6 +178,7 @@ function stepInfoUpload (dispatch, style, props, state) {
 
 function renderCurrentStep (dispatch, style, props, state) {
   const active = state.active
+  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
   let step
 
   switch (active) {
@@ -200,7 +201,7 @@ function renderCurrentStep (dispatch, style, props, state) {
       Back
     </button>
   ) : (
-    <Link className={style.cancelButton} to='/connections/import'>Back</Link>
+    <Link className={style.cancelButton} to={`/${nextSegment}/import`}>Back</Link>
   )
   const next = active < 2 ? (
     <button
@@ -210,7 +211,7 @@ function renderCurrentStep (dispatch, style, props, state) {
       Next
     </button>
   ) : (
-    <Link className={style.confirmButton} to='/connections/import/upload'>Next</Link>
+    <Link className={style.confirmButton} to={`/${nextSegment}/import/upload`}>Next</Link>
   )
 
   return (

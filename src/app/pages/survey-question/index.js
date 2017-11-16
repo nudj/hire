@@ -49,6 +49,7 @@ const SurveyQuestionPage = props => {
   const question = _get(section, 'question')
   const state = _get(props, 'surveyQuestionPage')
   const questionIndex = _findIndex(section.questions, { id: question.id })
+  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
 
   const headerProps = {
     title: 'Complete survey',
@@ -58,26 +59,26 @@ const SurveyQuestionPage = props => {
   let previousUri = ''
   const previousQuestion = section.questions[questionIndex - 1]
   if (previousQuestion) {
-    previousUri = `/surveys/${survey.slug}/sections/${
+    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
       section.id
     }/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
   } else {
-    previousUri = `/surveys/${survey.slug}/sections/${section.id}`
+    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}`
   }
 
   let nextUri = ''
   const nextQuestion = section.questions[questionIndex + 1]
   if (nextQuestion) {
-    nextUri = `/surveys/${survey.slug}/sections/${
+    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
       section.id
     }/${nextQuestion.type.toLowerCase()}/${nextQuestion.id}`
   } else {
     const sectionIndex = _findIndex(survey.sections, { id: section.id })
     const nextSection = survey.sections[sectionIndex + 1]
     if (nextSection) {
-      nextUri = `/surveys/${survey.slug}/sections/${nextSection.id}`
+      nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${nextSection.id}`
     } else {
-      nextUri = `/surveys/${survey.slug}/complete`
+      nextUri = `${onboardingSegment}/surveys/${survey.slug}/complete`
     }
   }
 

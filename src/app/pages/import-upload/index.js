@@ -1,6 +1,5 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Redirect } = require('react-router')
 const Dropzone = require('react-dropzone')
 
 const {
@@ -138,11 +137,12 @@ function stepUpload (dispatch, style, props, state) {
 }
 
 function renderCurrentStep (dispatch, style, props, state) {
+  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
   return (
     <div className={style.pageMain}>
       {stepUpload(dispatch, style, props, state)}
       <div className={style.buttonContainer}>
-        <Link className={style.cancelButton} to='/connections/import/guide'>Back</Link>
+        <Link className={style.cancelButton} to={`/${nextSegment}/import/guide`}>Back</Link>
         <button
           onClick={onUpload(dispatch)}
           className={state.connections.length ? style.confirmButton : style.confirmButtonDisabled}
@@ -159,11 +159,6 @@ const ImportPage = props => {
   const style = getStyle()
   const dispatch = props.dispatch
   const state = props.importUploadPage
-
-  if (state.leaving) {
-    return <Redirect to='/connections' push />
-  }
-
   const step = renderCurrentStep(dispatch, style, props, state)
   const headerProps = {
     title: 'Unlocking your network',

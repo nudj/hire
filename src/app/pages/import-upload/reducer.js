@@ -7,6 +7,7 @@ const {
 } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const importRoute = new RouteParser('/connections/import')
+const onboardingRoute = new RouteParser('/onboarding/import')
 
 const setValue = (state, action) => {
   return merge(state, {
@@ -23,7 +24,7 @@ const setConnections = (state, action) => {
 
 const routerLocationChange = (state, action) => {
   const baseImportUrlSegments = action.payload.pathname.split('/').slice(0, 3).join('/')
-  if (importRoute.match(baseImportUrlSegments)) {
+  if (importRoute.match(baseImportUrlSegments) || onboardingRoute.match(baseImportUrlSegments)) {
     return state
   }
   return merge(state, initialState)

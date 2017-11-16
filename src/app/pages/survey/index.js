@@ -16,9 +16,10 @@ const SurveyPage = props => {
   }
 
   let next = ''
+  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
   if (survey.sections.length) {
     next = (
-      <Link to={`/surveys/${survey.slug}/sections/${survey.sections[0].id}`}>
+      <Link to={`${onboardingSegment}/surveys/${survey.slug}/sections/${survey.sections[0].id}`}>
         Next
       </Link>
     )

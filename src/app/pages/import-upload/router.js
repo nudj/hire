@@ -8,6 +8,8 @@ const Router = ({ ensureLoggedIn, respondWith }) => {
 
   router.getHandlers('/connections/import/upload', respondWith(fetchers.get))
   router.postHandlers('/connections/import/upload', respondWith(fetchers.post))
+  router.getHandlers('/onboarding/import/upload', respondWith(fetchers.get))
+  router.postHandlers('/onboarding/import/upload', respondWith(fetchers.post))
 
   return router
 }

@@ -10,6 +10,7 @@ const {
 } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const surveyRoute = new RouteParser('/surveys/:surveySlug')
+const onboardingRoute = new RouteParser('/onboarding/surveys/:surveySlug')
 
 const setValue = (state, action) => {
   return merge(state, {
@@ -61,7 +62,7 @@ const toggleItem = (state, action) => {
 
 const routerLocationChange = (state, action) => {
   const baseSurveyUrlSegments = action.payload.pathname.split('/').slice(0, 3).join('/')
-  if (surveyRoute.match(baseSurveyUrlSegments)) {
+  if (surveyRoute.match(baseSurveyUrlSegments) || onboardingRoute.match(baseSurveyUrlSegments)) {
     return state
   }
   return merge(initialState)

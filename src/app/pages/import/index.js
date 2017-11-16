@@ -32,6 +32,7 @@ const ImportPage = props => {
   const style = getStyle()
   const dispatch = props.dispatch
   const state = props.importPage
+  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
 
   const headerProps = {
     title: 'Unlocking your network',
@@ -54,7 +55,7 @@ const ImportPage = props => {
       </ul>
       <div className={style.buttonContainer}>
         {state.network ? (
-          <Link to='/connections/import/guide' className={style.confirmButton}>Next</Link>
+          <Link to={`/${nextSegment}/import/guide`} className={style.confirmButton}>Next</Link>
         ) : (
           <span className={style.confirmButtonDisabled}>Next</span>
         )}
