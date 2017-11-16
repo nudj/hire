@@ -66,7 +66,6 @@ const SurveyQuestionPage = props => {
   }
 
   let nextUri = ''
-  let nextText = 'Next'
   const nextQuestion = section.questions[questionIndex + 1]
   if (nextQuestion) {
     nextUri = `/surveys/${survey.slug}/sections/${
@@ -78,7 +77,7 @@ const SurveyQuestionPage = props => {
     if (nextSection) {
       nextUri = `/surveys/${survey.slug}/sections/${nextSection.id}`
     } else {
-      nextText = 'Finish'
+      nextUri = `/surveys/${survey.slug}/complete`
     }
   }
 
@@ -133,7 +132,7 @@ const SurveyQuestionPage = props => {
         <title>nudj - Complete survey</title>
       </Helmet>
       <Link to={previousUri}>Previous</Link>
-      <Link to={nextUri}>{nextText}</Link>
+      <Link to={nextUri}>Next</Link>
       <h3>{question.title}</h3>
       <p>{question.description}</p>
       {questionContent}

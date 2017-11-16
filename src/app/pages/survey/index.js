@@ -22,8 +22,6 @@ const SurveyPage = props => {
         Next
       </Link>
     )
-  } else {
-    next = ''
   }
 
   return (
@@ -36,8 +34,8 @@ const SurveyPage = props => {
         <title>nudj - Complete survey</title>
       </Helmet>
       {next}
-      <h3>{survey.title}</h3>
-      <p>{survey.description}</p>
+      <h3>{survey.introTitle}</h3>
+      <p>{survey.introDescription}</p>
     </LayoutPage>
   )
 }

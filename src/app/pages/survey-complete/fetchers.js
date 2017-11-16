@@ -14,10 +14,14 @@ const get = ({ session, params }) => {
             }) {
               id
               slug
-              introTitle
-              introDescription
+              outroTitle
+              outroDescription
               sections: surveySections {
                 id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
               }
             }
           }

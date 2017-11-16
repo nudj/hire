@@ -348,45 +348,37 @@ data.surveys = data.surveys.concat([
   {
     id: 'survey1',
     slug: 'aided-recall-baby',
-    company: 'company1'
+    company: 'company1',
+    introTitle: 'rbeuifr friofrenf egrmeg',
+    introDescription: 'fnreu giegoireg nreiogrneiog reniogew fiowef newof newofnewiof ewnifowe nfiowef niewof nweiofewniof ewniofnoew nfwenfw',
+    outroTitle: 'rbeuifr friofrenf egrmeg',
+    outroDescription: 'fnreu giegoireg nreiogrneiog reniogew fiowef newof newofnewiof ewnifowe nfiowef niewof nweiofewniof ewniofnoew nfwenfw'
   }
 ])
 data.surveySections = data.surveySections.concat([
   {
     id: 'section1',
     survey: 'survey1',
-    title: 'Aided recall on acid baby',
-    description: 'Consequat domesticarum te pariatur a nescius de malis expetendis.'
-  },
-  {
-    id: 'section2',
-    survey: 'survey1',
     title: 'Professional + Previous Employers',
     description: 'First up, the places that you\'ve worked before and the people you know professionally.'
-  },
+  }// ,
   // {
-  //   id: 'section3',
+  //   id: 'section2',
   //   survey: 'survey1',
   //   title: 'Friends & Family',
   //   description: ''
   // },
   // {
-  //   id: 'section4',
+  //   id: 'section3',
   //   survey: 'survey1',
   //   title: 'Events & Networks',
   //   description: ''
-  // },
-  {
-    id: 'section5',
-    survey: 'survey1',
-    title: 'Thanks for your answers',
-    description: 'Fore ubi nescius aut do ipsum e anim.'
-  }
+  // }
 ])
 data.surveyQuestions = data.surveyQuestions.concat([
   {
     id: 'question1',
-    surveySection: 'section2',
+    surveySection: 'section1',
     name: 'workBefore',
     title: 'Where did you work before BEAR?',
     description: 'Please list all of your previous employers. Thanks!',
@@ -397,7 +389,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   },
   {
     id: 'question2',
-    surveySection: 'section2',
+    surveySection: 'section1',
     name: 'accountManagers',
     title: 'Do you know any account managers?',
     description: 'Add them manually or select them from your list of contacts below...',
@@ -408,7 +400,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   }// ,
   // {
   //   id: 'question4',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'knowSales',
   //   title: 'What about people that worked in broader Sales roles (e.g. Biz Dev, Customer Success etc.)?',
   //   description: 'Again, we\'re only trying to find people to ask for recommendations as well as hire, so don\'t worry if they\'re too senior for the role you\'re currently looking for!',
@@ -431,7 +423,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question5',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'sales',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -447,7 +439,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question6',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'knowGraduates',
   //   title: 'Did you come across or manage any good graduates?',
   //   description: '',
@@ -470,7 +462,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question7',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'graduates',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -486,7 +478,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question8',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'knowWorkWithGraduates',
   //   title: 'What about people who might manage or work with graduates?',
   //   description: '',
@@ -509,7 +501,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question9',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'workWithGraduates',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -525,7 +517,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question10',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'best',
   //   title: 'In general, who was the best person you worked with?',
   //   description: 'Ignoring their role entirely, we just want to know who the best person you\'ve worked with. Maybe you worked with a few awesome people? If so, feel free to add them all below.',
@@ -539,7 +531,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question11',
-  //   surveySection: 'section2',
+  //   surveySection: 'section1',
   //   name: 'managed',
   //   title: 'Who were the stand-out people that you managed?',
   //   description: 'We want to know all the people that you managed previously that you thought were going to have your job someday!',
@@ -553,7 +545,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question12',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'knowFriendsFmcg',
   //   title: 'Do any of your friends work in the FMCG space?',
   //   description: 'Maybe they work for an established brand. Or perhaps they work for a start-up. It might not strictly speaking be FMCG, but still has a sales team and works in the area of food (e.g. Farmdrop).',
@@ -576,7 +568,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question13',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'friendsFmcg',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -592,7 +584,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question14',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'knowFamilyFmcg',
   //   title: 'Do any of your family work in the FMCG space?',
   //   description: 'There might not be anyone in your immediate family, but try to think broader, such as your cousins.',
@@ -615,7 +607,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question15',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'familyFmcg',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -631,7 +623,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question16',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'knowSiblingGraduates',
   //   title: 'Have any of your friend\'s siblings graduated in the last few years?',
   //   description: 'This is to see if we can uncover an junior, but eager, sales person - after all grads are likely to know other grads!',
@@ -654,7 +646,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question17',
-  //   surveySection: 'section3',
+  //   surveySection: 'section2',
   //   name: 'graduates',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -670,7 +662,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question18',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'events',
   //   title: 'Have you attended any work related events recently?',
   //   description: '',
@@ -684,7 +676,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question19',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'knowFromEvents',
   //   title: 'Did you meet anyone there that might be suitable (or might know someone suitable) for BEAR\'s job?',
   //   description: 'Perhaps you met someone while working at an event that had an interest in what BEAR was doing.',
@@ -707,7 +699,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question20',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'fromEvents',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',
@@ -723,7 +715,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question21',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'clubs',
   //   title: 'Are you part of any clubs or networking groups outside of work?',
   //   description: '',
@@ -737,7 +729,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question22',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'knowFromClubs',
   //   title: 'Is there anyone there that might be suitable for the job?',
   //   description: '',
@@ -760,7 +752,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
   // },
   // {
   //   id: 'question23',
-  //   surveySection: 'section4',
+  //   surveySection: 'section3',
   //   name: 'fromClubs',
   //   title: 'Great! Please add their name(s) below.',
   //   description: '',

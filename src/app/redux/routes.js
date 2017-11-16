@@ -8,6 +8,6 @@ module.exports = {
   '/surveys/:surveySlug': require('../pages/survey'),
   '/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
-  '/surveys/:surveySlug/complete': require('../pages/survey'),
+  '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
   '/conversations': require('../pages/conversations')
 }
