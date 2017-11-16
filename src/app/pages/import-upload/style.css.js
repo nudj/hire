@@ -73,9 +73,7 @@ const styles = {
     margin: `0 0 0 ${variables.padding.d}`
   }),
   confirmButtonDisabled: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`,
-    opacity: 0.5,
-    cursor: 'default'
+    margin: `0 0 0 ${variables.padding.d}`
   }),
   cancelButton: merge(mixins.buttonSecondary, {
     margin: `0 0 0 ${variables.padding.d}`

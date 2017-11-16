@@ -1,13 +1,13 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
 
-const { SET_NETWORK } = require('./actions')
+const { SET_ACTIVE } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const importRoute = new RouteParser('/connections/import')
 
-const setNetwork = (state, action) => {
+const setActive = (state, action) => {
   return merge(state, {
-    network: action.network
+    active: action.active
   })
 }
 
@@ -16,16 +16,16 @@ const routerLocationChange = (state, action) => {
   if (importRoute.match(baseImportUrlSegments)) {
     return state
   }
-  return merge(initialState)
+  return merge(state, initialState)
 }
 
 const actions = {
-  [SET_NETWORK]: setNetwork,
+  [SET_ACTIVE]: setActive,
   [ROUTER_LOCATION_CHANGE]: routerLocationChange
 }
 
 const initialState = {
-  network: null
+  active: 0
 }
 
 const reducer = (state = initialState, action) => {
