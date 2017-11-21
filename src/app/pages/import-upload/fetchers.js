@@ -44,9 +44,15 @@ const post = async ({ session, body, files }) => {
           id
           firstName
           lastName
-          title
-          company
-          source
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
           person {
             id
             email

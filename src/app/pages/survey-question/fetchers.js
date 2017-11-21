@@ -23,9 +23,15 @@ const get = ({ session, params }) => {
           id
           firstName
           lastName
-          title
-          company
-          source
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
           person {
             id
             email
@@ -183,9 +189,15 @@ const postConnection = ({ session, params, body }) => {
           id
           firstName
           lastName
-          title
-          company
-          source
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
           person {
             id
             email
@@ -195,9 +207,15 @@ const postConnection = ({ session, params, body }) => {
           id
           firstName
           lastName
-          title
-          company
-          source
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
           person {
             id
             email

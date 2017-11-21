@@ -46,11 +46,11 @@ const ConnectionsPage = props => {
             details={[
               {
                 term: 'Job title',
-                description: connection.title
+                description: connection.role.name
               },
               {
                 term: 'Company',
-                description: connection.company
+                description: connection.company.name
               }
             ]}
             actions={[

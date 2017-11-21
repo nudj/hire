@@ -49,6 +49,12 @@ const SurveyQuestionConnections = props => {
     switch (column.name) {
       case 'email':
         return row.person.email
+      case 'company':
+        return row.company.name
+      case 'title':
+        return row.role.name
+      case 'source':
+        return row.source.name
       case 'selected':
         return (
           <input

@@ -8,8 +8,12 @@ const get = ({ session }) => {
           id
           firstName
           lastName
-          title
-          company
+          role {
+            name
+          }
+          company {
+            name
+          }
           person {
             id
           }

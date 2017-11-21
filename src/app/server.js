@@ -8,6 +8,9 @@ require('babel-register')({
     return true
   }
 })
+process.on('unhandledRejection', (error) => {
+  console.log(error.log, ...(error.log || []))
+})
 const path = require('path')
 const server = require('@nudj/framework/server')
 
