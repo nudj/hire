@@ -29,7 +29,7 @@ const setNewItemValue = (state, action) => {
 }
 
 const addConnection = (state, action) => {
-  const questions = Object.assign({}, state.questions)
+  const questions = merge(state.questions)
   const questionItems = get(questions, action.questionId, []).concat(action.newItem.id)
   questions[action.questionId] = questionItems
 
@@ -46,7 +46,7 @@ const addFormerEmployer = (state, action) => Object.assign({}, state, {
 })
 
 const toggleItem = (state, action) => {
-  const questions = Object.assign({}, state.questions)
+  const questions = merge(state.questions)
   let questionItems = get(questions, action.questionId, [])
   if (action.value) {
     if (!questionItems.some(id => id === action.itemId)) {
