@@ -1,13 +1,23 @@
 const React = require('react')
-const get = require('lodash/get')
+
 const getStyle = require('./style.css')
 const Link = require('../link/link')
 
+function onboardedOptions (style, onPageLeave) {
+  return [
+    <li key='Jobs' className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/jobs'>Jobs</Link></li>,
+    <li key='Connections' className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/connections'>Connections</Link></li>,
+    <li key='Conversations' className={style.menuItem}><Link onClick={onPageLeave} className={style.chat} to='/conversations'>Conversations</Link></li>
+  ]
+}
+
 const Header = (props) => {
+  const {
+    onPageLeave,
+    incompleteTaskCount,
+    onboarded = false
+  } = props
   const style = getStyle()
-  const onPageLeave = get(props, 'onPageLeave')
-  const incompleteTaskCount = get(props, 'incompleteTaskCount')
-  const onboarded = get(props, 'onboarded', false)
 
   const tasksLink = (
     <Link className={style.tasks} onClick={onPageLeave} to='/'>
@@ -23,9 +33,7 @@ const Header = (props) => {
         </Link>
         <ul className={style.menu}>
           <li className={style.menuItem}>{tasksLink}</li>
-          {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/jobs'>Jobs</Link></li> : ''}
-          {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.jobs} to='/connections'>Connections</Link></li> : ''}
-          {onboarded ? <li className={style.menuItem}><Link onClick={onPageLeave} className={style.chat} to='/conversations'>Conversations</Link></li> : ''}
+          {onboarded ? onboardedOptions(style, onPageLeave) : ''}
           <li className={style.menuItem}><a className={style.chat} href='mailto:help@nudj.co' id='open-intercom'>Chat</a></li>
           <li className={style.menuItem}><a onClick={onPageLeave} className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>

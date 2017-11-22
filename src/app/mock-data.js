@@ -1,12 +1,7 @@
 const {
-  // booleanChoices,
   questionTypes
 } = require('./lib/constants')
 
-// const {
-//   YES,
-//   NO
-// } = booleanChoices
 const {
   COMPANIES,
   CONNECTIONS
@@ -15,14 +10,14 @@ const {
 const data = {
   assets: [],
   companies: [],
-  companyOnboardeds: [],
+  companyOnboardedEvents: [],
   conversations: [],
   jobs: [],
   people: [],
   referrals: [],
   applications: [],
   hirers: [],
-  hirerOnboardeds: [],
+  hirerOnboardedEvents: [],
   employees: [],
   recommendations: [],
   internalMessages: [],
@@ -68,9 +63,9 @@ data.companies = data.companies.concat([
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
   }
 ])
-data.companyOnboardeds = data.companyOnboardeds.concat([
+data.companyOnboardedEvents = data.companyOnboardedEvents.concat([
   {
-    id: 'companyOnboarded1',
+    id: 'companyOnboardedEvent1',
     created: '1986-07-06T07:34:54.000+00:00',
     modified: '2000-01-17T02:51:58.000+00:00',
     company: 'company1'
@@ -232,13 +227,13 @@ data.hirers = data.hirers.concat([
     company: 'company1'
   }
 ])
-data.hirerOnboardeds = data.hirerOnboardeds.concat([
-  // {
-  //   id: 'hirerOnboarded1',
-  //   created: '1986-07-06T07:34:54.000+00:00',
-  //   modified: '2000-01-17T02:51:58.000+00:00',
-  //   hirer: 'hirer1'
-  // }
+data.hirerOnboardedEvents = data.hirerOnboardedEvents.concat([
+  {
+    id: 'hirerOnboardedEvent1',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    hirer: 'hirer1'
+  }
 ])
 data.employees = data.employees.concat([
   {
@@ -379,19 +374,7 @@ data.surveySections = data.surveySections.concat([
     survey: 'survey1',
     title: 'Professional + Previous Employers',
     description: 'First up, the places that you\'ve worked before and the people you know professionally.'
-  }// ,
-  // {
-  //   id: 'section2',
-  //   survey: 'survey1',
-  //   title: 'Friends & Family',
-  //   description: ''
-  // },
-  // {
-  //   id: 'section3',
-  //   survey: 'survey1',
-  //   title: 'Events & Networks',
-  //   description: ''
-  // }
+  }
 ])
 data.surveyQuestions = data.surveyQuestions.concat([
   {
@@ -402,7 +385,6 @@ data.surveyQuestions = data.surveyQuestions.concat([
     description: 'Please list all of your previous employers. Thanks!',
     type: COMPANIES,
     required: false,
-    dependencies: {},
     tags: []
   },
   {
@@ -413,377 +395,8 @@ data.surveyQuestions = data.surveyQuestions.concat([
     description: 'Add them manually or select them from your list of contacts below...',
     type: CONNECTIONS,
     required: false,
-    dependencies: {},
     tags: ['Account Management']
-  }// ,
-  // {
-  //   id: 'question4',
-  //   surveySection: 'section1',
-  //   name: 'knowSales',
-  //   title: 'What about people that worked in broader Sales roles (e.g. Biz Dev, Customer Success etc.)?',
-  //   description: 'Again, we\'re only trying to find people to ask for recommendations as well as hire, so don\'t worry if they\'re too senior for the role you\'re currently looking for!',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question5',
-  //   surveySection: 'section1',
-  //   name: 'sales',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['Sales'],
-  //   dependencies: {
-  //     knowSales: YES
-  //   }
-  // },
-  // {
-  //   id: 'question6',
-  //   surveySection: 'section1',
-  //   name: 'knowGraduates',
-  //   title: 'Did you come across or manage any good graduates?',
-  //   description: '',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question7',
-  //   surveySection: 'section1',
-  //   name: 'graduates',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['Graduate'],
-  //   dependencies: {
-  //     knowGraduates: YES
-  //   }
-  // },
-  // {
-  //   id: 'question8',
-  //   surveySection: 'section1',
-  //   name: 'knowWorkWithGraduates',
-  //   title: 'What about people who might manage or work with graduates?',
-  //   description: '',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question9',
-  //   surveySection: 'section1',
-  //   name: 'workWithGraduates',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['Work with graduates'],
-  //   dependencies: {
-  //     knowWorkWithGraduates: YES
-  //   }
-  // },
-  // {
-  //   id: 'question10',
-  //   surveySection: 'section1',
-  //   name: 'best',
-  //   title: 'In general, who was the best person you worked with?',
-  //   description: 'Ignoring their role entirely, we just want to know who the best person you\'ve worked with. Maybe you worked with a few awesome people? If so, feel free to add them all below.',
-  //   type: TEXT,
-  //   required: false,
-  //   dependencies: {},
-  //   options: {
-  //     placeholder: 'Answer goes here...'
-  //   },
-  //   tags: ['Best']
-  // },
-  // {
-  //   id: 'question11',
-  //   surveySection: 'section1',
-  //   name: 'managed',
-  //   title: 'Who were the stand-out people that you managed?',
-  //   description: 'We want to know all the people that you managed previously that you thought were going to have your job someday!',
-  //   type: FREETEXT,
-  //   required: false,
-  //   dependencies: {},
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['Subordinate']
-  // },
-  // {
-  //   id: 'question12',
-  //   surveySection: 'section2',
-  //   name: 'knowFriendsFmcg',
-  //   title: 'Do any of your friends work in the FMCG space?',
-  //   description: 'Maybe they work for an established brand. Or perhaps they work for a start-up. It might not strictly speaking be FMCG, but still has a sales team and works in the area of food (e.g. Farmdrop).',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question13',
-  //   surveySection: 'section2',
-  //   name: 'friendsFmcg',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['FMCG'],
-  //   dependencies: {
-  //     knowFriendsFmcg: YES
-  //   }
-  // },
-  // {
-  //   id: 'question14',
-  //   surveySection: 'section2',
-  //   name: 'knowFamilyFmcg',
-  //   title: 'Do any of your family work in the FMCG space?',
-  //   description: 'There might not be anyone in your immediate family, but try to think broader, such as your cousins.',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question15',
-  //   surveySection: 'section2',
-  //   name: 'familyFmcg',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['FMCG'],
-  //   dependencies: {
-  //     knowFamilyFmcg: YES
-  //   }
-  // },
-  // {
-  //   id: 'question16',
-  //   surveySection: 'section2',
-  //   name: 'knowSiblingGraduates',
-  //   title: 'Have any of your friend\'s siblings graduated in the last few years?',
-  //   description: 'This is to see if we can uncover an junior, but eager, sales person - after all grads are likely to know other grads!',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question17',
-  //   surveySection: 'section2',
-  //   name: 'graduates',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['Graduate'],
-  //   dependencies: {
-  //     knowSiblingGraduates: YES
-  //   }
-  // },
-  // {
-  //   id: 'question18',
-  //   surveySection: 'section3',
-  //   name: 'events',
-  //   title: 'Have you attended any work related events recently?',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: false,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   }
-  // },
-  // {
-  //   id: 'question19',
-  //   surveySection: 'section3',
-  //   name: 'knowFromEvents',
-  //   title: 'Did you meet anyone there that might be suitable (or might know someone suitable) for BEAR\'s job?',
-  //   description: 'Perhaps you met someone while working at an event that had an interest in what BEAR was doing.',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question20',
-  //   surveySection: 'section3',
-  //   name: 'fromEvents',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['events'],
-  //   dependencies: {
-  //     knowFromEvents: YES
-  //   }
-  // },
-  // {
-  //   id: 'question21',
-  //   surveySection: 'section3',
-  //   name: 'clubs',
-  //   title: 'Are you part of any clubs or networking groups outside of work?',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: false,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   }
-  // },
-  // {
-  //   id: 'question22',
-  //   surveySection: 'section3',
-  //   name: 'knowFromClubs',
-  //   title: 'Is there anyone there that might be suitable for the job?',
-  //   description: '',
-  //   type: CHOICE,
-  //   required: true,
-  //   dependencies: {},
-  //   tags: [],
-  //   options: {
-  //     choices: [
-  //       {
-  //         title: 'Yes',
-  //         name: YES
-  //       },
-  //       {
-  //         title: 'No',
-  //         name: NO
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   id: 'question23',
-  //   surveySection: 'section3',
-  //   name: 'fromClubs',
-  //   title: 'Great! Please add their name(s) below.',
-  //   description: '',
-  //   type: FREETEXT,
-  //   required: true,
-  //   options: {
-  //     placeholder: 'Answers go here...'
-  //   },
-  //   tags: ['clubs'],
-  //   dependencies: {
-  //     knowFromClubs: YES
-  //   }
-  // }
+  }
 ])
 data.connectionSources = data.connectionSources.concat([
   {

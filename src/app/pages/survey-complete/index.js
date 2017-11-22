@@ -1,15 +1,23 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 
-// const getStyle = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
 const Link = require('../../components/link/link')
 
 const SurveyPage = props => {
-  // const style = getStyle()
-  const survey = _get(props, 'user.hirer.company.survey')
-  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification
+  } = props
+  const survey = get(user, 'hirer.company.survey')
+  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
 
   const headerProps = {
     title: 'Complete survey',
@@ -33,11 +41,18 @@ const SurveyPage = props => {
   } else {
     previousUri = `${onboardingSegment}/surveys/${survey.slug}`
   }
-  const nextUri = _get(props, 'user.hirer.onboarded') ? '/connections' : '/'
+  const nextUri = get(user, 'hirer.onboarded') ? '/connections' : '/'
 
   return (
     <LayoutPage
-      {...props}
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
       header={headerProps}
       headline='Welcome to Aided Recall 🤔'
     >

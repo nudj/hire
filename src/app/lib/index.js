@@ -1,4 +1,6 @@
 const { AppError } = require('@nudj/framework/errors')
+const { distanceInWordsToNow, differenceInSeconds } = require('date-fns')
+
 const { notificationTypes } = require('./constants')
 
 const stripDelims = (tag) => tag.slice(2, -2)
@@ -23,8 +25,21 @@ const createNotification = (type, message) => {
   return { type, message }
 }
 
+function formattedModifiedDate (modified) {
+  const difference = differenceInSeconds(new Date(), modified)
+  return (difference < 120) ? 'just now' : `${distanceInWordsToNow(modified)} ago`
+}
+
+const reducerBuilder = (initialState, actions) => (state = initialState, action) => {
+  const { type } = action
+  const subreducer = actions[type]
+  return subreducer ? subreducer(state, action) : state
+}
+
 module.exports = {
   stripDelims,
   getActiveStep,
-  createNotification
+  createNotification,
+  formattedModifiedDate,
+  reducerBuilder
 }

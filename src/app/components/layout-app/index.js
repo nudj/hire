@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 
 const getStyle = require('./style.css')
 const Header = require('../header')
@@ -9,19 +8,29 @@ const ScrollTop = require('../scroll-top')
 
 const LayoutApp = (props) => {
   const style = getStyle()
-  const incompleteTaskCount = get(props, 'user.incompleteTaskCount')
-  const onboarded = get(props, 'user.hirer.company.onboarded', false)
+  const {
+    incompleteTaskCount,
+    companyOnboardedEvent = false,
+    history,
+    className,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    children
+  } = props
 
   return (
-    <ScrollTop ignore={props.history.action === 'REPLACE'}>
-      <div className={`${props.className} ${style.body}`}>
-        <Notification notification={props.notification} dispatch={props.dispatch} />
-        <Overlay overlay={props.overlay} dialog={props.dialog} dispatch={props.dispatch} />
+    <ScrollTop ignore={history.action === 'REPLACE'}>
+      <div className={`${className} ${style.body}`}>
+        <Notification notification={notification} dispatch={dispatch} />
+        <Overlay overlay={overlay} dialog={dialog} dispatch={dispatch} />
         <header className={style.header}>
-          <Header onPageLeave={props.onPageLeave} incompleteTaskCount={incompleteTaskCount} onboarded={onboarded} />
+          <Header onPageLeave={onPageLeave} incompleteTaskCount={incompleteTaskCount} onboarded={companyOnboardedEvent} />
         </header>
         <div className={style.content}>
-          {props.children}
+          {children}
         </div>
       </div>
     </ScrollTop>

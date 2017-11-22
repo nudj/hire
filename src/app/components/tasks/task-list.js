@@ -11,7 +11,13 @@ const TaskList = (props) => {
 
   return (
     <ul className={style.tasks}>
-      {tasks.map(task => <Task key={get(task, 'id')} {...task} user={user} />)}
+      {tasks.map(task => {
+        return (
+          <li key={get(task, 'id')} className={style.task}>
+            <Task {...task} user={user} />
+          </li>
+        )
+      })}
     </ul>
   )
 }

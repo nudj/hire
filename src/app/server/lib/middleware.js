@@ -30,8 +30,7 @@ async function ensureCompanyOnboarded (req, res, next) {
   return next()
 }
 
-async function ensureHirerOnboarded (req, res, next) {
-  console.log(req.session)
+async function ensureHirerOnboardedEvent (req, res, next) {
   const query = `
     query EnsureOnboarded ($userId: ID!) {
       user (id: $userId) {
@@ -58,5 +57,5 @@ async function ensureHirerOnboarded (req, res, next) {
 
 module.exports = {
   ensureCompanyOnboarded,
-  ensureHirerOnboarded
+  ensureHirerOnboardedEvent
 }

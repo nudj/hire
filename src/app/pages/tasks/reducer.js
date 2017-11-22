@@ -1,7 +1,8 @@
 const { merge } = require('@nudj/library')
 const { TOGGLE_COMPLETED } = require('./actions')
+const { reducerBuilder } = require('../../lib')
 
-const toggleCompleted = (state, action) => {
+const toggleCompleted = (state) => {
   return merge(state, {
     completedVisible: !state.completedVisible
   })
@@ -15,9 +16,4 @@ const initialState = {
   completedVisible: false
 }
 
-const reducer = (state = initialState, action) => {
-  const type = action.type
-  return actions[type] ? actions[type](state, action) : state
-}
-
-module.exports = reducer
+module.exports = reducerBuilder(initialState, actions)

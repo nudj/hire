@@ -1,15 +1,15 @@
 const React = require('react')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 
 const ConnectionEditor = (props) => {
-  const onChange = _get(props, 'onChange')
-  const onSubmitCallback = _get(props, 'onSubmit', () => {})
+  const onChange = get(props, 'onChange')
+  const onSubmitCallback = get(props, 'onSubmit', () => {})
   const onSubmit = (event) => {
     event.preventDefault()
     onSubmitCallback()
     return false
   }
-  const company = _get(props, 'company', {})
+  const company = get(props, 'company', {})
 
   return (
     <form onSubmit={onSubmit}>

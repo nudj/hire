@@ -1,5 +1,7 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
+const get = require('lodash/get')
+const { reducerBuilder } = require('../../lib')
 
 const {
   SET_VALUE,
@@ -24,28 +26,21 @@ const setNewItemValue = (state, action) => {
 }
 
 const addConnection = (state, action) => {
-  let connections = state.connections || []
-  connections = connections.concat(action.newItem)
-  state.connections = connections
-
   let questionItems = state.questions[action.questionId] || []
   questionItems = questionItems.concat(action.newItem.id)
   state.questions[action.questionId] = questionItems
 
-  state.newConnection = {}
-
-  return merge(state)
+  return Object.assign({}, state, {
+    connections: get(state, 'connections', []).concat(action.newItem),
+    questions: state.questions,
+    newConnection: {}
+  })
 }
 
-const addFormerEmployer = (state, action) => {
-  let formerEmployers = state.formerEmployers || []
-  formerEmployers = formerEmployers.concat(action.newItem)
-  state.formerEmployers = formerEmployers
-
-  state.newFormerEmployer = {}
-
-  return merge(state)
-}
+const addFormerEmployer = (state, action) => Object.assign({}, state, {
+  formerEmployers: get(state, 'formerEmployers', []).concat(action.newItem),
+  newFormerEmployer: {}
+})
 
 const toggleItem = (state, action) => {
   let questionItems = state.questions[action.questionId] || []
@@ -86,9 +81,4 @@ const initialState = {
   connections: []
 }
 
-const reducer = (state = initialState, action) => {
-  const type = action.type
-  return actions[type] ? actions[type](state, action) : state
-}
-
-module.exports = reducer
+module.exports = reducerBuilder(initialState, actions)

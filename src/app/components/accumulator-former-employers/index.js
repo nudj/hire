@@ -1,8 +1,6 @@
 const React = require('react')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 const { Table } = require('@nudj/components')
-
-// const getStyle = require('./style.css')
 
 const columns = [
   {
@@ -25,8 +23,7 @@ const cellRenderer = (column, row, defaultValue) => {
 }
 
 const AccumulatorFormerEmployers = props => {
-  // const style = getStyle()
-  const formerEmployers = _get(props, 'formerEmployers')
+  const formerEmployers = get(props, 'formerEmployers')
 
   return (
     <Table

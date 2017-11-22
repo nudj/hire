@@ -1,17 +1,25 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 const _findIndex = require('lodash/findIndex')
 
-// const getStyle = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
 const Link = require('../../components/link/link')
 
 const SurveyPage = props => {
-  // const style = getStyle()
-  const survey = _get(props, 'user.hirer.company.survey')
-  const section = _get(survey, 'section')
-  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification
+  } = props
+  const survey = get(user, 'hirer.company.survey')
+  const section = get(survey, 'section')
+  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
 
   const headerProps = {
     title: 'Complete survey',
@@ -39,9 +47,7 @@ const SurveyPage = props => {
 
   let nextUri = ''
   if (section.questions && section.questions.length) {
-    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-      section.id
-    }/${section.questions[0].type.toLowerCase()}/${section.questions[0].id}`
+    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}/${section.questions[0].type.toLowerCase()}/${section.questions[0].id}`
   } else {
     const sectionIndex = _findIndex(survey.sections, { id: section.id })
     const nextSection = survey.sections[sectionIndex + 1]
@@ -54,7 +60,14 @@ const SurveyPage = props => {
 
   return (
     <LayoutPage
-      {...props}
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
       header={headerProps}
       headline='Welcome to Aided Recall 🤔'
     >

@@ -68,7 +68,6 @@ const get = ({ session, params }) => {
                   name
                   type
                   required
-                  dependencies
                   options
                   tags
                 }
@@ -148,7 +147,6 @@ const postFormerEmployer = ({ session, params, body }) => {
                   name
                   type
                   required
-                  dependencies
                   options
                   tags
                 }
@@ -248,7 +246,6 @@ const postConnection = ({ session, params, body }) => {
                   name
                   type
                   required
-                  dependencies
                   options
                   tags
                 }

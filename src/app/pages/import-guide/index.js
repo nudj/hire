@@ -227,8 +227,17 @@ function renderCurrentStep (dispatch, style, props, state) {
 
 const ImportPage = props => {
   const style = getStyle()
-  const dispatch = props.dispatch
-  const state = props.importGuidePage
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    importGuidePage: state
+  } = props
 
   if (state.leaving) {
     return <Redirect to='/connections' push />
@@ -241,11 +250,22 @@ const ImportPage = props => {
   }
 
   return (
-    <LayoutPage {...props} header={headerProps} headline='Export your connections from LinkedIn'>
+    <LayoutPage
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+      header={headerProps}
+      headline='Export your connections from LinkedIn'
+    >
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>
-      <p className={style.copy}>Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we'll analyse them to discover who the best people to ask for recommendations are.</p>
+      <p className={style.copy}>Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we&quot;ll analyse them to discover who the best people to ask for recommendations are.</p>
       {step}
     </LayoutPage>
   )

@@ -157,8 +157,17 @@ function renderCurrentStep (dispatch, style, props, state) {
 
 const ImportPage = props => {
   const style = getStyle()
-  const dispatch = props.dispatch
-  const state = props.importUploadPage
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    importUploadPage: state
+  } = props
   const step = renderCurrentStep(dispatch, style, props, state)
   const headerProps = {
     title: 'Unlocking your network',
@@ -166,7 +175,18 @@ const ImportPage = props => {
   }
 
   return (
-    <LayoutPage {...props} header={headerProps} headline='Upload your file'>
+    <LayoutPage
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+      header={headerProps}
+      headline='Upload your file'
+    >
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>

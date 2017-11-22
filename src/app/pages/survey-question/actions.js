@@ -1,5 +1,5 @@
 const humanparser = require('humanparser')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 const _isEmpty = require('lodash/isEmpty')
 const _reduce = require('lodash/reduce')
 const _isUndefined = require('lodash/isUndefined')
@@ -32,20 +32,11 @@ function getSteps (sections = []) {
 }
 
 function getStepIndex (state, indexModifier, validate) {
-  const steps = getSteps(_get(state, 'app.user.hirer.company.survey.sections'))
-  const answers = _get(state, 'surveyQuestionPage.answers')
-  const originalIndex = _get(state, 'surveyQuestionPage.step')
+  const steps = getSteps(get(state, 'app.user.hirer.company.survey.sections'))
+  const answers = get(state, 'surveyQuestionPage.answers')
+  const originalIndex = get(state, 'surveyQuestionPage.step')
   let index = originalIndex
   let nextIndex
-  // if (
-  //   validate &&
-  //   steps[originalIndex].required &&
-  //   steps[originalIndex].name &&
-  //   !answers[steps[originalIndex].name]
-  // ) {
-  //   // required answer not given
-  //   return originalIndex
-  // }
   while (_isUndefined(nextIndex)) {
     const testIndex = indexModifier(index)
     const testSection = steps[testIndex]
@@ -82,21 +73,21 @@ module.exports.next = () => (dispatch, getState) => {
 
 module.exports.finishSurvey = () => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const answers = _get(state, 'surveyQuestionPage.answers', {})
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const answers = get(state, 'surveyQuestionPage.answers', {})
   const connections = getConnections(getQuestions(survey), answers)
   return dispatch(setValue('connections', connections))
 }
 
 module.exports.submitConnections = () => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const connections = _get(state, 'surveyQuestionPage.connections', []).map(
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const connections = get(state, 'surveyQuestionPage.connections', []).map(
     connection => _omit(connection, ['id'])
   )
   return dispatch(
     actions.app.postData({
-      url: `/surveys/${_get(survey, 'slug')}`,
+      url: `/surveys/${get(survey, 'slug')}`,
       method: 'post',
       data: {
         connections,
@@ -114,7 +105,7 @@ function getQuestions (survey) {
 
 function getConnections (questions, answers) {
   const nameQuestions = _filter(questions, question =>
-    _get(question, 'tags.length')
+    get(question, 'tags.length')
   )
   const connections = nameQuestions.reduce((connections, question) => {
     return connections.concat(getConnectionsForQuestion(question, answers))
@@ -123,7 +114,7 @@ function getConnections (questions, answers) {
 }
 
 function getConnectionsForQuestion (question, answers) {
-  return _get(answers, question.name, '')
+  return get(answers, question.name, '')
     .split('\n')
     .reduce((connections, connection) => {
       if (connection.length) {
@@ -171,10 +162,10 @@ function addConnection (questionId, newItem) {
 }
 module.exports.addConnection = questionId => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const section = _get(survey, 'section')
-  const question = _get(section, 'question')
-  const connection = _get(state, 'surveyQuestionPage.newConnection')
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const connection = get(state, 'surveyQuestionPage.newConnection')
   return dispatch(
     actions.app.postData(
       {
@@ -189,7 +180,7 @@ module.exports.addConnection = questionId => (dispatch, getState) => {
       },
       () => {
         const state = getState()
-        const newConnection = _get(state, 'app.user.newConnection')
+        const newConnection = get(state, 'app.user.newConnection')
         dispatch(addConnection(questionId, newConnection))
       }
     )
@@ -207,10 +198,10 @@ function addFormerEmployer (questionId, newItem) {
 }
 module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
   const state = getState()
-  const survey = _get(state, 'app.user.hirer.company.survey', {})
-  const section = _get(survey, 'section')
-  const question = _get(section, 'question')
-  const formerEmployer = _get(state, 'surveyQuestionPage.newFormerEmployer')
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const formerEmployer = get(state, 'surveyQuestionPage.newFormerEmployer')
   return dispatch(
     actions.app.postData(
       {
@@ -225,7 +216,7 @@ module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
       },
       () => {
         const state = getState()
-        const newFormerEmployer = _get(state, 'app.user.newFormerEmployer')
+        const newFormerEmployer = get(state, 'app.user.newFormerEmployer')
         dispatch(addFormerEmployer(questionId, newFormerEmployer))
       }
     )

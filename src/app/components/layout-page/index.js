@@ -1,5 +1,5 @@
 const React = require('react')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 
 const getStyle = require('./style.css')
 const LayoutApp = require('../layout-app')
@@ -8,17 +8,37 @@ const Tooltip = require('../tooltip/tooltip')
 
 const LayoutPage = (props) => {
   const style = getStyle()
-  const tooltip = _get(props, 'tooltip')
-  const header = _get(props, 'header')
-  const headline = _get(props, 'headline')
+  const {
+    tooltip,
+    header,
+    headline,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    children
+  } = props
 
   return (
-    <LayoutApp {...props} className={style.pageBody}>
+    <LayoutApp
+      className={style.pageBody}
+      incompleteTaskCount={get(user, 'incompleteTaskCount')}
+      companyOnboardedEvent={get(user, 'hirer.company.onboarded')}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+    >
       <PageHeader {...header} />
       {headline ? <h3 className={style.pageHeadline}>{headline}</h3> : ''}
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          {props.children}
+          {children}
         </div>
         <div className={style.pageSidebar}>
           {tooltip ? <Tooltip {...tooltip} /> : ''}

@@ -9,7 +9,17 @@ const RowItem = require('../../components/row-item/row-item')
 
 const ConnectionsPage = props => {
   const style = getStyle()
-  const connections = get(props, 'user.connections', [])
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification
+  } = props
+  const connections = get(user, 'connections', [])
   const headerProps = {
     title: 'Your little black book',
     subtitle: 'All your connections at your bec and call',
@@ -29,7 +39,14 @@ const ConnectionsPage = props => {
 
   return (
     <LayoutPage
-      {...props}
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
       header={headerProps}
       headline={`You have ${connections.length} connection${
         connections.length === 1 ? '' : 's'

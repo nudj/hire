@@ -1,5 +1,6 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
+const { reducerBuilder } = require('../../lib')
 
 const {
   SET_VALUE,
@@ -41,9 +42,4 @@ const initialState = {
   parsing: false
 }
 
-const reducer = (state = initialState, action) => {
-  const type = action.type
-  return actions[type] ? actions[type](state, action) : state
-}
-
-module.exports = reducer
+module.exports = reducerBuilder(initialState, actions)

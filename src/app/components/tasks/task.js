@@ -1,7 +1,7 @@
 const React = require('react')
 const Link = require('../link/link')
 const get = require('lodash/get')
-const { distanceInWordsToNow, differenceInSeconds } = require('date-fns')
+const { formattedModifiedDate } = require('../../lib')
 
 const getStyle = require('./task.css')
 
@@ -32,54 +32,43 @@ const typeOptions = {
   }
 }
 
-function formattedModifiedDate (modified) {
-  const difference = differenceInSeconds(new Date(), modified)
-  return (difference < 120) ? 'just now' : `${distanceInWordsToNow(modified)} ago`
-}
-
 const Task = (props) => {
   const style = getStyle()
   const completed = get(props, 'completed', false)
   const user = get(props, 'user')
-  const options = typeOptions[get(props, 'type')]
+  const options = get(typeOptions, props.type)
   const title = get(options, 'title', '')
 
-  let content
+  let text
+  let actions = ''
+
   if (completed) {
     const modified = get(props, 'modified')
     const completedBy = get(props, 'completedBy')
     const completedDate = formattedModifiedDate(modified)
     let userName = 'You'
-
     if (completedBy && completedBy.id !== user.id) {
       userName = `${get(completedBy, 'firstName', '')} ${get(completedBy, 'lastName', '')}`
     }
 
-    content = (
-      <li className={style.task}>
-        <div className={style.textContainer}>
-          <h5 className={style.titleDone}>{title}</h5>
-          <p className={style.textDone}>{userName} completed this task {completedDate}</p>
-        </div>
-      </li>
-    )
+    text = `${userName} completed this task ${completedDate}`
   } else {
-    const text = get(options, 'text', '')
     const actionLabel = get(options, 'action', '')
     const actionLink = get(options, 'actionLink', '')
 
-    content = (
-      <li className={style.task}>
-        <div className={style.textContainer}>
-          <h5 className={style.title}>{title}</h5>
-          <p className={style.text}>{text}</p>
-        </div>
-        <Link className={style.action} to={actionLink}>{actionLabel}</Link>
-      </li>
-    )
+    text = get(options, 'text', '')
+    actions = <Link className={style.action} to={actionLink}>{actionLabel}</Link>
   }
 
-  return content
+  return (
+    <div className={style.task}>
+      <div className={style.textContainer}>
+        <h5 className={style.title}>{title}</h5>
+        {text ? <p className={style.text}>{text}</p> : ''}
+      </div>
+      {actions}
+    </div>
+  )
 }
 
 module.exports = Task

@@ -6,8 +6,7 @@ const styles = {
     alignContent: 'center',
     alignItems: 'center',
     display: 'flex',
-    justifyContent: 'space-between',
-    margin: `0 0 ${variables.padding.d} 0`
+    justifyContent: 'space-between'
   }),
   textContainer: {
     flexGrow: '1'

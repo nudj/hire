@@ -5,7 +5,7 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const Linkify = require('linkifyjs/react')
 const striptags = require('striptags')
-const distanceInWordsToNow = require('date-fns/distance_in_words_to_now')
+const { formattedModifiedDate } = require('../../lib')
 
 const templater = require('../../lib/templater')
 const getStyle = require('./style.css')
@@ -27,7 +27,7 @@ const ConversationBox = (props) => {
     const isRecipient = message.sender.includes(props.recipient.email) // Recipient's address is known, hirer's gmail-specific address is less certain
     const messageStyle = isRecipient ? 'recipient' : 'hirer'
     const currentMessage = find(savedMessages, { providerId: message.id })
-    const sendDate = `sent ${distanceInWordsToNow(new Date(Number(message.date)))} ago`
+    const sendDate = `sent ${formattedModifiedDate(new Date(Number(message.date)))}`
     const key = message.id
     const textStyle = style[`${messageStyle}Paragraph`]
     const body = message.body.replace(/(<br \/>)/g, '\n\n')
@@ -41,7 +41,7 @@ const ConversationBox = (props) => {
     let date = sendDate
     if (currentMessage && currentMessage.readCount) {
       const currentMessageDate = get(currentMessage, 'modified')
-      date = currentMessageDate ? `seen ${distanceInWordsToNow(currentMessageDate)} ago` : `seen`
+      date = currentMessageDate ? `seen ${formattedModifiedDate(currentMessageDate)}` : `seen`
     }
 
     return (

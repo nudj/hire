@@ -1,10 +1,7 @@
 const React = require('react')
-const _get = require('lodash/get')
-const _find = require('lodash/find')
+const find = require('lodash/find')
 const { Table } = require('@nudj/components')
 const { merge } = require('@nudj/library')
-
-// const getStyle = require('./style.css')
 
 const columns = [
   {
@@ -38,12 +35,11 @@ const columns = [
 ]
 
 const SurveyQuestionConnections = props => {
-  // const style = getStyle()
-  const question = _get(props, 'question')
-  const connections = _get(props, 'connections')
-  const basket = _get(props, 'basket')
-  const onToggle = _get(props, 'onToggle')
-  const onRemove = _get(props, 'onRemove')
+  const question = props.question
+  const connections = props.connections
+  const basket = props.basket
+  const onToggle = props.onToggle
+  const onRemove = props.onRemove
 
   const cellRenderer = (column, row, defaultValue) => {
     switch (column.name) {
@@ -80,7 +76,7 @@ const SurveyQuestionConnections = props => {
         <h4>Basket</h4>
         <ul>
           {basket.map(id => {
-            const connection = _find(connections, { id })
+            const connection = find(connections, { id })
             return (
               <li key={connection.id}>
                 {connection.firstName} {connection.lastName}{' '}

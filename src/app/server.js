@@ -8,6 +8,7 @@ require('babel-register')({
     return true
   }
 })
+// TODO: Establish good pattern for this (maybe move to framework?)
 process.on('unhandledRejection', (error) => {
   console.log(error.log, ...(error.log || []))
 })

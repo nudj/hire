@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 const _findIndex = require('lodash/findIndex')
 
 const {
@@ -9,7 +9,6 @@ const {
   addFormerEmployer,
   toggleItem
 } = require('./actions')
-// const getStyle = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
 const FormCompany = require('../../components/form-company')
 const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
@@ -42,14 +41,22 @@ function onRemoveItemBasket (dispatch) {
 }
 
 const SurveyQuestionPage = props => {
-  // const style = getStyle()
-  const dispatch = _get(props, 'dispatch')
-  const survey = _get(props, 'user.hirer.company.survey')
-  const section = _get(survey, 'section')
-  const question = _get(section, 'question')
-  const state = _get(props, 'surveyQuestionPage')
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    surveyQuestionPage: state
+  } = props
+  const survey = get(user, 'hirer.company.survey')
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
   const questionIndex = _findIndex(section.questions, { id: question.id })
-  const onboardingSegment = _get(props, 'user.hirer.onboarded') ? '' : '/onboarding'
+  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
 
   const headerProps = {
     title: 'Complete survey',
@@ -59,9 +66,7 @@ const SurveyQuestionPage = props => {
   let previousUri = ''
   const previousQuestion = section.questions[questionIndex - 1]
   if (previousQuestion) {
-    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-      section.id
-    }/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
+    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
   } else {
     previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}`
   }
@@ -83,38 +88,38 @@ const SurveyQuestionPage = props => {
   }
 
   let questionContent
-  const questionType = _get(question, 'type')
+  const questionType = get(question, 'type')
   switch (questionType) {
     case questionTypes.COMPANIES:
-      const formerEmployers = _get(props, 'user.formerEmployers', []).concat(
-        _get(props, 'user.newFormerEmployer', [])
+      const formerEmployers = get(user, 'formerEmployers', []).concat(
+        get(user, 'newFormerEmployer', [])
       )
       questionContent = (
         <div>
           <FormCompany
             onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
             onSubmit={onAddCompany(dispatch, question.id)}
-            company={_get(state, 'newFormerEmployer', {})}
+            company={get(state, 'newFormerEmployer', {})}
           />
           <AccumulatorFormerEmployers formerEmployers={formerEmployers} />
         </div>
       )
       break
     case questionTypes.CONNECTIONS:
-      const connections = _get(props, 'user.connections', []).concat(
-        _get(props, 'user.newConnection', [])
+      const connections = get(user, 'connections', []).concat(
+        get(user, 'newConnection', [])
       )
       questionContent = (
         <div>
           <FormConnection
             onChange={onChangeNewItem(dispatch, 'newConnection')}
             onSubmit={onAddConnection(dispatch, question.id)}
-            connection={_get(state, 'newConnection', {})}
+            connection={get(state, 'newConnection', {})}
           />
           <AccumulatorConnections
             question={question}
             connections={connections}
-            basket={_get(state, `questions[${question.id}]`, [])}
+            basket={get(state, `questions[${question.id}]`, [])}
             onToggle={onToggleItem(dispatch)}
             onRemove={onRemoveItemBasket(dispatch)}
           />
@@ -125,7 +130,14 @@ const SurveyQuestionPage = props => {
 
   return (
     <LayoutPage
-      {...props}
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
       header={headerProps}
       headline='Welcome to Aided Recall 🤔'
     >

@@ -1,5 +1,6 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
+const { reducerBuilder } = require('../../lib')
 
 const { SET_NETWORK } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -29,9 +30,4 @@ const initialState = {
   network: null
 }
 
-const reducer = (state = initialState, action) => {
-  const type = action.type
-  return actions[type] ? actions[type](state, action) : state
-}
-
-module.exports = reducer
+module.exports = reducerBuilder(initialState, actions)

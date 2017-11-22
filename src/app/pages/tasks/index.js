@@ -18,7 +18,7 @@ function renderIncompleteContent (incompleteTasks, props, style) {
   let content
 
   if (!incompleteTasks.length) {
-    content = <p className={style.incompleteEmpty}>Doesn't look like there are any tasks for you to complete, check back soon.</p>
+    content = <p className={style.incompleteEmpty}>Doesn&#39;t look like there are any tasks for you to complete, check back soon.</p>
   } else {
     content = <TaskList tasks={incompleteTasks} user={get(props, 'user')} />
   }
@@ -42,13 +42,22 @@ function renderCompletedContent (completeTasks, props, style) {
 
 const TasksPage = (props) => {
   const style = getStyle()
-  const dispatch = get(props, 'dispatch')
-  const state = get(props, 'tasksPage')
-  const firstName = get(props, 'user.firstName', '')
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    tasksPage: state
+  } = props
+  const firstName = get(user, 'firstName', '')
   const completedVisible = get(state, 'completedVisible')
 
-  const userTasks = get(props, 'user.tasks', [])
-  const companyTasks = get(props, 'user.hirer.company.tasks', [])
+  const userTasks = get(user, 'tasks', [])
+  const companyTasks = get(user, 'hirer.company.tasks', [])
   const allTasks = userTasks.concat(companyTasks)
   const allIncompleteTasks = allTasks.filter(task => !task.completed)
   const allCompleteTasks = allTasks.filter(task => task.completed)
@@ -58,7 +67,18 @@ const TasksPage = (props) => {
   }
 
   return (
-    <LayoutPage {...props} header={headerProps} headline={`Welcome, ${firstName}!`}>
+    <LayoutPage
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+      header={headerProps}
+      headline={`Welcome, ${firstName}!`}
+    >
       <Helmet>
         <title>nudj - Tasks</title>
       </Helmet>
