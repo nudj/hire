@@ -1,71 +1,60 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const actions = require('@nudj/framework/actions')
 
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
-const {
-  showDialog
-} = actions.app
+const LayoutPage = require('../../components/layout-page')
+const Link = require('../../components/link/link')
 
-const getStyle = require('./style.css')
+const SurveyPage = props => {
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification
+  } = props
+  const survey = get(user, 'hirer.company.survey')
 
-const HirerSurvey = (props) => {
-  const style = getStyle()
-  const title = 'Complete our survey and jog your memory'
-  const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking you questions you wouldn’t necessarily ask yourself.'
-  const tooltip = get(props, 'tooltip')
-  const surveyUrl = get(props, 'survey.link', 'about:blank')
-  const surveyFrame = (<iframe src={surveyUrl} className={style.surveyFrame} />)
+  const headerProps = {
+    title: 'Complete survey',
+    subtitle: 'To impress Robyn and Jamie'
+  }
 
-  const handlePageLeave = (event) => {
-    event.preventDefault()
-    let url = event.target.getAttribute('href')
-
-    if (!url) {
-      url = '/'
-    }
-
-    return props.dispatch(showDialog({
-      options: [
-        {
-          type: 'cancel',
-          action: {
-            name: 'hideDialog'
-          }
-        },
-        {
-          type: 'link',
-          url
-        }
-      ]
-    }))
+  // TODO: Break out link building functionality so it can be shared between survey pages
+  let next = ''
+  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
+  if (survey.sections.length) {
+    next = (
+      <Link to={`${onboardingSegment}/surveys/${survey.slug}/sections/${survey.sections[0].id}`}>
+        Next
+      </Link>
+    )
   }
 
   return (
-    <LayoutApp {...props} onPageLeave={handlePageLeave} className={style.pageBody}>
+    <LayoutPage
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+      header={headerProps}
+      headline='Welcome to Aided Recall 🤔'
+    >
       <Helmet>
-        <title>nudj - Discover referrers in your network</title>
+        <title>nudj - Complete survey</title>
       </Helmet>
-      <input type='hidden' name='_csrf' value={props.csrfToken} />
-      <PageHeader
-        title='Discover referrers in your network'
-        subtitle='On-boarding'
-      />
-      <h3 className={style.pageHeadline}>{title}</h3>
-      <p className={style.copy}>{subtitle}</p>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          {surveyFrame}
-        </div>
-        <div className={style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
-      </div>
-    </LayoutApp>
+      {next}
+      <h3>{survey.introTitle}</h3>
+      <p>{survey.introDescription}</p>
+    </LayoutPage>
   )
 }
 
-module.exports = HirerSurvey
+module.exports = SurveyPage

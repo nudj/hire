@@ -15,20 +15,23 @@
   "homepage": "https://github.com/nudj/web#readme",
   "standard": {
     "parser": "babel-eslint",
+    "plugins": [ "flowtype" ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",
       "app/node_modules",
-      "webpack*"
+      "webpack*",
+      "@nudj"
     ]
   },
   "dependencies": {
-    "@nudj/components": "0.1.3",
+    "@nudj/components": "0.2.0",
     "@nudj/framework": "7.0.0",
     "@nudj/library": "1.1.0",
     "aphrodite": "^1.2.0",
     "aws-sdk": "^2.96.0",
     "axios": "^0.16.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.24.1",
     "better-react-spinkit": "^2.0.2",
@@ -45,12 +48,14 @@
     "express-fileupload": "^0.1.4",
     "express-session": "^1.15.1",
     "express-urlrewrite": "^1.2.0",
+    "flow-bin": "^0.59.0",
     "font-awesome": "^4.7.0",
     "form-serialize": "^0.7.1",
     "googleapis": "^21.3.0",
     "google-auth-library": "^0.10.0",
     "hash-generator": "^0.1.0",
     "history": "^4.6.1",
+    "humanparser": "^1.5.0",
     "intercom-client": "^2.8.7",
     "js-base64": "^2.1.9",
     "json-server": "^0.9.6",
@@ -92,6 +97,7 @@
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^1.2.2",
+    "eslint-plugin-flowtype": "2.39.1",
     "mocha": "^3.2.0",
     "nock": "^9.0.25",
     "nodemon": "^1.11.0",

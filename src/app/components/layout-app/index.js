@@ -8,17 +8,29 @@ const ScrollTop = require('../scroll-top')
 
 const LayoutApp = (props) => {
   const style = getStyle()
+  const {
+    incompleteTaskCount,
+    companyOnboardedEvent = false,
+    history,
+    className,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    children
+  } = props
 
   return (
-    <ScrollTop ignore={props.history.action === 'REPLACE'}>
-      <div className={`${props.className} ${style.body}`}>
-        <Notification notification={props.notification} dispatch={props.dispatch} />
-        <Overlay overlay={props.overlay} dialog={props.dialog} dispatch={props.dispatch} />
+    <ScrollTop ignore={history.action === 'REPLACE'}>
+      <div className={`${className} ${style.body}`}>
+        <Notification notification={notification} dispatch={dispatch} />
+        <Overlay overlay={overlay} dialog={dialog} dispatch={dispatch} />
         <header className={style.header}>
-          <Header {...props} />
+          <Header onPageLeave={onPageLeave} incompleteTaskCount={incompleteTaskCount} onboarded={companyOnboardedEvent} />
         </header>
         <div className={style.content}>
-          {props.children}
+          {children}
         </div>
       </div>
     </ScrollTop>

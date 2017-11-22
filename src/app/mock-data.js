@@ -1,23 +1,41 @@
+const {
+  questionTypes
+} = require('./lib/constants')
+
+const {
+  COMPANIES,
+  CONNECTIONS
+} = questionTypes
+
 const data = {
   assets: [],
   companies: [],
+  companyOnboardedEvents: [],
   conversations: [],
   jobs: [],
   people: [],
   referrals: [],
   applications: [],
   hirers: [],
+  hirerOnboardedEvents: [],
   employees: [],
   recommendations: [],
   internalMessages: [],
   externalMessages: [],
   surveyMessages: [],
   surveys: [],
-  tasks: [],
+  surveySections: [],
+  surveyQuestions: [],
+  companyTasks: [],
+  personTasks: [],
   tokens: [],
   employeeSurveys: [],
   accounts: [],
-  messages: []
+  messages: [],
+  connections: [],
+  formerEmployers: [],
+  roles: [],
+  connectionSources: []
 }
 data.companies = data.companies.concat([
   {
@@ -30,8 +48,7 @@ data.companies = data.companies.concat([
     name: 'Fake Company',
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
   },
   {
     id: 'company2',
@@ -43,8 +60,15 @@ data.companies = data.companies.concat([
     name: 'nudj',
     slug: 'nudj',
     url: 'https://nudj.co',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+  }
+])
+data.companyOnboardedEvents = data.companyOnboardedEvents.concat([
+  {
+    id: 'companyOnboardedEvent1',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    company: 'company1'
   }
 ])
 data.jobs = data.jobs.concat([
@@ -183,23 +207,39 @@ data.people = data.people.concat([
 data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
     company: 'company1'
   },
   {
     id: 'hirer2',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person1',
     company: 'company1'
   },
   {
     id: 'hirer3',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person6',
     company: 'company1'
+  }
+])
+data.hirerOnboardedEvents = data.hirerOnboardedEvents.concat([
+  {
+    id: 'hirerOnboardedEvent1',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    hirer: 'hirer1'
   }
 ])
 data.employees = data.employees.concat([
   {
     id: 'employee1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person4',
     company: 'company1'
   }
@@ -262,58 +302,42 @@ data.recommendations = data.recommendations.concat([
     source: 'NUDJ'
   }
 ])
-data.surveys = data.surveys.concat([
+data.companyTasks = data.companyTasks.concat([
   {
-    id: 'survey1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    company: 'company1',
-    link: 'https://nudj.typeform.com/to/gfAnDV',
-    uuid: 'gfAnDV',
-    type: 'EMPLOYEE_SURVEY'
-  },
-  {
-    id: 'survey2',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    company: 'company1',
-    link: 'https://nudj.typeform.com/to/gfAnDV',
-    uuid: 'gfAnDV',
-    type: 'HIRER_SURVEY'
-  }
-])
-data.tasks = data.tasks.concat([
-  {
-    id: 'task1',
-    hirer: 'hirer1',
-    type: 'UNLOCK_NETWORK_LINKEDIN',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    completed: 'hirer1'
-  },
-  {
-    id: 'task2',
+    id: 'companyTask2',
     company: 'company1',
     type: 'SEND_SURVEY_INTERNAL',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: false,
+    completedBy: 'person2'
   },
   {
-    id: 'task3',
+    id: 'companyTask3',
     company: 'company1',
     type: 'SHARE_JOBS',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: true,
+    completedBy: null
+  }
+])
+data.personTasks = data.personTasks.concat([
+  {
+    id: 'personTask1',
+    person: 'person5',
+    type: 'UNLOCK_NETWORK_LINKEDIN',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: false
   },
   {
-    id: 'task4',
-    hirer: 'hirer1',
+    id: 'personTask4',
+    person: 'person5',
     type: 'HIRER_SURVEY',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
-    completed: null
+    completed: false
   }
 ])
 data.tokens = data.tokens.concat([
@@ -331,6 +355,55 @@ data.employeeSurveys = data.employeeSurveys.concat([
     id: 'employeeSurvey1',
     employee: 'employee1',
     survey: 'survey1'
+  }
+])
+data.surveys = data.surveys.concat([
+  {
+    id: 'survey1',
+    slug: 'aided-recall-baby',
+    company: 'company1',
+    introTitle: 'rbeuifr friofrenf egrmeg',
+    introDescription: 'fnreu giegoireg nreiogrneiog reniogew fiowef newof newofnewiof ewnifowe nfiowef niewof nweiofewniof ewniofnoew nfwenfw',
+    outroTitle: 'rbeuifr friofrenf egrmeg',
+    outroDescription: 'fnreu giegoireg nreiogrneiog reniogew fiowef newof newofnewiof ewnifowe nfiowef niewof nweiofewniof ewniofnoew nfwenfw'
+  }
+])
+data.surveySections = data.surveySections.concat([
+  {
+    id: 'section1',
+    survey: 'survey1',
+    title: 'Professional + Previous Employers',
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+  }
+])
+data.surveyQuestions = data.surveyQuestions.concat([
+  {
+    id: 'question1',
+    surveySection: 'section1',
+    name: 'workBefore',
+    title: 'Where did you work before BEAR?',
+    description: 'Please list all of your previous employers. Thanks!',
+    type: COMPANIES,
+    required: false,
+    tags: []
+  },
+  {
+    id: 'question2',
+    surveySection: 'section1',
+    name: 'accountManagers',
+    title: 'Do you know any account managers?',
+    description: 'Add them manually or select them from your list of contacts below...',
+    type: CONNECTIONS,
+    required: false,
+    tags: ['Account Management']
+  }
+])
+data.connectionSources = data.connectionSources.concat([
+  {
+    id: 'connectionSource1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    name: 'linkedin'
   }
 ])
 

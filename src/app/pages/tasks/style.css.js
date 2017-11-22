@@ -1,5 +1,5 @@
 const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { mixins } = require('../../lib/css')
 
 const listStyle = {
   listStyle: 'none',
@@ -9,14 +9,13 @@ const listStyle = {
 
 module.exports = css(merge(mixins.pageLayout, {
   jobs: listStyle,
-  taskGroupTitle: merge(mixins.typography.h6, {
-    padding: `0 0 0 ${variables.padding.d}`
-  }),
+  taskGroupTitle: mixins.typography.h6,
   taskGroupTitleHighlight: mixins.highlightColour,
-  completedVisibleButton: merge(mixins.buttonSecondary, {
-    margin: `0 0 0 ${variables.padding.d}`
-  }),
-  incompleteEmpty: merge(mixins.typography.p, {
-    padding: `0 0 0 ${variables.padding.d}`
-  })
+  completedVisibleButton: mixins.buttonSecondary,
+  incompleteEmpty: mixins.typography.p,
+  pageSidebar: {
+    [mixins.breakpoints.l]: {
+      paddingTop: '40px'
+    }
+  }
 }))

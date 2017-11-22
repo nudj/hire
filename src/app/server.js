@@ -2,15 +2,18 @@ require('envkey')
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/app/) || filename.match(/framework/)) {
+    if (filename.match(/@nudj/) || filename.match(/app/)) {
       return false
     }
     return true
   }
 })
+// TODO: Establish good pattern for this (maybe move to framework?)
+process.on('unhandledRejection', (error) => {
+  console.log(error.log, ...(error.log || []))
+})
 const path = require('path')
 const server = require('@nudj/framework/server')
-const find = require('lodash/find')
 
 const App = require('./redux')
 const reduxRoutes = require('./redux/routes')
@@ -22,15 +25,14 @@ const expressRouters = {
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
     require('./pages/tasks/router'),
-    require('./pages/import-contacts/router'),
-    require('./pages/survey-compose/router'),
-    require('./pages/survey/router'),
     require('./pages/jobs/router'),
-    require('./pages/job/router'),
-    require('./pages/nudj/router'),
-    require('./pages/internal-compose/router'),
-    require('./pages/external-select/router'),
-    require('./pages/external-compose/router'),
+    require('./pages/connections/router'),
+    require('./pages/import-upload/router'),
+    require('./pages/survey/router'),
+    require('./pages/survey-section/router'),
+    require('./pages/survey-question/router'),
+    require('./pages/survey-complete/router'),
+    require('./pages/conversations/router'),
     require('./server/routers/catch-all')
   ]
 }
@@ -38,14 +40,11 @@ const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
 const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
-  req.session.data = req.session.data || {
-    hirer: find(mockData.hirers, { id: 'hirer1' }),
-    person: find(mockData.people, { id: 'person5' }),
-    company: find(mockData.companies, { id: 'company1' })
-  }
+  req.session.userId = 'person5'
   next()
 }
 const errorHandlers = {}
+const gqlFragments = require('./lib/graphql')
 server({
   App,
   reduxRoutes,
@@ -56,5 +55,6 @@ server({
   expressRouters,
   spoofLoggedIn,
   errorHandlers,
+  gqlFragments,
   LoadingComponent
 })

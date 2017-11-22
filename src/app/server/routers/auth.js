@@ -2,36 +2,28 @@ const express = require('express')
 const passport = require('passport')
 const request = require('../../lib/request')
 const logger = require('@nudj/framework/logger')
-const { promiseMap } = require('@nudj/library')
 const { cacheReturnTo } = require('@nudj/library/server')
 
-function fetchPerson (email) {
-  let person = request(`people/first?email=${encodeURIComponent(email)}`)
-  .then((person) => {
+async function fetchPerson (email) {
+  try {
+    const person = await request(`people/first?email=${encodeURIComponent(email)}`)
+    if (!person) throw new Error('Person not found')
     if (person.error) throw new Error('Unable to fetch person')
     return person
-  })
-  return promiseMap({ person })
+  } catch (error) {
+    throw new Error('Error fetching person')
+  }
 }
 
-function fetchHirer (data) {
-  data.hirer = request(`hirers/first?person=${data.person.id}`)
-  .then((hirer) => {
+async function fetchHirer (personId) {
+  try {
+    const hirer = await request(`hirers/first?person=${personId}`)
     if (!hirer) throw new Error('Not a registered hirer')
     if (hirer.error) throw new Error('Error fetching hirer')
     return hirer
-  })
-  return promiseMap(data)
-}
-
-function fetchCompany (data) {
-  data.company = request(`companies/${data.hirer.company}`)
-  .then((company) => {
-    if (!company) throw new Error('Company not found')
-    if (company.error) throw new Error('Error fetching company')
-    return company
-  })
-  return promiseMap(data)
+  } catch (error) {
+    throw new Error('Error fetching hirer')
+  }
 }
 
 const Router = ({
@@ -57,23 +49,21 @@ const Router = ({
 
   router.get('/callback',
     passport.authenticate('auth0', { failureRedirect: '/login' }),
-    (req, res, next) => {
+    async (req, res, next) => {
       if (!req.user) {
         logger.log('error', 'User not returned from Auth0')
         return next('Unable to login')
       }
 
-      fetchPerson(req.user._json.email)
-      .then(fetchHirer)
-      .then(fetchCompany)
-      .then((data) => {
-        req.session.data = data
+      try {
+        const user = await fetchPerson(req.user._json.email)
+        await fetchHirer(user.id) // ensure hirer exists
+        req.session.userId = user.id
         res.redirect(req.session.returnTo || '/')
-      })
-      .catch((error) => {
+      } catch (error) {
         logger.log('error', error)
         next('Unable to login')
-      })
+      }
     }
   )
 

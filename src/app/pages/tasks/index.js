@@ -1,99 +1,92 @@
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
+
 const getStyle = require('./style.css')
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
+const LayoutPage = require('../../components/layout-page')
 const TaskList = require('../../components/tasks/task-list')
+const { toggleCompleted } = require('./actions')
 
-module.exports = class TaskListPage extends React.Component {
-  constructor (props) {
-    super(props)
-    this.style = getStyle()
-    const completedVisible = false
-    this.state = {completedVisible}
-  }
-
-  toggleCompletedVisible (event) {
+function onClickToggleCompleted (dispatch) {
+  return (event) => {
     event.preventDefault()
-    const completedVisible = !get(this.state, 'completedVisible', true)
-    this.setState({completedVisible})
-  }
-
-  renderCompletedVisible (completeTasks) {
-    if (!completeTasks.length) {
-      return (<span />)
-    }
-
-    const {completedVisible} = this.state
-
-    if (!completedVisible) {
-      return (<button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Show completed ({completeTasks.length})</button>)
-    }
-
-    return (<div>
-      <h3 className={this.style.taskGroupTitle}>Completed tasks <span className={this.style.taskGroupTitleHighlight}>({completeTasks.length})</span></h3>
-      <div className={this.style.pageContent}>
-        <div className={this.style.pageMain}>
-          <TaskList tasks={completeTasks}
-            hirers={get(this.props, 'hirers', [])}
-            people={get(this.props, 'people', [])}
-            person={get(this.props, 'person')} />
-        </div>
-        <div className={this.style.pageSidebar} />
-      </div>
-      <button onClick={this.toggleCompletedVisible.bind(this)} className={this.style.completedVisibleButton}>Hide completed</button>
-    </div>)
-  }
-
-  renderIncompleteContent (incompleteTasks, tooltip) {
-    const outstanding = (<h3 className={this.style.taskGroupTitle}>To do <span className={this.style.taskGroupTitleHighlight}>({incompleteTasks.length})</span></h3>)
-
-    if (!incompleteTasks.length) {
-      return (<div>
-        {outstanding}
-        <p className={this.style.incompleteEmpty}>Doesn't look like there are any tasks for you to complete, check back soon.</p>
-      </div>)
-    }
-
-    return (<div>
-      {outstanding}
-      <div className={this.style.pageContent}>
-        <div className={this.style.pageMain}>
-          <TaskList tasks={incompleteTasks}
-            hirers={get(this.props, 'hirers', [])}
-            people={get(this.props, 'people', [])}
-            person={get(this.props, 'person')} />
-        </div>
-        <div className={this.style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
-      </div>
-    </div>)
-  }
-
-  render () {
-    const tooltip = get(this.props, 'tooltip')
-
-    const firstName = get(this.props, 'person.firstName', '')
-
-    const incompleteTasks = get(this.props, 'tasks', []).filter(task => !task.completed)
-    const incompleteContent = this.renderIncompleteContent(incompleteTasks, tooltip)
-
-    const completeTasks = get(this.props, 'tasks', []).filter(task => task.completed)
-    const completedVisibleContent = this.renderCompletedVisible(completeTasks)
-
-    return (
-      <LayoutApp {...this.props} className={this.style.pageBody}>
-        <Helmet>
-          <title>{`nudj - Tasks`}</title>
-        </Helmet>
-        <PageHeader title='Tasks' />
-        <h3 className={this.style.pageHeadline}>Welcome, {firstName}!</h3>
-        {incompleteContent}
-        {completedVisibleContent}
-      </LayoutApp>
-    )
+    dispatch(toggleCompleted())
   }
 }
+
+function renderIncompleteContent (incompleteTasks, props, style) {
+  let content
+
+  if (!incompleteTasks.length) {
+    content = <p className={style.incompleteEmpty}>Doesn&#39;t look like there are any tasks for you to complete, check back soon.</p>
+  } else {
+    content = <TaskList tasks={incompleteTasks} user={get(props, 'user')} />
+  }
+
+  return (
+    <div>
+      <h3 className={style.taskGroupTitle}>To do <span className={style.taskGroupTitleHighlight}>({incompleteTasks.length})</span></h3>
+      {content}
+    </div>
+  )
+}
+
+function renderCompletedContent (completeTasks, props, style) {
+  return (
+    <div>
+      <h3 className={style.taskGroupTitle}>Completed tasks <span className={style.taskGroupTitleHighlight}>({completeTasks.length})</span></h3>
+      <TaskList tasks={completeTasks} user={get(props, 'user')} />
+    </div>
+  )
+}
+
+const TasksPage = (props) => {
+  const style = getStyle()
+  const {
+    tooltip,
+    user,
+    history,
+    dispatch,
+    overlay,
+    dialog,
+    onPageLeave,
+    notification,
+    tasksPage: state
+  } = props
+  const firstName = get(user, 'firstName', '')
+  const completedVisible = get(state, 'completedVisible')
+
+  const userTasks = get(user, 'tasks', [])
+  const companyTasks = get(user, 'hirer.company.tasks', [])
+  const allTasks = userTasks.concat(companyTasks)
+  const allIncompleteTasks = allTasks.filter(task => !task.completed)
+  const allCompleteTasks = allTasks.filter(task => task.completed)
+  const incompleteContent = renderIncompleteContent(allIncompleteTasks, props, style)
+  const headerProps = {
+    title: 'Tasks'
+  }
+
+  return (
+    <LayoutPage
+      tooltip={tooltip}
+      user={user}
+      history={history}
+      dispatch={dispatch}
+      overlay={overlay}
+      dialog={dialog}
+      onPageLeave={onPageLeave}
+      notification={notification}
+      header={headerProps}
+      headline={`Welcome, ${firstName}!`}
+    >
+      <Helmet>
+        <title>nudj - Tasks</title>
+      </Helmet>
+      {incompleteContent}
+      {completedVisible ? renderCompletedContent(allCompleteTasks, props, style) : ''}
+      {allCompleteTasks.length ? <button onClick={onClickToggleCompleted(dispatch)} className={style.completedVisibleButton}>{completedVisible ? 'Hide' : 'Show'} completed</button> : ''}
+    </LayoutPage>
+  )
+}
+
+module.exports = TasksPage
