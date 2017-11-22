@@ -21,18 +21,21 @@ const setValue = (state, action) => {
 }
 
 const setNewItemValue = (state, action) => {
-  state[action.name][action.key] = action.value
-  return merge(state)
+  return merge(state, {
+    [action.name]: {
+      [action.key]: action.value
+    }
+  })
 }
 
 const addConnection = (state, action) => {
-  let questionItems = state.questions[action.questionId] || []
-  questionItems = questionItems.concat(action.newItem.id)
-  state.questions[action.questionId] = questionItems
+  const questions = Object.assign({}, state.questions)
+  const questionItems = get(questions, action.questionId, []).concat(action.newItem.id)
+  questions[action.questionId] = questionItems
 
   return Object.assign({}, state, {
     connections: get(state, 'connections', []).concat(action.newItem),
-    questions: state.questions,
+    questions,
     newConnection: {}
   })
 }
@@ -43,7 +46,8 @@ const addFormerEmployer = (state, action) => Object.assign({}, state, {
 })
 
 const toggleItem = (state, action) => {
-  let questionItems = state.questions[action.questionId] || []
+  const questions = Object.assign({}, state.questions)
+  let questionItems = get(questions, action.questionId, [])
   if (action.value) {
     if (!questionItems.some(id => id === action.itemId)) {
       questionItems = questionItems.concat(action.itemId)
@@ -51,8 +55,8 @@ const toggleItem = (state, action) => {
   } else {
     questionItems = questionItems.filter(id => id !== action.itemId)
   }
-  state.questions[action.questionId] = questionItems
-  return merge(state)
+  questions[action.questionId] = questionItems
+  return Object.assign({}, state, { questions })
 }
 
 const routerLocationChange = (state, action) => {
