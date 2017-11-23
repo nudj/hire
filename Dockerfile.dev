@@ -12,6 +12,6 @@ RUN mkdir -p /usr/src \
   && apk add glibc-2.25-r0.apk
 WORKDIR /usr/src
 COPY src /usr/src
-RUN npm i && npm prune
+RUN yarn
 EXPOSE 80 81 82
 CMD ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node .
