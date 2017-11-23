@@ -5,9 +5,10 @@ ARG DEBUG
 RUN mkdir -p /usr/src && apk add --no-cache ca-certificates
 WORKDIR /usr/src
 COPY src /usr/src
-RUN npm --production=false i \
+RUN yarn \
   && ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules \
   && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules \
-  && npm prune --production
+  && yarn install --prod --ignore-scripts --prefer-offline \
+  && yarn cache clean
 EXPOSE 80
 CMD ["node", "."]
