@@ -13,7 +13,11 @@ alias tdd='nodemon \
 	-x "mocha --recursive test || exit 1"'
 alias flow='flow --quiet'
 
-alias idev="cd ./@nudj/framework && yarn link && cd ../.. && yarn link @nudj/framework && cd ./@nudj/library && yarn link && cd ../.. && yarn link @nudj/library && cd ./@nudj/components && yarn link && cd ../.. && yarn link @nudj/components && cd ./@nudj/api && yarn link && cd ../.. && yarn link @nudj/api && dev"
+yank () {
+  cd ./@nudj/$1 && yarn link && cd ../..
+}
+
+alias idev="yank framework && yank components && yank api && yank library && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"
