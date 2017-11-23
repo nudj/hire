@@ -4,13 +4,13 @@ const parser = require('node-email-reply-parser')
 const { Base64 } = require('js-base64')
 const createHash = require('hash-generator')
 const logger = require('@nudj/framework/logger')
-const { Unauthorized } = require('@nudj/framework/errors')
+const { Unauthorized } = require('@nudj/library/errors')
 const { merge, promiseMap } = require('@nudj/library')
 
-const google = require('../lib/google')
+const google = require('../../lib/google')
 const templater = require('../../lib/templater')
-const accounts = require('./accounts')
 const { getDataBuilderFor } = require('../../lib/tags')
+const accounts = require('./accounts')
 
 const hashLength = 16
 

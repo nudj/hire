@@ -1,7 +1,7 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
-const { ensureHirerOnboardedEvent } = require('../../server/lib/middleware')
+const { ensureHirerOnboardedEvent } = require('../../lib/middleware')
 
 const Router = ({
   ensureLoggedIn,

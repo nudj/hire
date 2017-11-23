@@ -4,7 +4,7 @@ const _get = require('lodash/get')
 const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
 const intercom = require('../../lib/intercom')
-const mailer = require('../../server/lib/mailer')
+const mailer = require('../../lib/mailer')
 
 const get = ({ session }) => {
   const gql = `

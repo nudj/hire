@@ -2,7 +2,7 @@ const google = require('googleapis')
 const { Base64 } = require('js-base64')
 const logger = require('@nudj/framework/logger')
 const { emailBuilder } = require('@nudj/library/server')
-const request = require('../../lib/request')
+const request = require('@nudj/library/request')
 
 const gmail = google.gmail('v1')
 const OAuth2 = google.auth.OAuth2

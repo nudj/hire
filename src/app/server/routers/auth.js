@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const request = require('../../lib/request')
+const request = require('@nudj/library/request')
 const logger = require('@nudj/framework/logger')
 const { cacheReturnTo } = require('@nudj/library/server')
 

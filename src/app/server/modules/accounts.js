@@ -1,6 +1,6 @@
-const request = require('../../lib/request')
+const request = require('@nudj/library/request')
 const get = require('lodash/get')
-const google = require('../lib/google')
+const google = require('../../lib/google')
 const logger = require('@nudj/framework/logger')
 const {
   toQs,

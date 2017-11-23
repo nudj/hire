@@ -1,4 +1,4 @@
-const request = require('../../lib/request')
+const request = require('@nudj/library/request')
 
 const getById = (id) => {
   return request(`conversations/${id}`)

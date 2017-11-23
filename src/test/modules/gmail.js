@@ -1,11 +1,11 @@
 /* global expect asyncTest */
 /* eslint-env mocha */
 const nock = require('nock')
-const { Unauthorized } = require('@nudj/framework/errors')
+const { Unauthorized } = require('@nudj/library/errors')
 
 const gmail = require('../../app/server/modules/gmail')
 
-const api = nock('http://127.0.0.1:81')
+const api = nock('http://localhost:82')
 const googleAccounts = nock('https://accounts.google.com')
 const validTokenGoogle = nock('https://www.googleapis.com/gmail/v1/users/me', {
   reqheaders: {

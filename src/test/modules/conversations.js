@@ -4,7 +4,7 @@ const nock = require('nock')
 
 const conversations = require('../../app/server/modules/conversations')
 
-const api = nock('http://127.0.0.1:81')
+const api = nock('http://localhost:82')
 const mockConversationsPost = () => {
   api
     .post('/conversations', {

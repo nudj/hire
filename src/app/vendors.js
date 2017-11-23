@@ -1,4 +1,3 @@
-require('classnames')
 require('date-fns/format')
 require('escape-html')
 require('history')
