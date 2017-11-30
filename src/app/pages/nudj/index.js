@@ -22,25 +22,30 @@ const JobPage = (props) => {
       <PageHeader
         title={get(props, 'job.title')}
         subtitle={<span>@ <Link className={style.headerLink} to={'/'}>{get(props, 'company.name')}</Link></span>}
-      >
-        <CopyToClipboard className={style.copyLink} data-clipboard-text={jobLink}>Copy job link</CopyToClipboard>
-      </PageHeader>
-      <h3 className={style.pageHeadline}>Who would you like to ask first?</h3>
+      />
+      <h3 className={style.pageHeadline}>What would you like to do?</h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <div className={style.internal}>
             <div className={style.internalContent}>
-              <h4 className={style.title}>Ask your company</h4>
-              <p className={style.description}>Encourage your team to explore their networks, make recommendations and get your job out there.</p>
+              <h4 className={style.title}>Send a one-off email</h4>
+              <p className={style.description}>Send a one-off email about the role, which contains all the key information anyone will ever need to find someone great.</p>
             </div>
-            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/internal`}>Select</Link>
+            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/internal`}>Send email</Link>
           </div>
           <div className={style.external}>
             <div className={style.externalContent}>
-              <h4 className={style.title}>Ask your network</h4>
-              <p className={style.description}>We've identified key people from your network that will ensure your job gets in front of the best candidates.</p>
+              <h4 className={style.title}>View our recommendations</h4>
+              <p className={style.description}>See who we've indentified in your network that can help you in your search &amp; craft a message that will get them to take action.</p>
             </div>
-            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/external`}>Select</Link>
+            <Link className={style.button} to={`/jobs/${get(props, 'job.slug')}/external`}>View recommendations</Link>
+          </div>
+          <div className={style.copy}>
+            <div className={style.copyContent}>
+              <h4 className={style.title}>Share the job page</h4>
+              <p className={style.description}>Keep it simple and copy a link to the public job page, so you can send to whoever you want however you want.</p>
+            </div>
+            <CopyToClipboard className={style.button} data-clipboard-text={jobLink}>Copy link</CopyToClipboard>
           </div>
         </div>
         <div className={style.pageSidebar}>

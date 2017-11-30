@@ -19,7 +19,7 @@ const Header = (props) => {
         <ul className={style.menu}>
           <li className={style.menuItem}>{tasksLink}</li>
           {onboarded ? <li className={style.menuItem}><Link onClick={props.onPageLeave} className={style.jobs} to='/jobs'>Jobs</Link></li> : ''}
-          <li className={style.menuItem}><a className={style.chat} href='mailto:help@nudj.co' id='open-intercom'>Chat</a></li>
+          <li className={style.menuItem}><a className={style.chat} href='mailto:help@nudj.co' id='open-intercom'>Support</a></li>
           <li className={style.menuItem}><a onClick={props.onPageLeave} className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>

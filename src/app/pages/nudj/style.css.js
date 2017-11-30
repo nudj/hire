@@ -5,6 +5,12 @@ const cardChoiceIconSize = '46px'
 
 const cardStyle = merge(mixins.cardStyle, {
   textAlign: 'center',
+  maxWidth: '600px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: variables.padding.d,
   marginLeft: variables.padding.e,
   ':first-child': {
     marginLeft: 0
@@ -35,14 +41,20 @@ module.exports = css(merge(mixins.pageLayout, {
   },
   internal: cardStyle,
   external: cardStyle,
+  copy: cardStyle,
   internalContent: merge(cardContent, {
     ':before': {
-      backgroundImage: mixins.linkImage('company.svg')
+      backgroundImage: mixins.linkImage('newsletter.svg')
     }
   }),
   externalContent: merge(cardContent, {
     ':before': {
-      backgroundImage: mixins.linkImage('network.svg')
+      backgroundImage: mixins.linkImage('network-2.svg')
+    }
+  }),
+  copyContent: merge(cardContent, {
+    ':before': {
+      backgroundImage: mixins.linkImage('attach-87.svg')
     }
   }),
   title: merge(mixins.headings.h7, {
@@ -52,6 +64,7 @@ module.exports = css(merge(mixins.pageLayout, {
   }),
   description: merge(mixins.typography.p),
   button: merge(mixins.button, {
-    display: 'inline-block'
+    maxWidth: '250px',
+    textAlign: 'center'
   })
 }))
