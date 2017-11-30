@@ -12,6 +12,7 @@ alias tdd='nodemon \
 	--delay 250ms \
 	-x "mocha --recursive test || exit 1"'
 alias flow='flow --quiet'
+alias standardFix='./node_modules/.bin/standard --fix'
 
 yank () {
   cd ./@nudj/$1 && yarn link && cd ../..
