@@ -5,12 +5,12 @@ const { ensureHirerOnboardedEvent } = require('../../lib/middleware')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/', ensureHirerOnboardedEvent, respondWith(fetchers.get))
+  router.getHandlers('/', ensureHirerOnboardedEvent, respondWithGql(fetchers.get))
 
   return router
 }

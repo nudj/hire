@@ -5,13 +5,13 @@ const { ensureCompanyOnboarded } = require('../../lib/middleware')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
   router.use(ensureCompanyOnboarded)
 
-  router.getHandlers('/jobs', respondWith(fetchers.get))
+  router.getHandlers('/jobs', respondWithGql(fetchers.get))
 
   return router
 }
