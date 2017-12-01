@@ -1,12 +1,12 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const ReduxRoot = (props) => (
-  <div className={`${props.className}`}>
+const ReduxRoot = props => (
+  <div className={props.className}>
     <Helmet>
-      <meta charSet='utf-8' />
+      <meta charSet="utf-8" />
       <title>nudj</title>
-      <meta name='viewport' content='width=device-width, initial-scale=1' />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Helmet>
     {props.children}
   </div>

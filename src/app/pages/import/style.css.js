@@ -1,25 +1,17 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
 
-const styles = {
-  confirmButton: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`
-  }),
-  confirmButtonDisabled: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`,
-    opacity: 0.5,
-    cursor: 'default'
-  }),
-  buttonContainer: {
-    align: 'center',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    padding: `${variables.padding.d} 0 0 0`
+const styleSheet = StyleSheet.create({
+  button: {
+    width: '100%',
+    ':not(:first-child)': {
+      marginTop: sizes.regular
+    }
   },
-  copy: merge(mixins.typography.p, {
-    marginLeft: variables.padding.d,
-    width: '75%'
-  })
-}
+  // todo rename
+  comingSoon: {
+    marginTop: sizes.smallI,
+    color: colors.text
+  }
+})
 
-module.exports = css(styles)
+module.exports = styleSheet

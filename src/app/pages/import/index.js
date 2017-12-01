@@ -2,31 +2,30 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
+const { Text, Button } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
+
 const { setNetwork } = require('./actions')
-const LayoutPage = require('../../components/layout-page')
-const Link = require('../../components/link/link')
-const getStyle = require('./style.css')
+const sharedStyle = require('./shared.css')
+const style = require('./style.css')
 
-const networkChoices = [
-  {
-    name: 'linkedin',
-    label: 'LinkedIn',
-    selected: true
+const networks = {
+  linkedin: {
+    value: 'linkedin',
+    label: 'LinkedIn'
   },
-  {
-    name: 'facebook',
-    label: 'Facebook',
-    disabled: true
+  facebook: {
+    value: 'facebook',
+    label: 'Facebook'
   },
-  {
-    name: 'google',
-    label: 'Google Contacts',
-    disabled: true
+  google: {
+    value: 'google',
+    label: 'Google'
   }
-]
+}
 
-function onNetworkSelect (dispatch) {
-  return (event) => dispatch(setNetwork(event.target.value))
+function onNetworkSelect(dispatch) {
+  return event => dispatch(setNetwork(event.target.value))
 }
 
 const ImportPage = props => {
@@ -41,47 +40,65 @@ const ImportPage = props => {
     notification,
     importPage: state
   } = props
-  const style = getStyle()
-  const nextSegment = get(user, 'hirer.onboarded') ? 'connections' : 'onboarding'
+
+  const nextSegment = get(user, 'hirer.onboarded')
+    ? 'connections'
+    : 'onboarding'
 
   const headerProps = {
     title: 'Unlocking your network',
     subtitle: 'On-boarding'
   }
 
+  const handleNetworkSelect = onNetworkSelect(dispatch)
+
   return (
-    <LayoutPage
-      tooltip={tooltip}
-      user={user}
-      history={history}
-      dispatch={dispatch}
-      overlay={overlay}
-      dialog={dialog}
-      onPageLeave={onPageLeave}
-      notification={notification}
-      header={headerProps}
-      headline='Choose your network'
-    >
+    <div className={css(sharedStyle.root)}>
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
+        <html className={css(sharedStyle.html)} />
+        <body className={css(sharedStyle.pageBody)} />
       </Helmet>
-      <p className={style.copy}>One of these</p>
-      <ul>
-        {networkChoices.map(network => (
-          <li key={network.name}>
-            <input id={network.name} value={network.name} name='source' type='radio' checked={state.network === network.name} disabled={!!network.disabled} onChange={onNetworkSelect(dispatch)} />
-            <label htmlFor={network.name}>{network.label}</label>
-          </li>
-        ))}
-      </ul>
-      <div className={style.buttonContainer}>
-        {state.network ? (
-          <Link to={`/${nextSegment}/import/guide`} className={style.confirmButton}>Next</Link>
-        ) : (
-          <span className={style.confirmButtonDisabled}>Next</span>
-        )}
+      <div className={css(sharedStyle.wrapper)}>
+        <div className={css(sharedStyle.header)}>
+          <Text element="div" size="largeIi" style={sharedStyle.heading}>
+            Choose a network
+          </Text>
+          <Text element="p" style={sharedStyle.subheading}>
+            We recommend choosing the network where you feel the best
+            recommendations will come from based on your company and the roles
+            your hiring for.
+          </Text>
+        </div>
+        <div className={css(sharedStyle.body)}>
+          {/* <Text element="div" size="smallIi" style={style.comingSoon}>
+            Coming soon
+          </Text> */}
+          <Button
+            style={style.button}
+            value={networks.facebook.value}
+            onClick={handleNetworkSelect}
+          >
+            {networks.facebook.label}
+          </Button>
+          <Button
+            style={style.button}
+            value={networks.google.value}
+            onClick={handleNetworkSelect}
+          >
+            {networks.google.label}
+          </Button>
+          <Button
+            style={style.button}
+            volume="cheer"
+            value={networks.linkedin.value}
+            onClick={handleNetworkSelect}
+          >
+            {networks.linkedin.label}
+          </Button>
+        </div>
       </div>
-    </LayoutPage>
+    </div>
   )
 }
 
