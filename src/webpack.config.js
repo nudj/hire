@@ -32,7 +32,11 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        include: [path.join(__dirname, 'app'), path.join(__dirname, '@nudj'), path.join(__dirname, 'node_modules', '@nudj')],
+        include: [
+          path.join(__dirname, 'app'),
+          path.join(__dirname, '@nudj'),
+          path.join(__dirname, 'node_modules', '@nudj')
+        ],
         loader: 'babel-loader',
         options: {
           presets: [
@@ -46,6 +50,10 @@ module.exports = {
                 }
               }
             ]
+          ],
+          plugins: [
+            'babel-plugin-transform-class-properties',
+            'babel-plugin-transform-object-rest-spread'
           ]
         }
       }
