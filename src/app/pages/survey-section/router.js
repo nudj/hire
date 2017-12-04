@@ -2,12 +2,12 @@ const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
 
-const Router = ({ ensureLoggedIn, respondWith }) => {
+const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/surveys/:surveySlug/sections/:sectionId', respondWith(fetchers.get))
-  router.getHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId', respondWith(fetchers.get))
+  router.getHandlers('/surveys/:surveySlug/sections/:sectionId', respondWithGql(fetchers.get))
+  router.getHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId', respondWithGql(fetchers.get))
 
   return router
 }

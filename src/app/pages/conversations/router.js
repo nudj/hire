@@ -4,12 +4,12 @@ const fetchers = require('./fetchers')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/conversations', respondWith(fetchers.get))
+  router.getHandlers('/conversations', respondWithGql(fetchers.get))
 
   return router
 }
