@@ -23,7 +23,7 @@ const get = ({ session }) => {
   return { gql, variables }
 }
 
-const post = async ({ session, body, files }) => {
+const post = ({ session, body, files }) => {
   const userId = session.userId
 
   const gql = `

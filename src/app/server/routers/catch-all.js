@@ -20,12 +20,12 @@ const get = ({ session }) => {
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = express.Router()
   router.use(ensureLoggedIn)
 
-  router.get('*', respondWith(get))
+  router.get('*', respondWithGql(get))
 
   return router
 }
