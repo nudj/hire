@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const { Link } = require('react-router-dom')
 
 const { Text, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -24,10 +25,7 @@ const networks = {
   }
 }
 
-function onNetworkSelect(dispatch) {
-  return event => dispatch(setNetwork(event.target.value))
-}
-
+/** TODO: Rename nest component under `onboarding` */
 const ImportPage = props => {
   const {
     tooltip,
@@ -38,9 +36,11 @@ const ImportPage = props => {
     dialog,
     onPageLeave,
     notification,
-    importPage: state
+    importPage: state,
+    ...rest,
   } = props
 
+  /** Clean up unused cruft, i.e., remove redux etc. */
   const nextSegment = get(user, 'hirer.onboarded')
     ? 'connections'
     : 'onboarding'
@@ -49,8 +49,6 @@ const ImportPage = props => {
     title: 'Unlocking your network',
     subtitle: 'On-boarding'
   }
-
-  const handleNetworkSelect = onNetworkSelect(dispatch)
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -70,32 +68,31 @@ const ImportPage = props => {
             your hiring for.
           </Text>
         </div>
-        <div className={css(sharedStyle.body)}>
-          {/* <Text element="div" size="smallIi" style={style.comingSoon}>
-            Coming soon
-          </Text> */}
-          <Button
+        <div className={css(sharedStyle.body, style.buttonGroup)}>
+          {/**
+           * TODO:
+           *
+           * 1. Route structure, `/import` => `/import/linkedin/guide` => `/import/linkedin/upload`
+           * 2. Link as buttons
+           */}
+          <Link
             style={style.button}
-            value={networks.facebook.value}
-            onClick={handleNetworkSelect}
-          >
-            {networks.facebook.label}
-          </Button>
-          <Button
-            style={style.button}
-            value={networks.google.value}
-            onClick={handleNetworkSelect}
-          >
-            {networks.google.label}
-          </Button>
-          <Button
-            style={style.button}
-            volume="cheer"
-            value={networks.linkedin.value}
-            onClick={handleNetworkSelect}
+            to={`${networks.linkedin.value}/import/guide`}
           >
             {networks.linkedin.label}
-          </Button>
+          </Link>
+          <Link
+            style={style.button}
+            to={`${networks.facebook.value}/import/guide`}
+          >
+            {networks.facebook.label} - coming soon
+          </Link>
+          <Link
+            style={style.button}
+            to={`${networks.google.value}/import/guide`}
+          >
+            {networks.google.label} - coming soon
+          </Link>
         </div>
       </div>
     </div>

@@ -5,12 +5,18 @@ const pageSetup = {
   backgroundColor: colors.greyLightest
 }
 
+const multiplySizeVar = (size, multipler) =>
+  `${parseInt(size.replace('rem', ''), 10) * multipler}rem`
+
 const styleSheet = StyleSheet.create({
   html: pageSetup,
   pageBody: pageSetup,
   root: {
     height: '100%',
-    textAlign: 'left'
+    textAlign: 'left',
+    '@media (min-width: 37.5rem)': {
+      textAlign: 'center'
+    }
   },
   wrapper: {
     maxWidth: '60rem',
@@ -24,17 +30,25 @@ const styleSheet = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     flexShrink: 1,
-    height: '100%'
+    height: '100%',
+    '@media (min-width: 37.5rem)': {
+      paddingTop: multiplySizeVar(sizes.largeIii, 2),
+      paddingBottom: multiplySizeVar(sizes.largeIii, 2)
+    }
   },
-  body: {
-    alignSelf: 'flex-end',
-    width: '100%'
+  header: {
+    maxWidth: '40rem',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   heading: {
     color: colors.primary
   },
   subheading: {
     marginTop: sizes.regular
+  },
+  body: {
+    width: '100%'
   }
 })
 
