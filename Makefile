@@ -53,3 +53,13 @@ test:
 		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
 		  && ./node_modules/.bin/flow --quiet \
 		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
+
+standardFix:
+	-@docker rm -f hire-dev 2> /dev/null || true
+	@docker run --rm -it \
+		--env-file $(CWD)/.env \
+		--name hire-dev \
+		-e NPM_TOKEN=${NPM_TOKEN} \
+		-v $(CWD)/src/app:/usr/src/app \
+		$(IMAGEDEV) \
+		/bin/sh -c './node_modules/.bin/standard --fix --parser babel-eslint --plugin flowtype'
