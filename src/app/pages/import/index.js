@@ -1,11 +1,11 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const { Link } = require('react-router-dom')
 
-const { Text, Button } = require('@nudj/components')
+const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
+const Link = require('../../components/Link')
 const { setNetwork } = require('./actions')
 const sharedStyle = require('./shared.css')
 const style = require('./style.css')
@@ -37,7 +37,7 @@ const ImportPage = props => {
     onPageLeave,
     notification,
     importPage: state,
-    ...rest,
+    ...rest
   } = props
 
   /** Clean up unused cruft, i.e., remove redux etc. */
@@ -77,19 +77,20 @@ const ImportPage = props => {
            */}
           <Link
             style={style.button}
-            to={`${networks.linkedin.value}/import/guide`}
+            href={`${networks.linkedin.value}/import/guide`}
+            volume="cheer"
           >
             {networks.linkedin.label}
           </Link>
           <Link
             style={style.button}
-            to={`${networks.facebook.value}/import/guide`}
+            href={`${networks.facebook.value}/import/guide`}
           >
             {networks.facebook.label} - coming soon
           </Link>
           <Link
             style={style.button}
-            to={`${networks.google.value}/import/guide`}
+            href={`${networks.google.value}/import/guide`}
           >
             {networks.google.label} - coming soon
           </Link>
