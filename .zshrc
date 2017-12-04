@@ -15,7 +15,7 @@ alias flow='flow --quiet'
 alias standardFix='./node_modules/.bin/standard --fix'
 
 yank () {
-  cd ./@nudj/$1 && yarn link && cd ../..
+	cd ./@nudj/$1 && yarn link && cd ../.. && yarn link @nudj/$1
 }
 
 alias idev="yank framework && yank components && yank api && yank library && dev"
