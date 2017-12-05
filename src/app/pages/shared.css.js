@@ -35,6 +35,9 @@ const styleSheet = StyleSheet.create({
   heading: {
     color: colors.primary
   },
+  headingHighlight: {
+    color: colors.midRed
+  },
   subheading: {
     marginTop: sizes.largeIi,
     ':nth-of-type(n + 2)': {
@@ -81,9 +84,6 @@ const styleSheet = StyleSheet.create({
         marginTop: 0
       }
     }
-  },
-  headingHighlight: {
-    color: colors.midRed
   },
   footer: {}
 })

@@ -3,6 +3,7 @@ module.exports = {
   '/setup-network': require('../pages/import'),
   '/setup-network/:network': require('../pages/import-guide'),
   '/setup-network/:network/upload': require('../pages/import-upload'),
+  '/setup-network/:network/:step': require('../pages/import-guide'),
   '/onboarding/surveys/:surveySlug': require('../pages/survey'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
