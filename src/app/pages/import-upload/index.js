@@ -1,16 +1,14 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const Dropzone = require('react-dropzone')
+const get = require('lodash/get')
 
-const {
-  parse,
-  upload
-} = require('./actions')
+const { parse, upload } = require('./actions')
 const LayoutPage = require('../../components/layout-page')
 const Link = require('../../components/link/link')
 const getStyle = require('./style.css')
 
-function onUploadFile (dispatch) {
+function onUploadFile(dispatch) {
   return (acceptedFiles, rejectedFiles) => {
     if (rejectedFiles.length) {
       return
@@ -19,23 +17,22 @@ function onUploadFile (dispatch) {
   }
 }
 
-function onUpload (dispatch) {
+function onUpload(dispatch) {
   return () => {
     dispatch(upload())
   }
 }
 
-function dropzoneInternal (dispatch, style, props, state, {
-  isDragActive,
-  isDragReject,
-  acceptedFiles,
-  rejectedFiles
-}) {
+function dropzoneInternal(
+  dispatch,
+  style,
+  props,
+  state,
+  { isDragActive, isDragReject, acceptedFiles, rejectedFiles }
+) {
   if (isDragActive) {
     return (
-      <h5 className={style.dragAndDropHeading}>
-        Drop the file to save it!
-      </h5>
+      <h5 className={style.dragAndDropHeading}>Drop the file to save it!</h5>
     )
   }
 
@@ -52,7 +49,7 @@ function dropzoneInternal (dispatch, style, props, state, {
 
   // this is just for show
   if (acceptedFiles.length && parsing) {
-    return <div className='spinner' />
+    return <div className="spinner" />
   }
 
   if (acceptedFiles.length && connections.length) {
@@ -74,9 +71,7 @@ function dropzoneInternal (dispatch, style, props, state, {
         </h5>
         <p className={style.dragAndDropCopy}>
           Please try uploading{' '}
-          <em className={style.dragAndDropCopyEmphasis}>
-            Connections.csv
-          </em>
+          <em className={style.dragAndDropCopyEmphasis}>Connections.csv</em>
         </p>
       </span>
     )
@@ -107,14 +102,14 @@ function dropzoneInternal (dispatch, style, props, state, {
   )
 }
 
-function stepUpload (dispatch, style, props, state) {
+function stepUpload(dispatch, style, props, state) {
   const disablePreview = true
   const multiple = false
   return (
     <div className={style.instructionsStepContainer}>
       <div className={style.instructionsCard}>
         <Dropzone
-          accept='text/csv'
+          accept="text/csv"
           disablePreview={disablePreview}
           multiple={multiple}
           className={style.dragAndDrop}
@@ -136,16 +131,27 @@ function stepUpload (dispatch, style, props, state) {
   )
 }
 
-function renderCurrentStep (dispatch, style, props, state) {
-  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
+function renderCurrentStep(dispatch, style, props, state) {
+  const nextSegment = get(props.user, 'hirer.onboarded')
+    ? 'connections'
+    : 'onboarding'
   return (
     <div className={style.pageMain}>
       {stepUpload(dispatch, style, props, state)}
       <div className={style.buttonContainer}>
-        <Link className={style.cancelButton} to={`/${nextSegment}/import/guide`}>Back</Link>
+        <Link
+          className={style.cancelButton}
+          to={`/${nextSegment}/import/guide`}
+        >
+          Back
+        </Link>
         <button
           onClick={onUpload(dispatch)}
-          className={state.connections.length ? style.confirmButton : style.confirmButtonDisabled}
+          className={
+            state.connections.length
+              ? style.confirmButton
+              : style.confirmButtonDisabled
+          }
           disabled={!state.connections.length}
         >
           Upload
@@ -185,12 +191,15 @@ const ImportPage = props => {
       onPageLeave={onPageLeave}
       notification={notification}
       header={headerProps}
-      headline='Upload your file'
+      headline="Upload your file"
     >
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>
-      <p className={style.copy}>Click the box, locate Connections.csv and select it (alternatively you can drag and drop Connections.csv into the box)</p>
+      <p className={style.copy}>
+        Click the box, locate Connections.csv and select it (alternatively you
+        can drag and drop Connections.csv into the box)
+      </p>
       {step}
     </LayoutPage>
   )

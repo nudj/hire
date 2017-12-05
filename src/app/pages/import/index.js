@@ -1,45 +1,30 @@
-/* global User */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
 
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const Link = require('../../components/Link')
-const { setNetwork } = require('./actions')
+const ButtonLink = require('../../components/button-link')
 const sharedStyle = require('../shared.css')
 const style = require('./style.css')
 
-const networks = {
-  linkedin: {
-    value: 'linkedin',
-    label: 'LinkedIn'
-  },
-  facebook: {
-    value: 'facebook',
-    label: 'Facebook'
-  },
-  google: {
-    value: 'google',
-    label: 'Google'
-  }
-}
+const getUrl = network => `/setup-network/${network}`
 
-type Props = {
-  user: User
-}
-
-const ImportPage = ({ user }: Props) => {
-  /** Clean up unused cruft, i.e., remove redux etc. */
-  const nextSegment = get(user, 'hirer.onboarded')
-    ? 'connections'
-    : 'onboarding'
-
-  const headerProps = {
-    title: 'Unlocking your network',
-    subtitle: 'On-boarding'
+const ImportPage = () => {
+  const networks = {
+    linkedin: {
+      url: getUrl('linkedin'),
+      label: 'LinkedIn'
+    },
+    facebook: {
+      url: getUrl('facebook'),
+      label: 'Facebook'
+    },
+    google: {
+      url: getUrl('google'),
+      label: 'Google'
+    }
   }
 
   return (
@@ -61,31 +46,19 @@ const ImportPage = ({ user }: Props) => {
           </Text>
         </div>
         <div className={css(sharedStyle.body, style.buttonGroup)}>
-          {/**
-           * TODO:
-           *
-           * 1. Route structure, `/import` => `/import/linkedin/guide` => `/import/linkedin/upload`
-           * 2. Link as buttons
-           */}
-          <Link
+          <ButtonLink
             style={style.button}
-            href={`${networks.linkedin.value}/import/guide`}
+            href={networks.linkedin.url}
             volume="cheer"
           >
             {networks.linkedin.label}
-          </Link>
-          <Link
-            style={style.button}
-            href={`${networks.facebook.value}/import/guide`}
-          >
-            {networks.facebook.label} - coming soon
-          </Link>
-          <Link
-            style={style.button}
-            href={`${networks.google.value}/import/guide`}
-          >
-            {networks.google.label} - coming soon
-          </Link>
+          </ButtonLink>
+          <ButtonLink style={style.button} href={networks.facebook.url}>
+            {networks.facebook.label} <Text size="smallI">- coming soon</Text>
+          </ButtonLink>
+          <ButtonLink style={style.button} href={networks.google.url}>
+            {networks.google.label} <Text size="smallI">- coming soon</Text>
+          </ButtonLink>
         </div>
       </div>
     </div>

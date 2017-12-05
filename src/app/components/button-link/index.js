@@ -8,7 +8,7 @@ type Props = {
   restProps?: Array<mixed>
 }
 
-const Link = ({ href, ...restProps }: Props) => (
+const ButtonLink = ({ href, ...restProps }: Props) => (
   <StyledLink
     {...restProps}
     href={href}
@@ -18,4 +18,4 @@ const Link = ({ href, ...restProps }: Props) => (
   />
 )
 
-module.exports = Link
+module.exports = ButtonLink

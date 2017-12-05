@@ -1,8 +1,8 @@
 module.exports = {
   '/onboarding': require('../pages/onboarding'),
-  '/onboarding/import': require('../pages/import'),
-  '/onboarding/import/guide': require('../pages/import-guide'),
-  '/onboarding/import/upload': require('../pages/import-upload'),
+  '/setup-network': require('../pages/import'),
+  '/setup-network/:network': require('../pages/import-guide'),
+  '/setup-network/:network/upload': require('../pages/import-upload'),
   '/onboarding/surveys/:surveySlug': require('../pages/survey'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
