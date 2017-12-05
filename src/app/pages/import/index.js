@@ -1,3 +1,5 @@
+/* global User */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -7,7 +9,7 @@ const { css } = require('@nudj/components/lib/css')
 
 const Link = require('../../components/Link')
 const { setNetwork } = require('./actions')
-const sharedStyle = require('./shared.css')
+const sharedStyle = require('../shared.css')
 const style = require('./style.css')
 
 const networks = {
@@ -25,21 +27,11 @@ const networks = {
   }
 }
 
-/** TODO: Rename nest component under `onboarding` */
-const ImportPage = props => {
-  const {
-    tooltip,
-    user,
-    history,
-    dispatch,
-    overlay,
-    dialog,
-    onPageLeave,
-    notification,
-    importPage: state,
-    ...rest
-  } = props
+type Props = {
+  user: User
+}
 
+const ImportPage = ({ user }: Props) => {
   /** Clean up unused cruft, i.e., remove redux etc. */
   const nextSegment = get(user, 'hirer.onboarded')
     ? 'connections'

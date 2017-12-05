@@ -1,17 +1,11 @@
 const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 
-const pageSetup = {
-  height: '100%',
-  backgroundColor: colors.greyLightest
-}
-
 const multiplySizeVar = (size, multipler) =>
   `${parseInt(size.replace('rem', ''), 10) * multipler}rem`
 
 const styleSheet = StyleSheet.create({
-  html: pageSetup,
-  pageBody: pageSetup,
   root: {
+    backgroundColor: colors.greyLightest,
     height: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {
@@ -26,10 +20,6 @@ const styleSheet = StyleSheet.create({
     paddingRight: sizes.regular,
     paddingTop: sizes.largeIi,
     paddingBottom: sizes.largeIi,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flexShrink: 1,
     height: '100%',
     '@media (min-width: 37.5rem)': {
       paddingTop: multiplySizeVar(sizes.largeIii, 2),

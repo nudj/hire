@@ -7,12 +7,20 @@ const styleSheet = StyleSheet.create({
     flexDirection: 'column-reverse',
     flexWrap: 'wrap',
     alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: sizes.regular,
+    left: 0,
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
     '@media(min-width: 42.375rem)': {
       flexDirection: 'row',
       flexShrink: 1,
       flexGrow: 0,
       justifyContent: 'center',
-      alignSelf: 'flex-start'
+
+      bottom: 'auto',
+      top: '50%',
+      transform: 'translateY(-50%)'
     }
   },
   button: {

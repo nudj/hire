@@ -5,7 +5,7 @@ const { Link: StyledLink } = require('@nudj/components')
 
 type Props = {
   href: string,
-  restProps: Array<mixed>
+  restProps?: Array<mixed>
 }
 
 const Link = ({ href, ...restProps }: Props) => (
