@@ -5,7 +5,7 @@ require('babel-register')({
     require.resolve('babel-plugin-transform-class-properties'),
     require.resolve('babel-plugin-transform-object-rest-spread')
   ],
-  ignore: function(filename) {
+  ignore: function (filename) {
     if (
       !filename.match(/(?!@nudj)(.*)node_modules/) ||
       !filename.match(/(?!app)(.*)node_modules/)

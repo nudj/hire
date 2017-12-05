@@ -1,4 +1,4 @@
-const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   buttonGroup: {

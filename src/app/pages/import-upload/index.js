@@ -8,7 +8,7 @@ const LayoutPage = require('../../components/layout-page')
 const Link = require('../../components/link/link')
 const getStyle = require('./style.css')
 
-function onUploadFile(dispatch) {
+function onUploadFile (dispatch) {
   return (acceptedFiles, rejectedFiles) => {
     if (rejectedFiles.length) {
       return
@@ -17,13 +17,13 @@ function onUploadFile(dispatch) {
   }
 }
 
-function onUpload(dispatch) {
+function onUpload (dispatch) {
   return () => {
     dispatch(upload())
   }
 }
 
-function dropzoneInternal(
+function dropzoneInternal (
   dispatch,
   style,
   props,
@@ -49,7 +49,7 @@ function dropzoneInternal(
 
   // this is just for show
   if (acceptedFiles.length && parsing) {
-    return <div className="spinner" />
+    return <div className='spinner' />
   }
 
   if (acceptedFiles.length && connections.length) {
@@ -102,14 +102,14 @@ function dropzoneInternal(
   )
 }
 
-function stepUpload(dispatch, style, props, state) {
+function stepUpload (dispatch, style, props, state) {
   const disablePreview = true
   const multiple = false
   return (
     <div className={style.instructionsStepContainer}>
       <div className={style.instructionsCard}>
         <Dropzone
-          accept="text/csv"
+          accept='text/csv'
           disablePreview={disablePreview}
           multiple={multiple}
           className={style.dragAndDrop}
@@ -131,7 +131,7 @@ function stepUpload(dispatch, style, props, state) {
   )
 }
 
-function renderCurrentStep(dispatch, style, props, state) {
+function renderCurrentStep (dispatch, style, props, state) {
   const nextSegment = get(props.user, 'hirer.onboarded')
     ? 'connections'
     : 'onboarding'
@@ -191,7 +191,7 @@ const ImportPage = props => {
       onPageLeave={onPageLeave}
       notification={notification}
       header={headerProps}
-      headline="Upload your file"
+      headline='Upload your file'
     >
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>

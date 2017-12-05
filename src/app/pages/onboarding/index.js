@@ -34,14 +34,14 @@ const OnboardingPage = props => {
       onPageLeave={onPageLeave}
       notification={notification}
       header={headerProps}
-      headline="Hi"
+      headline='Hi'
     >
       <Helmet>
         <title>nudj - welcome</title>
       </Helmet>
       <p className={style.copy}>We&quot;re going to onboard you now</p>
       <div className={style.buttonContainer}>
-        <Link to="/setup-network" className={style.confirmButton}>
+        <Link to='/setup-network' className={style.confirmButton}>
           Next
         </Link>
       </div>
