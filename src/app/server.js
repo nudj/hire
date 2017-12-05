@@ -2,9 +2,13 @@ require('envkey')
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/app/)) {
+    if (
+      !filename.match(/(?!@nudj)(.*)node_modules/) ||
+      !filename.match(/(?!app)(.*)node_modules/)
+    ) {
       return false
     }
+
     return true
   }
 })
