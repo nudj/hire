@@ -5,17 +5,28 @@ const { Link: StyledLink } = require('@nudj/components')
 
 type Props = {
   href: string,
+  onClick?: Object => void,
   restProps?: Array<mixed>
 }
 
-const ButtonLink = ({ href, ...restProps }: Props) => (
-  <StyledLink
-    {...restProps}
-    href={href}
-    Component={({ href, ...restSubProps }: Props) => (
-      <RouterLink to={href} {...restSubProps} />
-    )}
-  />
-)
+const handleClick = ({ href, onClick }) => event => {
+  if (href === window.location.pathname) event.preventDefault()
+  typeof onClick === 'function' && onClick(event)
+}
+
+const ButtonLink = (props: Props) => {
+  const { href, ...restProps } = props
+
+  return (
+    <StyledLink
+      {...restProps}
+      href={href}
+      onClick={handleClick(props)}
+      Component={({ href, ...restSubProps }: Props) => (
+        <RouterLink to={href} {...restSubProps} />
+      )}
+    />
+  )
+}
 
 module.exports = ButtonLink
