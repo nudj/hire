@@ -17,7 +17,7 @@ const styleSheet = StyleSheet.create({
     marginBottom: 0
   },
   image: {
-    maxWidth: '40rem',
+    maxWidth: '37rem',
     marginLeft: 'auto',
     marginRight: 'auto',
     border: `1px solid ${colors.greyLight}`,

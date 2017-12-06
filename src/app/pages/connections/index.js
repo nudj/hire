@@ -25,13 +25,13 @@ const ConnectionsPage = props => {
     subtitle: 'All your connections at your bec and call',
     children: [
       <Link
-        key='recall'
+        key="recall"
         className={style.recall}
-        to='/surveys/aided-recall-baby'
+        to="/surveys/aided-recall-baby"
       >
         Take a survey
       </Link>,
-      <Link key='import' className={style.import} to='/connections/import'>
+      <Link key="import" className={style.import} to="/setup-network">
         Import connections
       </Link>
     ]
