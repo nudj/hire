@@ -1,4 +1,10 @@
-const { StyleSheet, colors, sizes, utilities } = require('@nudj/components/lib/css')
+const {
+  StyleSheet,
+  colors,
+  sizes,
+  utilities,
+  typography
+} = require('@nudj/components/lib/css')
 
 const stylesheet = StyleSheet.create({
   card: {
@@ -15,9 +21,14 @@ const stylesheet = StyleSheet.create({
   },
   button: {
     marginTop: sizes.regular,
-    fontWeight: '500',
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
+    fontSize: typography.fontSize.smallI,
+    fontWeight: typography.fontWeight.regular,
     '@media (min-width: 37.5rem)': {
-      fontSize: '0.9rem'
+      fontSize: typography.fontSize.regular,
+      paddingLeft: sizes.largeI,
+      paddingRight: sizes.largeI
     }
   }
 })

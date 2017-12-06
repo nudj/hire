@@ -4,27 +4,22 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 
-const { Text, Link } = require('@nudj/components')
+const { Text, Link, Align } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const {
   setNewItemValue,
   addConnection,
-  addFormerEmployer,
-  toggleItem
+  addFormerEmployer
 } = require('./actions')
 const getNextSurveyUri = require('./getNextSurveyUri')
 const style = require('./style.css')
-const LayoutPage = require('../../components/layout-page')
 const FormCompany = require('../../components/form-company')
-const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
 const FormConnection = require('../../components/form-connection')
-const AccumulatorConnections = require('../../components/accumulator-connections')
 const { questionTypes } = require('../../lib/constants')
 
 function onChangeNewItem (dispatch, itemType) {
-  return name => event =>
-    dispatch(setNewItemValue(itemType, name, event.value))
+  return name => event => dispatch(setNewItemValue(itemType, name, event.value))
 }
 
 function onAddCompany (dispatch, questionId) {
@@ -35,26 +30,10 @@ function onAddConnection (dispatch, questionId) {
   return () => dispatch(addConnection(questionId))
 }
 
-function onToggleItem (dispatch) {
-  return (questionId, itemId) => event =>
-    dispatch(toggleItem(questionId, itemId, event.target.checked))
-}
-
-function onRemoveItemBasket (dispatch) {
-  return (questionId, itemId) => event =>
-    dispatch(toggleItem(questionId, itemId, false))
-}
-
 const SurveyQuestionPage = props => {
   const {
-    tooltip,
     user,
-    history,
     dispatch,
-    overlay,
-    dialog,
-    onPageLeave,
-    notification,
     surveyQuestionPage: state
   } = props
   const survey = get(user, 'hirer.company.survey')
@@ -69,9 +48,33 @@ const SurveyQuestionPage = props => {
   const question = get(section, 'question')
   const allQuestions = flatten(allSections.map(section => section.questions))
   const questionIndex = findIndex(allQuestions, { id: question.id })
+<<<<<<< HEAD
+=======
+  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
+
+  let nextUri = ''
+  const nextQuestion = section.questions[questionIndex + 1]
+  if (nextQuestion) {
+    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
+      section.id
+    }/${nextQuestion.type.toLowerCase()}/${nextQuestion.id}`
+  } else {
+    const sectionIndex = findIndex(survey.sections, { id: section.id })
+    const nextSection = survey.sections[sectionIndex + 1]
+    if (nextSection) {
+      nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
+        nextSection.id
+      }`
+    } else {
+      nextUri = `${onboardingSegment}/surveys/${survey.slug}/complete`
+    }
+  }
+>>>>>>> Add action-bar using Align component
 
   const formerEmployers = get(user, 'formerEmployers', [])
-  const companiesAdded = formerEmployers.concat(get(user, 'newFormerEmployer', []))
+  const companiesAdded = formerEmployers.concat(
+    get(user, 'newFormerEmployer', [])
+  )
 
   let questionContent
   const questionType = get(question, 'type')
@@ -115,10 +118,26 @@ const SurveyQuestionPage = props => {
             {question.description}
           </Text>
           {questionContent}
-          <Link volume='cheer' href={nextUri}>Next</Link>
+          <div className={css(style.actionBar)}>
+            <Align
+              leftChildren={
+                <Text style={style.addCounter}>
+                  {`${companiesAdded.length} added`}
+                </Text>
+              }
+              rightChildren={
+                <Link volume='cheer' href={nextUri}>
+                  Next
+                </Link>
+              }
+            />
+          </div>
         </div>
       </div>
     </div>
   )
 }
+
+SurveyQuestionPage.handlesLoading = true
+
 module.exports = SurveyQuestionPage

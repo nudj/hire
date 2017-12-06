@@ -33,10 +33,9 @@ const styleSheet = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontWeight: '700',
-    fontSize: '1.3rem',
-    lineHeight: '1',
-    letterSpacing: '1px',
+    fontWeight: typography.fontWeight.bold,
+    fontSize: typography.fontSize.largeI,
+    lineHeight: 1,
     color: colors.royalBlue
   },
   subtitle: {
@@ -46,14 +45,30 @@ const styleSheet = StyleSheet.create({
   },
   stepCounter: {
     textAlign: 'center',
-    fontWeight: '700',
-    paddingBottom: sizes.largeI
+    fontWeight: typography.fontWeight.bold,
+    '@media (min-width: 37.5rem)': {
+      paddingBottom: sizes.largeI
+    }
+  },
+  addCounter: {
+    fontWeight: typography.fontWeight.bold
   },
   subheading: {
     marginTop: sizes.regular
   },
   body: {
     width: '100%'
+  },
+  actionBar: {
+    backgroundColor: colors.white,
+    position: 'fixed',
+    width: '100%',
+    left: 0,
+    bottom: 0,
+    paddingLeft: sizes.largeIi,
+    paddingRight: sizes.largeIi,
+    paddingTop: sizes.regular,
+    paddingBottom: sizes.regular
   }
 })
 
