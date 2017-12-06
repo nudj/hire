@@ -48,6 +48,8 @@ test:
 		--name hire-test \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
+		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
