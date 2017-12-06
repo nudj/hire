@@ -1,6 +1,5 @@
 // @flow
 const React = require('react')
-const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 
 const { Card, Text } = require('@nudj/components')
@@ -13,7 +12,7 @@ const style = require('./style.css')
 const LinkedInRequestGuide = () => (
   <div className={css(sharedStyle.root)}>
     <Helmet>
-      <title>nudj - upload your LinkedIn contacts</title>
+      <title>Downloading your connections from LinkedIn</title>
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
