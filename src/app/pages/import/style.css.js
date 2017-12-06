@@ -1,25 +1,44 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { chooseNetwork } = require('../../lib/css/breakpoints')
 
-const styles = {
-  confirmButton: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`
-  }),
-  confirmButtonDisabled: merge(mixins.button, {
-    margin: `0 0 0 ${variables.padding.d}`,
-    opacity: 0.5,
-    cursor: 'default'
-  }),
-  buttonContainer: {
-    align: 'center',
+const styleSheet = StyleSheet.create({
+  buttonGroup: {
+    alignSelf: 'flex-end',
+    bottom: sizes.regular,
     display: 'flex',
-    justifyContent: 'flex-end',
-    padding: `${variables.padding.d} 0 0 0`
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    left: 0,
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
+    position: 'absolute',
+    width: '100%',
+    [`@media(${chooseNetwork.full})`]: {
+      bottom: 'auto',
+      flexDirection: 'row',
+      flexGrow: 0,
+      flexShrink: 1,
+      justifyContent: 'center',
+      top: '50%',
+      transform: 'translateY(-50%)'
+    }
   },
-  copy: merge(mixins.typography.p, {
-    marginLeft: variables.padding.d,
-    width: '75%'
-  })
-}
+  button: {
+    flexBasis: '100%',
+    width: '100%',
+    ':not(:first-child)': {
+      marginTop: sizes.regular
+    },
+    [`@media(${chooseNetwork.full})`]: {
+      flexBasis: 'auto',
+      marginLeft: sizes.smallIi,
+      marginRight: sizes.smallIi,
+      width: 'auto',
+      ':not(:first-child)': {
+        marginTop: 0
+      }
+    }
+  }
+})
 
-module.exports = css(styles)
+module.exports = styleSheet

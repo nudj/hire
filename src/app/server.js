@@ -1,6 +1,10 @@
 require('envkey')
 require('babel-register')({
   presets: ['react'],
+  plugins: [
+    require.resolve('babel-plugin-transform-class-properties'),
+    require.resolve('babel-plugin-transform-object-rest-spread')
+  ],
   ignore: function (filename) {
     if (
       !filename.match(/(?!@nudj)(.*)node_modules/) ||
@@ -13,7 +17,7 @@ require('babel-register')({
   }
 })
 // TODO: Establish good pattern for this (maybe move to framework?)
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
   console.log(error.log, ...(error.log || []))
 })
 const path = require('path')

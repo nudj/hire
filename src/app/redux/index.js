@@ -1,8 +1,12 @@
 const React = require('react')
+const classnames = require('classnames')
 const { Helmet } = require('react-helmet')
 
-const ReduxRoot = (props) => (
-  <div className={`${props.className}`}>
+const { css } = require('@nudj/components/lib/css')
+const style = require('./style.css')
+
+const ReduxRoot = props => (
+  <div className={classnames(props.className, css(style.root))}>
     <Helmet>
       <meta charSet='utf-8' />
       <title>nudj</title>

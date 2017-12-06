@@ -34,6 +34,7 @@ ssh:
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
 		-v $(CWD)/src/yarn.lock:/usr/src/yarn.lock \
+		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
 		-v $(CWD)/../framework/src:/usr/src/@nudj/framework \
 		-v $(CWD)/../api/src:/usr/src/@nudj/api \
 		-v $(CWD)/../library/src:/usr/src/@nudj/library \

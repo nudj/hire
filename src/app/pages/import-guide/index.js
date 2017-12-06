@@ -8,7 +8,7 @@ const Link = require('../../components/link/link')
 const getStyle = require('./style.css')
 
 function onSetActive (dispatch, active) {
-  return (event) => dispatch(setActive(active))
+  return event => dispatch(setActive(active))
 }
 
 function stepInfoRequest (dispatch, style, props, state) {
@@ -62,10 +62,8 @@ function stepInfoRequest (dispatch, style, props, state) {
             <li className={style.instructionsStep}>
               <p className={style.instructionsCopy}>
                 Enter your password and click{' '}
-                <em className={style.instructionsCopyEmphasis}>
-                  "Done"
-                </em>{' '}
-                - the button text will then change to{' '}
+                <em className={style.instructionsCopyEmphasis}>"Done"</em> - the
+                button text will then change to{' '}
                 <em className={style.instructionsCopyEmphasis}>
                   "Request pending"
                 </em>.
@@ -163,9 +161,7 @@ function stepInfoUpload (dispatch, style, props, state) {
             <li className={style.instructionsStep}>
               <p className={style.instructionsCopy}>
                 Then click the{' '}
-                <em className={style.instructionsCopyEmphasis}>
-                  "Next"
-                </em>{' '}
+                <em className={style.instructionsCopyEmphasis}>"Next"</em>{' '}
                 button below.
               </p>
             </li>
@@ -178,7 +174,6 @@ function stepInfoUpload (dispatch, style, props, state) {
 
 function renderCurrentStep (dispatch, style, props, state) {
   const active = state.active
-  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
   let step
 
   switch (active) {
@@ -201,18 +196,26 @@ function renderCurrentStep (dispatch, style, props, state) {
       Back
     </button>
   ) : (
-    <Link className={style.cancelButton} to={`/${nextSegment}/import`}>Back</Link>
+    <Link className={style.cancelButton} to='/setup-network'>
+      Back
+    </Link>
   )
-  const next = active < 2 ? (
-    <button
-      onClick={onSetActive(dispatch, active + 1)}
-      className={style.confirmButton}
-    >
-      Next
-    </button>
-  ) : (
-    <Link className={style.confirmButton} to={`/${nextSegment}/import/upload`}>Next</Link>
-  )
+  const next =
+    active < 2 ? (
+      <button
+        onClick={onSetActive(dispatch, active + 1)}
+        className={style.confirmButton}
+      >
+        Next
+      </button>
+    ) : (
+      <Link
+        className={style.confirmButton}
+        to={`/setup-network/${props.match.params.network}/upload`}
+      >
+        Next
+      </Link>
+    )
 
   return (
     <div className={style.pageMain}>
@@ -265,7 +268,11 @@ const ImportPage = props => {
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>
-      <p className={style.copy}>Follow the step-by-step guide below to share your LinkedIn connections with us. Once you do, we&quot;ll analyse them to discover who the best people to ask for recommendations are.</p>
+      <p className={style.copy}>
+        Follow the step-by-step guide below to share your LinkedIn connections
+        with us. Once you do, we&quot;ll analyse them to discover who the best
+        people to ask for recommendations are.
+      </p>
       {step}
     </LayoutPage>
   )

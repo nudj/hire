@@ -1,11 +1,9 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const Dropzone = require('react-dropzone')
+const get = require('lodash/get')
 
-const {
-  parse,
-  upload
-} = require('./actions')
+const { parse, upload } = require('./actions')
 const LayoutPage = require('../../components/layout-page')
 const Link = require('../../components/link/link')
 const getStyle = require('./style.css')
@@ -25,17 +23,16 @@ function onUpload (dispatch) {
   }
 }
 
-function dropzoneInternal (dispatch, style, props, state, {
-  isDragActive,
-  isDragReject,
-  acceptedFiles,
-  rejectedFiles
-}) {
+function dropzoneInternal (
+  dispatch,
+  style,
+  props,
+  state,
+  { isDragActive, isDragReject, acceptedFiles, rejectedFiles }
+) {
   if (isDragActive) {
     return (
-      <h5 className={style.dragAndDropHeading}>
-        Drop the file to save it!
-      </h5>
+      <h5 className={style.dragAndDropHeading}>Drop the file to save it!</h5>
     )
   }
 
@@ -74,9 +71,7 @@ function dropzoneInternal (dispatch, style, props, state, {
         </h5>
         <p className={style.dragAndDropCopy}>
           Please try uploading{' '}
-          <em className={style.dragAndDropCopyEmphasis}>
-            Connections.csv
-          </em>
+          <em className={style.dragAndDropCopyEmphasis}>Connections.csv</em>
         </p>
       </span>
     )
@@ -137,15 +132,26 @@ function stepUpload (dispatch, style, props, state) {
 }
 
 function renderCurrentStep (dispatch, style, props, state) {
-  const nextSegment = props.user.hirer.onboarded ? 'connections' : 'onboarding'
+  const nextSegment = get(props.user, 'hirer.onboarded')
+    ? 'connections'
+    : 'onboarding'
   return (
     <div className={style.pageMain}>
       {stepUpload(dispatch, style, props, state)}
       <div className={style.buttonContainer}>
-        <Link className={style.cancelButton} to={`/${nextSegment}/import/guide`}>Back</Link>
+        <Link
+          className={style.cancelButton}
+          to={`/${nextSegment}/import/guide`}
+        >
+          Back
+        </Link>
         <button
           onClick={onUpload(dispatch)}
-          className={state.connections.length ? style.confirmButton : style.confirmButtonDisabled}
+          className={
+            state.connections.length
+              ? style.confirmButton
+              : style.confirmButtonDisabled
+          }
           disabled={!state.connections.length}
         >
           Upload
@@ -190,7 +196,10 @@ const ImportPage = props => {
       <Helmet>
         <title>nudj - upload your LinkedIn contacts</title>
       </Helmet>
-      <p className={style.copy}>Click the box, locate Connections.csv and select it (alternatively you can drag and drop Connections.csv into the box)</p>
+      <p className={style.copy}>
+        Click the box, locate Connections.csv and select it (alternatively you
+        can drag and drop Connections.csv into the box)
+      </p>
       {step}
     </LayoutPage>
   )
