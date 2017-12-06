@@ -1,6 +1,11 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const findIndex = require('lodash/findIndex')
+const flatten = require('lodash/flatten')
+
+const { Text, Link } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
 
 const {
   setNewItemValue,
@@ -9,17 +14,17 @@ const {
   toggleItem
 } = require('./actions')
 const getNextSurveyUri = require('./getNextSurveyUri')
+const style = require('./style.css')
 const LayoutPage = require('../../components/layout-page')
 const FormCompany = require('../../components/form-company')
 const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
 const FormConnection = require('../../components/form-connection')
 const AccumulatorConnections = require('../../components/accumulator-connections')
-const Link = require('../../components/link/link')
 const { questionTypes } = require('../../lib/constants')
 
 function onChangeNewItem (dispatch, itemType) {
   return name => event =>
-    dispatch(setNewItemValue(itemType, name, event.target.value))
+    dispatch(setNewItemValue(itemType, name, event.value))
 }
 
 function onAddCompany (dispatch, questionId) {
@@ -59,69 +64,61 @@ const SurveyQuestionPage = props => {
     title: 'Complete survey',
     subtitle: 'To impress Robyn and Jamie'
   }
+  const section = get(survey, 'section')
+  const allSections = get(survey, 'sections', [])
+  const question = get(section, 'question')
+  const allQuestions = flatten(allSections.map(section => section.questions))
+  const questionIndex = findIndex(allQuestions, { id: question.id })
+
+  const formerEmployers = get(user, 'formerEmployers', [])
+  const companiesAdded = formerEmployers.concat(get(user, 'newFormerEmployer', []))
 
   let questionContent
   const questionType = get(question, 'type')
   switch (questionType) {
     case questionTypes.COMPANIES:
-      const formerEmployers = get(user, 'formerEmployers', []).concat(
-        get(user, 'newFormerEmployer', [])
-      )
       questionContent = (
-        <div>
-          <FormCompany
-            onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
-            onSubmit={onAddCompany(dispatch, question.id)}
-            company={get(state, 'newFormerEmployer', {})}
-          />
-          <AccumulatorFormerEmployers formerEmployers={formerEmployers} />
-        </div>
+        <FormCompany
+          onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
+          onSubmit={onAddCompany(dispatch, question.id)}
+          company={get(state, 'newFormerEmployer', {})}
+        />
       )
       break
     case questionTypes.CONNECTIONS:
-      const connections = get(user, 'connections', []).concat(
-        get(user, 'newConnection', [])
-      )
       questionContent = (
-        <div>
-          <FormConnection
-            onChange={onChangeNewItem(dispatch, 'newConnection')}
-            onSubmit={onAddConnection(dispatch, question.id)}
-            connection={get(state, 'newConnection', {})}
-          />
-          <AccumulatorConnections
-            question={question}
-            connections={connections}
-            basket={get(state, `questions[${question.id}]`, [])}
-            onToggle={onToggleItem(dispatch)}
-            onRemove={onRemoveItemBasket(dispatch)}
-          />
-        </div>
+        <FormConnection
+          onChange={onChangeNewItem(dispatch, 'newConnection')}
+          onSubmit={onAddConnection(dispatch, question.id)}
+          connection={get(state, 'newConnection', {})}
+        />
       )
       break
   }
 
   return (
-    <LayoutPage
-      tooltip={tooltip}
-      user={user}
-      history={history}
-      dispatch={dispatch}
-      overlay={overlay}
-      dialog={dialog}
-      onPageLeave={onPageLeave}
-      notification={notification}
-      header={headerProps}
-      headline='Welcome to Aided Recall 🤔'
-    >
+    <div className={css(style.root)}>
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>
-      <Link to={nextUri}>Next</Link>
-      <h3>{question.title}</h3>
-      <p>{question.description}</p>
-      {questionContent}
-    </LayoutPage>
+      <div className={css(style.wrapper)}>
+        <Text element='div' size='regular' style={style.stepCounter}>
+          Step {questionIndex + 1} of {allQuestions.length}
+        </Text>
+        <div className={css(style.header)}>
+          <Text element='div' size='largeIi' style={style.title}>
+            {question.title}
+          </Text>
+        </div>
+        <div className={css(style.body)}>
+          <Text element='div' size='regular' style={style.subtitle}>
+            {question.description}
+          </Text>
+          {questionContent}
+          <Link volume='cheer' href={nextUri}>Next</Link>
+        </div>
+      </div>
+    </div>
   )
 }
 module.exports = SurveyQuestionPage
