@@ -16,40 +16,40 @@ const LinkedInRequestGuide = () => (
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={sharedStyle.heading}>
           Downloading your connections from LinkedIn
         </Text>
       </div>
       <Card style={sharedStyle.cardBody}>
         <img
           className={css(style.image)}
-          src="/assets/images/linkedin-request-2.gif"
+          src='/assets/images/linkedin-request-2.gif'
         />
         <ol className={css(style.list)}>
-          <Text element="li">
+          <Text element='li'>
             Log into your email account (the one you use to access LinkedIn)
           </Text>
-          <Text element="li">
+          <Text element='li'>
             Search for an email from LinkedIn with the subject - “Your LinkedIn
             data is ready!” If it’s not there, give it 5 minutes and check again
           </Text>
-          <Text element="li">Open the email</Text>
-          <Text element="li">
+          <Text element='li'>Open the email</Text>
+          <Text element='li'>
             Click the link to download your data - it will take you back to
             LinkedIn
           </Text>
-          <Text element="li">Click “Download archive”</Text>
-          <Text element="li">Next, click on “Pick & Choose”</Text>
-          <Text element="li">Then select "Connections"</Text>
-          <Text element="li">Click on "Request archive"</Text>
-          <Text element="li">Enter your password</Text>
-          <Text element="li">Hit "Done"</Text>
+          <Text element='li'>Click “Download archive”</Text>
+          <Text element='li'>Next, click on “Pick & Choose”</Text>
+          <Text element='li'>Then select "Connections"</Text>
+          <Text element='li'>Click on "Request archive"</Text>
+          <Text element='li'>Enter your password</Text>
+          <Text element='li'>Hit "Done"</Text>
         </ol>
       </Card>
       <div className={css(sharedStyle.body, sharedStyle.pageActionContainer)}>
         <ButtonLink
-          href="/setup-network/linkedin/upload"
-          volume="cheer"
+          href='/setup-network/linkedin/upload'
+          volume='cheer'
           style={sharedStyle.next}
         >
           Next

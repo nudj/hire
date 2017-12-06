@@ -16,39 +16,39 @@ const LinkedInRequestGuide = () => (
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={sharedStyle.heading}>
           Requesting your data from LinkedIn
         </Text>
       </div>
       <Card style={sharedStyle.cardBody}>
         <img
           className={css(style.image)}
-          src="/assets/images/linkedin-request-1.gif"
+          src='/assets/images/linkedin-request-1.gif'
         />
         <ol className={css(style.list)}>
-          <Text element="li">
+          <Text element='li'>
             Go to your{' '}
             <Link
               subtle
               inline
-              volume="scream"
-              href="https://www.linkedin.com/psettings/member-data"
-              target="_blank"
+              volume='scream'
+              href='https://www.linkedin.com/psettings/member-data'
+              target='_blank'
             >
               LinkedIn Settings
             </Link>
           </Text>
-          <Text element="li">Next, click on “Pick & Choose”</Text>
-          <Text element="li">Then select "Connections"</Text>
-          <Text element="li">Click on "Request archive"</Text>
-          <Text element="li">Enter your password</Text>
-          <Text element="li">Hit "Done"</Text>
+          <Text element='li'>Next, click on “Pick & Choose”</Text>
+          <Text element='li'>Then select "Connections"</Text>
+          <Text element='li'>Click on "Request archive"</Text>
+          <Text element='li'>Enter your password</Text>
+          <Text element='li'>Hit "Done"</Text>
         </ol>
       </Card>
       <div className={css(sharedStyle.body, sharedStyle.pageActionContainer)}>
         <ButtonLink
-          href="/setup-network/linkedin/download-data"
-          volume="cheer"
+          href='/setup-network/linkedin/download-data'
+          volume='cheer'
           style={sharedStyle.next}
         >
           Next
