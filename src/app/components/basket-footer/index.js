@@ -1,9 +1,15 @@
+// @flow
 const React = require('react')
 
 const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')
 
-const BasketFooter = (props) => {
+type BasketFooterProps = {
+  value: string,
+  children?: React.Node
+}
+
+const BasketFooter = (props: BasketFooterProps) => {
   const { value } = props
   return (
     <div className={css(style.basket)}>
@@ -18,8 +24,7 @@ const BasketFooter = (props) => {
 }
 
 BasketFooter.defaultProps = {
-  value: '',
-  children: null
+  value: ''
 }
 
 module.exports = BasketFooter

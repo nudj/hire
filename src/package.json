@@ -21,7 +21,8 @@
       "app/server/build*",
       "app/node_modules",
       "webpack*",
-      "@nudj"
+      "@nudj",
+      "flow-typed"
     ]
   },
   "dependencies": {
