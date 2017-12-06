@@ -7,7 +7,7 @@ const multiplySizeVar = (size, multipler) =>
 const styleSheet = StyleSheet.create({
   root: {
     backgroundColor: colors.greyLightest,
-    height: '100%',
+    minHeight: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {
       textAlign: 'center'
