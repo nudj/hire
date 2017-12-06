@@ -1,40 +1,40 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { chooseNetwork } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   buttonGroup: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    flexWrap: 'wrap',
     alignSelf: 'flex-end',
-    position: 'absolute',
     bottom: sizes.regular,
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
     left: 0,
     paddingLeft: sizes.regular,
     paddingRight: sizes.regular,
-    '@media(min-width: 42.375rem)': {
-      flexDirection: 'row',
-      flexShrink: 1,
-      flexGrow: 0,
-      justifyContent: 'center',
-
+    position: 'absolute',
+    width: '100%',
+    [`@media(${chooseNetwork.full})`]: {
       bottom: 'auto',
+      flexDirection: 'row',
+      flexGrow: 0,
+      flexShrink: 1,
+      justifyContent: 'center',
       top: '50%',
       transform: 'translateY(-50%)'
     }
   },
   button: {
-    width: '100%',
     flexBasis: '100%',
-    ':not(:last-child)': {
+    width: '100%',
+    ':not(:first-child)': {
       marginTop: sizes.regular
     },
-    '@media(min-width: 42.375rem)': {
+    [`@media(${chooseNetwork.full})`]: {
       flexBasis: 'auto',
-      width: 'auto',
       marginLeft: sizes.smallIi,
       marginRight: sizes.smallIi,
-      ':not(:last-child)': {
+      width: 'auto',
+      ':not(:first-child)': {
         marginTop: 0
       }
     }

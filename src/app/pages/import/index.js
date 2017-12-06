@@ -30,16 +30,14 @@ const ImportPage = () => {
   return (
     <div className={css(sharedStyle.root)}>
       <Helmet>
-        <title>nudj - upload your LinkedIn contacts</title>
-        <html className={css(sharedStyle.html)} />
-        <body className={css(sharedStyle.pageBody)} />
+        <title>nudj - Choose a network</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={sharedStyle.heading}>
+          <Text element="div" size="largeIi" style={sharedStyle.heading}>
             Choose a network
           </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          <Text element="p" style={sharedStyle.subheading}>
             We recommend choosing the network where you feel the best
             recommendations will come from based on your company and the roles
             your hiring for.
@@ -49,15 +47,15 @@ const ImportPage = () => {
           <ButtonLink
             style={style.button}
             href={networks.linkedin.url}
-            volume='cheer'
+            volume="cheer"
           >
             {networks.linkedin.label}
           </ButtonLink>
           <ButtonLink style={style.button} href={networks.facebook.url}>
-            {networks.facebook.label} <Text size='smallI'>- coming soon</Text>
+            {networks.facebook.label} <Text size="smallI">- coming soon</Text>
           </ButtonLink>
           <ButtonLink style={style.button} href={networks.google.url}>
-            {networks.google.label} <Text size='smallI'>- coming soon</Text>
+            {networks.google.label} <Text size="smallI">- coming soon</Text>
           </ButtonLink>
         </div>
       </div>
