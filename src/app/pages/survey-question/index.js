@@ -48,28 +48,6 @@ const SurveyQuestionPage = props => {
   const question = get(section, 'question')
   const allQuestions = flatten(allSections.map(section => section.questions))
   const questionIndex = findIndex(allQuestions, { id: question.id })
-<<<<<<< HEAD
-=======
-  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
-
-  let nextUri = ''
-  const nextQuestion = section.questions[questionIndex + 1]
-  if (nextQuestion) {
-    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-      section.id
-    }/${nextQuestion.type.toLowerCase()}/${nextQuestion.id}`
-  } else {
-    const sectionIndex = findIndex(survey.sections, { id: section.id })
-    const nextSection = survey.sections[sectionIndex + 1]
-    if (nextSection) {
-      nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-        nextSection.id
-      }`
-    } else {
-      nextUri = `${onboardingSegment}/surveys/${survey.slug}/complete`
-    }
-  }
->>>>>>> Add action-bar using Align component
 
   const formerEmployers = get(user, 'formerEmployers', [])
   const companiesAdded = formerEmployers.concat(
