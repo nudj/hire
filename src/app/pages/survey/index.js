@@ -68,7 +68,7 @@ const SurveyPage = (props: SurveyProps) => {
             your network.
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            To help jog your memory and uncover those gems, we're now going to
+            To help jog your memory and uncover those gems, we&#39;re now going to
             ask you a series of questions. All you have to do is select from the
             contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
