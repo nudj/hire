@@ -9,7 +9,7 @@ const style = require('./style.css')
 
 type CompanyFormProps = {
   company: Company,
-  onChange: string => void,
+  onChange: () => void,
   onSubmit: () => void,
 }
 
