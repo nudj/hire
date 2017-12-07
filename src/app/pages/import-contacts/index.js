@@ -263,7 +263,7 @@ class ImportContactsPage extends React.Component {
     return (<div className={this.style.instructionsStepContainer}>
       <div className={this.style.instructionsCard}>
         <Dropzone
-          accept='text/csv'
+          accept='.csv'
           disablePreview={disablePreview}
           multiple={multiple}
           className={this.style.dragAndDrop}
