@@ -70,7 +70,7 @@ const SurveyPage = (props: SurveyProps) => {
           <Text element='p' style={sharedStyle.subheading}>
             To help jog your memory and uncover those gems, we're now going to
             ask you a series of questions. All you have to do is select from the
-            contacts you've just uploaded who you feel is most relevant.
+            contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
         </div>
         <div className={css(sharedStyle.body, style.buttonGroup)}>
