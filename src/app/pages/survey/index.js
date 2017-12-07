@@ -1,3 +1,5 @@
+/* global ID QuestionType */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -10,15 +12,43 @@ const ButtonLink = require('../../components/button-link')
 const sharedStyle = require('../shared.css')
 const style = require('./style.css')
 
-const SurveyPage = props => {
+type Question = {
+  id: ID,
+  type: QuestionType
+}
+
+type Section = {
+  id: ID,
+  questions: Array<Question>
+}
+
+type SurveyProps = {
+  user: {
+    hirer: {
+      company: {
+        name?: string,
+        survey: {
+          id?: ID,
+          slug?: string,
+          sections: Array<Section>
+        }
+      }
+    }
+  }
+}
+
+const SurveyPage = (props: SurveyProps) => {
   const { user } = props
-  const survey = get(user, 'hirer.company.survey')
+  const company = get(user, 'hirer.company')
+  const survey = get(company, 'survey')
+  const initialSection = get(survey, 'sections[0]')
+  const initialQuestion = get(initialSection, 'questions[0]')
   const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
 
   return (
     <div className={css(sharedStyle.root)}>
       <Helmet>
-        <title>nudj - Choose a network</title>
+        <title>nudj - Survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
@@ -27,7 +57,10 @@ const SurveyPage = props => {
             size='largeIi'
             style={merge(sharedStyle.heading, style.heading)}
           >
-            Finding awesome people to join {get(user, 'hirer.company.name', '')}
+            Finding awesome people to join{' '}
+            <span className={css(style.companyName)}>
+              {get(company, 'name', '')}
+            </span>
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
             We know you want to work with awesome people that you like and
@@ -35,7 +68,7 @@ const SurveyPage = props => {
             your network.
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            To help job your memory and uncover those gems, we're now going to
+            To help jog your memory and uncover those gems, we're now going to
             ask you a series of questions. All you have to do is select from the
             contacts you've just uploaded who you feel is most relevant.
           </Text>
@@ -45,8 +78,8 @@ const SurveyPage = props => {
             style={style.button}
             volume='cheer'
             href={`${onboardingSegment}/surveys/${survey.slug}/sections/${
-              survey.sections[0].id
-            }`}
+              initialSection.id
+            }/${initialQuestion.type}/${initialQuestion.id}`}
           >
             Start
           </ButtonLink>
@@ -54,6 +87,18 @@ const SurveyPage = props => {
       </div>
     </div>
   )
+}
+
+SurveyPage.defaultProps = {
+  user: {
+    hirer: {
+      company: {
+        survey: {
+          sections: []
+        }
+      }
+    }
+  }
 }
 
 module.exports = SurveyPage

@@ -3,3 +3,5 @@ declare module StyleFile {
 }
 
 declare type ID = string | number
+
+declare type QuestionType = 'CONNECTIONS' | 'COMPANIES'

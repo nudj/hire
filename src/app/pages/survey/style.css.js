@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
 const { chooseNetwork } = require('../../lib/css/breakpoints')
 const { merge } = require('@nudj/library')
 
@@ -38,6 +38,9 @@ const styleSheet = StyleSheet.create({
   }),
   heading: {
     marginBottom: sizes.largeIi
+  },
+  companyName: {
+    color: colors.midRed
   }
 })
 
