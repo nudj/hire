@@ -19,7 +19,7 @@ const FormConnection = require('../../components/form-connection')
 const { questionTypes } = require('../../lib/constants')
 
 function onChangeNewItem (dispatch, itemType) {
-  return name => event => dispatch(setNewItemValue(itemType, name, event.value))
+  return event => dispatch(setNewItemValue(itemType, event.name, event.value))
 }
 
 function onAddCompany (dispatch, questionId) {

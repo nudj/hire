@@ -28,7 +28,7 @@ const AddCompanyForm = (props: CompanyFormProps) => {
           id='name'
           value={get(company, 'name', '')}
           name='name'
-          onChange={onChange('name')}
+          onChange={onChange}
         />
       </InputField>
       <Button type='submit' volume='cheer' style={style.button}>
