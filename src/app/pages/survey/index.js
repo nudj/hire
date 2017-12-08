@@ -5,7 +5,6 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { Text } = require('@nudj/components')
-const { merge } = require('@nudj/library')
 const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
@@ -75,7 +74,7 @@ const SurveyPage = (props: SurveyProps) => {
         </div>
         <div className={css(sharedStyle.body, sharedStyle.actions)}>
           <ButtonLink
-            style={merge(sharedStyle.action, style.startButton)}
+            style={sharedStyle.action}
             volume='cheer'
             href={`${onboardingSegment}/surveys/${survey.slug}/sections/${
               initialSection.id
