@@ -4,7 +4,7 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 
-const { Text, Link, Align } = require('@nudj/components')
+const { Text, Link, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const {
@@ -59,11 +59,13 @@ const SurveyQuestionPage = props => {
   switch (questionType) {
     case questionTypes.COMPANIES:
       questionContent = (
-        <FormCompany
-          onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
-          onSubmit={onAddCompany(dispatch, question.id)}
-          company={get(state, 'newFormerEmployer', {})}
-        />
+        <Card style={style.companyForm}>
+          <FormCompany
+            onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
+            onSubmit={onAddCompany(dispatch, question.id)}
+            company={get(state, 'newFormerEmployer', {})}
+          />
+        </Card>
       )
       break
     case questionTypes.CONNECTIONS:
@@ -83,7 +85,7 @@ const SurveyQuestionPage = props => {
         <title>nudj - Complete survey</title>
       </Helmet>
       <div className={css(style.wrapper)}>
-        <Text element='div' size='regular' style={style.stepCounter}>
+        <Text element='div' style={style.stepCounter}>
           Step {questionIndex + 1} of {allQuestions.length}
         </Text>
         <div className={css(style.header)}>
@@ -92,7 +94,7 @@ const SurveyQuestionPage = props => {
           </Text>
         </div>
         <div className={css(style.body)}>
-          <Text element='div' size='regular' style={style.subtitle}>
+          <Text element='div' style={style.subtitle}>
             {question.description}
           </Text>
           {questionContent}

@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography, utilities } = require('@nudj/components/lib/css')
 
 const multiplySizeVar = (size, multipler) => `${parseInt(size.replace('rem', ''), 10) * multipler}rem`
 
@@ -9,6 +9,18 @@ const styleSheet = StyleSheet.create({
     textAlign: 'center',
     '@media (min-width: 37.5rem)': {
       textAlign: 'left'
+    }
+  },
+  companyForm: {
+    backgroundColor: colors.white,
+    borderRadius: utilities.borderRadius,
+    boxShadow: utilities.boxShadow[10].narrow,
+    padding: sizes.largeIi,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '100%',
+    '@media (min-width: 37.5rem)': {
+      maxWidth: '20rem'
     }
   },
   wrapper: {

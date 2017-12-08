@@ -3,13 +3,12 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const { css } = require('@nudj/components/lib/css')
 const { Input, InputField, Button } = require('@nudj/components')
 const style = require('./style.css')
 
 type CompanyFormProps = {
   company: Company,
-  onChange: () => void,
+  onChange: (Object) => void,
   onSubmit: () => void,
 }
 
@@ -18,11 +17,10 @@ const AddCompanyForm = (props: CompanyFormProps) => {
   const onSubmitForm = (event) => {
     event.preventDefault()
     onSubmit()
-    return false
   }
 
   return (
-    <form onSubmit={onSubmitForm} className={css(style.card)}>
+    <form onSubmit={onSubmitForm}>
       <InputField label='Company name' htmlFor='name' required>
         <Input
           id='name'
