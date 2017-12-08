@@ -9,7 +9,6 @@ const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
 const sharedStyle = require('../shared.css')
-const style = require('./style.css')
 
 type Question = {
   id: ID,
@@ -57,7 +56,7 @@ const SurveyPage = (props: SurveyProps) => {
             style={sharedStyle.heading}
           >
             Finding awesome people to join{' '}
-            <span className={css(style.companyName)}>
+            <span className={css(sharedStyle.companyHighlight)}>
               {get(company, 'name', '')}
             </span>
           </Text>

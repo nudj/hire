@@ -82,6 +82,9 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
+  companyHighlight: {
+    color: colors.midRed
+  },
   footer: {}
 })
 
