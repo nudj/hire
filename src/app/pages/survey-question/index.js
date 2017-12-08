@@ -6,6 +6,7 @@ const flatten = require('lodash/flatten')
 
 const { Text, Link, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const { merge } = require('@nudj/library')
 
 const {
   setNewItemValue,
@@ -14,6 +15,7 @@ const {
 } = require('./actions')
 const getNextSurveyUri = require('./getNextSurveyUri')
 const style = require('./style.css')
+const sharedStyle = require('../shared.css')
 const FormCompany = require('../../components/form-company')
 const FormConnection = require('../../components/form-connection')
 const { questionTypes } = require('../../lib/constants')
@@ -80,28 +82,26 @@ const SurveyQuestionPage = props => {
   }
 
   return (
-    <div className={css(style.root)}>
+    <div className={css(sharedStyle.root)}>
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>
-      <div className={css(style.wrapper)}>
-        <Text element='div' style={style.stepCounter}>
+      <div className={css(sharedStyle.wrapper)}>
+        <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionIndex + 1} of {allQuestions.length}
         </Text>
-        <div className={css(style.header)}>
-          <Text element='div' size='largeIi' style={style.title}>
-            {question.title}
-          </Text>
-        </div>
-        <div className={css(style.body)}>
-          <Text element='div' style={style.subtitle}>
+        <Text element='div' size='largeIi' style={merge(sharedStyle.header, style.header)}>
+          {question.title}
+        </Text>
+        <div className={css(sharedStyle.body)}>
+          <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
           {questionContent}
-          <div className={css(style.actionBar)}>
+          <div className={css(sharedStyle.footer)}>
             <Align
               leftChildren={
-                <Text style={style.addCounter}>
+                <Text style={sharedStyle.addCounter}>
                   {`${companiesAdded.length} added`}
                 </Text>
               }

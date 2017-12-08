@@ -1,18 +1,12 @@
-const {
-  StyleSheet,
-  sizes,
-  typography
-} = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { wizardAction } = require('../../lib/css/breakpoints')
 
 const stylesheet = StyleSheet.create({
-  button: {
+  addCompanyButton: {
+    width: '100%',
     marginTop: sizes.regular,
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
-    fontWeight: typography.fontWeight.regular,
-    '@media (min-width: 37.5rem)': {
-      paddingLeft: sizes.largeI,
-      paddingRight: sizes.largeI
+    [`@media(${wizardAction.center})`]: {
+      width: 'auto'
     }
   }
 })

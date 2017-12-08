@@ -29,7 +29,11 @@ const AddCompanyForm = (props: CompanyFormProps) => {
           onChange={onChange}
         />
       </InputField>
-      <Button type='submit' volume='cheer' style={style.button}>
+      <Button
+        type='submit'
+        volume='cheer'
+        style={style.addCompanyButton}
+      >
         Add company
       </Button>
     </form>
