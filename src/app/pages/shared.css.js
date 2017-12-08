@@ -82,6 +82,9 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
+  headingHighlight: {
+    color: colors.midRed
+  },
   footer: {}
 })
 

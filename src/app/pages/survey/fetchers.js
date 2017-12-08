@@ -9,6 +9,7 @@ const get = ({ session, params }) => {
       user (id: $userId) {
         hirer {
           company {
+            name
             survey: surveyByFilters (filters: {
               slug: $surveySlug
             }) {
@@ -18,6 +19,10 @@ const get = ({ session, params }) => {
               introDescription
               sections: surveySections {
                 id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
               }
             }
           }
