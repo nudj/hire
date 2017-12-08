@@ -59,7 +59,21 @@ steps:
     when:
       branch:
         only:
+          - LEGACY-V1
           - master
+
+  push_legacy:
+    title: Push
+    type: push
+    candidate: '${{build}}'
+    tag: LEGACY-V1
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - LEGACY-V1
 
   push:
     title: Push
