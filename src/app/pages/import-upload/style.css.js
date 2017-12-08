@@ -85,7 +85,8 @@ const styles = {
     padding: `${variables.padding.d} 0 0 0`
   },
   instructionsCard: merge(mixins.cardStyle, {
-    position: 'relative'
+    position: 'relative',
+    padding: 0
   }),
   instructionsStepContainer: {
     margin: `0 0 ${variables.padding.d} 0`
@@ -116,7 +117,9 @@ const styles = {
   instructionsCopyEmphasis: {},
   instructionsImage: {
     display: 'block',
-    margin: `calc(${variables.padding.f} * -1) 0 0 calc(${variables.padding.f} * -1)`,
+    margin: `calc(${variables.padding.f} * -1) 0 0 calc(${
+      variables.padding.f
+    } * -1)`,
     padding: `0 ${variables.padding.e} 0 0`,
     width: '50%'
   },

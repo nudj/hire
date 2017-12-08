@@ -60,10 +60,9 @@ const parse = file => async (dispatch, getState) => {
   }
 }
 
-const upload = () => (dispatch, getState) => {
+const upload = source => (dispatch, getState) => {
   const state = getState()
   const segment = state.app.user.onboarded ? 'connections' : 'onboarding'
-  const source = state.importPage.network
   const connections = state.importUploadPage.connections
   const url = `/${segment}/import/upload`
   const method = 'post'
