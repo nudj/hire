@@ -1,33 +1,11 @@
-const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
-const { chooseNetwork } = require('../../lib/css/breakpoints')
-const { merge } = require('@nudj/library')
+const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const { centerPageAction } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
-  buttonGroup: {
-    alignSelf: 'flex-end',
-    bottom: sizes.regular,
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    left: 0,
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
-    position: 'absolute',
-    width: '100%',
-    [`@media(${chooseNetwork.full})`]: {
-      bottom: 'auto',
-      flexDirection: 'row',
-      flexGrow: 0,
-      flexShrink: 1,
-      justifyContent: 'center',
-      top: '50%',
-      transform: 'translateY(-50%)'
-    }
-  },
-  button: merge(typography.type.regular, {
+  button: {
     flexGrow: 1,
     width: '100%',
-    [`@media(${chooseNetwork.full})`]: {
+    [`@media(${centerPageAction.full})`]: {
       flexGrow: 'inherit',
       marginLeft: sizes.smallIi,
       marginRight: sizes.smallIi,
@@ -35,9 +13,6 @@ const styleSheet = StyleSheet.create({
       paddingRight: sizes.largeIii,
       width: 'auto'
     }
-  }),
-  heading: {
-    marginBottom: sizes.largeIi
   },
   companyName: {
     color: colors.midRed

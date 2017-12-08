@@ -55,7 +55,7 @@ const SurveyPage = (props: SurveyProps) => {
           <Text
             element='div'
             size='largeIi'
-            style={merge(sharedStyle.heading, style.heading)}
+            style={merge(sharedStyle.heading)}
           >
             Finding awesome people to join{' '}
             <span className={css(style.companyName)}>
@@ -73,7 +73,7 @@ const SurveyPage = (props: SurveyProps) => {
             contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
         </div>
-        <div className={css(sharedStyle.body, style.buttonGroup)}>
+        <div className={css(sharedStyle.body, sharedStyle.buttonGroup)}>
           <ButtonLink
             style={style.button}
             volume='cheer'
