@@ -9,7 +9,7 @@ const style = require('./style.css')
 type CompanyFormProps = {
   company: Company,
   onChange: (Object) => void,
-  onSubmit: () => void,
+  onSubmit: () => void
 }
 
 const AddCompanyForm = (props: CompanyFormProps) => {
