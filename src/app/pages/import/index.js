@@ -7,7 +7,6 @@ const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
 const sharedStyle = require('../shared.css')
-const style = require('./style.css')
 
 const getUrl = network => `/setup-network/${network}`
 
@@ -42,18 +41,18 @@ const ImportPage = () => (
           your hiring for.
         </Text>
       </div>
-      <div className={css(sharedStyle.body, style.buttonGroup)}>
+      <div className={css(sharedStyle.actions)}>
         <ButtonLink
-          style={style.button}
+          style={sharedStyle.action}
           href={NETWORKS.linkedin.url}
           volume='cheer'
         >
           {NETWORKS.linkedin.label}
         </ButtonLink>
-        <ButtonLink style={style.button} href={NETWORKS.facebook.url}>
+        <ButtonLink style={sharedStyle.action} href={NETWORKS.facebook.url}>
           {NETWORKS.facebook.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
-        <ButtonLink style={style.button} href={NETWORKS.google.url}>
+        <ButtonLink style={sharedStyle.action} href={NETWORKS.google.url}>
           {NETWORKS.google.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
       </div>
