@@ -82,7 +82,7 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
-  companyHighlight: {
+  headingHighlight: {
     color: colors.midRed
   },
   footer: {}

@@ -56,7 +56,7 @@ const SurveyPage = (props: SurveyProps) => {
             style={sharedStyle.heading}
           >
             Finding awesome people to join{' '}
-            <span className={css(sharedStyle.companyHighlight)}>
+            <span className={css(sharedStyle.headingHighlight)}>
               {get(company, 'name', '')}
             </span>
           </Text>
