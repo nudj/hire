@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const _findIndex = require('lodash/findIndex')
 
 const {
   setNewItemValue,
@@ -9,6 +8,7 @@ const {
   addFormerEmployer,
   toggleItem
 } = require('./actions')
+const getNextSurveyUri = require('./getNextUri')
 const LayoutPage = require('../../components/layout-page')
 const FormCompany = require('../../components/form-company')
 const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
@@ -53,38 +53,11 @@ const SurveyQuestionPage = props => {
     surveyQuestionPage: state
   } = props
   const survey = get(user, 'hirer.company.survey')
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
-  const questionIndex = _findIndex(section.questions, { id: question.id })
-  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
-
+  const question = get(survey, 'section.question')
+  const nextUri = getNextSurveyUri(survey)
   const headerProps = {
     title: 'Complete survey',
     subtitle: 'To impress Robyn and Jamie'
-  }
-
-  let previousUri = ''
-  const previousQuestion = section.questions[questionIndex - 1]
-  if (previousQuestion) {
-    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
-  } else {
-    previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${section.id}`
-  }
-
-  let nextUri = ''
-  const nextQuestion = section.questions[questionIndex + 1]
-  if (nextQuestion) {
-    nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-      section.id
-    }/${nextQuestion.type.toLowerCase()}/${nextQuestion.id}`
-  } else {
-    const sectionIndex = _findIndex(survey.sections, { id: section.id })
-    const nextSection = survey.sections[sectionIndex + 1]
-    if (nextSection) {
-      nextUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${nextSection.id}`
-    } else {
-      nextUri = `${onboardingSegment}/surveys/${survey.slug}/complete`
-    }
   }
 
   let questionContent
@@ -144,7 +117,6 @@ const SurveyQuestionPage = props => {
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>
-      <Link to={previousUri}>Previous</Link>
       <Link to={nextUri}>Next</Link>
       <h3>{question.title}</h3>
       <p>{question.description}</p>
