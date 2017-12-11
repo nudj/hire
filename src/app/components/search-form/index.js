@@ -48,10 +48,7 @@ const SearchForm = (props: SearchFormProps) => {
 SearchForm.defaultProps = {
   className: '',
   placeholder: '',
-  value: '',
-  onChange: (event) => {},
-  onSubmit: () => {},
-  onReset: () => {}
+  value: ''
 }
 
 module.exports = SearchForm
