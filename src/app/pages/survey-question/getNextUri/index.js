@@ -11,7 +11,6 @@ function getNextSurveyUri (survey: Survey) {
   const allQuestions = flatten(allSections.map(section => section.questions))
   const questionIndex = findIndex(allQuestions, { id: question.id })
   const nextQuestion = section.questions[questionIndex + 1]
-
   const baseURL = `/surveys/${survey.slug}`
 
   if (nextQuestion) {
