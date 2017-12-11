@@ -1,8 +1,10 @@
+/* global Survey */
+// @flow
 const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 
-function getNextSurveyUri (survey) {
+function getNextSurveyUri (survey: Survey) {
   const section = get(survey, 'section')
   const allSections = get(survey, 'sections', [])
   const question = get(section, 'question')
