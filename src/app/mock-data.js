@@ -37,6 +37,24 @@ const data = {
   roles: [],
   connectionSources: []
 }
+data.roles = data.roles.concat([
+  {
+    name: 'Fake Role',
+    id: 'role1'
+  }
+])
+data.connections = data.connections.concat([
+  {
+    company: 'company1',
+    firstName: 'Nicholas',
+    lastName: 'Collings',
+    from: 'person5',
+    source: 'connectionSource1',
+    role: 'role1',
+    person: 'person1',
+    id: '1'
+  }
+])
 data.companies = data.companies.concat([
   {
     id: 'company1',
