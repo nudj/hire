@@ -8,7 +8,7 @@ const {
   addFormerEmployer,
   toggleItem
 } = require('./actions')
-const getNextSurveyUri = require('./getNextUri')
+const getNextSurveyUri = require('./getNextSurveyUri')
 const LayoutPage = require('../../components/layout-page')
 const FormCompany = require('../../components/form-company')
 const AccumulatorFormerEmployers = require('../../components/accumulator-former-employers')
