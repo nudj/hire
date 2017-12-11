@@ -30,9 +30,9 @@
     react "15.6.1"
     react-textarea-autosize "5.1.0"
 
-"@nudj/components@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-0.4.0.tgz#922e5486e8b00c6d12ffa41c47efe68d68ad503d"
+"@nudj/components@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-1.0.0.tgz#607242b094715ec79cd51d9a09b24d1adf37f4b7"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -44,7 +44,6 @@
     prop-types "15.5.10"
     react "15.6.2"
     react-dom "15.6.2"
-    react-textarea-autosize "5.1.0"
 
 "@nudj/framework@9.0.0":
   version "9.0.0"
@@ -102,6 +101,15 @@
 "@nudj/library@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.0.0.tgz#3f384858b3d0ae44ff878c5f6db0299c7ba194e1"
+  dependencies:
+    axios "0.16.2"
+    deepmerge "1.5.0"
+    mailbuild "^0.3.7"
+    shortid "^2.2.8"
+
+"@nudj/library@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.1.0.tgz#45110ebb9bb7b46bad0396b0d5ea57d08b2eafdb"
   dependencies:
     axios "0.16.2"
     deepmerge "1.5.0"

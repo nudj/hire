@@ -7,8 +7,8 @@ require('babel-register')({
   ],
   ignore: function (filename) {
     if (
-      !filename.match(/(?!@nudj)(.*)node_modules/) ||
-      !filename.match(/(?!app)(.*)node_modules/)
+      filename.match(/@nudj/) ||
+      filename.match(/app/)
     ) {
       return false
     }
