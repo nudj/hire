@@ -101,7 +101,6 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 }
 
 ConnectionsTable.defaultProps = {
-  onSelect: () => {},
   connections: [],
   selectedConnections: [],
   styleSheet: {}
