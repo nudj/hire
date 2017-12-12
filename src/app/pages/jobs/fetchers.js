@@ -9,6 +9,7 @@ const get = ({
         hirer {
           company {
             name
+            slug
             jobs {
               id
               created
