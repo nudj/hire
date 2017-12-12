@@ -28,6 +28,7 @@ ssh:
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
+		-v $(CWD)/src/.babelrc:/usr/src/.babelrc \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
