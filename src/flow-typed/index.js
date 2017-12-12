@@ -3,3 +3,5 @@ declare module StyleFile {
 }
 
 declare type ID = string | number
+
+declare type Style = Object | Array<Object>
