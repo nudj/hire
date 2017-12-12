@@ -131,17 +131,10 @@ const styleSheet = StyleSheet.create({
   em: {
     fontStyle: 'italic'
   },
-  formContainer: {
-    borderRadius: utilities.borderRadius,
-    boxShadow: utilities.boxShadow[10].narrow,
-    padding: sizes.largeIi,
+  card: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: sizes.largeIi,
-    width: '100%',
-    [`@media(${wizardAction.center})`]: {
-      maxWidth: '20rem'
-    }
+    maxWidth: '42.375rem'
   }
 })
 

@@ -9,6 +9,7 @@ const { merge } = require('@nudj/library')
 
 const { setNewItemValue, addFormerEmployer } = require('../actions')
 const sharedStyle = require('../../shared.css')
+const style = require('./style.css')
 const FormCompany = require('../../../components/form-company')
 
 function onChangeNewItem (dispatch, itemType) {
@@ -59,7 +60,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
-          <Card style={sharedStyle.formContainer}>
+          <Card style={merge(sharedStyle.card, style.formCard)}>
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
               onSubmit={onAddCompany(dispatch, question.id)}
