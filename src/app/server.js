@@ -6,13 +6,9 @@ require('babel-register')({
     require.resolve('babel-plugin-transform-object-rest-spread')
   ],
   ignore: function (filename) {
-    if (
-      filename.match(/@nudj/) ||
-      filename.match(/app/)
-    ) {
+    if (filename.match(/\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/)) {
       return false
     }
-
     return true
   }
 })
