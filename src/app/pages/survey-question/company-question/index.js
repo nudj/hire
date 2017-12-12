@@ -1,6 +1,5 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
 
 const { Text, Link, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -22,8 +21,8 @@ function onAddCompany (dispatch, questionId) {
 const SurveyQuestionPage = props => {
   const {
     question,
-    allQuestions,
-    questionIndex,
+    questionNumber,
+    surveyLength,
     dispatch,
     companiesAdded,
     nextUri,
@@ -37,7 +36,7 @@ const SurveyQuestionPage = props => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>
-          Step {questionIndex + 1} of {allQuestions.length}
+          Step {questionNumber} of {surveyLength}
         </Text>
         <Text element='div' size='largeIi' style={merge(sharedStyle.header, style.header)}>
           {question.title}
@@ -57,7 +56,7 @@ const SurveyQuestionPage = props => {
             <Align
               leftChildren={
                 <Text style={sharedStyle.addCounter}>
-                  {`${companiesAdded.length} added`}
+                  {`${companiesAdded} added`}
                 </Text>
               }
               rightChildren={
