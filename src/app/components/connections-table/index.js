@@ -79,7 +79,14 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 
   const cellRenderer = (column, row, defaultValue) => {
     if (column.name === 'checkbox') {
-      return <Checkbox checked={row.selected} onChange={onSelect} />
+      return (
+        <Checkbox
+          checked={row.selected}
+          onChange={onSelect}
+          name={`${row.firstName} ${row.lastName}`}
+          value={row.id}
+        />
+      )
     }
     return defaultValue
   }

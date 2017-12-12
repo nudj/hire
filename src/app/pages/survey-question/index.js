@@ -3,19 +3,10 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 
-const { setNewItemValue, addConnection } = require('./actions')
 const getNextSurveyUri = require('./getNextSurveyUri')
 const CompanyQuestionPage = require('./company-question')
-const FormConnection = require('../../components/form-connection')
+const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
-
-function onChangeNewItem (dispatch, itemType) {
-  return event => dispatch(setNewItemValue(itemType, event.name, event.value))
-}
-
-function onAddConnection (dispatch, questionId) {
-  return () => dispatch(addConnection(questionId))
-}
 
 const SurveyQuestionPage = props => {
   const {
@@ -50,11 +41,7 @@ const SurveyQuestionPage = props => {
       )
     case questionTypes.CONNECTIONS:
       return (
-        <FormConnection
-          onChange={onChangeNewItem(dispatch, 'newConnection')}
-          onSubmit={onAddConnection(dispatch, question.id)}
-          connection={get(state, 'newConnection', {})}
-        />
+        <ConnectionsQuestionPage nextUri={nextUri} {...props} />
       )
   }
 }
