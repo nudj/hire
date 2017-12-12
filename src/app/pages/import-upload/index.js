@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const Dropzone = require('react-dropzone')
-const get = require('lodash/get')
 
 const { parse, upload } = require('./actions')
 const LayoutPage = require('../../components/layout-page')
@@ -132,16 +131,13 @@ function stepUpload (dispatch, style, props, state) {
 }
 
 function renderCurrentStep (dispatch, style, props, state) {
-  const nextSegment = get(props.user, 'hirer.onboarded')
-    ? 'connections'
-    : 'onboarding'
   return (
     <div className={style.pageMain}>
       {stepUpload(dispatch, style, props, state)}
       <div className={style.buttonContainer}>
         <Link
           className={style.cancelButton}
-          to={`/${nextSegment}/import/guide`}
+          to={`/setup-network/${props.match.params.network}/`}
         >
           Back
         </Link>

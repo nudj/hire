@@ -31,7 +31,7 @@ const ConnectionsPage = props => {
       >
         Take a survey
       </Link>,
-      <Link key='import' className={style.import} to='/connections/import'>
+      <Link key='import' className={style.import} to='/setup-network'>
         Import connections
       </Link>
     ]

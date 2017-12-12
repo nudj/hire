@@ -1,4 +1,9 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const {
+  StyleSheet,
+  sizes,
+  colors,
+  utilities
+} = require('@nudj/components/lib/css')
 const { wizardAction } = require('../lib/css/breakpoints')
 
 const multiplySizeVar = (size, multipler) =>
@@ -7,7 +12,7 @@ const multiplySizeVar = (size, multipler) =>
 const styleSheet = StyleSheet.create({
   root: {
     backgroundColor: colors.greyLightest,
-    height: '100%',
+    minHeight: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {
       textAlign: 'center'
@@ -34,6 +39,9 @@ const styleSheet = StyleSheet.create({
   },
   heading: {
     color: colors.primary
+  },
+  headingHighlight: {
+    color: colors.midRed
   },
   subheading: {
     marginTop: sizes.largeIi,
@@ -82,10 +90,28 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
-  headingHighlight: {
-    color: colors.midRed
+  footer: {},
+  list: {
+    textAlign: 'left',
+    maxWidth: '40rem',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingLeft: 0,
+    listStylePosition: 'inside',
+    marginTop: sizes.largeIi,
+    marginBottom: 0
   },
-  footer: {}
+  image: {
+    width: '100%',
+    maxWidth: '37rem',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    border: `1px solid ${colors.greyLight}`,
+    borderRadius: utilities.borderRadius
+  },
+  em: {
+    fontStyle: 'italic'
+  }
 })
 
 module.exports = styleSheet

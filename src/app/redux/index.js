@@ -7,9 +7,8 @@ const style = require('./style.css')
 
 const ReduxRoot = props => (
   <div className={classnames(props.className, css(style.root))}>
-    <Helmet>
+    <Helmet titleTemplate='%s | nudj' defaultTitle='nudj'>
       <meta charSet='utf-8' />
-      <title>nudj</title>
       <meta name='viewport' content='width=device-width, initial-scale=1' />
     </Helmet>
     {props.children}
