@@ -8,7 +8,6 @@ const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
 const { setNewItemValue, addFormerEmployer } = require('../actions')
-const style = require('./style.css')
 const sharedStyle = require('../../shared.css')
 const FormCompany = require('../../../components/form-company')
 
@@ -53,14 +52,14 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={merge(sharedStyle.header, style.header)}>
+        <Text element='div' size='largeIi' style={merge(sharedStyle.heading, sharedStyle.subheading)}>
           {question.title}
         </Text>
         <div className={css(sharedStyle.body)}>
           <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
-          <Card style={style.companyForm}>
+          <Card style={sharedStyle.formContainer}>
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
               onSubmit={onAddCompany(dispatch, question.id)}
