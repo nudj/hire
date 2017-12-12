@@ -28,21 +28,21 @@ const SurveyQuestionPage = props => {
   const section = get(survey, 'section')
   const allSections = get(survey, 'sections', [])
   const question = get(section, 'question')
-  const allQuestions = flatten(allSections.map(section => section.questions))
-  const questionIndex = findIndex(allQuestions, { id: question.id })
+  const questions = flatten(allSections.map(section => section.questions))
+  const questionIndex = findIndex(questions, { id: question.id })
   const formerEmployers = get(user, 'formerEmployers', [])
   const companiesAdded = formerEmployers.concat(
     get(user, 'newFormerEmployer', [])
   )
 
-  switch (get(question, 'type')) {
+  switch (question.type) {
     case questionTypes.COMPANIES:
       return (
         <CompanyQuestionPage
           question={question}
           questionNumber={questionIndex + 1}
-          surveyLength={allQuestions.length}
-          companiesAdded={companiesAdded.length}
+          questionCount={questions.length}
+          companies={companiesAdded}
           dispatch={dispatch}
           nextUri={nextUri}
           formerEmployer={get(state, 'newFormerEmployer', {})}

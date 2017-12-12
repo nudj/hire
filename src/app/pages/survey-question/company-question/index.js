@@ -26,8 +26,8 @@ function onAddCompany (dispatch, questionId) {
 type CompanyQuestionProps = {
   question: SurveyQuestion,
   nextUri: string,
-  companiesAdded: number,
-  surveyLength: number,
+  companies: Array<Company>,
+  questionCount: number,
   questionNumber: number,
   formerEmployer: Company,
   dispatch: Function
@@ -37,9 +37,9 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   const {
     question,
     questionNumber,
-    surveyLength,
+    questionCount,
     dispatch,
-    companiesAdded,
+    companies,
     nextUri,
     formerEmployer
   } = props
@@ -51,7 +51,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>
-          Step {questionNumber} of {surveyLength}
+          Step {questionNumber} of {questionCount}
         </Text>
         <Text element='div' size='largeIi' style={merge(sharedStyle.header, style.header)}>
           {question.title}
@@ -71,7 +71,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
             <Align
               leftChildren={
                 <Text style={sharedStyle.addCounter}>
-                  {`${companiesAdded} added`}
+                  {`${companies.length} added`}
                 </Text>
               }
               rightChildren={

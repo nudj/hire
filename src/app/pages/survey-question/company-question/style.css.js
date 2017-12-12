@@ -7,7 +7,6 @@ const {
 
 const styleSheet = StyleSheet.create({
   companyForm: {
-    backgroundColor: colors.white,
     borderRadius: utilities.borderRadius,
     boxShadow: utilities.boxShadow[10].narrow,
     padding: sizes.largeIi,
