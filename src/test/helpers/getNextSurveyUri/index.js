@@ -1,7 +1,5 @@
-/* global expect asyncTest */
+/* global expect */
 /* eslint-env mocha */
-const nock = require('nock')
-
 const getNextSurveyUri = require('../../../app/pages/survey-question/getNextSurveyUri')
 
 const twoQuestionSurvey = {
@@ -36,9 +34,6 @@ const twoQuestionSurvey = {
     ],
     question: {
       id: 'question1',
-      title: 'Where did you work before BEAR?',
-      description: 'Please list all of your previous employers. Thanks!',
-      name: 'workBefore',
       type: 'COMPANIES'
     }
   }
@@ -68,9 +63,6 @@ const oneQuestionSurvey = {
     ],
     question: {
       id: 'question1',
-      title: 'Where did you work before BEAR?',
-      description: 'Please list all of your previous employers. Thanks!',
-      name: 'workBefore',
       type: 'COMPANIES'
     }
   }
@@ -109,15 +101,10 @@ const twoSectionSurvey = {
     ],
     question: {
       id: 'question1',
-      title: 'Where did you work before BEAR?',
-      description: 'Please list all of your previous employers. Thanks!',
-      name: 'workBefore',
       type: 'COMPANIES'
     }
   }
 }
-
-const api = nock('http://localhost:82')
 
 describe('getNextSurveyUri', () => {
   it('fetches URL of next question in line', () => {
