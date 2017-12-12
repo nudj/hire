@@ -9,18 +9,14 @@ const style = require('./style.css')
 type CompanyFormProps = {
   company: Company,
   onChange: (Object) => void,
-  onSubmit: () => void
+  onSubmit: (Object) => void
 }
 
 const AddCompanyForm = (props: CompanyFormProps) => {
   const { onChange, company, onSubmit } = props
-  const onSubmitForm = (event) => {
-    event.preventDefault()
-    onSubmit()
-  }
 
   return (
-    <form onSubmit={onSubmitForm}>
+    <form onSubmit={onSubmit}>
       <InputField label='Company name' htmlFor='name' required>
         <Input
           id='name'

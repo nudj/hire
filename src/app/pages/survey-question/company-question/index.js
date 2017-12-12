@@ -17,7 +17,10 @@ function onChangeNewItem (dispatch, itemType) {
 }
 
 function onAddCompany (dispatch, questionId) {
-  return () => dispatch(addFormerEmployer(questionId))
+  return (event) => {
+    event.preventDefault()
+    dispatch(addFormerEmployer(questionId))
+  }
 }
 
 type CompanyQuestionProps = {

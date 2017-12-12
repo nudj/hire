@@ -1,3 +1,11 @@
+const { taskTypes } = require('../app/lib/constants')
+const {
+  HIRER_SURVEY,
+  SEND_SURVEY_INTERNAL,
+  SHARE_JOBS,
+  UNLOCK_NETWORK_LINKEDIN
+} = taskTypes
+
 declare type CompanyOnboardedEvent = {
   id?: ID,
   company?: Company
@@ -34,7 +42,7 @@ declare type CompanyTask = {
   completedBy?: Person
 }
 
-declare type TaskType = 'HIRER_SURVEY'
-| 'SEND_SURVEY_INTERNAL'
-| 'SHARE_JOBS'
-| 'UNLOCK_NETWORK_LINKEDIN'
+declare type TaskType = typeof HIRER_SURVEY
+| typeof SEND_SURVEY_INTERNAL
+| typeof SHARE_JOBS
+| typeof UNLOCK_NETWORK_LINKEDIN

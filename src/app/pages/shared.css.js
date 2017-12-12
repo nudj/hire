@@ -124,11 +124,7 @@ const styleSheet = StyleSheet.create({
   },
   stepCounter: {
     textAlign: 'center',
-    fontWeight: typography.fontWeight.bold,
-    paddingBottom: sizes.regular,
-    '@media (min-width: 37.5rem)': {
-      paddingBottom: sizes.largeI
-    }
+    fontWeight: typography.fontWeight.bold
   },
   addCounter: {
     fontWeight: typography.fontWeight.bold

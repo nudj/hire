@@ -1,4 +1,7 @@
-declare type SurveyQuestionType = 'COMPANIES' | 'CONNECTIONS'
+const { questionTypes } = require('../app/lib/constants')
+const { COMPANIES, CONNECTIONS } = questionTypes
+
+declare type SurveyQuestionType = typeof COMPANIES | typeof CONNECTIONS
 
 declare type Survey = {
   id?: ID,

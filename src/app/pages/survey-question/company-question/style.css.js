@@ -20,6 +20,7 @@ const styleSheet = StyleSheet.create({
     }
   },
   header: {
+    marginTop: sizes.largeI,
     color: colors.royalBlue
   }
 })
