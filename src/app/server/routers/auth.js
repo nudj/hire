@@ -6,23 +6,29 @@ const { cacheReturnTo } = require('@nudj/library/server')
 
 async function fetchPerson (email) {
   try {
-    const person = await request(`people/first?email=${encodeURIComponent(email)}`)
+    const person = await request(`people/first?email=${encodeURIComponent(email)}`, {
+      baseURL: `http://${process.env.API_HOST}:81`
+    })
     if (!person) throw new Error('Person not found')
     if (person.error) throw new Error('Unable to fetch person')
     return person
   } catch (error) {
-    throw new Error('Error fetching person')
+    logger.log('error', error.log || error)
+    throw error
   }
 }
 
 async function fetchHirer (personId) {
   try {
-    const hirer = await request(`hirers/first?person=${personId}`)
+    const hirer = await request(`hirers/first?person=${personId}`, {
+      baseURL: `http://${process.env.API_HOST}:81`
+    })
     if (!hirer) throw new Error('Not a registered hirer')
     if (hirer.error) throw new Error('Error fetching hirer')
     return hirer
   } catch (error) {
-    throw new Error('Error fetching hirer')
+    logger.log('error', error.log || error)
+    throw error
   }
 }
 
