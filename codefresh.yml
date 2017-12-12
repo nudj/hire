@@ -17,6 +17,7 @@ steps:
     working_directory: 'IMAGE_WORK_DIR'
     commands:
       - ./node_modules/.bin/standard
+      - ./node_modules/.bin/flow --quiet
       - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test
 
   build_latest:

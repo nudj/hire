@@ -1,4 +1,4 @@
-/* global ID QuestionType */
+/* global ID SurveyQuestionType */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -12,7 +12,7 @@ const sharedStyle = require('../shared.css')
 
 type Question = {
   id: ID,
-  type: QuestionType
+  type: SurveyQuestionType
 }
 
 type Section = {

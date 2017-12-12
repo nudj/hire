@@ -16,9 +16,16 @@ const questionTypes = {
   COMPANIES: 'COMPANIES',
   CONNECTIONS: 'CONNECTIONS'
 }
+const taskTypes = {
+  HIRER_SURVEY: 'HIRER_SURVEY',
+  SEND_SURVEY_INTERNAL: 'SEND_SURVEY_INTERNAL',
+  SHARE_JOBS: 'SHARE_JOBS',
+  UNLOCK_NETWORK_LINKEDIN: 'UNLOCK_NETWORK_LINKEDIN'
+}
 
 module.exports = {
   surveyTypes,
+  taskTypes,
   notificationTypes,
   booleanChoices,
   questionTypes

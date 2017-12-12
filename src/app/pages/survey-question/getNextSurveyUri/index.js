@@ -11,14 +11,14 @@ function getNextSurveyUri (survey: Survey) {
   const allQuestions = flatten(allSections.map(section => section.questions))
   const questionIndex = findIndex(allQuestions, { id: question.id })
   const nextQuestion = section.questions[questionIndex + 1]
-  const baseURL = `/surveys/${survey.slug}`
+  const baseURL = `/surveys/${get(survey, 'slug')}`
 
   if (nextQuestion) {
     const type = nextQuestion.type.toLowerCase()
     return `${baseURL}/sections/${section.id}/${type}/${nextQuestion.id}`
   }
-  const sectionIndex = findIndex(survey.sections, { id: section.id })
-  const nextSection = survey.sections[sectionIndex + 1]
+  const sectionIndex = findIndex(allSections, { id: section.id })
+  const nextSection = allSections[sectionIndex + 1]
   return nextSection ? `${baseURL}/sections/${nextSection.id}` : `${baseURL}/complete`
 }
 

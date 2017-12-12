@@ -1,25 +1,45 @@
+/* global Company */
+// @flow
 const React = require('react')
 const get = require('lodash/get')
 
-const ConnectionEditor = (props) => {
-  const onChange = get(props, 'onChange')
-  const onSubmitCallback = get(props, 'onSubmit', () => {})
-  const onSubmit = (event) => {
-    event.preventDefault()
-    onSubmitCallback()
-    return false
-  }
-  const company = get(props, 'company', {})
+const { Input, InputField, Button } = require('@nudj/components')
+const style = require('./style.css')
+
+type CompanyFormProps = {
+  company: Company,
+  onChange: (Object) => void,
+  onSubmit: (Object) => void
+}
+
+const AddCompanyForm = (props: CompanyFormProps) => {
+  const { onChange, company, onSubmit } = props
 
   return (
     <form onSubmit={onSubmit}>
-      <p>
-        <label htmlFor='name'>Company name</label>
-        <input id='name' type='text' value={company.name || ''} name='name' onChange={onChange('name')} />
-      </p>
-      <button>Add</button>
+      <InputField label='Company name' htmlFor='name' required>
+        <Input
+          id='name'
+          value={get(company, 'name', '')}
+          name='name'
+          onChange={onChange}
+        />
+      </InputField>
+      <Button
+        type='submit'
+        volume='cheer'
+        style={style.addCompanyButton}
+      >
+        Add company
+      </Button>
     </form>
   )
 }
 
-module.exports = ConnectionEditor
+AddCompanyForm.defaultProps = {
+  company: {},
+  onChange: () => {},
+  onSubmit: () => {}
+}
+
+module.exports = AddCompanyForm

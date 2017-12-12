@@ -129,6 +129,10 @@ const postFormerEmployer = ({ session, params, body }) => {
               slug
               sections: surveySections {
                 id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
               }
               section: surveySectionById (
                 id: $sectionId

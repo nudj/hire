@@ -4,4 +4,4 @@ declare module StyleFile {
 
 declare type ID = string | number
 
-declare type QuestionType = 'CONNECTIONS' | 'COMPANIES'
+declare type Style = Object | Array<Object>

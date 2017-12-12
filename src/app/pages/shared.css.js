@@ -2,7 +2,8 @@ const {
   StyleSheet,
   sizes,
   colors,
-  utilities
+  utilities,
+  typography
 } = require('@nudj/components/lib/css')
 const { wizardAction } = require('../lib/css/breakpoints')
 
@@ -90,7 +91,6 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
-  footer: {},
   list: {
     textAlign: 'left',
     maxWidth: '40rem',
@@ -109,8 +109,32 @@ const styleSheet = StyleSheet.create({
     border: `1px solid ${colors.greyLight}`,
     borderRadius: utilities.borderRadius
   },
+  footer: {
+    backgroundColor: colors.white,
+    position: 'fixed',
+    width: '100%',
+    left: 0,
+    bottom: 0,
+    paddingLeft: sizes.largeIi,
+    paddingRight: sizes.largeIi,
+    paddingTop: sizes.regular,
+    paddingBottom: sizes.regular,
+    textAlign: 'left'
+  },
+  stepCounter: {
+    textAlign: 'center',
+    fontWeight: typography.fontWeight.bold
+  },
+  addCounter: {
+    fontWeight: typography.fontWeight.bold
+  },
   em: {
     fontStyle: 'italic'
+  },
+  card: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '42.375rem'
   }
 })
 
