@@ -1,3 +1,5 @@
+/* global SurveyQuestion Company */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -18,7 +20,17 @@ function onAddCompany (dispatch, questionId) {
   return () => dispatch(addFormerEmployer(questionId))
 }
 
-const SurveyQuestionPage = props => {
+type CompanyQuestionProps = {
+  question: SurveyQuestion,
+  nextUri: string,
+  companiesAdded: number,
+  surveyLength: number,
+  questionNumber: number,
+  formerEmployer: Company,
+  dispatch: Function
+}
+
+const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   const {
     question,
     questionNumber,
@@ -72,4 +84,4 @@ const SurveyQuestionPage = props => {
   )
 }
 
-module.exports = SurveyQuestionPage
+module.exports = CompanyQuestionPage
