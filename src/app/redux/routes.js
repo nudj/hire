@@ -1,9 +1,9 @@
 module.exports = {
   '/onboarding': require('../pages/onboarding'),
-  '/setup-network': require('../pages/import'),
-  '/setup-network/:network/download-data': require('../pages/linkedin-guide-download'),
-  '/setup-network/:network/upload': require('../pages/import-upload'),
-  '/setup-network/:network': require('../pages/linkedin-guide-request'),
+  '/setup-network': require('../pages/setup-network'),
+  '/setup-network/linkedin': require('../pages/setup-network/linkedin/request-guide'),
+  '/setup-network/linkedin/download-data': require('../pages/setup-network/linkedin/download-guide'),
+  '/setup-network/linkedin/upload': require('../pages/import-upload'),
   '/onboarding/surveys/:surveySlug': require('../pages/survey'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),

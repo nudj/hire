@@ -7,7 +7,7 @@ const PREFIX = 'IMPORT'
 const SET_VALUE = `${PREFIX}_SET_VALUE`
 const SET_CONNECTIONS = `${PREFIX}_SET_CONNECTIONS`
 
-function setValue (key, value) {
+function setValue(key, value) {
   return {
     type: SET_VALUE,
     key,
@@ -15,7 +15,7 @@ function setValue (key, value) {
   }
 }
 
-function setConnections (connections) {
+function setConnections(connections) {
   return {
     type: SET_CONNECTIONS,
     connections
