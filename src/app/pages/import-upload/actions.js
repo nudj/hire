@@ -1,7 +1,7 @@
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const Papa = require('../../lib/papa')
-const { linkedinToNudjPeople } from '../../lib/linkedin-to-nudj'
+const { linkedinToNudjPeople } = require('../../lib/linkedin-to-nudj')
 
 const PREFIX = 'IMPORT'
 const SET_VALUE = `${PREFIX}_SET_VALUE`
