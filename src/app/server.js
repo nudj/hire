@@ -1,12 +1,11 @@
 require('envkey')
 require('babel-register')({
-  presets: ['react'],
-  plugins: [
-    require.resolve('babel-plugin-transform-class-properties'),
-    require.resolve('babel-plugin-transform-object-rest-spread')
-  ],
-  ignore: function (filename) {
-    if (filename.match(/\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/)) {
+  ignore: function(filename) {
+    if (
+      filename.match(
+        /\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/
+      )
+    ) {
       return false
     }
     return true
