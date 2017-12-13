@@ -1,7 +1,7 @@
+require('../lib/polyfills')
 const React = require('react')
 const classnames = require('classnames')
 const { Helmet } = require('react-helmet')
-require('../lib/polyfills')
 
 const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')

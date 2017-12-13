@@ -3,10 +3,9 @@ const Papa = require('../../lib/papa')
 const actions = require('@nudj/framework/actions')
 
 const PREFIX = 'IMPORT'
-
 const SET_VALUE = `${PREFIX}_SET_VALUE`
+const SET_CONNECTIONS = `${PREFIX}_SET_CONNECTIONS`
 
-module.exports.SET_VALUE = SET_VALUE
 function setValue (key, value) {
   return {
     type: SET_VALUE,
@@ -15,8 +14,6 @@ function setValue (key, value) {
   }
 }
 
-const SET_CONNECTIONS = `${PREFIX}_SET_CONNECTIONS`
-module.exports.SET_CONNECTIONS = SET_CONNECTIONS
 function setConnections (connections) {
   return {
     type: SET_CONNECTIONS,
@@ -63,7 +60,7 @@ const parse = file => async (dispatch, getState) => {
   }
 }
 
-module.exports.upload = () => (dispatch, getState) => {
+const upload = () => (dispatch, getState) => {
   const state = getState()
   const segment = state.app.user.onboarded ? 'connections' : 'onboarding'
   const source = state.importPage.network
@@ -74,4 +71,9 @@ module.exports.upload = () => (dispatch, getState) => {
   dispatch(actions.app.postData({ url, data, method }))
 }
 
-module.exports.parse = parse
+module.exports = {
+  parse,
+  upload,
+  SET_VALUE,
+  SET_CONNECTIONS
+}
