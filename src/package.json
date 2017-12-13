@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@nudj/components": "1.0.0",
-    "@nudj/framework": "9.0.2",
+    "@nudj/framework": "9.0.3",
     "@nudj/library": "2.1.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
