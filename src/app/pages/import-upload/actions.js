@@ -1,6 +1,7 @@
 const get = require('lodash/get')
-const Papa = require('../../lib/papa')
 const actions = require('@nudj/framework/actions')
+const Papa = require('../../lib/papa')
+const { linkedinToNudjPeople } from '../../lib/linkedin-to-nudj'
 
 const PREFIX = 'IMPORT'
 const SET_VALUE = `${PREFIX}_SET_VALUE`
@@ -21,29 +22,6 @@ function setConnections (connections) {
   }
 }
 
-function convertLinkedInToNudjPeople (connections) {
-  return connections
-    .map(convertLinkedInToNudjPerson)
-    .filter(person => person.email)
-    .sort((a, b) => {
-      if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) {
-        return -1
-      } else {
-        return a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : 0
-      }
-    })
-}
-
-function convertLinkedInToNudjPerson (person) {
-  return {
-    email: get(person, 'Email Address', get(person, 'EmailAddress', '')),
-    firstName: get(person, 'First Name', get(person, 'FirstName', '')),
-    lastName: get(person, 'Last Name', get(person, 'LastName', '')),
-    title: get(person, 'Position'),
-    company: get(person, 'Company')
-  }
-}
-
 const parse = file => async (dispatch, getState) => {
   dispatch(setValue('parsing', true))
 
@@ -53,7 +31,7 @@ const parse = file => async (dispatch, getState) => {
       dynamicTyping: true
     })
     const data = get(result, 'data', [])
-    const connections = convertLinkedInToNudjPeople(data)
+    const connections = linkedinToNudjPeople(data)
     dispatch(setConnections(connections))
   } catch (e) {
     throw new Error('Unable to parse connections')
