@@ -7,7 +7,7 @@ const PREFIX = 'IMPORT'
 const SET_VALUE = `${PREFIX}_SET_VALUE`
 
 module.exports.SET_VALUE = SET_VALUE
-function setValue(key, value) {
+function setValue (key, value) {
   return {
     type: SET_VALUE,
     key,
@@ -17,14 +17,14 @@ function setValue(key, value) {
 
 const SET_CONNECTIONS = `${PREFIX}_SET_CONNECTIONS`
 module.exports.SET_CONNECTIONS = SET_CONNECTIONS
-function setConnections(connections) {
+function setConnections (connections) {
   return {
     type: SET_CONNECTIONS,
     connections
   }
 }
 
-function convertLinkedInToNudjPeople(connections) {
+function convertLinkedInToNudjPeople (connections) {
   return connections
     .map(convertLinkedInToNudjPerson)
     .filter(person => person.email)
@@ -37,7 +37,7 @@ function convertLinkedInToNudjPeople(connections) {
     })
 }
 
-function convertLinkedInToNudjPerson(person) {
+function convertLinkedInToNudjPerson (person) {
   return {
     email: get(person, 'Email Address', get(person, 'EmailAddress', '')),
     firstName: get(person, 'First Name', get(person, 'FirstName', '')),

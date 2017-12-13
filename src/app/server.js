@@ -1,6 +1,6 @@
 require('envkey')
 require('babel-register')({
-  ignore: function(filename) {
+  ignore: function (filename) {
     if (
       filename.match(
         /\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/

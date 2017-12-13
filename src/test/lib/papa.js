@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 
@@ -42,7 +43,7 @@ const output = {
   ]
 }
 
-describe.only('Extended Papa', () => {
+describe('Extended Papa', () => {
   describe('asyncParse', () => {
     it('returns a promise', () => {
       const promise = Papa.asyncParse(input)
