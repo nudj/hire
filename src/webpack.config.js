@@ -40,6 +40,7 @@ module.exports = {
         exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
         loader: 'babel-loader',
         options: {
+          babelrc: false,
           presets: [
             'react',
             'flow',

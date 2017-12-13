@@ -57,6 +57,7 @@
     "react-router-dom": "^4.0.0",
     "react-textarea-autosize": "^5.1.0",
     "redux": "^3.6.0",
+    "regenerator-runtime": "0.11.1",
     "route-parser": "^0.0.5"
   },
   "devDependencies": {
