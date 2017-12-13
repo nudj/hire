@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const Dropzone = require('react-dropzone')
+const Dropzone = require('../../components/connections-csv-uploader')
 
 const { parse, upload } = require('./actions')
 const LayoutPage = require('../../components/layout-page')
@@ -12,7 +12,8 @@ function onUploadFile (dispatch) {
     if (rejectedFiles.length) {
       return
     }
-    return dispatch(parse(acceptedFiles[0]))
+
+    dispatch(parse(acceptedFiles[0]))
   }
 }
 
@@ -22,85 +23,6 @@ function onUpload (dispatch) {
   }
 }
 
-function dropzoneInternal (
-  dispatch,
-  style,
-  props,
-  state,
-  { isDragActive, isDragReject, acceptedFiles, rejectedFiles }
-) {
-  if (isDragActive) {
-    return (
-      <h5 className={style.dragAndDropHeading}>Drop the file to save it!</h5>
-    )
-  }
-
-  if (isDragReject) {
-    return (
-      <h5 className={style.dragAndDropHeading}>
-        This type of file is not accepted
-      </h5>
-    )
-  }
-
-  const connections = state.connections
-  const parsing = state.parsing
-
-  // this is just for show
-  if (acceptedFiles.length && parsing) {
-    return <div className='spinner' />
-  }
-
-  if (acceptedFiles.length && connections.length) {
-    return (
-      <span>
-        <h5 className={style.dragAndDropHeading}>File looks ok!</h5>
-        <p className={style.dragAndDropCopy}>
-          Click the "Next" button to proceed
-        </p>
-      </span>
-    )
-  }
-
-  if (acceptedFiles.length && !connections.length) {
-    return (
-      <span>
-        <h5 className={style.dragAndDropHeading}>
-          That CSV doesn&apos;t seem to be the one we want
-        </h5>
-        <p className={style.dragAndDropCopy}>
-          Please try uploading{' '}
-          <em className={style.dragAndDropCopyEmphasis}>Connections.csv</em>
-        </p>
-      </span>
-    )
-  }
-
-  if (rejectedFiles.length) {
-    return (
-      <span>
-        <h5 className={style.dragAndDropHeading}>
-          Seems to be a problem with that file
-        </h5>
-        <p className={style.dragAndDropCopy}>
-          Choose another file or contact us
-        </p>
-      </span>
-    )
-  }
-
-  return (
-    <span>
-      <h5 className={style.dragAndDropHeading}>
-        Drag &amp; drop Connections.csv
-      </h5>
-      <p className={style.dragAndDropFakeLink}>
-        Or click to select from computer
-      </p>
-    </span>
-  )
-}
-
 function stepUpload (dispatch, style, props, state) {
   const disablePreview = true
   const multiple = false
@@ -108,23 +30,13 @@ function stepUpload (dispatch, style, props, state) {
     <div className={style.instructionsStepContainer}>
       <div className={style.instructionsCard}>
         <Dropzone
-          accept='text/csv'
+          accept='.csv'
           disablePreview={disablePreview}
           multiple={multiple}
-          className={style.dragAndDrop}
-          activeClassName={style.dragAndDropOk}
-          rejectClassName={style.dragAndDropNotOk}
+          parsing={state.parsing}
+          connections={state.connections}
           onDrop={onUploadFile(dispatch)}
-        >
-          {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) =>
-            dropzoneInternal(dispatch, style, props, state, {
-              isDragActive,
-              isDragReject,
-              acceptedFiles,
-              rejectedFiles
-            })
-          }
-        </Dropzone>
+        />
       </div>
     </div>
   )
