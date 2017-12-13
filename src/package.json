@@ -15,7 +15,9 @@
   "homepage": "https://github.com/nudj/web#readme",
   "standard": {
     "parser": "babel-eslint",
-    "plugins": ["flowtype"],
+    "plugins": [
+      "flowtype"
+    ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",
@@ -36,8 +38,8 @@
     "envkey": "^1.0.0",
     "express": "^4.14.1",
     "flow-bin": "^0.59.0",
-    "googleapis": "^21.3.0",
     "google-auth-library": "^0.10.0",
+    "googleapis": "^21.3.0",
     "hash-generator": "^0.1.0",
     "humanparser": "^1.5.0",
     "intercom-client": "^2.8.7",
