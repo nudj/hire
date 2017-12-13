@@ -25,6 +25,9 @@ const SurveyQuestionPage = props => {
   const companiesAdded = formerEmployers.concat(
     get(user, 'newFormerEmployer', [])
   )
+  const connections = get(user, 'connections', []).concat(
+    get(user, 'newConnection', [])
+  )
 
   switch (question.type) {
     case questionTypes.COMPANIES:
@@ -41,7 +44,16 @@ const SurveyQuestionPage = props => {
       )
     case questionTypes.CONNECTIONS:
       return (
-        <ConnectionsQuestionPage nextUri={nextUri} {...props} />
+        <ConnectionsQuestionPage
+          nextUri={nextUri}
+          question={question}
+          connections={connections}
+          questionNumber={questionIndex + 1}
+          questionCount={questions.length}
+          dispatch={dispatch}
+          location={get(props, 'location', {})}
+          selectedConnections={get(state, 'selectedConnections', [])}
+        />
       )
   }
 }

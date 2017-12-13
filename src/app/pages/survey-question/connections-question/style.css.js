@@ -6,6 +6,9 @@ const styleSheet = StyleSheet.create({
   },
   title: {
     marginTop: sizes.largeIi
+  },
+  searchAction: {
+    marginTop: sizes.regular
   }
 })
 

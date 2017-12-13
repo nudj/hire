@@ -49,12 +49,8 @@ const columns = [
     name: 'checkbox'
   },
   {
-    heading: 'First name',
-    name: 'firstName'
-  },
-  {
-    heading: 'Last name',
-    name: 'lastName'
+    heading: 'Name',
+    name: 'name'
   },
   {
     heading: 'Job title',
@@ -67,10 +63,6 @@ const columns = [
   {
     heading: 'Email',
     name: 'person.email'
-  },
-  {
-    heading: 'Source',
-    name: 'source.name'
   }
 ]
 
@@ -87,6 +79,8 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
           value={row.id}
         />
       )
+    } else if (column.name === 'name') {
+      return `${row.firstName} ${row.lastName}`
     }
     return defaultValue
   }

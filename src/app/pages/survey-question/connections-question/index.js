@@ -2,7 +2,14 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Text, Link, Align, Card } = require('@nudj/components')
+const {
+  Text,
+  Link,
+  Align,
+  Card,
+  Input,
+  Button
+} = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
@@ -20,17 +27,15 @@ function onSelectConnection (dispatch) {
 
 const CompanyQuestionPage = (props) => {
   const {
-    user,
     nextUri,
     dispatch,
-    surveyQuestionPage: state
+    questionNumber,
+    questionCount,
+    connections,
+    question,
+    location,
+    selectedConnections
   } = props
-  const survey = get(user, 'hirer.company.survey')
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
-  const connections = get(user, 'connections', []).concat(
-    get(user, 'newConnection', [])
-  )
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -39,7 +44,7 @@ const CompanyQuestionPage = (props) => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>
-          Step {'questionNumber'} of {'questionCount'}
+          Step {questionNumber} of {questionCount}
         </Text>
         <Text element='div' size='largeIi' style={merge(sharedStyle.heading, style.title)}>
           {question.title}
@@ -49,17 +54,35 @@ const CompanyQuestionPage = (props) => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={merge(sharedStyle.card, style.formCard)}>
+            <form>
+              <Input
+                name='search'
+                label='search'
+                type='search'
+              />
+              <div className={css(style.searchAction)}>
+                {location.search ? (
+                  <Link href={get(props, 'location.pathname')} volume='cheer' subtle>
+                    Clear search
+                  </Link>
+                ) : (
+                  <Button type='submit' volume='cheer'>
+                    Search
+                  </Button>
+                )}
+              </div>
+            </form>
             <ConnectionsTable
               onSelect={onSelectConnection(dispatch)}
               connections={connections}
-              selectedConnections={get(state, 'selectedConnections', [])}
+              selectedConnections={selectedConnections}
             />
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align
               leftChildren={
                 <Text style={sharedStyle.addCounter}>
-                  {`1 added`}
+                  {`${selectedConnections.length} added`}
                 </Text>
               }
               rightChildren={
