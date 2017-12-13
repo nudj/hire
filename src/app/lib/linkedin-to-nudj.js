@@ -1,5 +1,5 @@
 // @flow
-const camelcase = require('camelcase')
+const camelcase = require('lodash/camelCase')
 const get = require('lodash/get')
 
 type LinkedInContact = {
