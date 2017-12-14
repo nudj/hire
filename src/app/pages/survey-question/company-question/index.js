@@ -12,12 +12,12 @@ const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const FormCompany = require('../../../components/form-company')
 
-function onChangeNewItem (dispatch, itemType) {
+function onChangeNewItem(dispatch, itemType) {
   return event => dispatch(setNewItemValue(itemType, event.name, event.value))
 }
 
-function onAddCompany (dispatch, questionId) {
-  return (event) => {
+function onAddCompany(dispatch, questionId) {
+  return event => {
     event.preventDefault()
     dispatch(addFormerEmployer(questionId))
   }
@@ -50,17 +50,27 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <title>nudj - Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' style={sharedStyle.stepCounter}>
+        <Text element="div" style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={merge(sharedStyle.heading, sharedStyle.subheading)}>
+        <Text
+          element="div"
+          size="largeIi"
+          style={merge(sharedStyle.heading, sharedStyle.subheading)}
+        >
           {question.title}
         </Text>
         <div className={css(sharedStyle.body)}>
-          <Text element='div' style={sharedStyle.subheading}>
+          <Text element="div" style={sharedStyle.subheading}>
             {question.description}
           </Text>
-          <Card style={merge(sharedStyle.card, style.formCard)}>
+          <Card
+            style={merge(
+              sharedStyle.card,
+              sharedStyle.cardSmall,
+              style.formCard
+            )}
+          >
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
               onSubmit={onAddCompany(dispatch, question.id)}
@@ -75,7 +85,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                 </Text>
               }
               rightChildren={
-                <Link volume='cheer' href={nextUri}>
+                <Link volume="cheer" href={nextUri}>
                   Next
                 </Link>
               }

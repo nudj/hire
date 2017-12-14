@@ -54,6 +54,17 @@ const styleSheet = StyleSheet.create({
     width: '100%',
     marginTop: sizes.largeIi
   },
+  card: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '42.375rem'
+  },
+  cardMedium: {
+    maxWidth: '31rem'
+  },
+  cardSmall: {
+    maxWidth: '20rem'
+  },
   actions: {
     alignSelf: 'flex-end',
     bottom: sizes.regular,
@@ -134,10 +145,11 @@ const styleSheet = StyleSheet.create({
   em: {
     fontStyle: 'italic'
   },
-  card: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: '42.375rem'
+  noPadding: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0
   }
 })
 
