@@ -71,15 +71,6 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 
   const cellRenderer = (column, row, defaultValue) => {
     switch (column.name) {
-      case 'name':
-        return row.company.name
-      default:
-        return defaultValue
-    }
-  }
-
-  const cellRenderer = (column, row, defaultValue) => {
-    switch (column.name) {
       case 'checkbox':
         return (
           <Checkbox
