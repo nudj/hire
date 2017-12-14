@@ -47,10 +47,10 @@ const uploadLinkedinConnections = () => async (dispatch, getState) => {
   dispatch(startConnectionsUpload())
 
   try {
-    const url = '/linkedin/import/upload'
+    const url = '/setup-network/linkedin/upload'
     const method = 'post'
     const data = {
-      connections: getState().importUploadPage.connections,
+      connections: getState().uploadPage.connections,
       source: 'linkedin'
     }
 

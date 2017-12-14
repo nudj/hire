@@ -1,5 +1,5 @@
-/* global expect asyncTest */
 /* eslint-env mocha */
+const { expect } = require('chai')
 const {
   START_PARSING_LINKEDIN_CONNECTIONS,
   COMPLETE_PARSING_LINKEDIN_CONNECTIONS,

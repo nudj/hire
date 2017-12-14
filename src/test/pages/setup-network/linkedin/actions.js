@@ -1,4 +1,3 @@
-/* global expect asyncTest */
 /* eslint-env mocha */
 const chai = require('chai')
 const sinon = require('sinon')
@@ -31,7 +30,6 @@ const {
   },
   '@nudj/framework/actions': {
     app: {
-      /** TODO: Stub a real action creator */
       postData: postDataSpy
     }
   }

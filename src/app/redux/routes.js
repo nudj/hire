@@ -3,7 +3,7 @@ module.exports = {
   '/setup-network': require('../pages/setup-network'),
   '/setup-network/:network': require('../pages/setup-network/linkedin/request-guide'),
   '/setup-network/:network/download-data': require('../pages/setup-network/linkedin/download-guide'),
-  '/setup-network/:network/upload': require('../pages/import-upload'),
+  '/setup-network/:network/upload': require('../pages/setup-network/linkedin/upload'),
   '/onboarding/surveys/:surveySlug': require('../pages/survey'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/onboarding/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),

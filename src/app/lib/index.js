@@ -20,14 +20,12 @@ const getActiveStep = externalMessage => {
 }
 
 const createNotification = (type, message) => {
-  if (!type || !notificationTypes.includes(type))
-    throw new AppError('Invalid notification type', type)
-  if (!message || typeof message !== 'string')
-    throw new AppError('Invalid notification message', message)
+  if (!type || !notificationTypes.includes(type)) { throw new AppError('Invalid notification type', type) }
+  if (!message || typeof message !== 'string') { throw new AppError('Invalid notification message', message) }
   return { type, message }
 }
 
-function formattedModifiedDate(modified) {
+function formattedModifiedDate (modified) {
   const difference = differenceInSeconds(new Date(), modified)
   return difference < 120 ? 'just now' : `${distanceInWordsToNow(modified)} ago`
 }

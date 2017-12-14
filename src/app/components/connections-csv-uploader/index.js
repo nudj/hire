@@ -25,7 +25,7 @@ const DZ = (props: Props) => {
   const { connections, loading, ...rest } = props
 
   return (
-    <Dropzone accept=".csv" className="example" {...rest}>
+    <Dropzone accept='.csv' className='example' {...rest}>
       {(childProps: ChildProps) => {
         const { isDragActive, acceptedFiles, rejectedFiles } = childProps
 
@@ -36,10 +36,10 @@ const DZ = (props: Props) => {
                 <Loader />
               </div>
               <div className={css(style.copy)}>
-                <Text element="div" size="largeIi">
+                <Text element='div' size='largeIi'>
                   Hold on
                 </Text>
-                <Text element="div" size="regular">
+                <Text element='div' size='regular'>
                   We’re just having a quick look through these lovely people
                 </Text>
               </div>
@@ -51,16 +51,16 @@ const DZ = (props: Props) => {
           return (
             <div className={css(style.dropzone)}>
               <img
-                src="/assets/images/point-hand-1.svg"
+                src='/assets/images/point-hand-1.svg'
                 className={css(
                   style.pointIllustration,
                   isDragActive && style.pointActive
                 )}
-                alt=""
+                alt=''
                 draggable={false}
               />
               <div className={css(style.copy)}>
-                <Text element="div" size="largeIi" style={style.messageReject}>
+                <Text element='div' size='largeIi' style={style.messageReject}>
                   Try Connections.csv instead
                 </Text>
                 <span
@@ -82,10 +82,10 @@ const DZ = (props: Props) => {
             <div className={css(style.dropzone)}>
               <div className={css(style.thumbsUpIllustration)} />
               <div className={css(style.copy)}>
-                <Text element="div" size="largeIi">
+                <Text element='div' size='largeIi'>
                   What a great bunch!
                 </Text>
-                <Text element="div" size="regular">
+                <Text element='div' size='regular'>
                   You&#39;ve added{' '}
                   <span className={css(style.connectionsCount)}>
                     {connections.length} people
@@ -99,16 +99,16 @@ const DZ = (props: Props) => {
         return (
           <div className={css(style.dropzone)}>
             <img
-              src="/assets/images/point-hand-1.svg"
+              src='/assets/images/point-hand-1.svg'
               className={css(
                 style.pointIllustration,
                 isDragActive && style.pointActive
               )}
-              alt=""
+              alt=''
               draggable={false}
             />
             <div className={css(style.copy)}>
-              <Text element="div" size="largeIi" style={style.message}>
+              <Text element='div' size='largeIi' style={style.message}>
                 Drag & drop here Connections.csv
               </Text>
               <span
