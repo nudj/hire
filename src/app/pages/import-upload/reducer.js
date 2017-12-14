@@ -1,11 +1,8 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
-const { reducerBuilder } = require('../../lib')
+const { createReducer } = require('../../lib')
 
-const {
-  SET_VALUE,
-  SET_CONNECTIONS
-} = require('./actions')
+const { SET_VALUE, SET_CONNECTIONS } = require('./actions')
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const importRoute = new RouteParser('/connections/import')
 const onboardingRoute = new RouteParser('/onboarding/import')
@@ -23,18 +20,9 @@ const setConnections = (state, action) => {
   })
 }
 
-const routerLocationChange = (state, action) => {
-  const baseImportUrlSegments = action.payload.pathname.split('/').slice(0, 3).join('/')
-  if (importRoute.match(baseImportUrlSegments) || onboardingRoute.match(baseImportUrlSegments)) {
-    return state
-  }
-  return merge(state, initialState)
-}
-
-const actions = {
+const reducers = {
   [SET_VALUE]: setValue,
-  [SET_CONNECTIONS]: setConnections,
-  [ROUTER_LOCATION_CHANGE]: routerLocationChange
+  [SET_CONNECTIONS]: setConnections
 }
 
 const initialState = {
@@ -42,4 +30,4 @@ const initialState = {
   parsing: false
 }
 
-module.exports = reducerBuilder(initialState, actions)
+module.exports = createReducer(initialState, reducers)
