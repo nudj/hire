@@ -2,71 +2,93 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const LayoutPage = require('../../components/layout-page')
-const Link = require('../../components/link/link')
+const { Text } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
+const sharedStyle = require('../shared.css')
 
-const SurveyPage = props => {
-  const {
-    tooltip,
-    user,
-    history,
-    dispatch,
-    overlay,
-    dialog,
-    onPageLeave,
-    notification
-  } = props
-  const survey = get(user, 'hirer.company.survey')
-  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
-
-  const headerProps = {
-    title: 'Complete survey',
-    subtitle: 'To impress Robyn and Jamie'
+// TODO: get real recommendations
+const recommendations = [
+  {
+    id: 'finn',
+    name: 'Finn Wolfhard',
+    jobTitle: 'Mike Wheeler',
+    company: 'Stanger Things',
+    recommendedFor: ['Intelligent', 'Conscientious', 'Student']
+  },
+  {
+    id: 'millie',
+    name: 'Millie Bobby Brown',
+    jobTitle: 'Eleven',
+    company: 'Stanger Things',
+    recommendedFor: [
+      'Psychokinetic',
+      'Unusual appearance',
+      'Limited vocabulary'
+    ]
+  },
+  {
+    id: 'gaten',
+    name: 'Gaten Matarazzo',
+    jobTitle: 'Dustin Henderson',
+    company: 'Stanger Things',
+    recommendedFor: [
+      'Cleidocranial dysplasia',
+      'New front teeth',
+      'Attraction to Max'
+    ]
+  },
+  {
+    id: 'caleb',
+    name: 'Caleb McLaughlin',
+    jobTitle: 'Lucas Sinclair',
+    company: 'Stanger Things',
+    recommendedFor: ['Wary of Eleven', "Max's love interest"]
+  },
+  {
+    id: 'will',
+    name: 'Noah Schnapp',
+    jobTitle: 'Will Byers',
+    company: 'Stanger Things',
+    recommendedFor: ['Upside Down capture', 'Host']
   }
+]
 
-  let previousUri = ''
-  const previousSection = survey.sections[survey.sections.length - 1]
-  if (previousSection) {
-    const previousQuestionsLength =
-      previousSection.questions && previousSection.questions.length
-    if (previousQuestionsLength) {
-      const previousQuestion =
-        previousSection.questions[previousQuestionsLength - 1]
-      previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${
-        previousSection.id
-      }/${previousQuestion.type.toLowerCase()}/${previousQuestion.id}`
-    } else {
-      previousUri = `${onboardingSegment}/surveys/${survey.slug}/sections/${previousSection.id}`
-    }
-  } else {
-    previousUri = `${onboardingSegment}/surveys/${survey.slug}`
-  }
-  const nextUri = get(user, 'hirer.onboarded') ? '/connections' : '/'
+const ListRecommendations = require('./list-recommendations')
+
+const getRecommendationCountString = recommendationCount => {
+  if (recommendationCount === 1) return `${recommendationCount} people`
+
+  return `${recommendationCount} people`
+}
+
+const ViewRecommendationsPage = props => {
+  console.log(props)
 
   return (
-    <LayoutPage
-      tooltip={tooltip}
-      user={user}
-      history={history}
-      dispatch={dispatch}
-      overlay={overlay}
-      dialog={dialog}
-      onPageLeave={onPageLeave}
-      notification={notification}
-      header={headerProps}
-      headline='Welcome to Aided Recall 🤔'
-    >
+    <div className={css(sharedStyle.root)}>
       <Helmet>
-        <title>nudj - Complete survey</title>
+        <title>View recommendations</title>
       </Helmet>
-      <Link to={previousUri}>
-        Back
-      </Link>
-      <Link to={nextUri}>Finish</Link>
-      <h3>{survey.outroTitle}</h3>
-      <p>{survey.outroDescription}</p>
-    </LayoutPage>
+      <div className={css(sharedStyle.wrapper)}>
+        <div className={css(sharedStyle.header)}>
+          <Text element="div" size="largeIi" style={sharedStyle.heading}>
+            You’ve uncovered{' '}
+            <span className={css(sharedStyle.headingHighlight)}>
+              {getRecommendationCountString(recommendations.length)}
+            </span>{' '}
+            worth nudj’ing within your network
+          </Text>
+          <Text element="p" style={sharedStyle.subheading}>
+            Now choose someone you’d like to send a nudj request to.
+          </Text>
+        </div>
+
+        <div className={css(sharedStyle.body)}>
+          <ListRecommendations recommendations={recommendations} />
+        </div>
+      </div>
+    </div>
   )
 }
 
-module.exports = SurveyPage
+module.exports = ViewRecommendationsPage

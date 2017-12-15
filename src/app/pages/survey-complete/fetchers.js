@@ -8,12 +8,6 @@ const get = ({ session, params }) => {
     ) {
       user (id: $userId) {
         hirer {
-          onboarded {
-            created
-          }
-          setOnboarded {
-            created
-          }
           company {
             survey: surveyByFilters (filters: {
               slug: $surveySlug
