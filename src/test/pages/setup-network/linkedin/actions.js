@@ -116,7 +116,7 @@ describe('linkedin connections upload action creators', () => {
         }
       ]
 
-      const store = mockStore({ importUploadPage: { connections: [] } })
+      const store = mockStore({ uploadPage: { connections: [] } })
 
       return store.dispatch(uploadLinkedinConnections()).then(() => {
         expect(postDataSpy.called).to.equal(true)
