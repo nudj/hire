@@ -11,7 +11,6 @@ const {
   Button
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const { merge } = require('@nudj/library')
 
 const { toggleConnection } = require('../actions')
 const sharedStyle = require('../../shared.css')
@@ -40,37 +39,35 @@ const CompanyQuestionPage = (props) => {
   return (
     <div className={css(sharedStyle.root)}>
       <Helmet>
-        <title>nudj - Complete survey</title>
+        <title>Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={merge(sharedStyle.heading, style.title)}>
+        <Text element='div' size='largeIi' style={sharedStyle.heading}>
           {question.title}
         </Text>
         <Text element='div' style={sharedStyle.subheading}>
           {question.description}
         </Text>
         <div className={css(sharedStyle.body)}>
-          <Card style={merge(sharedStyle.card, style.formCard)}>
+          <Card style={sharedStyle.card}>
             <form>
               <Input
                 name='search'
                 label='search'
                 type='search'
               />
-              <div className={css(style.searchAction)}>
-                {location.search ? (
-                  <Link href={get(props, 'location.pathname')} volume='cheer' subtle>
-                    Clear search
-                  </Link>
-                ) : (
-                  <Button type='submit' volume='cheer'>
-                    Search
-                  </Button>
-                )}
-              </div>
+              {location.search ? (
+                <Link style={style.searchAction} href={get(props, 'location.pathname')} volume='cheer' subtle>
+                  Clear search
+                </Link>
+              ) : (
+                <Button style={style.searchAction} type='submit' volume='cheer'>
+                  Search
+                </Button>
+              )}
             </form>
             <ConnectionsTable
               onSelect={onSelectConnection(dispatch)}
