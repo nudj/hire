@@ -88,3 +88,14 @@ module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
     )
   )
 }
+
+const TOGGLE_CONNECTION = 'TOGGLE_CONNECTION'
+module.exports.TOGGLE_CONNECTION = TOGGLE_CONNECTION
+function toggleConnection (connectionId) {
+  return {
+    type: TOGGLE_CONNECTION,
+    connectionId
+  }
+}
+module.exports.toggleConnection = connectionId =>
+  quickDispatch(toggleConnection(connectionId))

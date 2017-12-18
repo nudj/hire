@@ -1,11 +1,14 @@
 const { merge } = require('@nudj/library')
 const RouteParser = require('route-parser')
 const get = require('lodash/get')
+const without = require('lodash/without')
+const concat = require('lodash/concat')
 const { reducerBuilder } = require('../../lib')
 const {
   SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
-  ADD_FORMER_EMPLOYER
+  ADD_FORMER_EMPLOYER,
+  TOGGLE_CONNECTION
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -18,6 +21,14 @@ const setNewItemValue = (state, action) => {
       [action.key]: action.value
     }
   })
+}
+
+const toggleConnection = (state, action) => {
+  let selectedConnections = concat(state.selectedConnections, action.connectionId)
+  if (state.selectedConnections.includes(action.connectionId)) {
+    selectedConnections = without(state.selectedConnections, action.connectionId)
+  }
+  return { ...state, selectedConnections }
 }
 
 const addConnection = (state, action) => {
@@ -47,14 +58,14 @@ const routerLocationChange = (state, action) => {
 
 const actions = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
+  [TOGGLE_CONNECTION]: toggleConnection,
   [ADD_FORMER_EMPLOYER]: addFormerEmployer,
   [ADD_CONNECTION]: addConnection,
   [ROUTER_LOCATION_CHANGE]: routerLocationChange
 }
 
 const initialState = {
-  step: 0,
-  questions: {},
+  selectedConnections: [],
   newFormerEmployer: {},
   formerEmployers: [],
   newConnection: {},

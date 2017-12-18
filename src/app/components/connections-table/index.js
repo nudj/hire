@@ -49,12 +49,8 @@ const columns = [
     name: 'checkbox'
   },
   {
-    heading: 'First name',
-    name: 'firstName'
-  },
-  {
-    heading: 'Last name',
-    name: 'lastName'
+    heading: 'Name',
+    name: 'name'
   },
   {
     heading: 'Job title',
@@ -67,10 +63,6 @@ const columns = [
   {
     heading: 'Email',
     name: 'person.email'
-  },
-  {
-    heading: 'Source',
-    name: 'source.name'
   }
 ]
 
@@ -78,10 +70,21 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
   const { onSelect, connections, selectedConnections, styleSheet } = props
 
   const cellRenderer = (column, row, defaultValue) => {
-    if (column.name === 'checkbox') {
-      return <Checkbox checked={row.selected} onChange={onSelect} />
+    switch (column.name) {
+      case 'checkbox':
+        return (
+          <Checkbox
+            checked={row.selected}
+            onChange={onSelect}
+            name={`${row.firstName} ${row.lastName}`}
+            value={row.id}
+          />
+        )
+      case 'name':
+        return `${row.firstName} ${row.lastName}`
+      default:
+        return defaultValue
     }
-    return defaultValue
   }
 
   const data = connections.map(connection => {

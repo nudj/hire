@@ -68,7 +68,6 @@ const get = ({ session, params }) => {
                   name
                   type
                   required
-                  options
                   tags
                 }
               }

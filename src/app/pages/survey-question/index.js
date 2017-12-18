@@ -3,19 +3,10 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 
-const { setNewItemValue, addConnection } = require('./actions')
 const getNextSurveyUri = require('./getNextSurveyUri')
 const CompanyQuestionPage = require('./company-question')
-const FormConnection = require('../../components/form-connection')
+const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
-
-function onChangeNewItem (dispatch, itemType) {
-  return event => dispatch(setNewItemValue(itemType, event.name, event.value))
-}
-
-function onAddConnection (dispatch, questionId) {
-  return () => dispatch(addConnection(questionId))
-}
 
 const SurveyQuestionPage = props => {
   const {
@@ -34,6 +25,9 @@ const SurveyQuestionPage = props => {
   const companiesAdded = formerEmployers.concat(
     get(user, 'newFormerEmployer', [])
   )
+  const connections = get(user, 'connections', []).concat(
+    get(user, 'newConnection', [])
+  )
 
   switch (question.type) {
     case questionTypes.COMPANIES:
@@ -50,10 +44,15 @@ const SurveyQuestionPage = props => {
       )
     case questionTypes.CONNECTIONS:
       return (
-        <FormConnection
-          onChange={onChangeNewItem(dispatch, 'newConnection')}
-          onSubmit={onAddConnection(dispatch, question.id)}
-          connection={get(state, 'newConnection', {})}
+        <ConnectionsQuestionPage
+          nextUri={nextUri}
+          question={question}
+          connections={connections}
+          questionNumber={questionIndex + 1}
+          questionCount={questions.length}
+          dispatch={dispatch}
+          location={get(props, 'location', {})}
+          selectedConnections={get(state, 'selectedConnections', [])}
         />
       )
   }
