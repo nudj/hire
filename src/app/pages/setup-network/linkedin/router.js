@@ -8,11 +8,11 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
 
   router.getHandlers(
     '/setup-network/linkedin/upload',
-    respondWithGql(fetchers.get)
+    respondWithGql(fetchers.fetchPageData)
   )
   router.postHandlers(
     '/setup-network/linkedin/upload',
-    respondWithGql(fetchers.post)
+    respondWithGql(fetchers.uploadConnections)
   )
 
   return router

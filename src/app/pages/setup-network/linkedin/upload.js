@@ -24,11 +24,14 @@ type Props = {
 }
 
 const getHandleDrop = dispatch => (acceptedFiles, rejectedFiles) => {
-  if (rejectedFiles.length) return
-  dispatch(parseLinkedinConnections(acceptedFiles[0]))
+  if (rejectedFiles.length > 0) {
+    dispatch(parseLinkedinConnections(acceptedFiles[0]))
+  }
 }
 
-const getHandleNext = dispatch => () => dispatch(uploadLinkedinConnections())
+const getHandleNext = dispatch => () => {
+  dispatch(uploadLinkedinConnections())
+}
 
 const LinkedinUploadPage = (props: Props) => {
   const { dispatch, uploadPage: state } = props

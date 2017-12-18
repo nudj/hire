@@ -1,12 +1,12 @@
 const { Redirect } = require('@nudj/framework/errors')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 
 const { Global } = require('../../../lib/graphql')
 const { createNotification } = require('../../../lib')
 const intercom = require('../../../lib/intercom')
 const mailer = require('../../../lib/mailer')
 
-const get = ({ session }) => {
+const fetchPageData = ({ session }) => {
   const gql = `
     query ImportPage ($userId: ID!) {
       user (id: $userId) {
@@ -23,7 +23,7 @@ const get = ({ session }) => {
   return { gql, variables }
 }
 
-const post = ({ session, body, files }) => {
+const uploadConnections = ({ session, body, files }) => {
   const userId = session.userId
 
   const gql = `
@@ -94,12 +94,12 @@ const post = ({ session, body, files }) => {
     respond: async data => {
       await Promise.all([
         sendImportEmail({
-          name: `${_get(data, 'user.firstName', '')} ${_get(
+          name: `${get(data, 'user.firstName', '')} ${get(
             data,
             'user.lastName',
             ''
           )}`,
-          company: _get(data, 'user.hirer.company.name', '')
+          company: get(data, 'user.hirer.company.name', '')
         }),
         intercom.logEvent({
           event_name: 'linkedin network uploaded',
@@ -110,10 +110,10 @@ const post = ({ session, body, files }) => {
         })
       ])
 
-      const message = 'Some message'
+      const message = `You just added ${body.connections.length} connections 🙌`
 
       throw new Redirect({
-        url: `/surveys/${_get(data, 'user.hirer.company.surveys[0].slug', '')}`,
+        url: `/surveys/${get(data, 'user.hirer.company.surveys[0].slug', '')}`,
         notification: createNotification('success', message)
       })
     }
@@ -130,6 +130,6 @@ function sendImportEmail ({ name, company, location }) {
 }
 
 module.exports = {
-  get,
-  post
+  fetchPageData,
+  uploadConnections
 }
