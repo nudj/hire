@@ -123,7 +123,10 @@ const styleSheet = StyleSheet.create({
   },
   stepCounter: {
     textAlign: 'center',
-    fontWeight: typography.fontWeight.bold
+    fontWeight: typography.fontWeight.bold,
+    ':nth-child(1) + *': {
+      marginTop: sizes.largeI
+    }
   },
   addCounter: {
     fontWeight: typography.fontWeight.bold

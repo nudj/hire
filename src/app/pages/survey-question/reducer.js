@@ -28,7 +28,7 @@ const toggleConnection = (state, action) => {
   if (state.selectedConnections.includes(action.connectionId)) {
     selectedConnections = without(state.selectedConnections, action.connectionId)
   }
-  return Object.assign({}, state, { selectedConnections })
+  return { ...state, selectedConnections }
 }
 
 const addConnection = (state, action) => {
