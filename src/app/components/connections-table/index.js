@@ -37,10 +37,10 @@ type Connection = {
 }
 
 type ConnectionsTableProps = {
-   onSelect: () => void,
-   connections: Array<Connection>,
-   selectedConnections: Array<ID>,
-   styleSheet: StyleSheetType
+  onSelect: () => void,
+  connections: Array<Connection>,
+  selectedConnections: Array<ID>,
+  styleSheet: StyleSheetType
 }
 
 const columns = [
@@ -78,6 +78,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
             onChange={onSelect}
             name={`${row.firstName} ${row.lastName}`}
             value={row.id}
+            id={row.id}
           />
         )
       case 'name':
