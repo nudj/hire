@@ -4,7 +4,7 @@ const isNil = require('lodash/isNil')
 const { Global } = require('../../lib/graphql')
 const { questionTypes } = require('../../lib/constants')
 
-const getQuestion = (data) => {
+const getQuestion = data => {
   switch (toUpper(data.params.questionType)) {
     case questionTypes.COMPANIES:
       return getCompaniesQuestion(data)
@@ -174,9 +174,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     sectionId: params.sectionId,
     questionId: params.questionId,
     search: query.search,
-    fields: [
-      ['firstName', 'lastName']
-    ]
+    fields: [['firstName', 'lastName']]
   }
   return { gql, variables }
 }
