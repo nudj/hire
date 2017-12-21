@@ -9,11 +9,7 @@ const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
 
 const SurveyQuestionPage = props => {
-  const {
-    user,
-    dispatch,
-    surveyQuestionPage: state
-  } = props
+  const { user, dispatch, surveyQuestionPage: state, ...rest } = props
   const survey = get(user, 'hirer.company.survey')
   const nextUri = getNextSurveyUri(survey)
   const section = get(survey, 'section')
@@ -33,6 +29,7 @@ const SurveyQuestionPage = props => {
     case questionTypes.COMPANIES:
       return (
         <CompanyQuestionPage
+          {...rest}
           question={question}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
@@ -45,13 +42,13 @@ const SurveyQuestionPage = props => {
     case questionTypes.CONNECTIONS:
       return (
         <ConnectionsQuestionPage
+          {...rest}
           nextUri={nextUri}
           question={question}
           connections={connections}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
           dispatch={dispatch}
-          location={get(props, 'location', {})}
           selectedConnections={get(state, 'selectedConnections', [])}
         />
       )
