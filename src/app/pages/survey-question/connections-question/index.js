@@ -1,3 +1,4 @@
+/* global URLSearchParams */
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -10,7 +11,7 @@ const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 
-function onSelectConnection(dispatch) {
+function onSelectConnection (dispatch) {
   return event => {
     event.preventDefault()
     dispatch(toggleConnection(event.value))
@@ -18,7 +19,7 @@ function onSelectConnection(dispatch) {
 }
 
 class CompanyQuestionPage extends React.Component {
-  constructor(props, context) {
+  constructor (props, context) {
     super(props, context)
 
     const queryParams = new URLSearchParams(get(props, 'location.search', ''))
@@ -32,7 +33,7 @@ class CompanyQuestionPage extends React.Component {
     this.setState({ value })
   }
 
-  render() {
+  render () {
     const {
       nextUri,
       dispatch,
@@ -52,25 +53,25 @@ class CompanyQuestionPage extends React.Component {
           <title>Complete survey</title>
         </Helmet>
         <div className={css(sharedStyle.wrapper)}>
-          <Text element="div" style={sharedStyle.stepCounter}>
+          <Text element='div' style={sharedStyle.stepCounter}>
             Step {questionNumber} of {questionCount}
           </Text>
-          <Text element="div" size="largeIi" style={sharedStyle.heading}>
+          <Text element='div' size='largeIi' style={sharedStyle.heading}>
             {question.title}
           </Text>
-          <Text element="div" style={sharedStyle.subheading}>
+          <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
           <div className={css(sharedStyle.body)}>
             <Card style={sharedStyle.card}>
-              <Text element="div">
+              <Text element='div'>
                 Search by name and select from the results
               </Text>
               <form className={css(style.form)}>
                 <Input
-                  name="search"
-                  label="search"
-                  type="search"
+                  name='search'
+                  label='search'
+                  type='search'
                   value={value}
                   onChange={this.handleSearchChange}
                 />
@@ -78,7 +79,7 @@ class CompanyQuestionPage extends React.Component {
                   <Link
                     style={style.searchAction}
                     href={location.pathname}
-                    volume="murmur"
+                    volume='murmur'
                     subtle
                   >
                     Clear search
@@ -86,8 +87,8 @@ class CompanyQuestionPage extends React.Component {
                 ) : (
                   <Button
                     style={style.searchAction}
-                    type="submit"
-                    volume="cheer"
+                    type='submit'
+                    volume='cheer'
                   >
                     Search
                   </Button>
@@ -110,7 +111,7 @@ class CompanyQuestionPage extends React.Component {
                   </Text>
                 }
                 rightChildren={
-                  <Link volume="cheer" href={nextUri}>
+                  <Link volume='cheer' href={nextUri}>
                     Next
                   </Link>
                 }
