@@ -33,6 +33,7 @@ ssh:
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
+		-v $(CWD)/src/webpack.server.config.js:/usr/src/webpack.server.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
 		-v $(CWD)/src/yarn.lock:/usr/src/yarn.lock \
 		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \

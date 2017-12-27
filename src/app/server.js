@@ -15,10 +15,11 @@ require('babel-register')({
 process.on('unhandledRejection', error => {
   console.log(error.log, ...(error.log || []))
 })
+const http = require('http')
 const path = require('path')
-const server = require('@nudj/framework/server')
+const Server = require('@nudj/framework/server')
 
-const App = require('./redux')
+const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading/loading')
@@ -48,8 +49,9 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
-server({
-  App,
+
+const app = Server({
+  App: reactApp,
   reduxRoutes,
   reduxReducers,
   mockData,
@@ -61,3 +63,36 @@ server({
   gqlFragments,
   LoadingComponent
 })
+
+// TODO: Hot reloading for mock APIs?
+const server = http.createServer(app)
+let currentApp = app
+
+server.listen(80, () => {
+  console.log('info', 'App running')
+})
+
+if (module.hot) {
+  module.hot.accept('./redux', () => {
+    console.log('\n\nCHANGE\n\n')
+    const newReactApp = require('./redux')
+
+    server.removeListener('request', currentApp)
+    const newApp = Server({
+      App: newReactApp,
+      reduxRoutes,
+      reduxReducers,
+      mockData,
+      expressAssetPath,
+      buildAssetPath,
+      expressRouters,
+      spoofLoggedIn,
+      errorHandlers,
+      gqlFragments,
+      LoadingComponent
+    })
+
+    server.on('request', newApp)
+    currentApp = newApp
+  })
+}

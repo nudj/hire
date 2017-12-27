@@ -6,6 +6,8 @@ const { Helmet } = require('react-helmet')
 const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')
 
+console.log('OH MY')
+
 const ReduxRoot = props => (
   <div className={classnames(props.className, css(style.root))}>
     <Helmet titleTemplate='%s | nudj' defaultTitle='nudj'>
