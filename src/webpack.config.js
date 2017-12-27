@@ -20,7 +20,8 @@ if (process.env.DEBUG !== 'true') {
 module.exports = {
   cache: true,
   entry: {
-    'app/server/build/app': './app/client'
+    'app/server/build/app': './app/client',
+    'app/server/build/server': './app/server'
   },
   output: {
     path: __dirname,
