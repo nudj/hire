@@ -6,53 +6,6 @@ const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const sharedStyle = require('../shared.css')
 
-// TODO: get real recommendations
-const recommendations = [
-  {
-    id: 'finn',
-    name: 'Finn Wolfhard',
-    jobTitle: 'Mike Wheeler',
-    company: 'Stanger Things',
-    recommendedFor: ['Intelligent', 'Conscientious', 'Student']
-  },
-  {
-    id: 'millie',
-    name: 'Millie Bobby Brown',
-    jobTitle: 'Eleven',
-    company: 'Stanger Things',
-    recommendedFor: [
-      'Psychokinetic',
-      'Unusual appearance',
-      'Limited vocabulary'
-    ]
-  },
-  {
-    id: 'gaten',
-    name: 'Gaten Matarazzo',
-    jobTitle: 'Dustin Henderson',
-    company: 'Stanger Things',
-    recommendedFor: [
-      'Cleidocranial dysplasia',
-      'New front teeth',
-      'Attraction to Max'
-    ]
-  },
-  {
-    id: 'caleb',
-    name: 'Caleb McLaughlin',
-    jobTitle: 'Lucas Sinclair',
-    company: 'Stanger Things',
-    recommendedFor: ['Wary of Eleven', "Max's love interest"]
-  },
-  {
-    id: 'will',
-    name: 'Noah Schnapp',
-    jobTitle: 'Will Byers',
-    company: 'Stanger Things',
-    recommendedFor: ['Upside Down capture', 'Host']
-  }
-]
-
 const ListRecommendations = require('./list-recommendations')
 
 const getRecommendationCountString = recommendationCount => {
@@ -61,8 +14,11 @@ const getRecommendationCountString = recommendationCount => {
   return `${recommendationCount} people`
 }
 
-const ViewRecommendationsPage = props => {
-  console.log(props)
+const ViewRecommendationsPage = ({ user, surveyQuestionPage }) => {
+  const selectedConnections = get(surveyQuestionPage, 'selectedConnections', [])
+  const connections = get(user, 'connections', []).filter(
+    connection => selectedConnections.indexOf(connection.id) > -1
+  )
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -74,7 +30,7 @@ const ViewRecommendationsPage = props => {
           <Text element="div" size="largeIi" style={sharedStyle.heading}>
             You’ve uncovered{' '}
             <span className={css(sharedStyle.headingHighlight)}>
-              {getRecommendationCountString(recommendations.length)}
+              {getRecommendationCountString(connections.length)}
             </span>{' '}
             worth nudj’ing within your network
           </Text>
@@ -83,8 +39,8 @@ const ViewRecommendationsPage = props => {
           </Text>
         </div>
 
-        <div className={css(sharedStyle.body)}>
-          <ListRecommendations recommendations={recommendations} />
+        <div className={css(sharedStyle.body, sharedStyle.cardMedium)}>
+          <ListRecommendations recommendations={connections} />
         </div>
       </div>
     </div>

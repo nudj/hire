@@ -8,15 +8,16 @@ const { toggleConnection, updateConnectionsSearchQuery } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
+const ButtonLink = require('../../../components/button-link')
 
-function getHandleSelectConnection (dispatch) {
+function getHandleSelectConnection(dispatch) {
   return event => {
     event.preventDefault()
     dispatch(toggleConnection(event.value))
   }
 }
 
-function getHandleSearchChange (dispatch) {
+function getHandleSearchChange(dispatch) {
   return ({ value }) => {
     dispatch(updateConnectionsSearchQuery(value))
   }
@@ -41,39 +42,39 @@ const ConnectionsQuestionPage = props => {
         <title>Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' style={sharedStyle.stepCounter}>
+        <Text element="div" style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={sharedStyle.heading}>
+        <Text element="div" size="largeIi" style={sharedStyle.heading}>
           {question.title}
         </Text>
-        <Text element='div' style={sharedStyle.subheading}>
+        <Text element="div" style={sharedStyle.subheading}>
           {question.description}
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <Text element='div'>
+            <Text element="div">
               Search by name and select from the results
             </Text>
             <form className={css(style.form)}>
               <Input
-                name='search'
-                label='search'
-                type='search'
+                name="search"
+                label="search"
+                type="search"
                 value={query}
                 onChange={getHandleSearchChange(dispatch)}
               />
               {location.search ? (
-                <Link
+                <ButtonLink
                   style={style.searchAction}
                   href={location.pathname}
-                  volume='murmur'
+                  volume="murmur"
                   subtle
                 >
                   Clear search
-                </Link>
+                </ButtonLink>
               ) : (
-                <Button style={style.searchAction} type='submit' volume='cheer'>
+                <Button style={style.searchAction} type="submit" volume="cheer">
                   Search
                 </Button>
               )}
@@ -97,9 +98,9 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <Link volume='cheer' href={nextUri}>
+                <ButtonLink volume="cheer" href={nextUri}>
                   Next
-                </Link>
+                </ButtonLink>
               }
             />
           </div>

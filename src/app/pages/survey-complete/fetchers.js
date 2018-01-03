@@ -7,6 +7,24 @@ const get = ({ session, params }) => {
       $surveySlug: String
     ) {
       user (id: $userId) {
+        connections {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
         hirer {
           company {
             survey: surveyByFilters (filters: {

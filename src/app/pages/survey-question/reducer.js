@@ -82,7 +82,6 @@ const reducers = {
   [TOGGLE_CONNECTION]: toggleConnection,
   [ADD_FORMER_EMPLOYER]: addFormerEmployer,
   [ADD_CONNECTION]: addConnection,
-  [ROUTER_LOCATION_CHANGE]: routerLocationChange,
   [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery
 }
 

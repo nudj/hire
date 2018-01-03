@@ -1,14 +1,15 @@
 const React = require('react')
 const { Button, ContactCard } = require('@nudj/components')
 
-// const { css } = require('../../css')
-// const styleSheet = require('./style.css')
-
-const RecommendationItem = ({ id, onClick, ...rest }) => {
+const RecommendationItem = ({ id, onClick, ...contact }) => {
   const handleClick = e => onClick(id)
 
   return (
-    <ContactCard {...rest}>
+    <ContactCard
+      name={`${contact.firstName} ${contact.lastName}`}
+      jobTitle={contact.role.name}
+      company={contact.company.name}
+    >
       <Button onClick={handleClick} volume="cheer">
         Message
       </Button>
