@@ -1,7 +1,7 @@
-/* global URLSearchParams */
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const URLSearchParams = require('url-search-params')
 
 const { Text, Link, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')

@@ -15,7 +15,9 @@
   "homepage": "https://github.com/nudj/web#readme",
   "standard": {
     "parser": "babel-eslint",
-    "plugins": ["flowtype"],
+    "plugins": [
+      "flowtype"
+    ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",
@@ -59,7 +61,7 @@
     "redux": "^3.6.0",
     "regenerator-runtime": "0.11.1",
     "route-parser": "^0.0.5",
-    "url-search-params-polyfill": "2.0.1"
+    "url-search-params": "^0.10.0"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
