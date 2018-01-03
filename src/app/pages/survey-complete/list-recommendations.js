@@ -8,7 +8,14 @@ const ListRecommendations = ({ recommendations }) => (
   <ol className={css(style.list)}>
     {recommendations.map(recommendation => (
       <li key={recommendation.id} className={css(style.listItem)}>
-        <Item {...recommendation} onClick={console.log} />
+        <Item
+          id={recommendation.id}
+          firstName={recommendation.firstName}
+          lastName={recommendation.lastName}
+          role={recommendation.role}
+          company={recommendation.company}
+          onClick={console.log}
+        />
       </li>
     ))}
   </ol>

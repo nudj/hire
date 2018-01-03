@@ -53,9 +53,6 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <Text element="div">
-              Search by name and select from the results
-            </Text>
             <form className={css(style.form)}>
               <Input
                 name="search"
@@ -67,8 +64,8 @@ const ConnectionsQuestionPage = props => {
               {location.search ? (
                 <ButtonLink
                   style={style.searchAction}
-                  href={location.pathname}
-                  volume="murmur"
+                  href={get(props, 'location.pathname')}
+                  volume="cheer"
                   subtle
                 >
                   Clear search

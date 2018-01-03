@@ -10,7 +10,7 @@ const RecommendationItem = ({ id, onClick, ...contact }) => {
       jobTitle={contact.role.name}
       company={contact.company.name}
     >
-      <Button onClick={handleClick} volume="cheer">
+      <Button onClick={handleClick} volume='cheer'>
         Message
       </Button>
     </ContactCard>

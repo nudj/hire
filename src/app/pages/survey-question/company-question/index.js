@@ -3,7 +3,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Text, Link, Align, Card } = require('@nudj/components')
+const { Text, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
@@ -13,11 +13,11 @@ const style = require('./style.css')
 const FormCompany = require('../../../components/form-company')
 const ButtonLink = require('../../../components/button-link')
 
-function onChangeNewItem(dispatch, itemType) {
+function onChangeNewItem (dispatch, itemType) {
   return event => dispatch(setNewItemValue(itemType, event.name, event.value))
 }
 
-function onAddCompany(dispatch, questionId) {
+function onAddCompany (dispatch, questionId) {
   return event => {
     event.preventDefault()
     dispatch(addFormerEmployer(questionId))
@@ -51,18 +51,18 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <title>nudj - Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
-        <Text element="div" style={sharedStyle.stepCounter}>
+        <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
         <Text
-          element="div"
-          size="largeIi"
+          element='div'
+          size='largeIi'
           style={merge(sharedStyle.heading, sharedStyle.subheading)}
         >
           {question.title}
         </Text>
         <div className={css(sharedStyle.body)}>
-          <Text element="div" style={sharedStyle.subheading}>
+          <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
           <Card
@@ -86,7 +86,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                 </Text>
               }
               rightChildren={
-                <ButtonLink volume="cheer" href={nextUri}>
+                <ButtonLink volume='cheer' href={nextUri}>
                   Next
                 </ButtonLink>
               }
