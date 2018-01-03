@@ -3,6 +3,9 @@
 const React = require('react')
 const { Table, Checkbox } = require('@nudj/components')
 const { merge } = require('@nudj/library')
+const { mergeStyleSheets } = require('@nudj/components/lib/css')
+
+const style = require('./style.css')
 
 type StyleSheetType = {
   root?: Object,
@@ -37,10 +40,10 @@ type Connection = {
 }
 
 type ConnectionsTableProps = {
-   onSelect: () => void,
-   connections: Array<Connection>,
-   selectedConnections: Array<ID>,
-   styleSheet: StyleSheetType
+  onSelect: Object => void,
+  connections: Array<Connection>,
+  selectedConnections: Array<ID>,
+  styleSheet: StyleSheetType
 }
 
 const columns = [
@@ -78,6 +81,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
             onChange={onSelect}
             name={`${row.firstName} ${row.lastName}`}
             value={row.id}
+            id={row.id}
           />
         )
       case 'name':
@@ -87,18 +91,36 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
     }
   }
 
-  const data = connections.map(connection => {
-    return merge(connection, {
+  const data = connections.map(connection =>
+    merge(connection, {
       selected: selectedConnections.includes(connection.id)
     })
-  })
+  )
 
   return (
     <Table
       data={data}
-      styleSheet={styleSheet}
+      styleSheet={mergeStyleSheets(style, styleSheet)}
       columns={columns}
       cellRenderer={cellRenderer}
+      Row={({ children, className, id }) => {
+        return (
+          <tr
+            onClick={({ preventDefault, stopPropogation }) => {
+              onSelect({
+                preventDefault,
+                stopPropogation,
+                value: id,
+                name: id
+              })
+            }}
+            className={className}
+            id={id}
+          >
+            {children}
+          </tr>
+        )
+      }}
     />
   )
 }

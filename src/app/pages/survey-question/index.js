@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
+const URLSearchParams = require('url-search-params')
 
 const getNextSurveyUri = require('./getNextSurveyUri')
 const CompanyQuestionPage = require('./company-question')
@@ -9,11 +10,7 @@ const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
 
 const SurveyQuestionPage = props => {
-  const {
-    user,
-    dispatch,
-    surveyQuestionPage: state
-  } = props
+  const { user, dispatch, surveyQuestionPage: state, ...rest } = props
   const survey = get(user, 'hirer.company.survey')
   const nextUri = getNextSurveyUri(survey)
   const section = get(survey, 'section')
@@ -29,10 +26,15 @@ const SurveyQuestionPage = props => {
     get(user, 'newConnection', [])
   )
 
+  const queryParams = new URLSearchParams(get(props, 'location.search', ''))
+  const searchQuery =
+    state.searchQuery !== null ? state.searchQuery : queryParams.get('search')
+
   switch (question.type) {
     case questionTypes.COMPANIES:
       return (
         <CompanyQuestionPage
+          {...rest}
           question={question}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
@@ -45,14 +47,15 @@ const SurveyQuestionPage = props => {
     case questionTypes.CONNECTIONS:
       return (
         <ConnectionsQuestionPage
+          {...rest}
           nextUri={nextUri}
           question={question}
           connections={connections}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
           dispatch={dispatch}
-          location={get(props, 'location', {})}
           selectedConnections={get(state, 'selectedConnections', [])}
+          query={searchQuery}
         />
       )
   }

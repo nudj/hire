@@ -1,30 +1,28 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
 
-const {
-  Text,
-  Link,
-  Align,
-  Card,
-  Input,
-  Button
-} = require('@nudj/components')
+const { Text, Link, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const { toggleConnection } = require('../actions')
+const { toggleConnection, updateConnectionsSearchQuery } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 
-function onSelectConnection (dispatch) {
-  return (event) => {
+function getHandleSelectConnection (dispatch) {
+  return event => {
     event.preventDefault()
     dispatch(toggleConnection(event.value))
   }
 }
 
-const CompanyQuestionPage = (props) => {
+function getHandleSearchChange (dispatch) {
+  return ({ value }) => {
+    dispatch(updateConnectionsSearchQuery(value))
+  }
+}
+
+const ConnectionsQuestionPage = props => {
   const {
     nextUri,
     dispatch,
@@ -33,7 +31,8 @@ const CompanyQuestionPage = (props) => {
     connections,
     question,
     location,
-    selectedConnections
+    selectedConnections,
+    query
   } = props
 
   return (
@@ -53,14 +52,24 @@ const CompanyQuestionPage = (props) => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <form>
+            <Text element='div'>
+              Search by name and select from the results
+            </Text>
+            <form className={css(style.form)}>
               <Input
                 name='search'
                 label='search'
                 type='search'
+                value={query}
+                onChange={getHandleSearchChange(dispatch)}
               />
               {location.search ? (
-                <Link style={style.searchAction} href={get(props, 'location.pathname')} volume='cheer' subtle>
+                <Link
+                  style={style.searchAction}
+                  href={location.pathname}
+                  volume='murmur'
+                  subtle
+                >
                   Clear search
                 </Link>
               ) : (
@@ -70,7 +79,10 @@ const CompanyQuestionPage = (props) => {
               )}
             </form>
             <ConnectionsTable
-              onSelect={onSelectConnection(dispatch)}
+              styleSheet={{
+                root: style.table
+              }}
+              onSelect={getHandleSelectConnection(dispatch)}
               connections={connections}
               selectedConnections={selectedConnections}
             />
@@ -95,4 +107,4 @@ const CompanyQuestionPage = (props) => {
   )
 }
 
-module.exports = CompanyQuestionPage
+module.exports = ConnectionsQuestionPage
