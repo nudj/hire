@@ -1,4 +1,16 @@
+const toUpper = require('lodash/toUpper')
+
 const { Global } = require('../../lib/graphql')
+const { questionTypes } = require('../../lib/constants')
+
+const getQuestion = (data) => {
+  switch (toUpper(data.params.questionType)) {
+    case questionTypes.COMPANIES:
+      return getCompaniesQuestion(data)
+    case questionTypes.CONNECTIONS:
+      return getConnectionsQuestion(data)
+  }
+}
 
 const getCompaniesQuestion = ({ session, params, query }) => {
   const gql = `
@@ -178,7 +190,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
-    search: encodeURIComponent(query.search || ''),
+    search: encodeURIComponent(query.search),
     fields: [
       ['firstName', 'lastName']
     ]
@@ -367,8 +379,7 @@ const postConnection = ({ session, params, body }) => {
 }
 
 module.exports = {
-  getCompaniesQuestion,
-  getConnectionsQuestion,
+  getQuestion,
   postFormerEmployer,
   postConnection
 }
