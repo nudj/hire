@@ -68,6 +68,45 @@ const getCompaniesQuestion = ({ session, params, query }) => {
 }
 
 const getConnectionsQuestion = ({ session, params, query }) => {
+  const hirerFragment = `
+    hirer {
+      company {
+        survey: surveyByFilters (filters: {
+          slug: $surveySlug
+        }) {
+          id
+          slug
+          sections: surveySections {
+            id
+            questions: surveyQuestions {
+              id
+              type
+            }
+          }
+          section: surveySectionById (
+            id: $sectionId
+          ) {
+            id
+            questions: surveyQuestions {
+              id
+              type
+            }
+            question: surveyQuestionById (
+              id: $questionId
+            ) {
+              id
+              title
+              description
+              name
+              type
+              required
+              tags
+            }
+          }
+        }
+      }
+    }
+  `
   let gql = `
     query SurveyQuestionPage (
       $userId: ID!,
@@ -94,43 +133,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
             email
           }
         }
-        hirer {
-          company {
-            survey: surveyByFilters (filters: {
-              slug: $surveySlug
-            }) {
-              id
-              slug
-              sections: surveySections {
-                id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-              }
-              section: surveySectionById (
-                id: $sectionId
-              ) {
-                id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionById (
-                  id: $questionId
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                  tags
-                }
-              }
-            }
-          }
-        }
+        ${hirerFragment}
       }
       ${Global}
     }
@@ -164,43 +167,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               email
             }
           }
-          hirer {
-            company {
-              survey: surveyByFilters (filters: {
-                slug: $surveySlug
-              }) {
-                id
-                slug
-                sections: surveySections {
-                  id
-                  questions: surveyQuestions {
-                    id
-                    type
-                  }
-                }
-                section: surveySectionById (
-                  id: $sectionId
-                ) {
-                  id
-                  questions: surveyQuestions {
-                    id
-                    type
-                  }
-                  question: surveyQuestionById (
-                    id: $questionId
-                  ) {
-                    id
-                    title
-                    description
-                    name
-                    type
-                    required
-                    tags
-                  }
-                }
-              }
-            }
-          }
+          ${hirerFragment}
         }
         ${Global}
       }
