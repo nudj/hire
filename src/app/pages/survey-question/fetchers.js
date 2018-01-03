@@ -1,6 +1,11 @@
 const { Global } = require('../../lib/graphql')
 
-const get = ({ session, params }) => {
+const get = ({ session, params, query }) => {
+  let connections = 'connections'
+  if (query.search) {
+    connections = 'connections: searchConnections(query: $search, fields: $fields)'
+  }
+
   const gql = `
     query SurveyQuestionPage (
       $userId: ID!,
@@ -8,7 +13,8 @@ const get = ({ session, params }) => {
       $sectionId: ID!,
       $connectionsType: Boolean!,
       $employersType: Boolean!,
-      $questionId: ID!
+      $questionId: ID!,
+      ${query.search ? `$search: String!, $fields: [[String!]!]!` : ''}
     ) {
       user (id: $userId) {
         formerEmployers @include(if: $employersType) {
@@ -19,7 +25,7 @@ const get = ({ session, params }) => {
             name
           }
         }
-        connections @include(if: $connectionsType) {
+        ${connections} @include(if: $connectionsType) {
           id
           firstName
           lastName
@@ -84,7 +90,11 @@ const get = ({ session, params }) => {
     sectionId: params.sectionId,
     employersType: params.questionType === 'companies',
     connectionsType: params.questionType === 'connections',
-    questionId: params.questionId
+    questionId: params.questionId,
+    search: encodeURIComponent(query.search || ''),
+    fields: [
+      ['firstName', 'lastName']
+    ]
   }
   return { gql, variables }
 }
