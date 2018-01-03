@@ -1,20 +1,18 @@
 const React = require('react')
-const { Button, ContactCard } = require('@nudj/components')
+const { ContactCard } = require('@nudj/components')
 
-const RecommendationItem = ({ id, onClick, ...contact }) => {
-  const handleClick = e => onClick(id)
+const ButtonLink = require('../../components/button-link')
 
-  return (
-    <ContactCard
-      name={`${contact.firstName} ${contact.lastName}`}
-      jobTitle={contact.role.name}
-      company={contact.company.name}
-    >
-      <Button onClick={handleClick} volume='cheer'>
-        Message
-      </Button>
-    </ContactCard>
-  )
-}
+const RecommendationItem = ({ id, ...contact }) => (
+  <ContactCard
+    name={`${contact.firstName} ${contact.lastName}`}
+    jobTitle={contact.role.name}
+    company={contact.company.name}
+  >
+    <ButtonLink href='/connections' volume='cheer'>
+      Message
+    </ButtonLink>
+  </ContactCard>
+)
 
 module.exports = RecommendationItem
