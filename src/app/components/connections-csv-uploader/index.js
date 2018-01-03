@@ -21,7 +21,7 @@ type Props = {
   rest?: Array<mixed>
 }
 
-const DZ = (props: Props) => {
+const ConnectionsCsvUploader = (props: Props) => {
   const { connections, loading, ...rest } = props
 
   return (
@@ -128,9 +128,9 @@ const DZ = (props: Props) => {
   )
 }
 
-DZ.defaultProps = {
+ConnectionsCsvUploader.defaultProps = {
   connections: [],
   loading: false
 }
 
-module.exports = DZ
+module.exports = ConnectionsCsvUploader
