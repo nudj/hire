@@ -24,7 +24,7 @@ type Props = {
 }
 
 const getHandleDrop = dispatch => (acceptedFiles, rejectedFiles) => {
-  if (rejectedFiles.length > 0) {
+  if (acceptedFiles.length > 0) {
     dispatch(parseLinkedinConnections(acceptedFiles[0]))
   }
 }
