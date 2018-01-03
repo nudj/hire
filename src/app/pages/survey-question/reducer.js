@@ -3,7 +3,7 @@ const RouteParser = require('route-parser')
 const get = require('lodash/get')
 const without = require('lodash/without')
 const concat = require('lodash/concat')
-const { reducerBuilder } = require('../../lib')
+const { createReducer } = require('../../lib')
 const {
   SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
@@ -33,7 +33,9 @@ const toggleConnection = (state, action) => {
 
 const addConnection = (state, action) => {
   const questions = merge(state.questions)
-  const questionItems = get(questions, action.questionId, []).concat(action.newItem.id)
+  const questionItems = get(questions, action.questionId, []).concat(
+    action.newItem.id
+  )
   questions[action.questionId] = questionItems
 
   return Object.assign({}, state, {
@@ -43,20 +45,27 @@ const addConnection = (state, action) => {
   })
 }
 
-const addFormerEmployer = (state, action) => Object.assign({}, state, {
-  formerEmployers: get(state, 'formerEmployers', []).concat(action.newItem),
-  newFormerEmployer: {}
-})
+const addFormerEmployer = (state, action) =>
+  Object.assign({}, state, {
+    formerEmployers: get(state, 'formerEmployers', []).concat(action.newItem),
+    newFormerEmployer: {}
+  })
 
 const routerLocationChange = (state, action) => {
-  const baseSurveyUrlSegments = action.payload.pathname.split('/').slice(0, 3).join('/')
-  if (surveyRoute.match(baseSurveyUrlSegments) || onboardingRoute.match(baseSurveyUrlSegments)) {
+  const baseSurveyUrlSegments = action.payload.pathname
+    .split('/')
+    .slice(0, 3)
+    .join('/')
+  if (
+    surveyRoute.match(baseSurveyUrlSegments) ||
+    onboardingRoute.match(baseSurveyUrlSegments)
+  ) {
     return state
   }
   return merge(initialState)
 }
 
-const actions = {
+const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [TOGGLE_CONNECTION]: toggleConnection,
   [ADD_FORMER_EMPLOYER]: addFormerEmployer,
@@ -72,4 +81,4 @@ const initialState = {
   connections: []
 }
 
-module.exports = reducerBuilder(initialState, actions)
+module.exports = createReducer(initialState, reducers)

@@ -1,12 +1,12 @@
 const { Redirect } = require('@nudj/framework/errors')
-const _get = require('lodash/get')
+const get = require('lodash/get')
 
-const { Global } = require('../../lib/graphql')
-const { createNotification } = require('../../lib')
-const intercom = require('../../lib/intercom')
-const mailer = require('../../lib/mailer')
+const { Global } = require('../../../lib/graphql')
+const { createNotification } = require('../../../lib')
+const intercom = require('../../../lib/intercom')
+const mailer = require('../../../lib/mailer')
 
-const get = ({ session }) => {
+const fetchPageData = ({ session }) => {
   const gql = `
     query ImportPage ($userId: ID!) {
       user (id: $userId) {
@@ -23,7 +23,7 @@ const get = ({ session }) => {
   return { gql, variables }
 }
 
-const post = ({ session, body, files }) => {
+const uploadConnections = ({ session, body, files }) => {
   const userId = session.userId
 
   const gql = `
@@ -71,11 +71,11 @@ const post = ({ session, body, files }) => {
           completed
         }
         hirer {
-          onboarded {
-            created
-          }
           company {
             name
+            surveys {
+              slug
+            }
           }
         }
       }
@@ -94,12 +94,12 @@ const post = ({ session, body, files }) => {
     respond: async data => {
       await Promise.all([
         sendImportEmail({
-          name: `${_get(data, 'user.firstName', '')} ${_get(
+          name: `${get(data, 'user.firstName', '')} ${get(
             data,
             'user.lastName',
             ''
           )}`,
-          company: _get(data, 'user.hirer.company.name', '')
+          company: get(data, 'user.hirer.company.name', '')
         }),
         intercom.logEvent({
           event_name: 'linkedin network uploaded',
@@ -109,10 +109,11 @@ const post = ({ session, body, files }) => {
           }
         })
       ])
-      const url = data.user.hirer.onboarded ? '/connections' : '/onboarding/surveys/aided-recall-baby'
-      const message = data.user.hirer.onboarded ? "Nice. We'll let you know as soon as we find someone worth asking." : 'Thanks! Next up, let\'s try some aided recall'
+
+      const message = `You just added ${body.connections.length} connections 🙌`
+
       throw new Redirect({
-        url,
+        url: `/surveys/${get(data, 'user.hirer.company.surveys[0].slug', '')}`,
         notification: createNotification('success', message)
       })
     }
@@ -129,6 +130,6 @@ function sendImportEmail ({ name, company, location }) {
 }
 
 module.exports = {
-  get,
-  post
+  fetchPageData,
+  uploadConnections
 }

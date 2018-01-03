@@ -16,21 +16,20 @@ type ChildProps = {
 }
 
 type Props = {
-  children: ChildProps => React.Node,
   connections: Array<Connection>,
-  parsing: boolean,
+  loading: boolean,
   rest?: Array<mixed>
 }
 
-const DZ = (props: Props) => {
-  const { children, connections, parsing, ...rest } = props
+const ConnectionsCsvUploader = (props: Props) => {
+  const { connections, loading, ...rest } = props
 
   return (
     <Dropzone accept='.csv' className='example' {...rest}>
       {(childProps: ChildProps) => {
         const { isDragActive, acceptedFiles, rejectedFiles } = childProps
 
-        if (parsing) {
+        if (loading) {
           return (
             <div className={css(style.dropzone)}>
               <div className={css(style.loaderContainer)}>
@@ -129,4 +128,9 @@ const DZ = (props: Props) => {
   )
 }
 
-module.exports = DZ
+ConnectionsCsvUploader.defaultProps = {
+  connections: [],
+  loading: false
+}
+
+module.exports = ConnectionsCsvUploader

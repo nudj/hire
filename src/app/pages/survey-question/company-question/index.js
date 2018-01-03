@@ -17,7 +17,7 @@ function onChangeNewItem (dispatch, itemType) {
 }
 
 function onAddCompany (dispatch, questionId) {
-  return (event) => {
+  return event => {
     event.preventDefault()
     dispatch(addFormerEmployer(questionId))
   }
@@ -53,14 +53,24 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={merge(sharedStyle.heading, sharedStyle.subheading)}>
+        <Text
+          element='div'
+          size='largeIi'
+          style={merge(sharedStyle.heading, sharedStyle.subheading)}
+        >
           {question.title}
         </Text>
         <div className={css(sharedStyle.body)}>
           <Text element='div' style={sharedStyle.subheading}>
             {question.description}
           </Text>
-          <Card style={merge(sharedStyle.card, style.formCard)}>
+          <Card
+            style={merge(
+              sharedStyle.card,
+              sharedStyle.cardSmall,
+              style.formCard
+            )}
+          >
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
               onSubmit={onAddCompany(dispatch, question.id)}

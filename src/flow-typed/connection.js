@@ -7,9 +7,11 @@ declare type ConnectionSource = {
 
 declare type Connection = {
   id?: ID,
+  title?: string,
+  email?: string,
   created?: string,
   modified?: string,
-  firstName?: string,
+  firstName: string,
   lastName?: string,
   from?: Person,
   person?: Person,
