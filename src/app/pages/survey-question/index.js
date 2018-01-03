@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
+const URLSearchParams = require('url-search-params')
 
 const getNextSurveyUri = require('./getNextSurveyUri')
 const CompanyQuestionPage = require('./company-question')
@@ -24,6 +25,10 @@ const SurveyQuestionPage = props => {
   const connections = get(user, 'connections', []).concat(
     get(user, 'newConnection', [])
   )
+
+  const queryParams = new URLSearchParams(get(props, 'location.search', ''))
+  const searchQuery =
+    state.searchQuery !== null ? state.searchQuery : queryParams.get('search')
 
   switch (question.type) {
     case questionTypes.COMPANIES:
@@ -50,6 +55,7 @@ const SurveyQuestionPage = props => {
           questionCount={questions.length}
           dispatch={dispatch}
           selectedConnections={get(state, 'selectedConnections', [])}
+          query={searchQuery}
         />
       )
   }

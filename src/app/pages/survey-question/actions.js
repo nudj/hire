@@ -99,3 +99,12 @@ function toggleConnection (connectionId) {
 }
 module.exports.toggleConnection = connectionId =>
   quickDispatch(toggleConnection(connectionId))
+
+const UPDATE_CONNECTIONS_SEARCH_QUERY = 'UPDATE_CONNECTIONS_SEARCH_QUERY'
+module.exports.UPDATE_CONNECTIONS_SEARCH_QUERY = UPDATE_CONNECTIONS_SEARCH_QUERY
+
+const updateConnectionsSearchQuery = query => ({
+  type: UPDATE_CONNECTIONS_SEARCH_QUERY,
+  query
+})
+module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery

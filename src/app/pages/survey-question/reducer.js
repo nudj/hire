@@ -8,7 +8,8 @@ const {
   SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
   ADD_FORMER_EMPLOYER,
-  TOGGLE_CONNECTION
+  TOGGLE_CONNECTION,
+  UPDATE_CONNECTIONS_SEARCH_QUERY
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -24,9 +25,15 @@ const setNewItemValue = (state, action) => {
 }
 
 const toggleConnection = (state, action) => {
-  let selectedConnections = concat(state.selectedConnections, action.connectionId)
+  let selectedConnections = concat(
+    state.selectedConnections,
+    action.connectionId
+  )
   if (state.selectedConnections.includes(action.connectionId)) {
-    selectedConnections = without(state.selectedConnections, action.connectionId)
+    selectedConnections = without(
+      state.selectedConnections,
+      action.connectionId
+    )
   }
   return { ...state, selectedConnections }
 }
@@ -65,12 +72,18 @@ const routerLocationChange = (state, action) => {
   return merge(initialState)
 }
 
+const updateConnectionsSearchQuery = (state, { query }) => ({
+  ...state,
+  searchQuery: query
+})
+
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [TOGGLE_CONNECTION]: toggleConnection,
   [ADD_FORMER_EMPLOYER]: addFormerEmployer,
   [ADD_CONNECTION]: addConnection,
-  [ROUTER_LOCATION_CHANGE]: routerLocationChange
+  [ROUTER_LOCATION_CHANGE]: routerLocationChange,
+  [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery
 }
 
 const initialState = {
@@ -78,7 +91,8 @@ const initialState = {
   newFormerEmployer: {},
   formerEmployers: [],
   newConnection: {},
-  connections: []
+  connections: [],
+  searchQuery: null
 }
 
 module.exports = createReducer(initialState, reducers)
