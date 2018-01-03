@@ -1,23 +1,15 @@
 const { Global } = require('../../lib/graphql')
 
-const get = ({ session, params, query }) => {
-  let connections = 'connections'
-  if (query.search) {
-    connections = 'connections: searchConnections(query: $search, fields: $fields)'
-  }
-
+const getCompaniesQuestion = ({ session, params, query }) => {
   const gql = `
-    query SurveyQuestionPage (
+    query CompaniesQuestionPage (
       $userId: ID!,
       $surveySlug: String!,
       $sectionId: ID!,
-      $connectionsType: Boolean!,
-      $employersType: Boolean!,
-      $questionId: ID!,
-      ${query.search ? `$search: String!, $fields: [[String!]!]!` : ''}
+      $questionId: ID!
     ) {
       user (id: $userId) {
-        formerEmployers @include(if: $employersType) {
+        formerEmployers {
           id
           source
           company {
@@ -25,7 +17,66 @@ const get = ({ session, params, query }) => {
             name
           }
         }
-        ${connections} @include(if: $connectionsType) {
+        hirer {
+          company {
+            survey: surveyByFilters (filters: {
+              slug: $surveySlug
+            }) {
+              id
+              slug
+              sections: surveySections {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+              }
+              section: surveySectionById (
+                id: $sectionId
+              ) {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+                question: surveyQuestionById (
+                  id: $questionId
+                ) {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                  tags
+                }
+              }
+            }
+          }
+        }
+      }
+      ${Global}
+    }
+  `
+  const variables = {
+    userId: session.userId,
+    surveySlug: params.surveySlug,
+    sectionId: params.sectionId,
+    questionId: params.questionId
+  }
+  return { gql, variables }
+}
+
+const getConnectionsQuestion = ({ session, params, query }) => {
+  let gql = `
+    query SurveyQuestionPage (
+      $userId: ID!,
+      $surveySlug: String!,
+      $sectionId: ID!,
+      $questionId: ID!,
+    ) {
+      user (id: $userId) {
+        connections {
           id
           firstName
           lastName
@@ -84,12 +135,81 @@ const get = ({ session, params, query }) => {
       ${Global}
     }
   `
+  if (query.search) {
+    gql = `
+      query SurveyQuestionPage (
+        $userId: ID!,
+        $surveySlug: String!,
+        $sectionId: ID!,
+        $questionId: ID!,
+        $search: String!,
+        $fields: [[String!]!]!
+      ) {
+        user (id: $userId) {
+          connections: searchConnections(query: $search, fields: $fields) {
+            id
+            firstName
+            lastName
+            role {
+              name
+            }
+            company {
+              name
+            }
+            source {
+              name
+            }
+            person {
+              id
+              email
+            }
+          }
+          hirer {
+            company {
+              survey: surveyByFilters (filters: {
+                slug: $surveySlug
+              }) {
+                id
+                slug
+                sections: surveySections {
+                  id
+                  questions: surveyQuestions {
+                    id
+                    type
+                  }
+                }
+                section: surveySectionById (
+                  id: $sectionId
+                ) {
+                  id
+                  questions: surveyQuestions {
+                    id
+                    type
+                  }
+                  question: surveyQuestionById (
+                    id: $questionId
+                  ) {
+                    id
+                    title
+                    description
+                    name
+                    type
+                    required
+                    tags
+                  }
+                }
+              }
+            }
+          }
+        }
+        ${Global}
+      }
+    `
+  }
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
-    employersType: params.questionType === 'companies',
-    connectionsType: params.questionType === 'connections',
     questionId: params.questionId,
     search: encodeURIComponent(query.search || ''),
     fields: [
@@ -160,7 +280,6 @@ const postFormerEmployer = ({ session, params, body }) => {
                   name
                   type
                   required
-                  options
                   tags
                 }
               }
@@ -259,7 +378,6 @@ const postConnection = ({ session, params, body }) => {
                   name
                   type
                   required
-                  options
                   tags
                 }
               }
@@ -282,7 +400,8 @@ const postConnection = ({ session, params, body }) => {
 }
 
 module.exports = {
-  get,
+  getCompaniesQuestion,
+  getConnectionsQuestion,
   postFormerEmployer,
   postConnection
 }
