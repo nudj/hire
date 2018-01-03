@@ -1,3 +1,4 @@
+/* global Connection */
 // @flow
 const camelcase = require('lodash/camelCase')
 const get = require('lodash/get')
@@ -23,7 +24,7 @@ const normaliseLinkedinContact = (contact: LinkedInContact) => {
   return normalisedContact
 }
 
-const linkedinToNudjPerson = (contact: LinkedInContact) => {
+const linkedinToNudjPerson = (contact: LinkedInContact): Connection => {
   const normalisedContact = normaliseLinkedinContact(contact)
 
   return {

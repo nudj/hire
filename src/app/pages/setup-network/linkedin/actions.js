@@ -1,3 +1,5 @@
+/* global Dispatch, Action, Connection */
+// @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 
@@ -10,24 +12,26 @@ const COMPLETE_PARSING_LINKEDIN_CONNECTIONS =
 const START_CONNECTIONS_UPLOAD = 'START_CONNECTIONS_UPLOAD'
 const COMPLETE_CONNECTIONS_UPLOAD = 'COMPLETE_CONNECTIONS_UPLOAD'
 
-const startParsingLinkedinConnections = () => ({
+const startParsingLinkedinConnections = (): Action => ({
   type: START_PARSING_LINKEDIN_CONNECTIONS
 })
 
-const completeParsingLinkedinConnections = connections => ({
+const completeParsingLinkedinConnections = (connections): Action => ({
   type: COMPLETE_PARSING_LINKEDIN_CONNECTIONS,
   connections
 })
 
-const startConnectionsUpload = () => ({
+const startConnectionsUpload = (): Action => ({
   type: START_CONNECTIONS_UPLOAD
 })
 
-const completeConnectionsUpload = () => ({
+const completeConnectionsUpload = (): Action => ({
   type: COMPLETE_CONNECTIONS_UPLOAD
 })
 
-const parseLinkedinConnections = file => async dispatch => {
+const parseLinkedinConnections = (
+  file: Array<Connection>
+): (Dispatch => Promise<void>) => async (dispatch: Dispatch) => {
   dispatch(startParsingLinkedinConnections())
 
   try {
@@ -43,7 +47,10 @@ const parseLinkedinConnections = file => async dispatch => {
   }
 }
 
-const uploadLinkedinConnections = () => async (dispatch, getState) => {
+const uploadLinkedinConnections = (): ((
+  Dispatch,
+  () => Object
+) => Promise<void>) => async (dispatch, getState) => {
   dispatch(startConnectionsUpload())
 
   try {
