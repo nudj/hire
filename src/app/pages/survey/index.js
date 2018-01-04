@@ -50,11 +50,7 @@ const SurveyPage = (props: SurveyProps) => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text
-            element='div'
-            size='largeIi'
-            style={sharedStyle.heading}
-          >
+          <Text element='div' size='largeIi' style={sharedStyle.heading}>
             Finding awesome people to join{' '}
             <span className={css(sharedStyle.headingHighlight)}>
               {get(company, 'name', '')}
@@ -66,12 +62,12 @@ const SurveyPage = (props: SurveyProps) => {
             your network.
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            To help jog your memory and uncover those gems, we&#39;re now going to
-            ask you a series of questions. All you have to do is select from the
-            contacts you&#39;ve just uploaded who you feel is most relevant.
+            To help jog your memory and uncover those gems, we&#39;re now going
+            to ask you a series of questions. All you have to do is select from
+            the contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
         </div>
-        <div className={css(sharedStyle.body, sharedStyle.actions)}>
+        <div className={css(sharedStyle.body)}>
           <ButtonLink
             style={sharedStyle.action}
             volume='cheer'
