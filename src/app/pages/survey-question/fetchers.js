@@ -1,40 +1,33 @@
-const { Global } = require('../../lib/graphql')
+const toUpper = require('lodash/toUpper')
+const isNil = require('lodash/isNil')
 
-const get = ({ session, params }) => {
+const { Global } = require('../../lib/graphql')
+const { questionTypes } = require('../../lib/constants')
+
+const getQuestion = (data) => {
+  switch (toUpper(data.params.questionType)) {
+    case questionTypes.COMPANIES:
+      return getCompaniesQuestion(data)
+    case questionTypes.CONNECTIONS:
+      return getConnectionsQuestion(data)
+  }
+}
+
+const getCompaniesQuestion = ({ session, params, query }) => {
   const gql = `
-    query SurveyQuestionPage (
+    query CompaniesQuestionPage (
       $userId: ID!,
       $surveySlug: String!,
       $sectionId: ID!,
-      $connectionsType: Boolean!,
-      $employersType: Boolean!,
       $questionId: ID!
     ) {
       user (id: $userId) {
-        formerEmployers @include(if: $employersType) {
+        formerEmployers {
           id
           source
           company {
             id
             name
-          }
-        }
-        connections @include(if: $connectionsType) {
-          id
-          firstName
-          lastName
-          role {
-            name
-          }
-          company {
-            name
-          }
-          source {
-            name
-          }
-          person {
-            id
-            email
           }
         }
         hirer {
@@ -82,9 +75,108 @@ const get = ({ session, params }) => {
     userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
-    employersType: params.questionType === 'companies',
-    connectionsType: params.questionType === 'connections',
     questionId: params.questionId
+  }
+  return { gql, variables }
+}
+
+const getConnectionsQuestion = ({ session, params, query }) => {
+  const hirerFragment = `
+    hirer {
+      company {
+        survey: surveyByFilters (filters: {
+          slug: $surveySlug
+        }) {
+          id
+          slug
+          sections: surveySections {
+            id
+            questions: surveyQuestions {
+              id
+              type
+            }
+          }
+          section: surveySectionById (
+            id: $sectionId
+          ) {
+            id
+            questions: surveyQuestions {
+              id
+              type
+            }
+            question: surveyQuestionById (
+              id: $questionId
+            ) {
+              id
+              title
+              description
+              name
+              type
+              required
+              tags
+            }
+          }
+        }
+      }
+    }
+  `
+  let gql = `
+    query SurveyQuestionPage (
+      $userId: ID!,
+      $surveySlug: String!,
+      $sectionId: ID!,
+      $questionId: ID!,
+    ) {
+      user (id: $userId) {
+        ${hirerFragment}
+      }
+      ${Global}
+    }
+  `
+  if (!isNil(query.search)) {
+    gql = `
+      query SurveyQuestionPage (
+        $userId: ID!,
+        $surveySlug: String!,
+        $sectionId: ID!,
+        $questionId: ID!,
+        $search: String!,
+        $fields: [[String!]!]!
+      ) {
+        user (id: $userId) {
+          connections: searchConnections(query: $search, fields: $fields) {
+            id
+            firstName
+            lastName
+            role {
+              name
+            }
+            company {
+              name
+            }
+            source {
+              name
+            }
+            person {
+              id
+              email
+            }
+          }
+          ${hirerFragment}
+        }
+        ${Global}
+      }
+    `
+  }
+  const variables = {
+    userId: session.userId,
+    surveySlug: params.surveySlug,
+    sectionId: params.sectionId,
+    questionId: params.questionId,
+    search: query.search,
+    fields: [
+      ['firstName', 'lastName']
+    ]
   }
   return { gql, variables }
 }
@@ -150,7 +242,6 @@ const postFormerEmployer = ({ session, params, body }) => {
                   name
                   type
                   required
-                  options
                   tags
                 }
               }
@@ -249,7 +340,6 @@ const postConnection = ({ session, params, body }) => {
                   name
                   type
                   required
-                  options
                   tags
                 }
               }
@@ -272,7 +362,7 @@ const postConnection = ({ session, params, body }) => {
 }
 
 module.exports = {
-  get,
+  getQuestion,
   postFormerEmployer,
   postConnection
 }

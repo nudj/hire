@@ -53,6 +53,36 @@ data.connections = data.connections.concat([
     role: 'role1',
     person: 'person1',
     id: '1'
+  },
+  {
+    company: 'company2',
+    firstName: 'Timothy',
+    lastName: 'Robinson',
+    from: 'person5',
+    source: 'connectionSource1',
+    role: 'role1',
+    person: 'person6',
+    id: '2'
+  },
+  {
+    company: 'company1',
+    firstName: 'Robyn',
+    lastName: 'McGirl',
+    from: 'person5',
+    source: 'connectionSource1',
+    role: 'role1',
+    person: 'person2',
+    id: '3'
+  },
+  {
+    company: 'company1',
+    firstName: 'Matt',
+    lastName: 'Ellis',
+    from: 'person5',
+    source: 'connectionSource1',
+    role: 'role1',
+    person: 'person4',
+    id: '4'
   }
 ])
 data.companies = data.companies.concat([
