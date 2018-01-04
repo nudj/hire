@@ -41,7 +41,7 @@ const ChooseNetworkPage = () => (
           your hiring for.
         </Text>
       </div>
-      <div className={css(sharedStyle.actions)}>
+      <div className={css(sharedStyle.body)}>
         <ButtonLink
           style={sharedStyle.action}
           href={NETWORKS.linkedin.url}

@@ -66,7 +66,7 @@ const SurveyPage = (props: SurveyProps) => {
             the contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
         </div>
-        <div className={css(sharedStyle.body, sharedStyle.actions)}>
+        <div className={css(sharedStyle.body)}>
           <ButtonLink
             style={sharedStyle.action}
             volume='cheer'
