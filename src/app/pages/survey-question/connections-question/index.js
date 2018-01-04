@@ -78,14 +78,16 @@ const ConnectionsQuestionPage = props => {
                 </Button>
               )}
             </form>
-            <ConnectionsTable
-              styleSheet={{
-                root: style.table
-              }}
-              onSelect={getHandleSelectConnection(dispatch)}
-              connections={connections}
-              selectedConnections={selectedConnections}
-            />
+            {connections.length ? (
+              <ConnectionsTable
+                styleSheet={{
+                  root: style.table
+                }}
+                onSelect={getHandleSelectConnection(dispatch)}
+                connections={connections}
+                selectedConnections={selectedConnections}
+              />
+            ) : ''}
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align

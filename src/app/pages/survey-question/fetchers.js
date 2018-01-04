@@ -1,4 +1,5 @@
 const toUpper = require('lodash/toUpper')
+const isNil = require('lodash/isNil')
 
 const { Global } = require('../../lib/graphql')
 const { questionTypes } = require('../../lib/constants')
@@ -127,30 +128,12 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $questionId: ID!,
     ) {
       user (id: $userId) {
-        connections {
-          id
-          firstName
-          lastName
-          role {
-            name
-          }
-          company {
-            name
-          }
-          source {
-            name
-          }
-          person {
-            id
-            email
-          }
-        }
         ${hirerFragment}
       }
       ${Global}
     }
   `
-  if (query.search) {
+  if (!isNil(query.search)) {
     gql = `
       query SurveyQuestionPage (
         $userId: ID!,
@@ -190,7 +173,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
-    search: encodeURIComponent(query.search),
+    search: query.search,
     fields: [
       ['firstName', 'lastName']
     ]
