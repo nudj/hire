@@ -14,7 +14,6 @@ const ListRecommendations = ({ recommendations }) => (
           lastName={recommendation.lastName}
           role={recommendation.role}
           company={recommendation.company}
-          onClick={console.log}
         />
       </li>
     ))}
