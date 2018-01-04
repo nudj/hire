@@ -60,9 +60,13 @@ const styleSheet = StyleSheet.create({
     maxWidth: '42.375rem'
   },
   cardMedium: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
     maxWidth: '31rem'
   },
   cardSmall: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
     maxWidth: '20rem'
   },
   action: {

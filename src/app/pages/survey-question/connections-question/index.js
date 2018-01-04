@@ -1,13 +1,15 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const get = require('lodash/get')
 
-const { Text, Link, Align, Card, Input, Button } = require('@nudj/components')
+const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const { toggleConnection, updateConnectionsSearchQuery } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
+const ButtonLink = require('../../../components/button-link')
 
 function getHandleSelectConnection (dispatch) {
   return event => {
@@ -52,9 +54,6 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <Text element='div'>
-              Search by name and select from the results
-            </Text>
             <form className={css(style.form)}>
               <Input
                 name='search'
@@ -64,14 +63,15 @@ const ConnectionsQuestionPage = props => {
                 onChange={getHandleSearchChange(dispatch)}
               />
               {location.search ? (
-                <Link
+                <ButtonLink
                   style={style.searchAction}
-                  href={location.pathname}
-                  volume='murmur'
+                  href={get(props, 'location.pathname')}
+                  volume='cheer'
                   subtle
+                  preventReload={false}
                 >
                   Clear search
-                </Link>
+                </ButtonLink>
               ) : (
                 <Button style={style.searchAction} type='submit' volume='cheer'>
                   Search
@@ -87,7 +87,9 @@ const ConnectionsQuestionPage = props => {
                 connections={connections}
                 selectedConnections={selectedConnections}
               />
-            ) : ''}
+            ) : (
+              ''
+            )}
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align
@@ -97,9 +99,9 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <Link volume='cheer' href={nextUri}>
+                <ButtonLink volume='cheer' href={nextUri}>
                   Next
-                </Link>
+                </ButtonLink>
               }
             />
           </div>

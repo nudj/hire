@@ -3,7 +3,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Text, Link, Align, Card } = require('@nudj/components')
+const { Text, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
@@ -11,6 +11,7 @@ const { setNewItemValue, addFormerEmployer } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const FormCompany = require('../../../components/form-company')
+const ButtonLink = require('../../../components/button-link')
 
 function onChangeNewItem (dispatch, itemType) {
   return event => dispatch(setNewItemValue(itemType, event.name, event.value))
@@ -85,9 +86,9 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                 </Text>
               }
               rightChildren={
-                <Link volume='cheer' href={nextUri}>
+                <ButtonLink volume='cheer' href={nextUri}>
                   Next
-                </Link>
+                </ButtonLink>
               }
             />
           </div>

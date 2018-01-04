@@ -41,7 +41,6 @@ const SurveyPage = (props: SurveyProps) => {
   const survey = get(company, 'survey')
   const initialSection = get(survey, 'sections[0]')
   const initialQuestion = get(initialSection, 'questions[0]')
-  const onboardingSegment = get(user, 'hirer.onboarded') ? '' : '/onboarding'
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -71,9 +70,9 @@ const SurveyPage = (props: SurveyProps) => {
           <ButtonLink
             style={sharedStyle.action}
             volume='cheer'
-            href={`${onboardingSegment}/surveys/${survey.slug}/sections/${
-              initialSection.id
-            }/${initialQuestion.type}/${initialQuestion.id}`}
+            href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
+              initialQuestion.type
+            }/${initialQuestion.id}`}
           >
             Start
           </ButtonLink>

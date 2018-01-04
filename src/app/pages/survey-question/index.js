@@ -3,6 +3,7 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 const URLSearchParams = require('url-search-params')
+const { getFirstNonNil } = require('@nudj/library')
 
 const getNextSurveyUri = require('./getNextSurveyUri')
 const CompanyQuestionPage = require('./company-question')
@@ -27,8 +28,11 @@ const SurveyQuestionPage = props => {
   )
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
-  const searchQuery =
-    state.searchQuery !== null ? state.searchQuery : queryParams.get('search')
+  const searchQuery = getFirstNonNil(
+    state.searchQuery,
+    queryParams.get('search'),
+    ''
+  )
 
   switch (question.type) {
     case questionTypes.COMPANIES:

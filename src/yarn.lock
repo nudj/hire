@@ -39,9 +39,9 @@
     react "15.6.2"
     react-dom "15.6.2"
 
-"@nudj/components@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-1.1.0.tgz#52058d515e1137453cf444938e1139b9c49a734a"
+"@nudj/components@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.0.0.tgz#f3a18132847b6b3d0ed31406d564db86811a45f4"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -120,6 +120,15 @@
 "@nudj/library@2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.1.0.tgz#45110ebb9bb7b46bad0396b0d5ea57d08b2eafdb"
+  dependencies:
+    axios "0.16.2"
+    deepmerge "1.5.0"
+    mailbuild "^0.3.7"
+    shortid "^2.2.8"
+
+"@nudj/library@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.1.0.tgz#5b08a2be3d0db69e26718afd522909e2aedcc185"
   dependencies:
     axios "0.16.2"
     deepmerge "1.5.0"

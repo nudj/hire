@@ -7,13 +7,25 @@ const get = ({ session, params }) => {
       $surveySlug: String
     ) {
       user (id: $userId) {
+        connections {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
         hirer {
-          onboarded {
-            created
-          }
-          setOnboarded {
-            created
-          }
           company {
             survey: surveyByFilters (filters: {
               slug: $surveySlug

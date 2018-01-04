@@ -14,17 +14,16 @@ const accounts = require('./accounts')
 
 const hashLength = 16
 
-const getAccountForPerson = (person) => {
-  return accounts.getByFilters({ person })
-    .then(account => {
-      if (!account || !get(account, 'providers.google.accessToken')) {
-        throw new Unauthorized({ type: 'Google' })
-      }
-      return Promise.resolve(account.providers.google)
-    })
+const getAccountForPerson = person => {
+  return accounts.getByFilters({ person }).then(account => {
+    if (!account || !get(account, 'providers.google.accessToken')) {
+      throw new Unauthorized({ type: 'Google' })
+    }
+    return Promise.resolve(account.providers.google)
+  })
 }
 
-const formatThreadMessages = (messages) => {
+const formatThreadMessages = messages => {
   return messages.map(messageData => {
     const headers = messageData.payload.headers
     const sender = get(find(headers, { name: 'From' }), 'value')
@@ -57,10 +56,11 @@ const fetchMessagesByThread = (threadId, person) => {
     })
     .then(response => formatThreadMessages(response.messages))
     .catch(error => {
-      if (error.name !== Unauthorized.prototype.name) {
+      if (error.constructor !== Unauthorized) {
         logger.log('error', 'Error fetching thread', error)
-        return refreshAccessTokenAndContinue(refreshToken, google.getThread, { threadId })
-          .then(response => formatThreadMessages(response.messages))
+        return refreshAccessTokenAndContinue(refreshToken, google.getThread, {
+          threadId
+        }).then(response => formatThreadMessages(response.messages))
       }
       throw new Unauthorized({ type: 'Google' })
     })
@@ -77,24 +77,32 @@ const sendByThread = (email, person, threadId) => {
   return getAccountForPerson(person)
     .then(account => {
       refreshToken = account.refreshToken
-      return google.sendGmail({ email, accessToken: account.accessToken, threadId })
+      return google.sendGmail({
+        email,
+        accessToken: account.accessToken,
+        threadId
+      })
     })
     .catch(error => {
-      if (error.name !== Unauthorized.prototype.name) {
+      if (error.constructor !== Unauthorized) {
         logger.log('warn', 'Error sending to Gmail thread', error)
-        return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email, threadId })
+        return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, {
+          email,
+          threadId
+        })
       }
       throw new Unauthorized({ type: 'Google' })
     })
 }
 
 const refreshAccessTokenAndContinue = (refreshToken, callback, args) => {
-  return google.getAccessTokenFromRefreshToken(refreshToken)
+  return google
+    .getAccessTokenFromRefreshToken(refreshToken)
     .then(accessToken => {
       args.accessToken = accessToken
       return callback(args)
     })
-    .catch((error) => {
+    .catch(error => {
       logger.log('error', 'Error refreshing access token', error)
       throw new Unauthorized({ type: 'Google' })
     })
@@ -104,15 +112,17 @@ const sendGmailAndLogResponse = (email, accessToken, refreshToken) => {
   const pixelToken = createHash(hashLength)
   const trackedEmail = templater.appendTrackingToken(email, pixelToken)
 
-  return google.sendGmail({ email: trackedEmail, accessToken })
+  return google
+    .sendGmail({ email: trackedEmail, accessToken })
     .then(response => {
       logger.log('warn', 'email response', response, email)
       return merge(response, { pixelToken })
     })
     .catch(error => {
       logger.log('error', 'Error sending Gmail', error)
-      return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, { email: trackedEmail })
-        .then(response => merge(response, { pixelToken }))
+      return refreshAccessTokenAndContinue(refreshToken, google.sendGmail, {
+        email: trackedEmail
+      }).then(response => merge(response, { pixelToken }))
     })
 }
 
@@ -120,23 +130,32 @@ const send = (data, person, tags) => {
   const senderFirstName = get(data, 'person.firstName', 'FIRST_NAME')
   const senderLastName = get(data, 'person.lastName', 'SECOND_NAME')
 
-  const message = templater.render(
-    {
+  const message = templater
+    .render({
       data: getDataBuilderFor(tags, data),
-      template: get(data, 'externalMessage.composeMessage', get(data, 'template')),
-      pify: (contents) => `<p>${contents.join('')}</p>`
-    }
-  ).join('\n\n')
+      template: get(
+        data,
+        'externalMessage.composeMessage',
+        get(data, 'template')
+      ),
+      pify: contents => `<p>${contents.join('')}</p>`
+    })
+    .join('\n\n')
 
   const email = {
     body: message,
-    from: `${senderFirstName} ${senderLastName} <${get(data, 'person.email', '')}>`,
+    from: `${senderFirstName} ${senderLastName} <${get(
+      data,
+      'person.email',
+      ''
+    )}>`,
     subject: get(data, 'subject', 'Can you help me out?'),
     to: get(data, 'recipient.email')
   }
 
-  return getAccountForPerson(person)
-    .then(account => sendGmailAndLogResponse(email, account.accessToken, account.refreshToken))
+  return getAccountForPerson(person).then(account =>
+    sendGmailAndLogResponse(email, account.accessToken, account.refreshToken)
+  )
 }
 
 module.exports = {

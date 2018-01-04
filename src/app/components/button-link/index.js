@@ -6,16 +6,17 @@ const { Link: StyledLink } = require('@nudj/components')
 type Props = {
   href: string,
   onClick?: Object => void,
-  restProps?: Array<mixed>
+  restProps?: Array<mixed>,
+  preventReload?: boolean
 }
 
-const handleClick = ({ href, onClick }) => event => {
-  if (href === window.location.pathname) event.preventDefault()
+const handleClick = ({ preventReload, href, onClick }) => event => {
+  if (preventReload && href === window.location.pathname) event.preventDefault()
   typeof onClick === 'function' && onClick(event)
 }
 
 const ButtonLink = (props: Props) => {
-  const { href, ...restProps } = props
+  const { href, preventReload: _preventReload, ...restProps } = props
 
   return (
     <StyledLink
@@ -27,6 +28,10 @@ const ButtonLink = (props: Props) => {
       )}
     />
   )
+}
+
+ButtonLink.defaultProps = {
+  preventReload: true
 }
 
 module.exports = ButtonLink
