@@ -65,39 +65,16 @@ const styleSheet = StyleSheet.create({
   cardSmall: {
     maxWidth: '20rem'
   },
-  actions: {
-    alignSelf: 'flex-end',
-    bottom: sizes.regular,
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    left: 0,
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
-    position: 'absolute',
-    width: '100%',
-    [`@media(${wizardAction.center})`]: {
-      bottom: 'auto',
-      flexDirection: 'row',
-      flexGrow: 0,
-      flexShrink: 1,
-      justifyContent: 'center',
-      top: '50%',
-      transform: 'translateY(-50%)'
-    }
-  },
   action: {
-    flexBasis: '100%',
     width: '100%',
-    ':not(:first-child)': {
+    ':not(:first-of-type)': {
       marginTop: sizes.regular
     },
     [`@media(${wizardAction.center})`]: {
-      flexBasis: 'auto',
       marginLeft: sizes.smallIi,
       marginRight: sizes.smallIi,
       width: 'auto',
-      ':not(:first-child)': {
+      ':not(:first-of-type)': {
         marginTop: 0
       }
     }
