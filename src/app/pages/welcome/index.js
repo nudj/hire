@@ -16,10 +16,10 @@ const WelcomePage = () => (
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={sharedStyle.heading}>
           Welcome to nudj
         </Text>
-        <Text element="p" style={sharedStyle.subheading}>
+        <Text element='p' style={sharedStyle.subheading}>
           Before we being, we need you to complete a number of short tasks that
           will maximise your chances of finding someone awesome to hire and work
           with.
@@ -31,13 +31,13 @@ const WelcomePage = () => (
             <Card style={style.card}>
               <img
                 className={css(style.listItemImage)}
-                src="/assets/images/unlock-network.svg"
-                alt=""
+                src='/assets/images/unlock-network.svg'
+                alt=''
               />
-              <Text element="div" style={style.listItemHeading} size="largeI">
+              <Text element='div' style={style.listItemHeading} size='largeI'>
                 1. Unlock your network
               </Text>
-              <Text style={style.listItemBody} element="p">
+              <Text style={style.listItemBody} element='p'>
                 First up, we’ll help you export your connections from various
                 sources, so you can get a view of how big your network is.
               </Text>
@@ -47,13 +47,13 @@ const WelcomePage = () => (
             <Card style={style.card}>
               <img
                 className={css(style.listItemImage)}
-                src="/assets/images/uncover-gems.svg"
-                alt=""
+                src='/assets/images/uncover-gems.svg'
+                alt=''
               />
-              <Text element="div" style={style.listItemHeading} size="largeI">
+              <Text element='div' style={style.listItemHeading} size='largeI'>
                 2. Uncover gems
               </Text>
-              <Text style={style.listItemBody} element="p">
+              <Text style={style.listItemBody} element='p'>
                 We’ll then help your explore your network to uncover people
                 worth asking, who will be able to help you find your next hires.
               </Text>
@@ -63,13 +63,13 @@ const WelcomePage = () => (
             <Card style={style.card}>
               <img
                 className={css(style.listItemImage)}
-                src="/assets/images/send-nudjes.svg"
-                alt=""
+                src='/assets/images/send-nudjes.svg'
+                alt=''
               />
-              <Text element="div" style={style.listItemHeading} size="largeI">
+              <Text element='div' style={style.listItemHeading} size='largeI'>
                 3. Send nudjes
               </Text>
-              <Text style={style.listItemBody} element="p">
+              <Text style={style.listItemBody} element='p'>
                 Finally, we’ll help you help compose and send personalised
                 messages to the people you’ve identified.
               </Text>
@@ -78,8 +78,8 @@ const WelcomePage = () => (
         </ul>
         <ButtonLink
           style={[sharedStyle.action, style.button]}
-          href="/setup-network"
-          volume="cheer"
+          href='/setup-network'
+          volume='cheer'
         >
           Let's do this
         </ButtonLink>
