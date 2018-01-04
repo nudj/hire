@@ -27,8 +27,14 @@ const SurveyQuestionPage = props => {
   )
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
-  const searchQuery =
-    state.searchQuery !== null ? state.searchQuery : queryParams.get('search')
+  const searchQueryParam = queryParams.get('search')
+  let searchQuery = ''
+
+  if (state.searchQuery !== null) {
+    searchQuery = state.searchQuery
+  } else if (searchQueryParam) {
+    searchQuery = searchQueryParam
+  }
 
   switch (question.type) {
     case questionTypes.COMPANIES:
