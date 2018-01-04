@@ -50,31 +50,27 @@ const SurveyPage = (props: SurveyProps) => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text
-            element='div'
-            size='largeIi'
-            style={sharedStyle.heading}
-          >
+          <Text element="div" size="largeIi" style={sharedStyle.heading}>
             Finding awesome people to join{' '}
             <span className={css(sharedStyle.headingHighlight)}>
               {get(company, 'name', '')}
             </span>
           </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          <Text element="p" style={sharedStyle.subheading}>
             We know you want to work with awesome people that you like and
             respect. The best way to find such people is to source them from
             your network.
           </Text>
-          <Text element='p' style={sharedStyle.subheading}>
-            To help jog your memory and uncover those gems, we&#39;re now going to
-            ask you a series of questions. All you have to do is select from the
-            contacts you&#39;ve just uploaded who you feel is most relevant.
+          <Text element="p" style={sharedStyle.subheading}>
+            To help jog your memory and uncover those gems, we&#39;re now going
+            to ask you a series of questions. All you have to do is select from
+            the contacts you&#39;ve just uploaded who you feel is most relevant.
           </Text>
         </div>
-        <div className={css(sharedStyle.body, sharedStyle.actions)}>
+        <div className={css(sharedStyle.body)}>
           <ButtonLink
             style={sharedStyle.action}
-            volume='cheer'
+            volume="cheer"
             href={`${onboardingSegment}/surveys/${survey.slug}/sections/${
               initialSection.id
             }/${initialQuestion.type}/${initialQuestion.id}`}
