@@ -1,7 +1,8 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const get = require('lodash/get')
 
-const { Text, Link, Align, Card, Input, Button } = require('@nudj/components')
+const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const { toggleConnection, updateConnectionsSearchQuery } = require('../actions')
@@ -10,14 +11,14 @@ const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 const ButtonLink = require('../../../components/button-link')
 
-function getHandleSelectConnection(dispatch) {
+function getHandleSelectConnection (dispatch) {
   return event => {
     event.preventDefault()
     dispatch(toggleConnection(event.value))
   }
 }
 
-function getHandleSearchChange(dispatch) {
+function getHandleSearchChange (dispatch) {
   return ({ value }) => {
     dispatch(updateConnectionsSearchQuery(value))
   }
@@ -42,22 +43,22 @@ const ConnectionsQuestionPage = props => {
         <title>Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
-        <Text element="div" style={sharedStyle.stepCounter}>
+        <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={sharedStyle.heading}>
           {question.title}
         </Text>
-        <Text element="div" style={sharedStyle.subheading}>
+        <Text element='div' style={sharedStyle.subheading}>
           {question.description}
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
             <form className={css(style.form)}>
               <Input
-                name="search"
-                label="search"
-                type="search"
+                name='search'
+                label='search'
+                type='search'
                 value={query}
                 onChange={getHandleSearchChange(dispatch)}
               />
@@ -65,13 +66,14 @@ const ConnectionsQuestionPage = props => {
                 <ButtonLink
                   style={style.searchAction}
                   href={get(props, 'location.pathname')}
-                  volume="cheer"
+                  volume='cheer'
                   subtle
+                  preventReload={false}
                 >
                   Clear search
                 </ButtonLink>
               ) : (
-                <Button style={style.searchAction} type="submit" volume="cheer">
+                <Button style={style.searchAction} type='submit' volume='cheer'>
                   Search
                 </Button>
               )}
@@ -85,7 +87,9 @@ const ConnectionsQuestionPage = props => {
                 connections={connections}
                 selectedConnections={selectedConnections}
               />
-            ) : ''}
+            ) : (
+              ''
+            )}
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align
@@ -95,7 +99,7 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <ButtonLink volume="cheer" href={nextUri}>
+                <ButtonLink volume='cheer' href={nextUri}>
                   Next
                 </ButtonLink>
               }
