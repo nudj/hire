@@ -17,8 +17,9 @@ process.on('unhandledRejection', error => {
 })
 const path = require('path')
 const server = require('@nudj/framework/server')
+const logger = require('@nudj/framework/logger')
 
-const App = require('./redux')
+const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading/loading')
@@ -48,8 +49,8 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
-server({
-  App,
+const { app, getMockApiApps } = server({
+  App: reactApp,
   reduxRoutes,
   reduxReducers,
   mockData,
@@ -61,3 +62,19 @@ server({
   gqlFragments,
   LoadingComponent
 })
+
+app.listen(80, () => {
+  logger.log('info', 'Application running')
+})
+
+if (process.env.USE_MOCKS === 'true') {
+  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
+
+  jsonServer.listen(81, () => {
+    logger.log('info', 'JSONServer running')
+  })
+
+  gqlServer.listen(82, () => {
+    logger.log('info', 'Mock GQL running')
+  })
+}
