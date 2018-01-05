@@ -5,7 +5,11 @@ const get = require('lodash/get')
 const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const { toggleConnection, updateConnectionsSearchQuery } = require('../actions')
+const {
+  toggleConnection,
+  updateConnectionsSearchQuery,
+  saveSurveyAnswers
+} = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const ConnectionsTable = require('../../../components/connections-table')
@@ -24,9 +28,15 @@ function getHandleSearchChange (dispatch) {
   }
 }
 
+function handleSaveAnswers (dispatch, questionId) {
+  return event => {
+    event.preventDefault()
+    dispatch(saveSurveyAnswers(questionId))
+  }
+}
+
 const ConnectionsQuestionPage = props => {
   const {
-    nextUri,
     dispatch,
     questionNumber,
     questionCount,
@@ -99,9 +109,9 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <ButtonLink volume='cheer' href={nextUri}>
+                <Button style={style.searchAction} onClick={handleSaveAnswers(dispatch, question.id)} type='submit' volume='cheer'>
                   Next
-                </ButtonLink>
+                </Button>
               }
             />
           </div>

@@ -26,6 +26,7 @@ const data = {
   surveys: [],
   surveySections: [],
   surveyQuestions: [],
+  surveyAnswers: [],
   companyTasks: [],
   personTasks: [],
   tokens: [],
@@ -52,7 +53,7 @@ data.connections = data.connections.concat([
     source: 'connectionSource1',
     role: 'role1',
     person: 'person1',
-    id: '1'
+    id: 'connection1'
   },
   {
     company: 'company2',
@@ -62,7 +63,7 @@ data.connections = data.connections.concat([
     source: 'connectionSource1',
     role: 'role1',
     person: 'person6',
-    id: '2'
+    id: 'connection2'
   },
   {
     company: 'company1',
@@ -72,7 +73,7 @@ data.connections = data.connections.concat([
     source: 'connectionSource1',
     role: 'role1',
     person: 'person2',
-    id: '3'
+    id: 'connection3'
   },
   {
     company: 'company1',
@@ -82,7 +83,7 @@ data.connections = data.connections.concat([
     source: 'connectionSource1',
     role: 'role1',
     person: 'person4',
-    id: '4'
+    id: 'connection4'
   }
 ])
 data.companies = data.companies.concat([
@@ -446,6 +447,17 @@ data.surveyQuestions = data.surveyQuestions.concat([
     type: CONNECTIONS,
     required: false,
     tags: ['Account Management']
+  }
+])
+data.surveyAnswers = data.surveyAnswers.concat([
+  {
+    id: 'surveyAnswer1',
+    surveyQuestion: 'question2',
+    person: 'person5',
+    connections: [
+      'connection1',
+      'connection2'
+    ]
   }
 ])
 data.connectionSources = data.connectionSources.concat([

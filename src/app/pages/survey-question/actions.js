@@ -108,3 +108,21 @@ const updateConnectionsSearchQuery = query => ({
   query
 })
 module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
+
+module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
+  const state = getState()
+  const { selectedConnections: connections } = state.surveyQuestionPage
+  const surveySlug = get(state, 'app.user.hirer.company.survey.slug', '')
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${surveySlug}/complete`,
+        method: 'post',
+        data: {
+          surveyQuestion,
+          connections
+        }
+      }
+    )
+  )
+}
