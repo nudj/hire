@@ -2,15 +2,16 @@
 # yarn lockfile v1
 
 
-"@nudj/api@4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-4.0.1.tgz#dfb4fb30c7c16008493c38a08f7aa8e5cd7916e9"
+"@nudj/api@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-5.0.0.tgz#f820cfb35733cfb6bc78cae2ffba35eb7ec34c31"
   dependencies:
-    "@nudj/library" "2.0.0"
+    "@nudj/library" "4.0.0"
     apollo-server-express "^1.2.0"
     axios "^0.17.1"
     body-parser "1.17.2"
     date-fns "1.28.2"
+    dedent "^0.7.0"
     express "4.15.3"
     glob "^7.1.2"
     graphql "0.10.3"
@@ -20,7 +21,9 @@
     lodash "4.17.4"
     morgan "1.8.2"
     node-fetch "1.6.3"
+    pad-right "^0.2.2"
     pluralize "5.0.0"
+    random-words "^0.0.1"
     restify "4.3.0"
     semi "^4.0.5"
 
@@ -55,13 +58,13 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/framework@9.0.3":
-  version "9.0.3"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-9.0.3.tgz#c074ba4cde3f24b811762650a4344b9e27606db2"
+"@nudj/framework@10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-10.0.0.tgz#9e04a5cd93e75f52706014cd416335f175b243e5"
   dependencies:
-    "@nudj/api" "4.0.1"
+    "@nudj/api" "5.0.0"
     "@nudj/components" "1.0.0"
-    "@nudj/library" "2.1.0"
+    "@nudj/library" "4.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
     aphrodite "^1.2.0"
     axios "^0.16.1"
@@ -108,18 +111,27 @@
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
-"@nudj/library@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.0.0.tgz#3f384858b3d0ae44ff878c5f6db0299c7ba194e1"
+"@nudj/library@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.1.0.tgz#45110ebb9bb7b46bad0396b0d5ea57d08b2eafdb"
   dependencies:
     axios "0.16.2"
     deepmerge "1.5.0"
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
-"@nudj/library@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-2.1.0.tgz#45110ebb9bb7b46bad0396b0d5ea57d08b2eafdb"
+"@nudj/library@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.0.0.tgz#b2ef68d640fdd6d1ab83d382b43b5fcab12e3f52"
+  dependencies:
+    axios "0.16.2"
+    deepmerge "1.5.0"
+    mailbuild "^0.3.7"
+    shortid "^2.2.8"
+
+"@nudj/library@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.1.0.tgz#5b08a2be3d0db69e26718afd522909e2aedcc185"
   dependencies:
     axios "0.16.2"
     deepmerge "1.5.0"
