@@ -263,13 +263,13 @@ const postFormerEmployer = ({ session, params, body }) => {
 }
 
 const postConnectionAnswer = ({ session, params, body }) => {
-  let gql = `
+  const gql = `
     mutation createSurveyAnswer (
       $connections: [ID!]!
       $userId: ID!
       $surveyQuestion: ID!
     ) {
-      answer: createSurveyAnswer (
+      storeSurveyAnswer (
         surveyQuestion: $surveyQuestion
         person: $userId
         connections: $connections

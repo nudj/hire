@@ -114,7 +114,8 @@ module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const { selectedConnections: connections } = state.surveyQuestionPage
+  const { selectedConnections } = state.surveyQuestionPage
+  const connections = selectedConnections || []
   return dispatch(
     actions.app.postData(
       {

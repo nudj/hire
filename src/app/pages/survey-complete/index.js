@@ -1,4 +1,4 @@
-/* global Person */
+/* global Person SurveyAnswer */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -19,18 +19,15 @@ const getRecommendationCountString = recommendationCount => {
 
 type ViewRecommendationsProps = {
   user?: Person,
+  surveyAnswer: SurveyAnswer,
   surveyQuestionPage: {
     selectedConnections: Array<number>
   }
 }
 
 const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
-  const { user, surveyQuestionPage } = props
-
-  const selectedConnections = get(surveyQuestionPage, 'selectedConnections', [])
-  const connections = get(user, 'connections', []).filter(
-    connection => selectedConnections.indexOf(connection.id) > -1
-  )
+  const { user, surveyAnswer } = props
+  const { connections = [] } = surveyAnswer
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -70,8 +67,8 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           <div className={css(sharedStyle.body)}>
             <ButtonLink
               href={`/surveys/${get(
-                props,
-                'user.hirer.company.survey.slug',
+                user,
+                'hirer.company.survey.slug',
                 ''
               )}`}
               volume='cheer'

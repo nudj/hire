@@ -36,7 +36,7 @@ const data = {
   connections: [],
   formerEmployers: [],
   roles: [],
-  connectionSources: []
+  sources: []
 }
 data.roles = data.roles.concat([
   {
@@ -50,7 +50,7 @@ data.connections = data.connections.concat([
     firstName: 'Nicholas',
     lastName: 'Collings',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person1',
     id: 'connection1'
@@ -60,7 +60,7 @@ data.connections = data.connections.concat([
     firstName: 'Timothy',
     lastName: 'Robinson',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person6',
     id: 'connection2'
@@ -70,7 +70,7 @@ data.connections = data.connections.concat([
     firstName: 'Robyn',
     lastName: 'McGirl',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person2',
     id: 'connection3'
@@ -80,7 +80,7 @@ data.connections = data.connections.concat([
     firstName: 'Matt',
     lastName: 'Ellis',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person4',
     id: 'connection4'
@@ -460,9 +460,9 @@ data.surveyAnswers = data.surveyAnswers.concat([
     ]
   }
 ])
-data.connectionSources = data.connectionSources.concat([
+data.sources = data.sources.concat([
   {
-    id: 'connectionSource1',
+    id: 'source1',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     name: 'linkedin'
