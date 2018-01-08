@@ -109,7 +109,7 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <Button style={style.searchAction} onClick={handleSaveAnswers(dispatch, question.id)} type='submit' volume='cheer'>
+                <Button onClick={handleSaveAnswers(dispatch, question.id)} type='submit' volume='cheer'>
                   Next
                 </Button>
               }
