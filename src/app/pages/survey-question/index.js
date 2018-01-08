@@ -16,9 +16,9 @@ const SurveyQuestionPage = props => {
   const nextUri = getNextSurveyUri(survey)
   const section = get(survey, 'section')
   const allSections = get(survey, 'sections', [])
-  const question = get(section, 'question')
-  const questions = flatten(allSections.map(section => section.questions))
-  const questionIndex = findIndex(questions, { id: question.id })
+  const question = get(section, 'question', {})
+  const questions = flatten(allSections.map(section => get(section, 'questions')))
+  const questionIndex = findIndex(questions, { id: get(question, 'id') })
   const formerEmployers = get(user, 'formerEmployers', [])
   const companiesAdded = formerEmployers.concat(
     get(user, 'newFormerEmployer', [])
@@ -62,6 +62,8 @@ const SurveyQuestionPage = props => {
           query={searchQuery}
         />
       )
+    default:
+      return null
   }
 }
 
