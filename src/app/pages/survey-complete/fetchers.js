@@ -7,8 +7,7 @@ const get = ({ session, params }) => {
       $surveySlug: String
     ) {
       surveyAnswer: surveyAnswerByFilters (filters: {
-        person: "person5"
-        surveyQuestion: "question2"
+        person: $userId
       }) {
         connections {
           id
