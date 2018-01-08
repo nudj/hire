@@ -108,3 +108,26 @@ const updateConnectionsSearchQuery = query => ({
   query
 })
 module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
+
+module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
+  const state = getState()
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const { selectedConnections } = state.surveyQuestionPage
+  const connections = selectedConnections || []
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+          question.id
+        }`,
+        method: 'post',
+        data: {
+          surveyQuestion,
+          connections
+        }
+      }
+    )
+  )
+}

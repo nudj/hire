@@ -26,6 +26,7 @@ const data = {
   surveys: [],
   surveySections: [],
   surveyQuestions: [],
+  surveyAnswers: [],
   companyTasks: [],
   personTasks: [],
   tokens: [],
@@ -35,7 +36,7 @@ const data = {
   connections: [],
   formerEmployers: [],
   roles: [],
-  connectionSources: []
+  sources: []
 }
 data.roles = data.roles.concat([
   {
@@ -49,40 +50,40 @@ data.connections = data.connections.concat([
     firstName: 'Nicholas',
     lastName: 'Collings',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person1',
-    id: '1'
+    id: 'connection1'
   },
   {
     company: 'company2',
     firstName: 'Timothy',
     lastName: 'Robinson',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person6',
-    id: '2'
+    id: 'connection2'
   },
   {
     company: 'company1',
     firstName: 'Robyn',
     lastName: 'McGirl',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person2',
-    id: '3'
+    id: 'connection3'
   },
   {
     company: 'company1',
     firstName: 'Matt',
     lastName: 'Ellis',
     from: 'person5',
-    source: 'connectionSource1',
+    source: 'source1',
     role: 'role1',
     person: 'person4',
-    id: '4'
+    id: 'connection4'
   }
 ])
 data.companies = data.companies.concat([
@@ -448,9 +449,20 @@ data.surveyQuestions = data.surveyQuestions.concat([
     tags: ['Account Management']
   }
 ])
-data.connectionSources = data.connectionSources.concat([
+data.surveyAnswers = data.surveyAnswers.concat([
   {
-    id: 'connectionSource1',
+    id: 'surveyAnswer1',
+    surveyQuestion: 'question2',
+    person: 'person5',
+    connections: [
+      'connection1',
+      'connection2'
+    ]
+  }
+])
+data.sources = data.sources.concat([
+  {
+    id: 'source1',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     name: 'linkedin'

@@ -31,3 +31,10 @@ declare type SurveyQuestion = {
   type?: SurveyQuestionType,
   required?: boolean
 }
+
+declare type SurveyAnswer = {
+  id?: ID,
+  surveyQuestion?: SurveyQuestion,
+  person?: Person,
+  connections?: Array<Connection>
+}

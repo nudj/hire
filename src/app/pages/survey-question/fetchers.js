@@ -1,5 +1,6 @@
 const toUpper = require('lodash/toUpper')
 const isNil = require('lodash/isNil')
+const { Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
 const { questionTypes } = require('../../lib/constants')
@@ -261,106 +262,39 @@ const postFormerEmployer = ({ session, params, body }) => {
   return { gql, variables }
 }
 
-const postConnection = ({ session, params, body }) => {
+const postConnectionAnswer = ({ session, params, body }) => {
   const gql = `
-    mutation AddConnection (
-      $userId: ID!,
-      $surveySlug: String,
-      $sectionId: ID!,
-      $questionId: ID!,
-      $connection: PersonCreateInput!,
-      $source: String!
+    mutation createSurveyAnswer (
+      $connections: [ID!]!
+      $userId: ID!
+      $surveyQuestion: ID!
     ) {
-      user (id: $userId) {
-        newConnection: getOrCreateConnection (
-          to: $connection,
-          source: $source
-        ) {
-          id
-          firstName
-          lastName
-          role {
-            name
-          }
-          company {
-            name
-          }
-          source {
-            name
-          }
-          person {
-            id
-            email
-          }
-        }
-        connections {
-          id
-          firstName
-          lastName
-          role {
-            name
-          }
-          company {
-            name
-          }
-          source {
-            name
-          }
-          person {
-            id
-            email
-          }
-        }
-        hirer {
-          company {
-            survey: surveyByFilters (filters: {
-              slug: $surveySlug
-            }) {
-              id
-              slug
-              sections: surveySections {
-                id
-              }
-              section: surveySectionById (
-                id: $sectionId
-              ) {
-                id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionById (
-                  id: $questionId
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                  tags
-                }
-              }
-            }
-          }
-        }
+      storeSurveyAnswer (
+        surveyQuestion: $surveyQuestion
+        person: $userId
+        connections: $connections
+      ) {
+        id
       }
-      ${Global}
     }
   `
   const variables = {
     userId: session.userId,
+    surveyQuestion: params.questionId,
+    connections: body.connections,
     surveySlug: params.surveySlug,
-    sectionId: params.sectionId,
-    questionId: params.questionId,
-    connection: body.connection,
-    source: body.source
+    sectionId: params.sectionId
   }
-  return { gql, variables }
+  const respond = (data) => {
+    throw new Redirect({
+      url: `/surveys/${params.surveySlug}/complete`
+    })
+  }
+  return { gql, variables, respond }
 }
 
 module.exports = {
   getQuestion,
   postFormerEmployer,
-  postConnection
+  postConnectionAnswer
 }
