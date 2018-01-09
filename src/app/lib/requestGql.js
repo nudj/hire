@@ -19,7 +19,6 @@ async function request (query, variables) {
     }
     return response.data
   } catch (error) {
-    console.log(error)
     get(error, 'response.data.errors', []).forEach(error =>
       logger.log('error', error)
     )
