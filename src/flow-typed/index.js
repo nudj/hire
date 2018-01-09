@@ -5,3 +5,5 @@ declare module StyleFile {
 declare type ID = string | number
 
 declare type Style = Object | Array<Object>
+
+declare type FormMethod = 'post' | 'get'
