@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@nudj/api@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-5.0.0.tgz#f820cfb35733cfb6bc78cae2ffba35eb7ec34c31"
+"@nudj/api@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-6.1.0.tgz#b555dc2104ffb0e26fde42aac2a4dcbae74c8d38"
   dependencies:
     "@nudj/library" "4.0.0"
     apollo-server-express "^1.2.0"
@@ -58,11 +58,11 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/framework@10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-10.0.0.tgz#9e04a5cd93e75f52706014cd416335f175b243e5"
+"@nudj/framework@11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-11.1.0.tgz#b96d908a374bd96a86d50f93ef7fecf48e1628e1"
   dependencies:
-    "@nudj/api" "5.0.0"
+    "@nudj/api" "6.1.0"
     "@nudj/components" "1.0.0"
     "@nudj/library" "4.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
