@@ -30,7 +30,7 @@ const uploadConnections = ({ session, body, files }) => {
     mutation ImportPage (
       $userId: ID!,
       $taskType: TaskType!,
-      $connections: [PersonCreateInput!]!,
+      $connections: [ConnectionCreateInput!]!,
       $source: String!
     ) {
       user (id: $userId) {
