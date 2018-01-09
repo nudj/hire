@@ -23,9 +23,12 @@ const getCompaniesQuestion = ({ session, params, query }) => {
       $questionId: ID!
     ) {
       user (id: $userId) {
-        formerEmployers {
+        employments {
           id
-          source
+          source {
+            id
+            name
+          }
           company {
             id
             name
@@ -45,16 +48,20 @@ const getCompaniesQuestion = ({ session, params, query }) => {
                   type
                 }
               }
-              section: surveySectionById (
-                id: $sectionId
+              section: surveySectionByFilters (
+                filters: {
+                  id: $sectionId
+                }
               ) {
                 id
                 questions: surveyQuestions {
                   id
                   type
                 }
-                question: surveyQuestionById (
-                  id: $questionId
+                question: surveyQuestionByFilters (
+                  filters: {
+                    id: $questionId
+                  }
                 ) {
                   id
                   title
@@ -62,7 +69,6 @@ const getCompaniesQuestion = ({ session, params, query }) => {
                   name
                   type
                   required
-                  tags
                 }
               }
             }
@@ -97,16 +103,20 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               type
             }
           }
-          section: surveySectionById (
-            id: $sectionId
+          section: surveySectionByFilters (
+            filters: {
+              id: $sectionId
+            }
           ) {
             id
             questions: surveyQuestions {
               id
               type
             }
-            question: surveyQuestionById (
-              id: $questionId
+            question: surveyQuestionByFilters (
+              filters: {
+                id: $questionId
+              }
             ) {
               id
               title
@@ -114,7 +124,6 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               name
               type
               required
-              tags
             }
           }
         }
@@ -180,31 +189,35 @@ const getConnectionsQuestion = ({ session, params, query }) => {
   return { gql, variables }
 }
 
-const postFormerEmployer = ({ session, params, body }) => {
+const postEmployment = ({ session, params, body }) => {
   const gql = `
-    mutation AddFormerEmployer (
+    mutation AddEmployment (
       $userId: ID!,
       $surveySlug: String,
       $sectionId: ID!,
       $questionId: ID!,
-      $formerEmployer: CompanyCreateInput!,
+      $company: String!,
       $source: String!
     ) {
       user (id: $userId) {
-        newFormerEmployer: getOrCreateFormerEmployer (
-          formerEmployer: $formerEmployer,
+        newEmployment: getOrCreateEmployment (
+          company: $company,
           source: $source
         ) {
           id
-          source
+          source {
+            name
+          }
           company {
             id
             name
           }
         }
-        formerEmployers {
+        employments {
           id
-          source
+          source {
+            name
+          }
           company {
             id
             name
@@ -224,16 +237,20 @@ const postFormerEmployer = ({ session, params, body }) => {
                   type
                 }
               }
-              section: surveySectionById (
-                id: $sectionId
+              section: surveySectionByFilters (
+                filters: {
+                  id: $sectionId
+                }
               ) {
                 id
                 questions: surveyQuestions {
                   id
                   type
                 }
-                question: surveyQuestionById (
-                  id: $questionId
+                question: surveyQuestionByFilters (
+                  filters: {
+                    id: $questionId
+                  }
                 ) {
                   id
                   title
@@ -241,7 +258,6 @@ const postFormerEmployer = ({ session, params, body }) => {
                   name
                   type
                   required
-                  tags
                 }
               }
             }
@@ -256,7 +272,7 @@ const postFormerEmployer = ({ session, params, body }) => {
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
-    formerEmployer: body.formerEmployer,
+    company: body.employment,
     source: body.source
   }
   return { gql, variables }
@@ -295,6 +311,6 @@ const postConnectionAnswer = ({ session, params, body }) => {
 
 module.exports = {
   getQuestion,
-  postFormerEmployer,
+  postEmployment,
   postConnectionAnswer
 }

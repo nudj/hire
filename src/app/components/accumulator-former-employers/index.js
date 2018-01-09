@@ -22,16 +22,16 @@ const cellRenderer = (column, row, defaultValue) => {
   }
 }
 
-const AccumulatorFormerEmployers = props => {
-  const formerEmployers = get(props, 'formerEmployers')
+const AccumulatorEmployments = props => {
+  const employments = get(props, 'employments')
 
   return (
     <Table
-      data={formerEmployers}
+      data={employments}
       columns={columns}
       cellRenderer={cellRenderer}
     />
   )
 }
 
-module.exports = AccumulatorFormerEmployers
+module.exports = AccumulatorEmployments

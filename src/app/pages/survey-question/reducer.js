@@ -47,10 +47,10 @@ const addConnection = (state, action) => {
   })
 }
 
-const addFormerEmployer = (state, action) =>
+const addEmployment = (state, action) =>
   Object.assign({}, state, {
-    formerEmployers: get(state, 'formerEmployers', []).concat(action.newItem),
-    newFormerEmployer: {}
+    employments: get(state, 'employments', []).concat(action.newItem),
+    newEmployment: {}
   })
 
 const updateConnectionsSearchQuery = (state, { query }) => ({
@@ -61,15 +61,15 @@ const updateConnectionsSearchQuery = (state, { query }) => ({
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [TOGGLE_CONNECTION]: toggleConnection,
-  [ADD_FORMER_EMPLOYER]: addFormerEmployer,
+  [ADD_FORMER_EMPLOYER]: addEmployment,
   [ADD_CONNECTION]: addConnection,
   [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery
 }
 
 const initialState = {
   selectedConnections: [],
-  newFormerEmployer: {},
-  formerEmployers: [],
+  newEmployment: {},
+  employments: [],
   newConnection: {},
   connections: [],
   searchQuery: null

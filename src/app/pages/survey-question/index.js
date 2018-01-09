@@ -19,9 +19,9 @@ const SurveyQuestionPage = props => {
   const question = get(section, 'question', {})
   const questions = flatten(allSections.map(section => get(section, 'questions')))
   const questionIndex = findIndex(questions, { id: get(question, 'id') })
-  const formerEmployers = get(user, 'formerEmployers', [])
-  const companiesAdded = formerEmployers.concat(
-    get(user, 'newFormerEmployer', [])
+  const employments = get(user, 'employments', [])
+  const companiesAdded = employments.concat(
+    get(user, 'newEmployment', [])
   )
   const connections = get(user, 'connections', []).concat(
     get(user, 'newConnection', [])
@@ -45,7 +45,7 @@ const SurveyQuestionPage = props => {
           companies={companiesAdded}
           dispatch={dispatch}
           nextUri={nextUri}
-          formerEmployer={get(state, 'newFormerEmployer', {})}
+          employment={get(state, 'newEmployment', {})}
         />
       )
     case questionTypes.CONNECTIONS:

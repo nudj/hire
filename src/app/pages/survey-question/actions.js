@@ -55,19 +55,19 @@ module.exports.addConnection = questionId => (dispatch, getState) => {
 
 const ADD_FORMER_EMPLOYER = `${PREFIX}_ADD_FORMER_EMPLOYER`
 module.exports.ADD_FORMER_EMPLOYER = ADD_FORMER_EMPLOYER
-function addFormerEmployer (questionId, newItem) {
+function addEmployment (questionId, newItem) {
   return {
     type: ADD_FORMER_EMPLOYER,
     questionId,
     newItem
   }
 }
-module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
+module.exports.addEmployment = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const formerEmployer = get(state, 'surveyQuestionPage.newFormerEmployer')
+  const employment = get(state, 'surveyQuestionPage.newEmployment')
   return dispatch(
     actions.app.postData(
       {
@@ -76,14 +76,14 @@ module.exports.addFormerEmployer = questionId => (dispatch, getState) => {
         }`,
         method: 'post',
         data: {
-          formerEmployer,
+          employment: employment.name,
           source: 'survey'
         }
       },
       () => {
         const state = getState()
-        const newFormerEmployer = get(state, 'app.user.newFormerEmployer')
-        dispatch(addFormerEmployer(questionId, newFormerEmployer))
+        const newEmployment = get(state, 'app.user.newEmployment')
+        dispatch(addEmployment(questionId, newEmployment))
       }
     )
   )
