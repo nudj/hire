@@ -9,10 +9,10 @@ declare type Person = {
   type?: string,
   url?: string,
   hirer?: Hirer,
-  formerEmployers?: Array<FormerEmployer>
+  employments?: Array<Employment>
 }
 
-declare type FormerEmployer = {
+declare type Employment = {
   id?: ID,
   name?: string,
   company?: Company,

@@ -7,7 +7,7 @@ const { Text, Align, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
-const { setNewItemValue, addFormerEmployer } = require('../actions')
+const { setNewItemValue, addEmployment } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
 const FormCompany = require('../../../components/form-company')
@@ -20,7 +20,7 @@ function onChangeNewItem (dispatch, itemType) {
 function onAddCompany (dispatch, questionId) {
   return event => {
     event.preventDefault()
-    dispatch(addFormerEmployer(questionId))
+    dispatch(addEmployment(questionId))
   }
 }
 
@@ -30,7 +30,7 @@ type CompanyQuestionProps = {
   companies: Array<Company>,
   questionCount: number,
   questionNumber: number,
-  formerEmployer: Company,
+  employment: Company,
   dispatch: Function
 }
 
@@ -42,7 +42,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
     dispatch,
     companies,
     nextUri,
-    formerEmployer
+    employment
   } = props
 
   return (
@@ -73,9 +73,9 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
             )}
           >
             <FormCompany
-              onChange={onChangeNewItem(dispatch, 'newFormerEmployer')}
+              onChange={onChangeNewItem(dispatch, 'newEmployment')}
               onSubmit={onAddCompany(dispatch, question.id)}
-              company={formerEmployer}
+              company={employment}
             />
           </Card>
           <div className={css(sharedStyle.footer)}>
