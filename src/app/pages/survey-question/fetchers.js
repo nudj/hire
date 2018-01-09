@@ -103,16 +103,20 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               type
             }
           }
-          section: surveySectionById (
-            id: $sectionId
+          section: surveySectionByFilters (
+            filters: {
+              id: $sectionId
+            }
           ) {
             id
             questions: surveyQuestions {
               id
               type
             }
-            question: surveyQuestionById (
-              id: $questionId
+            question: surveyQuestionByFilters (
+              filters: {
+                id: $questionId
+              }
             ) {
               id
               title
@@ -120,7 +124,6 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               name
               type
               required
-              tags
             }
           }
         }
@@ -282,12 +285,91 @@ const postConnectionAnswer = ({ session, params, body }) => {
       $userId: ID!
       $surveyQuestion: ID!
     ) {
+<<<<<<< HEAD
       storeSurveyAnswer (
         surveyQuestion: $surveyQuestion
         person: $userId
         connections: $connections
       ) {
         id
+=======
+      user (id: $userId) {
+        newConnection: getOrCreateConnection (
+          to: $connection,
+          source: $source
+        ) {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
+        connections {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
+        hirer {
+          company {
+            survey: surveyByFilters (filters: {
+              slug: $surveySlug
+            }) {
+              id
+              slug
+              sections: surveySections {
+                id
+              }
+              section: surveySectionByFilters (
+                filters: {
+                  id: $sectionId
+                }
+              ) {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+                question: surveyQuestionByFilters (
+                  filters: {
+                    id: $questionId
+                  }
+                ) {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                }
+              }
+            }
+          }
+        }
+>>>>>>> Update fetcher on connections question page
       }
     }
   `
