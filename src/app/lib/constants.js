@@ -23,10 +23,16 @@ const taskTypes = {
   UNLOCK_NETWORK_LINKEDIN: 'UNLOCK_NETWORK_LINKEDIN'
 }
 
+const emailProviderPreferenceTypes = {
+  GOOGLE: 'GOOGLE',
+  OTHER: 'OTHER'
+}
+
 module.exports = {
   surveyTypes,
   taskTypes,
   notificationTypes,
   booleanChoices,
-  questionTypes
+  questionTypes,
+  emailProviderPreferenceTypes
 }

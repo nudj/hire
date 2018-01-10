@@ -187,7 +187,8 @@ data.people = data.people.concat([
     title: 'Tech Lead',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   },
   {
     id: 'person2',
@@ -200,7 +201,8 @@ data.people = data.people.concat([
     title: 'CEO',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   },
   {
     id: 'person3',
@@ -213,7 +215,8 @@ data.people = data.people.concat([
     title: 'Head of Product',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   },
   {
     id: 'person4',
@@ -226,7 +229,8 @@ data.people = data.people.concat([
     title: 'Design Wizard',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   },
   {
     id: 'person5',
@@ -239,7 +243,8 @@ data.people = data.people.concat([
     title: 'Senior Fake User',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   },
   {
     id: 'person6',
@@ -252,7 +257,8 @@ data.people = data.people.concat([
     title: 'Junior Fake User',
     type: 'external',
     company: 'nudj',
-    status: 'user'
+    status: 'user',
+    emailPreference: null
   }
 ])
 data.hirers = data.hirers.concat([

@@ -9,6 +9,9 @@ const styleSheet = StyleSheet.create({
     ':nth-child(n + 2)': {
       marginTop: sizes.regular
     }
+  },
+  modalWindow: {
+    height: 'auto'
   }
 })
 
