@@ -3,8 +3,9 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const { Input, InputField, Button } = require('@nudj/components')
+const { Input, Text, Button } = require('@nudj/components')
 const style = require('./style.css')
+const { css } = require('@nudj/components/lib/css')
 
 type CompanyFormProps = {
   company: Company,
@@ -16,15 +17,14 @@ const AddCompanyForm = (props: CompanyFormProps) => {
   const { onChange, company, onSubmit } = props
 
   return (
-    <form onSubmit={onSubmit}>
-      <InputField label='Company name' htmlFor='name' required>
-        <Input
-          id='name'
-          value={get(company, 'name', '')}
-          name='name'
-          onChange={onChange}
-        />
-      </InputField>
+    <form onSubmit={onSubmit} className={css(style.form)}>
+      <Input
+        id='name'
+        value={get(company, 'name', '')}
+        name='name'
+        onChange={onChange}
+        required
+      />
       <Button
         type='submit'
         volume='cheer'

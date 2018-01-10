@@ -36,6 +36,7 @@ const styleSheet = StyleSheet.create({
     height: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginTop: sizes.regular,
     maxHeight: '10.625rem',
     maxWidth: '10.625rem',
     width: '100%'

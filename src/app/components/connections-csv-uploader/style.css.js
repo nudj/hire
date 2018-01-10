@@ -28,25 +28,51 @@ const styleSheet = StyleSheet.create({
     width: '100%',
     textAlign: 'center'
   },
-  pointIllustration: {
-    width: '20.625rem',
+  copyTop: {
     position: 'absolute',
-    top: 0,
-    right: '50%',
-    transform: 'rotate(-70deg) translate(26%, 500%)',
-    transition: 'transform 150ms ease-in-out'
+    top: sizes.largeIii,
+    left: 0,
+    width: '100%',
+    textAlign: 'center'
   },
-  pointActive: {
-    transform: 'rotate(-70deg) translate(24%, 500%)'
+  pointIllustration: {
+    backgroundImage: 'url(/assets/images/point-hand-1.svg)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '35rem',
+    content: '""',
+    display: 'block',
+    height: '100%',
+    left: 'calc(50% - 3rem)',
+    margin: '0',
+    position: 'absolute',
+    top: '-60%',
+    width: '100%',
+    transform: 'rotate(-70deg)'
+  },
+  thumbsDownIllustration: {
+    backgroundImage: 'url(/assets/images/thumbs-up-hand-1.svg)',
+    backgroundPosition: 'right center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '30rem',
+    content: '""',
+    display: 'block',
+    height: '75%',
+    right: 'auto',
+    left: 'calc(50% - 2rem)',
+    margin: '0',
+    position: 'absolute',
+    top: '0',
+    width: 'calc(50% + 3rem)',
+    transform: 'rotate(-180deg)'
   },
   thumbsUpIllustration: {
     backgroundImage: 'url(/assets/images/thumbs-up-hand-1.svg)',
     backgroundPosition: 'right center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: 'auto',
+    backgroundSize: '30rem',
     content: '""',
     display: 'block',
-    height: '70%',
+    height: '65%',
     left: 'auto',
     right: 'calc(50% - 3rem)',
     margin: '0',
@@ -54,8 +80,20 @@ const styleSheet = StyleSheet.create({
     top: '0',
     width: 'calc(50% + 3rem)'
   },
-  browseLink: {
-    marginTop: sizes.largeIi
+  okHandIllustration: {
+    backgroundImage: 'url(/assets/images/ok-hand.svg)',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '12rem',
+    content: '""',
+    display: 'block',
+    height: '100%',
+    left: 'auto',
+    right: 'calc(50% - 3rem)',
+    margin: '0',
+    position: 'absolute',
+    top: '30%',
+    width: 'calc(50% - 3rem)'
   }
 })
 

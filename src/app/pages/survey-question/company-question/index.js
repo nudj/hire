@@ -68,10 +68,12 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           <Card
             style={merge(
               sharedStyle.card,
-              sharedStyle.cardSmall,
               style.formCard
             )}
           >
+          <Text element='label' size='smallI' style={style.labelCopy}>
+            Add all the companies you’ve worked at previously
+          </Text>
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newEmployment')}
               onSubmit={onAddCompany(dispatch, question.id)}

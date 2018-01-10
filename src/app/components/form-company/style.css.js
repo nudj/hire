@@ -8,6 +8,11 @@ const stylesheet = StyleSheet.create({
     [`@media(${wizardAction.center})`]: {
       width: 'auto'
     }
+  },
+  form: {
+    marginTop: sizes.regular,
+    marginLeft: sizes.largeIi,
+    marginRight: sizes.largeIi
   }
 })
 
