@@ -11,6 +11,10 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
     '/conversations/new/:connectionId',
     respondWithGql(fetchers.getActiveJobs)
   )
+  router.getHandlers(
+    '/conversations/new/:connectionId/:jobId',
+    respondWithGql(fetchers.getMessageTemplate)
+  )
 
   return router
 }

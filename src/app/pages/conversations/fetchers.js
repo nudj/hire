@@ -31,6 +31,39 @@ const getActiveJobs = (props) => {
   return { gql, variables }
 }
 
+const getMessageTemplate = (props) => {
+  const { session, params } = props
+
+  const gql = `
+    query getTemplateAndDetails($userId: ID!, $connectionId: ID!, $jobId: ID!) {
+      user(id: $userId) {
+        firstName
+        hirer {
+          company {
+            job: jobByFilters(filters: {id: $jobId}) {
+              title
+              url
+              templateTags
+            }
+          }
+        }
+        connection: connectionByFilters(filters: {id: $connectionId}) {
+          firstName
+        }
+      }
+      template: fetchTemplate(repo: "hirer", type: "composemessage", tags: ["formal", "new"])
+    }
+  `
+
+  const variables = {
+    userId: session.userId,
+    connectionId: params.connectionId,
+    jobId: params.jobId
+  }
+
+  return { gql, variables }
+}
+
 const get = ({
   session
 }) => {
@@ -47,5 +80,6 @@ const get = ({
 
 module.exports = {
   get,
-  getActiveJobs
+  getActiveJobs,
+  getMessageTemplate
 }

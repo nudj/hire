@@ -13,5 +13,6 @@ module.exports = {
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
   '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
   '/conversations': require('../pages/conversations'),
-  '/conversations/new/:connectionId': require('../pages/conversations/new-conversation')
+  '/conversations/new/:connectionId': require('../pages/conversations/new-conversation'),
+  '/conversations/new/:connectionId/:jobId': require('../pages/conversations/compose-message')
 }
