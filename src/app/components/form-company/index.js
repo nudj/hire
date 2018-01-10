@@ -3,7 +3,7 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const { Input, Text, Button } = require('@nudj/components')
+const { Input, Button } = require('@nudj/components')
 const style = require('./style.css')
 const { css } = require('@nudj/components/lib/css')
 

@@ -71,9 +71,9 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
               style.formCard
             )}
           >
-          <Text element='label' size='smallI' style={style.labelCopy}>
-            Add all the companies you’ve worked at previously
-          </Text>
+            <Text element='label' size='smallI' style={style.labelCopy}>
+              Add all the companies you’ve worked at previously
+            </Text>
             <FormCompany
               onChange={onChangeNewItem(dispatch, 'newEmployment')}
               onSubmit={onAddCompany(dispatch, question.id)}

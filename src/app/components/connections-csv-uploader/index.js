@@ -3,9 +3,6 @@
 const React = require('react')
 const { css } = require('@nudj/components/lib/css')
 const { Dropzone, Text, Loader } = require('@nudj/components')
-const {
-  linkStyleSheet
-} = require('@nudj/components/lib/components/inline-action/style.css')
 
 const style = require('./style.css')
 
@@ -82,7 +79,7 @@ const ConnectionsCsvUploader = (props: Props) => {
           )
         }
 
-        if (isDragActive > 0) {
+        if (isDragActive) {
           return (
             <div className={css(style.dropzone)}>
               <div className={css(style.copyTop)}>

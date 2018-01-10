@@ -84,7 +84,7 @@ const styleSheet = StyleSheet.create({
     backgroundImage: 'url(/assets/images/ok-hand.svg)',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: '12rem',
+    backgroundSize: '10rem',
     content: '""',
     display: 'block',
     height: '100%',

@@ -11,8 +11,8 @@ const stylesheet = StyleSheet.create({
   },
   form: {
     marginTop: sizes.regular,
-    marginLeft: sizes.largeIi,
-    marginRight: sizes.largeIi
+    marginLeft: sizes.largeIii,
+    marginRight: sizes.largeIii
   }
 })
 
