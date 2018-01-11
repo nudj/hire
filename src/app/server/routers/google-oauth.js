@@ -53,8 +53,7 @@ const authenticationFailureHandler = (req, res, next) => {
 }
 
 const Router = ({
-  ensureLoggedIn,
-  respondWithGql
+  ensureLoggedIn
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
