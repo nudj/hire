@@ -62,7 +62,7 @@ const get = ({ session, params }) => {
   return { gql, variables }
 }
 
-const setEmailPreference = ({ body, query, session }) => {
+const setEmailPreference = ({ body, params, query, session }) => {
   const gql = `
     mutation SetEmailPreference(
       $userId: ID!,
@@ -120,6 +120,7 @@ const setEmailPreference = ({ body, query, session }) => {
 
   const variables = {
     userId: session.userId,
+    surveySlug: params.surveySlug,
     data: {
       emailPreference: body.emailProvider
     }
@@ -128,14 +129,14 @@ const setEmailPreference = ({ body, query, session }) => {
   const respond = data => {
     if (body.emailProvider === emailProviderPreferenceTypes.GOOGLE) {
       session.returnTo = `/conversations/new/${query.id}`
-      session.returnFail = `/connections?id=${query.id}`
+      session.returnFail = `/surveys/${params.surveySlug}/complete`
       throw new Redirect({
         url: '/auth/google'
       })
     }
 
     throw new Redirect({
-      url: `/connections?id=${query.id}`
+      url: `/conversations/new/${query.id}`
     })
   }
 

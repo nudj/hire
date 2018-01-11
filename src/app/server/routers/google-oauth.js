@@ -11,7 +11,7 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_AUTH_CALLBACK,
   passReqToCallback: true
 },
-(req, accessToken, refreshToken, profile, cb) => {
+async (req, accessToken, refreshToken, profile, cb) => {
   const query = `
     mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID!) {
       user (id: $userId) {
@@ -29,7 +29,8 @@ passport.use(new GoogleStrategy({
       refreshToken
     }
   }
-  return requestGql(query, variables).then(() => cb(null, {}))
+  await requestGql(query, variables)
+  return cb(null, {})
 }))
 
 const googleAuthentication = passport.authorize('google', {
