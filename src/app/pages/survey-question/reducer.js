@@ -8,6 +8,7 @@ const {
   ADD_CONNECTION,
   ADD_FORMER_EMPLOYER,
   TOGGLE_CONNECTION,
+  SET_SELECTED_CONNECTIONS,
   UPDATE_CONNECTIONS_SEARCH_QUERY
 } = require('./actions')
 
@@ -19,19 +20,10 @@ const setNewItemValue = (state, action) => {
   })
 }
 
-const toggleConnection = (state, action) => {
-  let selectedConnections = concat(
-    state.selectedConnections,
-    action.connectionId
-  )
-  if (state.selectedConnections.includes(action.connectionId)) {
-    selectedConnections = without(
-      state.selectedConnections,
-      action.connectionId
-    )
-  }
-  return { ...state, selectedConnections }
-}
+const setSelectedConnections = (state, action) => ({
+  ...state,
+  selectedConnections: action.connections
+})
 
 const addConnection = (state, action) => {
   const questions = merge(state.questions)
@@ -60,10 +52,10 @@ const updateConnectionsSearchQuery = (state, { query }) => ({
 
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
-  [TOGGLE_CONNECTION]: toggleConnection,
   [ADD_FORMER_EMPLOYER]: addEmployment,
   [ADD_CONNECTION]: addConnection,
-  [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery
+  [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery,
+  [SET_SELECTED_CONNECTIONS]: setSelectedConnections
 }
 
 const initialState = {

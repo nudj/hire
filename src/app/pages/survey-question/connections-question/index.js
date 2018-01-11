@@ -8,16 +8,17 @@ const { css } = require('@nudj/components/lib/css')
 const {
   toggleConnection,
   updateConnectionsSearchQuery,
-  saveSurveyAnswers
+  saveSurveyAnswers,
+  setSelectedConnections
 } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 const ButtonLink = require('../../../components/button-link')
 
-const getHandleSelectConnection = (dispatch) => event => {
-  event.preventDefault()
-  dispatch(toggleConnection(event.value))
+const getHandleSetConnections = dispatch => (e) => {
+  e.preventDefault()
+  dispatch(setSelectedConnections(e.value))
 }
 
 const getHandleSearchChange = (dispatch) => ({ value }) => {
@@ -91,9 +92,10 @@ const ConnectionsQuestionPage = props => {
                 styleSheet={{
                   root: style.table
                 }}
-                onSelect={getHandleSelectConnection(dispatch)}
+                onSelect={getHandleSetConnections(dispatch)}
                 connections={connections}
                 selectedConnections={selectedConnections}
+                multiple
               />
             ) : (
               ''
