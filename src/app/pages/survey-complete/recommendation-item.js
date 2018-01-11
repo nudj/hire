@@ -9,7 +9,7 @@ const RecommendationItem = ({ id, ...contact }) => (
     jobTitle={contact.role.name}
     company={contact.company.name}
   >
-    <ButtonLink href='/connections' volume='cheer'>
+    <ButtonLink href={`?id=${id}`} volume='cheer'>
       Message
     </ButtonLink>
   </ContactCard>

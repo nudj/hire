@@ -1,15 +1,18 @@
-/* global Person SurveyAnswer */
+/* global Person SurveyAnswer Location */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const URLSearchParams = require('url-search-params')
 
-const { Text } = require('@nudj/components')
+const { Modal, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const sharedStyle = require('../shared.css')
 
+const style = require('./style.css')
+const sharedStyle = require('../shared.css')
 const ListRecommendations = require('./list-recommendations')
 const ButtonLink = require('../../components/button-link')
+const EmailAuthForm = require('../../components/email-authentication-form')
 
 const getRecommendationCountString = recommendationCount => {
   if (recommendationCount === 1) return `${recommendationCount} person`
@@ -22,12 +25,23 @@ type ViewRecommendationsProps = {
   surveyAnswer: SurveyAnswer,
   surveyQuestionPage: {
     selectedConnections: Array<number>
+  },
+  surveyCompletePage: {
+    googleAuthModalOpen: boolean
+  },
+  location: Location,
+  app: {
+    csrfToken: string
   }
 }
 
 const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const { user, surveyAnswer } = props
   const { connections = [] } = surveyAnswer
+
+  const csrfToken = get(props, 'csrfToken')
+  const queryParams = new URLSearchParams(get(props, 'location.search', ''))
+  const selectedContactId = queryParams.get('id')
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -51,6 +65,13 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           <div className={css(sharedStyle.body, sharedStyle.cardMedium)}>
             <ListRecommendations recommendations={connections} />
           </div>
+          <Modal isOpen={!!selectedContactId} style={style.modalWindow}>
+            <EmailAuthForm
+              csrfToken={csrfToken}
+              action={`?id=${selectedContactId}`}
+              method='post'
+            />
+          </Modal>
         </div>
       ) : (
         <div className={css(sharedStyle.wrapper)}>
@@ -66,11 +87,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           </div>
           <div className={css(sharedStyle.body)}>
             <ButtonLink
-              href={`/surveys/${get(
-                user,
-                'hirer.company.survey.slug',
-                ''
-              )}`}
+              href={`/surveys/${get(user, 'hirer.company.survey.slug', '')}`}
               volume='cheer'
             >
               Take survey again

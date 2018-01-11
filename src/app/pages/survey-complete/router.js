@@ -6,8 +6,14 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/surveys/:surveySlug/complete', respondWithGql(fetchers.get))
-  router.getHandlers('/onboarding/surveys/:surveySlug/complete', respondWithGql(fetchers.get))
+  router.getHandlers(
+    '/surveys/:surveySlug/complete',
+    respondWithGql(fetchers.get)
+  )
+  router.postHandlers(
+    '/surveys/:surveySlug/complete',
+    respondWithGql(fetchers.setEmailPreference)
+  )
 
   return router
 }
