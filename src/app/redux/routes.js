@@ -12,5 +12,6 @@ module.exports = {
   '/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
   '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
-  '/conversations': require('../pages/conversations')
+  '/conversations': require('../pages/conversations'),
+  '/conversations/new/:connectionId': require('../pages/conversations/new-conversation')
 }
