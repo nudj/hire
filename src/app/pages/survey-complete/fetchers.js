@@ -127,6 +127,8 @@ const setEmailPreference = ({ body, query, session }) => {
 
   const respond = data => {
     if (body.emailProvider === emailProviderPreferenceTypes.GOOGLE) {
+      session.returnTo = `/conversations/new/${query.id}`
+      session.returnFail = `/connections?id=${query.id}`
       throw new Redirect({
         url: '/auth/google'
       })

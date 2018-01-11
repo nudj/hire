@@ -1,12 +1,10 @@
 const passport = require('passport')
 const { Strategy: GoogleStrategy } = require('passport-google-oauth20')
 const createRouter = require('@nudj/framework/router')
-const { cacheReturnTo } = require('@nudj/library/server')
 const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
 
-let account
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -14,16 +12,19 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 (req, accessToken, refreshToken, profile, cb) => {
-  account = { accessToken, refreshToken }
+  req.session.googleAccount = { accessToken, refreshToken }
   return cb(null, {})
 }))
 
 const saveGoogleAccount = ({ session }) => {
-  const { accessToken, refreshToken } = account
+  const { accessToken, refreshToken } = session.googleAccount
+  delete session.googleAccount
   const gql = `
     mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID!) {
       user (id: $userId) {
-        account: createAccount(type: $type data: $data)
+        account: createAccount(type: $type data: $data) {
+          id
+        }
       }
     }
   `
@@ -69,7 +70,7 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/auth/google', cacheReturnTo, googleAuthentication)
+  router.getHandlers('/auth/google', googleAuthentication)
   router.getHandlers('/auth/google/failure', authenticationFailureHandler)
   router.getHandlers(
     '/auth/google/callback',
