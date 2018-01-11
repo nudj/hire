@@ -10,6 +10,7 @@ const { css } = require('@nudj/components/lib/css')
 
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
+
 const ListRecommendations = require('./list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const EmailAuthForm = require('../../components/email-authentication-form')

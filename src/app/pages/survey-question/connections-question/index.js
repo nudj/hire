@@ -11,7 +11,7 @@ const {
   saveSurveyAnswers
 } = require('../actions')
 const sharedStyle = require('../../shared.css')
-const style = require('./style.css')
+const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 const ButtonLink = require('../../../components/button-link')
 
@@ -64,16 +64,18 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <Text element='label' size='smallI' style={style.labelCopy}>
-              Search by name and select from the results
-            </Text>
-            <form className={css(style.form)}>
+            <form>
+              <Text element='label' size='smallI' htmlFor="search">
+                Search by name and select from the results
+              </Text>
               <Input
+                styleSheet={{ root: style.input }}
                 name='search'
                 label='search'
                 type='search'
                 value={query}
                 onChange={getHandleSearchChange(dispatch)}
+                placeholder='e.g., Jonny Ive'
               />
               {location.search ? (
                 <ButtonLink
@@ -86,7 +88,7 @@ const ConnectionsQuestionPage = props => {
                   Clear search
                 </ButtonLink>
               ) : (
-                <Button style={style.searchAction} type='submit' volume='cheer'>
+                <Button style={style.submitButton} type='submit' volume='cheer'>
                   Search
                 </Button>
               )}

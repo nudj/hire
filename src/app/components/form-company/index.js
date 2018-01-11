@@ -23,6 +23,7 @@ const AddCompanyForm = (props: CompanyFormProps) => {
         value={get(company, 'name', '')}
         name='name'
         onChange={onChange}
+        placeholder='e.g., Apple'
         required
       />
       <Button

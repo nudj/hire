@@ -1,19 +1,14 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
-  form: {
-    marginTop: sizes.regular,
-    marginLeft: sizes.largeIii,
-    marginRight: sizes.largeIii
+  submitButton: {
+    marginTop: sizes.regular
   },
-  searchAction: {
+  input: {
     marginTop: sizes.regular
   },
   table: {
     marginTop: sizes.largeIi
-  },
-  labelCopy: {
-    marginTop: sizes.regular
   }
 })
 
