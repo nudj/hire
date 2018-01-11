@@ -40,7 +40,7 @@ type Connection = {
 }
 
 type ConnectionsTableProps = {
-  onSelect: Object => void,
+  onSelect?: Object => void,
   connections: Array<Connection>,
   selectedConnections: Array<ID>,
   styleSheet: StyleSheetType,
@@ -76,10 +76,17 @@ const defaultColumns = [
   }
 ]
 
-const getColumns = (multiple) => [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
+const getColumns = ({ onSelect, multiple }) => {
+  return (typeof onSelect !== 'function')
+    ? defaultColumns
+    : [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
+}
 
 const ConnectionsTable = (props: ConnectionsTableProps) => {
   const { onSelect, connections, selectedConnections, styleSheet, multiple } = props
+
+  // flow hack
+  const onSelectHandler = onSelect || ((_) => {})
 
   const handleSelect = ({value, ...rest}) => {
     let newSelectedConnections
@@ -94,7 +101,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
       newSelectedConnections = [value]
     }
 
-    onSelect({
+    onSelectHandler({
       ...rest,
       value: newSelectedConnections
     })
@@ -139,7 +146,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
     <Table
       data={data}
       styleSheet={mergeStyleSheets(style, styleSheet)}
-      columns={getColumns(multiple)}
+      columns={getColumns(props)}
       cellRenderer={cellRenderer}
       Row={({ children, className, id }) => {
         return (
@@ -166,7 +173,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 ConnectionsTable.defaultProps = {
   connections: [],
   selectedConnections: [],
-  styleSheet: {}
+  styleSheet: {},
 }
 
 module.exports = ConnectionsTable
