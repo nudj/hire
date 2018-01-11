@@ -65,7 +65,7 @@ const ConnectionsQuestionPage = props => {
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
             <form>
-              <Text element='label' size='smallI' htmlFor="search">
+              <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
               <Input

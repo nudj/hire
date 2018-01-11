@@ -10,7 +10,6 @@ const { css } = require('@nudj/components/lib/css')
 const { setNewItemValue, addEmployment } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
-const FormCompany = require('../../../components/form-company')
 const ButtonLink = require('../../../components/button-link')
 
 function onChangeNewItem (dispatch, itemType) {
