@@ -1,8 +1,8 @@
 const passport = require('passport')
 const { Strategy: GoogleStrategy } = require('passport-google-oauth20')
 const createRouter = require('@nudj/framework/router')
-const { Redirect } = require('@nudj/library/errors')
 
+const requestGql = require('../../lib/requestGql')
 const { createNotification } = require('../../lib')
 
 passport.use(new GoogleStrategy({
@@ -12,14 +12,7 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 (req, accessToken, refreshToken, profile, cb) => {
-  req.session.googleAccount = { accessToken, refreshToken }
-  return cb(null, {})
-}))
-
-const saveGoogleAccount = ({ session }) => {
-  const { accessToken, refreshToken } = session.googleAccount
-  delete session.googleAccount
-  const gql = `
+  const query = `
     mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID!) {
       user (id: $userId) {
         account: createAccount(type: $type data: $data) {
@@ -29,20 +22,15 @@ const saveGoogleAccount = ({ session }) => {
     }
   `
   const variables = {
-    userId: session.userId,
+    userId: req.session.userId,
     type: 'GOOGLE',
     data: {
       accessToken,
       refreshToken
     }
   }
-  const respond = () => {
-    throw new Redirect({
-      url: session.returnTo || '/'
-    })
-  }
-  return { gql, variables, respond }
-}
+  return requestGql(query, variables).then(() => cb(null, {}))
+}))
 
 const googleAuthentication = passport.authorize('google', {
   scope: [
@@ -58,7 +46,7 @@ const googleAuthentication = passport.authorize('google', {
 const authenticationFailureHandler = (req, res, next) => {
   req.session.notification = createNotification('error', 'Something went wrong during authentication.')
   const failureRoute = req.session.returnFail || '/'
-  delete req.session.gmailSecret
+  delete req.session.returnTo
   delete req.session.returnFail
   res.redirect(failureRoute)
 }
@@ -75,7 +63,7 @@ const Router = ({
   router.getHandlers(
     '/auth/google/callback',
     passport.authorize('google', { failureRedirect: '/auth/google/failure' }),
-    respondWithGql(saveGoogleAccount)
+    (req, res) => res.redirect(req.session.returnTo)
   )
 
   return router
