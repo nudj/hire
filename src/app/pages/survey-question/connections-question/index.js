@@ -15,24 +15,18 @@ const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
 const ButtonLink = require('../../../components/button-link')
 
-function getHandleSelectConnection (dispatch) {
-  return event => {
-    event.preventDefault()
-    dispatch(toggleConnection(event.value))
-  }
+const getHandleSelectConnection = (dispatch) => event => {
+  event.preventDefault()
+  dispatch(toggleConnection(event.value))
 }
 
-function getHandleSearchChange (dispatch) {
-  return ({ value }) => {
-    dispatch(updateConnectionsSearchQuery(value))
-  }
+const getHandleSearchChange = (dispatch) => ({ value }) => {
+  dispatch(updateConnectionsSearchQuery(value))
 }
 
-function handleSaveAnswers (dispatch, questionId) {
-  return event => {
-    event.preventDefault()
-    dispatch(saveSurveyAnswers(questionId))
-  }
+const handleSaveAnswers = (dispatch, questionId) => event => {
+  event.preventDefault()
+  dispatch(saveSurveyAnswers(questionId))
 }
 
 const ConnectionsQuestionPage = props => {
@@ -44,8 +38,16 @@ const ConnectionsQuestionPage = props => {
     question,
     location,
     selectedConnections,
-    query
+    query,
+    history,
+    match
   } = props
+
+  const handleSearchChange = getHandleSearchChange(dispatch)
+  const handleSearchClear = ({ value }) => {
+    handleSearchChange(value)
+    history.push(match.url)
+  }
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -76,21 +78,12 @@ const ConnectionsQuestionPage = props => {
                 value={query}
                 onChange={getHandleSearchChange(dispatch)}
                 placeholder='e.g., Jonny Ive'
+                onChange={handleSearchChange}
+                onClear={handleSearchClear}
               />
-              {location.search ? (
-                <ButtonLink
-                  style={style.searchAction}
-                  href={get(props, 'location.pathname')}
-                  volume='cheer'
-                  subtle
-                  preventReload={false}
-                >
-                  Clear search
-                </ButtonLink>
-              ) : (
-                <Button style={style.submitButton} type='submit' volume='cheer'>
-                  Search
-                </Button>
+              <Button style={style.submitButton} type='submit' volume='cheer'>
+                Search
+              </Button>
               )}
             </form>
             {connections.length ? (
