@@ -13,6 +13,10 @@ module.exports = {
   '/conversations/new/:connectionId/:jobId': require('../pages/conversations/compose-message'),
   '/contacts': require('../pages/contacts'),
 
+  '/messages': require('../pages/messages'),
+  // '/messages/new/:connectionId': require('../pages/messages/new-conversation'),
+  // '/messages/new/:connectionId/:jobId': require('../pages/messages/compose-message')
+
   // legacy urls
   '/': require('../pages/tasks'),
   '/jobs': require('../pages/jobs'),
