@@ -1,7 +1,7 @@
 /* global ID */
 // @flow
 const React = require('react')
-const { Table, Checkbox } = require('@nudj/components')
+const { Table, Checkbox, RadioButton } = require('@nudj/components')
 const { merge } = require('@nudj/library')
 const { mergeStyleSheets } = require('@nudj/components/lib/css')
 
@@ -40,17 +40,24 @@ type Connection = {
 }
 
 type ConnectionsTableProps = {
-  onSelect: Object => void,
+  onSelect?: Object => void,
   connections: Array<Connection>,
   selectedConnections: Array<ID>,
-  styleSheet: StyleSheetType
+  styleSheet: StyleSheetType,
+  multiple?: boolean
 }
 
-const columns = [
-  {
-    heading: '',
-    name: 'checkbox'
-  },
+const checkboxColumn = {
+  heading: '',
+  name: 'checkbox'
+}
+
+const radioColumn = {
+  heading: '',
+  name: 'radio'
+}
+
+const defaultColumns = [
   {
     heading: 'Name',
     name: 'name'
@@ -70,15 +77,62 @@ const columns = [
 ]
 
 const ConnectionsTable = (props: ConnectionsTableProps) => {
-  const { onSelect, connections, selectedConnections, styleSheet } = props
+  const {
+    onSelect,
+    connections,
+    selectedConnections,
+    styleSheet,
+    multiple
+  } = props
+
+  const isSelectable = typeof onSelect === 'function'
+  // flow hack
+  const onSelectHandler = onSelect || (_ => {})
+
+  const getColumns = ({ onSelect, multiple }) => {
+    return !isSelectable
+      ? defaultColumns
+      : [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
+  }
+
+  const handleSelect = ({ value, ...rest }) => {
+    let newSelectedConnections
+
+    if (multiple) {
+      if (selectedConnections.includes(value)) {
+        newSelectedConnections = selectedConnections.filter(
+          val => val !== value
+        )
+      } else {
+        newSelectedConnections = [...selectedConnections, value]
+      }
+    } else {
+      newSelectedConnections = [value]
+    }
+
+    onSelectHandler({
+      ...rest,
+      value: newSelectedConnections
+    })
+  }
 
   const cellRenderer = (column, row, defaultValue) => {
     switch (column.name) {
+      case 'radio':
+        return (
+          <RadioButton
+            checked={row.selected}
+            onChange={handleSelect}
+            name={`${row.firstName} ${row.lastName}`}
+            value={row.id}
+            id={row.id}
+          />
+        )
       case 'checkbox':
         return (
           <Checkbox
             checked={row.selected}
-            onChange={onSelect}
+            onChange={handleSelect}
             name={`${row.firstName} ${row.lastName}`}
             value={row.id}
             id={row.id}
@@ -100,20 +154,30 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
   return (
     <Table
       data={data}
-      styleSheet={mergeStyleSheets(style, styleSheet)}
-      columns={columns}
+      styleSheet={mergeStyleSheets(
+        style,
+        {
+          row: isSelectable && style.rowSelectable
+        },
+        styleSheet
+      )}
+      columns={getColumns(props)}
       cellRenderer={cellRenderer}
       Row={({ children, className, id }) => {
         return (
           <tr
-            onClick={({ preventDefault, stopPropogation }) => {
-              onSelect({
-                preventDefault,
-                stopPropogation,
-                value: id,
-                name: id
-              })
-            }}
+            onClick={
+              isSelectable
+                ? e => {
+                  handleSelect({
+                    preventDefault: e.preventDefault,
+                    stopPropagation: e.stopPropagation,
+                    value: id,
+                    name: id
+                  })
+                }
+                : undefined
+            }
             className={className}
             id={id}
           >

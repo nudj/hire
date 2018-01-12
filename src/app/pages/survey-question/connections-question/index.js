@@ -1,38 +1,30 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
 
 const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const {
-  toggleConnection,
   updateConnectionsSearchQuery,
-  saveSurveyAnswers
+  saveSurveyAnswers,
+  setSelectedConnections
 } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
-const ButtonLink = require('../../../components/button-link')
 
-function getHandleSelectConnection (dispatch) {
-  return event => {
-    event.preventDefault()
-    dispatch(toggleConnection(event.value))
-  }
+const getHandleSetConnections = dispatch => e => {
+  e.preventDefault()
+  dispatch(setSelectedConnections(e.value))
 }
 
-function getHandleSearchChange (dispatch) {
-  return ({ value }) => {
-    dispatch(updateConnectionsSearchQuery(value))
-  }
+const getHandleSearchChange = dispatch => ({ value }) => {
+  dispatch(updateConnectionsSearchQuery(value))
 }
 
-function handleSaveAnswers (dispatch, questionId) {
-  return event => {
-    event.preventDefault()
-    dispatch(saveSurveyAnswers(questionId))
-  }
+const handleSaveAnswers = (dispatch, questionId) => event => {
+  event.preventDefault()
+  dispatch(saveSurveyAnswers(questionId))
 }
 
 const ConnectionsQuestionPage = props => {
@@ -42,10 +34,17 @@ const ConnectionsQuestionPage = props => {
     questionCount,
     connections,
     question,
-    location,
     selectedConnections,
-    query
+    query,
+    history,
+    match
   } = props
+
+  const handleSearchChange = getHandleSearchChange(dispatch)
+  const handleSearchClear = ({ value }) => {
+    handleSearchChange(value)
+    history.push(match.url)
+  }
 
   return (
     <div className={css(sharedStyle.root)}>
@@ -74,33 +73,23 @@ const ConnectionsQuestionPage = props => {
                 label='search'
                 type='search'
                 value={query}
-                onChange={getHandleSearchChange(dispatch)}
                 placeholder='e.g., Jonny Ive'
+                onChange={handleSearchChange}
+                onClear={handleSearchClear}
               />
-              {location.search ? (
-                <ButtonLink
-                  style={style.searchAction}
-                  href={get(props, 'location.pathname')}
-                  volume='cheer'
-                  subtle
-                  preventReload={false}
-                >
-                  Clear search
-                </ButtonLink>
-              ) : (
-                <Button style={style.submitButton} type='submit' volume='cheer'>
-                  Search
-                </Button>
-              )}
+              <Button style={style.submitButton} type='submit' volume='cheer'>
+                Search
+              </Button>
             </form>
             {connections.length ? (
               <ConnectionsTable
                 styleSheet={{
                   root: style.table
                 }}
-                onSelect={getHandleSelectConnection(dispatch)}
+                onSelect={getHandleSetConnections(dispatch)}
                 connections={connections}
                 selectedConnections={selectedConnections}
+                multiple
               />
             ) : (
               ''
@@ -114,7 +103,11 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <Button onClick={handleSaveAnswers(dispatch, question.id)} type='submit' volume='cheer'>
+                <Button
+                  onClick={handleSaveAnswers(dispatch, question.id)}
+                  type='submit'
+                  volume='cheer'
+                >
                   Next
                 </Button>
               }

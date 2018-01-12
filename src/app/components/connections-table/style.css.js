@@ -5,7 +5,7 @@ const styleSheet = StyleSheet.create({
     textAlign: 'left',
     borderCollapse: 'collapse'
   },
-  row: {
+  rowSelectable: {
     cursor: 'pointer'
   },
   cell: {

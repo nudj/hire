@@ -89,16 +89,14 @@ module.exports.addEmployment = questionId => (dispatch, getState) => {
   )
 }
 
-const TOGGLE_CONNECTION = 'TOGGLE_CONNECTION'
-module.exports.TOGGLE_CONNECTION = TOGGLE_CONNECTION
-function toggleConnection (connectionId) {
-  return {
-    type: TOGGLE_CONNECTION,
-    connectionId
-  }
-}
-module.exports.toggleConnection = connectionId =>
-  quickDispatch(toggleConnection(connectionId))
+const SET_SELECTED_CONNECTIONS = 'SET_SELECTED_CONNECTIONS'
+module.exports.SET_SELECTED_CONNECTIONS = SET_SELECTED_CONNECTIONS
+
+const setSelectedConnections = (connections) => ({
+  type: SET_SELECTED_CONNECTIONS,
+  connections
+})
+module.exports.setSelectedConnections = setSelectedConnections
 
 const UPDATE_CONNECTIONS_SEARCH_QUERY = 'UPDATE_CONNECTIONS_SEARCH_QUERY'
 module.exports.UPDATE_CONNECTIONS_SEARCH_QUERY = UPDATE_CONNECTIONS_SEARCH_QUERY
