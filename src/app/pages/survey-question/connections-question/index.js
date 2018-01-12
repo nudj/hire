@@ -7,7 +7,8 @@ const { css } = require('@nudj/components/lib/css')
 const {
   updateConnectionsSearchQuery,
   saveSurveyAnswers,
-  setSelectedConnections
+  setSelectedConnections,
+  search
 } = require('../actions')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
@@ -25,6 +26,11 @@ const getHandleSearchChange = dispatch => ({ value }) => {
 const handleSaveAnswers = (dispatch, questionId) => event => {
   event.preventDefault()
   dispatch(saveSurveyAnswers(questionId))
+}
+
+const getHandleSearchSubmit = dispatch => event => {
+  event.preventDefault()
+  dispatch(search())
 }
 
 const ConnectionsQuestionPage = props => {
@@ -63,7 +69,7 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <form>
+            <form onSubmit={getHandleSearchSubmit(dispatch)}>
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
