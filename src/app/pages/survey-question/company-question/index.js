@@ -2,15 +2,14 @@
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const get = require('lodash/get')
 
-const { Text, Align, Card } = require('@nudj/components')
+const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const { merge } = require('@nudj/library')
 
 const { setNewItemValue, addEmployment } = require('../actions')
 const sharedStyle = require('../../shared.css')
-const style = require('./style.css')
-const FormCompany = require('../../../components/form-company')
+const style = require('../style.css')
 const ButtonLink = require('../../../components/button-link')
 
 function onChangeNewItem (dispatch, itemType) {
@@ -57,26 +56,36 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <Text
           element='div'
           size='largeIi'
-          style={merge(sharedStyle.heading, sharedStyle.subheading)}
+          style={sharedStyle.heading}
         >
           {question.title}
         </Text>
+        <Text element='div' style={sharedStyle.subheading}>
+          {question.description}
+        </Text>
         <div className={css(sharedStyle.body)}>
-          <Text element='div' style={sharedStyle.subheading}>
-            {question.description}
-          </Text>
-          <Card
-            style={merge(
-              sharedStyle.card,
-              sharedStyle.cardSmall,
-              style.formCard
-            )}
-          >
-            <FormCompany
-              onChange={onChangeNewItem(dispatch, 'newEmployment')}
-              onSubmit={onAddCompany(dispatch, question.id)}
-              company={employment}
-            />
+          <Card style={sharedStyle.card}>
+            <form onSubmit={onAddCompany(dispatch, question.id)}>
+              <Text element='label' size='smallI' htmlFor='name'>
+                Add all the companies you’ve worked at previously
+              </Text>
+              <Input
+                styleSheet={{ root: style.input }}
+                id='name'
+                value={get(employment, 'name', '')}
+                name='name'
+                onChange={onChangeNewItem(dispatch, 'newEmployment')}
+                placeholder='e.g., Apple'
+                required
+              />
+              <Button
+                type='submit'
+                volume='cheer'
+                style={style.submitButton}
+              >
+                Add company
+              </Button>
+            </form>
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align

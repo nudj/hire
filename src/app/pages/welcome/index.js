@@ -29,13 +29,14 @@ const WelcomePage = () => (
         <ul className={css(style.list)}>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
+              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 1</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/unlock-network.svg'
                 alt=''
               />
               <Text element='div' style={style.listItemHeading} size='largeI'>
-                1. Unlock your network
+                Unlock your network
               </Text>
               <Text style={style.listItemBody} element='p'>
                 First up, we&#39;ll help you export your connections from
@@ -46,13 +47,14 @@ const WelcomePage = () => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
+              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 2</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/uncover-gems.svg'
                 alt=''
               />
               <Text element='div' style={style.listItemHeading} size='largeI'>
-                2. Uncover gems
+                Uncover gems
               </Text>
               <Text style={style.listItemBody} element='p'>
                 We&#39;ll then help your explore your network to uncover people
@@ -62,13 +64,14 @@ const WelcomePage = () => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
+              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 3</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/send-nudjes.svg'
                 alt=''
               />
               <Text element='div' style={style.listItemHeading} size='largeI'>
-                3. Send nudjes
+                Send nudjes
               </Text>
               <Text style={style.listItemBody} element='p'>
                 Finally, we&#39;ll help you help compose and send personalised

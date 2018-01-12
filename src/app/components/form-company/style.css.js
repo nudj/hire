@@ -8,6 +8,9 @@ const stylesheet = StyleSheet.create({
     [`@media(${wizardAction.center})`]: {
       width: 'auto'
     }
+  },
+  form: {
+    marginTop: sizes.regular
   }
 })
 

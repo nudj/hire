@@ -15,7 +15,9 @@
   "homepage": "https://github.com/nudj/web#readme",
   "standard": {
     "parser": "babel-eslint",
-    "plugins": ["flowtype"],
+    "plugins": [
+      "flowtype"
+    ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",

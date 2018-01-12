@@ -47,7 +47,7 @@ const LinkedinUploadPage = (props: Props) => {
             Upload your Connections.csv file
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            Simply drag and drop your file into the box below.
+            Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
           </Text>
         </div>
         <div className={css(sharedStyle.body)}>

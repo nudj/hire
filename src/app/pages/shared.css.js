@@ -20,7 +20,7 @@ const styleSheet = StyleSheet.create({
     }
   },
   wrapper: {
-    maxWidth: '60rem',
+    maxWidth: '70rem',
     marginLeft: 'auto',
     marginRight: 'auto',
     paddingLeft: sizes.regular,
@@ -95,7 +95,7 @@ const styleSheet = StyleSheet.create({
   },
   image: {
     width: '100%',
-    maxWidth: '37rem',
+    maxWidth: '40rem',
     marginLeft: 'auto',
     marginRight: 'auto',
     border: `1px solid ${colors.greyLight}`,

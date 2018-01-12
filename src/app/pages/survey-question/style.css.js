@@ -1,7 +1,13 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
-  formCard: {
+  submitButton: {
+    marginTop: sizes.regular
+  },
+  input: {
+    marginTop: sizes.regular
+  },
+  table: {
     marginTop: sizes.largeIi
   }
 })

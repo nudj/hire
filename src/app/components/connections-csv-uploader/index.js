@@ -3,9 +3,6 @@
 const React = require('react')
 const { css } = require('@nudj/components/lib/css')
 const { Dropzone, Text, Loader } = require('@nudj/components')
-const {
-  linkStyleSheet
-} = require('@nudj/components/lib/components/inline-action/style.css')
 
 const style = require('./style.css')
 
@@ -40,7 +37,7 @@ const ConnectionsCsvUploader = (props: Props) => {
                   Hold on
                 </Text>
                 <Text element='div' size='regular'>
-                  We’re just having a quick look through these lovely people
+                  We&#39;re just having a quick look through these lovely people
                 </Text>
               </div>
             </div>
@@ -50,28 +47,14 @@ const ConnectionsCsvUploader = (props: Props) => {
         if (rejectedFiles && rejectedFiles.length > 0) {
           return (
             <div className={css(style.dropzone)}>
-              <img
-                src='/assets/images/point-hand-1.svg'
-                className={css(
-                  style.pointIllustration,
-                  isDragActive && style.pointActive
-                )}
-                alt=''
-                draggable={false}
-              />
+              <div className={css(style.thumbsDownIllustration)} />
               <div className={css(style.copy)}>
                 <Text element='div' size='largeIi' style={style.messageReject}>
-                  Try Connections.csv instead
+                  Something doesn&#39;t look right
                 </Text>
-                <span
-                  className={css(
-                    linkStyleSheet.root,
-                    linkStyleSheet.cheer,
-                    linkStyleSheet.inline
-                  )}
-                >
-                  browse your computer
-                </span>
+                <Text element='div' size='regular'>
+                  Make sure it&#39;s the Connections.csv file
+                </Text>
               </div>
             </div>
           )
@@ -96,30 +79,29 @@ const ConnectionsCsvUploader = (props: Props) => {
           )
         }
 
+        if (isDragActive) {
+          return (
+            <div className={css(style.dropzone)}>
+              <div className={css(style.copyTop)}>
+                <Text element='div' size='largeIi'>
+                  Now drop the file
+                </Text>
+              </div>
+              <div className={css(style.okHandIllustration)} />
+            </div>
+          )
+        }
+
         return (
           <div className={css(style.dropzone)}>
-            <img
-              src='/assets/images/point-hand-1.svg'
-              className={css(
-                style.pointIllustration,
-                isDragActive && style.pointActive
-              )}
-              alt=''
-              draggable={false}
-            />
+            <div className={css(style.pointIllustration)} />
             <div className={css(style.copy)}>
               <Text element='div' size='largeIi' style={style.message}>
-                Drag & drop here Connections.csv
+                Drag & drop here
               </Text>
-              <span
-                className={css(
-                  linkStyleSheet.root,
-                  linkStyleSheet.cheer,
-                  linkStyleSheet.inline
-                )}
-              >
-                or browse your computer
-              </span>
+              <Text element='div' size='regular'>
+                or click to browse your computer
+              </Text>
             </div>
           </div>
         )
