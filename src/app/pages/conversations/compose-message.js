@@ -15,7 +15,7 @@ const {
 const { css } = require('@nudj/components/lib/css')
 
 const { render } = require('../../lib/templater')
-const { emailProviderPreferenceTypes } = require('../../lib/constants')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
@@ -51,7 +51,7 @@ const ComposeMessagePage = props => {
   const emailPreference = get(
     user,
     'emailPreference',
-    emailProviderPreferenceTypes.OTHER
+    emailPreferences.OTHER
   )
 
   const subjectTemplate = render({ template: template.subject })[0].join('')
@@ -98,7 +98,7 @@ const ComposeMessagePage = props => {
                 styleSheet={{ input: style.messageInput }}
                 autosize
               />
-              {emailPreference === emailProviderPreferenceTypes.GOOGLE ? (
+              {emailPreference === emailPreferences.GOOGLE ? (
                 <Button type='submit' volume='cheer' style={style.sendButton}>
                   Send message
                 </Button>

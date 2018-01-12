@@ -1,6 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 
-const { emailProviderPreferenceTypes } = require('../../lib/constants')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { Global } = require('../../lib/graphql')
 
 const get = ({ session, params }) => {
@@ -127,7 +127,7 @@ const setEmailPreference = ({ body, params, query, session }) => {
   }
 
   const respond = data => {
-    if (body.emailProvider === emailProviderPreferenceTypes.GOOGLE) {
+    if (body.emailProvider === emailPreferences.GOOGLE) {
       session.returnTo = `/conversations/new/${query.id}`
       session.returnFail = `/surveys/${params.surveySlug}/complete`
       throw new Redirect({
