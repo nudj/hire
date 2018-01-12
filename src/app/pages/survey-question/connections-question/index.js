@@ -81,7 +81,6 @@ const ConnectionsQuestionPage = props => {
               <Button style={style.submitButton} type='submit' volume='cheer'>
                 Search
               </Button>
-              )}
             </form>
             {connections.length ? (
               <ConnectionsTable
