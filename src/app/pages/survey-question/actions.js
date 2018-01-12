@@ -129,3 +129,20 @@ module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
     )
   )
 }
+
+module.exports.search = () => (dispatch, getState) => {
+  const state = getState()
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const search = get(state, 'surveyQuestionPage.searchQuery')
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}`,
+        method: 'get',
+        params: { search }
+      }
+    )
+  )
+}

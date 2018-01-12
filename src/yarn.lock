@@ -47,9 +47,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/framework@12.0.0":
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-12.0.0.tgz#428b328d0f11d31f696fbe9e0afae8a3b711809f"
+"@nudj/framework@12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-12.1.0.tgz#f98fb5f0cf4b64103c71adb2396fad6c87d02b20"
   dependencies:
     "@nudj/api" "7.0.0"
     "@nudj/components" "2.0.0"
