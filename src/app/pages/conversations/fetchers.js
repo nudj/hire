@@ -16,6 +16,9 @@ const getActiveJobs = (props) => {
         }
         connection: connectionByFilters(filters: {id: $connectionId}) {
           firstName
+          person {
+            email
+          }
         }
       }
     }
@@ -38,6 +41,7 @@ const getMessageTemplate = (props) => {
     query getTemplateAndDetails($userId: ID!, $connectionId: ID!, $jobId: ID!) {
       user(id: $userId) {
         firstName
+        emailPreference
         hirer {
           company {
             job: jobByFilters(filters: {id: $jobId}) {
