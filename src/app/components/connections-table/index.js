@@ -44,7 +44,7 @@ type ConnectionsTableProps = {
   connections: Array<Connection>,
   selectedConnections: Array<ID>,
   styleSheet: StyleSheetType,
-  multiple?: boolean,
+  multiple?: boolean
 }
 
 const checkboxColumn = {
@@ -76,24 +76,33 @@ const defaultColumns = [
   }
 ]
 
-const getColumns = ({ onSelect, multiple }) => {
-  return (typeof onSelect !== 'function')
-    ? defaultColumns
-    : [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
-}
-
 const ConnectionsTable = (props: ConnectionsTableProps) => {
-  const { onSelect, connections, selectedConnections, styleSheet, multiple } = props
+  const {
+    onSelect,
+    connections,
+    selectedConnections,
+    styleSheet,
+    multiple
+  } = props
 
+  const isSelectable = typeof onSelect === 'function'
   // flow hack
-  const onSelectHandler = onSelect || ((_) => {})
+  const onSelectHandler = onSelect || (_ => {})
 
-  const handleSelect = ({value, ...rest}) => {
+  const getColumns = ({ onSelect, multiple }) => {
+    return !isSelectable
+      ? defaultColumns
+      : [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
+  }
+
+  const handleSelect = ({ value, ...rest }) => {
     let newSelectedConnections
 
     if (multiple) {
       if (selectedConnections.includes(value)) {
-        newSelectedConnections = selectedConnections.filter(val => val !== value)
+        newSelectedConnections = selectedConnections.filter(
+          val => val !== value
+        )
       } else {
         newSelectedConnections = [...selectedConnections, value]
       }
@@ -109,7 +118,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 
   const cellRenderer = (column, row, defaultValue) => {
     switch (column.name) {
-      case 'radio': 
+      case 'radio':
         return (
           <RadioButton
             checked={row.selected}
@@ -145,20 +154,30 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
   return (
     <Table
       data={data}
-      styleSheet={mergeStyleSheets(style, styleSheet)}
+      styleSheet={mergeStyleSheets(
+        style,
+        {
+          row: isSelectable && style.rowSelectable
+        },
+        styleSheet
+      )}
       columns={getColumns(props)}
       cellRenderer={cellRenderer}
       Row={({ children, className, id }) => {
         return (
           <tr
-            onClick={(e) => {
-              handleSelect({
-                preventDefault: e.preventDefault,
-                stopPropagation: e.stopPropagation,
-                value: id,
-                name: id
-              })
-            }}
+            onClick={
+              isSelectable
+                ? e => {
+                  handleSelect({
+                    preventDefault: e.preventDefault,
+                    stopPropagation: e.stopPropagation,
+                    value: id,
+                    name: id
+                  })
+                }
+                : undefined
+            }
             className={className}
             id={id}
           >
@@ -173,7 +192,7 @@ const ConnectionsTable = (props: ConnectionsTableProps) => {
 ConnectionsTable.defaultProps = {
   connections: [],
   selectedConnections: [],
-  styleSheet: {},
+  styleSheet: {}
 }
 
 module.exports = ConnectionsTable
