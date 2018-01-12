@@ -4,10 +4,18 @@ const get = require('lodash/get')
 const createHash = require('hash-generator')
 const { getFirstNonNil } = require('@nudj/library')
 
-const { Card, Button, Input, Text, Textarea } = require('@nudj/components')
+const {
+  Card,
+  Button,
+  Input,
+  Link,
+  Text,
+  Textarea
+} = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const { render } = require('../../lib/templater')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
@@ -33,12 +41,20 @@ const parseJobMessageTemplate = (template, job, user) =>
     brify: () => '\n\n'
   })[0].join('')
 
+const getMailTo = (to, subject, message) =>
+  `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
+
 const ComposeMessagePage = props => {
   const { conversationsPage, dispatch, user, template } = props
+  const toEmail = get(user, 'connection.person.email', '')
   const job = get(props, 'hirer.company.job', {})
+  const emailPreference = get(
+    user,
+    'emailPreference',
+    emailPreferences.OTHER
+  )
 
   const subjectTemplate = render({ template: template.subject })[0].join('')
-
   const messageTemplate = parseJobMessageTemplate(template.message, job, user)
 
   const subjectValue = getFirstNonNil(
@@ -82,9 +98,19 @@ const ComposeMessagePage = props => {
                 styleSheet={{ input: style.messageInput }}
                 autosize
               />
-              <Button type='submit' volume='cheer' style={style.sendButton}>
-                Send message
-              </Button>
+              {emailPreference === emailPreferences.GOOGLE ? (
+                <Button type='submit' volume='cheer' style={style.sendButton}>
+                  Send message
+                </Button>
+              ) : (
+                <Link
+                  volume='cheer'
+                  style={style.sendButton}
+                  href={getMailTo(toEmail, subjectValue, messageValue)}
+                >
+                  Send message
+                </Link>
+              )}
             </form>
           </Card>
         </div>

@@ -5,7 +5,7 @@ const React = require('react')
 const { Button, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const { emailProviderPreferenceTypes } = require('../../lib/constants')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const style = require('./style.css')
 
 type Props = {
@@ -45,7 +45,7 @@ const EmailAuthenticationForm = (props: Props) => {
           style={style.button}
           name='emailProvider'
           type='submit'
-          value={emailProviderPreferenceTypes.OTHER}
+          value={emailPreferences.OTHER}
         >
           No, thanks
         </Button>
@@ -53,7 +53,7 @@ const EmailAuthenticationForm = (props: Props) => {
           style={style.button}
           name='emailProvider'
           type='submit'
-          value={emailProviderPreferenceTypes.GOOGLE}
+          value={emailPreferences.GOOGLE}
           volume='cheer'
         >
           Sync account
