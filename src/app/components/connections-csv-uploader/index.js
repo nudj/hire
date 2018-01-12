@@ -37,7 +37,7 @@ const ConnectionsCsvUploader = (props: Props) => {
                   Hold on
                 </Text>
                 <Text element='div' size='regular'>
-                  We’re just having a quick look through these lovely people
+                  We&#39;re just having a quick look through these lovely people
                 </Text>
               </div>
             </div>
@@ -50,10 +50,10 @@ const ConnectionsCsvUploader = (props: Props) => {
               <div className={css(style.thumbsDownIllustration)} />
               <div className={css(style.copy)}>
                 <Text element='div' size='largeIi' style={style.messageReject}>
-                  Something doesn't look right
+                  Something doesn&#39;t look right
                 </Text>
                 <Text element='div' size='regular'>
-                  Make sure it's the Connections.csv file
+                  Make sure it&#39;s the Connections.csv file
                 </Text>
               </div>
             </div>
