@@ -76,6 +76,7 @@ const ContactsPage = props => {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onClear={handleSearchClear}
+                placeholder='e.g., Jonny Ive'
               />
               <Button type='submit' volume='cheer' style={style.submitButton}>
                 Search

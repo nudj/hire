@@ -73,7 +73,6 @@ const ConnectionsQuestionPage = props => {
                 label='search'
                 type='search'
                 value={query}
-                onChange={getHandleSearchChange(dispatch)}
                 placeholder='e.g., Jonny Ive'
                 onChange={handleSearchChange}
                 onClear={handleSearchClear}
