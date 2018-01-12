@@ -1,12 +1,10 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
 
 const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const {
-  toggleConnection,
   updateConnectionsSearchQuery,
   saveSurveyAnswers,
   setSelectedConnections
@@ -14,14 +12,13 @@ const {
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
-const ButtonLink = require('../../../components/button-link')
 
-const getHandleSetConnections = dispatch => (e) => {
+const getHandleSetConnections = dispatch => e => {
   e.preventDefault()
   dispatch(setSelectedConnections(e.value))
 }
 
-const getHandleSearchChange = (dispatch) => ({ value }) => {
+const getHandleSearchChange = dispatch => ({ value }) => {
   dispatch(updateConnectionsSearchQuery(value))
 }
 
@@ -37,7 +34,6 @@ const ConnectionsQuestionPage = props => {
     questionCount,
     connections,
     question,
-    location,
     selectedConnections,
     query,
     history,
@@ -109,7 +105,11 @@ const ConnectionsQuestionPage = props => {
                 </Text>
               }
               rightChildren={
-                <Button onClick={handleSaveAnswers(dispatch, question.id)} type='submit' volume='cheer'>
+                <Button
+                  onClick={handleSaveAnswers(dispatch, question.id)}
+                  type='submit'
+                  volume='cheer'
+                >
                   Next
                 </Button>
               }

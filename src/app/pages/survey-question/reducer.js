@@ -1,13 +1,10 @@
 const { merge } = require('@nudj/library')
 const get = require('lodash/get')
-const without = require('lodash/without')
-const concat = require('lodash/concat')
 const { createReducer } = require('../../lib')
 const {
   SET_NEW_ITEM_VALUE,
   ADD_CONNECTION,
   ADD_FORMER_EMPLOYER,
-  TOGGLE_CONNECTION,
   SET_SELECTED_CONNECTIONS,
   UPDATE_CONNECTIONS_SEARCH_QUERY
 } = require('./actions')
