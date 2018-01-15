@@ -1,5 +1,9 @@
 const { Global } = require('../../lib/graphql')
 
+const getMessage = props => {
+  return { gql, variables }
+}
+
 const getActiveJobs = (props) => {
   const { session, params } = props
   const gql = `

@@ -9,6 +9,7 @@ module.exports = {
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
   '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
   '/messages': require('../pages/messages'),
+  '/messages/:conversationId': require('../pages/messages/thread'),
   '/messages/new/:connectionId': require('../pages/messages/new'),
   '/messages/new/:connectionId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
