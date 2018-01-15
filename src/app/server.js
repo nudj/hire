@@ -19,6 +19,8 @@ const path = require('path')
 const server = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 
+const { mockData, mockGoogleRequests } = require('./mocks')
+
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
@@ -43,7 +45,6 @@ const expressRouters = {
 }
 const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
-const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
   req.session.userId = 'person5'
   next()
@@ -77,5 +78,9 @@ if (process.env.USE_MOCKS === 'true') {
 
   gqlServer.listen(82, () => {
     logger.log('info', 'Mock GQL running')
+  })
+
+  mockGoogleRequests(() => {
+    logger.log('info', 'Mock Google running')
   })
 }

@@ -1,6 +1,6 @@
 const {
   questionTypes
-} = require('./lib/constants')
+} = require('../lib/constants')
 
 const {
   COMPANIES,
@@ -38,6 +38,46 @@ const data = {
   roles: [],
   sources: []
 }
+data.conversations = data.conversations.concat([
+  {
+    type: 'GOOGLE',
+    threadId: 'VALID_THREAD_ID',
+    person: 'person7',
+    recipient: 'person6',
+    created: '2018-01-14T11:42:30.251+00:00',
+    modified: '2018-01-14T11:42:30.251+00:00',
+    id: 'conversation1'
+  },
+  {
+    type: 'OTHER',
+    person: 'person7',
+    recipient: 'person6',
+    created: '2018-01-14T11:42:30.251+00:00',
+    modified: '2018-01-14T11:42:30.251+00:00',
+    id: 'conversation2'
+  }
+])
+data.accounts = data.accounts.concat([
+  {
+    person: 'person5',
+    type: 'GOOGLE',
+    data: {
+      accessToken: 'VALID_ACCESS_TOKEN',
+      refreshToken: 'VALID_REFRESH_TOKEN'
+    },
+    created: '2018-01-11T12:20:02.723+00:00',
+    modified: '2018-01-11T12:20:02.723+00:00',
+    id: 'account1'
+  },
+  {
+    person: 'person7',
+    recipient: 'person6',
+    type: 'OTHER',
+    created: '2018-01-11T12:20:02.723+00:00',
+    modified: '2018-01-11T12:20:02.723+00:00',
+    id: 'account2'
+  }
+])
 data.roles = data.roles.concat([
   {
     name: 'Fake Role',
