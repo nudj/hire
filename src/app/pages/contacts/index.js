@@ -100,7 +100,7 @@ const ContactsPage = props => {
             <Align
               rightChildren={
                 <ButtonLink
-                  href={`/conversations/new/${selectedContactId}`}
+                  href={`/messages/new/${selectedContactId}`}
                   volume='cheer'
                   disabled={!selectedContactId}
                 >

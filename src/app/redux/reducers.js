@@ -1,13 +1,13 @@
 const tasksPage = require('../pages/tasks/reducer')
 const surveyQuestionPage = require('../pages/survey-question/reducer')
 const uploadPage = require('../pages/setup-network/linkedin/reducer')
-const conversationsPage = require('../pages/conversations/reducer')
+const composeMessage = require('../pages/messages/new/reducer')
 const contactsPage = require('../pages/contacts/reducer')
 
 module.exports = {
   tasksPage,
   surveyQuestionPage,
   uploadPage,
-  conversationsPage,
-  contactsPage
+  contactsPage,
+  composeMessage,
 }

@@ -7,6 +7,7 @@ const getActiveJobs = (props) => {
       user (id: $userId) {
         hirer {
           company {
+            id
             jobs: jobsByFilters(filters: { status: $status }) {
               id
               title
@@ -22,7 +23,6 @@ const getActiveJobs = (props) => {
         }
       }
     }
-
   `
 
   const variables = {
@@ -68,22 +68,7 @@ const getMessageTemplate = (props) => {
   return { gql, variables }
 }
 
-const get = ({
-  session
-}) => {
-  const gql = `
-    query TasksPage ($userId: ID!) {
-      ${Global}
-    }
-  `
-  const variables = {
-    userId: session.userId
-  }
-  return { gql, variables }
-}
-
 module.exports = {
-  get,
   getActiveJobs,
   getMessageTemplate
 }

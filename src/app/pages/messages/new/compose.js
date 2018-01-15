@@ -46,7 +46,7 @@ const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
 const ComposeMessagePage = props => {
-  const { conversationsPage, dispatch, user, template } = props
+  const { composeMessage, dispatch, user, template } = props
   const toEmail = get(user, 'connection.person.email', '')
   const job = get(props, 'hirer.company.job', {})
   const emailPreference = get(
@@ -59,12 +59,12 @@ const ComposeMessagePage = props => {
   const messageTemplate = parseJobMessageTemplate(template.message, job, user)
 
   const subjectValue = getFirstNonNil(
-    conversationsPage.subject,
+    composeMessage.subject,
     subjectTemplate,
     ''
   )
   const messageValue = getFirstNonNil(
-    conversationsPage.message,
+    composeMessage.message,
     messageTemplate,
     ''
   )

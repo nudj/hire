@@ -1,6 +1,6 @@
 const { merge } = require('@nudj/library')
 const { SELECT_JOB, UPDATE_SUBJECT, UPDATE_MESSAGE } = require('./actions')
-const { createReducer } = require('../../lib')
+const { createReducer } = require('../../../lib')
 
 const selectJob = (state, action) => {
   return merge(state, {

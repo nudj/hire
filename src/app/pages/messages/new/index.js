@@ -15,7 +15,7 @@ const getHandleSelectJob = dispatch => ({ value }) => dispatch(selectJob(value))
 
 const NewConversationPage = props => {
   const { dispatch } = props
-  const selectedJobId = get(props, 'conversationsPage.jobId')
+  const selectedJobId = get(props, 'composeMessage.jobId')
   const jobs = get(props, 'user.hirer.company.jobs', [])
   const connection = get(props, 'user.connection.firstName')
 
