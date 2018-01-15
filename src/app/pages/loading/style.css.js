@@ -1,5 +1,4 @@
-const { css } = require('@nudj/framework/css')
-const { variables } = require('../../lib/css')
+const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 
 const spin = {
   '0%': {
@@ -11,21 +10,22 @@ const spin = {
   }
 }
 
-module.exports = css({
-  loading: {
-    background: variables.colors.grey
+module.exports = StyleSheet.create({
+  root: {
+    backgroundColor: colors.greyLightest,
+    minHeight: '100%'
   },
   body: {
     flex: '1 1 auto',
     display: 'flex',
-    height: `calc(100vh - ${variables.sizing.fixedHeaderButtonIconSize})`,
+    height: `calc(100vh - ${sizes.largeIi})`,
     justifyContent: 'center',
     alignItems: 'center'
   },
   spinner: {
-    width: variables.padding.c,
-    height: variables.padding.c,
-    backgroundColor: variables.colors.navy,
+    width: sizes.largeIi,
+    height: sizes.largeIi,
+    backgroundColor: colors.primary,
     borderRadius: '100%',
     animationName: spin,
     animationDuration: '1.0s',
