@@ -22,7 +22,7 @@ const logger = require('@nudj/framework/logger')
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
-const LoadingComponent = require('./components/loading/loading')
+const LoadingPage = require('./pages/loading')
 const expressRouters = {
   insecure: [],
   secure: [
@@ -61,7 +61,7 @@ const { app, getMockApiApps } = server({
   spoofLoggedIn,
   errorHandlers,
   gqlFragments,
-  LoadingComponent
+  LoadingComponent: LoadingPage
 })
 
 app.listen(80, () => {
