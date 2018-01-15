@@ -1,8 +1,9 @@
 const nock = require('nock')
+const mockSend = require('./mock-send')
 
 const google = nock('https://www.googleapis.com').persist()
 
-const mockGmailSend = () => {
+const mockGoogleRequests = () => {
   google
     .get('/oauth2/v1/tokeninfo')
     .query({ access_token: 'VALID_ACCESS_TOKEN' })
@@ -10,15 +11,7 @@ const mockGmailSend = () => {
 
   google
     .post('/gmail/v1/users/me/messages/send')
-    .reply(async (uri, body, callback) => {
-      const data = await Promise.resolve({ threadId: 'VALID_GMAIL_THREAD_ID' })
-      callback(null, [200, data])
-    })
-}
-
-const mockGoogleRequests = (callback) => {
-  mockGmailSend()
-  callback && callback()
+    .reply(mockSend)
 }
 
 module.exports = mockGoogleRequests

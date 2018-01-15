@@ -19,7 +19,7 @@ const path = require('path')
 const server = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 
-const { mockData, mockGoogleRequests } = require('./mocks')
+const { mockData, mockExternalRequests } = require('./mocks')
 
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
@@ -80,7 +80,7 @@ if (process.env.USE_MOCKS === 'true') {
     logger.log('info', 'Mock GQL running')
   })
 
-  mockGoogleRequests(() => {
-    logger.log('info', 'Mock Google running')
+  mockExternalRequests(() => {
+    logger.log('info', 'Mocking external requests')
   })
 }
