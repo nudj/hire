@@ -1,20 +1,26 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const isNil = require('lodash/isNil')
+const get = require('lodash/get')
 
-const { Text, Align, Card, Input, Button } = require('@nudj/components')
+const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const {
+  setNewItemValue,
   updateConnectionsSearchQuery,
   saveSurveyAnswers,
   setSelectedConnections,
-  search
+  search,
+  showAddForm,
+  hideAddForm,
+  submitNewConnection
 } = require('../actions')
 const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
+const ConnectionsForm = require('../../../components/form-connection')
 
 const getHandleSetConnections = dispatch => e => {
   e.preventDefault()
@@ -33,6 +39,24 @@ const handleSaveAnswers = (dispatch, questionId) => event => {
 const getHandleSearchSubmit = dispatch => event => {
   event.preventDefault()
   dispatch(search())
+}
+
+const getHandleAddClick = dispatch => event => {
+  event.preventDefault()
+  dispatch(showAddForm())
+}
+
+const getHandleModalClose = dispatch => event => {
+  event.preventDefault()
+  dispatch(hideAddForm())
+}
+
+const getHandleConnectionChange = dispatch => (field, value) => {
+  dispatch(setNewItemValue('newConnection', field, value))
+}
+
+const getHandleConnectionSubmit = dispatch => (field, value) => {
+  dispatch(submitNewConnection())
 }
 
 const ConnectionsQuestionPage = props => {
@@ -132,6 +156,33 @@ const ConnectionsQuestionPage = props => {
             </form>
             {renderSearchTable()}
           </Card>
+          <Button
+            subtle
+            volume='whistle'
+            onClick={getHandleAddClick(dispatch)}
+          >
+            Add person
+          </Button>
+          <Modal
+            isOpen={get(props, 'addFormVisible')}
+            style={style.modalWindow}
+            shouldCloseOnOverlayClick
+            shouldCloseOnEsc
+            onRequestClose={getHandleModalClose(dispatch)}
+          >
+            <Text element='div' size='largeI' style={style.modalHeading}>
+              Add an individual
+            </Text>
+            <Text element='p' style={style.modalBody}>
+              Thought of someone who might help you in your search? Just add their details below so you can nudj them.
+            </Text>
+            <ConnectionsForm
+              csrfToken={get(props, 'csrfToken')}
+              onChange={getHandleConnectionChange(dispatch)}
+              onSubmit={getHandleConnectionSubmit(dispatch)}
+              connection={get(props, 'newConnection')}
+            />
+          </Modal>
           <div className={css(sharedStyle.footer)}>
             <Align
               leftChildren={

@@ -146,3 +146,40 @@ module.exports.search = () => (dispatch, getState) => {
     )
   )
 }
+
+const SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
+module.exports.SHOW_ADD_FORM = SHOW_ADD_FORM
+function showAddForm () {
+  return {
+    type: SHOW_ADD_FORM
+  }
+}
+module.exports.showAddForm = () =>
+  quickDispatch(showAddForm())
+
+const HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
+module.exports.HIDE_ADD_FORM = HIDE_ADD_FORM
+function hideAddForm () {
+  return {
+    type: HIDE_ADD_FORM
+  }
+}
+module.exports.hideAddForm = () =>
+  quickDispatch(hideAddForm())
+
+module.exports.submitNewConnection = () => (dispatch, getState) => {
+  const state = getState()
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const data = get(state, 'surveyQuestionPage.newConnection')
+
+  return dispatch(
+    actions.app.postData(
+      {
+        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection`,
+        data
+      }
+    )
+  )
+}

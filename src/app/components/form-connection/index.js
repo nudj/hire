@@ -1,39 +1,81 @@
 const React = require('react')
 const get = require('lodash/get')
 
+const { InputField, Input, Button } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
+
+const style = require('./style.css')
+
+const fields = [
+  {
+    name: 'firstName',
+    label: 'First name',
+    required: true
+  },
+  {
+    name: 'lastName',
+    label: 'Last name',
+    required: true
+  },
+  {
+    name: 'email',
+    label: 'Email',
+    required: true
+  },
+  {
+    name: 'role',
+    label: 'Job title'
+  },
+  {
+    name: 'company',
+    label: 'Company'
+  }
+]
+
 const ConnectionEditor = (props) => {
-  const onChange = get(props, 'onChange')
-  const onSubmitCallback = get(props, 'onSubmit', () => {})
-  const onSubmit = (event) => {
+  const {
+    csrfToken,
+    onChange,
+    onSubmit = () => {}
+  } = props
+
+  const onChangeCallback = name => event => {
+    onChange(name, event.value)
+  }
+  const onSubmitCallback = event => {
     event.preventDefault()
-    onSubmitCallback()
+    onSubmit()
     return false
   }
   const connection = get(props, 'connection', {})
 
   return (
-    <form onSubmit={onSubmit}>
-      <p>
-        <label htmlFor='newFirstName'>First name</label>
-        <input id='newFirstName' type='text' value={connection.firstName || ''} name='firstName' onChange={onChange('firstName')} />
-      </p>
-      <p>
-        <label htmlFor='newLastName'>Last name</label>
-        <input id='newLastName' type='text' value={connection.lastName || ''} name='lastName' onChange={onChange('lastName')} />
-      </p>
-      <p>
-        <label htmlFor='newTitle'>Title</label>
-        <input id='newTitle' type='text' value={connection.title || ''} name='title' onChange={onChange('title')} />
-      </p>
-      <p>
-        <label htmlFor='newCompany'>Company</label>
-        <input id='newCompany' type='text' value={connection.company || ''} name='company' onChange={onChange('company')} />
-      </p>
-      <p>
-        <label htmlFor='newEmail'>Email</label>
-        <input id='newEmail' type='text' value={connection.email || ''} name='email' onChange={onChange('email')} />
-      </p>
-      <button>Add</button>
+    <form action='/' onSubmit={onSubmitCallback}>
+      <input name='_csrf' value={csrfToken} type='hidden' />
+      {fields.map(field => (
+        <InputField
+          htmlFor={field.name}
+          label={field.label}
+          required={field.required}
+          key={field.name}
+          styleSheet={{ root: style.field }}
+        >
+          <Input
+            onChange={onChangeCallback(field.name)}
+            id={field.name}
+            name={field.name}
+            value={connection[field.name]}
+            required
+          />
+        </InputField>
+      ))}
+      <Button
+        volume='cheer'
+        className={css(style.submit)}
+        type='submit'
+      >
+        Add person
+      </Button>
     </form>
   )
 }

@@ -22,7 +22,16 @@ const styleSheet = StyleSheet.create({
     paddingRight: sizes.largeIi
   },
   table: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    marginTop: sizes.largeIi
+  },
+  modalHeading: {
+    textAlign: 'center'
+  },
+  modalBody: {
+    marginTop: sizes.regular,
+    marginBottom: sizes.regular,
+    textAlign: 'center'
   }
 })
 

@@ -9,9 +9,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   router.getHandlers('/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId', respondWithGql(fetchers.getQuestion))
   router.postHandlers('/surveys/:surveySlug/sections/:sectionId/companies/:questionId', respondWithGql(fetchers.postEmployment))
   router.postHandlers('/surveys/:surveySlug/sections/:sectionId/connections/:questionId', respondWithGql(fetchers.postConnectionAnswer))
-  router.getHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId', respondWithGql(fetchers.get))
-  router.postHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId/companies/:questionId', respondWithGql(fetchers.postEmployment))
-  router.postHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId/connections/:questionId', respondWithGql(fetchers.postConnection))
+  router.postHandlers('/surveys/:surveySlug/sections/:sectionId/connections/:questionId/newConnection', respondWithGql(fetchers.postNewConnection))
 
   return router
 }

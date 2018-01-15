@@ -58,6 +58,7 @@ const SurveyQuestionPage = props => {
           selectedConnections={get(state, 'selectedConnections', [])}
           searchInput={searchInput}
           searchQuery={searchQuery}
+          addFormVisible={get(state, 'addFormVisible', false)}
         />
       )
     default:
