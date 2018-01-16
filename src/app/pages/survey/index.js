@@ -8,6 +8,7 @@ const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 
 type Question = {
@@ -43,9 +44,13 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]')
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
-        <title>nudj - Survey</title>
+        <title>Survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
@@ -78,7 +83,7 @@ const SurveyPage = (props: SurveyProps) => {
           </ButtonLink>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 

@@ -6,6 +6,7 @@ const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 
 const getUrl = network => `/setup-network/${network}`
@@ -25,8 +26,12 @@ const NETWORKS = {
   }
 }
 
-const ChooseNetworkPage = () => (
-  <div className={css(sharedStyle.root)}>
+const ChooseNetworkPage = (props: Object) => (
+  <Layout
+    {...props}
+    styleSheet={{root: sharedStyle.root}}
+    title='Part 1 - Unlock your network'
+  >
     <Helmet>
       <title>Choose a network</title>
     </Helmet>
@@ -57,7 +62,7 @@ const ChooseNetworkPage = () => (
         </ButtonLink>
       </div>
     </div>
-  </div>
+  </Layout>
 )
 
 module.exports = ChooseNetworkPage

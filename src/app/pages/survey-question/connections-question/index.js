@@ -10,6 +10,7 @@ const {
   setSelectedConnections,
   search
 } = require('../actions')
+const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ConnectionsTable = require('../../../components/connections-table')
@@ -53,7 +54,11 @@ const ConnectionsQuestionPage = props => {
   }
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
         <title>Complete survey</title>
       </Helmet>
@@ -121,7 +126,7 @@ const ConnectionsQuestionPage = props => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 

@@ -7,6 +7,7 @@ const { css } = require('@nudj/components/lib/css')
 
 const ListJobs = require('../../components/job-radio-group')
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 const { selectJob } = require('./actions')
 
@@ -19,7 +20,7 @@ const NewConversationPage = props => {
   const connection = get(props, 'user.connection.firstName')
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Select a job</title>
       </Helmet>
@@ -55,7 +56,7 @@ const NewConversationPage = props => {
           </ButtonLink>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 

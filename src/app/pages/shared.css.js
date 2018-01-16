@@ -5,19 +5,13 @@ const {
   utilities,
   typography
 } = require('@nudj/components/lib/css')
-const { wizardAction } = require('../lib/css/breakpoints')
 
-const multiplySizeVar = (size, multipler) =>
-  `${parseInt(size.replace('rem', ''), 10) * multipler}rem`
+const { wizardAction } = require('../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   root: {
     backgroundColor: colors.greyLightest,
-    minHeight: '100%',
-    textAlign: 'left',
-    '@media (min-width: 37.5rem)': {
-      textAlign: 'center'
-    }
+    minHeight: '100%'
   },
   wrapper: {
     maxWidth: '70rem',
@@ -28,9 +22,11 @@ const styleSheet = StyleSheet.create({
     paddingTop: sizes.largeIi,
     paddingBottom: sizes.largeIi,
     height: '100%',
+    textAlign: 'left',
     '@media (min-width: 37.5rem)': {
-      paddingTop: multiplySizeVar(sizes.largeIii, 2),
-      paddingBottom: multiplySizeVar(sizes.largeIii, 2)
+      paddingTop: sizes.largeIii,
+      paddingBottom: sizes.largeIii,
+      textAlign: 'center'
     }
   },
   header: {
@@ -107,11 +103,18 @@ const styleSheet = StyleSheet.create({
     width: '100%',
     left: 0,
     bottom: 0,
-    paddingLeft: sizes.largeIi,
-    paddingRight: sizes.largeIi,
-    paddingTop: sizes.regular,
-    paddingBottom: sizes.regular,
-    textAlign: 'left'
+    borderTopColor: colors.greyLight,
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    paddingLeft: sizes.smallI,
+    paddingRight: sizes.smallI,
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
+    textAlign: 'left',
+    '@media(min-width: 30rem)': {
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular
+    }
   },
   stepCounter: {
     textAlign: 'center',

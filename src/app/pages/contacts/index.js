@@ -8,6 +8,7 @@ const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const style = require('./style.css')
+const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const {
@@ -45,7 +46,7 @@ const ContactsPage = props => {
   }
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Complete survey</title>
       </Helmet>
@@ -108,7 +109,7 @@ const ContactsPage = props => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 

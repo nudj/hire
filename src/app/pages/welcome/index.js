@@ -6,11 +6,12 @@ const { Text, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 const style = require('./style.css')
 
-const WelcomePage = () => (
-  <div className={css(sharedStyle.root)}>
+const WelcomePage = (props: Object) => (
+  <Layout {...props} styleSheet={{root: sharedStyle.root}}>
     <Helmet>
       <title>Welcome</title>
     </Helmet>
@@ -89,7 +90,7 @@ const WelcomePage = () => (
         </ButtonLink>
       </div>
     </div>
-  </div>
+  </Layout>
 )
 
 module.exports = WelcomePage

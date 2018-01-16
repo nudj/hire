@@ -8,6 +8,7 @@ const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const { setNewItemValue, addEmployment } = require('../actions')
+const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
 const ButtonLink = require('../../../components/button-link')
@@ -45,7 +46,11 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   } = props
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>
@@ -103,7 +108,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 
