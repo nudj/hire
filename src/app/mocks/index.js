@@ -1,7 +1,7 @@
 const nock = require('nock')
 const logger = require('@nudj/framework/logger')
-const mockData = require('./mock-data')
-const mockGoogleRequests = require('./google/mock-requests')
+const mockData = require('./data')
+const mockGoogleRequests = require('./google/requests')
 
 const start = (callback) => {
   // Add different types of mocked external requests here

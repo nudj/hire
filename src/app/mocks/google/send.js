@@ -5,8 +5,8 @@ const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
 const request = require('@nudj/library/request')
 
-const { VALID_ACCESS_TOKEN } = require('./mock-constants')
-const mockThreadFetch = require('./mock-thread-fetch')
+const { VALID_ACCESS_TOKEN } = require('./constants')
+const mockThreadFetch = require('./thread-fetch')
 
 const url = `http://${process.env.API_HOST}:81`
 
@@ -36,12 +36,10 @@ const parseBody = async (rawMessage) => {
     }
     return email
   }, { body })
-  data.recipient = await fetchPersonFromEmail(data.to)
-  data.sender = 'person5'
-  delete data.to
-  delete data.from
+  data.to = await fetchPersonFromEmail(data.to)
+  data.from = 'person5'
 
-  return pick(data, ['body', 'sender', 'recipient'])
+  return pick(data, ['body', 'to', 'from'])
 }
 
 module.exports = async (uri, body, callback) => {

@@ -9,9 +9,9 @@ const fetchEmailFromPerson = async (id) => {
   return person.email
 }
 
-const threadTemplate = async ({ id, body, sender, subject, recipient, date }) => {
-  const to = await fetchEmailFromPerson(recipient)
-  const from = await fetchEmailFromPerson(sender)
+const threadTemplate = async ({ id, body, from, subject, to, date }) => {
+  to = await fetchEmailFromPerson(to)
+  from = await fetchEmailFromPerson(from)
   return {
     id,
     internalDate: date,

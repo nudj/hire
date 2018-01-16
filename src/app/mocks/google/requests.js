@@ -1,10 +1,10 @@
 const nock = require('nock')
-const mockSend = require('./mock-send')
-const mockThreadFetch = require('./mock-thread-fetch')
+const mockSend = require('./send')
+const mockThreadFetch = require('./thread-fetch')
 const {
   threadIds,
   VALID_ACCESS_TOKEN
-} = require('./mock-constants')
+} = require('./constants')
 
 const google = nock('https://www.googleapis.com').persist()
 
