@@ -18,7 +18,7 @@ const mockExternalRequests = (callback) => {
 
   // Add different types of mocked external requests here
   mockGoogleRequests()
-  callback && callback()
+  typeof callback === 'function' && callback()
 }
 
 module.exports = {
