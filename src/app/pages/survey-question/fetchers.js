@@ -345,12 +345,7 @@ const postNewConnection = ({ session, params, body }) => {
     company: body.company,
     source: { name: 'manual' }
   }
-  const respond = (data) => {
-    throw new Redirect({
-      url: `/surveys/${params.surveySlug}/sections/${params.sectionId}/connections/${params.questionId}`
-    })
-  }
-  return { gql, variables, respond }
+  return { gql, variables }
 }
 
 module.exports = {

@@ -23,7 +23,7 @@ const fields = [
     required: true
   },
   {
-    name: 'role',
+    name: 'title',
     label: 'Job title'
   },
   {
@@ -51,13 +51,13 @@ const FormConnection = (props) => {
   const connection = get(props, 'connection', {})
 
   return (
-    <form action='/' onSubmit={getHandleSubmit} className={css(styleOverride)}>
+    <form onSubmit={getHandleSubmit} className={css(styleOverride)}>
       <input name='_csrf' value={csrfToken} type='hidden' />
       {fields.map(field => (
         <InputField
           htmlFor={field.name}
           label={field.label}
-          required={field.required}
+          required={!!field.required}
           key={field.name}
           styleSheet={{ root: style.field }}
         >
@@ -65,8 +65,8 @@ const FormConnection = (props) => {
             onChange={getHandleChange(field.name)}
             id={field.name}
             name={field.name}
-            value={connection[field.name]}
-            required
+            value={connection[field.name] || ''}
+            required={!!field.required}
           />
         </InputField>
       ))}

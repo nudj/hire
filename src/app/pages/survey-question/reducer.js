@@ -8,7 +8,8 @@ const {
   SET_SELECTED_CONNECTIONS,
   UPDATE_CONNECTIONS_SEARCH_QUERY,
   SHOW_ADD_FORM,
-  HIDE_ADD_FORM
+  HIDE_ADD_FORM,
+  CLEAR_ADD_FORM
 } = require('./actions')
 
 const setNewItemValue = (state, action) => {
@@ -59,6 +60,11 @@ const hideAddForm = state => ({
   showAddIndividualConnectionModal: false
 })
 
+const clearAddForm = state => ({
+  ...state,
+  newConnection: {}
+})
+
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [ADD_FORMER_EMPLOYER]: addEmployment,
@@ -66,7 +72,8 @@ const reducers = {
   [UPDATE_CONNECTIONS_SEARCH_QUERY]: updateConnectionsSearchQuery,
   [SET_SELECTED_CONNECTIONS]: setSelectedConnections,
   [SHOW_ADD_FORM]: showAddForm,
-  [HIDE_ADD_FORM]: hideAddForm
+  [HIDE_ADD_FORM]: hideAddForm,
+  [CLEAR_ADD_FORM]: clearAddForm
 }
 
 const initialState = {
