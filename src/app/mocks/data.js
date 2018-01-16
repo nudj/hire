@@ -58,7 +58,8 @@ data.conversations = data.conversations.concat([
   {
     type: emailPreferences.OTHER,
     person: 'person5',
-    recipient: 'person1'
+    recipient: 'person1',
+    id: 'conversation2'
   }
 ])
 data.messages = data.messages.concat([

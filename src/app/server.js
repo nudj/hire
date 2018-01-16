@@ -66,14 +66,6 @@ app.listen(80, () => {
 })
 
 if (process.env.USE_MOCKS === 'true') {
-  // TODO: Establish good pattern for this (maybe move to framework?)
-  process.on('unhandledRejection', error => {
-    console.log(error.log, ...(error.log || []))
-  })
-  process.on('exit', (code) => {
-    mockExternalRequests.stop(`Process terminated with exit code: ${code}`)
-  })
-
   const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
 
   jsonServer.listen(81, () => {
@@ -84,7 +76,7 @@ if (process.env.USE_MOCKS === 'true') {
     logger.log('info', 'Mock GQL running')
   })
 
-  mockExternalRequests.start(() => {
+  mockExternalRequests(() => {
     logger.log('info', 'Mocking external requests')
   })
 }
