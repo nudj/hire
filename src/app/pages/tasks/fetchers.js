@@ -6,11 +6,6 @@ const get = ({
   const gql = `
     query TasksPage ($userId: ID!) {
       user (id: $userId) {
-        conversationByFilters(filters: { id: "conversation1" }) {
-          messages {
-            id
-          }
-        }
         id
         firstName
         tasks {

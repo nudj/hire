@@ -5,6 +5,7 @@ const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
 const request = require('@nudj/library/request')
 
+const { VALID_ACCESS_TOKEN } = require('./mock-constants')
 const mockThreadFetch = require('./mock-thread-fetch')
 
 const url = `http://${process.env.API_HOST}:81`

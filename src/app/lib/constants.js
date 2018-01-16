@@ -1,3 +1,5 @@
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
+
 const surveyTypes = {
   EMPLOYEE_SURVEY: 'EMPLOYEE_SURVEY',
   HIRER_SURVEY: 'HIRER_SURVEY'
@@ -28,5 +30,6 @@ module.exports = {
   taskTypes,
   notificationTypes,
   booleanChoices,
+  emailPreferences,
   questionTypes
 }

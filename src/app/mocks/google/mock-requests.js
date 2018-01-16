@@ -7,11 +7,6 @@ const {
 } = require('./mock-constants')
 
 const google = nock('https://www.googleapis.com').persist()
-const gmail = nock('https://www.googleapis.com/gmail/v1/users/me', {
-  reqheaders: {
-    authorization: `Bearer ${VALID_ACCESS_TOKEN}`
-  }
-}).persist()
 
 const mockGoogleRequests = () => {
   google
@@ -23,8 +18,8 @@ const mockGoogleRequests = () => {
     .reply(mockSend)
 
   threadIds.forEach(id => {
-    gmail
-      .get(`/threads/${id}`)
+    google
+      .get(`/gmail/v1/users/me/threads/${id}`)
       .reply(mockThreadFetch)
   })
 }

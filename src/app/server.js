@@ -11,20 +11,24 @@ require('babel-register')({
     return true
   }
 })
-// TODO: Establish good pattern for this (maybe move to framework?)
-process.on('unhandledRejection', error => {
-  console.log(error.log, ...(error.log || []))
-})
 const path = require('path')
 const server = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 
 const { mockData, mockExternalRequests } = require('./mocks')
-
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingPage = require('./pages/loading')
+
+// TODO: Establish good pattern for this (maybe move to framework?)
+process.on('unhandledRejection', error => {
+  console.log(error.log, ...(error.log || []))
+})
+process.on('exit', (code) => {
+  mockExternalRequests.stop(`Process terminated with exit code: ${code}`)
+})
+
 const expressRouters = {
   insecure: [],
   secure: [
@@ -80,7 +84,7 @@ if (process.env.USE_MOCKS === 'true') {
     logger.log('info', 'Mock GQL running')
   })
 
-  mockExternalRequests(() => {
+  mockExternalRequests.start(() => {
     logger.log('info', 'Mocking external requests')
   })
 }

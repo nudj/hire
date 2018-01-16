@@ -1,5 +1,6 @@
 const {
-  questionTypes
+  questionTypes,
+  emailPreferences
 } = require('../lib/constants')
 
 const {
@@ -44,10 +45,49 @@ const data = {
   roles: [],
   sources: []
 }
+data.conversations = data.conversations.concat([
+  {
+    type: emailPreferences.GOOGLE,
+    threadId: threadIds[0],
+    person: 'person5',
+    recipient: 'person1',
+    created: '2018-01-16T01:32:50.875+00:00',
+    modified: '2018-01-16T01:32:50.875+00:00',
+    id: 'conversation1'
+  },
+  {
+    type: emailPreferences.OTHER,
+    person: 'person5',
+    recipient: 'person1'
+  }
+])
+data.messages = data.messages.concat([
+  {
+    id: `${threadIds[0]}-message1`,
+    date: '2018-01-16T02:51:58.000+00:00',
+    body: 'Hello, how are you?',
+    sender: 'person5',
+    recipient: 'person1'
+  },
+  {
+    id: `${threadIds[0]}-message2`,
+    date: '2018-01-16T02:57:58.000+00:00',
+    body: 'I am well, David! How about you?',
+    sender: 'person1',
+    recipient: 'person5'
+  },
+  {
+    id: `${threadIds[0]}-message3`,
+    date: '2018-01-16T02:59:40.000+00:00',
+    body: 'Not too bad, not too bad!',
+    sender: 'person5',
+    recipient: 'person1'
+  }
+])
 data.accounts = data.accounts.concat([
   {
     person: 'person5',
-    type: 'GOOGLE',
+    type: emailPreferences.GOOGLE,
     data: {
       accessToken: VALID_ACCESS_TOKEN,
       refreshToken: VALID_REFRESH_TOKEN
