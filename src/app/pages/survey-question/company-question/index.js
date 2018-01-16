@@ -46,7 +46,11 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   } = props
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 2 - Uncover gems">
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
         <title>nudj - Complete survey</title>
       </Helmet>

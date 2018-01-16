@@ -54,7 +54,11 @@ const ConnectionsQuestionPage = props => {
   }
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 2 - Uncover gems">
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
         <title>Complete survey</title>
       </Helmet>

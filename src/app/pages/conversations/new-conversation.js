@@ -20,7 +20,7 @@ const NewConversationPage = props => {
   const connection = get(props, 'user.connection.firstName')
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Select a job</title>
       </Helmet>

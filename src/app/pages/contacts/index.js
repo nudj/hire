@@ -46,7 +46,7 @@ const ContactsPage = props => {
   }
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Complete survey</title>
       </Helmet>

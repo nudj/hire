@@ -70,7 +70,7 @@ const ComposeMessagePage = props => {
   )
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Send your message</title>
       </Helmet>

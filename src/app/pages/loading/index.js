@@ -6,7 +6,7 @@ const style = require('./style.css')
 const sharedStyle = require('../shared.css')
 
 const Loading = props => (
-  <Layout {...props} styleSheet={{root: sharedStyle.root }}>
+  <Layout {...props} styleSheet={{root: sharedStyle.root}}>
     <div className={css(style.root)}>
       <div className={css(style.body)}>
         <div className={css(style.spinner)} />

@@ -9,8 +9,12 @@ const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../../shared.css')
 
-const LinkedinDownloadGuidePage = props => (
-  <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 1 - Unlock your network">
+const LinkedinDownloadGuidePage = (props: Object) => (
+  <Layout
+    {...props}
+    styleSheet={{root: sharedStyle.root}}
+    title='Part 1 - Unlock your network'
+  >
     <Helmet>
       <title>Downloading your connections from LinkedIn</title>
     </Helmet>

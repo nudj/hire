@@ -8,7 +8,7 @@ const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 const defaultStyleSheet = require('./style.css')
 
 const ApplicationLayout = props => {
-  const { user, children, title, styleSheet } = props
+  const { children, title, styleSheet } = props
   const onboarded = get(props, 'user.hirer.onboarded', false)
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
@@ -16,10 +16,10 @@ const ApplicationLayout = props => {
   return (
     <div className={css(style.root)}>
       <div className={css(style.pageHeader)}>
-        <RouterLink className={css(style.logoContainer)} to="/">
+        <RouterLink className={css(style.logoContainer)} to='/'>
           <img
             className={css(style.logo)}
-            src="/assets/images/nudj-logo-dark.svg"
+            src='/assets/images/nudj-logo-dark.svg'
           />
         </RouterLink>
         <div className={css(style.bodyContainer)}>
@@ -29,7 +29,7 @@ const ApplicationLayout = props => {
                 <NavLink
                   className={css(style.navigationLink)}
                   activeClassName={css(style.navigationLinkActive)}
-                  to="/contacts"
+                  to='/contacts'
                 >
                   Contacts
                 </NavLink>
@@ -38,7 +38,7 @@ const ApplicationLayout = props => {
                 <NavLink
                   className={css(style.navigationLink)}
                   activeClassName={css(style.navigationLinkActive)}
-                  to="/messages"
+                  to='/messages'
                 >
                   Messages
                 </NavLink>
@@ -49,12 +49,12 @@ const ApplicationLayout = props => {
           )}
         </div>
         <div className={css(style.helpContainer)}>
-          <Link href="mailto:help@nudj.co" id="open-intercom" subtle style={style.helpLink}>
+          <Link href='mailto:help@nudj.co' id='open-intercom' subtle style={style.helpLink}>
             Chat
           </Link>
         </div>
       </div>
-      {props.children}
+      {children}
     </div>
   )
 }

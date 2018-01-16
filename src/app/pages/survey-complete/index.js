@@ -46,7 +46,11 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const selectedContactId = queryParams.get('id')
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 3 - Send nudjes">
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 3 - Send nudjes'
+    >
       <Helmet>
         <title>View recommendations</title>
       </Helmet>

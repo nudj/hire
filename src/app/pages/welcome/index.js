@@ -10,8 +10,8 @@ const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 const style = require('./style.css')
 
-const WelcomePage = props => (
-  <Layout {...props} styleSheet={{root: sharedStyle.root }}>
+const WelcomePage = (props: Object) => (
+  <Layout {...props} styleSheet={{root: sharedStyle.root}}>
     <Helmet>
       <title>Welcome</title>
     </Helmet>

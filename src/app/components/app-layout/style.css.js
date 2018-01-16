@@ -3,7 +3,7 @@ const { StyleSheet, typography, sizes, colors } = require('@nudj/components/lib/
 
 const styleSheet = StyleSheet.create({
   root: {
-    minHeight: '100%',
+    minHeight: '100%'
   },
   pageHeader: {
     display: 'flex',
@@ -12,7 +12,7 @@ const styleSheet = StyleSheet.create({
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
     alignItems: 'stretch',
-    width: '100%',
+    width: '100%'
   },
   logoContainer: {
     flexShrink: 0,
@@ -20,30 +20,30 @@ const styleSheet = StyleSheet.create({
     paddingRight: sizes.smallI,
     '@media(min-width: 30rem)': {
       paddingLeft: sizes.regular,
-      paddingRight: sizes.regular,
+      paddingRight: sizes.regular
     }
   },
   bodyContainer: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   helpContainer: {
-    flexShrink: 0,
+    flexShrink: 0
   },
   logo: {
     maxWidth: sizes.largeI,
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   navigationList: {
     listStyleType: 'none',
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: 0,
-    height: '100%',
+    height: '100%'
   },
   navigationListItem: {
     display: 'inline-block',
-    height: '100%',
+    height: '100%'
   },
   navigationLink: merge(typography.type.smallI, {
     backgroundColor: 'transparent',
@@ -71,12 +71,12 @@ const styleSheet = StyleSheet.create({
       content: '""',
       display: 'inline-block',
       height: '100%',
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     },
     '@media(min-width: 30rem)': merge(typography.type.regular, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
-      fontWeight: typography.fontWeight.bold,
+      fontWeight: typography.fontWeight.bold
     })
   }),
   navigationLinkActive: {
@@ -87,7 +87,7 @@ const styleSheet = StyleSheet.create({
       bottom: '-1px',
       position: 'absolute',
       backgroundColor: colors.greyDarker,
-      left: 0,
+      left: 0
     }
   },
   helpLink: merge(typography.type.smallI, {
@@ -97,7 +97,7 @@ const styleSheet = StyleSheet.create({
     '@media(min-width: 30rem)': merge(typography.type.regular, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
-      fontWeight: typography.fontWeight.bold,
+      fontWeight: typography.fontWeight.bold
     })
   }),
   title: merge(typography.type.smallI, {
@@ -109,10 +109,10 @@ const styleSheet = StyleSheet.create({
       content: '""',
       display: 'inline-block',
       height: '100%',
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     },
     '@media(min-width: 30rem)': merge(typography.type.regular, {
-      fontWeight: typography.fontWeight.bold,
+      fontWeight: typography.fontWeight.bold
     })
   })
 })

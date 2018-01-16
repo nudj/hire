@@ -44,7 +44,11 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]')
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 2 - Uncover gems">
+    <Layout
+      {...props}
+      styleSheet={{root: sharedStyle.root}}
+      title='Part 2 - Uncover gems'
+    >
       <Helmet>
         <title>Survey</title>
       </Helmet>

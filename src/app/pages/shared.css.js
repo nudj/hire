@@ -11,7 +11,7 @@ const { wizardAction } = require('../lib/css/breakpoints')
 const styleSheet = StyleSheet.create({
   root: {
     backgroundColor: colors.greyLightest,
-    minHeight: '100%',
+    minHeight: '100%'
   },
   wrapper: {
     maxWidth: '70rem',
@@ -27,7 +27,7 @@ const styleSheet = StyleSheet.create({
       paddingTop: sizes.largeIii,
       paddingBottom: sizes.largeIii,
       textAlign: 'center'
-    },
+    }
   },
   header: {
     maxWidth: '40rem',
@@ -113,7 +113,7 @@ const styleSheet = StyleSheet.create({
     textAlign: 'left',
     '@media(min-width: 30rem)': {
       paddingLeft: sizes.regular,
-      paddingRight: sizes.regular,
+      paddingRight: sizes.regular
     }
   },
   stepCounter: {

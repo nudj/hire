@@ -26,8 +26,12 @@ const NETWORKS = {
   }
 }
 
-const ChooseNetworkPage = props => (
-  <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 1 - Unlock your network">
+const ChooseNetworkPage = (props: Object) => (
+  <Layout
+    {...props}
+    styleSheet={{root: sharedStyle.root}}
+    title='Part 1 - Unlock your network'
+  >
     <Helmet>
       <title>Choose a network</title>
     </Helmet>
