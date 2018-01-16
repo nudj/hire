@@ -9,5 +9,5 @@ module.exports = {
   surveyQuestionPage,
   uploadPage,
   contactsPage,
-  composeMessage,
+  composeMessage
 }

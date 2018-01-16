@@ -106,7 +106,7 @@ const replyTo = (props) => {
   }
 
   return { gql, variables }
-} 
+}
 
 const getActiveJobs = (props) => {
   const { session, params } = props

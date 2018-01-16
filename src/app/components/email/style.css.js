@@ -2,7 +2,7 @@ const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   root: {
-    textAlign: 'left',
+    textAlign: 'left'
   },
   metaDataItem: {
     color: colors.primary

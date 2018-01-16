@@ -64,19 +64,19 @@ const MessageThreadPage = props => {
     <div className={css(sharedStyle.root)}>
       <Helmet>
         <title>
-          { subject } 
+          { subject }
         </title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Card style={[sharedStyle.card, sharedStyle.noPadding]}>
           <div className={css(style.threadSection)}>
-            <Text style={style.threadSubject} element="div" size="largeI">
+            <Text style={style.threadSubject} element='div' size='largeI'>
               {subject}
             </Text>
-            <Text style={style.threadName} element="div" size="smallI">
+            <Text style={style.threadName} element='div' size='smallI'>
               {recipient.firstName} {recipient.lastName}
             </Text>
-            <Text style={style.threadEmail} element="div" size="smallIi">
+            <Text style={style.threadEmail} element='div' size='smallIi'>
               {recipient.email}
             </Text>
           </div>
@@ -91,7 +91,7 @@ const MessageThreadPage = props => {
               />
             </div>
           ))}
-          <form className={css(style.threadSection)} method="post">
+          <form className={css(style.threadSection)} method='post'>
             <Textarea name='body' placeholder='Write your message here...' />
             <Button style={style.replyButton} type='submit' volume='cheer'>Reply</Button>
           </form>
