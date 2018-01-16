@@ -12,6 +12,7 @@ const {
 } = require('./actions')
 const Dropzone = require('../../../components/connections-csv-uploader')
 const ButtonLink = require('../../../components/button-link')
+const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../../shared.css')
 
 type Props = {
@@ -37,7 +38,7 @@ const LinkedinUploadPage = (props: Props) => {
   const { dispatch, uploadPage: state } = props
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 1 - Unlock your network">
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
@@ -79,7 +80,7 @@ const LinkedinUploadPage = (props: Props) => {
           </div>
         )}
       </div>
-    </div>
+    </Layout>
   )
 }
 

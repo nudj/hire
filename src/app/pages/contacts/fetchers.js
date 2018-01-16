@@ -1,11 +1,14 @@
 const isNil = require('lodash/isNil')
 
+const { Global } = require('../../lib/graphql')
+
 const getContacts = ({ session, query }) => {
   const preSearchQuery = `
     query SurveyQuestionPage($userId: ID!) {
       user(id: $userId) {
         connectionsCount
       }
+      ${Global}
     }
   `
 
@@ -32,6 +35,7 @@ const getContacts = ({ session, query }) => {
           }
         }
       }
+      ${Global}
     }
   `
 

@@ -2,7 +2,6 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const createHash = require('hash-generator')
-const { getFirstNonNil } = require('@nudj/library')
 
 const {
   Card,
@@ -13,11 +12,13 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const { getFirstNonNil } = require('@nudj/library')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
 const { render } = require('../../lib/templater')
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
+const Layout = require('../../components/app-layout')
 const { updateSubject, updateMessage } = require('./actions')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
@@ -69,7 +70,7 @@ const ComposeMessagePage = props => {
   )
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root }}>
       <Helmet>
         <title>Send your message</title>
       </Helmet>
@@ -115,7 +116,7 @@ const ComposeMessagePage = props => {
           </Card>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 

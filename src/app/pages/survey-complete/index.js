@@ -13,6 +13,7 @@ const sharedStyle = require('../shared.css')
 
 const ListRecommendations = require('./list-recommendations')
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const EmailAuthForm = require('../../components/email-authentication-form')
 
 const getRecommendationCountString = recommendationCount => {
@@ -45,7 +46,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const selectedContactId = queryParams.get('id')
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 3 - Send nudjes">
       <Helmet>
         <title>View recommendations</title>
       </Helmet>
@@ -96,7 +97,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           </div>
         </div>
       )}
-    </div>
+    </Layout>
   )
 }
 

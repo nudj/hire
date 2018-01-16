@@ -6,10 +6,11 @@ const { Card, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 
-const LinkedInRequestGuide = () => (
-  <div className={css(sharedStyle.root)}>
+const LinkedInRequestGuide = props => (
+  <Layout {...props} styleSheet={{root: sharedStyle.root }} title="Part 1 - Unlock your network">
     <Helmet>
       <title>Downloading your connections from LinkedIn</title>
     </Helmet>
@@ -71,7 +72,7 @@ const LinkedInRequestGuide = () => (
         </ButtonLink>
       </div>
     </div>
-  </div>
+  </Layout>
 )
 
 module.exports = LinkedInRequestGuide
