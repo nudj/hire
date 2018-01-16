@@ -1,7 +1,12 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { merge } = require('@nudj/library')
 
-const { StyleSheet, colors, sizes, utilities, typography } = require('@nudj/components/lib/css')
+const {
+  StyleSheet,
+  colors,
+  sizes,
+  utilities,
+  typography
+} = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   root: {
@@ -40,7 +45,7 @@ const styleSheet = StyleSheet.create({
     color: colors.white,
     '@media(min-width: 30rem)': merge(typography.type.regular, {
       paddingLeft: sizes.regular,
-      paddingRight: sizes.regular,
+      paddingRight: sizes.regular
     })
   }),
   close: {
@@ -48,7 +53,7 @@ const styleSheet = StyleSheet.create({
     border: 0,
     display: 'block',
     cursor: 'pointer',
-    color: variables.colors.white,
+    color: colors.white,
     alignSelf: 'stretch',
     paddingTop: sizes.smallI,
     paddingBottom: sizes.smallI,
@@ -64,7 +69,7 @@ const styleSheet = StyleSheet.create({
     },
     '@media(min-width: 30rem)': merge(typography.type.regular, {
       paddingLeft: sizes.regular,
-      paddingRight: sizes.regular,
+      paddingRight: sizes.regular
     })
   },
   closeIcon: {
@@ -72,7 +77,7 @@ const styleSheet = StyleSheet.create({
   },
   visible: {
     transform: 'translate3d(0, 0, 0)',
-    boxShadow: utilities.boxShadow[10].narrow,
+    boxShadow: utilities.boxShadow[10].narrow
   }
 })
 

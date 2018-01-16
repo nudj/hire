@@ -359,7 +359,7 @@ data.people = data.people.concat([
     company: 'nudj',
     status: 'user',
     emailPreference: null
-  },
+  }
 ])
 data.hirers = data.hirers.concat([
   {

@@ -7,8 +7,8 @@ const styleSheet = StyleSheet.create({
   continueButton: {
     marginTop: sizes.regular,
     paddingLeft: 0,
-    paddingRight: 0,
-  },
+    paddingRight: 0
+  }
 })
 
 module.exports = styleSheet

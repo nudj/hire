@@ -9,18 +9,18 @@ const onClickClose = props => event =>
   props.dispatch(actions.app.hideNotification())
 
 class Notification extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       js: false
     }
   }
-  componentDidMount() {
+  componentDidMount () {
     this.setState({
       js: true
     })
   }
-  render() {
+  render () {
     const notification = get(this.props, 'notification')
     const type = get(notification, 'type')
     const show = notification && !get(notification, 'hide')
@@ -37,8 +37,8 @@ class Notification extends React.Component {
           >
             <img
               className={css(style.closeIcon)}
-              src="/assets/images/close.svg"
-              alt="Close"
+              src='/assets/images/close.svg'
+              alt='Close'
             />
           </button>
         ) : null}

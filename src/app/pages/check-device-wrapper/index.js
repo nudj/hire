@@ -1,3 +1,4 @@
+/* global sessionStorage */
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -15,7 +16,7 @@ const checkMobileDevice = Component => class extends React.Component {
     showOverlay: false
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (
       regex.test(navigator.userAgent) &&
       sessionStorage.getItem('nudj-continue-onboarding') !== 'true'
@@ -37,13 +38,13 @@ const checkMobileDevice = Component => class extends React.Component {
     sessionStorage.setItem('nudj-continue-onboarding', true)
   }
 
-  render() {
+  render () {
     const { showOverlay } = this.state
 
     if (!showOverlay) return <Component {...this.props} />
 
     return (
-      <Layout {...this.props} title="" styleSheet={{ root: sharedStyle.root }}>
+      <Layout {...this.props} title='' styleSheet={{ root: sharedStyle.root }}>
         <Helmet>
           <title>Continue onboarding?</title>
         </Helmet>
@@ -64,7 +65,7 @@ const checkMobileDevice = Component => class extends React.Component {
               Send me a link
             </Button>
           </form>
-          <Button subtle onClick={this.dismissOverlay}  style={style.continueButton}>
+          <Button subtle onClick={this.dismissOverlay} style={style.continueButton}>
             I'm using a computer
           </Button>
         </div>
