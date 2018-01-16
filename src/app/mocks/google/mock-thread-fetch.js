@@ -1,7 +1,4 @@
 const { Base64 } = require('js-base64')
-const createHash = require('hash-generator')
-const uniqueId = require('lodash/uniqueId')
-const toLower = require('lodash/toLower')
 const filter = require('lodash/filter')
 const request = require('@nudj/library/request')
 
@@ -40,8 +37,8 @@ const threadTemplate = async ({ id, body, sender, subject, recipient, date }) =>
   }
 }
 
-const formatAsThread = async (messages) => {
-  return await Promise.all(messages.map(message => threadTemplate(message)))
+const formatAsThread = (messages) => {
+  return Promise.all(messages.map(message => threadTemplate(message)))
 }
 
 module.exports = async (uri, body, callback) => {
