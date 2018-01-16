@@ -38,23 +38,31 @@ const data = {
   roles: [],
   sources: []
 }
+data.messages = data.messages.concat([
+  {
+    id: 'MESSAGE-VALID_THREAD_ID-1',
+    body: 'Hello!',
+    sender: 'person5',
+    recipient: 'person6',
+    date: '2018-01-14T11:42:30.251+00:00'
+  },
+  {
+    id: 'MESSAGE-DIFFERENT_THREAD_ID-1',
+    body: 'Hello!',
+    sender: 'person5',
+    recipient: 'person6',
+    date: '2018-01-14T11:42:30.251+00:00'
+  }
+])
 data.conversations = data.conversations.concat([
   {
     type: 'GOOGLE',
     threadId: 'VALID_THREAD_ID',
-    person: 'person7',
+    person: 'person5',
     recipient: 'person6',
     created: '2018-01-14T11:42:30.251+00:00',
     modified: '2018-01-14T11:42:30.251+00:00',
     id: 'conversation1'
-  },
-  {
-    type: 'OTHER',
-    person: 'person7',
-    recipient: 'person6',
-    created: '2018-01-14T11:42:30.251+00:00',
-    modified: '2018-01-14T11:42:30.251+00:00',
-    id: 'conversation2'
   }
 ])
 data.accounts = data.accounts.concat([
