@@ -8,6 +8,7 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
+const Layout = require('../../components/app-layout')
 const MessagePreview = require('../../components/message-preview')
 const sharedStyle = require('../shared.css')
 const style = require('./style.css')
@@ -17,7 +18,7 @@ const MessagesPage = props => {
   const conversations = get(user, 'conversations', [])
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>Your messages</title>
       </Helmet>
@@ -47,7 +48,7 @@ const MessagesPage = props => {
           </ol>
         </Card>
       </div>
-    </div>
+    </Layout>
   )
 }
 

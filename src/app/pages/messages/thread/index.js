@@ -9,46 +9,10 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
+const Layout = require('../../components/app-layout')
 const ThreadItem = require('../../../components/email')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
-
-// const conversation = {
-//   id: '1',
-//   subject: 'The Batcave',
-//   thread: [
-//     {
-//       id: '1',
-//       sent: new Date(),
-//       body: 'No use, Joker! I knew you\'d employ your sneezing powder, so I took an Anti-Allergy Pill! Instead of a SNEEZE, I\'ve caught YOU, COLD!',
-//       recipient: {
-//         firstName: 'Bat',
-//         lastName: 'Man',
-//         email: 'batman@batcave.tld'
-//       }
-//     },
-//     {
-//       id: '2',
-//       sent: new Date(),
-//       body: 'No use, Joker! I knew you\'d employ your sneezing powder, so I took an Anti-Allergy Pill! Instead of a SNEEZE, I\'ve caught YOU, COLD!',
-//       recipient: {
-//         firstName: 'Bat',
-//         lastName: 'Man',
-//         email: 'batman@batcave.tld'
-//       }
-//     },
-//     {
-//       id: '3',
-//       sent: new Date(),
-//       body: 'No use, Joker! I knew you\'d employ your sneezing powder, so I took an Anti-Allergy Pill! Instead of a SNEEZE, I\'ve caught YOU, COLD!',
-//       recipient: {
-//         firstName: 'Bat',
-//         lastName: 'Man',
-//         email: 'batman@batcave.tld'
-//       }
-//     }
-//   ]
-// }
 
 const MessageThreadPage = props => {
   const conversation = get(props, 'user.conversation')
@@ -61,7 +25,7 @@ const MessageThreadPage = props => {
       : 'Unable to display messages'
 
   return (
-    <div className={css(sharedStyle.root)}>
+    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
         <title>
           { subject }
@@ -97,7 +61,7 @@ const MessageThreadPage = props => {
           </form>
         </Card>
       </div>
-    </div>
+    </Layout>
   )
 }
 

@@ -17,10 +17,10 @@ const {
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
 
-const { render } = require('../../lib/templater')
+const { render } = require('../../../lib/templater')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
-const Layout = require('../../components/app-layout')
+const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage } = require('./actions')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>

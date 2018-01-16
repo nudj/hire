@@ -5,9 +5,9 @@ const get = require('lodash/get')
 const { Card, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const ListJobs = require('../../components/job-radio-group')
-const ButtonLink = require('../../components/button-link')
-const Layout = require('../../components/app-layout')
+const ListJobs = require('../../../components/job-radio-group')
+const ButtonLink = require('../../../components/button-link')
+const Layout = require('../../../components/app-layout')
 const sharedStyle = require('../shared.css')
 const { selectJob } = require('./actions')
 
