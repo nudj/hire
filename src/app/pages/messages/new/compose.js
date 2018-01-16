@@ -12,8 +12,10 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const {
+  values: emailPreferences
+} = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
 const { render } = require('../../lib/templater')
 const style = require('./style.css')
@@ -48,12 +50,8 @@ const getMailTo = (to, subject, message) =>
 const ComposeMessagePage = props => {
   const { composeMessage, dispatch, user, template } = props
   const toEmail = get(user, 'connection.person.email', '')
-  const job = get(props, 'hirer.company.job', {})
-  const emailPreference = get(
-    user,
-    'emailPreference',
-    emailPreferences.OTHER
-  )
+  const job = get(user, 'hirer.company.job', {})
+  const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
 
   const subjectTemplate = render({ template: template.subject })[0].join('')
   const messageTemplate = parseJobMessageTemplate(template.message, job, user)
@@ -68,8 +66,6 @@ const ComposeMessagePage = props => {
     messageTemplate,
     ''
   )
-
-  console.log(messageTemplate, messageValue)
 
   return (
     <Layout {...props} styleSheet={{root: sharedStyle.root}}>
