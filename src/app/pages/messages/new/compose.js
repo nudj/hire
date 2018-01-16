@@ -18,10 +18,10 @@ const {
 const { getFirstNonNil } = require('@nudj/library')
 
 const { render } = require('../../../lib/templater')
-const style = require('./style.css')
-const sharedStyle = require('../shared.css')
 const Layout = require('../../../components/app-layout')
+const sharedStyle = require('../../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
+const style = require('./style.css')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
   dispatch(updateSubject(value))

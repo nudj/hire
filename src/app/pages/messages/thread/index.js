@@ -9,7 +9,7 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
-const Layout = require('../../components/app-layout')
+const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
 const sharedStyle = require('../../shared.css')
 const style = require('./style.css')
@@ -17,7 +17,8 @@ const style = require('./style.css')
 const MessageThreadPage = props => {
   const conversation = get(props, 'user.conversation')
   const { recipient } = conversation
-  const messages = get(props, 'user.conversation.messages', [])
+  const messages = get(conversation, 'messages', [])
+  const csrfToken = get(props, 'csrfToken')
 
   const subject =
     conversation.type === emailPreferences.GOOGLE
@@ -57,6 +58,7 @@ const MessageThreadPage = props => {
           ))}
           <form className={css(style.threadSection)} method='post'>
             <Textarea name='body' placeholder='Write your message here...' />
+            <input name='_csrf' value={csrfToken} type='hidden' />
             <Button style={style.replyButton} type='submit' volume='cheer'>Reply</Button>
           </form>
         </Card>

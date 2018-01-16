@@ -16,6 +16,11 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
     respondWithGql(fetchers.getThread)
   )
 
+  router.postHandlers(
+    '/messages/:conversationId',
+    respondWithGql(fetchers.replyTo)
+  )
+
   router.getHandlers(
     '/messages/new/:connectionId',
     respondWithGql(fetchers.getActiveJobs)

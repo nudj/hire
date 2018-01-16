@@ -20,6 +20,7 @@ const getMessages = props => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -56,6 +57,7 @@ const getThread = props => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -96,6 +98,7 @@ const replyTo = (props) => {
           }
         }
       }
+      ${Global}
     }    
   `
 
@@ -130,6 +133,7 @@ const getActiveJobs = (props) => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -164,6 +168,7 @@ const getMessageTemplate = (props) => {
         }
       }
       template: fetchTemplate(repo: "hirer", type: "composemessage", tags: ["formal", "new"])
+      ${Global}
     }
   `
 
@@ -180,5 +185,6 @@ module.exports = {
   getMessages,
   getThread,
   getActiveJobs,
-  getMessageTemplate
+  getMessageTemplate,
+  replyTo
 }

@@ -8,7 +8,7 @@ const styleSheet = StyleSheet.create({
     color: colors.primary
   },
   body: {
-    marginTop: sizes.largeI
+    marginTop: sizes.regular
   }
 })
 

@@ -35,11 +35,11 @@ const MessagesPage = props => {
                   : 'Unable to display messages'
 
               return (
-                <li className={css(style.listItem)} key={conversation.id}>
+                <li className={css(style.listItem)} key={id}>
                   <MessagePreview
                     subject={subject}
                     body={body}
-                    href={`/messages/${conversation.id}`}
+                    href={`/messages/${id}`}
                     recipient={`${firstName} ${lastName}`}
                   />
                 </li>
