@@ -292,21 +292,24 @@ data.hirers = data.hirers.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
-    company: 'company1'
+    company: 'company1',
+    onboarded: true
   },
   {
     id: 'hirer2',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person1',
-    company: 'company1'
+    company: 'company1',
+    onboarded: false
   },
   {
     id: 'hirer3',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person6',
-    company: 'company1'
+    company: 'company1',
+    onboarded: false
   }
 ])
 data.hirerOnboardedEvents = data.hirerOnboardedEvents.concat([
