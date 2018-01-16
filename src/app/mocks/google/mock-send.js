@@ -1,11 +1,24 @@
+const nock = require('nock')
 const { Base64 } = require('js-base64')
 const createHash = require('hash-generator')
-const uniqueId = require('lodash/uniqueId')
 const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
 const request = require('@nudj/library/request')
 
+const mockThreadFetch = require('./mock-thread-fetch')
+
 const url = `http://${process.env.API_HOST}:81`
+
+const addThreadListener = (thread) => {
+  nock('https://www.googleapis.com/gmail/v1/users/me', {
+    reqheaders: {
+      authorization: `Bearer ${VALID_ACCESS_TOKEN}`
+    }
+  })
+    .persist()
+    .get(`/threads/${thread}`)
+    .reply(mockThreadFetch)
+}
 
 const fetchPersonFromEmail = async (email) => {
   const person = await request(`${url}/people/filter?email=${email}`)
@@ -27,14 +40,19 @@ const parseBody = async (rawMessage) => {
   delete data.to
   delete data.from
 
-  return pick(data, ['body', 'date', 'id', 'sender', 'recipient'])
+  return pick(data, ['body', 'sender', 'recipient'])
 }
 
 module.exports = async (uri, body, callback) => {
-  const threadId = createHash(8)
+  let threadId = body.threadId
+  if (!threadId) {
+    threadId = createHash(8)
+    addThreadListener(threadId)
+  }
   const email = await parseBody(body.raw)
   const data = {
-    id: `MESSAGE_${threadId}_${uniqueId()}`,
+    id: `${threadId}-${createHash(8)}`,
+    date: new Date(),
     ...email
   }
   const method = 'post'

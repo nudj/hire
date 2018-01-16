@@ -48,7 +48,7 @@ module.exports = async (uri, body, callback) => {
   const threadId = uri.split('/').pop()
   const allMessages = await request(`${url}/messages`)
   const filteredMessages = filter(allMessages, (message) => {
-    return message.id.split('-')[1] === threadId
+    return message.id.split('-')[0] === threadId
   })
   const messages = await formatAsThread(filteredMessages)
   callback(null, [200, { messages }])
