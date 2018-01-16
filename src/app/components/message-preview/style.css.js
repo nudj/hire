@@ -50,7 +50,6 @@ const styleSheet = StyleSheet.create({
     marginTop: sizes.smallIi
   },
   body: {
-    lineHeight: 1,
     color: colors.text,
     width: '100%',
     overflow: 'hidden',

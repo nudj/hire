@@ -67,22 +67,25 @@ data.messages = data.messages.concat([
     id: `${threadIds[0]}-message1`,
     date: '2018-01-16T02:51:58.000+00:00',
     body: 'Hello, how are you?',
-    to: 'person5',
-    from: 'person1'
+    to: 'person1',
+    from: 'person5',
+    subject: 'About that job'
   },
   {
     id: `${threadIds[0]}-message2`,
     date: '2018-01-16T02:57:58.000+00:00',
     body: 'I am well, David! How about you?',
-    to: 'person1',
-    from: 'person5'
+    to: 'person5',
+    from: 'person1',
+    subject: 'About that job'
   },
   {
     id: `${threadIds[0]}-message3`,
     date: '2018-01-16T02:59:40.000+00:00',
     body: 'Not too bad, not too bad!',
-    to: 'person5',
-    from: 'person1'
+    to: 'person1',
+    from: 'person5',
+    subject: 'About that job'
   }
 ])
 data.accounts = data.accounts.concat([

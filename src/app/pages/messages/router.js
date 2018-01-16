@@ -7,6 +7,16 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   router.use(ensureLoggedIn)
 
   router.getHandlers(
+    '/messages',
+    respondWithGql(fetchers.getMessages)
+  )
+
+  router.getHandlers(
+    '/messages/:conversationId',
+    respondWithGql(fetchers.getThread)
+  )
+
+  router.getHandlers(
     '/messages/new/:connectionId',
     respondWithGql(fetchers.getActiveJobs)
   )

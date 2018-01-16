@@ -69,6 +69,8 @@ const ComposeMessagePage = props => {
     ''
   )
 
+  console.log(messageTemplate, messageValue)
+
   return (
     <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>

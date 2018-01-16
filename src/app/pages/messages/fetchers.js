@@ -1,8 +1,112 @@
 const { Global } = require('../../lib/graphql')
 
-const getMessage = props => {
+const getMessages = props => {
+  const { session } = props
+
+  const gql = `
+    query GetMessages($userId: ID!) {
+      user (id: $userId) {
+        conversations {
+          id
+          type
+          subject
+          recipient {
+            firstName
+            lastName
+            email
+          }
+          message: latestMessage {
+            body
+          }
+        }
+      }
+    }
+  `
+
+  const variables = {
+    userId: session.userId
+  }
+
   return { gql, variables }
 }
+
+const getThread = props => {
+  const { session, params } = props
+
+  const gql = `
+    query GetThread($userId: ID!, $conversationId: ID!) {
+      user (id: $userId) {
+        conversation: conversationByFilters(filters: { id: $conversationId }) {
+          subject
+          type
+          recipient {
+            firstName
+            lastName
+            email
+          }
+          messages {
+            id
+            body
+            date
+            from {
+              firstName
+              lastName
+              email
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const variables = {
+    userId: session.userId,
+    conversationId: params.conversationId
+  }
+
+  return { gql, variables }
+}
+
+const replyTo = (props) => {
+  const { session, params, body } = props
+
+  const gql = `
+    mutation ReplyTo ($userId: ID!, $conversationId: ID!, $body: String!) {
+      user (id: $userId) {
+        conversation: conversationByFilters(filters: { id: $conversationId }) {
+          sendMessage (body: $body) {
+            success
+          }
+          subject
+          type
+          recipient {
+            firstName
+            lastName
+            email
+          }
+          messages {
+            id
+            body
+            date
+            from {
+              firstName
+              lastName
+              email
+            }
+          }
+        }
+      }
+    }    
+  `
+
+  const variables = {
+    userId: session.userId,
+    conversationId: params.conversationId,
+    body: body.body
+  }
+
+  return { gql, variables }
+} 
 
 const getActiveJobs = (props) => {
   const { session, params } = props
@@ -73,6 +177,8 @@ const getMessageTemplate = (props) => {
 }
 
 module.exports = {
+  getMessages,
+  getThread,
   getActiveJobs,
   getMessageTemplate
 }
