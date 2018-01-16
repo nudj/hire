@@ -2,7 +2,12 @@ const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   field: {
-    marginBottom: sizes.regular
+    ':nth-child(n + 2)': {
+      marginTop: sizes.regular
+    }
+  },
+  submit: {
+    marginTop: sizes.regular
   }
 })
 

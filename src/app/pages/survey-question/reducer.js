@@ -51,12 +51,12 @@ const updateConnectionsSearchQuery = (state, { query }) => ({
 
 const showAddForm = state => ({
   ...state,
-  addFormVisible: true
+  showAddIndividualConnectionModal: true
 })
 
 const hideAddForm = state => ({
   ...state,
-  addFormVisible: false
+  showAddIndividualConnectionModal: false
 })
 
 const reducers = {
@@ -76,7 +76,7 @@ const initialState = {
   newConnection: {},
   connections: [],
   searchQuery: null,
-  addFormVisible: false
+  showAddIndividualConnectionModal: false
 }
 
 module.exports = createReducer(initialState, reducers)

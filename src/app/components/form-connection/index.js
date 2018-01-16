@@ -32,17 +32,18 @@ const fields = [
   }
 ]
 
-const ConnectionEditor = (props) => {
+const FormConnection = (props) => {
   const {
     csrfToken,
     onChange,
-    onSubmit = () => {}
+    onSubmit,
+    style: styleOverride
   } = props
 
-  const onChangeCallback = name => event => {
+  const getHandleChange = name => event => {
     onChange(name, event.value)
   }
-  const onSubmitCallback = event => {
+  const getHandleSubmit = event => {
     event.preventDefault()
     onSubmit()
     return false
@@ -50,7 +51,7 @@ const ConnectionEditor = (props) => {
   const connection = get(props, 'connection', {})
 
   return (
-    <form action='/' onSubmit={onSubmitCallback}>
+    <form action='/' onSubmit={getHandleSubmit} className={css(styleOverride)}>
       <input name='_csrf' value={csrfToken} type='hidden' />
       {fields.map(field => (
         <InputField
@@ -61,7 +62,7 @@ const ConnectionEditor = (props) => {
           styleSheet={{ root: style.field }}
         >
           <Input
-            onChange={onChangeCallback(field.name)}
+            onChange={getHandleChange(field.name)}
             id={field.name}
             name={field.name}
             value={connection[field.name]}
@@ -71,7 +72,7 @@ const ConnectionEditor = (props) => {
       ))}
       <Button
         volume='cheer'
-        className={css(style.submit)}
+        style={style.submit}
         type='submit'
       >
         Add person
@@ -80,4 +81,4 @@ const ConnectionEditor = (props) => {
   )
 }
 
-module.exports = ConnectionEditor
+module.exports = FormConnection

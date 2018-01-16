@@ -30,8 +30,10 @@ const styleSheet = StyleSheet.create({
   },
   modalBody: {
     marginTop: sizes.regular,
-    marginBottom: sizes.regular,
     textAlign: 'center'
+  },
+  form: {
+    marginTop: sizes.regular
   }
 })
 

@@ -1,21 +1,16 @@
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { quickDispatch } = require('@nudj/library')
 
 const PREFIX = 'SURVEY'
 
 const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
 module.exports.SET_NEW_ITEM_VALUE = SET_NEW_ITEM_VALUE
-function setNewItemValue (name, key, value) {
-  return {
-    type: SET_NEW_ITEM_VALUE,
-    name,
-    key,
-    value
-  }
-}
-module.exports.setNewItemValue = (name, key, value) =>
-  quickDispatch(setNewItemValue(name, key, value))
+module.exports.setNewItemValue = (name, key, value) => ({
+  type: SET_NEW_ITEM_VALUE,
+  name,
+  key,
+  value
+})
 
 const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
 module.exports.ADD_CONNECTION = ADD_CONNECTION
@@ -147,25 +142,15 @@ module.exports.search = () => (dispatch, getState) => {
   )
 }
 
-const SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
-module.exports.SHOW_ADD_FORM = SHOW_ADD_FORM
-function showAddForm () {
-  return {
-    type: SHOW_ADD_FORM
-  }
-}
-module.exports.showAddForm = () =>
-  quickDispatch(showAddForm())
+module.exports.SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
+module.exports.showAddForm = () => ({
+  type: module.exports.SHOW_ADD_FORM
+})
 
-const HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
-module.exports.HIDE_ADD_FORM = HIDE_ADD_FORM
-function hideAddForm () {
-  return {
-    type: HIDE_ADD_FORM
-  }
-}
-module.exports.hideAddForm = () =>
-  quickDispatch(hideAddForm())
+module.exports.HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
+module.exports.hideAddForm = () => ({
+  type: module.exports.HIDE_ADD_FORM
+})
 
 module.exports.submitNewConnection = () => (dispatch, getState) => {
   const state = getState()

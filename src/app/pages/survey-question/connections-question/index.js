@@ -164,7 +164,7 @@ const ConnectionsQuestionPage = props => {
             Add person
           </Button>
           <Modal
-            isOpen={get(props, 'addFormVisible')}
+            isOpen={get(props, 'showAddIndividualConnectionModal')}
             style={style.modalWindow}
             shouldCloseOnOverlayClick
             shouldCloseOnEsc
@@ -177,6 +177,7 @@ const ConnectionsQuestionPage = props => {
               Thought of someone who might help you in your search? Just add their details below so you can nudj them.
             </Text>
             <ConnectionsForm
+              style={style.form}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
