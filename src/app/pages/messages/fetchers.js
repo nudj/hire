@@ -1,3 +1,6 @@
+const { Redirect } = require('@nudj/library/errors')
+
+const { createNotification } = require('../../lib')
 const { Global } = require('../../lib/graphql')
 
 const getMessages = props => {
@@ -72,43 +75,75 @@ const getThread = props => {
 const replyTo = (props) => {
   const { session, params, body } = props
 
-  const gql = `
-    mutation ReplyTo ($userId: ID!, $conversationId: ID!, $body: String!) {
-      user (id: $userId) {
-        conversation: conversationByFilters(filters: { id: $conversationId }) {
-          sendMessage (body: $body) {
-            success
-          }
-          subject
-          type
-          recipient {
-            firstName
-            lastName
-            email
-          }
-          messages {
-            id
-            body
-            date
-            from {
+  console.log(body)
+
+  // TODO: API side validation
+  if (body.body.length > 0) {
+    const gql = `
+      mutation ReplyTo ($userId: ID!, $conversationId: ID!, $body: String!) {
+        user (id: $userId) {
+          conversation: conversationByFilters(filters: { id: $conversationId }) {
+            newMessage: sendMessage(body: $body) {
+              id
+              body
+              date
+              from {
+                firstName
+                lastName
+                email
+              }
+            }
+            subject
+            type
+            recipient {
               firstName
               lastName
               email
             }
+            messages {
+              id
+              body
+              date
+              from {
+                firstName
+                lastName
+                email
+              }
+            }
           }
         }
+        ${Global}
+      }    
+    `
+
+    const variables = {
+      userId: session.userId,
+      conversationId: params.conversationId,
+      body: body.body
+    }
+
+    return {
+      gql,
+      variables,
+      respond: () => {
+        // prevents multiple submissions on refresh
+        throw new Redirect({ url: `/messages/${params.conversationId}` })
       }
-      ${Global}
-    }    
-  `
-
-  const variables = {
-    userId: session.userId,
-    conversationId: params.conversationId,
-    body: body.body
+    }
+  } else {
+    return {
+      respond: () => {
+        // prevents multiple submissions on refresh
+        throw new Redirect({
+          url: `/messages/${params.conversationId}`,
+          notification: createNotification(
+            'error',
+            "You can't send an empty message"
+          )
+        })
+      }
+    }
   }
-
-  return { gql, variables }
 }
 
 const getActiveJobs = (props) => {

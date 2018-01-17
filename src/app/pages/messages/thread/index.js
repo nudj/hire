@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const { format } = require('date-fns')
 const get = require('lodash/get')
+const isNil = require('lodash/isNil')
 
 const { Button, Card, Link, Modal, Text, Textarea } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -17,9 +18,13 @@ const style = require('./style.css')
 
 const MessageThreadPage = props => {
   const conversation = get(props, 'user.conversation')
-  const { recipient } = conversation
+  const { recipient, newMessage } = conversation
   const messages = get(conversation, 'messages', [])
   const csrfToken = get(props, 'csrfToken')
+
+  const fullThread = [...messages, newMessage].filter(message => !isNil(message))
+
+  console.log(conversation, fullThread)
 
   const subject =
     conversation.type === emailPreferences.GOOGLE
@@ -44,7 +49,7 @@ const MessageThreadPage = props => {
               {recipient.email}
             </Text>
           </div>
-          {messages.map(message => (
+          {fullThread.map(message => (
             <div className={css(style.threadSection)} key={message.id}>
               <ThreadItem
                 from={`${message.from.firstName} ${message.from.lastName} <${
