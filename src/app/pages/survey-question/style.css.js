@@ -7,7 +7,7 @@ const styleSheet = StyleSheet.create({
   },
   form: {
     paddingLeft: sizes.largeIi,
-    paddingRight: sizes.largeIi,
+    paddingRight: sizes.largeIi
   },
   submitButton: {
     marginTop: sizes.regular
@@ -19,11 +19,11 @@ const styleSheet = StyleSheet.create({
     overflowX: 'scroll',
     marginTop: sizes.largeIi,
     paddingLeft: sizes.largeIi,
-    paddingRight: sizes.largeIi,
+    paddingRight: sizes.largeIi
   },
   table: {
-    whiteSpace: 'nowrap',
-  },
+    whiteSpace: 'nowrap'
+  }
 })
 
 module.exports = styleSheet
