@@ -65,7 +65,8 @@ const Router = ({
         const user = await fetchPerson(req.user._json.email)
         await fetchHirer(user.id) // ensure hirer exists
         req.session.userId = user.id
-        res.redirect(req.session.returnTo || '/')
+
+        res.redirect(req.session.returnTo || '/messages')
       } catch (error) {
         logger.log('error', error)
         next('Unable to login')
@@ -73,7 +74,7 @@ const Router = ({
     }
   )
 
-  router.get('/login', cacheReturnTo, passport.authenticate('auth0', {}), (req, res, next) => res.redirect(req.session.returnTo || '/'))
+  router.get('/login', cacheReturnTo, passport.authenticate('auth0', {}), (req, res, next) => res.redirect(req.session.returnTo || '/messages'))
 
   return router
 }
