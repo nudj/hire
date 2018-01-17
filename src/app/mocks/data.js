@@ -91,7 +91,7 @@ data.messages = data.messages.concat([
 data.accounts = data.accounts.concat([
   {
     person: 'person5',
-    type: emailPreferences.GOOGLE,
+    type: emailPreferences.OTHER,
     data: {
       accessToken: VALID_ACCESS_TOKEN,
       refreshToken: VALID_REFRESH_TOKEN
