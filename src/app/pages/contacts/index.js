@@ -62,8 +62,10 @@ const ContactsPage = props => {
           Search for people to nudj or add more people to grow your network.
         </Text>
         <div className={css(sharedStyle.body)}>
-          <Card style={sharedStyle.card}>
-            <form>
+          <Card style={[sharedStyle.card, style.card]}>
+            <form
+              className={css(style.form)}
+            >
               <Text element='label' size='smallI' htmlFor='search'>
                 Search and select from the results
               </Text>
@@ -84,14 +86,16 @@ const ContactsPage = props => {
               </Button>
             </form>
             {connections.length > 0 && (
-              <ConnectionsTable
-                styleSheet={{
-                  root: style.table
-                }}
-                connections={connections}
-                onSelect={getHandleSelectContacts(dispatch)}
-                selectedConnections={selectedContacts}
-              />
+              <div className={css(style.tableOverflow)}>
+                <ConnectionsTable
+                  styleSheet={{
+                    root: style.table
+                  }}
+                  connections={connections}
+                  onSelect={getHandleSelectContacts(dispatch)}
+                  selectedConnections={selectedContacts}
+                />
+              </div>
             )}
           </Card>
           <div className={css(sharedStyle.footer)}>

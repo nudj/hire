@@ -17,10 +17,10 @@ const styleSheet = StyleSheet.create({
     maxWidth: '70rem',
     marginLeft: 'auto',
     marginRight: 'auto',
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
     paddingTop: sizes.largeIi,
     paddingBottom: sizes.largeIi,
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
     height: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {
@@ -134,7 +134,7 @@ const styleSheet = StyleSheet.create({
     paddingBottom: 0,
     paddingLeft: 0,
     paddingRight: 0
-  }
+  },
 })
 
 module.exports = styleSheet
