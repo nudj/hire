@@ -2,38 +2,40 @@ const { Redirect } = require('@nudj/framework/errors')
 
 const { createNotification } = require('../../lib')
 const mailer = require('../../lib/mailer')
+const template = require('./email-template')
 
 const sendMagicLink = ({ session }) => {
   const gql = `
-    query getUser($userId: ID!) {
+    query getUser($userId: ID!, $subject: String!, $body: String!) {
       user (id: $userId) {
-        email
+        notifyByEmail(subject: $subject, body: $body) {
+          success
+        }
       }
     }
   `
 
   const variables = {
-    userId: session.userId
+    userId: session.userId,
+    subject: 'Continue setting up your nudj account',
+    body: template
   }
 
   const respond = async data => {
-    console.log('DATA', data)
-    const mailResponse = await mailer.send({
-      to: process.env.USE_MOCKS ? 'rich@nudj.co' : data.user.email,
-      from: 'hello@nudj.co',
-      subject: 'Continue with your nudj onboarding',
-      html: '<a href="http://localhost:90/login">Continue onboarding</a>'
-    })
-
-    console.log('MAIL RESPONSE', mailResponse)
-
-    throw new Redirect({
-      url: `/welcome`,
-      notification: createNotification(
-        'success',
-        'Check your inbox to continue on your other device'
-      )
-    })
+    if (data.user.notifyByEmail.success) {
+      throw new Redirect({
+        url: `/notification-sent`,
+        notification: null
+      })
+    } else {
+      throw new Redirect({
+        url: `/welcome`,
+        notification: createNotification(
+          'error',
+          'Unable to send email'
+        )
+      })
+    }
   }
 
   return { gql, variables, respond }
