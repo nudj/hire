@@ -57,7 +57,7 @@ const FormConnection = (props) => {
         <InputField
           htmlFor={field.name}
           label={field.label}
-          required={!!field.required}
+          required={field.required}
           key={field.name}
           styleSheet={{ root: style.field }}
         >
@@ -66,7 +66,7 @@ const FormConnection = (props) => {
             id={field.name}
             name={field.name}
             value={connection[field.name] || ''}
-            required={!!field.required}
+            required={field.required}
           />
         </InputField>
       ))}
