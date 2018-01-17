@@ -1,6 +1,13 @@
 const {
-  questionTypes
-} = require('./lib/constants')
+  questionTypes,
+  emailPreferences
+} = require('../lib/constants')
+
+const {
+  threadIds,
+  VALID_ACCESS_TOKEN,
+  VALID_REFRESH_TOKEN
+} = require('./google/constants')
 
 const {
   COMPANIES,
@@ -38,6 +45,57 @@ const data = {
   roles: [],
   sources: []
 }
+data.conversations = data.conversations.concat([
+  {
+    type: emailPreferences.GOOGLE,
+    threadId: threadIds[0],
+    person: 'person5',
+    recipient: 'person1',
+    created: '2018-01-16T01:32:50.875+00:00',
+    modified: '2018-01-16T01:32:50.875+00:00',
+    id: 'conversation1'
+  },
+  {
+    type: emailPreferences.OTHER,
+    person: 'person5',
+    recipient: 'person1',
+    id: 'conversation2'
+  }
+])
+data.messages = data.messages.concat([
+  {
+    id: `${threadIds[0]}-message1`,
+    date: '2018-01-16T02:51:58.000+00:00',
+    body: 'Hello, how are you?',
+    to: 'person5',
+    from: 'person1'
+  },
+  {
+    id: `${threadIds[0]}-message2`,
+    date: '2018-01-16T02:57:58.000+00:00',
+    body: 'I am well, David! How about you?',
+    to: 'person1',
+    from: 'person5'
+  },
+  {
+    id: `${threadIds[0]}-message3`,
+    date: '2018-01-16T02:59:40.000+00:00',
+    body: 'Not too bad, not too bad!',
+    to: 'person5',
+    from: 'person1'
+  }
+])
+data.accounts = data.accounts.concat([
+  {
+    person: 'person5',
+    type: emailPreferences.GOOGLE,
+    data: {
+      accessToken: VALID_ACCESS_TOKEN,
+      refreshToken: VALID_REFRESH_TOKEN
+    },
+    id: 'account1'
+  }
+])
 data.roles = data.roles.concat([
   {
     name: 'Fake Role',
@@ -269,7 +327,7 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user',
-    emailPreference: null
+    emailPreference: emailPreferences.GOOGLE
   },
   {
     id: 'person6',
