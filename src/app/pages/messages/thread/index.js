@@ -24,8 +24,6 @@ const MessageThreadPage = props => {
 
   const fullThread = [...messages, newMessage].filter(message => !isNil(message))
 
-  console.log(conversation, fullThread)
-
   const subject =
     conversation.type === emailPreferences.GOOGLE
       ? conversation.subject

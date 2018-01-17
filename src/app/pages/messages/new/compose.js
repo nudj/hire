@@ -48,7 +48,7 @@ const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
 const ComposeMessagePage = props => {
-  const { composeMessage, dispatch, user, template } = props
+  const { composeMessage, dispatch, user, template, csrfToken } = props
   const toEmail = get(user, 'connection.person.email', '')
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
@@ -85,18 +85,21 @@ const ComposeMessagePage = props => {
         </div>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <form>
+            <form method="post">
               <Input
+                name="subject"
                 value={subjectValue}
                 onChange={getHandleSubjectChange(dispatch)}
                 styleSheet={{ input: style.subjectInput }}
               />
               <Textarea
+                name="body"
                 value={messageValue}
                 onChange={getHandleMessageChange(dispatch)}
                 styleSheet={{ input: style.messageInput }}
                 autosize
               />
+              <input name='_csrf' value={csrfToken} type='hidden' />
               {emailPreference === emailPreferences.GOOGLE ? (
                 <Button type='submit' volume='cheer' style={style.sendButton}>
                   Send message

@@ -75,8 +75,6 @@ const getThread = props => {
 const replyTo = (props) => {
   const { session, params, body } = props
 
-  console.log(body)
-
   // TODO: API side validation
   if (body.body.length > 0) {
     const gql = `
@@ -216,10 +214,39 @@ const getMessageTemplate = (props) => {
   return { gql, variables }
 }
 
+const sendNewMessage = ({ session, params, body }) => {
+  const gql = `
+    mutation SendNewMessage($userId: ID!, $connectionId: ID!, $subject: String!, $body: String!) {
+      user(id: $userId) {
+        conversation: sendEmail(to: $connectionId, subject: $subject, body: $body) {
+          id
+        }
+      }
+    }
+  `
+
+  const variables = {
+    userId: session.userId,
+    connectionId: 'person1',
+    subject: body.subject,
+    body: body.body,
+  }
+
+  return {
+    gql,
+    variables,
+    respond: (pageData) => {
+      // prevents multiple submissions on refresh
+      throw new Redirect({ url: `/messages/${pageData.user.conversation.id}` })
+    }
+  }
+} 
+
 module.exports = {
   getMessages,
   getThread,
   getActiveJobs,
   getMessageTemplate,
-  replyTo
+  replyTo,
+  sendNewMessage
 }

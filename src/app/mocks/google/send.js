@@ -3,6 +3,7 @@ const { Base64 } = require('js-base64')
 const createHash = require('hash-generator')
 const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
+const findIndex = require('lodash/findIndex')
 const request = require('@nudj/library/request')
 
 const { VALID_ACCESS_TOKEN } = require('./constants')
@@ -28,7 +29,12 @@ const fetchPersonFromEmail = async (email) => {
 
 const parseBody = async (rawMessage) => {
   const decoded = Base64.decode(rawMessage).split('\r\n')
-  const body = decoded[decoded.length - 1]
+  const metaDataFinishIndex = decoded.indexOf('MIME-Version: 1.0')
+  const body = decoded.slice(
+    metaDataFinishIndex + 2,
+    decoded.length
+  ).join('')
+
   const data = decoded.reduce((email, entry) => {
     if (entry.includes(':')) {
       const [key, value] = entry.split(':')
