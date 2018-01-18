@@ -4,15 +4,13 @@ const get = require('lodash/get')
 const { createNotification } = require('./')
 const request = require('./requestGql')
 
-async function ensureCompanyOnboarded (req, res, next) {
+async function ensureOnboarded (req, res, next) {
   try {
     const query = `
       query EnsureOnboarded ($userId: ID!) {
         user (id: $userId) {
           hirer {
-            company {
-              onboarded
-            }
+            onboarded
           }
         }
       }
@@ -21,15 +19,16 @@ async function ensureCompanyOnboarded (req, res, next) {
       userId: req.session.userId
     }
     const responseData = await request(query, variables)
-    if (get(responseData, 'user.hirer.company.onboarded')) {
+    if (get(responseData, 'user.hirer.onboarded')) {
       return next()
     }
   } catch (error) {
     logger.log('error', error)
   }
+
   next(
     new Redirect({
-      url: '/',
+      url: '/welcome',
       notification: createNotification(
         'error',
         "We're still getting your company set-up, so you can't access this page just yet. Need more information? Let us know."
@@ -39,5 +38,5 @@ async function ensureCompanyOnboarded (req, res, next) {
 }
 
 module.exports = {
-  ensureCompanyOnboarded
+  ensureOnboarded
 }
