@@ -1,5 +1,4 @@
 const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
-const { modal } = require('../../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   threadSubject: {
@@ -29,7 +28,7 @@ const styleSheet = StyleSheet.create({
   },
   replyButton: {
     marginTop: sizes.largeI
-  },
+  }
 })
 
 module.exports = styleSheet

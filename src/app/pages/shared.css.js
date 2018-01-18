@@ -39,7 +39,7 @@ const styleSheet = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
+    paddingRight: sizes.regular
   },
   headingPrimary: {
     color: colors.primary

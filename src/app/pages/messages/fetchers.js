@@ -1,7 +1,6 @@
 const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { Global } = require('../../lib/graphql')
 
 const getMessages = props => {
@@ -232,7 +231,7 @@ const sendNewMessage = ({ session, params, body }) => {
     userId: session.userId,
     connectionId: 'person1',
     subject: body.subject,
-    body: body.body,
+    body: body.body
   }
 
   return {

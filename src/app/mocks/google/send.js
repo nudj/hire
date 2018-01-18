@@ -3,7 +3,6 @@ const { Base64 } = require('js-base64')
 const createHash = require('hash-generator')
 const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
-const findIndex = require('lodash/findIndex')
 const request = require('@nudj/library/request')
 
 const { VALID_ACCESS_TOKEN } = require('./constants')

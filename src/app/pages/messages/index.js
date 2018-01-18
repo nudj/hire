@@ -57,7 +57,7 @@ const MessagesPage = props => {
                   You haven’t sent any messages
                 </Text>
                 <Text element='p' style={sharedStyle.subheading}>
-                  To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves. 
+                  To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves.
                 </Text>
                 <div className={css(style.buttonGroup)}>
                   <ButtonLink
@@ -73,7 +73,7 @@ const MessagesPage = props => {
               </div>
             ) }
           </div>
-        ) : ( 
+        ) : (
           <form method='post' action='/sync-google' className={css(style.section)}>
             <Text element='p' size='largeI' style={sharedStyle.heading}>
               Keeping track of your messages

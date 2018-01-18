@@ -85,15 +85,15 @@ const ComposeMessagePage = props => {
         </div>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <form method="post">
+            <form method='post'>
               <Input
-                name="subject"
+                name='subject'
                 value={subjectValue}
                 onChange={getHandleSubjectChange(dispatch)}
                 styleSheet={{ input: style.subjectInput }}
               />
               <Textarea
-                name="body"
+                name='body'
                 value={messageValue}
                 onChange={getHandleMessageChange(dispatch)}
                 styleSheet={{ input: style.messageInput }}

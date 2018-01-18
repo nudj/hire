@@ -61,7 +61,7 @@ data.conversations = data.conversations.concat([
     recipient: 'person1',
     id: 'conversation2',
     created: '2018-01-16T01:32:50.875+00:00',
-    modified: '2018-01-16T01:32:50.875+00:00',
+    modified: '2018-01-16T01:32:50.875+00:00'
   }
 ])
 data.messages = data.messages.concat([
