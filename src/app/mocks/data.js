@@ -345,6 +345,20 @@ data.people = data.people.concat([
     company: 'nudj',
     status: 'user',
     emailPreference: null
+  },
+  {
+    id: 'person7',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    firstName: 'Richard',
+    lastName: 'Palmer',
+    email: 'rich@nudj.co',
+    url: 'http://rdjpalmer.com',
+    title: 'Unicorn (lol)',
+    type: 'external',
+    company: 'nudj',
+    status: 'user',
+    emailPreference: null
   }
 ])
 data.hirers = data.hirers.concat([
@@ -369,6 +383,14 @@ data.hirers = data.hirers.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person6',
+    company: 'company1',
+    onboarded: false
+  },
+  {
+    id: 'hirer4',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    person: 'person7',
     company: 'company1',
     onboarded: false
   }

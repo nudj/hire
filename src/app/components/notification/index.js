@@ -1,14 +1,16 @@
 const React = require('react')
 const get = require('lodash/get')
-const getStyle = require('./style.css')
 const actions = require('@nudj/framework/actions')
+const { css } = require('@nudj/components/lib/css')
 
-const onClickClose = (props) => (event) => props.dispatch(actions.app.hideNotification())
+const style = require('./style.css')
+
+const onClickClose = props => event =>
+  props.dispatch(actions.app.hideNotification())
 
 class Notification extends React.Component {
   constructor (props) {
     super(props)
-    this.style = getStyle()
     this.state = {
       js: false
     }
@@ -21,12 +23,27 @@ class Notification extends React.Component {
   render () {
     const notification = get(this.props, 'notification')
     const type = get(notification, 'type')
-    const typeClass = type ? this.style[type] : ''
-    const stateClass = notification && !get(notification, 'hide') ? this.style.visible : ''
-    return <div className={`${this.style.notification} ${typeClass} ${stateClass}`}>
-      <div className={this.style.message}>{get(notification, 'message', '')}</div>
-      {get(this.state, 'js') ? <button className={this.style.close} onClick={onClickClose(this.props)}><img className={this.style.closeIcon} src='/assets/images/close.svg' alt='Close' /></button> : null}
-    </div>
+    const show = notification && !get(notification, 'hide')
+
+    return (
+      <div className={css([style.root, style[type], show && style.visible])}>
+        <div className={css(style.message)}>
+          {get(notification, 'message', '')}
+        </div>
+        {get(this.state, 'js') ? (
+          <button
+            className={css(style.close)}
+            onClick={onClickClose(this.props)}
+          >
+            <img
+              className={css(style.closeIcon)}
+              src='/assets/images/close.svg'
+              alt='Close'
+            />
+          </button>
+        ) : null}
+      </div>
+    )
   }
 }
 

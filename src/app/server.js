@@ -36,6 +36,8 @@ const expressRouters = {
     require('./pages/survey-complete/router'),
     require('./pages/messages/router'),
     require('./pages/contacts/router'),
+    require('./pages/check-device-wrapper/router'),
+    require('./pages/notification-sent/router'),
     require('./server/routers/catch-all')
   ]
 }
