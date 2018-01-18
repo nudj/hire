@@ -10,6 +10,7 @@ const getMessages = props => {
   const gql = `
     query GetMessages($userId: ID!) {
       user (id: $userId) {
+        emailPreference
         conversations {
           id
           type

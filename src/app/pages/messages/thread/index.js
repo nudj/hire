@@ -36,16 +36,6 @@ const MessageThreadPage = props => {
       ? conversation.subject
       : 'Unable to display messages'
 
-  const showSyncGoogleModal = (
-    emailPreference !== emailPreferences.GOOGLE &&
-    conversation.type !== emailPreferences.GOOGLE
-  )
-
-  const showCantTrackModal = (
-    emailPreference === emailPreferences.GOOGLE &&
-    conversation.type !== emailPreferences.GOOGLE 
-  )
-
   return (
     <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
       <Helmet>
@@ -85,60 +75,6 @@ const MessageThreadPage = props => {
           </form>
         </Card>
       </div>
-      <Modal isOpen={showSyncGoogleModal} style={style.modal}>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
-          Unfortunately, we can’t display your message
-        </Text>
-        <Text element="p" style={sharedStyle.subheading}>
-          As you’ve not sent this email via Gmail, you can’t view any messages
-          sent or recieved from this person.
-        </Text>
-        <Text element="p" style={sharedStyle.subheading}>
-          If you use a different email provider check if it’s on our{' '}
-          <Link
-            href="https://nudj.canny.io/product-roadmap"
-            target="_blank"
-            inline
-            subtle
-            volume="scream"
-          >
-            roadmap
-          </Link>. Alternatively sync your gmail account now.
-        </Text>
-        <form method="post" action="/sync-google">
-          <input name="_csrf" value={csrfToken} type="hidden" />
-          <div className={css(style.buttonGroup)}>
-            <ButtonLink style={style.button} href="/messages">Back</ButtonLink>
-            <Button
-              style={[style.syncButton, style.button]}
-              name="emailProvider"
-              type="submit"
-              value={emailPreferences.GOOGLE}
-              volume="cheer"
-            >
-              Sync account
-            </Button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal isOpen={showCantTrackModal} style={style.modal}>
-        <Text element="div" size="largeIi" style={sharedStyle.heading}>
-          Unfortunately, we can’t display your message
-        </Text>
-        <Text element="p" style={sharedStyle.subheading}>
-          As you’ve not sent this email via Gmail, you can’t view any messages
-          sent or recieved from this person.
-        </Text>
-        <Text element="p" style={sharedStyle.subheading}>
-          You've already switched to using gmail, so all other messages will be trackable.
-        </Text>
-        <div className={css(style.buttonGroup)}>
-          <ButtonLink style={style.button} href="/messages">
-            Back
-          </ButtonLink>
-        </div>
-      </Modal>
     </Layout>
   )
 }

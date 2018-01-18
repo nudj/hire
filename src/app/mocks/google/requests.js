@@ -10,6 +10,12 @@ const google = nock('https://www.googleapis.com').persist()
 
 const mockGoogleRequests = () => {
   google
+    .post('/oauth2/v4/token')
+    .reply(200, {})
+  google
+    .get('/plus/v1/people/me')
+    .reply(200, {})
+  google
     .get('/oauth2/v1/tokeninfo')
     .query({ access_token: VALID_ACCESS_TOKEN })
     .reply(200)
