@@ -20,7 +20,7 @@ const Email = ({ from, date, body }) => {
         rightChildren={<Text size='smallI' style={style.metaDataItem}>{date}</Text>}
       />
       <div className={css(style.body)}>
-        <Text>
+        <Text element="div">
           { dumblyRenderBody(body) }
         </Text>
       </div>

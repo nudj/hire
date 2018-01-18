@@ -1,5 +1,5 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
-const { emailAuthenticationForm } = require('../../lib/css/breakpoints')
+const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   root: {
@@ -17,7 +17,7 @@ const styleSheet = StyleSheet.create({
   },
   buttonGroup: {
     marginTop: sizes.largeIi,
-    [`@media(${emailAuthenticationForm.unstackButtons})`]: {
+    [`@media(${modal.unstackButtons})`]: {
       display: 'flex',
       justifyContent: 'center'
     }
@@ -27,7 +27,7 @@ const styleSheet = StyleSheet.create({
     ':not(:first-of-type)': {
       marginTop: sizes.regular
     },
-    [`@media(${emailAuthenticationForm.unstackButtons})`]: {
+    [`@media(${modal.unstackButtons})`]: {
       width: 'auto',
       marginLeft: sizes.smallIi,
       marginRight: sizes.smallIi,

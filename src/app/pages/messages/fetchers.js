@@ -1,6 +1,7 @@
 const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { Global } = require('../../lib/graphql')
 
 const getMessages = props => {
@@ -40,6 +41,7 @@ const getThread = props => {
   const gql = `
     query GetThread($userId: ID!, $conversationId: ID!) {
       user (id: $userId) {
+        emailPreference
         conversation: conversationByFilters(filters: { id: $conversationId }) {
           subject
           type
@@ -240,7 +242,39 @@ const sendNewMessage = ({ session, params, body }) => {
       throw new Redirect({ url: `/messages/${pageData.user.conversation.id}` })
     }
   }
-} 
+}
+
+const setEmailPreference = ({ body, params, session }) => {
+  const gql = `
+    mutation SetEmailPreference(
+      $userId: ID!,
+      $data: PersonUpdateInput!
+    ) {
+      updatePerson(id: $userId, data: $data) {
+        id
+        emailPreference
+      }
+    }
+  `
+
+  const variables = {
+    userId: session.userId,
+    data: {
+      emailPreference: body.emailProvider
+    }
+  }
+
+  // TODO: Dry up with survey-complete/fetchers.js `setEmailPreference`
+  const respond = data => {
+    session.returnTo = `/messages`
+    session.returnFail = `/messages`
+    throw new Redirect({
+      url: '/auth/google'
+    })
+  }
+
+  return { gql, variables, respond }
+}
 
 module.exports = {
   getMessages,
@@ -248,5 +282,6 @@ module.exports = {
   getActiveJobs,
   getMessageTemplate,
   replyTo,
-  sendNewMessage
+  sendNewMessage,
+  setEmailPreference
 }

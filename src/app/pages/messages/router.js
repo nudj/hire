@@ -36,6 +36,11 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
     respondWithGql(fetchers.sendNewMessage)
   )
 
+  router.postHandlers(
+    '/sync-google',
+    respondWithGql(fetchers.setEmailPreference)
+  )
+
   return router
 }
 

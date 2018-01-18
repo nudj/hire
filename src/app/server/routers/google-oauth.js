@@ -63,7 +63,13 @@ const Router = ({
   router.getHandlers(
     '/auth/google/callback',
     passport.authorize('google', { failureRedirect: '/auth/google/failure' }),
-    (req, res) => res.redirect(req.session.returnTo)
+    (req, res) => {
+      req.session.notification = createNotification(
+        'success',
+        'We successfully synced your google account'
+      )
+      res.redirect(req.session.returnTo)
+    }
   )
 
   return router
