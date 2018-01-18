@@ -61,7 +61,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
         <Text
           element='div'
           size='largeIi'
-          style={sharedStyle.heading}
+          style={[sharedStyle.heading, sharedStyle.headingPrimary]}
         >
           {question.title}
         </Text>

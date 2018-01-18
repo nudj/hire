@@ -57,7 +57,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
       {connections.length > 0 ? (
         <div className={css(sharedStyle.wrapper)}>
           <div className={css(sharedStyle.header)}>
-            <Text element='div' size='largeIi' style={sharedStyle.heading}>
+            <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
               You’ve uncovered{' '}
               <span className={css(sharedStyle.headingHighlight)}>
                 {getRecommendationCountString(connections.length)}
@@ -82,7 +82,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
       ) : (
         <div className={css(sharedStyle.wrapper)}>
           <div className={css(sharedStyle.header)}>
-            <Text element='div' size='largeIi' style={sharedStyle.heading}>
+            <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
               You haven’t found anyone worth nudj’ing within your network
             </Text>
             <Text element='p' style={sharedStyle.subheading}>

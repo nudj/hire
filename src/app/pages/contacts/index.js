@@ -51,7 +51,7 @@ const ContactsPage = props => {
         <title>Complete survey</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' size='largeIi' style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
           You currently have{' '}
           <span className={css(sharedStyle.headingHighlight)}>
             {totalConnectionsCount}

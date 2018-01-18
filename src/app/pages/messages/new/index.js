@@ -26,7 +26,7 @@ const NewConversationPage = props => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={sharedStyle.heading}>
+          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
             Select the job you’d like to send {connection}
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
