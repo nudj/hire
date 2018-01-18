@@ -63,9 +63,7 @@ const ContactsPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={[sharedStyle.card, style.card]}>
-            <form
-              className={css(style.form)}
-            >
+            <form className={css(style.form)}>
               <Text element='label' size='smallI' htmlFor='search'>
                 Search and select from the results
               </Text>
