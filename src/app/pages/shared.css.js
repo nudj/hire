@@ -19,13 +19,13 @@ const styleSheet = StyleSheet.create({
     marginRight: 'auto',
     paddingTop: sizes.largeIi,
     paddingBottom: sizes.largeIi,
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
     height: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {
       paddingTop: sizes.largeIii,
       paddingBottom: sizes.largeIii,
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular,
       textAlign: 'center'
     }
   },
@@ -35,13 +35,25 @@ const styleSheet = StyleSheet.create({
     marginRight: 'auto'
   },
   heading: {
+    maxWidth: '42.5rem',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular
+  },
+  headingPrimary: {
     color: colors.primary
   },
   headingHighlight: {
     color: colors.midRed
   },
   subheading: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '38rem',
     marginTop: sizes.largeIi,
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
     ':nth-of-type(n + 2)': {
       marginTop: sizes.regular
     }

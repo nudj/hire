@@ -1,19 +1,28 @@
-const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
-  root: {
-    textAlign: 'center'
+  section: {
+    ':nth-child(n + 2)': {
+      marginTop: sizes.largeIi
+    }
   },
-  gmailLogo: {
-    width: '2rem',
-    height: '1.5625rem'
+  card: {
+    overflow: 'hidden'
   },
-  heading: {
-    marginTop: sizes.largeIi
+  list: {
+    listStyleType: 'none',
+    marginTop: 0,
+    marginBottom: 0,
+    paddingLeft: 0,
+    textAlign: 'left'
   },
-  body: {
-    marginTop: sizes.regular
+  listItem: {
+    ':nth-child(n + 2)': {
+      borderTopWidth: '1px',
+      borderTopStyle: 'solid',
+      borderTopColor: colors.greyLight
+    }
   },
   buttonGroup: {
     marginTop: sizes.largeIi,

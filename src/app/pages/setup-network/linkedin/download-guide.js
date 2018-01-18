@@ -20,7 +20,7 @@ const LinkedinDownloadGuidePage = (props: Object) => (
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
-        <Text element='div' size='largeIi' style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
           Downloading your connections from LinkedIn
         </Text>
       </div>

@@ -66,7 +66,7 @@ const ConnectionsQuestionPage = props => {
         <Text element='div' style={sharedStyle.stepCounter}>
           Step {questionNumber} of {questionCount}
         </Text>
-        <Text element='div' size='largeIi' style={sharedStyle.heading}>
+        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
           {question.title}
         </Text>
         <Text element='div' style={sharedStyle.subheading}>

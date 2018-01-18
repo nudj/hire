@@ -129,7 +129,7 @@ const setEmailPreference = ({ body, params, query, session }) => {
 
   const respond = data => {
     if (body.emailProvider === emailPreferences.GOOGLE) {
-      session.returnTo = `/conversations/new/${query.id}`
+      session.returnTo = `/messages/new/${query.id}`
       session.returnFail = `/surveys/${params.surveySlug}/complete`
       throw new Redirect({
         url: '/auth/google'
@@ -137,7 +137,7 @@ const setEmailPreference = ({ body, params, query, session }) => {
     }
 
     throw new Redirect({
-      url: `/conversations/new/${query.id}`
+      url: `/messages/new/${query.id}`
     })
   }
 

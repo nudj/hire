@@ -59,7 +59,9 @@ data.conversations = data.conversations.concat([
     type: emailPreferences.OTHER,
     person: 'person5',
     recipient: 'person1',
-    id: 'conversation2'
+    id: 'conversation2',
+    created: '2018-01-16T01:32:50.875+00:00',
+    modified: '2018-01-16T01:32:50.875+00:00'
   }
 ])
 data.messages = data.messages.concat([
@@ -67,22 +69,25 @@ data.messages = data.messages.concat([
     id: `${threadIds[0]}-message1`,
     date: '2018-01-16T02:51:58.000+00:00',
     body: 'Hello, how are you?',
-    to: 'person5',
-    from: 'person1'
+    to: 'person1',
+    from: 'person5',
+    subject: 'About that job'
   },
   {
     id: `${threadIds[0]}-message2`,
     date: '2018-01-16T02:57:58.000+00:00',
     body: 'I am well, David! How about you?',
-    to: 'person1',
-    from: 'person5'
+    to: 'person5',
+    from: 'person1',
+    subject: 'About that job'
   },
   {
     id: `${threadIds[0]}-message3`,
     date: '2018-01-16T02:59:40.000+00:00',
     body: 'Not too bad, not too bad!',
-    to: 'person5',
-    from: 'person1'
+    to: 'person1',
+    from: 'person5',
+    subject: 'About that job'
   }
 ])
 data.accounts = data.accounts.concat([
@@ -325,7 +330,7 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user',
-    emailPreference: emailPreferences.GOOGLE
+    emailPreference: emailPreferences.OTHER
   },
   {
     id: 'person6',
@@ -349,7 +354,7 @@ data.hirers = data.hirers.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
     company: 'company1',
-    onboarded: false
+    onboarded: true
   },
   {
     id: 'hirer2',

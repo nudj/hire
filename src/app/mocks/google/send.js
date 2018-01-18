@@ -28,7 +28,13 @@ const fetchPersonFromEmail = async (email) => {
 
 const parseBody = async (rawMessage) => {
   const decoded = Base64.decode(rawMessage).split('\r\n')
-  const body = decoded[decoded.length - 1]
+  const metaDataFinishIndex = decoded.indexOf('MIME-Version: 1.0')
+
+  const body = decoded.slice(
+    metaDataFinishIndex + 2,
+    decoded.length
+  ).join('\n')
+
   const data = decoded.reduce((email, entry) => {
     if (entry.includes(':')) {
       const [key, value] = entry.split(':')

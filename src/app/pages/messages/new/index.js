@@ -5,17 +5,17 @@ const get = require('lodash/get')
 const { Card, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const ListJobs = require('../../components/job-radio-group')
-const ButtonLink = require('../../components/button-link')
-const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+const ListJobs = require('../../../components/job-radio-group')
+const ButtonLink = require('../../../components/button-link')
+const Layout = require('../../../components/app-layout')
+const sharedStyle = require('../../shared.css')
 const { selectJob } = require('./actions')
 
 const getHandleSelectJob = dispatch => ({ value }) => dispatch(selectJob(value))
 
 const NewConversationPage = props => {
   const { dispatch } = props
-  const selectedJobId = get(props, 'conversationsPage.jobId')
+  const selectedJobId = get(props, 'composeMessage.jobId')
   const jobs = get(props, 'user.hirer.company.jobs', [])
   const connection = get(props, 'user.connection.firstName')
 
@@ -26,7 +26,7 @@ const NewConversationPage = props => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={sharedStyle.heading}>
+          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
             Select the job you’d like to send {connection}
           </Text>
           <Text element='p' style={sharedStyle.subheading}>

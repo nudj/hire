@@ -34,7 +34,7 @@ const expressRouters = {
     require('./pages/survey-section/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey-complete/router'),
-    require('./pages/conversations/router'),
+    require('./pages/messages/router'),
     require('./pages/contacts/router'),
     require('./server/routers/catch-all')
   ]

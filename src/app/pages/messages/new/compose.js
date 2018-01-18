@@ -12,14 +12,16 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const {
+  values: emailPreferences
+} = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
-const { render } = require('../../lib/templater')
-const style = require('./style.css')
-const sharedStyle = require('../shared.css')
-const Layout = require('../../components/app-layout')
+const { render } = require('../../../lib/templater')
+const Layout = require('../../../components/app-layout')
+const sharedStyle = require('../../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
+const style = require('./style.css')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
   dispatch(updateSubject(value))
@@ -46,25 +48,21 @@ const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
 const ComposeMessagePage = props => {
-  const { conversationsPage, dispatch, user, template } = props
+  const { composeMessage, dispatch, user, template, csrfToken } = props
   const toEmail = get(user, 'connection.person.email', '')
-  const job = get(props, 'hirer.company.job', {})
-  const emailPreference = get(
-    user,
-    'emailPreference',
-    emailPreferences.OTHER
-  )
+  const job = get(user, 'hirer.company.job', {})
+  const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
 
   const subjectTemplate = render({ template: template.subject })[0].join('')
   const messageTemplate = parseJobMessageTemplate(template.message, job, user)
 
   const subjectValue = getFirstNonNil(
-    conversationsPage.subject,
+    composeMessage.subject,
     subjectTemplate,
     ''
   )
   const messageValue = getFirstNonNil(
-    conversationsPage.message,
+    composeMessage.message,
     messageTemplate,
     ''
   )
@@ -76,7 +74,7 @@ const ComposeMessagePage = props => {
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={sharedStyle.heading}>
+          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
             Now compose your masterpiece
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
@@ -87,18 +85,21 @@ const ComposeMessagePage = props => {
         </div>
         <div className={css(sharedStyle.body)}>
           <Card style={sharedStyle.card}>
-            <form>
+            <form method='post'>
               <Input
+                name='subject'
                 value={subjectValue}
                 onChange={getHandleSubjectChange(dispatch)}
                 styleSheet={{ input: style.subjectInput }}
               />
               <Textarea
+                name='body'
                 value={messageValue}
                 onChange={getHandleMessageChange(dispatch)}
                 styleSheet={{ input: style.messageInput }}
                 autosize
               />
+              <input name='_csrf' value={csrfToken} type='hidden' />
               {emailPreference === emailPreferences.GOOGLE ? (
                 <Button type='submit' volume='cheer' style={style.sendButton}>
                   Send message

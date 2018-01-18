@@ -8,11 +8,11 @@ module.exports = {
   '/surveys/:surveySlug/sections/:sectionId': require('../pages/survey-section'),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': require('../pages/survey-question'),
   '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
-  '/conversations': require('../pages/conversations'),
-  '/conversations/new/:connectionId': require('../pages/conversations/new-conversation'),
-  '/conversations/new/:connectionId/:jobId': require('../pages/conversations/compose-message'),
+  '/messages': require('../pages/messages'),
+  '/messages/:conversationId': require('../pages/messages/thread'),
+  '/messages/new/:connectionId': require('../pages/messages/new'),
+  '/messages/new/:connectionId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
-
   // legacy urls
   '/': require('../pages/tasks'),
   '/jobs': require('../pages/jobs'),
