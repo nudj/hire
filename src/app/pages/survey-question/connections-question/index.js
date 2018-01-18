@@ -73,8 +73,11 @@ const ConnectionsQuestionPage = props => {
           {question.description}
         </Text>
         <div className={css(sharedStyle.body)}>
-          <Card style={sharedStyle.card}>
-            <form onSubmit={getHandleSearchSubmit(dispatch)}>
+          <Card style={[sharedStyle.card, style.card]}>
+            <form
+              onSubmit={getHandleSearchSubmit(dispatch)}
+              className={css(style.form)}
+            >
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
@@ -93,15 +96,17 @@ const ConnectionsQuestionPage = props => {
               </Button>
             </form>
             {connections.length ? (
-              <ConnectionsTable
-                styleSheet={{
-                  root: style.table
-                }}
-                onSelect={getHandleSetConnections(dispatch)}
-                connections={connections}
-                selectedConnections={selectedConnections}
-                multiple
-              />
+              <div className={css(style.tableOverflow)}>
+                <ConnectionsTable
+                  styleSheet={{
+                    root: style.table
+                  }}
+                  onSelect={getHandleSetConnections(dispatch)}
+                  connections={connections}
+                  selectedConnections={selectedConnections}
+                  multiple
+                />
+              </div>
             ) : (
               ''
             )}
