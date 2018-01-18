@@ -1,5 +1,3 @@
-const { Redirect } = require('@nudj/framework/errors')
-
 const { Global } = require('../../lib/graphql')
 
 const getUser = ({ session }) => {

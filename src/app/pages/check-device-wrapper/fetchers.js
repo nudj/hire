@@ -1,7 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 
 const { createNotification } = require('../../lib')
-const mailer = require('../../lib/mailer')
 const template = require('./email-template')
 
 const sendMagicLink = ({ session }) => {
