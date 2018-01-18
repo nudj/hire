@@ -3,7 +3,7 @@ const { Redirect } = require('@nudj/framework/errors')
 const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { Global } = require('../../lib/graphql')
 
-const get = ({ session, params }) => {
+const completeSurvey = ({ session, params }) => {
   const gql = `
     mutation SurveyPage (
       $userId: ID!,
@@ -33,6 +33,7 @@ const get = ({ session, params }) => {
       }
       user (id: $userId) {
         hirer {
+          setOnboarded
           company {
             survey: surveyByFilters (filters: {
               slug: $surveySlug
@@ -144,6 +145,6 @@ const setEmailPreference = ({ body, params, query, session }) => {
 }
 
 module.exports = {
-  get,
+  completeSurvey,
   setEmailPreference
 }
