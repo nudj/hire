@@ -19,8 +19,6 @@ const styleSheet = StyleSheet.create({
     marginRight: 'auto',
     paddingTop: sizes.largeIi,
     paddingBottom: sizes.largeIi,
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
     height: '100%',
     textAlign: 'left',
     '@media (min-width: 37.5rem)': {

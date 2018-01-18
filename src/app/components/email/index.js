@@ -6,10 +6,10 @@ const { renderSimpleTemplate } = require('@nudj/library')
 
 const style = require('./style.css')
 
-const dumblyRenderBody = body => body.split('\n').map(paragraph => {
-  if (paragraph.length === 0) return <br />
+const dumblyRenderBody = body => body.split('\n').map((paragraph, i) => {
+  if (paragraph.length === 0) return <br  key={i} />
 
-  return <p>{paragraph}</p>
+  return <p key={i}>{paragraph}</p>
 })
 
 const Email = ({ from, date, body }) => {
