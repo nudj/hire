@@ -40,8 +40,8 @@ const SurveyPage = (props: SurveyProps) => {
   const { user } = props
   const company = get(user, 'hirer.company')
   const survey = get(company, 'survey')
-  const initialSection = get(survey, 'sections[0]')
-  const initialQuestion = get(initialSection, 'questions[0]')
+  const initialSection = get(survey, 'sections[0]', {})
+  const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
     <Layout

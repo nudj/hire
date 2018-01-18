@@ -15,7 +15,7 @@ const path = require('path')
 const server = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 
-const { mockData, mockExternalRequests } = require('./mocks')
+const mockData = require('./mocks/data')
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
@@ -68,6 +68,7 @@ app.listen(80, () => {
 })
 
 if (process.env.USE_MOCKS === 'true') {
+  const mockExternalRequests = require('./mocks')
   const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
 
   jsonServer.listen(81, () => {

@@ -1,6 +1,5 @@
 const nock = require('nock')
 const logger = require('@nudj/framework/logger')
-const mockData = require('./data')
 const mockGoogleRequests = require('./google/requests')
 
 const stopMocks = (message) => {
@@ -21,7 +20,4 @@ const mockExternalRequests = (callback) => {
   typeof callback === 'function' && callback()
 }
 
-module.exports = {
-  mockData,
-  mockExternalRequests
-}
+module.exports = mockExternalRequests

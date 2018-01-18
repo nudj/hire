@@ -38,7 +38,7 @@ const uploadConnections = ({ session, body, files }) => {
         lastName
         email
         newConnections: getOrCreateConnections (
-          to: $connections,
+          connections: $connections,
           source: $source
         ) {
           id
