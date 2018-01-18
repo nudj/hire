@@ -47,7 +47,7 @@ const data = {
 }
 data.conversations = data.conversations.concat([
   {
-    type: emailPreferences.OTHER,
+    type: emailPreferences.GOOGLE,
     threadId: threadIds[0],
     person: 'person5',
     recipient: 'person1',
