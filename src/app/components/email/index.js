@@ -6,15 +6,13 @@ const { renderSimpleTemplate } = require('@nudj/library')
 
 const style = require('./style.css')
 
-const Email = ({ from, date, body }) => {
-  const lol = renderSimpleTemplate({
-    template: body,
-    pify: (paragraph, length, padding) => {
-      return <p>{paragraph}</p>
-    }
-  })
-  console.log(lol)
+const dumblyRenderBody = body => body.split('\n').map(paragraph => {
+  if (paragraph.length === 0) return <br />
 
+  return <p>{paragraph}</p>
+})
+
+const Email = ({ from, date, body }) => {
   return (
     <div className={css(style.root)}>
       <Align
@@ -23,7 +21,7 @@ const Email = ({ from, date, body }) => {
       />
       <div className={css(style.body)}>
         <Text>
-          { lol }
+          { dumblyRenderBody(body) }
         </Text>
       </div>
     </div>
