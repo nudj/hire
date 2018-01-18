@@ -68,7 +68,7 @@ const Router = ({
         'success',
         'We successfully synced your google account'
       )
-      res.redirect(req.session.returnTo)
+      res.redirect(req.session.returnTo || '/')
     }
   )
 
