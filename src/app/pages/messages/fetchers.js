@@ -223,7 +223,8 @@ const getMessageTemplate = (props) => {
     templateTags: [
       'external',
       'long',
-      'familiar'
+      'familiar',
+      'createMessage'
     ]
   }
 
