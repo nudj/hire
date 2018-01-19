@@ -20,7 +20,7 @@ const SurveyQuestionPage = props => {
   const questions = flatten(allSections.map(section => get(section, 'questions')))
   const questionIndex = findIndex(questions, { id: get(question, 'id') })
   const employments = get(user, 'employments', [])
-  const allConnections = get(user, 'allConnections', [])
+  const connectionsCount = get(user, 'connectionsCount', [])
   const companiesAdded = employments.concat(
     get(user, 'newEmployment', [])
   )
@@ -53,7 +53,7 @@ const SurveyQuestionPage = props => {
           nextUri={nextUri}
           question={question}
           connections={connections}
-          hasConnections={!!allConnections.length}
+          hasConnections={!!connectionsCount}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
           dispatch={dispatch}
