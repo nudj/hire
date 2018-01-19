@@ -3,6 +3,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const toLower = require('lodash/toLower')
 
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -76,7 +77,7 @@ const SurveyPage = (props: SurveyProps) => {
             style={sharedStyle.action}
             volume='cheer'
             href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
-              initialQuestion.type
+              toLower(initialQuestion.type)
             }/${initialQuestion.id}`}
           >
             Start
