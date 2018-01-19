@@ -134,7 +134,7 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={[sharedStyle.card, style.card]}>
-            {hasConnections ? (
+            {hasConnections || selectedConnections.length ? (
               <form
                 onSubmit={getHandleSearchSubmit(dispatch)}
                 className={css(style.form)}
@@ -171,7 +171,7 @@ const ConnectionsQuestionPage = props => {
             )}
             {renderSearchTable()}
           </Card>
-          {hasConnections && (
+          {(hasConnections || !!selectedConnections.length) && (
             <Button
               subtle
               volume='cheer'
