@@ -1,5 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const isNil = require('lodash/isNil')
 
 const { Text, Align, Card, Input, Button } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -42,7 +43,8 @@ const ConnectionsQuestionPage = props => {
     connections,
     question,
     selectedConnections,
-    query,
+    searchInput,
+    searchQuery,
     history,
     match
   } = props
@@ -51,6 +53,39 @@ const ConnectionsQuestionPage = props => {
   const handleSearchClear = ({ value }) => {
     handleSearchChange(value)
     history.push(match.url)
+  }
+
+  const renderSearchTable = () => {
+    switch (true) {
+      case !!connections.length:
+        return (
+          <div className={css(style.tableOverflow)}>
+            <ConnectionsTable
+              styleSheet={{
+                root: style.table
+              }}
+              onSelect={getHandleSetConnections(dispatch)}
+              connections={connections}
+              selectedConnections={selectedConnections}
+              multiple
+            />
+          </div>
+        )
+      case !connections.length && !isNil(searchQuery):
+        return (
+          <div className={css(style.tableOverflow)}>
+            <Text element='div' size='largeI' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+              0 people match '{searchQuery}'
+            </Text>
+            <Text element='div' style={sharedStyle.subheading}>
+              We can&#39;t find anyone in your contacts that matches your query.
+              Try another search term or add them manually using the link below
+            </Text>
+          </div>
+        )
+      default:
+        return null
+    }
   }
 
   return (
@@ -86,7 +121,7 @@ const ConnectionsQuestionPage = props => {
                 name='search'
                 label='search'
                 type='search'
-                value={query}
+                value={searchInput}
                 placeholder='e.g., Jonny Ive'
                 onChange={handleSearchChange}
                 onClear={handleSearchClear}
@@ -95,21 +130,7 @@ const ConnectionsQuestionPage = props => {
                 Search
               </Button>
             </form>
-            {connections.length ? (
-              <div className={css(style.tableOverflow)}>
-                <ConnectionsTable
-                  styleSheet={{
-                    root: style.table
-                  }}
-                  onSelect={getHandleSetConnections(dispatch)}
-                  connections={connections}
-                  selectedConnections={selectedConnections}
-                  multiple
-                />
-              </div>
-            ) : (
-              ''
-            )}
+            {renderSearchTable()}
           </Card>
           <div className={css(sharedStyle.footer)}>
             <Align

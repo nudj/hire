@@ -28,11 +28,8 @@ const SurveyQuestionPage = props => {
   )
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
-  const searchQuery = getFirstNonNil(
-    state.searchQuery,
-    queryParams.get('search'),
-    ''
-  )
+  const searchQuery = queryParams.get('search')
+  const searchInput = getFirstNonNil(state.searchQuery, searchQuery, '')
 
   switch (question.type) {
     case questionTypes.COMPANIES:
@@ -59,7 +56,8 @@ const SurveyQuestionPage = props => {
           questionCount={questions.length}
           dispatch={dispatch}
           selectedConnections={get(state, 'selectedConnections', [])}
-          query={searchQuery}
+          searchInput={searchInput}
+          searchQuery={searchQuery}
         />
       )
     default:
