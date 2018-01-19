@@ -309,8 +309,48 @@ const postConnectionAnswer = ({ session, params, body }) => {
   return { gql, variables, respond }
 }
 
+const postNewConnection = ({ session, params, body }) => {
+  const gql = `
+    mutation addNewConnection (
+      $userId: ID!
+      $firstName: String!
+      $lastName: String!
+      $email: String!
+      $title: String
+      $company: String
+      $source: SourceCreateInput!
+    ) {
+      user (id: $userId) {
+        newConnection: getOrCreateConnection (
+          to: {
+            firstName: $firstName,
+            lastName: $lastName,
+            email: $email,
+            title: $title,
+            company: $company
+          }
+          source: $source
+        ) {
+          id
+        }
+      }
+    }
+  `
+  const variables = {
+    userId: session.userId,
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email,
+    title: body.title,
+    company: body.company,
+    source: { name: 'manual' }
+  }
+  return { gql, variables }
+}
+
 module.exports = {
   getQuestion,
   postEmployment,
-  postConnectionAnswer
+  postConnectionAnswer,
+  postNewConnection
 }

@@ -6,10 +6,14 @@ const styleSheet = StyleSheet.create({
     paddingRight: 0
   },
   form: {
+    marginTop: sizes.regular,
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
   },
   submitButton: {
+    marginTop: sizes.regular
+  },
+  addPersonButton: {
     marginTop: sizes.regular
   },
   input: {
@@ -22,7 +26,15 @@ const styleSheet = StyleSheet.create({
     paddingRight: sizes.largeIi
   },
   table: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    marginTop: sizes.largeIi
+  },
+  modalHeading: {
+    textAlign: 'center'
+  },
+  modalBody: {
+    marginTop: sizes.regular,
+    textAlign: 'center'
   }
 })
 

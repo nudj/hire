@@ -1,21 +1,17 @@
+const axios = require('axios')
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { quickDispatch } = require('@nudj/library')
 
 const PREFIX = 'SURVEY'
 
 const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
 module.exports.SET_NEW_ITEM_VALUE = SET_NEW_ITEM_VALUE
-function setNewItemValue (name, key, value) {
-  return {
-    type: SET_NEW_ITEM_VALUE,
-    name,
-    key,
-    value
-  }
-}
-module.exports.setNewItemValue = (name, key, value) =>
-  quickDispatch(setNewItemValue(name, key, value))
+module.exports.setNewItemValue = (name, key, value) => ({
+  type: SET_NEW_ITEM_VALUE,
+  name,
+  key,
+  value
+})
 
 const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
 module.exports.ADD_CONNECTION = ADD_CONNECTION
@@ -136,6 +132,7 @@ module.exports.search = () => (dispatch, getState) => {
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const search = get(state, 'surveyQuestionPage.searchQuery') || ''
+
   return dispatch(
     actions.app.postData(
       {
@@ -145,4 +142,44 @@ module.exports.search = () => (dispatch, getState) => {
       }
     )
   )
+}
+
+module.exports.SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
+module.exports.showAddForm = () => ({
+  type: module.exports.SHOW_ADD_FORM
+})
+
+module.exports.HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
+module.exports.hideAddForm = () => ({
+  type: module.exports.HIDE_ADD_FORM
+})
+
+module.exports.CLEAR_ADD_FORM = `${PREFIX}_CLEAR_ADD_FORM`
+module.exports.clearAddForm = () => ({
+  type: module.exports.CLEAR_ADD_FORM
+})
+
+module.exports.submitNewConnection = () => (dispatch, getState) => {
+  const state = getState()
+  const survey = get(state, 'app.user.hirer.company.survey', {})
+  const section = get(survey, 'section')
+  const question = get(section, 'question')
+  const data = get(state, 'surveyQuestionPage.newConnection')
+  const csrfToken = get(state, 'app.csrfToken')
+
+  return axios({
+    url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-TOKEN': csrfToken
+    },
+    data
+  })
+  .then(response => {
+    const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
+    dispatch(setSelectedConnections(selectedConnections.concat(response.data.app.user.newConnection.id)))
+    dispatch(module.exports.clearAddForm())
+  })
 }
