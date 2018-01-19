@@ -7,6 +7,24 @@ const getContacts = ({ session, query }) => {
     query SurveyQuestionPage($userId: ID!) {
       user(id: $userId) {
         connectionsCount
+        connections {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
       }
       ${Global}
     }
