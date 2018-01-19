@@ -78,7 +78,7 @@ const ConnectionsQuestionPage = props => {
               0 people match '{searchQuery}'
             </Text>
             <Text element='div' style={sharedStyle.subheading}>
-              We can't find anyone in your contacts that matches your query.
+              We can&#39;t find anyone in your contacts that matches your query.
               Try another search term or add them manually using the link below
             </Text>
           </div>
