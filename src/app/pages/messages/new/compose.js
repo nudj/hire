@@ -32,6 +32,9 @@ const parseJobMessageTemplate = (template, job, user) =>
   render({
     template: template,
     data: {
+      recipient: {
+        firstname: user.connection.firstName
+      },
       job: {
         title: job.title,
         link: job.url
@@ -53,7 +56,14 @@ const ComposeMessagePage = props => {
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
 
-  const subjectTemplate = render({ template: template.subject })[0].join('')
+  const subjectTemplate = render({
+    template: template.subject,
+    data: {
+      recipient: {
+        firstname: get(user, 'connection.firstName', 'Hey')
+      }
+    }
+  })[0].join('')
   const messageTemplate = parseJobMessageTemplate(template.message, job, user)
 
   const subjectValue = getFirstNonNil(

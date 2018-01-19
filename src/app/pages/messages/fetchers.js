@@ -113,7 +113,7 @@ const replyTo = (props) => {
           }
         }
         ${Global}
-      }    
+      }
     `
 
     const variables = {
@@ -185,7 +185,14 @@ const getMessageTemplate = (props) => {
   const { session, params } = props
 
   const gql = `
-    query getTemplateAndDetails($userId: ID!, $connectionId: ID!, $jobId: ID!) {
+    query getTemplateAndDetails(
+      $userId: ID!,
+      $connectionId: ID!,
+      $jobId: ID!,
+      $repo: String!,
+      $templateType: String!,
+      $templateTags: [String!]!
+    ) {
       user(id: $userId) {
         firstName
         emailPreference
@@ -202,7 +209,7 @@ const getMessageTemplate = (props) => {
           firstName
         }
       }
-      template: fetchTemplate(repo: "hirer", type: "composemessage", tags: ["formal", "new"])
+      template: fetchTemplate(repo: $repo, type: $templateType, tags: $templateTags)
       ${Global}
     }
   `
@@ -210,7 +217,14 @@ const getMessageTemplate = (props) => {
   const variables = {
     userId: session.userId,
     connectionId: params.connectionId,
-    jobId: params.jobId
+    jobId: params.jobId,
+    repo: 'hirer',
+    templateType: 'composemessage',
+    templateTags: [
+      'external',
+      'long',
+      'familiar'
+    ]
   }
 
   return { gql, variables }
