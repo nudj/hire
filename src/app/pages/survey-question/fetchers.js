@@ -138,6 +138,24 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $questionId: ID!,
     ) {
       user (id: $userId) {
+        connections {
+          id
+          firstName
+          lastName
+          role {
+            name
+          }
+          company {
+            name
+          }
+          source {
+            name
+          }
+          person {
+            id
+            email
+          }
+        }
         ${hirerFragment}
       }
       ${Global}
