@@ -20,6 +20,7 @@ const fields = [
   {
     name: 'email',
     label: 'Email',
+    type: 'email',
     required: true
   },
   {
@@ -65,6 +66,7 @@ const FormConnection = (props) => {
             onChange={getHandleChange(field.name)}
             id={field.name}
             name={field.name}
+            type={field.type || 'text'}
             value={connection[field.name] || ''}
             required={field.required}
           />

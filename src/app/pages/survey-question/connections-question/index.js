@@ -64,6 +64,7 @@ const ConnectionsQuestionPage = props => {
     dispatch,
     questionNumber,
     questionCount,
+    hasConnections,
     connections,
     question,
     selectedConnections,
@@ -133,37 +134,53 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={[sharedStyle.card, style.card]}>
-            <form
-              onSubmit={getHandleSearchSubmit(dispatch)}
-              className={css(style.form)}
-            >
-              <Text element='label' size='smallI' htmlFor='search'>
-                Search by name and select from the results
-              </Text>
-              <Input
-                styleSheet={{ root: style.input }}
-                name='search'
-                label='search'
-                type='search'
-                value={searchInput}
-                placeholder='e.g., Jonny Ive'
-                onChange={handleSearchChange}
-                onClear={handleSearchClear}
-              />
-              <Button style={style.submitButton} type='submit' volume='cheer'>
-                Search
-              </Button>
-            </form>
+            {hasConnections || selectedConnections.length ? (
+              <form
+                onSubmit={getHandleSearchSubmit(dispatch)}
+                className={css(style.form)}
+              >
+                <Text element='label' size='smallI' htmlFor='search'>
+                  Search by name and select from the results
+                </Text>
+                <Input
+                  styleSheet={{ root: style.input }}
+                  name='search'
+                  label='search'
+                  type='search'
+                  value={searchInput}
+                  placeholder='e.g., Jonny Ive'
+                  onChange={handleSearchChange}
+                  onClear={handleSearchClear}
+                />
+                <Button style={style.submitButton} type='submit' volume='cheer'>
+                  Search
+                </Button>
+              </form>
+            ) : (
+              <div className={css(style.form)}>
+                <Text element='label'>
+                  Add their details below
+                </Text>
+                <ConnectionsForm
+                  csrfToken={get(props, 'csrfToken')}
+                  onChange={getHandleConnectionChange(dispatch)}
+                  onSubmit={getHandleConnectionSubmit(dispatch)}
+                  connection={get(props, 'newConnection')}
+                />
+              </div>
+            )}
             {renderSearchTable()}
           </Card>
-          <Button
-            subtle
-            volume='cheer'
-            onClick={getHandleAddClick(dispatch)}
-            style={style.addPersonButton}
-          >
-            Add person
-          </Button>
+          {(hasConnections || !!selectedConnections.length) && (
+            <Button
+              subtle
+              volume='cheer'
+              onClick={getHandleAddClick(dispatch)}
+              style={style.addPersonButton}
+            >
+              Add person
+            </Button>
+          )}
           <Modal
             isOpen={get(props, 'showAddIndividualConnectionModal')}
             style={style.modalWindow}
@@ -175,7 +192,8 @@ const ConnectionsQuestionPage = props => {
               Add an individual
             </Text>
             <Text element='p' style={style.modalBody}>
-              Thought of someone who might help you in your search? Just add their details below so you can nudj them.
+              Thought of someone who might help you in your search? Just add
+              their details below so you can nudj them.
             </Text>
             <ConnectionsForm
               style={style.form}
