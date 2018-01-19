@@ -135,7 +135,7 @@ module.exports.search = () => (dispatch, getState) => {
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const search = get(state, 'surveyQuestionPage.searchQuery')
+  const search = get(state, 'surveyQuestionPage.searchQuery') || ''
   return dispatch(
     actions.app.postData(
       {

@@ -49,7 +49,6 @@ const ConnectionsQuestionPage = props => {
     match
   } = props
 
-  console.log(props)
   const handleSearchChange = getHandleSearchChange(dispatch)
   const handleSearchClear = ({ value }) => {
     handleSearchChange(value)
