@@ -44,6 +44,7 @@
     "humanparser": "^1.5.0",
     "intercom-client": "^2.8.7",
     "js-base64": "^2.1.9",
+    "linkifyjs": "^2.1.5",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.9.1",
     "node-email-reply-parser": "^0.1.0",
