@@ -89,6 +89,9 @@ const getCompaniesQuestion = ({ session, params, query }) => {
 
 const getConnectionsQuestion = ({ session, params, query }) => {
   const hirerFragment = `
+    allConnections: connections {
+      id
+    }
     hirer {
       company {
         survey: surveyByFilters (filters: {

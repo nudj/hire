@@ -64,6 +64,7 @@ const ConnectionsQuestionPage = props => {
     dispatch,
     questionNumber,
     questionCount,
+    hasConnections,
     connections,
     question,
     selectedConnections,
@@ -133,27 +134,31 @@ const ConnectionsQuestionPage = props => {
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={[sharedStyle.card, style.card]}>
-            <form
-              onSubmit={getHandleSearchSubmit(dispatch)}
-              className={css(style.form)}
-            >
-              <Text element='label' size='smallI' htmlFor='search'>
-                Search by name and select from the results
-              </Text>
-              <Input
-                styleSheet={{ root: style.input }}
-                name='search'
-                label='search'
-                type='search'
-                value={searchInput}
-                placeholder='e.g., Jonny Ive'
-                onChange={handleSearchChange}
-                onClear={handleSearchClear}
-              />
-              <Button style={style.submitButton} type='submit' volume='cheer'>
-                Search
-              </Button>
-            </form>
+            {hasConnections ? (
+              <form
+                onSubmit={getHandleSearchSubmit(dispatch)}
+                className={css(style.form)}
+              >
+                <Text element='label' size='smallI' htmlFor='search'>
+                  Search by name and select from the results
+                </Text>
+                <Input
+                  styleSheet={{ root: style.input }}
+                  name='search'
+                  label='search'
+                  type='search'
+                  value={searchInput}
+                  placeholder='e.g., Jonny Ive'
+                  onChange={handleSearchChange}
+                  onClear={handleSearchClear}
+                />
+                <Button style={style.submitButton} type='submit' volume='cheer'>
+                  Search
+                </Button>
+              </form>
+            ) : (
+              null // Add connections form
+            )}
             {renderSearchTable()}
           </Card>
           <Button
