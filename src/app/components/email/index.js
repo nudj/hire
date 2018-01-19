@@ -1,4 +1,5 @@
 const React = require('react')
+const Linkify = require('linkifyjs/react')
 
 const { Align, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -8,7 +9,7 @@ const style = require('./style.css')
 const dumblyRenderBody = body => body.split('\n').map((paragraph, i) => {
   if (paragraph.length === 0) return <br key={i} />
 
-  return <p key={i}>{paragraph}</p>
+  return <Linkify tagName='p' key={i}>{paragraph}</Linkify>
 })
 
 const Email = ({ from, date, body }) => {
