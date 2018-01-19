@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@nudj/components": "2.0.0",
+    "@nudj/components": "2.1.0",
     "@nudj/framework": "12.1.0",
     "@nudj/library": "4.1.0",
     "babel-preset-flow": "^6.23.0",
@@ -80,7 +80,7 @@
     "sinon": "4.0.1",
     "sinon-chai": "2.14.0",
     "standard": "^10.0.3",
-    "uglifyjs-webpack-plugin": "^0.4.6",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^2.2.1"
   }
 }
