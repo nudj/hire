@@ -6,6 +6,7 @@ const styleSheet = StyleSheet.create({
     paddingRight: 0
   },
   form: {
+    marginTop: sizes.regular,
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
   },
@@ -31,9 +32,6 @@ const styleSheet = StyleSheet.create({
   modalBody: {
     marginTop: sizes.regular,
     textAlign: 'center'
-  },
-  form: {
-    marginTop: sizes.regular
   }
 })
 
