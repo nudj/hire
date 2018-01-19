@@ -84,7 +84,7 @@ data.messages = data.messages.concat([
   {
     id: `${threadIds[0]}-message3`,
     date: '2018-01-16T02:59:40.000+00:00',
-    body: 'Not too bad, not too bad!',
+    body: 'Not too bad\n\nI have an opportunity from nudj.co for you',
     to: 'person1',
     from: 'person5',
     subject: 'About that job'

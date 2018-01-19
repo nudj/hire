@@ -5041,6 +5041,10 @@ jju@^1.1.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
+jquery@>=1.9.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
 js-base64@^2.1.9:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.1.tgz#e02813181cd53002888e918935467acb2910e596"
@@ -5300,6 +5304,14 @@ levn@~0.2.5:
   dependencies:
     prelude-ls "~1.1.0"
     type-check "~0.3.1"
+
+linkifyjs@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-2.1.5.tgz#effc9f01e4aeafbbdbef21a45feab38b9516f93e"
+  optionalDependencies:
+    jquery ">=1.9.0"
+    react ">=0.14.0"
+    react-dom ">=0.14.0"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -7338,6 +7350,15 @@ react-dom@15.6.2, react-dom@^15.4.2:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-dom@>=0.14.0:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
 react-dropzone@4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-4.2.3.tgz#f7bc92aa5fe4253fdb1fd3792114d2d29b47119a"
@@ -7449,6 +7470,15 @@ react@15.6.2, react@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+react@>=0.14.0:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 read-all-stream@^3.0.0:
   version "3.1.0"
