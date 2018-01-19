@@ -198,7 +198,7 @@ const ConnectionsQuestionPage = props => {
                   type='submit'
                   volume='cheer'
                 >
-                  Next
+                  {selectedConnections.length ? 'Next' : 'Skip'}
                 </Button>
               }
             />
