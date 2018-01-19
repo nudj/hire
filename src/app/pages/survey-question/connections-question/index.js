@@ -158,8 +158,9 @@ const ConnectionsQuestionPage = props => {
           </Card>
           <Button
             subtle
-            volume='whistle'
+            volume='cheer'
             onClick={getHandleAddClick(dispatch)}
+            style={style.addPersonButton}
           >
             Add person
           </Button>

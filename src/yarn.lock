@@ -2,23 +2,27 @@
 # yarn lockfile v1
 
 
-"@nudj/api@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-7.0.0.tgz#d142494483994fda10d821a4cd08d2b77463f370"
+"@nudj/api@7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-7.1.0.tgz#4663100f74a381bdf7f7f667efeb9302876f9c1a"
   dependencies:
-    "@nudj/library" "4.0.0"
+    "@nudj/library" "4.2.0"
     apollo-server-express "^1.2.0"
     axios "^0.17.1"
     body-parser "1.17.2"
     date-fns "1.28.2"
     dedent "^0.7.0"
+    email-addresses "^3.0.1"
+    entities "^1.1.1"
     envkey "^1.0.0"
     express "4.15.3"
     glob "^7.1.2"
+    googleapis "^21.3.0"
     graphql "0.10.3"
     graphql-server-express "1.0.0"
     graphql-tools "1.1.0"
     intercom-client "^2.8.7"
+    js-base64 "^2.1.9"
     json-server "0.11.2"
     lodash "4.17.4"
     mailgun-js "^0.14.1"
@@ -30,6 +34,7 @@
     random-words "^0.0.1"
     restify "4.3.0"
     semi "^4.0.5"
+    striptags "^3.1.1"
 
 "@nudj/components@2.0.0":
   version "2.0.0"
@@ -66,11 +71,11 @@
     react-modal "^3.1.10"
     react-textarea-autosize "^5.2.1"
 
-"@nudj/framework@12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-12.1.0.tgz#f98fb5f0cf4b64103c71adb2396fad6c87d02b20"
+"@nudj/framework@12.2.0":
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-12.2.0.tgz#ad3631d00021d08505d8cbb652b4e8e57de303f3"
   dependencies:
-    "@nudj/api" "7.0.0"
+    "@nudj/api" "7.1.0"
     "@nudj/components" "2.0.0"
     "@nudj/library" "4.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
@@ -119,21 +124,21 @@
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
-"@nudj/library@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.0.0.tgz#b2ef68d640fdd6d1ab83d382b43b5fcab12e3f52"
-  dependencies:
-    axios "0.16.2"
-    deepmerge "1.5.0"
-    mailbuild "^0.3.7"
-    shortid "^2.2.8"
-
 "@nudj/library@4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.1.0.tgz#5b08a2be3d0db69e26718afd522909e2aedcc185"
   dependencies:
     axios "0.16.2"
     deepmerge "1.5.0"
+    mailbuild "^0.3.7"
+    shortid "^2.2.8"
+
+"@nudj/library@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.2.0.tgz#f568d5d98e4b0f8a1f08d53f13109ca1829a95e7"
+  dependencies:
+    axios "^0.16.2"
+    deepmerge "^1.5.0"
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
@@ -607,7 +612,7 @@ aws4@^1.2.1, aws4@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
 
-axios@0.16.2, axios@^0.16.1:
+axios@0.16.2, axios@^0.16.1, axios@^0.16.2:
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.16.2.tgz#ba4f92f17167dfbab40983785454b9ac149c3c6d"
   dependencies:
@@ -2520,6 +2525,10 @@ deepmerge@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.5.0.tgz#00bc5b88fd23b8130f9f5049071c3420e07a5465"
 
+deepmerge@^1.5.0:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.5.2.tgz#10499d868844cdad4fee0842df8c7f6f0c95a753"
+
 define-properties@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.1.2.tgz#83a73f2fea569898fb737193c8f873caf6d45c94"
@@ -2857,6 +2866,10 @@ elliptic@^6.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
+email-addresses@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/email-addresses/-/email-addresses-3.0.1.tgz#c1fc20c189e7f96d4012d375db5feaccdd24391c"
+
 "emoji-regex@>=6.0.0 <=6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-6.1.1.tgz#c6cd0ec1b0642e2a3c67a1137efc5e796da4f88e"
@@ -2890,7 +2903,7 @@ enhanced-resolve@^3.3.0, enhanced-resolve@^3.4.0:
     object-assign "^4.0.1"
     tapable "^0.2.7"
 
-entities@~1.1.1:
+entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
@@ -8637,6 +8650,10 @@ strip-json-comments@~1.0.1:
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+
+striptags@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/striptags/-/striptags-3.1.1.tgz#c8c3e7fdd6fb4bb3a32a3b752e5b5e3e38093ebd"
 
 style-loader@^0.18.2:
   version "0.18.2"

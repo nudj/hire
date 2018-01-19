@@ -376,7 +376,7 @@ data.hirers = data.hirers.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
     company: 'company1',
-    onboarded: true
+    onboarded: false
   },
   {
     id: 'hirer2',

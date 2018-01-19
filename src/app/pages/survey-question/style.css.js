@@ -13,6 +13,9 @@ const styleSheet = StyleSheet.create({
   submitButton: {
     marginTop: sizes.regular
   },
+  addPersonButton: {
+    marginTop: sizes.regular
+  },
   input: {
     marginTop: sizes.regular
   },
