@@ -196,9 +196,9 @@ const ConnectionsQuestionPage = props => {
                 <Button
                   onClick={handleSaveAnswers(dispatch, question.id)}
                   type='submit'
-                  volume='cheer'
+                  volume={selectedConnections.length ? 'cheer' : 'murmur'}
                 >
-                  Next
+                  {selectedConnections.length ? 'Next' : 'Skip'}
                 </Button>
               }
             />

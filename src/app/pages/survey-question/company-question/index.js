@@ -100,8 +100,11 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                 </Text>
               }
               rightChildren={
-                <ButtonLink volume='cheer' href={nextUri}>
-                  Next
+                <ButtonLink
+                  volume={companies.length ? 'cheer' : 'murmur'}
+                  href={nextUri}
+                >
+                  {companies.length ? 'Next' : 'Skip'}
                 </ButtonLink>
               }
             />
