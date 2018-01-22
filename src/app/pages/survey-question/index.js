@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
+const uniqBy = require('lodash/uniqBy')
 const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 
@@ -21,9 +22,9 @@ const SurveyQuestionPage = props => {
   const questionIndex = findIndex(questions, { id: get(question, 'id') })
   const employments = get(user, 'employments', [])
   const connectionsCount = get(user, 'connectionsCount', [])
-  const companiesAdded = employments.concat(
+  const companiesAdded = uniqBy(employments.concat(
     get(user, 'newEmployment', [])
-  )
+  ), employment => employment.id)
   const connections = get(user, 'connections', []).concat(
     get(user, 'newConnection', [])
   )
