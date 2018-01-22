@@ -207,6 +207,9 @@ const getMessageTemplate = (props) => {
         }
         connection: connectionByFilters(filters: {id: $connectionId}) {
           firstName
+          person {
+            id
+          }
         }
       }
       template: fetchTemplate(repo: $repo, type: $templateType, tags: $templateTags)
@@ -233,9 +236,9 @@ const getMessageTemplate = (props) => {
 
 const sendNewMessage = ({ session, params, body }) => {
   const gql = `
-    mutation SendNewMessage($userId: ID!, $connectionId: ID!, $subject: String!, $body: String!) {
+    mutation SendNewMessage($userId: ID!, $recipientId: ID!, $subject: String!, $body: String!) {
       user(id: $userId) {
-        conversation: sendEmail(to: $connectionId, subject: $subject, body: $body) {
+        conversation: sendEmail(to: $recipientId, subject: $subject, body: $body) {
           id
         }
       }
@@ -244,7 +247,7 @@ const sendNewMessage = ({ session, params, body }) => {
 
   const variables = {
     userId: session.userId,
-    connectionId: 'person1',
+    recipientId: body.recipient,
     subject: body.subject,
     body: body.body
   }

@@ -53,6 +53,7 @@ const getMailTo = (to, subject, message) =>
 const ComposeMessagePage = props => {
   const { composeMessage, dispatch, user, template, csrfToken } = props
   const toEmail = get(user, 'connection.person.email', '')
+  const recipientId = get(user, 'connection.person.id')
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
 
@@ -110,6 +111,7 @@ const ComposeMessagePage = props => {
                 autosize
               />
               <input name='_csrf' value={csrfToken} type='hidden' />
+              <input name='recipient' value={recipientId} type='hidden' />
               {emailPreference === emailPreferences.GOOGLE ? (
                 <Button type='submit' volume='cheer' style={style.sendButton}>
                   Send message
