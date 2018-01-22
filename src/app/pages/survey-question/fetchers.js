@@ -1,5 +1,4 @@
 const toUpper = require('lodash/toUpper')
-const isNil = require('lodash/isNil')
 const { Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
@@ -162,7 +161,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       ${Global}
     }
   `
-  if (!isNil(query.search)) {
+  if (query.search) {
     gql = `
       query SurveyQuestionPage (
         $userId: ID!,
