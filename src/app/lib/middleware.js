@@ -31,7 +31,7 @@ async function ensureOnboarded (req, res, next) {
       url: '/welcome',
       notification: createNotification(
         'error',
-        "We're still getting your company set-up, so you can't access this page just yet. Need more information? Let us know."
+        "We're still setting up your account, so you can't complete on-boarding just yet."
       )
     })
   )
