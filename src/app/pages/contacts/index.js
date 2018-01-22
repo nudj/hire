@@ -48,7 +48,7 @@ const ContactsPage = props => {
   return (
     <Layout {...props} styleSheet={{root: sharedStyle.root}}>
       <Helmet>
-        <title>Complete survey</title>
+        <title>Contacts</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
@@ -56,16 +56,16 @@ const ContactsPage = props => {
           <span className={css(sharedStyle.headingHighlight)}>
             {totalConnectionsCount}
           </span>{' '}
-          contacts in your network
+          people in your network
         </Text>
         <Text element='div' style={sharedStyle.subheading}>
-          Search for people to nudj or add more people to grow your network.
+          Search for people to ask for recommendations or add more people to grow your network.
         </Text>
         <div className={css(sharedStyle.body)}>
           <Card style={[sharedStyle.card, style.card]}>
             <form className={css(style.form)}>
               <Text element='label' size='smallI' htmlFor='search'>
-                Search and select from the results
+                Search by name and select from the results
               </Text>
               <Input
                 styleSheet={{

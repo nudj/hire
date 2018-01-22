@@ -30,9 +30,8 @@ const NewConversationPage = props => {
             Select the job you’d like to send {connection}
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            Select which of your company’s open jobs that this person is most
-            likely to provide the best recommendations for. We’ll then create a
-            unqiue link to this role for you.
+            Select which of your company&#39;s open jobs this person is most
+            likely to provide the best recommendations for.
           </Text>
         </div>
         <div className={css(sharedStyle.body)}>
