@@ -198,7 +198,12 @@ const getMessageTemplate = (props) => {
         emailPreference
         hirer {
           company {
+            slug
             job: jobByFilters(filters: {id: $jobId}) {
+              referral: createReferral(person: $userId) {
+                id
+              }
+              slug
               title
               url
               templateTags
