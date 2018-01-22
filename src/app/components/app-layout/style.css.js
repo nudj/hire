@@ -11,7 +11,7 @@ const styleSheet = StyleSheet.create({
     borderBottomColor: colors.greyLight,
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    alignItems: 'stretch',
+    alignItems: 'center',
     width: '100%'
   },
   logoContainer: {
