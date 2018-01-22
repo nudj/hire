@@ -40,9 +40,8 @@ const WelcomePage = (props: Object) => (
                 Unlock your network
               </Text>
               <Text style={style.listItemBody} element='p'>
-                First up, we&#39;ll help you export your connections from
-                various sources, so you can get a view of how big your network
-                is.
+                Export your connections from
+                various sources, allowing you to explore your entire network.
               </Text>
             </Card>
           </li>
@@ -55,11 +54,11 @@ const WelcomePage = (props: Object) => (
                 alt=''
               />
               <Text element='div' style={style.listItemHeading} size='largeI'>
-                Uncover gems
+                Uncover hidden gems
               </Text>
               <Text style={style.listItemBody} element='p'>
-                We&#39;ll then help your explore your network to uncover people
-                worth asking, who will be able to help you find your next hires.
+                Identify key people within your network who are
+                worth asking for recommendations.
               </Text>
             </Card>
           </li>
@@ -75,7 +74,7 @@ const WelcomePage = (props: Object) => (
                 Send nudjes
               </Text>
               <Text style={style.listItemBody} element='p'>
-                Finally, we&#39;ll help you help compose and send personalised
+                Compose and send personalised
                 messages to the people you&#39;ve identified.
               </Text>
             </Card>

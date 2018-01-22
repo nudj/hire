@@ -34,10 +34,10 @@ const OnboardingPage = props => {
       onPageLeave={onPageLeave}
       notification={notification}
       header={headerProps}
-      headline='Hi'
+      headline='Welcome'
     >
       <Helmet>
-        <title>nudj - welcome</title>
+        <title>Welcome</title>
       </Helmet>
       <p className={style.copy}>We&quot;re going to onboard you now</p>
       <div className={style.buttonContainer}>

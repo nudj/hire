@@ -25,7 +25,7 @@ const MessagesPage = props => {
   return (
     <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
       <Helmet>
-        <title>Your messages</title>
+        <title>Messages</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference) ? (

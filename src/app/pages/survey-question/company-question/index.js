@@ -49,10 +49,10 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
     <Layout
       {...props}
       styleSheet={{root: sharedStyle.root}}
-      title='Part 2 - Uncover gems'
+      title='Part 2 - Uncover hidden gems'
     >
       <Helmet>
-        <title>nudj - Complete survey</title>
+        <title>Uncover hidden gems</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>
@@ -72,7 +72,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           <Card style={sharedStyle.card}>
             <form onSubmit={onAddCompany(dispatch, question.id)}>
               <Text element='label' size='smallI' htmlFor='name'>
-                Add all the companies you’ve worked at previously
+                Add the names of all companies you&#39;ve worked at
               </Text>
               <Input
                 styleSheet={{ root: style.input }}

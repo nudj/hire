@@ -69,10 +69,10 @@ const SurveyPage = props => {
       onPageLeave={onPageLeave}
       notification={notification}
       header={headerProps}
-      headline='Welcome to Aided Recall 🤔'
+      headline='Uncover hidden gems'
     >
       <Helmet>
-        <title>nudj - Survey Section</title>
+        <title>Survey</title>
       </Helmet>
       <Link to={previousUri}>Previous</Link>
       <Link to={nextUri}>Next</Link>

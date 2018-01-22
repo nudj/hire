@@ -46,7 +46,7 @@ const checkMobileDevice = Component => class extends React.Component {
     return (
       <Layout {...this.props} title='' styleSheet={{ root: sharedStyle.root }}>
         <Helmet>
-          <title>Continue onboarding?</title>
+          <title>You need to be at a computer to setup your account</title>
         </Helmet>
         <div className={css(sharedStyle.wrapper)}>
           <Text element='div' size='largeIi' style={sharedStyle.heading}>

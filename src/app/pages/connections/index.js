@@ -53,7 +53,7 @@ const ConnectionsPage = props => {
       } so far`}
     >
       <Helmet>
-        <title>nudj - Connections</title>
+        <title>Connections</title>
       </Helmet>
       <ul className={style.list}>
         {connections.map(connection => (

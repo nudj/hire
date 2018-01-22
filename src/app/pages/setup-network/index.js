@@ -33,12 +33,12 @@ const ChooseNetworkPage = (props: Object) => (
     title='Part 1 - Unlock your network'
   >
     <Helmet>
-      <title>Choose a network</title>
+      <title>Select a network</title>
     </Helmet>
     <div className={css(sharedStyle.wrapper)}>
       <div className={css(sharedStyle.header)}>
         <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
-          Choose a network
+          Select a network
         </Text>
         <Text element='p' style={sharedStyle.subheading}>
           We recommend choosing the network where you feel the best

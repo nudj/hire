@@ -48,10 +48,10 @@ const SurveyPage = (props: SurveyProps) => {
     <Layout
       {...props}
       styleSheet={{root: sharedStyle.root}}
-      title='Part 2 - Uncover gems'
+      title='Part 2 - Uncover hidden gems'
     >
       <Helmet>
-        <title>Survey</title>
+        <title>Uncover hidden gems</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <div className={css(sharedStyle.header)}>
@@ -62,14 +62,11 @@ const SurveyPage = (props: SurveyProps) => {
             </span>
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            We know you want to work with awesome people that you like and
-            respect. The best way to find such people is to source them from
-            your network.
+            The best way to find great people to hire is to source them from
+            your network. However, you need to ask the right people to get the best recommendations.
           </Text>
           <Text element='p' style={sharedStyle.subheading}>
-            To help jog your memory and uncover those gems, we&#39;re now going
-            to ask you a series of questions. All you have to do is select from
-            the contacts you&#39;ve just uploaded who you feel is most relevant.
+          To help, we&#39;re now going to ask you a series of questions that have been designed to systematically unlock the best people from your past.
           </Text>
         </div>
         <div className={css(sharedStyle.body)}>

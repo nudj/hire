@@ -117,10 +117,10 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       styleSheet={{root: sharedStyle.root}}
-      title='Part 2 - Uncover gems'
+      title='Part 2 - Uncover hidden gems'
     >
       <Helmet>
-        <title>Complete survey</title>
+        <title>Uncover hidden gems</title>
       </Helmet>
       <div className={css(sharedStyle.wrapper)}>
         <Text element='div' style={sharedStyle.stepCounter}>

@@ -66,7 +66,7 @@ const Router = ({
     (req, res) => {
       req.session.notification = createNotification(
         'success',
-        'We successfully synced your google account'
+        'We have successfully synced your Gmail account'
       )
       res.redirect(req.session.returnTo || '/')
     }

@@ -62,7 +62,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               <span className={css(sharedStyle.headingHighlight)}>
                 {getRecommendationCountString(connections.length)}
               </span>{' '}
-              worth nudj’ing within your network
+              worth nudj’ing from within your network
             </Text>
             <Text element='p' style={sharedStyle.subheading}>
               Now choose someone you’d like to send a nudj request to.
@@ -83,12 +83,12 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
         <div className={css(sharedStyle.wrapper)}>
           <div className={css(sharedStyle.header)}>
             <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
-              You haven’t found anyone worth nudj’ing within your network
+              You haven&#39;t found anyone worth nudj&#39;ing within your network
             </Text>
             <Text element='p' style={sharedStyle.subheading}>
               We suggest taking the survey again, only this time try to identify
               people who could give you good recommendations, not neccessarily
-              those you’d hire.
+              those you&#39;d hire.
             </Text>
           </div>
           <div className={css(sharedStyle.body)}>
