@@ -28,7 +28,7 @@ const getHandleSubjectChange = dispatch => ({ value }) =>
 const getHandleMessageChange = dispatch => ({ value }) =>
   dispatch(updateMessage(value))
 
-const parseJobMessageTemplate = (template, job, user) =>
+const parseJobMessageTemplate = (template, job, user, link) =>
   render({
     template: template,
     data: {
@@ -37,7 +37,7 @@ const parseJobMessageTemplate = (template, job, user) =>
       },
       job: {
         title: job.title,
-        link: job.url
+        link
       },
       sender: {
         firstname: user.firstName
@@ -56,6 +56,9 @@ const ComposeMessagePage = props => {
   const recipientId = get(user, 'connection.person.id')
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
+  const companySlug = get(user, 'hirer.company.slug', '')
+  const jobSlug = get(job, 'slug', '')
+  const referralId = get(job, 'referral.id', '')
 
   const subjectTemplate = render({
     template: template.subject,
@@ -65,7 +68,8 @@ const ComposeMessagePage = props => {
       }
     }
   })[0].join('')
-  const messageTemplate = parseJobMessageTemplate(template.message, job, user)
+  const referralLink = `${get(props, 'web.protocol')}://${get(props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const messageTemplate = parseJobMessageTemplate(template.message, job, user, referralLink)
 
   const subjectValue = getFirstNonNil(
     composeMessage.subject,
