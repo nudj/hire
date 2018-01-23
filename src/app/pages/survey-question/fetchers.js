@@ -217,6 +217,10 @@ const postEmployment = ({ session, params, body }) => {
       $company: String!,
       $source: String!
     ) {
+      notification: setNotification (type: "success", message: "Company added") {
+        type
+        message
+      }
       user (id: $userId) {
         newEmployment: getOrCreateEmployment (
           company: $company,

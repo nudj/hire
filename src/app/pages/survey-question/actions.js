@@ -178,8 +178,15 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     data
   })
   .then(response => {
-    const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
-    dispatch(setSelectedConnections(selectedConnections.concat(response.data.app.user.newConnection.id)))
+    dispatch(module.exports.hideAddForm())
     dispatch(module.exports.clearAddForm())
+    const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
+    dispatch(setSelectedConnections(
+      selectedConnections.concat(response.data.app.user.newConnection.id)
+    ))
+    dispatch(actions.app.showNotification({
+      type: 'success',
+      message: 'Person added'
+    }))
   })
 }

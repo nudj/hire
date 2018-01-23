@@ -12,7 +12,13 @@ const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
 
 const SurveyQuestionPage = props => {
-  const { user, dispatch, surveyQuestionPage: state, ...rest } = props
+  const {
+    user,
+    dispatch,
+    notification,
+    surveyQuestionPage: state,
+    ...rest
+  } = props
   const survey = get(user, 'hirer.company.survey')
   const nextUri = getNextSurveyUri(survey)
   const section = get(survey, 'section')
@@ -38,6 +44,7 @@ const SurveyQuestionPage = props => {
       return (
         <CompanyQuestionPage
           {...rest}
+          notification={notification}
           question={question}
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
@@ -51,6 +58,7 @@ const SurveyQuestionPage = props => {
       return (
         <ConnectionsQuestionPage
           {...rest}
+          notification={notification}
           nextUri={nextUri}
           question={question}
           connections={connections}

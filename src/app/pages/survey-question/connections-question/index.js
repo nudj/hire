@@ -71,7 +71,8 @@ const ConnectionsQuestionPage = props => {
     searchInput,
     searchQuery,
     history,
-    match
+    match,
+    notification
   } = props
 
   const handleSearchChange = getHandleSearchChange(dispatch)
@@ -116,6 +117,7 @@ const ConnectionsQuestionPage = props => {
   return (
     <Layout
       {...props}
+      notification={notification}
       styleSheet={{root: sharedStyle.root}}
       title='Part 2 - Uncover hidden gems'
     >
