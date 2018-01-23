@@ -215,8 +215,14 @@ const postEmployment = ({ session, params, body }) => {
       $sectionId: ID!,
       $questionId: ID!,
       $company: String!,
-      $source: String!
+      $source: String!,
+      $type: String!,
+      $message: String!
     ) {
+      notification: setNotification (type: $type, message: $message) {
+        type
+        message
+      }
       user (id: $userId) {
         newEmployment: getOrCreateEmployment (
           company: $company,
@@ -291,7 +297,9 @@ const postEmployment = ({ session, params, body }) => {
     sectionId: params.sectionId,
     questionId: params.questionId,
     company: body.employment,
-    source: body.source
+    source: body.source,
+    type: 'success',
+    message: 'Company added'
   }
   return { gql, variables }
 }

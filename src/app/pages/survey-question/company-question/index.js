@@ -1,4 +1,4 @@
-/* global SurveyQuestion Company */
+/* global SurveyQuestion Company Notification */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -31,6 +31,7 @@ type CompanyQuestionProps = {
   questionCount: number,
   questionNumber: number,
   employment: Company,
+  notification: Notification,
   dispatch: Function
 }
 
@@ -42,7 +43,8 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
     dispatch,
     companies,
     nextUri,
-    employment
+    employment,
+    notification
   } = props
 
   return (
@@ -50,6 +52,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
       {...props}
       styleSheet={{root: sharedStyle.root}}
       title='Part 2 - Uncover hidden gems'
+      notification={notification}
     >
       <Helmet>
         <title>Uncover hidden gems</title>
