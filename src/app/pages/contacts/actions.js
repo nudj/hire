@@ -1,6 +1,7 @@
 const axios = require('axios')
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
+const { logger } = require('@nudj/library')
 
 const UPDATE_CONTACT_SEARCH_QUERY = 'CONTACTS_UPDATE_CONTACT_SEARCH_QUERY'
 const SET_SELECTED_CONTACTS = 'CONTACTS_SET_SELECTED_CONTACTS'
@@ -62,7 +63,7 @@ const submitNewConnection = () => (dispatch, getState) => {
     }))
   })
   .catch(error => {
-    console.error(error)
+    logger('error', error)
     dispatch(actions.app.showNotification({
       type: 'error',
       message: 'Something went wrong while adding a contact! Please try again.'
