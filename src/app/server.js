@@ -31,7 +31,6 @@ const expressRouters = {
     require('./pages/connections/router'),
     require('./pages/setup-network/linkedin/router'),
     require('./pages/survey/router'),
-    require('./pages/survey-section/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey-complete/router'),
     require('./pages/messages/router'),

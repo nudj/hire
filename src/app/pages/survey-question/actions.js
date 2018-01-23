@@ -31,7 +31,7 @@ module.exports.addConnection = questionId => (dispatch, getState) => {
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+        url: `/surveys/${survey.slug}/${section.id}/connections/${
           question.id
         }`,
         method: 'post',
@@ -67,7 +67,7 @@ module.exports.addEmployment = questionId => (dispatch, getState) => {
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/companies/${
+        url: `/surveys/${survey.slug}/${section.id}/companies/${
           question.id
         }`,
         method: 'post',
@@ -113,7 +113,7 @@ module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+        url: `/surveys/${survey.slug}/${section.id}/connections/${
           question.id
         }`,
         method: 'post',
@@ -136,7 +136,7 @@ module.exports.search = () => (dispatch, getState) => {
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}`,
+        url: `/surveys/${survey.slug}/${section.id}/connections/${question.id}`,
         method: 'get',
         params: { search }
       }
@@ -168,7 +168,7 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   const csrfToken = get(state, 'app.csrfToken')
 
   return axios({
-    url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
+    url: `/surveys/${survey.slug}/${section.id}/connections/${question.id}/newConnection/json`,
     method: 'post',
     headers: {
       Accept: 'application/json',
