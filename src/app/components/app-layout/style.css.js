@@ -11,11 +11,12 @@ const styleSheet = StyleSheet.create({
     borderBottomColor: colors.greyLight,
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    alignItems: 'center',
+    alignItems: 'stretch',
     width: '100%'
   },
   logoContainer: {
     flexShrink: 0,
+    alignSelf: 'center',
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
     '@media(min-width: 30rem)': {
