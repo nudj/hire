@@ -5,6 +5,7 @@ const {
   SET_SELECTED_CONTACTS,
   SHOW_ADD_FORM,
   HIDE_ADD_FORM,
+  CLEAR_ADD_FORM,
   SET_NEW_ITEM_VALUE
 } = require('./actions')
 
@@ -28,6 +29,11 @@ const hideAddForm = state => ({
   showAddIndividualConnectionModal: false
 })
 
+const clearAddForm = state => ({
+  ...state,
+  newContact: {}
+})
+
 const setNewItemValue = (state, action) => {
   return merge(state, {
     [action.name]: {
@@ -41,11 +47,13 @@ const reducers = {
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
   [SET_SELECTED_CONTACTS]: setSelectedContacts,
   [SHOW_ADD_FORM]: showAddForm,
-  [HIDE_ADD_FORM]: hideAddForm
+  [HIDE_ADD_FORM]: hideAddForm,
+  [CLEAR_ADD_FORM]: clearAddForm
 }
 
 const initialState = {
   selectedContacts: [],
+  newContact: {},
   searchQuery: null,
   showAddIndividualConnectionModal: false
 }

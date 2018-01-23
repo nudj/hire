@@ -73,6 +73,46 @@ const getContacts = ({ session, query }) => {
     : { gql: preSearchQuery, variables: preSearchVariables }
 }
 
+const postContact = ({ session, params, body }) => {
+  const gql = `
+    mutation addNewContact (
+      $userId: ID!
+      $firstName: String!
+      $lastName: String!
+      $email: String!
+      $title: String
+      $company: String
+      $source: SourceCreateInput!
+    ) {
+      user (id: $userId) {
+        newContact: getOrCreateConnection (
+          to: {
+            firstName: $firstName,
+            lastName: $lastName,
+            email: $email,
+            title: $title,
+            company: $company
+          }
+          source: $source
+        ) {
+          id
+        }
+      }
+    }
+  `
+  const variables = {
+    userId: session.userId,
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email,
+    title: body.title,
+    company: body.company,
+    source: { name: 'manual' }
+  }
+  return { gql, variables }
+}
+
 module.exports = {
-  getContacts
+  getContacts,
+  postContact
 }

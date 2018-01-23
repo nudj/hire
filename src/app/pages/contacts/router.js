@@ -11,6 +11,7 @@ const Router = ({
   router.use(ensureLoggedIn)
 
   router.getHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.getContacts))
+  router.postHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.postContact))
 
   return router
 }
