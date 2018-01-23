@@ -16,8 +16,8 @@ const ConnectionsForm = require('../../components/form-connection')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
-  showAddForm,
-  hideAddForm,
+  showAddContactForm,
+  hideAddContactForm,
   setNewItemValue,
   submitNewConnection
 } = require('./actions')
@@ -33,12 +33,12 @@ const getHandleSelectContacts = dispatch => ({ value }) => {
 
 const getHandleAddClick = dispatch => event => {
   event.preventDefault()
-  dispatch(showAddForm())
+  dispatch(showAddContactForm())
 }
 
 const getHandleModalClose = dispatch => event => {
   event.preventDefault()
-  dispatch(hideAddForm())
+  dispatch(hideAddContactForm())
 }
 
 const getHandleConnectionChange = dispatch => (field, value) => {

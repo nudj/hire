@@ -5,10 +5,10 @@ const actions = require('@nudj/framework/actions')
 const PREFIX = 'CONTACTS'
 const UPDATE_CONTACT_SEARCH_QUERY = 'UPDATE_CONTACT_SEARCH_QUERY'
 const SET_SELECTED_CONTACTS = 'SET_SELECTED_CONTACTS'
-const SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
-const HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
+const SHOW_ADD_CONTACT_FORM = `${PREFIX}_SHOW_ADD_CONTACT_FORM`
+const HIDE_ADD_CONTACT_FORM = `${PREFIX}_HIDE_ADD_CONTACT_FORM`
 const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
-const CLEAR_ADD_FORM = `${PREFIX}_CLEAR_ADD_FORM`
+const CLEAR_ADD_CONTACT_FORM = `${PREFIX}_CLEAR_ADD_CONTACT_FORM`
 
 const updateContactsSearchQuery = (query) => ({
   type: UPDATE_CONTACT_SEARCH_QUERY,
@@ -20,16 +20,16 @@ const setSelectedContacts = (contacts) => ({
   contacts
 })
 
-const showAddForm = () => ({
-  type: SHOW_ADD_FORM
+const showAddContactForm = () => ({
+  type: SHOW_ADD_CONTACT_FORM
 })
 
-const hideAddForm = () => ({
-  type: HIDE_ADD_FORM
+const hideAddContactForm = () => ({
+  type: HIDE_ADD_CONTACT_FORM
 })
 
-const clearAddForm = () => ({
-  type: CLEAR_ADD_FORM
+const clearAddContactForm = () => ({
+  type: CLEAR_ADD_CONTACT_FORM
 })
 
 const setNewItemValue = (name, key, value) => ({
@@ -54,12 +54,19 @@ const submitNewConnection = () => (dispatch, getState) => {
     },
     data
   })
-  .then(response => {
-    dispatch(hideAddForm())
-    dispatch(clearAddForm())
+  .then(() => {
+    dispatch(hideAddContactForm())
+    dispatch(clearAddContactForm())
     dispatch(actions.app.showNotification({
       type: 'success',
-      message: 'Person added'
+      message: 'New contact added! 🎉'
+    }))
+  })
+  .catch(error => {
+    console.error(error)
+    dispatch(actions.app.showNotification({
+      type: 'error',
+      message: 'Something went wrong while adding a contact! Please try again.'
     }))
   })
 }
@@ -69,15 +76,15 @@ module.exports = {
   UPDATE_CONTACT_SEARCH_QUERY,
   SET_SELECTED_CONTACTS,
   SET_NEW_ITEM_VALUE,
-  SHOW_ADD_FORM,
-  HIDE_ADD_FORM,
-  CLEAR_ADD_FORM,
+  SHOW_ADD_CONTACT_FORM,
+  HIDE_ADD_CONTACT_FORM,
+  CLEAR_ADD_CONTACT_FORM,
   // action creators
   updateContactsSearchQuery,
   setSelectedContacts,
-  showAddForm,
-  hideAddForm,
-  clearAddForm,
+  showAddContactForm,
+  hideAddContactForm,
+  clearAddContactForm,
   setNewItemValue,
   submitNewConnection
 }

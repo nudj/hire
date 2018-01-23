@@ -3,9 +3,9 @@ const { createReducer } = require('../../lib')
 const {
   UPDATE_CONTACT_SEARCH_QUERY,
   SET_SELECTED_CONTACTS,
-  SHOW_ADD_FORM,
-  HIDE_ADD_FORM,
-  CLEAR_ADD_FORM,
+  SHOW_ADD_CONTACT_FORM,
+  HIDE_ADD_CONTACT_FORM,
+  CLEAR_ADD_CONTACT_FORM,
   SET_NEW_ITEM_VALUE
 } = require('./actions')
 
@@ -19,17 +19,17 @@ const setSelectedContacts = (state, action) => ({
   selectedContacts: action.contacts
 })
 
-const showAddForm = state => ({
+const showAddContactForm = state => ({
   ...state,
   showAddIndividualConnectionModal: true
 })
 
-const hideAddForm = state => ({
+const hideAddContactForm = state => ({
   ...state,
   showAddIndividualConnectionModal: false
 })
 
-const clearAddForm = state => ({
+const clearAddContactForm = state => ({
   ...state,
   newContact: {}
 })
@@ -46,9 +46,9 @@ const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
   [SET_SELECTED_CONTACTS]: setSelectedContacts,
-  [SHOW_ADD_FORM]: showAddForm,
-  [HIDE_ADD_FORM]: hideAddForm,
-  [CLEAR_ADD_FORM]: clearAddForm
+  [SHOW_ADD_CONTACT_FORM]: showAddContactForm,
+  [HIDE_ADD_CONTACT_FORM]: hideAddContactForm,
+  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm
 }
 
 const initialState = {

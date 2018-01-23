@@ -17,9 +17,6 @@ const styleSheet = StyleSheet.create({
     marginTop: sizes.regular,
     textAlign: 'center'
   },
-  modalWindow: {
-    height: 'auto'
-  },
   form: {
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
