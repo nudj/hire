@@ -5,16 +5,18 @@ const sortBy = require('lodash/sortBy')
 const URLSearchParams = require('url-search-params')
 
 const { getFirstNonNil } = require('@nudj/library')
-const { Text, Align, Card, Input, Button } = require('@nudj/components')
+const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
+const ConnectionsForm = require('../../components/form-connection')
 const {
   setSelectedContacts,
-  updateContactsSearchQuery
+  updateContactsSearchQuery,
+  showAddForm
 } = require('./actions')
 const sharedStyle = require('../shared.css')
 
@@ -26,16 +28,26 @@ const getHandleSelectContacts = dispatch => ({ value }) => {
   dispatch(setSelectedContacts(value))
 }
 
+const getHandleAddClick = dispatch => event => {
+  event.preventDefault()
+  dispatch(showAddForm())
+}
+
+const getHandleModalClose = dispatch => event => {
+  event.preventDefault()
+  // dispatch(hideAddForm())
+}
+
 const ContactsPage = props => {
-  const { user, contactsPage, dispatch, history, match } = props
+  const { user, contactsPage: state, dispatch, history, match } = props
   const connections = get(user, 'connections', [])
   const totalConnectionsCount = get(user, 'connectionsCount', 0)
-  const selectedContacts = get(contactsPage, 'selectedContacts', [])
-  const selectedContactId = get(contactsPage, 'selectedContacts', [])[0]
+  const selectedContacts = get(state, 'selectedContacts', [])
+  const selectedContactId = get(state, 'selectedContacts', [])[0]
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const searchQuery = getFirstNonNil(
-    contactsPage.searchQuery,
+    state.searchQuery,
     queryParams.get('search'),
     ''
   )
@@ -97,6 +109,34 @@ const ContactsPage = props => {
               </div>
             )}
           </Card>
+          <Button
+            subtle
+            volume='cheer'
+            onClick={getHandleAddClick(dispatch)}
+            style={style.addPersonButton}
+          >
+            Add person
+          </Button>
+          <Modal
+            isOpen={get(state, 'showAddIndividualConnectionModal')}
+            shouldCloseOnOverlayClick
+            shouldCloseOnEsc
+            onRequestClose={getHandleModalClose(dispatch)}
+          >
+            <Text element='div' size='largeI'>
+              Add an individual
+            </Text>
+            <Text element='p'>
+              Thought of someone who might help you in your search? Just add
+              their details below so you can nudj them.
+            </Text>
+            <ConnectionsForm
+              csrfToken={get(props, 'csrfToken')}
+              onChange={() => {}}
+              onSubmit={() => {}}
+              connection={get(props, 'newConnection')}
+            />
+          </Modal>
           <div className={css(sharedStyle.footer)}>
             <Align
               rightChildren={

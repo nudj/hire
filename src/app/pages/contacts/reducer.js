@@ -1,6 +1,7 @@
 const {
   UPDATE_CONTACT_SEARCH_QUERY,
-  SET_SELECTED_CONTACTS
+  SET_SELECTED_CONTACTS,
+  SHOW_ADD_FORM
 } = require('./actions')
 
 const { createReducer } = require('../../lib')
@@ -15,14 +16,21 @@ const setSelectedContacts = (state, action) => ({
   selectedContacts: action.contacts
 })
 
+const showAddForm = state => ({
+  ...state,
+  showAddIndividualConnectionModal: true
+})
+
 const reducers = {
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
-  [SET_SELECTED_CONTACTS]: setSelectedContacts
+  [SET_SELECTED_CONTACTS]: setSelectedContacts,
+  [SHOW_ADD_FORM]: showAddForm
 }
 
 const initialState = {
   selectedContacts: [],
-  searchQuery: null
+  searchQuery: null,
+  showAddIndividualConnectionModal: false
 }
 
 module.exports = createReducer(initialState, reducers)
