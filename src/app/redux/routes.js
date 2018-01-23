@@ -7,7 +7,6 @@ module.exports = {
   '/setup-network/:network/download-data': checkMobileDevice(require('../pages/setup-network/linkedin/download-guide')),
   '/setup-network/:network/upload': checkMobileDevice(require('../pages/setup-network/linkedin/upload')),
   '/surveys/:surveySlug': checkMobileDevice(require('../pages/survey')),
-  '/surveys/:surveySlug/sections/:sectionId': checkMobileDevice(require('../pages/survey-section')),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': checkMobileDevice(require('../pages/survey-question')),
   '/surveys/:surveySlug/complete': checkMobileDevice(require('../pages/survey-complete')),
   '/messages': require('../pages/messages'),
@@ -16,9 +15,4 @@ module.exports = {
   '/messages/new/:connectionId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent'),
-  // legacy urls
-  '/': require('../pages/tasks'),
-  '/jobs': require('../pages/jobs'),
-  '/connections': require('../pages/connections'),
-  '/connections/import': require('../pages/setup-network')
 }
