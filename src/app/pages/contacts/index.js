@@ -130,18 +130,20 @@ const ContactsPage = props => {
           </Button>
           <Modal
             isOpen={get(state, 'showAddIndividualConnectionModal')}
+            style={style.modalWindow}
             shouldCloseOnOverlayClick
             shouldCloseOnEsc
             onRequestClose={getHandleModalClose(dispatch)}
           >
-            <Text element='div' size='largeI'>
+            <Text element='div' size='largeI' style={style.modalHeading}>
               Add an individual
             </Text>
-            <Text element='p'>
+            <Text element='p' style={style.modalBody}>
               Thought of someone who might help you in your search? Just add
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
+              style={style.form}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
