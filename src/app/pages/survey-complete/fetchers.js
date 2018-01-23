@@ -32,8 +32,14 @@ const completeSurvey = ({ session, params }) => {
         }
       }
       user (id: $userId) {
+        emailPreference
+        conversations {
+          recipient {
+            email
+          }
+        }
         hirer {
-          setOnboarded
+          onboarded
           company {
             survey: surveyByFilters (filters: {
               slug: $surveySlug
