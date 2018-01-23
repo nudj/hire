@@ -1,13 +1,11 @@
-const isNil = require('lodash/isNil')
-
 const { Global } = require('../../lib/graphql')
 
 const getContacts = ({ session, query }) => {
   const preSearchQuery = `
-    query SurveyQuestionPage($userId: ID!) {
+    query SurveyQuestionPage($userId: ID!, $blankSearch: Boolean!) {
       user(id: $userId) {
         connectionsCount
-        connections {
+        connections @include(if: $blankSearch) {
           id
           firstName
           lastName
@@ -58,7 +56,8 @@ const getContacts = ({ session, query }) => {
   `
 
   const commonVariables = {
-    userId: session.userId
+    userId: session.userId,
+    blankSearch: query.search === ''
   }
 
   const preSearchVariables = commonVariables
@@ -69,7 +68,7 @@ const getContacts = ({ session, query }) => {
     fields: [['firstName', 'lastName']]
   }
 
-  return !isNil(query.search)
+  return query.search
     ? { gql: searchQuery, variables: searchVariables }
     : { gql: preSearchQuery, variables: preSearchVariables }
 }

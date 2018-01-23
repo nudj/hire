@@ -136,9 +136,10 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $surveySlug: String!,
       $sectionId: ID!,
       $questionId: ID!,
+      $blankSearch: Boolean!
     ) {
       user (id: $userId) {
-        connections {
+        connections @include(if: $blankSearch) {
           id
           firstName
           lastName
@@ -202,6 +203,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     sectionId: params.sectionId,
     questionId: params.questionId,
     search: query.search,
+    blankSearch: query.search === '',
     fields: [['firstName', 'lastName']]
   }
   return { gql, variables }
