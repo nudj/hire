@@ -107,7 +107,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                   volume={companies.length ? 'cheer' : 'murmur'}
                   href={nextUri}
                 >
-                  {companies.length ? 'Next' : 'Skip'}
+                  {companies.length ? 'Next' : 'This is my first job'}
                 </ButtonLink>
               }
             />
