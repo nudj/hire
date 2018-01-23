@@ -340,7 +340,7 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user',
-    emailPreference: emailPreferences.OTHER
+    emailPreference: null
   },
   {
     id: 'person6',
