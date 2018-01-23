@@ -1,10 +1,12 @@
+const { merge } = require('@nudj/library')
+const { createReducer } = require('../../lib')
 const {
   UPDATE_CONTACT_SEARCH_QUERY,
   SET_SELECTED_CONTACTS,
-  SHOW_ADD_FORM
+  SHOW_ADD_FORM,
+  HIDE_ADD_FORM,
+  SET_NEW_ITEM_VALUE
 } = require('./actions')
-
-const { createReducer } = require('../../lib')
 
 const updateContactSearchQuery = (state, action) => ({
   ...state,
@@ -21,10 +23,25 @@ const showAddForm = state => ({
   showAddIndividualConnectionModal: true
 })
 
+const hideAddForm = state => ({
+  ...state,
+  showAddIndividualConnectionModal: false
+})
+
+const setNewItemValue = (state, action) => {
+  return merge(state, {
+    [action.name]: {
+      [action.key]: action.value
+    }
+  })
+}
+
 const reducers = {
+  [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
   [SET_SELECTED_CONTACTS]: setSelectedContacts,
-  [SHOW_ADD_FORM]: showAddForm
+  [SHOW_ADD_FORM]: showAddForm,
+  [HIDE_ADD_FORM]: hideAddForm
 }
 
 const initialState = {

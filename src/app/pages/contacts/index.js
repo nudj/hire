@@ -16,7 +16,10 @@ const ConnectionsForm = require('../../components/form-connection')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
-  showAddForm
+  showAddForm,
+  hideAddForm,
+  setNewItemValue,
+  submitNewConnection
 } = require('./actions')
 const sharedStyle = require('../shared.css')
 
@@ -35,7 +38,15 @@ const getHandleAddClick = dispatch => event => {
 
 const getHandleModalClose = dispatch => event => {
   event.preventDefault()
-  // dispatch(hideAddForm())
+  dispatch(hideAddForm())
+}
+
+const getHandleConnectionChange = dispatch => (field, value) => {
+  dispatch(setNewItemValue('newContact', field, value))
+}
+
+const getHandleConnectionSubmit = dispatch => (field, value) => {
+  dispatch(submitNewConnection())
 }
 
 const ContactsPage = props => {
@@ -132,9 +143,9 @@ const ContactsPage = props => {
             </Text>
             <ConnectionsForm
               csrfToken={get(props, 'csrfToken')}
-              onChange={() => {}}
-              onSubmit={() => {}}
-              connection={get(props, 'newConnection')}
+              onChange={getHandleConnectionChange(dispatch)}
+              onSubmit={getHandleConnectionSubmit(dispatch)}
+              connection={get(state, 'newContact')}
             />
           </Modal>
           <div className={css(sharedStyle.footer)}>
