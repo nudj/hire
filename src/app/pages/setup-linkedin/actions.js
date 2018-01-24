@@ -60,17 +60,17 @@ const uploadLinkedinConnections = (): ((
       connections: getState().uploadLinkedinConnectionsPage.connections,
       source: 'linkedin'
     }
-
-    dispatch(
+    await dispatch(
       actions.app.postData({
         url,
         method,
-        data
+        data,
+        showLoading: false
       })
     )
     dispatch(completeConnectionsUpload())
-  } catch (e) {
-    throw new Error(e)
+  } catch (error) {
+    throw new Error(error)
   }
 }
 
