@@ -9,7 +9,7 @@ const { Card, Text } = require('@nudj/components')
 const {
   parseLinkedinConnections,
   uploadLinkedinConnections
-} = require('./actions')
+} = require('../actions')
 const Dropzone = require('../../../components/connections-csv-uploader')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
@@ -17,7 +17,7 @@ const sharedStyle = require('../../shared.css')
 
 type Props = {
   dispatch: Dispatch,
-  uploadPage: {
+  uploadLinkedinConnectionsPage: {
     connections: Array<Connection>,
     loading: boolean,
     parsing: boolean
@@ -35,7 +35,7 @@ const getHandleNext = dispatch => () => {
 }
 
 const LinkedinUploadPage = (props: Props) => {
-  const { dispatch, uploadPage: state } = props
+  const { dispatch, uploadLinkedinConnectionsPage: state } = props
 
   return (
     <Layout

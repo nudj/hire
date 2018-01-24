@@ -1,4 +1,4 @@
-const { createReducer } = require('../../../lib')
+const { createReducer } = require('../../lib')
 const {
   START_PARSING_LINKEDIN_CONNECTIONS,
   COMPLETE_PARSING_LINKEDIN_CONNECTIONS,

@@ -21,11 +21,11 @@ const {
   completeConnectionsUpload,
   parseLinkedinConnections,
   uploadLinkedinConnections
-} = proxyquire('../../../../app/pages/setup-network/linkedin/actions', {
-  '../../../lib/papa': {
+} = proxyquire('../../../app/pages/setup-linkedin/actions', {
+  '../../lib/papa': {
     asyncParse: file => Promise.resolve()
   },
-  '../../../lib/linkedin-to-nudj': {
+  '../../lib/linkedin-to-nudj': {
     linkedinToNudjPeople: () => [{ email: 'example@email.tld' }]
   },
   '@nudj/framework/actions': {
@@ -116,7 +116,7 @@ describe('linkedin connections upload action creators', () => {
         }
       ]
 
-      const store = mockStore({ uploadPage: { connections: [] } })
+      const store = mockStore({ uploadLinkedinConnectionsPage: { connections: [] } })
 
       return store.dispatch(uploadLinkedinConnections()).then(() => {
         expect(postDataSpy.called).to.equal(true)

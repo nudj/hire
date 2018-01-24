@@ -4,9 +4,18 @@ const { Helmet } = require('react-helmet')
 
 const { Card, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
+const {
+  Wrapper,
+  Section,
+  Heading,
+  P,
+  styleSheet: wizardStyles,
+} = require('../../../components/wizard')
+
 const sharedStyle = require('../../shared.css')
 
 const LinkedinDownloadGuidePage = (props: Object) => (
@@ -18,13 +27,13 @@ const LinkedinDownloadGuidePage = (props: Object) => (
     <Helmet>
       <title>Downloading your connections from LinkedIn</title>
     </Helmet>
-    <div className={css(sharedStyle.wrapper)}>
-      <div className={css(sharedStyle.header)}>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+    <Wrapper>
+      <Section padding>
+        <Heading>
           Downloading your connections from LinkedIn
-        </Text>
-      </div>
-      <div className={css(sharedStyle.body)}>
+        </Heading>
+      </Section>
+      <Section padding>
         <Card>
           <img
             className={css(sharedStyle.image)}
@@ -36,7 +45,7 @@ const LinkedinDownloadGuidePage = (props: Object) => (
             </Text>
             <Text element='li'>
               Search for an email from LinkedIn with the subject -{' '}
-              <em className={css(sharedStyle.em)}>
+              <em className={css(m.i)}>
                 Your LinkedIn data is ready!
               </em>{' '}
               If it’s not there, give it 5 minutes and check again
@@ -47,35 +56,35 @@ const LinkedinDownloadGuidePage = (props: Object) => (
               LinkedIn
             </Text>
             <Text element='li'>
-              Click <em className={css(sharedStyle.em)}>Download archive</em>
+              Click <em className={css(m.i)}>Download archive</em>
             </Text>
             <Text element='li'>
               Next, click on{' '}
-              <em className={css(sharedStyle.em)}>Pick & Choose</em>
+              <em className={css(m.i)}>Pick & Choose</em>
             </Text>
             <Text element='li'>
-              Then select <em className={css(sharedStyle.em)}>Connections</em>
+              Then select <em className={css(m.i)}>Connections</em>
             </Text>
             <Text element='li'>
-              Click on <em className={css(sharedStyle.em)}>Request archive</em>
+              Click on <em className={css(m.i)}>Request archive</em>
             </Text>
             <Text element='li'>Enter your password</Text>
             <Text element='li'>
-              Hit <em className={css(sharedStyle.em)}>Done</em>
+              Hit <em className={css(m.i)}>Done</em>
             </Text>
           </ol>
         </Card>
-      </div>
-      <div className={css(sharedStyle.body, sharedStyle.pageActionContainer)}>
+      </Section>
+      <Section padding>
         <ButtonLink
           href='/setup-network/linkedin/upload'
           volume='cheer'
-          style={sharedStyle.next}
+          style={wizardStyles.action}
         >
           Next
         </ButtonLink>
-      </div>
-    </div>
+      </Section>
+    </Wrapper>
   </Layout>
 )
 
