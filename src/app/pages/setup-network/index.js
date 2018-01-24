@@ -54,10 +54,10 @@ const ChooseNetworkPage = (props: Object) => (
         >
           {NETWORKS.linkedin.label}
         </ButtonLink>
-        <ButtonLink style={sharedStyle.action} href={NETWORKS.facebook.url}>
+        <ButtonLink style={sharedStyle.action} href={NETWORKS.facebook.url} disabled>
           {NETWORKS.facebook.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
-        <ButtonLink style={sharedStyle.action} href={NETWORKS.google.url}>
+        <ButtonLink style={sharedStyle.action} href={NETWORKS.google.url} disabled>
           {NETWORKS.google.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
       </div>
