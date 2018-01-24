@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const sortBy = require('lodash/sortBy')
 const URLSearchParams = require('url-search-params')
 
 const { getFirstNonNil } = require('@nudj/library')
@@ -89,7 +90,7 @@ const ContactsPage = props => {
                   styleSheet={{
                     root: style.table
                   }}
-                  connections={connections}
+                  connections={sortBy(connections, ['firstName', 'lastName'])}
                   onSelect={getHandleSelectContacts(dispatch)}
                   selectedConnections={selectedContacts}
                 />
