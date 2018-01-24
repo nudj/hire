@@ -92,23 +92,25 @@ const uploadConnections = ({ session, body, files }) => {
     gql,
     variables,
     respond: async data => {
-      await Promise.all([
-        sendImportEmail({
-          name: `${get(data, 'user.firstName', '')} ${get(
-            data,
-            'user.lastName',
-            ''
-          )}`,
-          company: get(data, 'user.hirer.company.name', '')
-        }),
-        intercom.logEvent({
-          event_name: 'linkedin network uploaded',
-          email: data.user.email,
-          metadata: {
-            category: 'onboarding'
-          }
-        })
-      ])
+      if (process.env.USE_MOCKS !== 'true') {
+        await Promise.all([
+          sendImportEmail({
+            name: `${get(data, 'user.firstName', '')} ${get(
+              data,
+              'user.lastName',
+              ''
+            )}`,
+            company: get(data, 'user.hirer.company.name', '')
+          }),
+          intercom.logEvent({
+            event_name: 'linkedin network uploaded',
+            email: data.user.email,
+            metadata: {
+              category: 'onboarding'
+            }
+          })
+        ])
+      }
 
       const message = `You just added ${body.connections.length} connections 🙌`
 
