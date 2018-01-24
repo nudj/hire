@@ -73,7 +73,7 @@ const SurveyPage = (props: SurveyProps) => {
           <ButtonLink
             style={sharedStyle.action}
             volume='cheer'
-            href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
+            href={`/surveys/${survey.slug}/${initialSection.id}/${
               toLower(initialQuestion.type)
             }/${initialQuestion.id}`}
           >

@@ -4,13 +4,16 @@ const { ContactCard } = require('@nudj/components')
 
 const ButtonLink = require('../../components/button-link')
 
-const RecommendationItem = ({ id, ...contact }) => (
+const RecommendationItem = ({ id, emailPreference, ...contact }) => (
   <ContactCard
     name={`${contact.firstName} ${contact.lastName}`}
     jobTitle={get(contact, 'role.name')}
     company={get(contact, 'company.name')}
   >
-    <ButtonLink href={`?id=${id}`} volume='cheer'>
+    <ButtonLink
+      href={ emailPreference ? `/messages/new/${id}` : `?id=${id}` }
+      volume='cheer'
+    >
       Message
     </ButtonLink>
   </ContactCard>

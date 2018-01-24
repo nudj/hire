@@ -1,3 +1,4 @@
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
@@ -197,6 +198,7 @@ const getMessageTemplate = (props) => {
         firstName
         emailPreference
         hirer {
+          onboarded
           company {
             slug
             job: jobByFilters(filters: {id: $jobId}) {
@@ -239,10 +241,26 @@ const getMessageTemplate = (props) => {
   return { gql, variables }
 }
 
-const sendNewMessage = ({ session, params, body }) => {
+const getSendNewMessageFetcher = data => {
+  switch(data.body.send) {
+    case 'another':
+      return sendNewMessageAndRepeat(data)
+    default:
+      return sendNewMessageAndCompleteOnboarding(data)
+  }
+}
+
+const sendNewMessageAndRepeat = ({ session, params, body }) => {
   const gql = `
     mutation SendNewMessage($userId: ID!, $recipientId: ID!, $subject: String!, $body: String!) {
       user(id: $userId) {
+        hirer {
+          company {
+            surveys {
+              slug
+            }
+          }
+        }
         conversation: sendEmail(to: $recipientId, subject: $subject, body: $body) {
           id
         }
@@ -260,9 +278,47 @@ const sendNewMessage = ({ session, params, body }) => {
   return {
     gql,
     variables,
-    respond: (pageData) => {
+    respond: (data) => {
+      throw new Redirect({
+        url: `/surveys/${get(data, 'user.hirer.company.surveys[0].slug', '')}/complete`,
+        notification: createNotification('success', 'Message sent')
+      })
+    }
+  }
+}
+
+const sendNewMessageAndCompleteOnboarding = ({ session, params, body }) => {
+  const gql = `
+    mutation SendNewMessage($userId: ID!, $recipientId: ID!, $subject: String!, $body: String!) {
+      user(id: $userId) {
+        hirer {
+          setOnboarded
+          company {
+            surveys {
+              slug
+            }
+          }
+        }
+        conversation: sendEmail(to: $recipientId, subject: $subject, body: $body) {
+          id
+        }
+      }
+    }
+  `
+
+  const variables = {
+    userId: session.userId,
+    recipientId: body.recipient,
+    subject: body.subject,
+    body: body.body
+  }
+
+  return {
+    gql,
+    variables,
+    respond: (data) => {
       // prevents multiple submissions on refresh
-      throw new Redirect({ url: `/messages/${pageData.user.conversation.id}` })
+      throw new Redirect({ url: `/messages/${data.user.conversation.id}` })
     }
   }
 }
@@ -305,6 +361,6 @@ module.exports = {
   getActiveJobs,
   getMessageTemplate,
   replyTo,
-  sendNewMessage,
+  sendNewMessage: getSendNewMessageFetcher,
   setEmailPreference
 }

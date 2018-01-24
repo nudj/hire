@@ -149,12 +149,14 @@ data.connections = data.connections.concat([
     id: 'connection4'
   },
   {
-    firstName: 'Rich',
+    company: 'company1',
+    firstName: 'Richard',
     lastName: 'Palmer',
     from: 'person5',
     source: 'source1',
+    role: 'role1',
     person: 'person7',
-    id: 'connection5'
+    id: 'connection5',
   }
 ])
 data.companies = data.companies.concat([
@@ -338,7 +340,7 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user',
-    emailPreference: emailPreferences.OTHER
+    emailPreference: null
   },
   {
     id: 'person6',

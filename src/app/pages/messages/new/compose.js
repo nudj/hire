@@ -19,6 +19,7 @@ const { getFirstNonNil } = require('@nudj/library')
 
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
+const ButtonLink = require('../../../components/button-link')
 const sharedStyle = require('../../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
 const style = require('./style.css')
@@ -50,6 +51,28 @@ const parseJobMessageTemplate = (template, job, user, link) =>
 const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
+const renderSendButton = (
+  emailPreference,
+  to,
+  subject,
+  message,
+  label = 'Send message'
+) => {
+  return emailPreference === emailPreferences.GOOGLE ? (
+    <Button type="submit" volume="cheer" style={style.sendButton}>
+      {label}
+    </Button>
+  ) : (
+    <Link
+      volume="cheer"
+      style={style.sendButton}
+      href={getMailTo(to, subject, message)}
+    >
+      {label}
+    </Link>
+  )
+}
+
 const ComposeMessagePage = props => {
   const { composeMessage, dispatch, user, template, csrfToken } = props
   const toEmail = get(user, 'connection.person.email', '')
@@ -59,6 +82,9 @@ const ComposeMessagePage = props => {
   const companySlug = get(user, 'hirer.company.slug', '')
   const jobSlug = get(job, 'slug', '')
   const referralId = get(job, 'referral.id', '')
+  const onboarded = get(user, 'hirer.onboarded')
+
+  console.log(recipientId)
 
   const subjectTemplate = render({
     template: template.subject,
@@ -116,17 +142,29 @@ const ComposeMessagePage = props => {
               />
               <input name='_csrf' value={csrfToken} type='hidden' />
               <input name='recipient' value={recipientId} type='hidden' />
-              {emailPreference === emailPreferences.GOOGLE ? (
-                <Button type='submit' volume='cheer' style={style.sendButton}>
-                  Send message
-                </Button>
+
+              { emailPreference === emailPreferences.GOOGLE ? (
+                <div>
+                  <Button type="submit" style={style.sendButton}>
+                    Send and finish
+                  </Button>
+                  <Button
+                    name="send"
+                    value="another"
+                    type="submit"
+                    volume="cheer"
+                    style={style.sendButton}
+                  >
+                    Send and compose another
+                  </Button>
+                </div>
               ) : (
                 <Link
-                  volume='cheer'
+                  volume="cheer"
                   style={style.sendButton}
                   href={getMailTo(toEmail, subjectValue, messageValue)}
                 >
-                  Send message
+                  Open mail client
                 </Link>
               )}
             </form>

@@ -16,11 +16,11 @@ function getNextSurveyUri (survey: Survey) {
 
     if (nextQuestion) {
       const type = get(nextQuestion, 'type', '').toLowerCase()
-      return `${baseURL}/sections/${section.id}/${type}/${nextQuestion.id}`
+      return `${baseURL}/${section.id}/${type}/${nextQuestion.id}`
     }
     const sectionIndex = findIndex(allSections, { id: get(section, 'id') })
     const nextSection = allSections[sectionIndex + 1]
-    return nextSection ? `${baseURL}/sections/${get(nextSection, 'id')}` : `${baseURL}/complete`
+    return nextSection ? `${baseURL}/${get(nextSection, 'id')}` : `${baseURL}/complete`
   } catch (error) {
     console.error(error)
     return null

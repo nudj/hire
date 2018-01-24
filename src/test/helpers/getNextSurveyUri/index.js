@@ -108,12 +108,12 @@ const twoSectionSurvey = {
 
 describe('getNextSurveyUri', () => {
   it('fetches URL of next question in line', () => {
-    const slug = '/surveys/aided-recall-baby/sections/section1/connections/question2'
+    const slug = '/surveys/aided-recall-baby/section1/connections/question2'
     expect(getNextSurveyUri(twoQuestionSurvey)).to.equal(slug)
   })
 
   it('fetches a survey-section URL if section is next', () => {
-    const slug = '/surveys/aided-recall-baby/sections/section2'
+    const slug = '/surveys/aided-recall-baby/section2'
     expect(getNextSurveyUri(twoSectionSurvey)).to.equal(slug)
   })
 

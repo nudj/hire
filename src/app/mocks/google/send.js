@@ -3,12 +3,15 @@ const { Base64 } = require('js-base64')
 const createHash = require('hash-generator')
 const toLower = require('lodash/toLower')
 const pick = require('lodash/pick')
+const addrs = require('email-addresses')
 const request = require('@nudj/library/request')
 
 const { VALID_ACCESS_TOKEN } = require('./constants')
 const mockThreadFetch = require('./thread-fetch')
 
 const url = `http://${process.env.API_HOST}:81`
+
+const getEmail = email => addrs.parseOneAddress(email).address
 
 const addThreadListener = (thread) => {
   nock('https://www.googleapis.com/gmail/v1/users/me', {
@@ -22,7 +25,7 @@ const addThreadListener = (thread) => {
 }
 
 const fetchPersonFromEmail = async (email) => {
-  const person = await request(`${url}/people/filter?email=${email}`)
+  const person = await request(`${url}/people/filter?email=${encodeURI(email)}`)
   return person[0].id
 }
 
@@ -42,8 +45,9 @@ const parseBody = async (rawMessage) => {
     }
     return email
   }, { body })
-  data.to = await fetchPersonFromEmail(data.to)
-  data.from = 'person5'
+
+  data.to = await fetchPersonFromEmail(getEmail(data.to))
+  data.from = await fetchPersonFromEmail(getEmail(data.from))
 
   return pick(data, ['body', 'to', 'from'])
 }
