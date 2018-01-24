@@ -7,17 +7,25 @@ const toLower = require('lodash/toLower')
 
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+
+const {
+  Wrapper,
+  Section,
+  Heading,
+  P,
+  styleSheet: wizardStyles,
+} = require('../../components/wizard')
 
 type Question = {
   id: ID,
   type: SurveyQuestionType
 }
 
-type Section = {
+type SectionProps = {
   id: ID,
   questions: Array<Question>
 }
@@ -30,7 +38,7 @@ type SurveyProps = {
         survey: {
           id?: ID,
           slug?: string,
-          sections: Array<Section>
+          sections: Array<SectionProps>
         }
       }
     }
@@ -47,31 +55,31 @@ const SurveyPage = (props: SurveyProps) => {
   return (
     <Layout
       {...props}
-      styleSheet={{root: sharedStyle.root}}
+      styleSheet={{root: wizardStyles.root}}
       title='Part 2 - Uncover hidden gems'
     >
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+      <Wrapper>
+        <Section padding>
+          <Heading>
             Finding awesome people to join{' '}
-            <span className={css(sharedStyle.headingHighlight)}>
+            <span className={css(m.fgMidRed)}>
               {get(company, 'name', '')}
             </span>
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <P>
             The best way to find great people to hire is to source them from
             your network. However, you need to ask the right people to get the best recommendations.
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </P>
+          <P>
           To help, we&#39;re now going to ask you a series of questions that have been designed to systematically unlock the best people from your past.
-          </Text>
-        </div>
-        <div className={css(sharedStyle.body)}>
+          </P>
+        </Section>
+        <Section padding>
           <ButtonLink
-            style={sharedStyle.action}
+            style={wizardStyles.action}
             volume='cheer'
             href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
               toLower(initialQuestion.type)
@@ -79,8 +87,8 @@ const SurveyPage = (props: SurveyProps) => {
           >
             Start
           </ButtonLink>
-        </div>
-      </div>
+        </Section>
+      </Wrapper>
     </Layout>
   )
 }
