@@ -12,16 +12,14 @@ const {
   Wrapper,
   Section,
   Heading,
-  P,
   styleSheet: wizardStyles,
 } = require('../../../components/wizard')
-
-const sharedStyle = require('../../shared.css')
+const style = require('../style.css')
 
 const LinkedinDownloadGuidePage = (props: Object) => (
   <Layout
     {...props}
-    styleSheet={{root: sharedStyle.root}}
+    styleSheet={{root: wizardStyles.root}}
     title='Part 1 - Unlock your network'
   >
     <Helmet>
@@ -36,10 +34,10 @@ const LinkedinDownloadGuidePage = (props: Object) => (
       <Section padding>
         <Card>
           <img
-            className={css(sharedStyle.image)}
+            className={css(style.image)}
             src='/assets/images/linkedin-request-2.gif'
           />
-          <ol className={css(sharedStyle.list)}>
+          <ol className={css(style.list)}>
             <Text element='li'>
               Log into your email account (the one you use to access LinkedIn)
             </Text>
