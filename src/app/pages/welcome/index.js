@@ -4,7 +4,7 @@ const { Helmet } = require('react-helmet')
 
 const { Text, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const modifiers = require('@nudj/components/lib/css/modifiers.css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
@@ -37,7 +37,7 @@ const WelcomePage = (props: Object) => (
         <ul className={css(style.list)}>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={modifiers.fgMidRed}>Step 1</Text>
+              <Text element='div' size='largeIi' style={m.fgMidRed}>Step 1</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/unlock-network.svg'
@@ -54,7 +54,7 @@ const WelcomePage = (props: Object) => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={modifiers.fgMidRed}>Step 2</Text>
+              <Text element='div' size='largeIi' style={m.fgMidRed}>Step 2</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/uncover-gems.svg'
@@ -71,7 +71,7 @@ const WelcomePage = (props: Object) => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={modifiers.fgMidRed}>Step 3</Text>
+              <Text element='div' size='largeIi' style={m.fgMidRed}>Step 3</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/send-nudjes.svg'
