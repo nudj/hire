@@ -6,6 +6,7 @@ const sortBy = require('lodash/sortBy')
 
 const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const {
   setNewItemValue,
@@ -18,10 +19,19 @@ const {
   submitNewConnection
 } = require('../actions')
 const Layout = require('../../../components/app-layout')
-const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
+const Basket = require('../../../components/basket')
 const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
+
+const {
+  Wrapper,
+  Section,
+  Heading,
+  P,
+  Footer,
+  styleSheet: wizardStyles,
+} = require('../../../components/wizard')
 
 const getHandleSetConnections = dispatch => e => {
   e.preventDefault()
@@ -101,13 +111,13 @@ const ConnectionsQuestionPage = props => {
       case !connections.length && !isNil(searchQuery):
         return (
           <div className={css(style.tableOverflow)}>
-            <Text element='div' size='largeI' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+            <Heading element="div">
               0 people match '{searchQuery}'
-            </Text>
-            <Text element='div' style={sharedStyle.subheading}>
+            </Heading>
+            <P>
               We can&#39;t find anyone in your contacts that matches your query.
               Try another search term or add them manually using the link below
-            </Text>
+            </P>
           </div>
         )
       default:
@@ -119,34 +129,36 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       notification={notification}
-      styleSheet={{root: sharedStyle.root}}
+      styleSheet={{root: wizardStyles.root}}
       title='Part 2 - Uncover hidden gems'
     >
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' style={sharedStyle.stepCounter}>
-          Step {questionNumber} of {questionCount}
-        </Text>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
-          {question.title}
-        </Text>
-        <Text element='div' style={sharedStyle.subheading}>
-          {question.description}
-        </Text>
-        <div className={css(sharedStyle.body)}>
-          <Card style={[sharedStyle.card, style.card]}>
+      <Wrapper>
+        <Section padding>
+          <Text element='div' style={style.stepCounter}>
+            Step {questionNumber} of {questionCount}
+          </Text>
+          <Heading>
+            {question.title}
+          </Heading>
+          <P>
+            {question.description}
+          </P>
+        </Section>
+        <Section padding width="largeI">
+          <Card style={[m.pl0, m.pr0]}>
             {hasConnections || selectedConnections.length ? (
               <form
                 onSubmit={getHandleSearchSubmit(dispatch)}
-                className={css(style.form)}
+                className={css(m.plLgIi, m.prLgIi)}
               >
                 <Text element='label' size='smallI' htmlFor='search'>
                   Search by name and select from the results
                 </Text>
                 <Input
-                  styleSheet={{ root: style.input }}
+                  styleSheet={{ root: m.mtReg }}
                   name='search'
                   label='search'
                   type='search'
@@ -155,12 +167,12 @@ const ConnectionsQuestionPage = props => {
                   onChange={handleSearchChange}
                   onClear={handleSearchClear}
                 />
-                <Button style={style.submitButton} type='submit' volume='cheer'>
+                <Button style={m.mtReg} type='submit' volume='cheer'>
                   Search
                 </Button>
               </form>
             ) : (
-              <div className={css(style.form)}>
+              <div className={css(m.plLgIi, m.prLgIi)}>
                 <Text element='label'>
                   Add their details below
                 </Text>
@@ -206,26 +218,15 @@ const ConnectionsQuestionPage = props => {
               connection={get(props, 'newConnection')}
             />
           </Modal>
-          <div className={css(sharedStyle.footer)}>
-            <Align
-              leftChildren={
-                <Text style={sharedStyle.addCounter}>
-                  {`${selectedConnections.length} added`}
-                </Text>
-              }
-              rightChildren={
-                <Button
-                  onClick={handleSaveAnswers(dispatch, question.id)}
-                  type='submit'
-                  volume={selectedConnections.length ? 'cheer' : 'murmur'}
-                >
-                  {selectedConnections.length ? 'Next' : 'I don\'t know anyone'}
-                </Button>
-              }
-            />
-          </div>
-        </div>
-      </div>
+        </Section>
+        <Footer>
+          <Basket
+            basket={selectedConnections}
+            skipLabel="I don't know anyone"
+            nextClick={handleSaveAnswers(dispatch, question.id)}
+          />
+        </Footer>
+      </Wrapper>
     </Layout>
   )
 }
