@@ -14,7 +14,6 @@ const {
 } = require('../../components/wizard')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
 
 const getUrl = network => `/setup-network/${network}`
 
