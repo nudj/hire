@@ -29,6 +29,25 @@ const styleSheet = StyleSheet.create({
       textAlign: 'center'
     }
   },
+  footer: {
+    backgroundColor: colors.white,
+    position: 'fixed',
+    width: '100%',
+    left: 0,
+    bottom: 0,
+    borderTopColor: colors.greyLight,
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    paddingLeft: sizes.smallI,
+    paddingRight: sizes.smallI,
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
+    textAlign: 'left',
+    '@media(min-width: 30rem)': {
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular
+    }
+  },
   heading: {
     maxWidth: '42.5rem',
     marginLeft: 'auto',

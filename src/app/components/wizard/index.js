@@ -37,10 +37,17 @@ P.defaultProps= {
   element: 'p'
 }
 
+const Footer = ({ children, style, ...props }) => (
+  <div {...props} className={css(styleSheet.footer, style)}>
+    {children}
+  </div>
+)
+
 module.exports = {
   Wrapper,
   Section,
   Heading,
   P,
+  Footer,
   styleSheet
 }
