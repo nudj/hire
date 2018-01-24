@@ -27,6 +27,7 @@ const expressRouters = {
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
     require('./pages/setup-network/linkedin/router'),
+    require('./pages/recommendations/router'),
     require('./pages/survey/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey-complete/router'),

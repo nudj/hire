@@ -9,6 +9,7 @@ module.exports = {
   '/surveys/:surveySlug': checkMobileDevice(require('../pages/survey')),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': checkMobileDevice(require('../pages/survey-question')),
   '/surveys/:surveySlug/complete': checkMobileDevice(require('../pages/survey-complete')),
+  '/recommendations': require('../pages/recommendations'),
   '/messages': require('../pages/messages'),
   '/messages/:conversationId': require('../pages/messages/thread'),
   '/messages/new/:connectionId': require('../pages/messages/new'),
