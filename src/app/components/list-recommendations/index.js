@@ -4,7 +4,7 @@ const { css } = require('@nudj/components/lib/css')
 const Item = require('../recommendation')
 const style = require('./style.css')
 
-const ListRecommendations = ({ recommendations, hrefTemplate }) => (
+const ListRecommendations = ({ recommendations, getHref }) => (
   <ol className={css(style.list)}>
     {recommendations.map(recommendation => (
       <li key={recommendation.id} className={css(style.listItem)}>
@@ -14,7 +14,7 @@ const ListRecommendations = ({ recommendations, hrefTemplate }) => (
           lastName={recommendation.lastName}
           role={recommendation.role}
           company={recommendation.company}
-          href={hrefTemplate(recommendation)}
+          href={getHref(recommendation)}
         />
       </li>
     ))}

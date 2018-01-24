@@ -11,7 +11,6 @@ const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
 
-const templateHelper = require('../../lib/templateHelper')
 const ListRecommendations = require('../../components/list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
@@ -46,7 +45,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const selectedContactId = queryParams.get('id')
 
-  const recommendationHrefTemplate = templateHelper`?id=${'id'}`
+  const getRecommendationHref = ({id}) => `?id=${id}`
 
   return (
     <Layout
@@ -74,7 +73,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           <div className={css(sharedStyle.body, sharedStyle.cardMedium)}>
             <ListRecommendations
               recommendations={connections}
-              hrefTemplate={recommendationHrefTemplate}
+              getHref={getRecommendationHref}
             />
           </div>
           <Modal isOpen={!!selectedContactId} style={style.modalWindow}>

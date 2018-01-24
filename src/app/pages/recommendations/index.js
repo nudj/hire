@@ -6,14 +6,13 @@ const get = require('lodash/get')
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const templateHelper = require('../../lib/templateHelper')
 const ListRecommendations = require('../../components/list-recommendations')
 const Layout = require('../../components/app-layout')
 const sharedStyle = require('../shared.css')
 
 const RecommendationsPage = (props: Object) => {
   const answers = get(props, 'surveyAnswers', [])
-  const recommendationHrefTemplate = templateHelper`/messages/new/${'id'}`
+  const getRecommendationHref = ({id}) => `/messages/new/${id}`
 
   return (
     <Layout {...props} styleSheet={{root: sharedStyle.root}}>
@@ -34,7 +33,7 @@ const RecommendationsPage = (props: Object) => {
                   </Text>
                   <ListRecommendations
                     recommendations={answer.connections}
-                    hrefTemplate={recommendationHrefTemplate}
+                    getHref={getRecommendationHref}
                   />
                 </div>
               )
