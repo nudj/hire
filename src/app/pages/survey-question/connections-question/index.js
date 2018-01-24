@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const isNil = require('lodash/isNil')
 const get = require('lodash/get')
+const sortBy = require('lodash/sortBy')
 
 const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -91,7 +92,7 @@ const ConnectionsQuestionPage = props => {
                 root: style.table
               }}
               onSelect={getHandleSetConnections(dispatch)}
-              connections={connections}
+              connections={sortBy(connections, ['firstName', 'lastName'])}
               selectedConnections={selectedConnections}
               multiple
             />
