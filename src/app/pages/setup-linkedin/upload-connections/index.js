@@ -5,6 +5,7 @@ const { Helmet } = require('react-helmet')
 
 const { css } = require('@nudj/components/lib/css')
 const { Card, Text } = require('@nudj/components')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const {
   parseLinkedinConnections,
@@ -13,7 +14,15 @@ const {
 const Dropzone = require('../../../components/connections-csv-uploader')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
-const sharedStyle = require('../../shared.css')
+
+const {
+  Wrapper,
+  Section,
+  Heading,
+  P,
+  styleSheet: wizardStyles,
+} = require('../../../components/wizard')
+const style = require('../style.css')
 
 type Props = {
   dispatch: Dispatch,
@@ -40,50 +49,41 @@ const LinkedinUploadPage = (props: Props) => {
   return (
     <Layout
       {...props}
-      styleSheet={{root: sharedStyle.root}}
+      styleSheet={{root: wizardStyles.root}}
       title='Part 1 - Unlock your network'
     >
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+      <Wrapper>
+        <Section padding>
+          <Heading>
             Upload your Connections.csv file
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <P>
             Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
-          </Text>
-        </div>
-        <div className={css(sharedStyle.body)}>
-          <Card
-            style={[
-              sharedStyle.card,
-              sharedStyle.cardMedium,
-              sharedStyle.noPadding
-            ]}
-          >
+          </P>
+        </Section>
+        <Section padding width="regular">
+          <Card style={m.pa0}>
             <Dropzone
               connections={state.connections}
               onDrop={getHandleDrop(dispatch)}
             />
           </Card>
-        </div>
-        {state.connections.length > 0 && (
-          <div
-            className={css(sharedStyle.body, sharedStyle.pageActionContainer)}
+        </Section>
+        <Section padding>
+          <ButtonLink
+            href='/setup-network/linkedin/upload'
+            volume='cheer'
+            style={wizardStyles.action}
+            onClick={getHandleNext(dispatch)}
+            disabled={state.connections.length < 1}
           >
-            <ButtonLink
-              href='/setup-network/linkedin/upload'
-              volume='cheer'
-              style={sharedStyle.next}
-              onClick={getHandleNext(dispatch)}
-            >
-              Next
-            </ButtonLink>
-          </div>
-        )}
-      </div>
+            Next
+          </ButtonLink>
+        </Section>
+      </Wrapper>
     </Layout>
   )
 }

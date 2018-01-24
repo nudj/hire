@@ -3,22 +3,10 @@ const { Text } = require('@nudj/components')
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 
 const styleSheet = require('./style.css')
+const Section = require('./section')
 
 const Wrapper = ({ children, style, ...props }) => (
   <div {...props} className={css(styleSheet.wrapper, style)}>
-    {children}
-  </div>
-)
-
-const Section = ({ children, style, padding, ...props }) => (
-  <div
-    {...props}
-    className={css(
-      styleSheet.section,
-      style,
-      padding && styleSheet.sectionPadding
-    )}
-  >
     {children}
   </div>
 )

@@ -29,20 +29,6 @@ const styleSheet = StyleSheet.create({
       textAlign: 'center'
     }
   },
-  section: {
-    ':nth-of-type(n + 2)': {
-      marginTop: sizes.regular,
-    },
-    [`@media(${wizardAction.center})`]: {
-      ':nth-of-type(n + 2)': {
-        marginTop: sizes.largeIi,
-      },
-    }
-  },
-  sectionPadding: {
-    paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
-  },
   heading: {
     maxWidth: '42.5rem',
     marginLeft: 'auto',
