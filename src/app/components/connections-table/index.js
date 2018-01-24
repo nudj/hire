@@ -8,7 +8,6 @@ const isEqual = require('lodash/isEqual')
 
 const style = require('./style.css')
 
-
 type StyleSheetType = {
   root?: Object,
   header?: Object,
@@ -123,7 +122,7 @@ module.exports = class ConnectionsTable extends React.Component<ConnectionsTable
     })
   }
 
-  shouldComponentUpdate(nextProps: ConnectionsTableProps) {
+  shouldComponentUpdate (nextProps: ConnectionsTableProps) {
     if (
       isEqual(this.props.connections, nextProps.connections) &&
       isEqual(this.props.selectedConnections, nextProps.selectedConnections)
@@ -134,13 +133,12 @@ module.exports = class ConnectionsTable extends React.Component<ConnectionsTable
     return true
   }
 
-  render() { 
+  render () {
     const {
       onSelect,
       connections,
       selectedConnections,
-      styleSheet,
-      multiple
+      styleSheet
     } = this.props
 
     const isSelectable = typeof onSelect === 'function'
@@ -179,8 +177,6 @@ module.exports = class ConnectionsTable extends React.Component<ConnectionsTable
         selected: selectedConnections.includes(connection.id)
       })
     )
-
-    console.log('rerendering TABLE')
 
     return (
       <Table
