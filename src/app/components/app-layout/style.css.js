@@ -30,7 +30,7 @@ const styleSheet = StyleSheet.create({
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
       paddingTop: 0,
-      paddingBottom: 0,
+      paddingBottom: 0
     }
   },
   bodyContainer: {
@@ -39,14 +39,14 @@ const styleSheet = StyleSheet.create({
     '@media(min-width: 34.25rem)': {
       order: 'initial',
       width: 'auto',
-      flexGrow: 1,
+      flexGrow: 1
     }
   },
   helpContainer: {
     flexBasis: '50%',
     textAlign: 'right',
     '@media(min-width: 34.25rem)': {
-      flexBasis: 'auto',
+      flexBasis: 'auto'
     }
   },
   logo: {
@@ -68,7 +68,7 @@ const styleSheet = StyleSheet.create({
   navigationListItem: {
     display: 'inline-block',
     height: '100%',
-    flexGrow: 1,
+    flexGrow: 1
   },
   navigationLink: merge(typography.type.smallIi, {
     backgroundColor: 'transparent',
@@ -105,7 +105,7 @@ const styleSheet = StyleSheet.create({
       paddingRight: sizes.regular,
       fontWeight: typography.fontWeight.bold,
       paddingTop: 0,
-      paddingBottom: 0,
+      paddingBottom: 0
     })
   }),
   navigationLinkActive: {

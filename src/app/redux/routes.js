@@ -17,5 +17,5 @@ module.exports = {
   '/contacts': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent'),
   // legacy urls
-  '/': require('../pages/tasks'),
+  '/': require('../pages/tasks')
 }
