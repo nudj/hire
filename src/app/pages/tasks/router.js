@@ -1,7 +1,6 @@
 const { Redirect } = require('@nudj/library/errors')
 const createRouter = require('@nudj/framework/router')
 
-const fetchers = require('./fetchers')
 const { ensureOnboarded } = require('../../lib/middleware')
 
 const Router = ({
@@ -15,7 +14,7 @@ const Router = ({
     '/',
     ensureOnboarded,
     (req, res, next) => next(new Redirect({ url: '/messages' })),
-    respondWithGql(fetchers.get)
+    respondWithGql()
   )
 
   return router

@@ -16,4 +16,6 @@ module.exports = {
   '/messages/new/:connectionId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent'),
+  // legacy urls
+  '/': require('../pages/tasks'),
 }

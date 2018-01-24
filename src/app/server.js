@@ -35,6 +35,7 @@ const expressRouters = {
     require('./pages/contacts/router'),
     require('./pages/check-device-wrapper/router'),
     require('./pages/notification-sent/router'),
+    require('./pages/tasks/router'),
     require('./server/routers/catch-all')
   ]
 }
