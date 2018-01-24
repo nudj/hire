@@ -26,18 +26,16 @@ const expressRouters = {
   secure: [
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
-    require('./pages/tasks/router'),
-    require('./pages/jobs/router'),
-    require('./pages/connections/router'),
     require('./pages/setup-network/linkedin/router'),
+    require('./pages/recommendations/router'),
     require('./pages/survey/router'),
-    require('./pages/survey-section/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey-complete/router'),
     require('./pages/messages/router'),
     require('./pages/contacts/router'),
     require('./pages/check-device-wrapper/router'),
     require('./pages/notification-sent/router'),
+    require('./pages/tasks/router'),
     require('./server/routers/catch-all')
   ]
 }

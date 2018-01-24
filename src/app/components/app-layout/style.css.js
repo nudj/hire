@@ -12,23 +12,42 @@ const styleSheet = StyleSheet.create({
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
     alignItems: 'stretch',
-    width: '100%'
+    width: '100%',
+    flexWrap: 'wrap',
+    '@media(min-width: 34.25rem)': {
+      flexWrap: 'nowrap'
+    }
   },
   logoContainer: {
-    flexShrink: 0,
+    flexBasis: '50%',
     alignSelf: 'center',
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
-    '@media(min-width: 30rem)': {
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
+    '@media(min-width: 34.25rem)': {
+      flexBasis: 'auto',
       paddingLeft: sizes.regular,
-      paddingRight: sizes.regular
+      paddingRight: sizes.regular,
+      paddingTop: 0,
+      paddingBottom: 0
     }
   },
   bodyContainer: {
-    flexGrow: 1
+    order: '3',
+    width: '100%',
+    '@media(min-width: 34.25rem)': {
+      order: 'initial',
+      width: 'auto',
+      flexGrow: 1
+    }
   },
   helpContainer: {
-    flexShrink: 0
+    flexBasis: '50%',
+    textAlign: 'right',
+    '@media(min-width: 34.25rem)': {
+      flexBasis: 'auto'
+    }
   },
   logo: {
     maxWidth: sizes.largeI,
@@ -40,13 +59,18 @@ const styleSheet = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: 0,
-    height: '100%'
+    height: '100%',
+    display: 'flex',
+    '@media(min-width: 34.25rem)': {
+      display: 'block'
+    }
   },
   navigationListItem: {
     display: 'inline-block',
-    height: '100%'
+    height: '100%',
+    flexGrow: 1
   },
-  navigationLink: merge(typography.type.smallI, {
+  navigationLink: merge(typography.type.smallIi, {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     borderWidth: 0,
@@ -56,6 +80,8 @@ const styleSheet = StyleSheet.create({
     fontWeight: typography.fontWeight.bold,
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
     textAlign: 'center',
     textDecoration: 'none',
     transition: 'all 150ms',
@@ -74,10 +100,12 @@ const styleSheet = StyleSheet.create({
       height: '100%',
       verticalAlign: 'middle'
     },
-    '@media(min-width: 30rem)': merge(typography.type.regular, {
+    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
-      fontWeight: typography.fontWeight.bold
+      fontWeight: typography.fontWeight.bold,
+      paddingTop: 0,
+      paddingBottom: 0
     })
   }),
   navigationLinkActive: {
@@ -91,11 +119,11 @@ const styleSheet = StyleSheet.create({
       left: 0
     }
   },
-  helpLink: merge(typography.type.smallI, {
+  helpLink: merge(typography.type.smallIi, {
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
     fontWeight: typography.fontWeight.bold,
-    '@media(min-width: 30rem)': merge(typography.type.regular, {
+    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
       fontWeight: typography.fontWeight.bold
@@ -112,7 +140,7 @@ const styleSheet = StyleSheet.create({
       height: '100%',
       verticalAlign: 'middle'
     },
-    '@media(min-width: 30rem)': merge(typography.type.regular, {
+    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
       fontWeight: typography.fontWeight.bold
     })
   })

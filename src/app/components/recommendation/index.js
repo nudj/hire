@@ -2,15 +2,15 @@ const React = require('react')
 const get = require('lodash/get')
 const { ContactCard } = require('@nudj/components')
 
-const ButtonLink = require('../../components/button-link')
+const ButtonLink = require('../button-link')
 
-const RecommendationItem = ({ id, ...contact }) => (
+const RecommendationItem = ({ id, href, ...contact }) => (
   <ContactCard
     name={`${contact.firstName} ${contact.lastName}`}
     jobTitle={get(contact, 'role.name')}
     company={get(contact, 'company.name')}
   >
-    <ButtonLink href={`?id=${id}`} volume='cheer'>
+    <ButtonLink href={href} volume='cheer'>
       Message
     </ButtonLink>
   </ContactCard>

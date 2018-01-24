@@ -1,13 +1,13 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
+const { ensureOnboarded } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/surveys/:surveySlug/sections/:sectionId', respondWithGql(fetchers.get))
-  router.getHandlers('/onboarding/surveys/:surveySlug/sections/:sectionId', respondWithGql(fetchers.get))
+  router.getHandlers('/recommendations', ensureOnboarded, respondWithGql(fetchers.get))
 
   return router
 }

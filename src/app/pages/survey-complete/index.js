@@ -11,7 +11,7 @@ const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')
 const sharedStyle = require('../shared.css')
 
-const ListRecommendations = require('./list-recommendations')
+const ListRecommendations = require('../../components/list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
 const EmailAuthForm = require('../../components/email-authentication-form')
@@ -45,6 +45,8 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const selectedContactId = queryParams.get('id')
 
+  const getRecommendationHref = ({id}) => `?id=${id}`
+
   return (
     <Layout
       {...props}
@@ -69,7 +71,10 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
             </Text>
           </div>
           <div className={css(sharedStyle.body, sharedStyle.cardMedium)}>
-            <ListRecommendations recommendations={connections} />
+            <ListRecommendations
+              recommendations={connections}
+              getHref={getRecommendationHref}
+            />
           </div>
           <Modal isOpen={!!selectedContactId} style={style.modalWindow}>
             <EmailAuthForm
