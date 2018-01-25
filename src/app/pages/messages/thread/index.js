@@ -11,11 +11,14 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
-const sharedStyle = require('../../shared.css')
+const Wrapper = require('../../components/wrapper')
+const Section = require('../../components/section')
+const { Heading, P } = require('../../components/app')
 const style = require('./style.css')
 
 const MessageThreadPage = props => {
@@ -34,12 +37,13 @@ const MessageThreadPage = props => {
       : 'Unable to display messages'
 
   return (
-    <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
+    <Layout {...props}>
       <Helmet>
         <title>{subject}</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Card style={[sharedStyle.card, sharedStyle.noPadding]}>
+      <Wrapper>
+        <Section>
+        <Card style={m.pa0}>
           <div className={css(style.threadSection)}>
             <Text style={style.threadSubject} element='div' size='largeI'>
               {subject}
