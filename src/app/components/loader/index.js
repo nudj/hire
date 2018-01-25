@@ -11,43 +11,42 @@ class Loader extends React.Component {
       initialMessage: props.message,
       elipsisChars: '',
       tooLong: false,
-      interval: null
+      interval: null,
+      timeout: null
     }
   }
 
   componentDidMount () {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       this.setState({ tooLong: true })
     }, this.props.threshold)
-
-    if (this.props.elipsis) {
-      const interval = setInterval(() => {
-        if (this.state.elipsisChars === '...') {
-          this.setState({ elipsisChars: '.' })
-        } else {
-          this.setState({ elipsisChars: `${this.state.elipsisChars}.` })
-        }
-      }, this.props.elipsisSpeed || 500)
-      this.setState({ interval })
-    }
+    this.setState({ timeout })
   }
 
   componentWillUnmount () {
-    if (this.state.interval) {
-      clearInterval(this.state.interval)
+    if (this.state.timeout) {
+      clearInterval(this.state.timeout)
     }
   }
 
   render () {
     const { tooLong, initialMessage } = this.state
-    const message = tooLong ? this.props.tooLongMessage : initialMessage
+    const { tooLongMessage, elipsis } = this.props
+    const message = tooLong ? tooLongMessage : initialMessage
 
     return (
       <div className={css(style.root)}>
         <div className={css(style.body)}>
           <div className={css(style.spinner)} />
           <Text element='div' size='largeI' style={style.message}>
-            {message}<span style={{position: 'absolute'}}>{this.state.elipsisChars}</span>
+            {message}
+            {elipsis && (
+              <span className={css(style.elipsis)}>
+                <div className={css(style.elipsisDot, style.dotOne)} />
+                <div className={css(style.elipsisDot, style.dotTwo)} />
+                <div className={css(style.elipsisDot)} />
+              </span>
+            )}
           </Text>
         </div>
       </div>
