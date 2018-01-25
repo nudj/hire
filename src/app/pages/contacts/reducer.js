@@ -1,9 +1,13 @@
+const { merge } = require('@nudj/library')
+const { createReducer } = require('../../lib')
 const {
   UPDATE_CONTACT_SEARCH_QUERY,
-  SET_SELECTED_CONTACTS
+  SET_SELECTED_CONTACTS,
+  SHOW_ADD_CONTACT_FORM,
+  HIDE_ADD_CONTACT_FORM,
+  CLEAR_ADD_CONTACT_FORM,
+  SET_NEW_ITEM_VALUE
 } = require('./actions')
-
-const { createReducer } = require('../../lib')
 
 const updateContactSearchQuery = (state, action) => ({
   ...state,
@@ -15,14 +19,43 @@ const setSelectedContacts = (state, action) => ({
   selectedContacts: action.contacts
 })
 
+const showAddContactForm = state => ({
+  ...state,
+  showAddIndividualConnectionModal: true
+})
+
+const hideAddContactForm = state => ({
+  ...state,
+  showAddIndividualConnectionModal: false
+})
+
+const clearAddContactForm = state => ({
+  ...state,
+  newContact: {}
+})
+
+const setNewItemValue = (state, action) => {
+  return merge(state, {
+    [action.name]: {
+      [action.key]: action.value
+    }
+  })
+}
+
 const reducers = {
+  [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
-  [SET_SELECTED_CONTACTS]: setSelectedContacts
+  [SET_SELECTED_CONTACTS]: setSelectedContacts,
+  [SHOW_ADD_CONTACT_FORM]: showAddContactForm,
+  [HIDE_ADD_CONTACT_FORM]: hideAddContactForm,
+  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm
 }
 
 const initialState = {
   selectedContacts: [],
-  searchQuery: null
+  newContact: {},
+  searchQuery: null,
+  showAddIndividualConnectionModal: false
 }
 
 module.exports = createReducer(initialState, reducers)

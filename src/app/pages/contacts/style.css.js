@@ -6,6 +6,16 @@ const styleSheet = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0
   },
+  addPersonButton: {
+    marginTop: sizes.regular
+  },
+  modalHeading: {
+    textAlign: 'center'
+  },
+  modalBody: {
+    marginTop: sizes.regular,
+    textAlign: 'center'
+  },
   form: {
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
