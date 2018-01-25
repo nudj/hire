@@ -5,9 +5,9 @@ const { Helmet } = require('react-helmet')
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
+const Wrapper = require('../../components/wrapper')
+const Section = require('../../components/section')
 const {
-  Wrapper,
-  Section,
   Heading,
   P,
   styleSheet: wizardStyles,

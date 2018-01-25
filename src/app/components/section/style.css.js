@@ -1,12 +1,6 @@
-const {
-  StyleSheet,
-  sizes,
-  colors,
-  utilities,
-  typography
-} = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
-const { wizardAction } = require('../../../lib/css/breakpoints')
+const { wizardAction } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   root: {

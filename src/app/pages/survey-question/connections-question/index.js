@@ -24,9 +24,9 @@ const Basket = require('../../../components/basket')
 const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
 
+const Wrapper = require('../../../components/wrapper')
+const Section = require('../../../components/section')
 const {
-  Wrapper,
-  Section,
   Heading,
   P,
   Footer,

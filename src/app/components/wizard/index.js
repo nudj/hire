@@ -1,15 +1,8 @@
 const React = require('react')
 const { Text } = require('@nudj/components')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/lib/css')
 
 const styleSheet = require('./style.css')
-const Section = require('./section')
-
-const Wrapper = ({ children, style, ...props }) => (
-  <div {...props} className={css(styleSheet.wrapper, style)}>
-    {children}
-  </div>
-)
 
 const Heading = ({ children, style, size, element, ...props }) => (
   <Text
@@ -44,8 +37,6 @@ const Footer = ({ children, style, ...props }) => (
 )
 
 module.exports = {
-  Wrapper,
-  Section,
   Heading,
   P,
   Footer,

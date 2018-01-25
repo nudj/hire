@@ -9,22 +9,6 @@ const {
 const { wizardAction } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
-  wrapper: {
-    maxWidth: '70rem',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingTop: sizes.largeIi,
-    paddingBottom: sizes.largeIi,
-    height: '100%',
-    textAlign: 'left',
-    '@media (min-width: 37.5rem)': {
-      paddingTop: sizes.largeIii,
-      paddingBottom: sizes.largeIii,
-      paddingLeft: sizes.regular,
-      paddingRight: sizes.regular,
-      textAlign: 'center'
-    }
-  },
   footer: {
     backgroundColor: colors.white,
     position: 'fixed',

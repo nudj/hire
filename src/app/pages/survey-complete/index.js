@@ -15,9 +15,9 @@ const ListRecommendations = require('../../components/list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
 const EmailAuthForm = require('../../components/email-authentication-form')
+const Wrapper = require('../../components/wrapper')
+const Section = require('../../components/section')
 const {
-  Wrapper,
-  Section,
   Heading,
   P,
   Footer,

@@ -13,9 +13,9 @@ const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const ButtonLink = require('../../../components/button-link')
 const Basket = require('../../../components/basket')
+const Wrapper = require('../../../components/wrapper')
+const Section = require('../../../components/Section')
 const {
-  Wrapper,
-  Section,
   Heading,
   P,
   Footer,
