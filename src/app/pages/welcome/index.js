@@ -18,7 +18,7 @@ const {
 const style = require('./style.css')
 
 const WelcomePage = (props: Object) => (
-  <Layout {...props} styleSheet={{root: wizardStyles.root}}>
+  <Layout {...props}>
     <Helmet>
       <title>Welcome</title>
     </Helmet>

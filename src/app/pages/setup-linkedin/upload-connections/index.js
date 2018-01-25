@@ -47,11 +47,7 @@ const LinkedinUploadPage = (props: Props) => {
   const { dispatch, uploadLinkedinConnectionsPage: state } = props
 
   return (
-    <Layout
-      {...props}
-      styleSheet={{root: wizardStyles.root}}
-      title='Part 1 - Unlock your network'
-    >
+    <Layout {...props} title='Part 1 - Unlock your network'>
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>

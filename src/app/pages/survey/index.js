@@ -53,11 +53,7 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
-    <Layout
-      {...props}
-      styleSheet={{root: wizardStyles.root}}
-      title='Part 2 - Uncover hidden gems'
-    >
+    <Layout {...props} title='Part 2 - Uncover hidden gems'>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>

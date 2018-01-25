@@ -56,11 +56,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const getRecommendationHref = ({id}) => `?id=${id}`
 
   return (
-    <Layout
-      {...props}
-      styleSheet={{root: wizardStyles.root}}
-      title='Part 3 - Send nudjes'
-    >
+    <Layout {...props} title='Part 3 - Send nudjes'>
       <Helmet>
         <title>View recommendations</title>
       </Helmet>

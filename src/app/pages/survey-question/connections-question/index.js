@@ -129,7 +129,6 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       notification={notification}
-      styleSheet={{root: wizardStyles.root}}
       title='Part 2 - Uncover hidden gems'
     >
       <Helmet>

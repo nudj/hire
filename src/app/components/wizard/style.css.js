@@ -9,10 +9,6 @@ const {
 const { wizardAction } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
-  root: {
-    backgroundColor: colors.greyLightest,
-    minHeight: '100%'
-  },
   wrapper: {
     maxWidth: '70rem',
     marginLeft: 'auto',

@@ -59,7 +59,6 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   return (
     <Layout
       {...props}
-      styleSheet={{root: wizardStyles.root}}
       title='Part 2 - Uncover hidden gems'
       notification={notification}
     >

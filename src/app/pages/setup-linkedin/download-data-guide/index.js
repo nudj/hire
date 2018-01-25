@@ -19,7 +19,6 @@ const style = require('../style.css')
 const LinkedinDownloadGuidePage = (props: Object) => (
   <Layout
     {...props}
-    styleSheet={{root: wizardStyles.root}}
     title='Part 1 - Unlock your network'
   >
     <Helmet>
