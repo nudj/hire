@@ -16,11 +16,14 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
-const sharedStyle = require('../../shared.css')
 const { updateSubject, updateMessage } = require('./actions')
+const Wrapper = require('../../../components/wrapper')
+const Section = require('../../../components/section')
+const { Heading, P } = require('../../../components/app')
 const style = require('./style.css')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
@@ -83,23 +86,23 @@ const ComposeMessagePage = props => {
   )
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+    <Layout {...props}>
       <Helmet>
         <title>Send your message</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+      <Wrapper>
+        <Section padding>
+          <Heading level={1} style={m.fgPrimary}>
             Now compose your masterpiece
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <P>
             We know that the best way to get a response is to make sure the
             message you send is personal, so take a bit of time to tailor the
             template below.
-          </Text>
-        </div>
-        <div className={css(sharedStyle.body)}>
-          <Card style={sharedStyle.card}>
+          </P>
+        </Section>
+        <Section width="largeI">
+          <Card>
             <form method='post'>
               <Input
                 name='subject'
@@ -116,23 +119,25 @@ const ComposeMessagePage = props => {
               />
               <input name='_csrf' value={csrfToken} type='hidden' />
               <input name='recipient' value={recipientId} type='hidden' />
-              {emailPreference === emailPreferences.GOOGLE ? (
-                <Button type='submit' volume='cheer' style={style.sendButton}>
-                  Send message
-                </Button>
-              ) : (
-                <Link
-                  volume='cheer'
-                  style={style.sendButton}
-                  href={getMailTo(toEmail, subjectValue, messageValue)}
-                >
-                  Send message
-                </Link>
-              )}
+              <div className={css(m.center)}>
+                {emailPreference === emailPreferences.GOOGLE ? (
+                  <Button type='submit' volume='cheer' style={m.mtReg}>
+                    Send message
+                  </Button>
+                ) : (
+                  <Link
+                    volume='cheer'
+                    style={m.mtReg}
+                    href={getMailTo(toEmail, subjectValue, messageValue)}
+                  >
+                    Send message
+                  </Link>
+                )}
+              </div>
             </form>
           </Card>
-        </div>
-      </div>
+        </Section>
+      </Wrapper>
     </Layout>
   )
 }

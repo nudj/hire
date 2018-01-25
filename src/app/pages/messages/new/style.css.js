@@ -9,9 +9,6 @@ const styleSheet = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  sendButton: {
-    marginTop: sizes.regular
-  }
 })
 
 module.exports = styleSheet
