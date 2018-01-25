@@ -65,7 +65,7 @@ const uploadLinkedinConnections = (): ((
         url,
         method,
         data,
-        showLoading: false
+        showLoadingState: false
       })
     )
     dispatch(completeConnectionsUpload())

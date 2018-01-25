@@ -51,7 +51,7 @@ const LinkedinUploadPage = (props: Props) => {
       {state.loading ? (
         <Loader
           initialMessage='Uploading your connections'
-          thresholdMessage='Still uploading'
+          thresholdMessage='Still going'
           threshold={4000}
           ellipsis
         />

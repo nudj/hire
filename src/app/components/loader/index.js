@@ -16,7 +16,7 @@ class Loader extends React.Component {
 
   componentDidMount () {
     const timeout = setTimeout(() => {
-      this.setState({ tooLong: true })
+      this.setState({ thresholdReached: true })
     }, this.props.threshold)
     this.setState({ timeout })
   }
