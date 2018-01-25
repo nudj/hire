@@ -4,14 +4,20 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Text, Align, Card, Input, Button } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Text, Card, Input, Button } = require('@nudj/components')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { setNewItemValue, addEmployment } = require('../actions')
 const Layout = require('../../../components/app-layout')
-const sharedStyle = require('../../shared.css')
 const style = require('../style.css')
-const ButtonLink = require('../../../components/button-link')
+const Basket = require('../../../components/basket')
+const Main = require('../../../components/main')
+const Section = require('../../../components/section')
+const {
+  Heading,
+  Para,
+  Footer
+} = require('../../../components/wizard')
 
 function onChangeNewItem (dispatch, itemType) {
   return event => dispatch(setNewItemValue(itemType, event.name, event.value))
@@ -50,35 +56,32 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   return (
     <Layout
       {...props}
-      styleSheet={{root: sharedStyle.root}}
       title='Part 2 - Uncover hidden gems'
       notification={notification}
     >
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' style={sharedStyle.stepCounter}>
-          Step {questionNumber} of {questionCount}
-        </Text>
-        <Text
-          element='div'
-          size='largeIi'
-          style={[sharedStyle.heading, sharedStyle.headingPrimary]}
-        >
-          {question.title}
-        </Text>
-        <Text element='div' style={sharedStyle.subheading}>
-          {question.description}
-        </Text>
-        <div className={css(sharedStyle.body)}>
-          <Card style={sharedStyle.card}>
+      <Main>
+        <Section padding>
+          <Text element='div' style={style.stepCounter}>
+            Step {questionNumber} of {questionCount}
+          </Text>
+          <Heading>
+            {question.title}
+          </Heading>
+          <Para>
+            {question.description}
+          </Para>
+        </Section>
+        <Section padding width='largeI'>
+          <Card>
             <form onSubmit={onAddCompany(dispatch, question.id)}>
               <Text element='label' size='smallI' htmlFor='name'>
                 Add the names of all companies you&#39;ve worked at
               </Text>
               <Input
-                styleSheet={{ root: style.input }}
+                styleSheet={{ root: mss.mtReg }}
                 id='name'
                 value={get(employment, 'name', '')}
                 name='name'
@@ -89,31 +92,21 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
               <Button
                 type='submit'
                 volume='cheer'
-                style={style.submitButton}
+                style={mss.mtReg}
               >
                 Add company
               </Button>
             </form>
           </Card>
-          <div className={css(sharedStyle.footer)}>
-            <Align
-              leftChildren={
-                <Text style={sharedStyle.addCounter}>
-                  {`${companies.length} added`}
-                </Text>
-              }
-              rightChildren={
-                <ButtonLink
-                  volume={companies.length ? 'cheer' : 'murmur'}
-                  href={nextUri}
-                >
-                  {companies.length ? 'Next' : 'This is my first job'}
-                </ButtonLink>
-              }
+          <Footer>
+            <Basket
+              basket={companies}
+              skipLabel='This is my first job'
+              nextHref={nextUri}
             />
-          </div>
-        </div>
-      </div>
+          </Footer>
+        </Section>
+      </Main>
     </Layout>
   )
 }

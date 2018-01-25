@@ -1,10 +1,10 @@
 const { Redirect } = require('@nudj/framework/errors')
 const get = require('lodash/get')
 
-const { Global } = require('../../../lib/graphql')
-const { createNotification } = require('../../../lib')
-const intercom = require('../../../lib/intercom')
-const mailer = require('../../../lib/mailer')
+const { Global } = require('../../lib/graphql')
+const { createNotification } = require('../../lib')
+const intercom = require('../../lib/intercom')
+const mailer = require('../../lib/mailer')
 
 const fetchPageData = ({ session }) => {
   const gql = `

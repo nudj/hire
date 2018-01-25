@@ -3,8 +3,8 @@
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 
-const Papa = require('../../../lib/papa')
-const { linkedinToNudjPeople } = require('../../../lib/linkedin-to-nudj')
+const Papa = require('../../lib/papa')
+const { linkedinToNudjPeople } = require('../../lib/linkedin-to-nudj')
 
 const START_PARSING_LINKEDIN_CONNECTIONS = 'START_PARSING_LINKEDIN_CONNECTIONS'
 const COMPLETE_PARSING_LINKEDIN_CONNECTIONS =
@@ -57,7 +57,7 @@ const uploadLinkedinConnections = (): ((
     const url = '/setup-network/linkedin/upload'
     const method = 'post'
     const data = {
-      connections: getState().uploadPage.connections,
+      connections: getState().uploadLinkedinConnectionsPage.connections,
       source: 'linkedin'
     }
 

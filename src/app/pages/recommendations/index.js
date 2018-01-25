@@ -3,24 +3,26 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ListRecommendations = require('../../components/list-recommendations')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const { Heading } = require('../../components/app')
 
 const RecommendationsPage = (props: Object) => {
   const answers = get(props, 'surveyAnswers', [])
   const getRecommendationHref = ({id}) => `/messages/new/${id}`
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+    <Layout {...props}>
       <Helmet>
         <title>Your recommendations</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.body, sharedStyle.cardMedium)}>
+      <Main>
+        <Section padding width='regular' style={mss.left}>
           {
             answers.map(answer => {
               const id = get(answer, 'id')
@@ -28,9 +30,9 @@ const RecommendationsPage = (props: Object) => {
 
               return (
                 <div key={id}>
-                  <Text element='div' size='largeI' style={sharedStyle.heading}>
+                  <Heading level={2}>
                     { surveyTitle }
-                  </Text>
+                  </Heading>
                   <ListRecommendations
                     recommendations={answer.connections}
                     getHref={getRecommendationHref}
@@ -39,8 +41,8 @@ const RecommendationsPage = (props: Object) => {
               )
             })
           }
-        </div>
-      </div>
+        </Section>
+      </Main>
     </Layout>
   )
 }

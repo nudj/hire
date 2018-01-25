@@ -3,11 +3,16 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
 
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const {
+  Heading,
+  Para,
+  styleSheet: wizardStyles
+} = require('../../components/wizard')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
 
 const getUrl = network => `/setup-network/${network}`
 
@@ -27,41 +32,37 @@ const NETWORKS = {
 }
 
 const ChooseNetworkPage = (props: Object) => (
-  <Layout
-    {...props}
-    styleSheet={{root: sharedStyle.root}}
-    title='Part 1 - Unlock your network'
-  >
+  <Layout {...props} title='Part 1 - Unlock your network'>
     <Helmet>
       <title>Select a network</title>
     </Helmet>
-    <div className={css(sharedStyle.wrapper)}>
-      <div className={css(sharedStyle.header)}>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+    <Main>
+      <Section padding>
+        <Heading>
           Select a network
-        </Text>
-        <Text element='p' style={sharedStyle.subheading}>
+        </Heading>
+        <Para>
           We recommend choosing the network where you feel the best
           recommendations will come from based on your company and the roles
           your hiring for.
-        </Text>
-      </div>
-      <div className={css(sharedStyle.body)}>
+        </Para>
+      </Section>
+      <Section padding>
         <ButtonLink
-          style={sharedStyle.action}
+          style={wizardStyles.action}
           href={NETWORKS.linkedin.url}
           volume='cheer'
         >
           {NETWORKS.linkedin.label}
         </ButtonLink>
-        <ButtonLink style={sharedStyle.action} href={NETWORKS.facebook.url} disabled>
+        <ButtonLink style={wizardStyles.action} href={NETWORKS.facebook.url} disabled>
           {NETWORKS.facebook.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
-        <ButtonLink style={sharedStyle.action} href={NETWORKS.google.url} disabled>
+        <ButtonLink style={wizardStyles.action} href={NETWORKS.google.url} disabled>
           {NETWORKS.google.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
-      </div>
-    </div>
+      </Section>
+    </Main>
   </Layout>
 )
 

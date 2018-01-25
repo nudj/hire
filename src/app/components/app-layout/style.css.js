@@ -3,6 +3,7 @@ const { StyleSheet, typography, sizes, colors } = require('@nudj/components/lib/
 
 const styleSheet = StyleSheet.create({
   root: {
+    backgroundColor: colors.greyLightest,
     minHeight: '100%'
   },
   pageHeader: {

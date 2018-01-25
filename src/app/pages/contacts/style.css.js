@@ -2,29 +2,12 @@ const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 // TODO: Merge with survey-question/style.css.js
 const styleSheet = StyleSheet.create({
-  card: {
-    paddingLeft: 0,
-    paddingRight: 0
-  },
-  addPersonButton: {
-    marginTop: sizes.regular
-  },
   modalHeading: {
     textAlign: 'center'
   },
   modalBody: {
     marginTop: sizes.regular,
     textAlign: 'center'
-  },
-  form: {
-    paddingLeft: sizes.largeIi,
-    paddingRight: sizes.largeIi
-  },
-  submitButton: {
-    marginTop: sizes.regular
-  },
-  input: {
-    marginTop: sizes.regular
   },
   tableOverflow: {
     overflowX: 'scroll',

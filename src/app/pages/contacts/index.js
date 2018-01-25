@@ -7,12 +7,20 @@ const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
+const {
+  Heading,
+  Para,
+  Footer
+} = require('../../components/wizard')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
@@ -21,7 +29,6 @@ const {
   setNewItemValue,
   submitNewConnection
 } = require('./actions')
-const sharedStyle = require('../shared.css')
 
 const getHandleSearchChange = dispatch => ({ value }) => {
   dispatch(updateContactsSearchQuery(value))
@@ -70,31 +77,31 @@ const ContactsPage = props => {
   }
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+    <Layout {...props}>
       <Helmet>
         <title>Contacts</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
-          You currently have{' '}
-          <span className={css(sharedStyle.headingHighlight)}>
-            {totalConnectionsCount}
-          </span>{' '}
-          people in your network
-        </Text>
-        <Text element='div' style={sharedStyle.subheading}>
-          Search for people to ask for recommendations or add more people to grow your network.
-        </Text>
-        <div className={css(sharedStyle.body)}>
-          <Card style={[sharedStyle.card, style.card]}>
-            <form className={css(style.form)}>
+      <Main>
+        <Section padding>
+          <Heading>
+            You currently have{' '}
+            <span className={css(mss.fgMidRed)}>
+              {totalConnectionsCount}
+            </span>{' '}
+            people in your network
+          </Heading>
+          <Para>
+            Search for people to ask for recommendations or add more people to grow your network.
+          </Para>
+        </Section>
+        <Section padding width='largeI'>
+          <Card style={[mss.pl0, mss.pr0]}>
+            <form className={css(mss.plLgIi, mss.prLgIi)}>
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
               <Input
-                styleSheet={{
-                  root: style.input
-                }}
+                styleSheet={{ root: mss.mtReg }}
                 name='search'
                 label='search'
                 type='search'
@@ -103,7 +110,7 @@ const ContactsPage = props => {
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
               />
-              <Button type='submit' volume='cheer' style={style.submitButton}>
+              <Button type='submit' volume='cheer' style={mss.mtReg}>
                 Search
               </Button>
             </form>
@@ -124,7 +131,7 @@ const ContactsPage = props => {
             subtle
             volume='cheer'
             onClick={getHandleAddClick(dispatch)}
-            style={style.addPersonButton}
+            style={mss.mtReg}
           >
             Add person
           </Button>
@@ -143,14 +150,14 @@ const ContactsPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              style={style.form}
+              className={css(mss.plLgIi, mss.prLgIi)}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
               connection={get(state, 'newContact')}
             />
           </Modal>
-          <div className={css(sharedStyle.footer)}>
+          <Footer>
             <Align
               rightChildren={
                 <ButtonLink
@@ -162,9 +169,9 @@ const ContactsPage = props => {
                 </ButtonLink>
               }
             />
-          </div>
-        </div>
-      </div>
+          </Footer>
+        </Section>
+      </Main>
     </Layout>
   )
 }

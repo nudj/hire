@@ -2,14 +2,16 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Card, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Card } = require('@nudj/components')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ListJobs = require('../../../components/job-radio-group')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
-const sharedStyle = require('../../shared.css')
 const { selectJob } = require('./actions')
+const Main = require('../../../components/main')
+const Section = require('../../../components/section')
+const { Heading, Para } = require('../../../components/app')
 
 const getHandleSelectJob = dispatch => ({ value }) => dispatch(selectJob(value))
 
@@ -20,22 +22,22 @@ const NewConversationPage = props => {
   const connection = get(props, 'user.connection.firstName')
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+    <Layout {...props}>
       <Helmet>
         <title>Select a job</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+      <Main>
+        <Section padding>
+          <Heading level={1} style={mss.fgPrimary}>
             Select the job you’d like to send {connection}
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <Para>
             Select which of your company&#39;s open jobs this person is most
             likely to provide the best recommendations for.
-          </Text>
-        </div>
-        <div className={css(sharedStyle.body)}>
-          <Card style={sharedStyle.cardSmall}>
+          </Para>
+        </Section>
+        <Section padding width='smallI'>
+          <Card>
             <ListJobs
               name='jobId'
               jobs={jobs}
@@ -43,18 +45,17 @@ const NewConversationPage = props => {
               selectedJobId={selectedJobId}
             />
           </Card>
-        </div>
-        <div className={css(sharedStyle.body, sharedStyle.pageActionContainer)}>
+        </Section>
+        <Section padding style={mss.center}>
           <ButtonLink
             href={`${props.match.url}/${selectedJobId}`}
             volume='cheer'
-            style={sharedStyle.next}
             disabled={!selectedJobId}
           >
             Next
           </ButtonLink>
-        </div>
-      </div>
+        </Section>
+      </Main>
     </Layout>
   )
 }

@@ -3,14 +3,19 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const { Button, Card, Text } = require('@nudj/components')
+const { Button, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../lib/constants')
 const Layout = require('../../components/app-layout')
 const MessagePreview = require('../../components/message-preview')
 const ButtonLink = require('../../components/button-link')
-const sharedStyle = require('../shared.css')
+
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const { Heading, Para } = require('../../components/app')
+
 const style = require('./style.css')
 
 const MessagesPage = props => {
@@ -23,15 +28,18 @@ const MessagesPage = props => {
   )
 
   return (
-    <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
+    <Layout {...props}>
       <Helmet>
         <title>Messages</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference) ? (
-          <div>
-            {syncedConversations.length > 0 ? (
-              <Card style={[sharedStyle.card, sharedStyle.noPadding, style.card, style.section]}>
+      <Main>
+        { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
+          ? syncedConversations.length > 0 ? (
+            <Section width='largeI'>
+              <Heading level={1} style={[mss.plReg, mss.mrReg, mss.fgPrimary]}>
+                All messages
+              </Heading>
+              <Card style={[mss.pa0, mss.mtReg, mss.ofHide]}>
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation
@@ -51,58 +59,71 @@ const MessagesPage = props => {
                   })}
                 </ol>
               </Card>
-            ) : (
-              <div className={css(style.section)}>
-                <Text element='p' size='largeI' style={sharedStyle.heading}>
-                  You haven’t sent any messages
-                </Text>
-                <Text element='p' style={sharedStyle.subheading}>
-                  To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves.
-                </Text>
-                <div className={css(style.buttonGroup)}>
-                  <ButtonLink
-                    href='/contacts'
-                    style={style.button}
-                    name='emailProvider'
-                    volume='cheer'
-                    subtle
-                  >
-                    Start a conversation
-                  </ButtonLink>
-                </div>
+              <div className={css(mss.center, mss.plReg, mss.prReg)}>
+                <ButtonLink
+                  href='/contacts'
+                  style={mss.mtLgI}
+                  name='emailProvider'
+                  volume='cheer'
+                  subtle
+                >
+                  Start new conversation
+                </ButtonLink>
               </div>
-            ) }
-          </div>
-        ) : (
-          <form method='post' action='/sync-google' className={css(style.section)}>
-            <Text element='p' size='largeI' style={sharedStyle.heading}>
-              Keeping track of your messages
-            </Text>
-            <Text element='p' style={sharedStyle.subheading}>
-              If you’ve sent messages using something other than Gmail, we can’t
-              display them.
-            </Text>
-            <Text element='p' style={sharedStyle.subheading}>
-              We recommend syncing with Gmail, which will ensure you can track
-              all your messages going forward. If however, you'd like to use a
-              different email provider then let us know.
-            </Text>
-            <input name='_csrf' value={csrfToken} type='hidden' />
-            <div className={css(style.buttonGroup)}>
-              <Button
-                style={style.button}
-                name='emailProvider'
-                type='submit'
-                value={emailPreferences.GOOGLE}
-                volume='cheer'
-                subtle
-              >
-                Sync with Gmail
-              </Button>
-            </div>
-          </form>
+            </Section>
+          ) : (
+            <Section width='largeI' padding>
+              <Heading level={1} style={mss.fgPrimary}>
+                You haven&apos;t sent any messages
+              </Heading>
+              <Para>
+                To get candidates you need to send out some requests. After all, those jobs aren&apos;t going to fill themselves.
+              </Para>
+              <div className={css(mss.center)}>
+                <ButtonLink
+                  href='/contacts'
+                  style={mss.mtLgI}
+                  name='emailProvider'
+                  volume='cheer'
+                  subtle
+                >
+                  Start a conversation
+                </ButtonLink>
+              </div>
+            </Section>
+          )
+        : (
+          <Section padding>
+            <form method='post' action='/sync-google'>
+              <Heading level={1} style={mss.fgPrimary}>
+                Keeping track of your messages
+              </Heading>
+              <Para>
+                If you&apos;ve sent messages using something other than Gmail, we can’t
+                display them.
+              </Para>
+              <Para>
+                We recommend syncing with Gmail, which will ensure you can track
+                all your messages going forward. If however, you&apos;d like to use a
+                different email provider then let us know.
+              </Para>
+              <input name='_csrf' value={csrfToken} type='hidden' />
+              <div className={css(mss.center)}>
+                <Button
+                  style={mss.mtLgI}
+                  name='emailProvider'
+                  type='submit'
+                  value={emailPreferences.GOOGLE}
+                  volume='cheer'
+                  subtle
+                >
+                  Sync with Gmail
+                </Button>
+              </div>
+            </form>
+          </Section>
         )}
-      </div>
+      </Main>
     </Layout>
   )
 }

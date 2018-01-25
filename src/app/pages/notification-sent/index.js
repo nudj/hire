@@ -2,32 +2,31 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const { Heading, Para } = require('../../components/wizard')
 
 const NotificationSentPage = (props: Object) => {
   const email = props.user.email
 
   return (
-    <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
+    <Layout {...props}>
       <Helmet>
         <title>Email sent</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={sharedStyle.heading}>
+      <Main>
+        <Section padding>
+          <Heading>
             Check your inbox!
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <Para>
             We just sent you an email to {email} so you can continue setting up
             your account on a different device. You should find it in your inbox
             now.
-          </Text>
-        </div>
-      </div>
+          </Para>
+        </Section>
+      </Main>
     </Layout>
   )
 }

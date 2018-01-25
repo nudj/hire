@@ -5,19 +5,26 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const toLower = require('lodash/toLower')
 
-const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const {
+  Heading,
+  Para,
+  styleSheet: wizardStyles
+} = require('../../components/wizard')
 
 type Question = {
   id: ID,
   type: SurveyQuestionType
 }
 
-type Section = {
+type SectionProps = {
   id: ID,
   questions: Array<Question>
 }
@@ -30,7 +37,7 @@ type SurveyProps = {
         survey: {
           id?: ID,
           slug?: string,
-          sections: Array<Section>
+          sections: Array<SectionProps>
         }
       }
     }
@@ -45,33 +52,29 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
-    <Layout
-      {...props}
-      styleSheet={{root: sharedStyle.root}}
-      title='Part 2 - Uncover hidden gems'
-    >
+    <Layout {...props} title='Part 2 - Uncover hidden gems'>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <div className={css(sharedStyle.header)}>
-          <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+      <Main>
+        <Section padding>
+          <Heading>
             Finding awesome people to join{' '}
-            <span className={css(sharedStyle.headingHighlight)}>
+            <span className={css(mss.fgMidRed)}>
               {get(company, 'name', '')}
             </span>
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Heading>
+          <Para>
             The best way to find great people to hire is to source them from
             your network. However, you need to ask the right people to get the best recommendations.
-          </Text>
-          <Text element='p' style={sharedStyle.subheading}>
+          </Para>
+          <Para>
           To help, we&#39;re now going to ask you a series of questions that have been designed to systematically unlock the best people from your past.
-          </Text>
-        </div>
-        <div className={css(sharedStyle.body)}>
+          </Para>
+        </Section>
+        <Section padding>
           <ButtonLink
-            style={sharedStyle.action}
+            style={wizardStyles.action}
             volume='cheer'
             href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
               toLower(initialQuestion.type)
@@ -79,8 +82,8 @@ const SurveyPage = (props: SurveyProps) => {
           >
             Start
           </ButtonLink>
-        </div>
-      </div>
+        </Section>
+      </Main>
     </Layout>
   )
 }

@@ -11,11 +11,13 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
-const sharedStyle = require('../../shared.css')
+const Main = require('../../../components/main')
+const Section = require('../../../components/section')
 const style = require('./style.css')
 
 const MessageThreadPage = props => {
@@ -34,44 +36,46 @@ const MessageThreadPage = props => {
       : 'Unable to display messages'
 
   return (
-    <Layout {...props} styleSheet={{ root: sharedStyle.root }}>
+    <Layout {...props}>
       <Helmet>
         <title>{subject}</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Card style={[sharedStyle.card, sharedStyle.noPadding]}>
-          <div className={css(style.threadSection)}>
-            <Text style={style.threadSubject} element='div' size='largeI'>
-              {subject}
-            </Text>
-            <Text style={style.threadName} element='div' size='smallI'>
-              {recipient.firstName} {recipient.lastName}
-            </Text>
-            <Text style={style.threadEmail} element='div' size='smallIi'>
-              {recipient.email}
-            </Text>
-          </div>
-          {fullThread.length > 0 &&
-            fullThread.map(message => (
-              <div className={css(style.threadSection)} key={message.id}>
-                <ThreadItem
-                  from={`${message.from.firstName} ${message.from.lastName} <${
-                    message.from.email
-                  }>`}
-                  body={message.body}
-                  date={format(message.date, 'DD MMM YY HH:mm')}
-                />
-              </div>
-            ))}
-          <form className={css(style.threadSection)} method='post'>
-            <Textarea name='body' placeholder='Write your message here...' />
-            <input name='_csrf' value={csrfToken} type='hidden' />
-            <Button style={style.replyButton} type='submit' volume='cheer'>
-              Reply
-            </Button>
-          </form>
-        </Card>
-      </div>
+      <Main>
+        <Section width='largeI'>
+          <Card style={mss.pa0}>
+            <div className={css(style.threadSection)}>
+              <Text style={style.threadSubject} element='div' size='largeI'>
+                {subject}
+              </Text>
+              <Text style={style.threadName} element='div' size='smallI'>
+                {recipient.firstName} {recipient.lastName}
+              </Text>
+              <Text style={style.threadEmail} element='div' size='smallIi'>
+                {recipient.email}
+              </Text>
+            </div>
+            {fullThread.length > 0 &&
+              fullThread.map(message => (
+                <div className={css(style.threadSection)} key={message.id}>
+                  <ThreadItem
+                    from={`${message.from.firstName} ${message.from.lastName} <${
+                      message.from.email
+                    }>`}
+                    body={message.body}
+                    date={format(message.date, 'DD MMM YY HH:mm')}
+                  />
+                </div>
+              ))}
+            <form className={css(style.threadSection)} method='post'>
+              <Textarea name='body' placeholder='Write your message here...' />
+              <input name='_csrf' value={csrfToken} type='hidden' />
+              <Button style={style.replyButton} type='submit' volume='cheer'>
+                Reply
+              </Button>
+            </form>
+          </Card>
+        </Section>
+      </Main>
     </Layout>
   )
 }

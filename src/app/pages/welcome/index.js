@@ -4,33 +4,40 @@ const { Helmet } = require('react-helmet')
 
 const { Text, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const sharedStyle = require('../shared.css')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const {
+  Heading,
+  Para,
+  styleSheet: wizardStyles
+} = require('../../components/wizard')
 const style = require('./style.css')
 
 const WelcomePage = (props: Object) => (
-  <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+  <Layout {...props}>
     <Helmet>
       <title>Welcome</title>
     </Helmet>
-    <div className={css(sharedStyle.wrapper)}>
-      <div className={css(sharedStyle.header)}>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
+    <Main>
+      <Section padding>
+        <Heading>
           Welcome to nudj
-        </Text>
-        <Text element='p' style={sharedStyle.subheading}>
+        </Heading>
+        <Para>
           Before we being, we need you to complete a number of short tasks that
           will maximise your chances of finding someone awesome to hire and work
           with.
-        </Text>
-      </div>
-      <div className={css(sharedStyle.body)}>
+        </Para>
+      </Section>
+      <Section>
         <ul className={css(style.list)}>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 1</Text>
+              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 1</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/unlock-network.svg'
@@ -47,7 +54,7 @@ const WelcomePage = (props: Object) => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 2</Text>
+              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 2</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/uncover-gems.svg'
@@ -64,7 +71,7 @@ const WelcomePage = (props: Object) => (
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text element='div' size='largeIi' style={sharedStyle.headingHighlight}>Step 3</Text>
+              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 3</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/send-nudjes.svg'
@@ -80,15 +87,17 @@ const WelcomePage = (props: Object) => (
             </Card>
           </li>
         </ul>
+      </Section>
+      <Section padding>
         <ButtonLink
-          style={[sharedStyle.action, style.button]}
+          style={wizardStyles.action}
           href='/setup-network'
           volume='cheer'
         >
           Let&#39;s do this
         </ButtonLink>
-      </div>
-    </div>
+      </Section>
+    </Main>
   </Layout>
 )
 
