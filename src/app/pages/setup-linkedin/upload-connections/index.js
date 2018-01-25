@@ -11,6 +11,7 @@ const {
   uploadLinkedinConnections
 } = require('../actions')
 const Dropzone = require('../../../components/connections-csv-uploader')
+const Loader = require('../../../components/loader')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 
@@ -49,35 +50,44 @@ const LinkedinUploadPage = (props: Props) => {
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
-      <Main>
-        <Section padding>
-          <Heading>
-            Upload your Connections.csv file
-          </Heading>
-          <Para>
-            Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
-          </Para>
-        </Section>
-        <Section padding width='regular'>
-          <Card style={mss.pa0}>
-            <Dropzone
-              connections={state.connections}
-              onDrop={getHandleDrop(dispatch)}
-            />
-          </Card>
-        </Section>
-        <Section padding>
-          <ButtonLink
-            href='/setup-network/linkedin/upload'
-            volume='cheer'
-            style={wizardStyles.action}
-            onClick={getHandleNext(dispatch)}
-            disabled={state.connections.length < 1}
-          >
-            Next
-          </ButtonLink>
-        </Section>
-      </Main>
+      {state.loading ? (
+        <Loader
+          initialMessage='Uploading your connections'
+          thresholdMessage='Still going'
+          threshold={4000}
+          ellipsis
+        />
+      ) : (
+        <Main>
+          <Section padding>
+            <Heading>
+              Upload your Connections.csv file
+            </Heading>
+            <Para>
+              Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
+            </Para>
+          </Section>
+          <Section padding width='regular'>
+            <Card style={mss.pa0}>
+              <Dropzone
+                connections={state.connections}
+                onDrop={getHandleDrop(dispatch)}
+              />
+            </Card>
+          </Section>
+          <Section padding>
+            <ButtonLink
+              href='/setup-network/linkedin/upload'
+              volume='cheer'
+              style={wizardStyles.action}
+              onClick={getHandleNext(dispatch)}
+              disabled={state.connections.length < 1}
+            >
+              Next
+            </ButtonLink>
+          </Section>
+        </Main>
+      )}
     </Layout>
   )
 }

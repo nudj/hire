@@ -42,8 +42,8 @@ const parseLinkedinConnections = (
     const data = get(result, 'data', [])
     const connections = linkedinToNudjPeople(data)
     return dispatch(completeParsingLinkedinConnections(connections))
-  } catch (e) {
-    throw new Error(e)
+  } catch (error) {
+    throw new Error(error)
   }
 }
 
