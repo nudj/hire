@@ -170,7 +170,7 @@ const ConnectionsQuestionPage = props => {
                 </Button>
               </form>
             ) : (
-              <div className={css(mssplLgIi, mss.prLgIi)}>
+              <div className={css(mss.plLgIi, mss.prLgIi)}>
                 <Text element='label'>
                   Add their details below
                 </Text>
