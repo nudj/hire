@@ -64,7 +64,7 @@ const LinkedinUploadPage = (props: Props) => {
               Upload your Connections.csv file
             </Heading>
             <Para>
-              Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
+              Unzip the folder you&#39;ve just downloaded, then drag and drop the Connections.csv file onto the box below.
             </Para>
           </Section>
           <Section padding width='regular'>
