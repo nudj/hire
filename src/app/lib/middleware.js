@@ -29,10 +29,10 @@ async function ensureOnboarded (req, res, next) {
   next(
     new Redirect({
       url: '/welcome',
-      notification: createNotification(
+      notification: req.originalUrl !== '/' ? createNotification(
         'error',
         "We're still setting up your account, so you can't complete on-boarding just yet."
-      )
+      ) : null
     })
   )
 }
