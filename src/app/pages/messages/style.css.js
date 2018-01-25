@@ -2,20 +2,11 @@ const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
-  section: {
-    ':nth-child(n + 2)': {
-      marginTop: sizes.largeIi
-    }
-  },
-  card: {
-    overflow: 'hidden'
-  },
   list: {
     listStyleType: 'none',
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: 0,
-    textAlign: 'left'
   },
   listItem: {
     ':nth-child(n + 2)': {

@@ -2,6 +2,8 @@ const React = require('react')
 const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
+const styleSheet = require('./style.css')
+
 const getLevelSize = level => {
   switch(level) {
     case 1:
@@ -32,4 +34,14 @@ Heading.defaultProps = {
   level: 1,
 }
 
-module.exports = { Heading }
+const P = ({ children, style, element, ...props }) => (
+  <Text {...props} element={element} style={[styleSheet.paragraph, style]}>
+    {children}
+  </Text>
+)
+
+P.defaultProps= {
+  element: 'p'
+}
+
+module.exports = { Heading, P }
