@@ -7,12 +7,21 @@ const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
+const m = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')
+const Wrapper = require('../../components/wrapper')
+const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
+const {
+  Heading,
+  P,
+  Footer,
+  styleSheet: wizardStyles,
+} = require('../../components/wizard')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
@@ -74,27 +83,27 @@ const ContactsPage = props => {
       <Helmet>
         <title>Contacts</title>
       </Helmet>
-      <div className={css(sharedStyle.wrapper)}>
-        <Text element='div' size='largeIi' style={[sharedStyle.heading, sharedStyle.headingPrimary]}>
-          You currently have{' '}
-          <span className={css(sharedStyle.headingHighlight)}>
-            {totalConnectionsCount}
-          </span>{' '}
-          people in your network
-        </Text>
-        <Text element='div' style={sharedStyle.subheading}>
-          Search for people to ask for recommendations or add more people to grow your network.
-        </Text>
-        <div className={css(sharedStyle.body)}>
-          <Card style={[sharedStyle.card, style.card]}>
-            <form className={css(style.form)}>
+      <Wrapper>
+        <Section padding>
+          <Heading>
+            You currently have{' '}
+            <span className={css(m.fgMidRed)}>
+              {totalConnectionsCount}
+            </span>{' '}
+            people in your network
+          </Heading>
+          <P>
+            Search for people to ask for recommendations or add more people to grow your network.
+          </P>
+        </Section>
+        <Section padding width="largeI">
+          <Card style={[m.pl0, m.pr0]}>
+            <form className={css(m.plLgIi, m.prLgIi)}>
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
               <Input
-                styleSheet={{
-                  root: style.input
-                }}
+                styleSheet={{ root: m.mtReg }}
                 name='search'
                 label='search'
                 type='search'
@@ -103,7 +112,7 @@ const ContactsPage = props => {
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
               />
-              <Button type='submit' volume='cheer' style={style.submitButton}>
+              <Button type='submit' volume='cheer' style={m.mtReg}>
                 Search
               </Button>
             </form>
@@ -124,7 +133,7 @@ const ContactsPage = props => {
             subtle
             volume='cheer'
             onClick={getHandleAddClick(dispatch)}
-            style={style.addPersonButton}
+            style={m.mtReg}
           >
             Add person
           </Button>
@@ -143,14 +152,14 @@ const ContactsPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              style={style.form}
+             className={css(m.plLgIi, m.prLgIi)}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
               connection={get(state, 'newContact')}
             />
           </Modal>
-          <div className={css(sharedStyle.footer)}>
+          <Footer>
             <Align
               rightChildren={
                 <ButtonLink
@@ -162,9 +171,9 @@ const ContactsPage = props => {
                 </ButtonLink>
               }
             />
-          </div>
-        </div>
-      </div>
+          </Footer>
+        </Section>
+      </Wrapper>
     </Layout>
   )
 }
