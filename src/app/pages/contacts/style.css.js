@@ -7,8 +7,7 @@ const styleSheet = StyleSheet.create({
     paddingRight: 0
   },
   addPersonButton: {
-    marginTop: sizes.regular,
-    marginBottom: sizes.largeIi
+    marginTop: sizes.regular
   },
   modalHeading: {
     textAlign: 'center'
