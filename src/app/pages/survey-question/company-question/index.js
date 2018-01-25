@@ -12,7 +12,7 @@ const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
 const Wrapper = require('../../../components/wrapper')
-const Section = require('../../../components/Section')
+const Section = require('../../../components/section')
 const {
   Heading,
   P,

@@ -9,7 +9,7 @@ const m = require('@nudj/components/lib/css/modifiers.css')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 const Wrapper = require('../../../components/wrapper')
-const Section = require('../../../components/Section')
+const Section = require('../../../components/section')
 const {
   Heading,
   styleSheet: wizardStyles
