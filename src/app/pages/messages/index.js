@@ -74,10 +74,10 @@ const MessagesPage = props => {
           ) : (
             <Section width='largeI' padding>
               <Heading level={1} style={mss.fgPrimary}>
-                You haven’t sent any messages
+                You haven&apos;t sent any messages
               </Heading>
               <Para>
-                To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves.
+                To get candidates you need to send out some requests. After all, those jobs aren&apos;t going to fill themselves.
               </Para>
               <div className={css(mss.center)}>
                 <ButtonLink
@@ -99,12 +99,12 @@ const MessagesPage = props => {
                 Keeping track of your messages
               </Heading>
               <Para>
-                If you’ve sent messages using something other than Gmail, we can’t
+                If you&apos;ve sent messages using something other than Gmail, we can’t
                 display themss.
               </Para>
               <Para>
                 We recommend syncing with Gmail, which will ensure you can track
-                all your messages going forward. If however, you'd like to use a
+                all your messages going forward. If however, you&apos;d like to use a
                 different email provider then let us know.
               </Para>
               <input name='_csrf' value={csrfToken} type='hidden' />

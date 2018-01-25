@@ -84,7 +84,7 @@ const checkMobileDevice = Component =>
                 onClick={this.dismissOverlay}
                 style={[wizardStyles.action, mss.pl0, mss.pr0]}
               >
-                I'm using a computer
+                I&apos;m using a computer
               </Button>
             </Section>
           </Main>
