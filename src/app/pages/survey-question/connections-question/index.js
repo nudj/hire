@@ -6,7 +6,7 @@ const sortBy = require('lodash/sortBy')
 
 const { Text, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const {
   setNewItemValue,
@@ -146,17 +146,17 @@ const ConnectionsQuestionPage = props => {
           </P>
         </Section>
         <Section padding width='largeI'>
-          <Card style={[m.pl0, m.pr0]}>
+          <Card style={[mss.pl0, mss.pr0]}>
             {hasConnections || selectedConnections.length ? (
               <form
                 onSubmit={getHandleSearchSubmit(dispatch)}
-                className={css(m.plLgIi, m.prLgIi)}
+                className={css(mss.plLgIi, mss.prLgIi)}
               >
                 <Text element='label' size='smallI' htmlFor='search'>
                   Search by name and select from the results
                 </Text>
                 <Input
-                  styleSheet={{ root: m.mtReg }}
+                  styleSheet={{ root: mss.mtReg }}
                   name='search'
                   label='search'
                   type='search'
@@ -165,12 +165,12 @@ const ConnectionsQuestionPage = props => {
                   onChange={handleSearchChange}
                   onClear={handleSearchClear}
                 />
-                <Button style={m.mtReg} type='submit' volume='cheer'>
+                <Button style={mss.mtReg} type='submit' volume='cheer'>
                   Search
                 </Button>
               </form>
             ) : (
-              <div className={css(m.plLgIi, m.prLgIi)}>
+              <div className={css(mssplLgIi, mss.prLgIi)}>
                 <Text element='label'>
                   Add their details below
                 </Text>
@@ -189,7 +189,7 @@ const ConnectionsQuestionPage = props => {
               subtle
               volume='cheer'
               onClick={getHandleAddClick(dispatch)}
-              style={m.mtReg}
+              style={mss.mtReg}
             >
               Add person
             </Button>
@@ -209,7 +209,7 @@ const ConnectionsQuestionPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              style={[m.mtr, m.plLgIi, m.prLgIi]}
+              style={[mss.mtr, mss.plLgIi, mss.prLgIi]}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}

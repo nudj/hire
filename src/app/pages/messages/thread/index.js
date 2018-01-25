@@ -11,7 +11,7 @@ const {
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')
@@ -42,7 +42,7 @@ const MessageThreadPage = props => {
       </Helmet>
       <Wrapper>
         <Section width='largeI'>
-          <Card style={m.pa0}>
+          <Card style={mss.pa0}>
             <div className={css(style.threadSection)}>
               <Text style={style.threadSubject} element='div' size='largeI'>
                 {subject}

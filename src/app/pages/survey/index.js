@@ -6,7 +6,7 @@ const get = require('lodash/get')
 const toLower = require('lodash/toLower')
 
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
@@ -60,7 +60,7 @@ const SurveyPage = (props: SurveyProps) => {
         <Section padding>
           <Heading>
             Finding awesome people to join{' '}
-            <span className={css(m.fgMidRed)}>
+            <span className={css(mss.fgMidRed)}>
               {get(company, 'name', '')}
             </span>
           </Heading>

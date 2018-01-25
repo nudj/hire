@@ -3,7 +3,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Button } = require('@nudj/components')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
 
@@ -82,7 +82,7 @@ const checkMobileDevice = Component =>
               <Button
                 subtle
                 onClick={this.dismissOverlay}
-                style={[wizardStyles.action, m.pl0, m.pr0]}
+                style={[wizardStyles.action, mss.pl0, mss.pr0]}
               >
                 I'm using a computer
               </Button>

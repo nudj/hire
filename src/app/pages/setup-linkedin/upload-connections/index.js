@@ -4,7 +4,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Card } = require('@nudj/components')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const {
   parseLinkedinConnections,
@@ -59,7 +59,7 @@ const LinkedinUploadPage = (props: Props) => {
           </P>
         </Section>
         <Section padding width='regular'>
-          <Card style={m.pa0}>
+          <Card style={mss.pa0}>
             <Dropzone
               connections={state.connections}
               onDrop={getHandleDrop(dispatch)}

@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { Card } = require('@nudj/components')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ListJobs = require('../../../components/job-radio-group')
 const ButtonLink = require('../../../components/button-link')
@@ -28,7 +28,7 @@ const NewConversationPage = props => {
       </Helmet>
       <Wrapper>
         <Section padding>
-          <Heading level={1} style={m.fgPrimary}>
+          <Heading level={1} style={mss.fgPrimary}>
             Select the job you’d like to send {connection}
           </Heading>
           <P>
@@ -46,7 +46,7 @@ const NewConversationPage = props => {
             />
           </Card>
         </Section>
-        <Section padding style={m.center}>
+        <Section padding style={mss.center}>
           <ButtonLink
             href={`${props.match.url}/${selectedJobId}`}
             volume='cheer'

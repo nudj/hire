@@ -3,7 +3,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ListRecommendations = require('../../components/list-recommendations')
 const Layout = require('../../components/app-layout')
@@ -22,7 +22,7 @@ const RecommendationsPage = (props: Object) => {
         <title>Your recommendations</title>
       </Helmet>
       <Wrapper>
-        <Section padding width='regular' style={m.left}>
+        <Section padding width='regular' style={mss.left}>
           {
             answers.map(answer => {
               const id = get(answer, 'id')

@@ -15,7 +15,7 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
@@ -91,7 +91,7 @@ const ComposeMessagePage = props => {
       </Helmet>
       <Wrapper>
         <Section padding>
-          <Heading level={1} style={m.fgPrimary}>
+          <Heading level={1} style={mss.fgPrimary}>
             Now compose your masterpiece
           </Heading>
           <P>
@@ -118,15 +118,15 @@ const ComposeMessagePage = props => {
               />
               <input name='_csrf' value={csrfToken} type='hidden' />
               <input name='recipient' value={recipientId} type='hidden' />
-              <div className={css(m.center)}>
+              <div className={css(mss.center)}>
                 {emailPreference === emailPreferences.GOOGLE ? (
-                  <Button type='submit' volume='cheer' style={m.mtReg}>
+                  <Button type='submit' volume='cheer' style={mss.mtReg}>
                     Send message
                   </Button>
                 ) : (
                   <Link
                     volume='cheer'
-                    style={m.mtReg}
+                    style={mss.mtReg}
                     href={getMailTo(toEmail, subjectValue, messageValue)}
                   >
                     Send message

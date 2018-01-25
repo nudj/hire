@@ -7,7 +7,7 @@ const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')
@@ -85,7 +85,7 @@ const ContactsPage = props => {
         <Section padding>
           <Heading>
             You currently have{' '}
-            <span className={css(m.fgMidRed)}>
+            <span className={css(mss.fgMidRed)}>
               {totalConnectionsCount}
             </span>{' '}
             people in your network
@@ -95,13 +95,13 @@ const ContactsPage = props => {
           </P>
         </Section>
         <Section padding width='largeI'>
-          <Card style={[m.pl0, m.pr0]}>
-            <form className={css(m.plLgIi, m.prLgIi)}>
+          <Card style={[mss.pl0, mss.pr0]}>
+            <form className={css(mss.plLgIi, mss.prLgIi)}>
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
               <Input
-                styleSheet={{ root: m.mtReg }}
+                styleSheet={{ root: mss.mtReg }}
                 name='search'
                 label='search'
                 type='search'
@@ -110,7 +110,7 @@ const ContactsPage = props => {
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
               />
-              <Button type='submit' volume='cheer' style={m.mtReg}>
+              <Button type='submit' volume='cheer' style={mss.mtReg}>
                 Search
               </Button>
             </form>
@@ -131,7 +131,7 @@ const ContactsPage = props => {
             subtle
             volume='cheer'
             onClick={getHandleAddClick(dispatch)}
-            style={m.mtReg}
+            style={mss.mtReg}
           >
             Add person
           </Button>
@@ -150,7 +150,7 @@ const ContactsPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              className={css(m.plLgIi, m.prLgIi)}
+              className={css(mss.plLgIi, mss.prLgIi)}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}

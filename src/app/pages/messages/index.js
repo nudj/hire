@@ -5,7 +5,7 @@ const isNil = require('lodash/isNil')
 
 const { Button, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../lib/constants')
 const Layout = require('../../components/app-layout')
@@ -36,10 +36,10 @@ const MessagesPage = props => {
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
           ? syncedConversations.length > 0 ? (
             <Section width='largeI'>
-              <Heading level={1} style={[m.plReg, m.mrReg, m.fgPrimary]}>
+              <Heading level={1} style={[mss.plReg, mss.mrReg, mss.fgPrimary]}>
                 All messages
               </Heading>
-              <Card style={[m.pa0, m.mtReg, m.ofHide]}>
+              <Card style={[mss.pa0, mss.mtReg, mss.ofHide]}>
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation
@@ -59,10 +59,10 @@ const MessagesPage = props => {
                   })}
                 </ol>
               </Card>
-              <div className={css(m.center, m.plReg, m.prReg)}>
+              <div className={css(mss.center, mss.plReg, mss.prReg)}>
                 <ButtonLink
                   href='/contacts'
-                  style={m.mtLgI}
+                  style={mss.mtLgI}
                   name='emailProvider'
                   volume='cheer'
                   subtle
@@ -73,16 +73,16 @@ const MessagesPage = props => {
             </Section>
           ) : (
             <Section width='largeI' padding>
-              <Heading level={1} style={m.fgPrimary}>
+              <Heading level={1} style={mss.fgPrimary}>
                 You haven’t sent any messages
               </Heading>
               <P>
                 To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves.
               </P>
-              <div className={css(m.center)}>
+              <div className={css(mss.center)}>
                 <ButtonLink
                   href='/contacts'
-                  style={m.mtLgI}
+                  style={mss.mtLgI}
                   name='emailProvider'
                   volume='cheer'
                   subtle
@@ -95,12 +95,12 @@ const MessagesPage = props => {
         : (
           <Section padding>
             <form method='post' action='/sync-google'>
-              <Heading level={1} style={m.fgPrimary}>
+              <Heading level={1} style={mss.fgPrimary}>
                 Keeping track of your messages
               </Heading>
               <P>
                 If you’ve sent messages using something other than Gmail, we can’t
-                display them.
+                display themss.
               </P>
               <P>
                 We recommend syncing with Gmail, which will ensure you can track
@@ -108,9 +108,9 @@ const MessagesPage = props => {
                 different email provider then let us know.
               </P>
               <input name='_csrf' value={csrfToken} type='hidden' />
-              <div className={css(m.center)}>
+              <div className={css(mss.center)}>
                 <Button
-                  style={m.mtLgI}
+                  style={mss.mtLgI}
                   name='emailProvider'
                   type='submit'
                   value={emailPreferences.GOOGLE}

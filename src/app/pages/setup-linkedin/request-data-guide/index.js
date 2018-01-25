@@ -4,7 +4,7 @@ const { Helmet } = require('react-helmet')
 
 const { Card, Text, Link } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
@@ -48,17 +48,17 @@ const LinkedinRequestGuidePage = (props: Object) => (
             </Text>
             <Text element='li'>
               Next, click on{' '}
-              <em className={css(m.i)}>Pick & Choose</em>
+              <em className={css(mss.i)}>Pick & Choose</em>
             </Text>
             <Text element='li'>
-              Then select <em className={css(m.i)}>Connections</em>
+              Then select <em className={css(mss.i)}>Connections</em>
             </Text>
             <Text element='li'>
-              Click on <em className={css(m.i)}>Request archive</em>
+              Click on <em className={css(mss.i)}>Request archive</em>
             </Text>
             <Text element='li'>Enter your password</Text>
             <Text element='li'>
-              Hit <em className={css(m.i)}>Done</em>
+              Hit <em className={css(mss.i)}>Done</em>
             </Text>
           </ol>
         </Card>

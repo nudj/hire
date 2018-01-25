@@ -7,7 +7,7 @@ const URLSearchParams = require('url-search-params')
 
 const { Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
@@ -64,7 +64,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
           <Section padding>
             <Heading>
               You’ve uncovered{' '}
-              <span className={css(m.fgMidRed)}>
+              <span className={css(mss.fgMidRed)}>
                 {getRecommendationCountString(connections.length)}
               </span>{' '}
               worth nudj’ing from within your network

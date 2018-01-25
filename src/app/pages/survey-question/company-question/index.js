@@ -5,7 +5,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { Text, Card, Input, Button } = require('@nudj/components')
-const m = require('@nudj/components/lib/css/modifiers.css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { setNewItemValue, addEmployment } = require('../actions')
 const Layout = require('../../../components/app-layout')
@@ -81,7 +81,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
                 Add the names of all companies you&#39;ve worked at
               </Text>
               <Input
-                styleSheet={{ root: m.mtReg }}
+                styleSheet={{ root: mss.mtReg }}
                 id='name'
                 value={get(employment, 'name', '')}
                 name='name'
@@ -92,7 +92,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
               <Button
                 type='submit'
                 volume='cheer'
-                style={m.mtReg}
+                style={mss.mtReg}
               >
                 Add company
               </Button>
