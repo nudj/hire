@@ -305,7 +305,6 @@ const postEmployment = ({ session, params, body }) => {
 }
 
 const postConnectionAnswer = ({ session, params, body }) => {
-  console.log('\n\n\npostConnectionAnswer\n\n\n')
   const gql = `
     mutation createSurveyAnswer (
       $connections: [ID!]!
