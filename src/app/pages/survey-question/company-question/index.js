@@ -11,11 +11,11 @@ const { setNewItemValue, addEmployment } = require('../actions')
 const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const {
   Heading,
-  P,
+  Para,
   Footer
 } = require('../../../components/wizard')
 
@@ -62,7 +62,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Text element='div' style={style.stepCounter}>
             Step {questionNumber} of {questionCount}
@@ -70,9 +70,9 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           <Heading>
             {question.title}
           </Heading>
-          <P>
+          <Para>
             {question.description}
-          </P>
+          </Para>
         </Section>
         <Section padding width='largeI'>
           <Card>
@@ -106,7 +106,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
             />
           </Footer>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

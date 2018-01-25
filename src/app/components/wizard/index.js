@@ -20,13 +20,13 @@ Heading.defaultProps = {
   size: 'largeIi'
 }
 
-const P = ({ children, style, element, ...props }) => (
+const Para = ({ children, style, element, ...props }) => (
   <Text {...props} element={element} style={[styleSheet.paragraph, style]}>
     {children}
   </Text>
 )
 
-P.defaultProps = {
+Para.defaultProps = {
   element: 'p'
 }
 
@@ -38,7 +38,7 @@ const Footer = ({ children, style, ...props }) => (
 
 module.exports = {
   Heading,
-  P,
+  Para,
   Footer,
   styleSheet
 }

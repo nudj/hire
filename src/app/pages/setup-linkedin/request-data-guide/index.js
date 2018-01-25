@@ -8,7 +8,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const {
   Heading,
@@ -21,7 +21,7 @@ const LinkedinRequestGuidePage = (props: Object) => (
     <Helmet>
       <title>Requesting your data from LinkedIn</title>
     </Helmet>
-    <Wrapper>
+    <Main>
       <Section padding>
         <Heading>
           Requesting your data from LinkedIn
@@ -72,7 +72,7 @@ const LinkedinRequestGuidePage = (props: Object) => (
           Next
         </ButtonLink>
       </Section>
-    </Wrapper>
+    </Main>
   </Layout>
 )
 

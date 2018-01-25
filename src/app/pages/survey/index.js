@@ -11,11 +11,11 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
 
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 
@@ -56,7 +56,7 @@ const SurveyPage = (props: SurveyProps) => {
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Heading>
             Finding awesome people to join{' '}
@@ -64,13 +64,13 @@ const SurveyPage = (props: SurveyProps) => {
               {get(company, 'name', '')}
             </span>
           </Heading>
-          <P>
+          <Para>
             The best way to find great people to hire is to source them from
             your network. However, you need to ask the right people to get the best recommendations.
-          </P>
-          <P>
+          </Para>
+          <Para>
           To help, we&#39;re now going to ask you a series of questions that have been designed to systematically unlock the best people from your past.
-          </P>
+          </Para>
         </Section>
         <Section padding>
           <ButtonLink
@@ -83,7 +83,7 @@ const SurveyPage = (props: SurveyProps) => {
             Start
           </ButtonLink>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

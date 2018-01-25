@@ -9,9 +9,9 @@ const ListJobs = require('../../../components/job-radio-group')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 const { selectJob } = require('./actions')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
-const { Heading, P } = require('../../../components/app')
+const { Heading, Para } = require('../../../components/app')
 
 const getHandleSelectJob = dispatch => ({ value }) => dispatch(selectJob(value))
 
@@ -26,15 +26,15 @@ const NewConversationPage = props => {
       <Helmet>
         <title>Select a job</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Heading level={1} style={mss.fgPrimary}>
             Select the job you’d like to send {connection}
           </Heading>
-          <P>
+          <Para>
             Select which of your company&#39;s open jobs this person is most
             likely to provide the best recommendations for.
-          </P>
+          </Para>
         </Section>
         <Section padding width='smallI'>
           <Card>
@@ -55,7 +55,7 @@ const NewConversationPage = props => {
             Next
           </ButtonLink>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

@@ -15,11 +15,11 @@ const ListRecommendations = require('../../components/list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
 const EmailAuthForm = require('../../components/email-authentication-form')
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 
@@ -60,7 +60,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
         <title>View recommendations</title>
       </Helmet>
       {connections.length > 0 ? (
-        <Wrapper>
+        <Main>
           <Section padding>
             <Heading>
               You’ve uncovered{' '}
@@ -69,9 +69,9 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               </span>{' '}
               worth nudj’ing from within your network
             </Heading>
-            <P>
+            <Para>
               Now choose someone you’d like to send a nudj request to.
-            </P>
+            </Para>
           </Section>
           <Section padding width='regular'>
             <ListRecommendations
@@ -86,18 +86,18 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               method='post'
             />
           </Modal>
-        </Wrapper>
+        </Main>
       ) : (
-        <Wrapper>
+        <Main>
           <Section padding>
             <Heading>
               You haven&#39;t found anyone worth nudj&#39;ing within your network
             </Heading>
-            <P>
+            <Para>
               We suggest taking the survey again, only this time try to identify
               people who could give you good recommendations, not neccessarily
               those you&#39;d hire.
-            </P>
+            </Para>
           </Section>
           <Section padding>
             <ButtonLink
@@ -108,7 +108,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               Take survey again
             </ButtonLink>
           </Section>
-        </Wrapper>
+        </Main>
       )}
     </Layout>
   )

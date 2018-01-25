@@ -12,9 +12,9 @@ const Layout = require('../../components/app-layout')
 const MessagePreview = require('../../components/message-preview')
 const ButtonLink = require('../../components/button-link')
 
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
-const { Heading, P } = require('../../components/app')
+const { Heading, Para } = require('../../components/app')
 
 const style = require('./style.css')
 
@@ -32,7 +32,7 @@ const MessagesPage = props => {
       <Helmet>
         <title>Messages</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
           ? syncedConversations.length > 0 ? (
             <Section width='largeI'>
@@ -76,9 +76,9 @@ const MessagesPage = props => {
               <Heading level={1} style={mss.fgPrimary}>
                 You haven’t sent any messages
               </Heading>
-              <P>
+              <Para>
                 To get candidates you need to send out some requests. After all, those jobs aren’t going to fill themselves.
-              </P>
+              </Para>
               <div className={css(mss.center)}>
                 <ButtonLink
                   href='/contacts'
@@ -98,15 +98,15 @@ const MessagesPage = props => {
               <Heading level={1} style={mss.fgPrimary}>
                 Keeping track of your messages
               </Heading>
-              <P>
+              <Para>
                 If you’ve sent messages using something other than Gmail, we can’t
                 display themss.
-              </P>
-              <P>
+              </Para>
+              <Para>
                 We recommend syncing with Gmail, which will ensure you can track
                 all your messages going forward. If however, you'd like to use a
                 different email provider then let us know.
-              </P>
+              </Para>
               <input name='_csrf' value={csrfToken} type='hidden' />
               <div className={css(mss.center)}>
                 <Button
@@ -123,7 +123,7 @@ const MessagesPage = props => {
             </form>
           </Section>
         )}
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

@@ -7,11 +7,11 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
 
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 
@@ -55,19 +55,19 @@ const checkMobileDevice = Component =>
           <Helmet>
             <title>You need to be at a computer to setup your account</title>
           </Helmet>
-          <Wrapper>
+          <Main>
             <Section padding>
               <Heading>
                 You need to be at a computer to setup your account
               </Heading>
-              <P>
+              <Para>
                 Because you need to download large files and upload them, you
                 need to use a desktop or laptop computer to set up your account.
-              </P>
-              <P>
+              </Para>
+              <Para>
                 We can email you a link so you can pick this up as soon as
                 you’re back at a computer.
-              </P>
+              </Para>
             </Section>
             <Section padding>
               <form action='/continue-onboarding'>
@@ -87,7 +87,7 @@ const checkMobileDevice = Component =>
                 I'm using a computer
               </Button>
             </Section>
-          </Wrapper>
+          </Main>
         </Layout>
       )
     }

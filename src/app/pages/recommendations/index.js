@@ -8,7 +8,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const ListRecommendations = require('../../components/list-recommendations')
 const Layout = require('../../components/app-layout')
 
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const { Heading } = require('../../components/app')
 
@@ -21,7 +21,7 @@ const RecommendationsPage = (props: Object) => {
       <Helmet>
         <title>Your recommendations</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding width='regular' style={mss.left}>
           {
             answers.map(answer => {
@@ -42,7 +42,7 @@ const RecommendationsPage = (props: Object) => {
             })
           }
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

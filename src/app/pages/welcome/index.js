@@ -8,11 +8,11 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 const style = require('./style.css')
@@ -22,16 +22,16 @@ const WelcomePage = (props: Object) => (
     <Helmet>
       <title>Welcome</title>
     </Helmet>
-    <Wrapper>
+    <Main>
       <Section padding>
         <Heading>
           Welcome to nudj
         </Heading>
-        <P>
+        <Para>
           Before we being, we need you to complete a number of short tasks that
           will maximise your chances of finding someone awesome to hire and work
           with.
-        </P>
+        </Para>
       </Section>
       <Section>
         <ul className={css(style.list)}>
@@ -97,7 +97,7 @@ const WelcomePage = (props: Object) => (
           Let&#39;s do this
         </ButtonLink>
       </Section>
-    </Wrapper>
+    </Main>
   </Layout>
 )
 

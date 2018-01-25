@@ -8,7 +8,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const {
   Heading,
@@ -24,7 +24,7 @@ const LinkedinDownloadGuidePage = (props: Object) => (
     <Helmet>
       <title>Downloading your connections from LinkedIn</title>
     </Helmet>
-    <Wrapper>
+    <Main>
       <Section padding>
         <Heading>
           Downloading your connections from LinkedIn
@@ -81,7 +81,7 @@ const LinkedinDownloadGuidePage = (props: Object) => (
           Next
         </ButtonLink>
       </Section>
-    </Wrapper>
+    </Main>
   </Layout>
 )
 

@@ -20,9 +20,9 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage } = require('./actions')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
-const { Heading, P } = require('../../../components/app')
+const { Heading, Para } = require('../../../components/app')
 const style = require('./style.css')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
@@ -89,16 +89,16 @@ const ComposeMessagePage = props => {
       <Helmet>
         <title>Send your message</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Heading level={1} style={mss.fgPrimary}>
             Now compose your masterpiece
           </Heading>
-          <P>
+          <Para>
             We know that the best way to get a response is to make sure the
             message you send is personal, so take a bit of time to tailor the
             template below.
-          </P>
+          </Para>
         </Section>
         <Section width='largeI'>
           <Card>
@@ -136,7 +136,7 @@ const ComposeMessagePage = props => {
             </form>
           </Card>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

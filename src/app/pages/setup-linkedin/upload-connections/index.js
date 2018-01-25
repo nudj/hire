@@ -14,11 +14,11 @@ const Dropzone = require('../../../components/connections-csv-uploader')
 const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
 
@@ -49,14 +49,14 @@ const LinkedinUploadPage = (props: Props) => {
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Heading>
             Upload your Connections.csv file
           </Heading>
-          <P>
+          <Para>
             Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
-          </P>
+          </Para>
         </Section>
         <Section padding width='regular'>
           <Card style={mss.pa0}>
@@ -77,7 +77,7 @@ const LinkedinUploadPage = (props: Props) => {
             Next
           </ButtonLink>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

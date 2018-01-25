@@ -4,11 +4,11 @@ const { Helmet } = require('react-helmet')
 
 const { Text } = require('@nudj/components')
 
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
   Heading,
-  P,
+  Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 const ButtonLink = require('../../components/button-link')
@@ -36,16 +36,16 @@ const ChooseNetworkPage = (props: Object) => (
     <Helmet>
       <title>Select a network</title>
     </Helmet>
-    <Wrapper>
+    <Main>
       <Section padding>
         <Heading>
           Select a network
         </Heading>
-        <P>
+        <Para>
           We recommend choosing the network where you feel the best
           recommendations will come from based on your company and the roles
           your hiring for.
-        </P>
+        </Para>
       </Section>
       <Section padding>
         <ButtonLink
@@ -62,7 +62,7 @@ const ChooseNetworkPage = (props: Object) => (
           {NETWORKS.google.label} <Text size='smallI'>- coming soon</Text>
         </ButtonLink>
       </Section>
-    </Wrapper>
+    </Main>
   </Layout>
 )
 

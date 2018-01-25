@@ -24,11 +24,11 @@ const Basket = require('../../../components/basket')
 const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
 
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const {
   Heading,
-  P,
+  Para,
   Footer
 } = require('../../../components/wizard')
 
@@ -113,10 +113,10 @@ const ConnectionsQuestionPage = props => {
             <Heading element='div'>
               0 people match '{searchQuery}'
             </Heading>
-            <P>
+            <Para>
               We can&#39;t find anyone in your contacts that matches your query.
               Try another search term or add them manually using the link below
-            </P>
+            </Para>
           </div>
         )
       default:
@@ -133,7 +133,7 @@ const ConnectionsQuestionPage = props => {
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Text element='div' style={style.stepCounter}>
             Step {questionNumber} of {questionCount}
@@ -141,9 +141,9 @@ const ConnectionsQuestionPage = props => {
           <Heading>
             {question.title}
           </Heading>
-          <P>
+          <Para>
             {question.description}
-          </P>
+          </Para>
         </Section>
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
@@ -224,7 +224,7 @@ const ConnectionsQuestionPage = props => {
             nextClick={handleSaveAnswers(dispatch, question.id)}
           />
         </Footer>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

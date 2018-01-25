@@ -16,7 +16,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const { emailPreferences } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
-const Wrapper = require('../../../components/wrapper')
+const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const style = require('./style.css')
 
@@ -40,7 +40,7 @@ const MessageThreadPage = props => {
       <Helmet>
         <title>{subject}</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section width='largeI'>
           <Card style={mss.pa0}>
             <div className={css(style.threadSection)}>
@@ -75,7 +75,7 @@ const MessageThreadPage = props => {
             </form>
           </Card>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }

@@ -11,14 +11,14 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')
-const Wrapper = require('../../components/wrapper')
+const Main = require('../../components/main')
 const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
 const {
   Heading,
-  P,
+  Para,
   Footer
 } = require('../../components/wizard')
 const {
@@ -81,7 +81,7 @@ const ContactsPage = props => {
       <Helmet>
         <title>Contacts</title>
       </Helmet>
-      <Wrapper>
+      <Main>
         <Section padding>
           <Heading>
             You currently have{' '}
@@ -90,9 +90,9 @@ const ContactsPage = props => {
             </span>{' '}
             people in your network
           </Heading>
-          <P>
+          <Para>
             Search for people to ask for recommendations or add more people to grow your network.
-          </P>
+          </Para>
         </Section>
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
@@ -171,7 +171,7 @@ const ContactsPage = props => {
             />
           </Footer>
         </Section>
-      </Wrapper>
+      </Main>
     </Layout>
   )
 }
