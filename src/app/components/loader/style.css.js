@@ -60,13 +60,13 @@ module.exports = StyleSheet.create({
     top: '2px'
   },
   elipsisDot: {
-    width: '0.5rem',
-    height: '0.5rem',
-    backgroundColor: '#333',
+    width: sizes.smallIi,
+    height: sizes.smallIi,
+    backgroundColor: colors.text,
     borderRadius: '100%',
     display: 'inline-block',
     animationName: elipsisMovement,
-    animationDuration: '2.0s, 0s',
+    animationDuration: '2.0s',
     animationFillMode: 'both',
     animationIterationCount: 'infinite'
   },
