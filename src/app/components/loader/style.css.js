@@ -10,7 +10,7 @@ const spin = {
   }
 }
 
-const elipsisMovement = {
+const ellipsisMovement = {
   '0%': {
     transform: 'scale(0)',
     opacity: 1
@@ -54,18 +54,18 @@ module.exports = StyleSheet.create({
     marginTop: sizes.largeIii,
     position: 'absolute'
   },
-  elipsis: {
+  ellipsis: {
     marginLeft: '1px',
     position: 'relative',
     top: '2px'
   },
-  elipsisDot: {
+  ellipsisDot: {
     width: sizes.smallIi,
     height: sizes.smallIi,
     backgroundColor: colors.text,
     borderRadius: '100%',
     display: 'inline-block',
-    animationName: elipsisMovement,
+    animationName: ellipsisMovement,
     animationDuration: '2.0s',
     animationFillMode: 'both',
     animationIterationCount: 'infinite'

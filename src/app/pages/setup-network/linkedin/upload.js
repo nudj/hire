@@ -50,10 +50,10 @@ const LinkedinUploadPage = (props: Props) => {
       </Helmet>
       {state.loading ? (
         <Loader
-          message='Uploading your connections'
-          tooLongMessage='Still going'
+          initialMessage='Uploading your connections'
+          thresholdMessage='Still uploading'
           threshold={4000}
-          elipsis
+          ellipsis
         />
       ) : (
         <div className={css(sharedStyle.wrapper)}>

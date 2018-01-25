@@ -8,9 +8,7 @@ class Loader extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      initialMessage: props.message,
-      elipsisChars: '',
-      tooLong: false,
+      thresholdReached: false,
       interval: null,
       timeout: null
     }
@@ -30,9 +28,9 @@ class Loader extends React.Component {
   }
 
   render () {
-    const { tooLong, initialMessage } = this.state
-    const { tooLongMessage, elipsis } = this.props
-    const message = tooLong ? tooLongMessage : initialMessage
+    const { thresholdReached } = this.state
+    const { thresholdMessage, ellipsis, initialMessage } = this.props
+    const message = thresholdReached ? thresholdMessage : initialMessage
 
     return (
       <div className={css(style.root)}>
@@ -40,11 +38,11 @@ class Loader extends React.Component {
           <div className={css(style.spinner)} />
           <Text element='div' size='largeI' style={style.message}>
             {message}
-            {elipsis && (
-              <span className={css(style.elipsis)}>
-                <div className={css(style.elipsisDot, style.dotOne)} />
-                <div className={css(style.elipsisDot, style.dotTwo)} />
-                <div className={css(style.elipsisDot)} />
+            {ellipsis && (
+              <span className={css(style.ellipsis)}>
+                <div className={css(style.ellipsisDot, style.dotOne)} />
+                <div className={css(style.ellipsisDot, style.dotTwo)} />
+                <div className={css(style.ellipsisDot)} />
               </span>
             )}
           </Text>
