@@ -13,15 +13,6 @@ const styleSheet = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0
   },
-  form: {
-    marginTop: sizes.regular,
-    paddingLeft: sizes.largeIi,
-    paddingRight: sizes.largeIi
-  },
-  addPersonButton: {
-    marginTop: sizes.regular,
-    marginBottom: sizes.largeIi
-  },
   tableOverflow: {
     overflowX: 'scroll',
     marginTop: sizes.largeIi,

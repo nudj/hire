@@ -190,7 +190,7 @@ const ConnectionsQuestionPage = props => {
               subtle
               volume='cheer'
               onClick={getHandleAddClick(dispatch)}
-              style={style.addPersonButton}
+              style={m.mtReg}
             >
               Add person
             </Button>
@@ -210,7 +210,7 @@ const ConnectionsQuestionPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              style={style.form}
+              style={[m.mtr, m.plLgIi, m.prLgIi]}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
