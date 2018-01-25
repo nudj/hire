@@ -42,8 +42,8 @@ const parseLinkedinConnections = (
     const data = get(result, 'data', [])
     const connections = linkedinToNudjPeople(data)
     return dispatch(completeParsingLinkedinConnections(connections))
-  } catch (e) {
-    throw new Error(e)
+  } catch (error) {
+    throw new Error(error)
   }
 }
 
@@ -60,17 +60,17 @@ const uploadLinkedinConnections = (): ((
       connections: getState().uploadLinkedinConnectionsPage.connections,
       source: 'linkedin'
     }
-
-    dispatch(
+    await dispatch(
       actions.app.postData({
         url,
         method,
-        data
+        data,
+        showLoadingState: false
       })
     )
     dispatch(completeConnectionsUpload())
-  } catch (e) {
-    throw new Error(e)
+  } catch (error) {
+    throw new Error(error)
   }
 }
 
