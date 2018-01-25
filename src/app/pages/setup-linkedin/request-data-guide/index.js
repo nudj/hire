@@ -12,7 +12,7 @@ const Wrapper = require('../../../components/wrapper')
 const Section = require('../../../components/section')
 const {
   Heading,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../../components/wizard')
 const style = require('../style.css')
 

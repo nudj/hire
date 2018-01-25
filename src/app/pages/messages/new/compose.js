@@ -8,7 +8,6 @@ const {
   Button,
   Input,
   Link,
-  Text,
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -101,7 +100,7 @@ const ComposeMessagePage = props => {
             template below.
           </P>
         </Section>
-        <Section width="largeI">
+        <Section width='largeI'>
           <Card>
             <form method='post'>
               <Input

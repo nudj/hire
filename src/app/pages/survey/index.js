@@ -5,7 +5,6 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const toLower = require('lodash/toLower')
 
-const { Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
@@ -17,7 +16,7 @@ const Section = require('../../components/section')
 const {
   Heading,
   P,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../components/wizard')
 
 type Question = {

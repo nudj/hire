@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const { Button, Card, Text } = require('@nudj/components')
+const { Button, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
@@ -33,9 +33,9 @@ const MessagesPage = props => {
         <title>Messages</title>
       </Helmet>
       <Wrapper>
-        { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference) ?
-          syncedConversations.length > 0 ? (
-            <Section width="largeI">
+        { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
+          ? syncedConversations.length > 0 ? (
+            <Section width='largeI'>
               <Heading level={1} style={[m.plReg, m.mrReg, m.fgPrimary]}>
                 All messages
               </Heading>
@@ -72,7 +72,7 @@ const MessagesPage = props => {
               </div>
             </Section>
           ) : (
-            <Section width="largeI" padding>
+            <Section width='largeI' padding>
               <Heading level={1} style={m.fgPrimary}>
                 You haven’t sent any messages
               </Heading>

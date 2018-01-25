@@ -1,9 +1,7 @@
 const {
   StyleSheet,
   sizes,
-  colors,
-  utilities,
-  typography
+  colors
 } = require('@nudj/components/lib/css')
 
 const { wizardAction } = require('../../lib/css/breakpoints')
@@ -32,7 +30,7 @@ const styleSheet = StyleSheet.create({
     maxWidth: '42.5rem',
     marginLeft: 'auto',
     marginRight: 'auto',
-    color: colors.primary,
+    color: colors.primary
   },
   paragraph: {
     marginLeft: 'auto',
@@ -56,7 +54,7 @@ const styleSheet = StyleSheet.create({
         marginTop: 0
       }
     }
-  },
+  }
 })
 
 module.exports = styleSheet

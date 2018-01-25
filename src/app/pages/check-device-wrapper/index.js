@@ -2,12 +2,10 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Text, Button } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Button } = require('@nudj/components')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
-const style = require('./style.css')
 
 const Wrapper = require('../../components/wrapper')
 const Section = require('../../components/section')
@@ -25,7 +23,7 @@ const checkMobileDevice = Component =>
       showOverlay: false
     }
 
-    componentDidMount() {
+    componentDidMount () {
       if (
         regex.test(navigator.userAgent) &&
         sessionStorage.getItem('nudj-continue-onboarding') !== 'true'
@@ -47,13 +45,13 @@ const checkMobileDevice = Component =>
       sessionStorage.setItem('nudj-continue-onboarding', true)
     }
 
-    render() {
+    render () {
       const { showOverlay } = this.state
 
       if (!showOverlay) return <Component {...this.props} />
 
       return (
-        <Layout {...this.props} title="">
+        <Layout {...this.props} title=''>
           <Helmet>
             <title>You need to be at a computer to setup your account</title>
           </Helmet>
@@ -72,10 +70,10 @@ const checkMobileDevice = Component =>
               </P>
             </Section>
             <Section padding>
-              <form action="/continue-onboarding">
+              <form action='/continue-onboarding'>
                 <Button
-                  type="submit"
-                  volume="cheer"
+                  type='submit'
+                  volume='cheer'
                   style={wizardStyles.action}
                 >
                   Send me a link

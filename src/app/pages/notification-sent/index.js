@@ -2,9 +2,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-
 const Layout = require('../../components/app-layout')
 const Wrapper = require('../../components/wrapper')
 const Section = require('../../components/section')

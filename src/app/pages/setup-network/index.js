@@ -3,14 +3,13 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
 
 const Wrapper = require('../../components/wrapper')
 const Section = require('../../components/section')
 const {
   Heading,
   P,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../components/wizard')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')

@@ -2,8 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Card, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Card } = require('@nudj/components')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
 const ListJobs = require('../../../components/job-radio-group')
@@ -37,7 +36,7 @@ const NewConversationPage = props => {
             likely to provide the best recommendations for.
           </P>
         </Section>
-        <Section padding width="smallI">
+        <Section padding width='smallI'>
           <Card>
             <ListJobs
               name='jobId'

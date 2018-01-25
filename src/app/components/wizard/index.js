@@ -26,7 +26,7 @@ const P = ({ children, style, element, ...props }) => (
   </Text>
 )
 
-P.defaultProps= {
+P.defaultProps = {
   element: 'p'
 }
 

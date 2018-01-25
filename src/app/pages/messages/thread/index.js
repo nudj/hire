@@ -18,7 +18,6 @@ const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
 const Wrapper = require('../../../components/wrapper')
 const Section = require('../../../components/section')
-const { Heading, P } = require('../../../components/app')
 const style = require('./style.css')
 
 const MessageThreadPage = props => {
@@ -42,7 +41,7 @@ const MessageThreadPage = props => {
         <title>{subject}</title>
       </Helmet>
       <Wrapper>
-        <Section width="largeI">
+        <Section width='largeI'>
           <Card style={m.pa0}>
             <div className={css(style.threadSection)}>
               <Text style={style.threadSubject} element='div' size='largeI'>

@@ -4,7 +4,7 @@ const isNil = require('lodash/isNil')
 const get = require('lodash/get')
 const sortBy = require('lodash/sortBy')
 
-const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
+const { Text, Card, Input, Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
@@ -29,8 +29,7 @@ const Section = require('../../../components/section')
 const {
   Heading,
   P,
-  Footer,
-  styleSheet: wizardStyles,
+  Footer
 } = require('../../../components/wizard')
 
 const getHandleSetConnections = dispatch => e => {
@@ -111,7 +110,7 @@ const ConnectionsQuestionPage = props => {
       case !connections.length && !isNil(searchQuery):
         return (
           <div className={css(style.tableOverflow)}>
-            <Heading element="div">
+            <Heading element='div'>
               0 people match '{searchQuery}'
             </Heading>
             <P>
@@ -146,7 +145,7 @@ const ConnectionsQuestionPage = props => {
             {question.description}
           </P>
         </Section>
-        <Section padding width="largeI">
+        <Section padding width='largeI'>
           <Card style={[m.pl0, m.pr0]}>
             {hasConnections || selectedConnections.length ? (
               <form

@@ -1,7 +1,5 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
-const { wizardAction } = require('../../lib/css/breakpoints')
-
 const styleSheet = StyleSheet.create({
   paragraph: {
     marginLeft: 'auto',
@@ -11,7 +9,7 @@ const styleSheet = StyleSheet.create({
     ':nth-of-type(n + 2)': {
       marginTop: sizes.regular
     }
-  },
+  }
 })
 
 module.exports = styleSheet

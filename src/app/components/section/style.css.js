@@ -7,27 +7,27 @@ const styleSheet = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     ':nth-of-type(n + 2)': {
-      marginTop: sizes.regular,
+      marginTop: sizes.regular
     },
     [`@media(${wizardAction.center})`]: {
       ':nth-of-type(n + 2)': {
-        marginTop: sizes.largeIi,
-      },
+        marginTop: sizes.largeIi
+      }
     }
   },
   padding: {
     paddingLeft: sizes.regular,
-    paddingRight: sizes.regular,
+    paddingRight: sizes.regular
   },
   largeI: {
-    maxWidth: '42.375rem',
+    maxWidth: '42.375rem'
   },
   regular: {
-    maxWidth: '31rem',
+    maxWidth: '31rem'
   },
   smallI: {
-    maxWidth: '20rem',
-  },
+    maxWidth: '20rem'
+  }
 })
 
 module.exports = styleSheet

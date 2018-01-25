@@ -5,7 +5,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const URLSearchParams = require('url-search-params')
 
-const { Modal, Text } = require('@nudj/components')
+const { Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
@@ -20,8 +20,7 @@ const Section = require('../../components/section')
 const {
   Heading,
   P,
-  Footer,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../components/wizard')
 
 const getRecommendationCountString = recommendationCount => {
@@ -74,7 +73,7 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               Now choose someone you’d like to send a nudj request to.
             </P>
           </Section>
-          <Section padding width="regular">
+          <Section padding width='regular'>
             <ListRecommendations
               recommendations={connections}
               getHref={getRecommendationHref}

@@ -3,8 +3,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { css } = require('@nudj/components/lib/css')
-const { Card, Text } = require('@nudj/components')
+const { Card } = require('@nudj/components')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
 const {
@@ -20,9 +19,8 @@ const Section = require('../../../components/section')
 const {
   Heading,
   P,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../../components/wizard')
-const style = require('../style.css')
 
 type Props = {
   dispatch: Dispatch,
@@ -60,7 +58,7 @@ const LinkedinUploadPage = (props: Props) => {
             Unzip the folder you've just downloaded, then drag and drop the Connections.csv file onto the box below.
           </P>
         </Section>
-        <Section padding width="regular">
+        <Section padding width='regular'>
           <Card style={m.pa0}>
             <Dropzone
               connections={state.connections}

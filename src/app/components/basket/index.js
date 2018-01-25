@@ -1,6 +1,6 @@
 const React = require('react')
 
-const { Align, Button, Text } = require('@nudj/components')
+const { Align, Text } = require('@nudj/components')
 
 const ButtonLink = require('../button-link')
 const style = require('./style.css')
@@ -29,7 +29,7 @@ Basket.defaultProps = {
   skipLabel: 'Skip',
   nextLabel: 'Next',
   nextClick: () => {},
-  nextHref: "#"
+  nextHref: '#'
 }
 
 module.exports = Basket

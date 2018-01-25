@@ -19,8 +19,7 @@ const ConnectionsForm = require('../../components/form-connection')
 const {
   Heading,
   P,
-  Footer,
-  styleSheet: wizardStyles,
+  Footer
 } = require('../../components/wizard')
 const {
   setSelectedContacts,
@@ -95,7 +94,7 @@ const ContactsPage = props => {
             Search for people to ask for recommendations or add more people to grow your network.
           </P>
         </Section>
-        <Section padding width="largeI">
+        <Section padding width='largeI'>
           <Card style={[m.pl0, m.pr0]}>
             <form className={css(m.plLgIi, m.prLgIi)}>
               <Text element='label' size='smallI' htmlFor='search'>
@@ -151,7 +150,7 @@ const ContactsPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-             className={css(m.plLgIi, m.prLgIi)}
+              className={css(m.plLgIi, m.prLgIi)}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}

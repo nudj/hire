@@ -4,22 +4,19 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Text, Align, Card, Input, Button } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Text, Card, Input, Button } = require('@nudj/components')
 const m = require('@nudj/components/lib/css/modifiers.css')
 
 const { setNewItemValue, addEmployment } = require('../actions')
 const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
-const ButtonLink = require('../../../components/button-link')
 const Basket = require('../../../components/basket')
 const Wrapper = require('../../../components/wrapper')
 const Section = require('../../../components/Section')
 const {
   Heading,
   P,
-  Footer,
-  styleSheet: wizardStyles,
+  Footer
 } = require('../../../components/wizard')
 
 function onChangeNewItem (dispatch, itemType) {
@@ -77,7 +74,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
             {question.description}
           </P>
         </Section>
-        <Section padding width="largeI">
+        <Section padding width='largeI'>
           <Card>
             <form onSubmit={onAddCompany(dispatch, question.id)}>
               <Text element='label' size='smallI' htmlFor='name'>
@@ -104,7 +101,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           <Footer>
             <Basket
               basket={companies}
-              skipLabel="This is my first job"
+              skipLabel='This is my first job'
               nextHref={nextUri}
             />
           </Footer>

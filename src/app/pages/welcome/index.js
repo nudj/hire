@@ -13,7 +13,7 @@ const Section = require('../../components/section')
 const {
   Heading,
   P,
-  styleSheet: wizardStyles,
+  styleSheet: wizardStyles
 } = require('../../components/wizard')
 const style = require('./style.css')
 

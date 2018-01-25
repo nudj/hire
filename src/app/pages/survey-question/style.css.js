@@ -8,7 +8,7 @@ const styleSheet = StyleSheet.create({
       marginTop: sizes.largeI
     }
   },
-  
+
   card: {
     paddingLeft: 0,
     paddingRight: 0

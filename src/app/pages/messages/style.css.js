@@ -6,7 +6,7 @@ const styleSheet = StyleSheet.create({
     listStyleType: 'none',
     marginTop: 0,
     marginBottom: 0,
-    paddingLeft: 0,
+    paddingLeft: 0
   },
   listItem: {
     ':nth-child(n + 2)': {
