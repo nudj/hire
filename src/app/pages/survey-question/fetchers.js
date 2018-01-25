@@ -1,8 +1,10 @@
 const toUpper = require('lodash/toUpper')
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
 const { questionTypes } = require('../../lib/constants')
+const getNextSurveyUri = require('./getNextSurveyUri')
 
 const getQuestion = data => {
   switch (toUpper(data.params.questionType)) {
@@ -307,29 +309,76 @@ const postConnectionAnswer = ({ session, params, body }) => {
     mutation createSurveyAnswer (
       $connections: [ID!]!
       $userId: ID!
-      $surveyQuestion: ID!
+      $questionId: ID!,
+      $sectionId: ID!,
+      $surveySlug: String!,
     ) {
       storeSurveyAnswer (
-        surveyQuestion: $surveyQuestion
+        surveyQuestion: $questionId
         person: $userId
         connections: $connections
       ) {
         id
       }
+      user(id: $userId) {
+        hirer {
+          company {
+            survey: surveyByFilters(filters: {slug: $surveySlug}) {
+              id
+              slug
+              sections: surveySections {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+              }
+              section: surveySectionByFilters (
+                filters: {
+                  id: $sectionId
+                }
+              ) {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+                question: surveyQuestionByFilters (
+                  filters: {
+                    id: $questionId
+                  }
+                ) {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                }
+              }
+            }
+          }
+        }
+      }
     }
   `
+
   const variables = {
     userId: session.userId,
-    surveyQuestion: params.questionId,
-    connections: body.connections,
+    sectionId: params.sectionId,
+    questionId: params.questionId,
     surveySlug: params.surveySlug,
-    sectionId: params.sectionId
+    connections: body.connections
   }
+
   const respond = (data) => {
+    const redirectUrl = getNextSurveyUri(get(data, 'user.hirer.company.survey', {}))
+
     throw new Redirect({
-      url: `/surveys/${params.surveySlug}/complete`
+      url: redirectUrl
     })
   }
+
   return { gql, variables, respond }
 }
 
