@@ -30,7 +30,6 @@ const {
   setNewItemValue,
   submitNewConnection
 } = require('./actions')
-const sharedStyle = require('../shared.css')
 
 const getHandleSearchChange = dispatch => ({ value }) => {
   dispatch(updateContactsSearchQuery(value))
@@ -79,7 +78,7 @@ const ContactsPage = props => {
   }
 
   return (
-    <Layout {...props} styleSheet={{root: sharedStyle.root}}>
+    <Layout {...props}>
       <Helmet>
         <title>Contacts</title>
       </Helmet>
