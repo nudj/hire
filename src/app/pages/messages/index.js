@@ -100,7 +100,7 @@ const MessagesPage = props => {
               </Heading>
               <Para>
                 If you&apos;ve sent messages using something other than Gmail, we can’t
-                display themss.
+                display them.
               </Para>
               <Para>
                 We recommend syncing with Gmail, which will ensure you can track
