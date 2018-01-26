@@ -62,14 +62,31 @@ const styleSheet = StyleSheet.create({
     paddingLeft: 0,
     height: '100%',
     display: 'flex',
+    overflowX: 'scroll',
+    overflowScrolling: 'touch',
     '@media(min-width: 34.25rem)': {
-      display: 'block'
+      display: 'block',
+      overflow: 'visible'
     }
   },
   navigationListItem: {
     display: 'inline-block',
     height: '100%',
-    flexGrow: 1
+    flexGrow: 1,
+    ':first-child': {
+      paddingLeft: sizes.smallIi
+    },
+    ':last-child': {
+      paddingRight: sizes.smallIi
+    },
+    '@media(min-width: 34.25rem)': {
+      ':first-child': {
+        paddingLeft: 0
+      },
+      ':last-child': {
+        paddingRight: 0
+      }
+    }
   },
   navigationLink: merge(typography.type.smallIi, {
     backgroundColor: 'transparent',
@@ -79,8 +96,8 @@ const styleSheet = StyleSheet.create({
     cursor: 'pointer',
     display: 'block',
     fontWeight: typography.fontWeight.bold,
-    paddingLeft: sizes.smallI,
-    paddingRight: sizes.smallI,
+    paddingLeft: sizes.smallIi,
+    paddingRight: sizes.smallIi,
     paddingTop: sizes.smallIi,
     paddingBottom: sizes.smallIi,
     textAlign: 'center',
@@ -89,6 +106,7 @@ const styleSheet = StyleSheet.create({
     position: 'relative',
     verticalAlign: 'middle',
     height: '100%',
+    whiteSpace: 'nowrap',
     ':hover': {
       color: colors.greyDark
     },
@@ -114,7 +132,7 @@ const styleSheet = StyleSheet.create({
       content: '""',
       width: '100%',
       height: '1px',
-      bottom: '-1px',
+      bottom: 0,
       position: 'absolute',
       backgroundColor: colors.greyDarker,
       left: 0

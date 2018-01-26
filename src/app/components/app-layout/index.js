@@ -36,6 +36,16 @@ const ApplicationLayout = props => {
                   <NavLink
                     className={css(style.navigationLink)}
                     activeClassName={css(style.navigationLinkActive)}
+                    to='/'
+                    exact
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+                <li className={css(style.navigationListItem)}>
+                  <NavLink
+                    className={css(style.navigationLink)}
+                    activeClassName={css(style.navigationLinkActive)}
                     to='/messages'
                   >
                     Messages

@@ -51,9 +51,9 @@ const getHandleModalClose = dispatch => event => {
   dispatch(hideAddContactForm())
 }
 
-const getHandleSearchSubmit = dispatch => event => {
+const getHandleSearchSubmit = (dispatch, url) => event => {
   event.preventDefault()
-  dispatch(search())
+  dispatch(search(url))
 }
 
 const getHandleConnectionChange = dispatch => (field, value) => {
@@ -66,6 +66,7 @@ const getHandleConnectionSubmit = dispatch => (field, value) => {
 
 const ContactsPage = props => {
   const { user, contactsPage: state, dispatch, history, match } = props
+  const jobId = get(match, 'params.jobId')
   const connections = get(user, 'connections', [])
   const selectedContacts = get(state, 'selectedContacts', [])
   const selectedContactId = get(state, 'selectedContacts', [])[0]
@@ -135,7 +136,7 @@ const ContactsPage = props => {
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
             <form
-              onSubmit={getHandleSearchSubmit(dispatch)}
+              onSubmit={getHandleSearchSubmit(dispatch, match.url)}
               className={css(mss.plLgIi, mss.prLgIi)}
             >
               <Text element='label' size='smallI' htmlFor='search'>
@@ -204,7 +205,10 @@ const ContactsPage = props => {
             <Align
               rightChildren={
                 <ButtonLink
-                  href={`/messages/new/${selectedConnectionId}`}
+                  href={jobId
+                    ? `/messages/new/${selectedConnectionId}/${jobId}`
+                    : `/messages/new/${selectedConnectionId}`
+                  }
                   volume='cheer'
                   disabled={!selectedConnectionId}
                 >

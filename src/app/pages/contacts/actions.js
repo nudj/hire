@@ -81,7 +81,7 @@ const submitNewConnection = () => (dispatch, getState) => {
   })
 }
 
-const search = () => async (dispatch, getState) => {
+const search = (url = '/contacts') => async (dispatch, getState, ...args) => {
   const state = getState()
   const search = get(state, 'contactsPage.searchQuery') || ''
 
@@ -89,7 +89,7 @@ const search = () => async (dispatch, getState) => {
   await dispatch(
     actions.app.postData(
       {
-        url: `/contacts`,
+        url,
         method: 'get',
         params: { search },
         showLoadingState: false
