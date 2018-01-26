@@ -8,7 +8,12 @@ const styleSheet = StyleSheet.create({
       marginTop: sizes.largeI
     }
   },
-
+  searchLoader: {
+    height: sizes.largeV,
+    marginTop: sizes.largeIi,
+    paddingLeft: sizes.largeIi,
+    paddingRight: sizes.largeIi
+  },
   card: {
     paddingLeft: 0,
     paddingRight: 0

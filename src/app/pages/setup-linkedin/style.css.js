@@ -23,6 +23,9 @@ const styleSheet = StyleSheet.create({
     marginRight: 'auto',
     border: `1px solid ${colors.greyLight}`,
     borderRadius: utilities.borderRadius
+  },
+  fullPageLoader: {
+    height: `calc(100vh - ${sizes.largeIi})`
   }
 })
 

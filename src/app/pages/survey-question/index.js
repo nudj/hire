@@ -70,6 +70,7 @@ const SurveyQuestionPage = props => {
           searchInput={searchInput}
           searchQuery={searchQuery}
           showAddIndividualConnectionModal={get(state, 'showAddIndividualConnectionModal', false)}
+          loading={get(state, 'loading', false)}
           newConnection={get(state, 'newConnection', {})}
         />
       )
