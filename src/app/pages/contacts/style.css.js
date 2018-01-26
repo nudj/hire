@@ -17,6 +17,12 @@ const styleSheet = StyleSheet.create({
   },
   table: {
     whiteSpace: 'nowrap'
+  },
+  searchLoader: {
+    height: sizes.largeV,
+    marginTop: sizes.largeIi,
+    paddingLeft: sizes.largeIi,
+    paddingRight: sizes.largeIi
   }
 })
 

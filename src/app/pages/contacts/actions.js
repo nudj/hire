@@ -9,6 +9,8 @@ const SHOW_ADD_CONTACT_FORM = 'CONTACTS_SHOW_ADD_CONTACT_FORM'
 const HIDE_ADD_CONTACT_FORM = 'CONTACTS_HIDE_ADD_CONTACT_FORM'
 const SET_NEW_ITEM_VALUE = 'CONTACTS_SET_NEW_ITEM_VALUE'
 const CLEAR_ADD_CONTACT_FORM = 'CONTACTS_CLEAR_ADD_CONTACT_FORM'
+const START_LOADING = 'CONTACTS_START_LOADING'
+const STOP_LOADING = 'CONTACTS_STOP_LOADING'
 
 const updateContactsSearchQuery = (query) => ({
   type: UPDATE_CONTACT_SEARCH_QUERY,
@@ -30,6 +32,14 @@ const hideAddContactForm = () => ({
 
 const clearAddContactForm = () => ({
   type: CLEAR_ADD_CONTACT_FORM
+})
+
+const startLoading = () => ({
+  type: START_LOADING
+})
+
+const stopLoading = () => ({
+  type: STOP_LOADING
 })
 
 const setNewItemValue = (name, key, value) => ({
@@ -71,6 +81,25 @@ const submitNewConnection = () => (dispatch, getState) => {
   })
 }
 
+const search = () => async (dispatch, getState) => {
+  console.log('Calling the search!')
+  const state = getState()
+  const search = get(state, 'contactsPage.searchQuery') || ''
+
+  dispatch(startLoading())
+  await dispatch(
+    actions.app.postData(
+      {
+        url: `/contacts`,
+        method: 'get',
+        params: { search },
+        showLoadingState: false
+      }
+    )
+  )
+  dispatch(stopLoading())
+}
+
 module.exports = {
   // constants
   UPDATE_CONTACT_SEARCH_QUERY,
@@ -79,6 +108,8 @@ module.exports = {
   SHOW_ADD_CONTACT_FORM,
   HIDE_ADD_CONTACT_FORM,
   CLEAR_ADD_CONTACT_FORM,
+  START_LOADING,
+  STOP_LOADING,
   // action creators
   updateContactsSearchQuery,
   setSelectedContacts,
@@ -86,5 +117,6 @@ module.exports = {
   hideAddContactForm,
   clearAddContactForm,
   setNewItemValue,
-  submitNewConnection
+  submitNewConnection,
+  search
 }

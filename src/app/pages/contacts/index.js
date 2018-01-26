@@ -16,6 +16,7 @@ const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
+const Loader = require('../../components/loader')
 const {
   Heading,
   Para,
@@ -27,7 +28,8 @@ const {
   showAddContactForm,
   hideAddContactForm,
   setNewItemValue,
-  submitNewConnection
+  submitNewConnection,
+  search
 } = require('./actions')
 
 const getHandleSearchChange = dispatch => ({ value }) => {
@@ -46,6 +48,11 @@ const getHandleAddClick = dispatch => event => {
 const getHandleModalClose = dispatch => event => {
   event.preventDefault()
   dispatch(hideAddContactForm())
+}
+
+const getHandleSearchSubmit = dispatch => event => {
+  event.preventDefault()
+  dispatch(search())
 }
 
 const getHandleConnectionChange = dispatch => (field, value) => {
@@ -96,7 +103,10 @@ const ContactsPage = props => {
         </Section>
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
-            <form className={css(mss.plLgIi, mss.prLgIi)}>
+            <form
+              onSubmit={getHandleSearchSubmit(dispatch)}
+              className={css(mss.plLgIi, mss.prLgIi)}
+            >
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
@@ -114,17 +124,28 @@ const ContactsPage = props => {
                 Search
               </Button>
             </form>
-            {connections.length > 0 && (
-              <div className={css(style.tableOverflow)}>
-                <ConnectionsTable
-                  styleSheet={{
-                    root: style.table
-                  }}
-                  connections={sortBy(connections, ['firstName', 'lastName'])}
-                  onSelect={getHandleSelectContacts(dispatch)}
-                  selectedConnections={selectedContacts}
+            {state.loading ? (
+              <div className={css(style.searchLoader)}>
+                <Loader
+                  initialMessage='Searching contacts'
+                  thresholdMessage='Still going'
+                  threshold={4000}
+                  ellipsis
                 />
               </div>
+            ) : (
+              connections.length > 0 && (
+                <div className={css(style.tableOverflow)}>
+                  <ConnectionsTable
+                    styleSheet={{
+                      root: style.table
+                    }}
+                    connections={sortBy(connections, ['firstName', 'lastName'])}
+                    onSelect={getHandleSelectContacts(dispatch)}
+                    selectedConnections={selectedContacts}
+                  />
+                </div>
+              )
             )}
           </Card>
           <Button
