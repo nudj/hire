@@ -1,6 +1,7 @@
 const checkMobileDevice = require('../pages/check-device-wrapper')
 
 module.exports = {
+  '/': require('../pages/dashboard'),
   '/welcome': checkMobileDevice(require('../pages/welcome')),
   '/setup-network': checkMobileDevice(require('../pages/setup-network')),
   '/setup-network/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
@@ -15,5 +16,6 @@ module.exports = {
   '/messages/new/:recipientId': require('../pages/messages/new'),
   '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
+  '/contacts/jobs/:jobId': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent')
 }
