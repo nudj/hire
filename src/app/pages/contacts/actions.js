@@ -82,7 +82,6 @@ const submitNewConnection = () => (dispatch, getState) => {
 }
 
 const search = () => async (dispatch, getState) => {
-  console.log('Calling the search!')
   const state = getState()
   const search = get(state, 'contactsPage.searchQuery') || ''
 
