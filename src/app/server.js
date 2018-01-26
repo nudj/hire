@@ -11,8 +11,9 @@ require('babel-register')({
     return true
   }
 })
+const http = require('http')
 const path = require('path')
-const server = require('@nudj/framework/server')
+const createNudjApps = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 
 const mockData = require('./mocks/data')
@@ -47,11 +48,10 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
-const { app, getMockApiApps } = server({
+const { app, getMockApiApps } = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
-  mockData,
   expressAssetPath,
   buildAssetPath,
   expressRouters,
@@ -61,13 +61,18 @@ const { app, getMockApiApps } = server({
   LoadingComponent: LoadingPage
 })
 
-app.listen(80, () => {
+const server = http.createServer(app)
+
+server.listen(80, () => {
   logger.log('info', 'Application running')
 })
 
 if (process.env.USE_MOCKS === 'true') {
   const mockExternalRequests = require('./mocks')
-  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
+  const { jsonServer: jsonServerApp, gqlServer: gqlServerApp } = getMockApiApps({ data: mockData })
+
+  const jsonServer = http.createServer(jsonServerApp)
+  const gqlServer = http.createServer(gqlServerApp)
 
   jsonServer.listen(81, () => {
     logger.log('info', 'JSONServer running')
