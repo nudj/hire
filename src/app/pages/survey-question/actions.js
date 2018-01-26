@@ -2,27 +2,33 @@ const axios = require('axios')
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 
-const PREFIX = 'SURVEY'
+const ADD_CONNECTION = 'SURVEY_ADD_CONNECTION'
+const SET_NEW_ITEM_VALUE = 'SURVEY_SET_NEW_ITEM_VALUE'
+const ADD_FORMER_EMPLOYER = 'SURVEY_ADD_FORMER_EMPLOYER'
+const SET_SELECTED_CONNECTIONS = 'SET_SELECTED_CONNECTIONS'
+const UPDATE_CONNECTIONS_SEARCH_QUERY = 'SURVEY_UPDATE_CONNECTIONS_SEARCH_QUERY'
+const START_LOADING = 'SURVEY_START_LOADING'
+const STOP_LOADING = 'SURVEY_STOP_LOADING'
+const CONNECTIONS_SEARCH = 'SURVEY_CONNECTIONS_SEARCH'
+const SHOW_ADD_FORM = 'SURVEY_SHOW_ADD_FORM'
+const HIDE_ADD_FORM = 'SURVEY_HIDE_ADD_FORM'
+const CLEAR_ADD_FORM = 'SURVEY_CLEAR_ADD_FORM'
 
-const SET_NEW_ITEM_VALUE = `${PREFIX}_SET_NEW_ITEM_VALUE`
-module.exports.SET_NEW_ITEM_VALUE = SET_NEW_ITEM_VALUE
-module.exports.setNewItemValue = (name, key, value) => ({
+const setNewItemValue = (name, key, value) => ({
   type: SET_NEW_ITEM_VALUE,
   name,
   key,
   value
 })
 
-const ADD_CONNECTION = `${PREFIX}_ADD_CONNECTION`
-module.exports.ADD_CONNECTION = ADD_CONNECTION
-function addConnection (questionId, newItem) {
+function addNewConnection (questionId, newItem) {
   return {
     type: ADD_CONNECTION,
     questionId,
     newItem
   }
 }
-module.exports.addConnection = questionId => (dispatch, getState) => {
+const addConnection = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
@@ -43,22 +49,20 @@ module.exports.addConnection = questionId => (dispatch, getState) => {
       () => {
         const state = getState()
         const newConnection = get(state, 'app.user.newConnection')
-        dispatch(addConnection(questionId, newConnection))
+        dispatch(addNewConnection(questionId, newConnection))
       }
     )
   )
 }
 
-const ADD_FORMER_EMPLOYER = `${PREFIX}_ADD_FORMER_EMPLOYER`
-module.exports.ADD_FORMER_EMPLOYER = ADD_FORMER_EMPLOYER
-function addEmployment (questionId, newItem) {
+const addNewEmployment = (questionId, newItem) => {
   return {
     type: ADD_FORMER_EMPLOYER,
     questionId,
     newItem
   }
 }
-module.exports.addEmployment = questionId => (dispatch, getState) => {
+const addEmployment = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
@@ -79,31 +83,23 @@ module.exports.addEmployment = questionId => (dispatch, getState) => {
       () => {
         const state = getState()
         const newEmployment = get(state, 'app.user.newEmployment')
-        dispatch(addEmployment(questionId, newEmployment))
+        dispatch(addNewEmployment(questionId, newEmployment))
       }
     )
   )
 }
 
-const SET_SELECTED_CONNECTIONS = 'SET_SELECTED_CONNECTIONS'
-module.exports.SET_SELECTED_CONNECTIONS = SET_SELECTED_CONNECTIONS
-
 const setSelectedConnections = (connections) => ({
   type: SET_SELECTED_CONNECTIONS,
   connections
 })
-module.exports.setSelectedConnections = setSelectedConnections
-
-const UPDATE_CONNECTIONS_SEARCH_QUERY = 'UPDATE_CONNECTIONS_SEARCH_QUERY'
-module.exports.UPDATE_CONNECTIONS_SEARCH_QUERY = UPDATE_CONNECTIONS_SEARCH_QUERY
 
 const updateConnectionsSearchQuery = query => ({
   type: UPDATE_CONNECTIONS_SEARCH_QUERY,
   query
 })
-module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
 
-module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
+const saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
@@ -126,40 +122,48 @@ module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
   )
 }
 
-module.exports.search = () => (dispatch, getState) => {
+const startLoading = () => ({
+  type: START_LOADING
+})
+
+const stopLoading = () => ({
+  type: STOP_LOADING
+})
+
+const search = () => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const search = get(state, 'surveyQuestionPage.searchQuery') || ''
 
-  return dispatch(
+  dispatch(startLoading())
+  await dispatch(
     actions.app.postData(
       {
         url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}`,
         method: 'get',
-        params: { search }
+        params: { search },
+        showLoadingState: false
       }
     )
   )
+  dispatch(stopLoading())
 }
 
-module.exports.SHOW_ADD_FORM = `${PREFIX}_SHOW_ADD_FORM`
-module.exports.showAddForm = () => ({
-  type: module.exports.SHOW_ADD_FORM
+const showAddForm = () => ({
+  type: SHOW_ADD_FORM
 })
 
-module.exports.HIDE_ADD_FORM = `${PREFIX}_HIDE_ADD_FORM`
-module.exports.hideAddForm = () => ({
-  type: module.exports.HIDE_ADD_FORM
+const hideAddForm = () => ({
+  type: HIDE_ADD_FORM
 })
 
-module.exports.CLEAR_ADD_FORM = `${PREFIX}_CLEAR_ADD_FORM`
-module.exports.clearAddForm = () => ({
-  type: module.exports.CLEAR_ADD_FORM
+const clearAddForm = () => ({
+  type: CLEAR_ADD_FORM
 })
 
-module.exports.submitNewConnection = () => (dispatch, getState) => {
+const submitNewConnection = () => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
@@ -178,8 +182,8 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     data
   })
   .then(response => {
-    dispatch(module.exports.hideAddForm())
-    dispatch(module.exports.clearAddForm())
+    dispatch(hideAddForm())
+    dispatch(clearAddForm())
     const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
     dispatch(setSelectedConnections(
       selectedConnections.concat(response.data.app.user.newConnection.id)
@@ -189,4 +193,32 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
       message: 'Person added'
     }))
   })
+}
+
+module.exports = {
+  // constants
+  START_LOADING,
+  STOP_LOADING,
+  CLEAR_ADD_FORM,
+  HIDE_ADD_FORM,
+  SHOW_ADD_FORM,
+  CONNECTIONS_SEARCH,
+  UPDATE_CONNECTIONS_SEARCH_QUERY,
+  SET_SELECTED_CONNECTIONS,
+  ADD_FORMER_EMPLOYER,
+  ADD_CONNECTION,
+  SET_NEW_ITEM_VALUE,
+  // action creators
+  submitNewConnection,
+  setSelectedConnections,
+  updateConnectionsSearchQuery,
+  clearAddForm,
+  hideAddForm,
+  showAddForm,
+  search,
+  startLoading,
+  saveSurveyAnswers,
+  addEmployment,
+  addConnection,
+  setNewItemValue
 }
