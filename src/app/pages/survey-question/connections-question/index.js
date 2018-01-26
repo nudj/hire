@@ -21,6 +21,7 @@ const {
 const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
+const Loader = require('../../../components/loader')
 const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
 
@@ -82,6 +83,7 @@ const ConnectionsQuestionPage = props => {
     searchQuery,
     history,
     match,
+    loading,
     notification
   } = props
 
@@ -93,6 +95,17 @@ const ConnectionsQuestionPage = props => {
 
   const renderSearchTable = () => {
     switch (true) {
+      case loading:
+        return (
+          <div className={css(style.searchLoader)}>
+            <Loader
+              initialMessage='Searching connections'
+              thresholdMessage='Still going'
+              threshold={4000}
+              ellipsis
+            />
+          </div>
+        )
       case !!connections.length:
         return (
           <div className={css(style.tableOverflow)}>

@@ -11,7 +11,9 @@ const {
   SHOW_ADD_FORM,
   HIDE_ADD_FORM,
   CLEAR_ADD_FORM,
-  SUBMIT_CONNECTIONS_QUESTION_ANSWERS
+  SUBMIT_CONNECTIONS_QUESTION_ANSWERS,
+  START_LOADING,
+  STOP_LOADING
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
@@ -105,6 +107,20 @@ const handleLocationChange = (state, action) => {
   }
 }
 
+const startLoading = state => {
+  return {
+    ...state,
+    loading: true
+  }
+}
+
+const stopLoading = state => {
+  return {
+    ...state,
+    loading: false
+  }
+}
+
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [ADD_FORMER_EMPLOYER]: addEmployment,
@@ -115,7 +131,9 @@ const reducers = {
   [HIDE_ADD_FORM]: hideAddForm,
   [CLEAR_ADD_FORM]: clearAddForm,
   [SUBMIT_CONNECTIONS_QUESTION_ANSWERS]: resetConnectionsQuestionAnswers,
-  [ROUTER_LOCATION_CHANGE]: handleLocationChange
+  [ROUTER_LOCATION_CHANGE]: handleLocationChange,
+  [START_LOADING]: startLoading,
+  [STOP_LOADING]: stopLoading
 }
 
 const initialState = {
@@ -125,9 +143,10 @@ const initialState = {
   newConnection: {},
   connections: [],
   searchQuery: null,
-  showAddIndividualConnectionModal: false,
   connectionsChanged: false,
-  questionId: null
+  questionId: null,
+  loading: false,
+  showAddIndividualConnectionModal: false
 }
 
 module.exports = createReducer(initialState, reducers)

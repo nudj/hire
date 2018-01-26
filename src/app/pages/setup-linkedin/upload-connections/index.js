@@ -22,6 +22,7 @@ const {
   Para,
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
+const style = require('../style.css')
 
 type Props = {
   dispatch: Dispatch,
@@ -52,6 +53,7 @@ const LinkedinUploadPage = (props: Props) => {
       </Helmet>
       {state.loading ? (
         <Loader
+          style={style.fullPageLoader}
           initialMessage='Uploading your connections'
           thresholdMessage='Still going'
           threshold={4000}

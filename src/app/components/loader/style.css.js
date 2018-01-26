@@ -30,13 +30,11 @@ const ellipsisMovement = {
 
 module.exports = StyleSheet.create({
   root: {
-    backgroundColor: colors.greyLightest,
     minHeight: '100%'
   },
   body: {
     flex: '1 1 auto',
     display: 'flex',
-    height: `calc(100vh - ${sizes.largeIi})`,
     justifyContent: 'center',
     alignItems: 'center'
   },
