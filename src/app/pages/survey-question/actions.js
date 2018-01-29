@@ -110,8 +110,29 @@ module.exports.saveSurveyAnswers = surveyQuestion => async (dispatch, getState) 
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const { selectedConnections } = state.surveyQuestionPage
-  const connections = selectedConnections || []
+  const { connectionsChanged } = state.surveyQuestionPage
+
+  let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
+
+  /**
+   * TODO:
+   * DRY up saved connections getting with /survey-question/index.js
+   */
+  if (!connectionsChanged) {
+    const savedConnections = flatten(
+      get(state, 'app.surveyAnswers', [])
+        .filter(answer => {
+          return answer.surveyQuestion.id === get(question, 'id')
+        })
+        .map(answer =>
+          answer.connections.map(connection => connection.id)
+        )
+    )
+
+    newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
+  }
+
+
   try {
     await dispatch(
       actions.app.postData(
@@ -122,7 +143,7 @@ module.exports.saveSurveyAnswers = surveyQuestion => async (dispatch, getState) 
           method: 'post',
           data: {
             surveyQuestion,
-            connections
+            connections: newSelectedConnections
           }
         }
       )
