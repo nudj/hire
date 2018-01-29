@@ -1,14 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
-
-const spin = {
-  '0%': {
-    transform: 'scale(0)'
-  },
-  '100%': {
-    transform: 'scale(1.0)',
-    opacity: 0
-  }
-}
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const ellipsisMovement = {
   '0%': {

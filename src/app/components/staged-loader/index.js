@@ -1,6 +1,5 @@
 const React = require('react')
 const { css } = require('@nudj/components/lib/css')
-const { Text } = require('@nudj/components')
 
 const style = require('./style.css')
 
@@ -11,7 +10,7 @@ class Loader extends React.Component {
       stage: 0,
       interval: null,
       showEndMessage: false,
-      endMessageTimeout: null,
+      endMessageTimeout: null
     }
   }
 
@@ -53,8 +52,8 @@ class Loader extends React.Component {
   }
 
   render () {
-    const { stage, showEndMessage } = this.state
-    const { messages, ellipsis, endMessage } = this.props
+    const { showEndMessage } = this.state
+    const { ellipsis } = this.props
 
     const message = this.getMessage()
 

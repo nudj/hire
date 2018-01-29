@@ -22,7 +22,6 @@ const {
   Para,
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
-const style = require('../style.css')
 
 type Props = {
   dispatch: Dispatch,
@@ -88,7 +87,7 @@ const LinkedinUploadPage = (props: Props) => {
                   'Ok, this is taking the biscuit',
                   'Speaking of biscuits, why don\'t you grab one while you wait',
                   'Nearly there',
-                  'Just a few more seconds',
+                  'Just a few more seconds'
                 ]}
                 threshold={4000}
                 ellipsis
