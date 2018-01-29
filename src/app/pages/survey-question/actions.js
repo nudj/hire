@@ -128,8 +128,6 @@ module.exports.saveSurveyAnswers = questionId => async (dispatch, getState) => {
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
   }
 
-  console.log('newSelectedConnections')
-
   try {
     await dispatch(
       actions.app.postData(
