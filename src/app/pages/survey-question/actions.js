@@ -1,5 +1,7 @@
 const axios = require('axios')
 const get = require('lodash/get')
+const uniq = require('lodash/uniq')
+const flatten = require('lodash/flatten')
 const actions = require('@nudj/framework/actions')
 
 const PREFIX = 'SURVEY'
@@ -103,35 +105,40 @@ const updateConnectionsSearchQuery = query => ({
 })
 module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
 
-module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
+module.exports.saveSurveyAnswers = surveyQuestion => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const { selectedConnections } = state.surveyQuestionPage
   const connections = selectedConnections || []
-  return dispatch(
-    actions.app.postData(
-      {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
-          question.id
-        }`,
-        method: 'post',
-        data: {
-          surveyQuestion,
-          connections
+  try {
+    await dispatch(
+      actions.app.postData(
+        {
+          url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+            question.id
+          }`,
+          method: 'post',
+          data: {
+            surveyQuestion,
+            connections
+          }
         }
-      }
+      )
     )
-  )
+
+    return dispatch(submitConnectionsQuestionAnswers())
+  } catch (e) {
+    console.error(e)
+  }
 }
 
-module.exports.search = () => (dispatch, getState) => {
+module.exports.search = (search = '') => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const search = get(state, 'surveyQuestionPage.searchQuery') || ''
 
   return dispatch(
     actions.app.postData(
@@ -165,7 +172,28 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const data = get(state, 'surveyQuestionPage.newConnection')
+  const connectionsAlreadyChanged = get(state, 'surveyQuestionPage.connectionsChanged')
   const csrfToken = get(state, 'app.csrfToken')
+
+  let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
+
+  /**
+   * TODO:
+   * DRY up saved connections getting with /survey-question/index.js
+   */
+  if (!connectionsAlreadyChanged) {
+    const savedConnections = flatten(
+      get(state, 'app.surveyAnswers', [])
+        .filter(answer => {
+          return answer.surveyQuestion.id === get(question, 'id')
+        })
+        .map(answer =>
+          answer.connections.map(connection => connection.id)
+        )
+    )
+
+    newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
+  }
 
   return axios({
     url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
@@ -180,9 +208,8 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   .then(response => {
     dispatch(module.exports.hideAddForm())
     dispatch(module.exports.clearAddForm())
-    const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
     dispatch(setSelectedConnections(
-      selectedConnections.concat(response.data.app.user.newConnection.id)
+      newSelectedConnections.concat(response.data.app.user.newConnection.id)
     ))
     dispatch(actions.app.showNotification({
       type: 'success',
@@ -190,3 +217,11 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     }))
   })
 }
+
+const SUBMIT_CONNECTIONS_QUESTION_ANSWERS = 'SUBMIT_CONNECTIONS_QUESTION_ANSWERS'
+const submitConnectionsQuestionAnswers = () => ({
+  type: SUBMIT_CONNECTIONS_QUESTION_ANSWERS
+})
+
+module.exports.SUBMIT_CONNECTIONS_QUESTION_ANSWERS = SUBMIT_CONNECTIONS_QUESTION_ANSWERS
+module.exports.submitConnectionsQuestionAnswers = submitConnectionsQuestionAnswers

@@ -1,5 +1,6 @@
 const { merge } = require('@nudj/library')
 const get = require('lodash/get')
+const RouteParser = require('route-parser')
 const { createReducer } = require('../../lib')
 const {
   SET_NEW_ITEM_VALUE,
@@ -9,8 +10,11 @@ const {
   UPDATE_CONNECTIONS_SEARCH_QUERY,
   SHOW_ADD_FORM,
   HIDE_ADD_FORM,
-  CLEAR_ADD_FORM
+  CLEAR_ADD_FORM,
+  SUBMIT_CONNECTIONS_QUESTION_ANSWERS
 } = require('./actions')
+
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 
 const setNewItemValue = (state, action) => {
   return merge(state, {
@@ -22,7 +26,8 @@ const setNewItemValue = (state, action) => {
 
 const setSelectedConnections = (state, action) => ({
   ...state,
-  selectedConnections: action.connections
+  selectedConnections: action.connections,
+  connectionsChanged: true
 })
 
 const addConnection = (state, action) => {
@@ -65,6 +70,22 @@ const clearAddForm = state => ({
   newConnection: {}
 })
 
+const resetConnectionsQuestionAnswers = (state, action) => {
+  return {
+    ...state,
+    selectedConnections: [],
+    connections: [],
+    searchQuery: null,
+    newConnection: {},
+    connectionsChanged: false,
+  }
+}
+
+const resetSearchQuery = state => ({
+  ...state,
+  searchQuery: null
+})
+
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [ADD_FORMER_EMPLOYER]: addEmployment,
@@ -73,7 +94,9 @@ const reducers = {
   [SET_SELECTED_CONNECTIONS]: setSelectedConnections,
   [SHOW_ADD_FORM]: showAddForm,
   [HIDE_ADD_FORM]: hideAddForm,
-  [CLEAR_ADD_FORM]: clearAddForm
+  [CLEAR_ADD_FORM]: clearAddForm,
+  [SUBMIT_CONNECTIONS_QUESTION_ANSWERS]: resetConnectionsQuestionAnswers,
+  [ROUTER_LOCATION_CHANGE]: resetSearchQuery
 }
 
 const initialState = {
@@ -83,7 +106,8 @@ const initialState = {
   newConnection: {},
   connections: [],
   searchQuery: null,
-  showAddIndividualConnectionModal: false
+  showAddIndividualConnectionModal: false,
+  connectionsChanged: false
 }
 
 module.exports = createReducer(initialState, reducers)

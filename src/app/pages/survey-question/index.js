@@ -3,6 +3,7 @@ const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
 const flatten = require('lodash/flatten')
 const uniqBy = require('lodash/uniqBy')
+const uniq = require('lodash/uniq')
 const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 
@@ -28,16 +29,28 @@ const SurveyQuestionPage = props => {
   const questionIndex = findIndex(questions, { id: get(question, 'id') })
   const employments = get(user, 'employments', [])
   const connectionsCount = get(user, 'connectionsCount', [])
-  const companiesAdded = uniqBy(employments.concat(
-    get(user, 'newEmployment', [])
-  ), employment => employment.id)
+  const companiesAdded = uniqBy(
+    employments.concat(get(user, 'newEmployment', [])),
+    employment => employment.id
+  )
   const connections = get(user, 'connections', []).concat(
     get(user, 'newConnection', [])
   )
+  const surveyAnswers = get(props, 'surveyAnswers', [])
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const searchQuery = queryParams.get('search')
   const searchInput = getFirstNonNil(state.searchQuery, searchQuery, '')
+
+  const savedConnections = flatten(
+    surveyAnswers.filter(answer => {
+      return get(answer, 'surveyQuestion.id') === get(question, 'id')
+    }).map(answer => answer.connections.map(connection => connection.id))
+  )
+
+  const selectedConnections = state.connectionsChanged
+    ? get(state, 'selectedConnections', [])
+    : uniq(savedConnections.concat(get(state, 'selectedConnections', [])))
 
   switch (question.type) {
     case questionTypes.COMPANIES:
@@ -66,7 +79,7 @@ const SurveyQuestionPage = props => {
           questionNumber={questionIndex + 1}
           questionCount={questions.length}
           dispatch={dispatch}
-          selectedConnections={get(state, 'selectedConnections', [])}
+          selectedConnections={selectedConnections}
           searchInput={searchInput}
           searchQuery={searchQuery}
           showAddIndividualConnectionModal={get(state, 'showAddIndividualConnectionModal', false)}

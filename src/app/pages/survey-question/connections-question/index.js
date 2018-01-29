@@ -48,7 +48,7 @@ const handleSaveAnswers = (dispatch, questionId) => event => {
 
 const getHandleSearchSubmit = dispatch => event => {
   event.preventDefault()
-  dispatch(search())
+  dispatch(search(event.target.elements['search'].value))
 }
 
 const getHandleAddClick = dispatch => event => {

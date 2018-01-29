@@ -132,6 +132,18 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       }
     }
   `
+
+  const surveyAnswersFragment = `
+    surveyAnswers: surveyAnswersByFilters(filters: { person: $userId }) {
+      connections {
+        id
+      }
+      surveyQuestion {
+        id
+      }
+    }
+  `
+
   let gql = `
     query SurveyQuestionPage (
       $userId: ID!,
@@ -140,6 +152,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $questionId: ID!,
       $blankSearch: Boolean!
     ) {
+      ${surveyAnswersFragment}
       user (id: $userId) {
         connections @include(if: $blankSearch) {
           id
@@ -174,6 +187,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
         $search: String!,
         $fields: [[String!]!]!
       ) {
+        ${surveyAnswersFragment}
         user (id: $userId) {
           connections: searchConnections(query: $search, fields: $fields) {
             id
