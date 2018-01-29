@@ -8,6 +8,7 @@ const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 
 const getNextSurveyUri = require('./getNextSurveyUri')
+const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
 const CompanyQuestionPage = require('./company-question')
 const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
@@ -43,10 +44,9 @@ const SurveyQuestionPage = props => {
   const searchQuery = queryParams.get('search')
   const searchInput = getFirstNonNil(state.searchQuery, searchQuery, '')
 
-  const savedConnections = flatten(
-    surveyAnswers.filter(answer => {
-      return get(answer, 'surveyQuestion.id') === get(question, 'id')
-    }).map(answer => answer.connections.map(connection => connection.id))
+  const savedConnections = getSavedSurveyQuestionConnections(
+    get(question, 'id'),
+    surveyAnswers
   )
 
   const selectedConnectionsChangeSet = state.selectedConnections[questionId] || []

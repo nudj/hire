@@ -15,6 +15,7 @@ const {
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
+const surveyRoute = new RouteParser('/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId')
 
 const setNewItemValue = (state, action) => {
   return merge(state, {
@@ -83,10 +84,26 @@ const resetConnectionsQuestionAnswers = (state, action) => {
   }
 }
 
-const resetSearchQuery = state => ({
-  ...state,
-  searchQuery: null
-})
+/**
+ * FIXME
+ */
+const handleLocationChange = (state, action) => {
+  const questionId = get(surveyRoute.match(action.payload.pathname), 'questionId')
+
+  if (state.questionId !== questionId) {
+    return {
+      ...state,
+      questionId: questionId,
+      searchQuery: null,
+      connectionsChanged: false
+    }
+  }
+
+  return {
+    ...state,
+    searchQuery: null
+  }
+}
 
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
@@ -98,7 +115,7 @@ const reducers = {
   [HIDE_ADD_FORM]: hideAddForm,
   [CLEAR_ADD_FORM]: clearAddForm,
   [SUBMIT_CONNECTIONS_QUESTION_ANSWERS]: resetConnectionsQuestionAnswers,
-  [ROUTER_LOCATION_CHANGE]: resetSearchQuery
+  [ROUTER_LOCATION_CHANGE]: handleLocationChange
 }
 
 const initialState = {
@@ -109,7 +126,8 @@ const initialState = {
   connections: [],
   searchQuery: null,
   showAddIndividualConnectionModal: false,
-  connectionsChanged: false
+  connectionsChanged: false,
+  questionId: null,
 }
 
 module.exports = createReducer(initialState, reducers)

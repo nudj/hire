@@ -1,8 +1,9 @@
 const axios = require('axios')
 const get = require('lodash/get')
 const uniq = require('lodash/uniq')
-const flatten = require('lodash/flatten')
 const actions = require('@nudj/framework/actions')
+
+const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
 
 const PREFIX = 'SURVEY'
 
@@ -120,18 +121,14 @@ module.exports.saveSurveyAnswers = questionId => async (dispatch, getState) => {
    * DRY up saved connections getting with /survey-question/index.js
    */
   if (!connectionsChanged) {
-    const savedConnections = flatten(
+    const savedConnections = getSavedSurveyQuestionConnections(
+      get(question, 'id'),
       get(state, 'app.surveyAnswers', [])
-        .filter(answer => {
-          return answer.surveyQuestion.id === get(question, 'id')
-        })
-        .map(answer =>
-          answer.connections.map(connection => connection.id)
-        )
     )
-
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
   }
+
+  console.log('newSelectedConnections')
 
   try {
     await dispatch(
@@ -198,19 +195,10 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
 
   let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
 
-  /**
-   * TODO:
-   * DRY up saved connections getting with /survey-question/index.js
-   */
   if (!connectionsAlreadyChanged) {
-    const savedConnections = flatten(
+    const savedConnections = getSavedSurveyQuestionConnections(
+      get(question, 'id'),
       get(state, 'app.surveyAnswers', [])
-        .filter(answer => {
-          return answer.surveyQuestion.id === get(question, 'id')
-        })
-        .map(answer =>
-          answer.connections.map(connection => connection.id)
-        )
     )
 
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
