@@ -11,6 +11,7 @@ require('babel-register')({
     return true
   }
 })
+
 const http = require('http')
 const path = require('path')
 const createNudjApps = require('@nudj/framework/server')
@@ -40,15 +41,20 @@ const expressRouters = {
     require('./server/routers/catch-all')
   ]
 }
-const expressAssetPath = path.join(__dirname, 'server/assets')
-const buildAssetPath = path.join(__dirname, 'server/build')
+
+const useDevServer = process.env.USE_DEV_SERVER === 'true'
+
+const expressAssetPath = path.resolve('./app/server/assets')
+const buildAssetPath = !useDevServer && path.resolve('./app/server/build')
+
 const spoofLoggedIn = (req, res, next) => {
   req.session.userId = process.env.SPOOF_USER_ID
   next()
 }
+
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
-const { app, getMockApiApps } = createNudjApps({
+let { app, getMockApiApps } = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
@@ -84,5 +90,37 @@ if (process.env.USE_MOCKS === 'true') {
 
   mockExternalRequests(() => {
     logger.log('info', 'Mocking external requests')
+  })
+}
+
+if (module.hot) {
+  module.hot.accept([
+    './redux',
+    './redux/routes',
+    './redux/reducers',
+    path.resolve('./pages'),
+    path.resolve('./components')
+  ], () => {
+    const updatedReactApp = require('./redux')
+    const updatedReduxRoutes = require('./redux/routes')
+    const updatedReduxReducers = require('./redux/reducers')
+    const updatedLoadingPage = require('./pages/loading')
+
+    server.removeListener('request', app)
+    const { app: newApp } = createNudjApps({
+      App: updatedReactApp,
+      reduxRoutes: updatedReduxRoutes,
+      reduxReducers: updatedReduxReducers,
+      expressAssetPath,
+      buildAssetPath,
+      expressRouters,
+      spoofLoggedIn,
+      errorHandlers,
+      gqlFragments,
+      LoadingComponent: updatedLoadingPage
+    })
+
+    server.on('request', newApp)
+    app = newApp
   })
 }

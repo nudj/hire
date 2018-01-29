@@ -3,13 +3,13 @@ export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='hire» '
 
-alias run="node ."
-alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+alias run="yarn start"
+alias dev="yarn run dev"
 alias test="standard && flow && mocha  --compilers js:babel-core/register --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
-	--watch ./ \
+	--watch ./ \ 
 	--delay 250ms \
 	-x "mocha --compilers js:babel-core/register --recursive test/unit || exit 1"'
 alias flow='flow --quiet'
