@@ -128,8 +128,9 @@ const ContactsPage = props => {
               >
                 { state.loading ? (
                   <Loader
-                    initialMessage='Searching contacts'
-                    thresholdMessage='Still going'
+                    messages={[
+                      'Searching contacts'
+                    ]}
                     threshold={4000}
                     ellipsis
                   />

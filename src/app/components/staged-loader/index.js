@@ -8,33 +8,59 @@ class Loader extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      thresholdReached: false,
+      stage: 0,
       interval: null,
-      timeout: null
+      showEndMessage: false,
+      endMessageTimeout: null,
     }
   }
 
   componentDidMount () {
-    const timeout = setTimeout(() => {
-      this.setState({ thresholdReached: true })
+    const interval = setInterval(() => {
+      this.setState(({ stage }) => ({
+        stage: stage + 1
+      }))
     }, this.props.threshold)
-    this.setState({ timeout })
+
+    const endMessageTimeout = setTimeout(() => {
+      this.setState({
+        showEndMessage: true
+      })
+    }, 180000)
+
+    this.setState({ interval, endMessageTimeout })
   }
 
   componentWillUnmount () {
-    if (this.state.timeout) {
-      clearInterval(this.state.timeout)
+    if (this.state.interval) {
+      clearInterval(this.state.interval)
+    }
+
+    if (this.state.endMessageTimeout) {
+      clearTimeout(this.state.endMessageTimeout)
     }
   }
 
+  getMessage = () => {
+    const { messages } = this.props
+    const { stage } = this.state
+
+    if (stage >= messages.length) {
+      return messages[messages.length - 1]
+    }
+
+    return messages[stage]
+  }
+
   render () {
-    const { thresholdReached } = this.state
-    const { thresholdMessage, ellipsis, initialMessage } = this.props
-    const message = thresholdReached ? thresholdMessage : initialMessage
+    const { stage, showEndMessage } = this.state
+    const { messages, ellipsis, endMessage } = this.props
+
+    const message = this.getMessage()
 
     return (
       <span style={style.message}>
-        {message}
+        {showEndMessage ? 'Reticulating splines' : message}
         {ellipsis && (
           <span className={css(style.ellipsis)}>
             <div className={css(style.ellipsisDot, style.dotOne)} />

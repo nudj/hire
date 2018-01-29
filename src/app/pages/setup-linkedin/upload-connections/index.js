@@ -78,8 +78,18 @@ const LinkedinUploadPage = (props: Props) => {
           >
             { state.loading ? (
               <Loader
-                initialMessage='Uploading your connections'
-                thresholdMessage='Still going'
+                messages={[
+                  'Uploading your connections',
+                  'Adding them to your account',
+                  'Getting them ready for search',
+                  'Wow, you certainly are popular',
+                  'Seriously, this must be some kind of record',
+                  'Is there anyone you don\'t know',
+                  'Ok, this is taking the biscuit',
+                  'Speaking of biscuits, why don\'t you grab one while you wait',
+                  'Nearly there',
+                  'Just a few more seconds',
+                ]}
                 threshold={4000}
                 ellipsis
               />

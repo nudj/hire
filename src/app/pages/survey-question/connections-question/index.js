@@ -175,8 +175,9 @@ const ConnectionsQuestionPage = props => {
                 >
                   { loading ? (
                     <Loader
-                      initialMessage='Searching connections'
-                      thresholdMessage='Still going'
+                      messages={[
+                        'Searching connections'
+                      ]}
                       threshold={4000}
                       ellipsis
                     />
