@@ -26,7 +26,8 @@ const SurveyQuestionPage = props => {
   const allSections = get(survey, 'sections', [])
   const question = get(section, 'question', {})
   const questions = flatten(allSections.map(section => get(section, 'questions')))
-  const questionIndex = findIndex(questions, { id: get(question, 'id') })
+  const questionId = get(question, 'id')
+  const questionIndex = findIndex(questions, { id: questionId })
   const employments = get(user, 'employments', [])
   const connectionsCount = get(user, 'connectionsCount', [])
   const companiesAdded = uniqBy(
@@ -48,9 +49,11 @@ const SurveyQuestionPage = props => {
     }).map(answer => answer.connections.map(connection => connection.id))
   )
 
+  const selectedConnectionsChangeSet = state.selectedConnections[questionId] || []
+
   const selectedConnections = state.connectionsChanged
-    ? get(state, 'selectedConnections', [])
-    : uniq(savedConnections.concat(get(state, 'selectedConnections', [])))
+    ? selectedConnectionsChangeSet
+    : uniq(savedConnections.concat(selectedConnectionsChangeSet))
 
   switch (question.type) {
     case questionTypes.COMPANIES:

@@ -32,9 +32,9 @@ const {
   Footer
 } = require('../../../components/wizard')
 
-const getHandleSetConnections = dispatch => e => {
+const getHandleSetConnections = (questionId, dispatch) => e => {
   e.preventDefault()
-  dispatch(setSelectedConnections(e.value))
+  dispatch(setSelectedConnections(questionId, e.value))
 }
 
 const getHandleSearchChange = dispatch => ({ value }) => {
@@ -100,7 +100,7 @@ const ConnectionsQuestionPage = props => {
               styleSheet={{
                 root: style.table
               }}
-              onSelect={getHandleSetConnections(dispatch)}
+              onSelect={getHandleSetConnections(question.id, dispatch)}
               connections={sortBy(connections, ['firstName', 'lastName'])}
               selectedConnections={selectedConnections}
               multiple

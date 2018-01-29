@@ -26,7 +26,10 @@ const setNewItemValue = (state, action) => {
 
 const setSelectedConnections = (state, action) => ({
   ...state,
-  selectedConnections: action.connections,
+  selectedConnections: {
+    ...state.selectedConnections,
+    [action.questionId]: action.connections
+  },
   connectionsChanged: true
 })
 
@@ -73,7 +76,6 @@ const clearAddForm = state => ({
 const resetConnectionsQuestionAnswers = (state, action) => {
   return {
     ...state,
-    selectedConnections: [],
     connections: [],
     searchQuery: null,
     newConnection: {},
@@ -100,7 +102,7 @@ const reducers = {
 }
 
 const initialState = {
-  selectedConnections: [],
+  selectedConnections: {},
   newEmployment: {},
   employments: [],
   newConnection: {},

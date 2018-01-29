@@ -90,8 +90,9 @@ module.exports.addEmployment = questionId => (dispatch, getState) => {
 const SET_SELECTED_CONNECTIONS = 'SET_SELECTED_CONNECTIONS'
 module.exports.SET_SELECTED_CONNECTIONS = SET_SELECTED_CONNECTIONS
 
-const setSelectedConnections = (connections) => ({
+const setSelectedConnections = (questionId, connections) => ({
   type: SET_SELECTED_CONNECTIONS,
+  questionId,
   connections
 })
 module.exports.setSelectedConnections = setSelectedConnections
@@ -105,14 +106,14 @@ const updateConnectionsSearchQuery = query => ({
 })
 module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
 
-module.exports.saveSurveyAnswers = surveyQuestion => async (dispatch, getState) => {
+module.exports.saveSurveyAnswers = questionId => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const { connectionsChanged } = state.surveyQuestionPage
 
-  let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
+  let newSelectedConnections = get(state, `surveyQuestionPage.selectedConnections[${questionId}]`, [])
 
   /**
    * TODO:
@@ -141,7 +142,7 @@ module.exports.saveSurveyAnswers = surveyQuestion => async (dispatch, getState) 
           }`,
           method: 'post',
           data: {
-            surveyQuestion,
+            surveyQuestion: questionId,
             connections: newSelectedConnections
           }
         }
