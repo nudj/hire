@@ -202,8 +202,6 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
   }
 
-  console.log(newSelectedConnections)
-
   return axios({
     url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
     method: 'post',
