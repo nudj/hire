@@ -127,7 +127,7 @@ const initialState = {
   searchQuery: null,
   showAddIndividualConnectionModal: false,
   connectionsChanged: false,
-  questionId: null,
+  questionId: null
 }
 
 module.exports = createReducer(initialState, reducers)
