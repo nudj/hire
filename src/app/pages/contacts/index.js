@@ -16,7 +16,7 @@ const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
-const Loader = require('../../components/loader')
+const Loader = require('../../components/staged-loader')
 const {
   Heading,
   Para,
@@ -120,32 +120,33 @@ const ContactsPage = props => {
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
               />
-              <Button type='submit' volume='cheer' style={mss.mtReg}>
-                Search
+              <Button
+                type='submit'
+                volume='cheer'
+                style={mss.mtReg}
+                disabled={state.loading}
+              >
+                { state.loading ? (
+                  <Loader
+                    initialMessage='Searching contacts'
+                    thresholdMessage='Still going'
+                    threshold={4000}
+                    ellipsis
+                  />
+                ) : 'Search' }
               </Button>
             </form>
-            {state.loading ? (
-              <div className={css(style.searchLoader)}>
-                <Loader
-                  initialMessage='Searching contacts'
-                  thresholdMessage='Still going'
-                  threshold={4000}
-                  ellipsis
+            { connections.length > 0 && (
+              <div className={css(style.tableOverflow)}>
+                <ConnectionsTable
+                  styleSheet={{
+                    root: style.table
+                  }}
+                  connections={sortBy(connections, ['firstName', 'lastName'])}
+                  onSelect={getHandleSelectContacts(dispatch)}
+                  selectedConnections={selectedContacts}
                 />
               </div>
-            ) : (
-              connections.length > 0 && (
-                <div className={css(style.tableOverflow)}>
-                  <ConnectionsTable
-                    styleSheet={{
-                      root: style.table
-                    }}
-                    connections={sortBy(connections, ['firstName', 'lastName'])}
-                    onSelect={getHandleSelectContacts(dispatch)}
-                    selectedConnections={selectedContacts}
-                  />
-                </div>
-              )
             )}
           </Card>
           <Button
