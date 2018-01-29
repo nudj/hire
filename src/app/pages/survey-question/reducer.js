@@ -77,7 +77,7 @@ const resetConnectionsQuestionAnswers = (state, action) => {
     connections: [],
     searchQuery: null,
     newConnection: {},
-    connectionsChanged: false,
+    connectionsChanged: false
   }
 }
 
