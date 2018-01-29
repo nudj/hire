@@ -572,6 +572,16 @@ data.surveyQuestions = data.surveyQuestions.concat([
     type: CONNECTIONS,
     required: false,
     tags: ['Account Management']
+  },
+  {
+    id: 'question3',
+    surveySection: 'section1',
+    name: 'topsyandtim',
+    title: 'Do you know any Topsys?',
+    description: 'Add them manually or select them from your list of contacts below...',
+    type: CONNECTIONS,
+    required: false,
+    tags: ['Topsy', 'Tim']
   }
 ])
 data.surveyAnswers = data.surveyAnswers.concat([
