@@ -33,21 +33,16 @@ class Loader extends React.Component {
     const message = thresholdReached ? thresholdMessage : initialMessage
 
     return (
-      <div className={css(style.root)}>
-        <div className={css(style.body)}>
-          <div className={css(style.spinner)} />
-          <Text element='div' size='largeI' style={style.message}>
-            {message}
-            {ellipsis && (
-              <span className={css(style.ellipsis)}>
-                <div className={css(style.ellipsisDot, style.dotOne)} />
-                <div className={css(style.ellipsisDot, style.dotTwo)} />
-                <div className={css(style.ellipsisDot)} />
-              </span>
-            )}
-          </Text>
-        </div>
-      </div>
+      <span style={style.message}>
+        {message}
+        {ellipsis && (
+          <span className={css(style.ellipsis)}>
+            <div className={css(style.ellipsisDot, style.dotOne)} />
+            <div className={css(style.ellipsisDot, style.dotTwo)} />
+            <div className={css(style.ellipsisDot)} />
+          </span>
+        )}
+      </span>
     )
   }
 }
