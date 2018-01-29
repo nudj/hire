@@ -1,5 +1,6 @@
 const { merge } = require('@nudj/library')
 const get = require('lodash/get')
+const RouteParser = require('route-parser')
 const { createReducer } = require('../../lib')
 const {
   SET_NEW_ITEM_VALUE,
@@ -9,8 +10,12 @@ const {
   UPDATE_CONNECTIONS_SEARCH_QUERY,
   SHOW_ADD_FORM,
   HIDE_ADD_FORM,
-  CLEAR_ADD_FORM
+  CLEAR_ADD_FORM,
+  SUBMIT_CONNECTIONS_QUESTION_ANSWERS
 } = require('./actions')
+
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
+const surveyRoute = new RouteParser('/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId')
 
 const setNewItemValue = (state, action) => {
   return merge(state, {
@@ -22,7 +27,11 @@ const setNewItemValue = (state, action) => {
 
 const setSelectedConnections = (state, action) => ({
   ...state,
-  selectedConnections: action.connections
+  selectedConnections: {
+    ...state.selectedConnections,
+    [action.questionId]: action.connections
+  },
+  connectionsChanged: true
 })
 
 const addConnection = (state, action) => {
@@ -65,6 +74,37 @@ const clearAddForm = state => ({
   newConnection: {}
 })
 
+const resetConnectionsQuestionAnswers = (state, action) => {
+  return {
+    ...state,
+    connections: [],
+    searchQuery: null,
+    newConnection: {},
+    connectionsChanged: false
+  }
+}
+
+/**
+ * FIXME
+ */
+const handleLocationChange = (state, action) => {
+  const questionId = get(surveyRoute.match(action.payload.pathname), 'questionId')
+
+  if (state.questionId !== questionId) {
+    return {
+      ...state,
+      questionId: questionId,
+      searchQuery: null,
+      connectionsChanged: false
+    }
+  }
+
+  return {
+    ...state,
+    searchQuery: null
+  }
+}
+
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [ADD_FORMER_EMPLOYER]: addEmployment,
@@ -73,17 +113,21 @@ const reducers = {
   [SET_SELECTED_CONNECTIONS]: setSelectedConnections,
   [SHOW_ADD_FORM]: showAddForm,
   [HIDE_ADD_FORM]: hideAddForm,
-  [CLEAR_ADD_FORM]: clearAddForm
+  [CLEAR_ADD_FORM]: clearAddForm,
+  [SUBMIT_CONNECTIONS_QUESTION_ANSWERS]: resetConnectionsQuestionAnswers,
+  [ROUTER_LOCATION_CHANGE]: handleLocationChange
 }
 
 const initialState = {
-  selectedConnections: [],
+  selectedConnections: {},
   newEmployment: {},
   employments: [],
   newConnection: {},
   connections: [],
   searchQuery: null,
-  showAddIndividualConnectionModal: false
+  showAddIndividualConnectionModal: false,
+  connectionsChanged: false,
+  questionId: null
 }
 
 module.exports = createReducer(initialState, reducers)

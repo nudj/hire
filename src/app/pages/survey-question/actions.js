@@ -1,6 +1,9 @@
 const axios = require('axios')
 const get = require('lodash/get')
+const uniq = require('lodash/uniq')
 const actions = require('@nudj/framework/actions')
+
+const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
 
 const PREFIX = 'SURVEY'
 
@@ -88,8 +91,9 @@ module.exports.addEmployment = questionId => (dispatch, getState) => {
 const SET_SELECTED_CONNECTIONS = 'SET_SELECTED_CONNECTIONS'
 module.exports.SET_SELECTED_CONNECTIONS = SET_SELECTED_CONNECTIONS
 
-const setSelectedConnections = (connections) => ({
+const setSelectedConnections = (questionId, connections) => ({
   type: SET_SELECTED_CONNECTIONS,
+  questionId,
   connections
 })
 module.exports.setSelectedConnections = setSelectedConnections
@@ -103,35 +107,54 @@ const updateConnectionsSearchQuery = query => ({
 })
 module.exports.updateConnectionsSearchQuery = updateConnectionsSearchQuery
 
-module.exports.saveSurveyAnswers = surveyQuestion => (dispatch, getState) => {
+module.exports.saveSurveyAnswers = questionId => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const { selectedConnections } = state.surveyQuestionPage
-  const connections = selectedConnections || []
-  return dispatch(
-    actions.app.postData(
-      {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
-          question.id
-        }`,
-        method: 'post',
-        data: {
-          surveyQuestion,
-          connections
-        }
-      }
+  const { connectionsChanged } = state.surveyQuestionPage
+
+  let newSelectedConnections = get(state, `surveyQuestionPage.selectedConnections[${questionId}]`, [])
+
+  /**
+   * TODO:
+   * DRY up saved connections getting with /survey-question/index.js
+   */
+  if (!connectionsChanged) {
+    const savedConnections = getSavedSurveyQuestionConnections(
+      get(question, 'id'),
+      get(state, 'app.surveyAnswers', [])
     )
-  )
+    newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
+  }
+
+  try {
+    await dispatch(
+      actions.app.postData(
+        {
+          url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
+            question.id
+          }`,
+          method: 'post',
+          data: {
+            surveyQuestion: questionId,
+            connections: newSelectedConnections
+          }
+        }
+      )
+    )
+
+    return dispatch(submitConnectionsQuestionAnswers())
+  } catch (e) {
+    console.error(e)
+  }
 }
 
-module.exports.search = () => (dispatch, getState) => {
+module.exports.search = (search = '') => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
   const section = get(survey, 'section')
   const question = get(section, 'question')
-  const search = get(state, 'surveyQuestionPage.searchQuery') || ''
 
   return dispatch(
     actions.app.postData(
@@ -165,7 +188,19 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   const section = get(survey, 'section')
   const question = get(section, 'question')
   const data = get(state, 'surveyQuestionPage.newConnection')
+  const connectionsAlreadyChanged = get(state, 'surveyQuestionPage.connectionsChanged')
   const csrfToken = get(state, 'app.csrfToken')
+
+  let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
+
+  if (!connectionsAlreadyChanged) {
+    const savedConnections = getSavedSurveyQuestionConnections(
+      get(question, 'id'),
+      get(state, 'app.surveyAnswers', [])
+    )
+
+    newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
+  }
 
   return axios({
     url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
@@ -180,9 +215,8 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   .then(response => {
     dispatch(module.exports.hideAddForm())
     dispatch(module.exports.clearAddForm())
-    const selectedConnections = get(state, 'surveyQuestionPage.selectedConnections')
     dispatch(setSelectedConnections(
-      selectedConnections.concat(response.data.app.user.newConnection.id)
+      newSelectedConnections.concat(response.data.app.user.newConnection.id)
     ))
     dispatch(actions.app.showNotification({
       type: 'success',
@@ -190,3 +224,11 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     }))
   })
 }
+
+const SUBMIT_CONNECTIONS_QUESTION_ANSWERS = 'SUBMIT_CONNECTIONS_QUESTION_ANSWERS'
+const submitConnectionsQuestionAnswers = () => ({
+  type: SUBMIT_CONNECTIONS_QUESTION_ANSWERS
+})
+
+module.exports.SUBMIT_CONNECTIONS_QUESTION_ANSWERS = SUBMIT_CONNECTIONS_QUESTION_ANSWERS
+module.exports.submitConnectionsQuestionAnswers = submitConnectionsQuestionAnswers

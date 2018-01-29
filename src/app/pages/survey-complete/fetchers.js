@@ -9,7 +9,7 @@ const completeSurvey = ({ session, params }) => {
       $userId: ID!,
       $surveySlug: String
     ) {
-      surveyAnswer: surveyAnswerByFilters (filters: {
+      surveyAnswers: surveyAnswersByFilters (filters: {
         person: $userId
       }) {
         connections {

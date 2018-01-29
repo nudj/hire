@@ -3,6 +3,8 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const flatten = require('lodash/flatten')
+const uniqBy = require('lodash/uniqBy')
 const URLSearchParams = require('url-search-params')
 
 const { Modal } = require('@nudj/components')
@@ -31,7 +33,7 @@ const getRecommendationCountString = recommendationCount => {
 
 type ViewRecommendationsProps = {
   user?: Person,
-  surveyAnswer: SurveyAnswer,
+  surveyAnswers: Array<SurveyAnswer>,
   surveyQuestionPage: {
     selectedConnections: Array<number>
   },
@@ -45,8 +47,12 @@ type ViewRecommendationsProps = {
 }
 
 const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
-  const { user, surveyAnswer } = props
-  const { connections = [] } = surveyAnswer
+  const { user, surveyAnswers } = props
+
+  const connections = uniqBy(
+    flatten(surveyAnswers.map(answer => answer.connections)),
+    connection => connection.id
+  )
 
   const csrfToken = get(props, 'csrfToken')
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
