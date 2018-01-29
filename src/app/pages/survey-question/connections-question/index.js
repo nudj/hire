@@ -21,6 +21,7 @@ const {
 const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
+const Loader = require('../../../components/staged-loader')
 const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
 
@@ -82,6 +83,7 @@ const ConnectionsQuestionPage = props => {
     searchQuery,
     history,
     match,
+    loading,
     notification
   } = props
 
@@ -165,8 +167,21 @@ const ConnectionsQuestionPage = props => {
                   onChange={handleSearchChange}
                   onClear={handleSearchClear}
                 />
-                <Button style={mss.mtReg} type='submit' volume='cheer'>
-                  Search
+                <Button
+                  style={mss.mtReg}
+                  type='submit'
+                  volume='cheer'
+                  disabled={loading}
+                >
+                  { loading ? (
+                    <Loader
+                      messages={[
+                        'Searching connections'
+                      ]}
+                      threshold={4000}
+                      ellipsis
+                    />
+                  ) : 'Search' }
                 </Button>
               </form>
             ) : (

@@ -1,14 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
-
-const spin = {
-  '0%': {
-    transform: 'scale(0)'
-  },
-  '100%': {
-    transform: 'scale(1.0)',
-    opacity: 0
-  }
-}
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const ellipsisMovement = {
   '0%': {
@@ -29,28 +19,9 @@ const ellipsisMovement = {
 }
 
 module.exports = StyleSheet.create({
-  root: {
-    minHeight: '100%'
-  },
-  body: {
-    flex: '1 1 auto',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  spinner: {
-    width: sizes.largeIi,
-    height: sizes.largeIi,
-    backgroundColor: colors.primary,
-    borderRadius: '100%',
-    animationName: spin,
-    animationDuration: '1.0s',
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'ease-in-out'
-  },
   message: {
     marginTop: sizes.largeIii,
-    position: 'absolute'
+    position: 'relative'
   },
   ellipsis: {
     marginLeft: '1px',
@@ -60,7 +31,7 @@ module.exports = StyleSheet.create({
   ellipsisDot: {
     width: sizes.smallIi,
     height: sizes.smallIi,
-    backgroundColor: colors.text,
+    backgroundColor: 'currentColor',
     borderRadius: '100%',
     display: 'inline-block',
     animationName: ellipsisMovement,

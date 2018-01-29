@@ -28,13 +28,18 @@ class Loader extends React.Component {
   }
 
   render () {
+    const {
+      thresholdMessage,
+      ellipsis,
+      initialMessage,
+      style: styleOverride
+    } = this.props
     const { thresholdReached } = this.state
-    const { thresholdMessage, ellipsis, initialMessage } = this.props
     const message = thresholdReached ? thresholdMessage : initialMessage
 
     return (
       <div className={css(style.root)}>
-        <div className={css(style.body)}>
+        <div className={css(style.body, styleOverride)}>
           <div className={css(style.spinner)} />
           <Text element='div' size='largeI' style={style.message}>
             {message}

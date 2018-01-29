@@ -16,6 +16,7 @@ const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
+const Loader = require('../../components/staged-loader')
 const {
   Heading,
   Para,
@@ -27,7 +28,8 @@ const {
   showAddContactForm,
   hideAddContactForm,
   setNewItemValue,
-  submitNewConnection
+  submitNewConnection,
+  search
 } = require('./actions')
 
 const getHandleSearchChange = dispatch => ({ value }) => {
@@ -46,6 +48,11 @@ const getHandleAddClick = dispatch => event => {
 const getHandleModalClose = dispatch => event => {
   event.preventDefault()
   dispatch(hideAddContactForm())
+}
+
+const getHandleSearchSubmit = dispatch => event => {
+  event.preventDefault()
+  dispatch(search())
 }
 
 const getHandleConnectionChange = dispatch => (field, value) => {
@@ -96,7 +103,10 @@ const ContactsPage = props => {
         </Section>
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
-            <form className={css(mss.plLgIi, mss.prLgIi)}>
+            <form
+              onSubmit={getHandleSearchSubmit(dispatch)}
+              className={css(mss.plLgIi, mss.prLgIi)}
+            >
               <Text element='label' size='smallI' htmlFor='search'>
                 Search by name and select from the results
               </Text>
@@ -110,11 +120,24 @@ const ContactsPage = props => {
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
               />
-              <Button type='submit' volume='cheer' style={mss.mtReg}>
-                Search
+              <Button
+                type='submit'
+                volume='cheer'
+                style={mss.mtReg}
+                disabled={state.loading}
+              >
+                { state.loading ? (
+                  <Loader
+                    messages={[
+                      'Searching contacts'
+                    ]}
+                    threshold={4000}
+                    ellipsis
+                  />
+                ) : 'Search' }
               </Button>
             </form>
-            {connections.length > 0 && (
+            { connections.length > 0 && (
               <div className={css(style.tableOverflow)}>
                 <ConnectionsTable
                   styleSheet={{

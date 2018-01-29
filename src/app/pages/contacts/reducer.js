@@ -6,7 +6,9 @@ const {
   SHOW_ADD_CONTACT_FORM,
   HIDE_ADD_CONTACT_FORM,
   CLEAR_ADD_CONTACT_FORM,
-  SET_NEW_ITEM_VALUE
+  SET_NEW_ITEM_VALUE,
+  START_LOADING,
+  STOP_LOADING
 } = require('./actions')
 
 const updateContactSearchQuery = (state, action) => ({
@@ -34,6 +36,16 @@ const clearAddContactForm = state => ({
   newContact: {}
 })
 
+const startLoading = state => ({
+  ...state,
+  loading: true
+})
+
+const stopLoading = state => ({
+  ...state,
+  loading: false
+})
+
 const setNewItemValue = (state, action) => {
   return merge(state, {
     [action.name]: {
@@ -48,13 +60,16 @@ const reducers = {
   [SET_SELECTED_CONTACTS]: setSelectedContacts,
   [SHOW_ADD_CONTACT_FORM]: showAddContactForm,
   [HIDE_ADD_CONTACT_FORM]: hideAddContactForm,
-  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm
+  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm,
+  [START_LOADING]: startLoading,
+  [STOP_LOADING]: stopLoading
 }
 
 const initialState = {
   selectedContacts: [],
   newContact: {},
   searchQuery: null,
+  loading: false,
   showAddIndividualConnectionModal: false
 }
 
