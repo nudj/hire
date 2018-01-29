@@ -191,7 +191,7 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
   const connectionsAlreadyChanged = get(state, 'surveyQuestionPage.connectionsChanged')
   const csrfToken = get(state, 'app.csrfToken')
 
-  let newSelectedConnections = get(state, 'surveyQuestionPage.selectedConnections', [])
+  let newSelectedConnections = get(state, `surveyQuestionPage.selectedConnections[${question.id}]`, [])
 
   if (!connectionsAlreadyChanged) {
     const savedConnections = getSavedSurveyQuestionConnections(
@@ -201,6 +201,8 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
 
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
   }
+
+  console.log(newSelectedConnections)
 
   return axios({
     url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
@@ -216,6 +218,7 @@ module.exports.submitNewConnection = () => (dispatch, getState) => {
     dispatch(module.exports.hideAddForm())
     dispatch(module.exports.clearAddForm())
     dispatch(setSelectedConnections(
+      question.id,
       newSelectedConnections.concat(response.data.app.user.newConnection.id)
     ))
     dispatch(actions.app.showNotification({
