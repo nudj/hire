@@ -17,6 +17,7 @@ const {
 const { getFirstNonNil } = require('@nudj/library')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
+const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage } = require('./actions')
@@ -30,12 +31,12 @@ const getHandleSubjectChange = dispatch => ({ value }) =>
 const getHandleMessageChange = dispatch => ({ value }) =>
   dispatch(updateMessage(value))
 
-const parseJobMessageTemplate = (template, job, user, link) =>
+const parseJobMessageTemplate = (template, job, user, recipient, link) =>
   render({
     template: template,
     data: {
       recipient: {
-        firstname: user.connection.firstName
+        firstname: recipient.firstName
       },
       job: {
         title: job.title,
@@ -53,25 +54,26 @@ const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
 const ComposeMessagePage = props => {
-  const { composeMessage, dispatch, user, template, csrfToken } = props
-  const toEmail = get(user, 'connection.person.email', '')
-  const recipientId = get(user, 'connection.person.id')
+  const { composeMessage, dispatch, user, recipient, template, csrfToken } = props
+  const toEmail = get(recipient, 'email', '')
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
   const companySlug = get(user, 'hirer.company.slug', '')
   const jobSlug = get(job, 'slug', '')
   const referralId = get(job, 'referral.id', '')
 
+  const { firstName } = getPersonOrConnectionName(recipient)
+
   const subjectTemplate = render({
     template: template.subject,
     data: {
       recipient: {
-        firstname: get(user, 'connection.firstName', 'Hey')
+        firstname: firstName
       }
     }
   })[0].join('')
   const referralLink = `${get(props, 'web.protocol')}://${get(props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
-  const messageTemplate = parseJobMessageTemplate(template.message, job, user, referralLink)
+  const messageTemplate = parseJobMessageTemplate(template.message, job, user, { firstName }, referralLink)
 
   const subjectValue = getFirstNonNil(
     composeMessage.subject,
@@ -117,7 +119,6 @@ const ComposeMessagePage = props => {
                 autosize
               />
               <input name='_csrf' value={csrfToken} type='hidden' />
-              <input name='recipient' value={recipientId} type='hidden' />
               <div className={css(mss.center)}>
                 {emailPreference === emailPreferences.GOOGLE ? (
                   <Button type='submit' volume='cheer' style={mss.mtReg}>

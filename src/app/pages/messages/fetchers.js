@@ -106,6 +106,10 @@ const replyTo = (props) => {
                 firstName
                 lastName
                 email
+                asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+                  firstName
+                  lastName
+                }
               }
             }
             subject
@@ -168,7 +172,7 @@ const replyTo = (props) => {
 const getActiveJobs = (props) => {
   const { session, params } = props
   const gql = `
-    query GetJobs($userId: ID!, $connectionId: ID!, $status: JobStatus) {
+    query GetJobs($userId: ID!, $recipientId: ID!, $status: JobStatus) {
       user (id: $userId) {
         hirer {
           company {
@@ -180,11 +184,13 @@ const getActiveJobs = (props) => {
             }
           }
         }
-        connection: connectionByFilters(filters: {id: $connectionId}) {
+      }
+      recipient: personByFilters(filters: {id: $recipientId}) {
+        firstName
+        lastName
+        asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
           firstName
-          person {
-            email
-          }
+          lastName
         }
       }
       ${Global}
@@ -193,7 +199,7 @@ const getActiveJobs = (props) => {
 
   const variables = {
     userId: session.userId,
-    connectionId: params.connectionId,
+    recipientId: params.recipientId,
     status: 'PUBLISHED'
   }
 
@@ -206,7 +212,7 @@ const getMessageTemplate = (props) => {
   const gql = `
     query getTemplateAndDetails(
       $userId: ID!,
-      $connectionId: ID!,
+      $recipientId: ID!,
       $jobId: ID!,
       $repo: String!,
       $templateType: String!,
@@ -219,7 +225,7 @@ const getMessageTemplate = (props) => {
           company {
             slug
             job: jobByFilters(filters: {id: $jobId}) {
-              referral: createReferral(person: $userId) {
+              referral: createReferral(person: $recipientId) {
                 id
               }
               slug
@@ -229,12 +235,15 @@ const getMessageTemplate = (props) => {
             }
           }
         }
-        connection: connectionByFilters(filters: {id: $connectionId}) {
+      }
+      recipient: personByFilters(filters: {id: $recipientId}) {
+        firstName
+        lastName
+        asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
           firstName
-          person {
-            id
-          }
+          lastName
         }
+        email
       }
       template: fetchTemplate(repo: $repo, type: $templateType, tags: $templateTags)
       ${Global}
@@ -243,7 +252,7 @@ const getMessageTemplate = (props) => {
 
   const variables = {
     userId: session.userId,
-    connectionId: params.connectionId,
+    recipientId: params.recipientId,
     jobId: params.jobId,
     repo: 'hirer',
     templateType: 'composemessage',
@@ -271,7 +280,7 @@ const sendNewMessage = ({ session, params, body }) => {
 
   const variables = {
     userId: session.userId,
-    recipientId: body.recipient,
+    recipientId: params.recipientId,
     subject: body.subject,
     body: body.body
   }

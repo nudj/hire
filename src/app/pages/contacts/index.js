@@ -70,6 +70,9 @@ const ContactsPage = props => {
   const selectedContacts = get(state, 'selectedContacts', [])
   const selectedContactId = get(state, 'selectedContacts', [])[0]
 
+  const selectedConnection = connections.filter(connection => selectedContactId === connection.id)[0]
+  const selectedConnectionId = get(selectedConnection, 'person.id')
+
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const searchQuery = getFirstNonNil(
     state.searchQuery,
@@ -184,9 +187,9 @@ const ContactsPage = props => {
             <Align
               rightChildren={
                 <ButtonLink
-                  href={`/messages/new/${selectedContactId}`}
+                  href={`/messages/new/${selectedConnectionId}`}
                   volume='cheer'
-                  disabled={!selectedContactId}
+                  disabled={!selectedConnectionId}
                 >
                   Next
                 </ButtonLink>

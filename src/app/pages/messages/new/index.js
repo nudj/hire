@@ -19,7 +19,7 @@ const NewConversationPage = props => {
   const { dispatch } = props
   const selectedJobId = get(props, 'composeMessage.jobId')
   const jobs = get(props, 'user.hirer.company.jobs', [])
-  const connection = get(props, 'user.connection.firstName')
+  const recipient = get(props, 'recipient.firstName')
 
   return (
     <Layout {...props}>
@@ -29,7 +29,7 @@ const NewConversationPage = props => {
       <Main>
         <Section padding>
           <Heading level={1} style={mss.fgPrimary}>
-            Select the job you’d like to send {connection}
+            Select the job you’d like to send {recipient}
           </Heading>
           <Para>
             Select which of your company&#39;s open jobs this person is most

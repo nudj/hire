@@ -28,6 +28,8 @@ const completeSurvey = ({ session, params }) => {
           person {
             id
             email
+            firstName
+            lastName
           }
         }
       }

@@ -29,6 +29,8 @@ const get = ({ session }) => {
           person {
             id
             email
+            firstName
+            lastName
           }
         }
       }

@@ -12,8 +12,8 @@ module.exports = {
   '/recommendations': require('../pages/recommendations'),
   '/messages': require('../pages/messages'),
   '/messages/:conversationId': require('../pages/messages/thread'),
-  '/messages/new/:connectionId': require('../pages/messages/new'),
-  '/messages/new/:connectionId/:jobId': require('../pages/messages/new/compose'),
+  '/messages/new/:recipientId': require('../pages/messages/new'),
+  '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent')
 }
