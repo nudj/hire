@@ -62,7 +62,7 @@ const ComposeMessagePage = props => {
   const jobSlug = get(job, 'slug', '')
   const referralId = get(job, 'referral.id', '')
 
-  const { firstName, lastName } = getPersonOrConnectionName(recipient)
+  const { firstName } = getPersonOrConnectionName(recipient)
 
   const subjectTemplate = render({
     template: template.subject,
