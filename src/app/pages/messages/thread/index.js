@@ -18,6 +18,11 @@ const style = require('./style.css')
 const MessageThreadPage = props => {
   const { conversation } = props.user
   const { recipient, newMessage } = conversation
+  const asAConnection = get(recipient, 'asAConnection')
+
+  const firstName = recipient.firstName || asAConnection.firstName
+  const lastName = recipient.lastName || asAConnection.lastName
+
   const messages = get(conversation, 'messages', [])
   const csrfToken = get(props, 'csrfToken')
 
@@ -43,7 +48,7 @@ const MessageThreadPage = props => {
                 {subject}
               </Text>
               <Text style={style.threadName} element='div' size='smallI'>
-                {recipient.firstName} {recipient.lastName}
+                {firstName} {lastName}
               </Text>
               <Text style={style.threadEmail} element='div' size='smallIi'>
                 {recipient.email}
@@ -59,11 +64,14 @@ const MessageThreadPage = props => {
                   )
                 }
 
+                const messageFirstName = message.from.firstName || message.from.asAConnection.firstName
+                const messageLastName = message.from.lastName || message.from.asAConnection.lastName
+
                 return (
                   <div className={css(style.threadSection)} key={message.id}>
                     <ThreadItem
-                      from={`${message.from.firstName} ${
-                        message.from.lastName
+                      from={`${messageFirstName} ${
+                        messageLastName
                       } <${message.from.email}>`}
                       body={message.body}
                       date={format(message.date, 'DD MMM YY HH:mm')}

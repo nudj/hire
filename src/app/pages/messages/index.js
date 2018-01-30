@@ -43,7 +43,8 @@ const MessagesPage = props => {
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation
-                    const { firstName, lastName } = recipient
+                    const { asAConnection } = recipient
+                    const { firstName, lastName } = asAConnection
                     const { body } = message
 
                     return (
