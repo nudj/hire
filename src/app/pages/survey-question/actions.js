@@ -196,8 +196,6 @@ const submitNewConnection = () => (dispatch, getState) => {
   const connectionsAlreadyChanged = get(state, 'surveyQuestionPage.connectionsChanged')
   const csrfToken = get(state, 'app.csrfToken')
 
-  console.log(data)
-
   let newSelectedConnections = get(state, `surveyQuestionPage.selectedConnections[${question.id}]`, [])
 
   if (!connectionsAlreadyChanged) {
