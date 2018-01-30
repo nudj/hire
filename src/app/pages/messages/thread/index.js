@@ -4,16 +4,11 @@ const { format } = require('date-fns')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const {
-  Button,
-  Card,
-  Text,
-  Textarea
-} = require('@nudj/components')
+const { Button, Card, Text, Textarea } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const { emailPreferences } = require('../../../lib/constants')
+const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
 const Main = require('../../../components/main')
@@ -55,17 +50,28 @@ const MessageThreadPage = props => {
               </Text>
             </div>
             {fullThread.length > 0 &&
-              fullThread.map(message => (
-                <div className={css(style.threadSection)} key={message.id}>
-                  <ThreadItem
-                    from={`${message.from.firstName} ${message.from.lastName} <${
-                      message.from.email
-                    }>`}
-                    body={message.body}
-                    date={format(message.date, 'DD MMM YY HH:mm')}
-                  />
-                </div>
-              ))}
+              fullThread.map(message => {
+                if (message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS) {
+                  return (
+                    <Text element='div' style={style.threadSection} key={message.id}>
+                      Google was unable to send your previous message. Likely
+                      because the email address is incorrect
+                    </Text>
+                  )
+                }
+
+                return (
+                  <div className={css(style.threadSection)} key={message.id}>
+                    <ThreadItem
+                      from={`${message.from.firstName} ${
+                        message.from.lastName
+                      } <${message.from.email}>`}
+                      body={message.body}
+                      date={format(message.date, 'DD MMM YY HH:mm')}
+                    />
+                  </div>
+                )
+              })}
             <form className={css(style.threadSection)} method='post'>
               <Textarea name='body' placeholder='Write your message here...' />
               <input name='_csrf' value={csrfToken} type='hidden' />

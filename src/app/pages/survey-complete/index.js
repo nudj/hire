@@ -6,6 +6,7 @@ const get = require('lodash/get')
 const flatten = require('lodash/flatten')
 const uniqBy = require('lodash/uniqBy')
 const URLSearchParams = require('url-search-params')
+const isNil = require('lodash/isNil')
 
 const { Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -13,6 +14,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
+const { emailPreferences } = require('../../lib/constants')
 const ListRecommendations = require('../../components/list-recommendations')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
@@ -57,8 +59,13 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   const csrfToken = get(props, 'csrfToken')
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const selectedContactId = queryParams.get('id')
+  const emailPreference = get(user, 'emailPreference', null)
 
-  const getRecommendationHref = ({id}) => `?id=${id}`
+  const getRecommendationHref = ({id}) => {
+    return emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
+      ? `/messages/new/${id}`
+      : `?id=${id}`
+  }
 
   return (
     <Layout {...props} title='Part 3 - Send nudjes'>
