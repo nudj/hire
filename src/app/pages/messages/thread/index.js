@@ -54,8 +54,7 @@ const MessageThreadPage = props => {
                 if (message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS) {
                   return (
                     <Text element='div' style={style.threadSection} key={message.id}>
-                      Google was unable to send your previous message. Likely
-                      because the email address is incorrect
+                      Google was unable to send your previous message. Most likely because the recipient email address is invalid. Get in touch if you have further questions.
                     </Text>
                   )
                 }

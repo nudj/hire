@@ -52,7 +52,7 @@ const MessagesPage = props => {
                           subject={subject}
                           body={
                             message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS
-                              ? 'Google was unable to send your previous message. Likely because the email address is incorrect'
+                              ? 'Google was unable to send your previous message. Most likely because the recipient email address is invalid. Get in touch if you have further questions.'
                               : body
                           }
                           href={`/messages/${id}`}
