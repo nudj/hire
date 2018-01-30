@@ -10,11 +10,10 @@ const ListRecommendations = ({ recommendations, getHref }) => (
       <li key={recommendation.id} className={css(style.listItem)}>
         <Item
           id={recommendation.id}
-          firstName={recommendation.firstName}
-          lastName={recommendation.lastName}
+          person={recommendation.person}
           role={recommendation.role}
           company={recommendation.company}
-          href={getHref(recommendation)}
+          href={getHref(recommendation.person)}
         />
       </li>
     ))}

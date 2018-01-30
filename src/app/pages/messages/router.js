@@ -26,19 +26,19 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   )
 
   router.getHandlers(
-    '/messages/new/:connectionId',
+    '/messages/new/:recipientId',
     ensureOnboarded,
     respondWithGql(fetchers.getActiveJobs)
   )
 
   router.getHandlers(
-    '/messages/new/:connectionId/:jobId',
+    '/messages/new/:recipientId/:jobId',
     ensureOnboarded,
     respondWithGql(fetchers.getMessageTemplate)
   )
 
   router.postHandlers(
-    '/messages/new/:connectionId/:jobId',
+    '/messages/new/:recipientId/:jobId',
     ensureOnboarded,
     respondWithGql(fetchers.sendNewMessage)
   )

@@ -6,7 +6,7 @@ const ButtonLink = require('../button-link')
 
 const RecommendationItem = ({ id, href, ...contact }) => (
   <ContactCard
-    name={`${contact.firstName} ${contact.lastName}`}
+    name={`${get(contact, 'person.firstName')} ${get(contact, 'person.lastName')}`}
     jobTitle={get(contact, 'role.name')}
     company={get(contact, 'company.name')}
   >

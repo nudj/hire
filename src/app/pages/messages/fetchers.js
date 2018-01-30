@@ -168,7 +168,7 @@ const replyTo = (props) => {
 const getActiveJobs = (props) => {
   const { session, params } = props
   const gql = `
-    query GetJobs($userId: ID!, $connectionId: ID!, $status: JobStatus) {
+    query GetJobs($userId: ID!, $recipientId: ID!, $status: JobStatus) {
       user (id: $userId) {
         hirer {
           company {
@@ -180,12 +180,9 @@ const getActiveJobs = (props) => {
             }
           }
         }
-        connection: connectionByFilters(filters: {id: $connectionId}) {
-          firstName
-          person {
-            email
-          }
-        }
+      }
+      recipient: personByFilters(filters: {id: $recipientId}) {
+        firstName
       }
       ${Global}
     }
@@ -193,7 +190,7 @@ const getActiveJobs = (props) => {
 
   const variables = {
     userId: session.userId,
-    connectionId: params.connectionId,
+    recipientId: params.recipientId,
     status: 'PUBLISHED'
   }
 
@@ -206,7 +203,7 @@ const getMessageTemplate = (props) => {
   const gql = `
     query getTemplateAndDetails(
       $userId: ID!,
-      $connectionId: ID!,
+      $recipientId: ID!,
       $jobId: ID!,
       $repo: String!,
       $templateType: String!,
@@ -229,12 +226,10 @@ const getMessageTemplate = (props) => {
             }
           }
         }
-        connection: connectionByFilters(filters: {id: $connectionId}) {
-          firstName
-          person {
-            id
-          }
-        }
+      }
+      recipient: personByFilters(filters: {id: $recipientId}) {
+        firstName
+        email
       }
       template: fetchTemplate(repo: $repo, type: $templateType, tags: $templateTags)
       ${Global}
@@ -243,7 +238,7 @@ const getMessageTemplate = (props) => {
 
   const variables = {
     userId: session.userId,
-    connectionId: params.connectionId,
+    recipientId: params.recipientId,
     jobId: params.jobId,
     repo: 'hirer',
     templateType: 'composemessage',

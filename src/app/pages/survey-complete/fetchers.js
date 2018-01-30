@@ -14,8 +14,6 @@ const completeSurvey = ({ session, params }) => {
       }) {
         connections {
           id
-          firstName
-          lastName
           role {
             name
           }
@@ -28,6 +26,8 @@ const completeSurvey = ({ session, params }) => {
           person {
             id
             email
+            firstName
+            lastName
           }
         }
       }

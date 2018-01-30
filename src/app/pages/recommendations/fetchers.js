@@ -15,8 +15,6 @@ const get = ({ session }) => {
         }
         connections {
           id
-          firstName
-          lastName
           role {
             name
           }
@@ -29,6 +27,8 @@ const get = ({ session }) => {
           person {
             id
             email
+            firstName
+            lastName
           }
         }
       }
