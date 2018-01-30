@@ -29,7 +29,6 @@ const uploadConnections = ({ session, body, files }) => {
   const gql = `
     mutation ImportPage (
       $userId: ID!,
-      $taskType: TaskType!,
       $connections: [ConnectionCreateInput!]!,
       $source: String!
     ) {
@@ -58,18 +57,6 @@ const uploadConnections = ({ session, body, files }) => {
             email
           }
         }
-        completedTask: updateTaskByFilters(
-          filters: {
-            type: $taskType
-          },
-          data: {
-            completed: true
-          }
-        ) {
-          id
-          type
-          completed
-        }
         hirer {
           company {
             name
@@ -84,7 +71,6 @@ const uploadConnections = ({ session, body, files }) => {
   `
   const variables = {
     userId,
-    taskType: 'UNLOCK_NETWORK_LINKEDIN',
     connections: body.connections,
     source: 'linkedin'
   }
