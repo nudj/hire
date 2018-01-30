@@ -15,9 +15,13 @@ const getMessages = props => {
           type
           subject
           recipient {
+            email
             firstName
             lastName
-            email
+            asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+              firstName
+              lastName
+            }
           }
           message: latestMessage {
             body
@@ -52,6 +56,10 @@ const getThread = props => {
             firstName
             lastName
             email
+            asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+              firstName
+              lastName
+            }
           }
           messages {
             id
@@ -61,6 +69,10 @@ const getThread = props => {
               firstName
               lastName
               email
+              asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+                firstName
+                lastName
+              }
             }
           }
         }
@@ -102,6 +114,10 @@ const replyTo = (props) => {
               firstName
               lastName
               email
+              asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+                firstName
+                lastName
+              }
             }
             messages {
               id

@@ -8,6 +8,7 @@ const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../lib/constants')
+const getPersonOrConnectionName = require('../../lib/get-person-or-connection-names')
 const Layout = require('../../components/app-layout')
 const MessagePreview = require('../../components/message-preview')
 const ButtonLink = require('../../components/button-link')
@@ -43,8 +44,8 @@ const MessagesPage = props => {
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation
-                    const { firstName, lastName } = recipient
                     const { body } = message
+                    const { firstName, lastName } = getPersonOrConnectionName(recipient)
 
                     return (
                       <li className={css(style.listItem)} key={id}>
