@@ -25,11 +25,14 @@ const taskTypes = {
   UNLOCK_NETWORK_LINKEDIN: 'UNLOCK_NETWORK_LINKEDIN'
 }
 
+const GOOGLE_MAILER_DAEMON_ADDRESS = 'mailer-daemon@googlemail.com'
+
 module.exports = {
   surveyTypes,
   taskTypes,
   notificationTypes,
   booleanChoices,
   emailPreferences,
-  questionTypes
+  questionTypes,
+  GOOGLE_MAILER_DAEMON_ADDRESS
 }

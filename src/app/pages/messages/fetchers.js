@@ -21,6 +21,9 @@ const getMessages = props => {
           }
           message: latestMessage {
             body
+            from {
+              email
+            }
           }
         }
       }

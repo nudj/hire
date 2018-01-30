@@ -7,7 +7,7 @@ const { Button, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const { emailPreferences } = require('../../lib/constants')
+const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../lib/constants')
 const Layout = require('../../components/app-layout')
 const MessagePreview = require('../../components/message-preview')
 const ButtonLink = require('../../components/button-link')
@@ -50,7 +50,11 @@ const MessagesPage = props => {
                       <li className={css(style.listItem)} key={id}>
                         <MessagePreview
                           subject={subject}
-                          body={body}
+                          body={
+                            message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS
+                              ? 'Google was unable to send your previous message. Likely because the email address is incorrect'
+                              : body
+                          }
                           href={`/messages/${id}`}
                           recipient={`${firstName} ${lastName}`}
                         />
