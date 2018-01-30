@@ -9,6 +9,7 @@ const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../../lib/constants')
+const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const Layout = require('../../../components/app-layout')
 const ThreadItem = require('../../../components/email')
 const Main = require('../../../components/main')
@@ -18,10 +19,8 @@ const style = require('./style.css')
 const MessageThreadPage = props => {
   const { conversation } = props.user
   const { recipient, newMessage } = conversation
-  const asAConnection = get(recipient, 'asAConnection')
 
-  const firstName = recipient.firstName || asAConnection.firstName
-  const lastName = recipient.lastName || asAConnection.lastName
+  const { firstName, lastName } = getPersonOrConnectionName(recipient)
 
   const messages = get(conversation, 'messages', [])
   const csrfToken = get(props, 'csrfToken')
@@ -64,15 +63,15 @@ const MessageThreadPage = props => {
                   )
                 }
 
-                const messageFirstName = message.from.firstName || message.from.asAConnection.firstName
-                const messageLastName = message.from.lastName || message.from.asAConnection.lastName
+                const {
+                  firstName: messageFirstName,
+                  lastName: messageLastName
+                } = getPersonOrConnectionName(message.from)
 
                 return (
                   <div className={css(style.threadSection)} key={message.id}>
                     <ThreadItem
-                      from={`${messageFirstName} ${
-                        messageLastName
-                      } <${message.from.email}>`}
+                      from={`${messageFirstName} ${messageLastName} <${message.from.email}>`}
                       body={message.body}
                       date={format(message.date, 'DD MMM YY HH:mm')}
                     />
