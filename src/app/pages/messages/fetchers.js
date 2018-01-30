@@ -106,6 +106,10 @@ const replyTo = (props) => {
                 firstName
                 lastName
                 email
+                asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+                  firstName
+                  lastName
+                }
               }
             }
             subject
@@ -183,6 +187,11 @@ const getActiveJobs = (props) => {
       }
       recipient: personByFilters(filters: {id: $recipientId}) {
         firstName
+        lastName
+        asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+          firstName
+          lastName
+        }
       }
       ${Global}
     }
@@ -216,7 +225,7 @@ const getMessageTemplate = (props) => {
           company {
             slug
             job: jobByFilters(filters: {id: $jobId}) {
-              referral: createReferral(person: $userId) {
+              referral: createReferral(person: $recipientId) {
                 id
               }
               slug
@@ -229,6 +238,11 @@ const getMessageTemplate = (props) => {
       }
       recipient: personByFilters(filters: {id: $recipientId}) {
         firstName
+        lastName
+        asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
+          firstName
+          lastName
+        }
         email
       }
       template: fetchTemplate(repo: $repo, type: $templateType, tags: $templateTags)
@@ -266,7 +280,7 @@ const sendNewMessage = ({ session, params, body }) => {
 
   const variables = {
     userId: session.userId,
-    recipientId: body.recipient,
+    recipientId: params.recipientId,
     subject: body.subject,
     body: body.body
   }

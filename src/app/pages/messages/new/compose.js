@@ -17,6 +17,7 @@ const {
 const { getFirstNonNil } = require('@nudj/library')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
+const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage } = require('./actions')
@@ -61,16 +62,18 @@ const ComposeMessagePage = props => {
   const jobSlug = get(job, 'slug', '')
   const referralId = get(job, 'referral.id', '')
 
+  const { firstName, lastName } = getPersonOrConnectionName(recipient)
+
   const subjectTemplate = render({
     template: template.subject,
     data: {
       recipient: {
-        firstname: get(user, 'recipient.firstName', 'Hey')
+        firstname: firstName
       }
     }
   })[0].join('')
   const referralLink = `${get(props, 'web.protocol')}://${get(props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
-  const messageTemplate = parseJobMessageTemplate(template.message, job, user, recipient, referralLink)
+  const messageTemplate = parseJobMessageTemplate(template.message, job, user, { firstName }, referralLink)
 
   const subjectValue = getFirstNonNil(
     composeMessage.subject,
