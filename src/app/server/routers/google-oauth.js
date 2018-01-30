@@ -15,7 +15,7 @@ async (req, accessToken, refreshToken, profile, cb) => {
   const query = `
     mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID!) {
       user (id: $userId) {
-        account: createAccount(type: $type data: $data) {
+        account: createOrUpdateAccount(type: $type data: $data) {
           id
         }
       }
