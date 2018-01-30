@@ -9,7 +9,8 @@ declare type Person = {
   type?: string,
   url?: string,
   hirer?: Hirer,
-  employments?: Array<Employment>
+  employments?: Array<Employment>,
+  emailPreference?: string
 }
 
 declare type Employment = {
