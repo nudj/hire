@@ -15,6 +15,8 @@ const get = ({ session }) => {
         }
         connections {
           id
+          firstName
+          lastName
           role {
             name
           }
@@ -29,10 +31,6 @@ const get = ({ session }) => {
             email
             firstName
             lastName
-            asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
-              firstName
-              lastName
-            }
           }
         }
       }

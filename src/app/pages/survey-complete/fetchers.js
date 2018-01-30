@@ -14,6 +14,8 @@ const completeSurvey = ({ session, params }) => {
       }) {
         connections {
           id
+          firstName
+          lastName
           role {
             name
           }
@@ -28,10 +30,6 @@ const completeSurvey = ({ session, params }) => {
             email
             firstName
             lastName
-            asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
-              firstName
-              lastName
-            }
           }
         }
       }
