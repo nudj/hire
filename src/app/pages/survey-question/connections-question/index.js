@@ -94,36 +94,35 @@ const ConnectionsQuestionPage = props => {
   }
 
   const renderSearchTable = () => {
-    switch (true) {
-      case !!connections.length:
-        return (
-          <div className={css(style.tableOverflow)}>
-            <ConnectionsTable
-              styleSheet={{
-                root: style.table
-              }}
-              onSelect={getHandleSetConnections(question.id, dispatch)}
-              connections={sortBy(connections, ['firstName', 'lastName'])}
-              selectedConnections={selectedConnections}
-              multiple
-            />
-          </div>
-        )
-      case !connections.length && !isNil(searchQuery):
-        return (
-          <div className={css(style.tableOverflow)}>
-            <Heading element='div'>
-              0 people match '{searchQuery}'
-            </Heading>
-            <Para>
-              We can&#39;t find anyone in your contacts that matches your query.
-              Try another search term or add them manually using the link below
-            </Para>
-          </div>
-        )
-      default:
-        return null
+    if (connections.length) {
+      return (
+        <div className={css(style.tableOverflow)}>
+          <ConnectionsTable
+            styleSheet={{
+              root: style.table
+            }}
+            onSelect={getHandleSetConnections(question.id, dispatch)}
+            connections={sortBy(connections, ['firstName', 'lastName'])}
+            selectedConnections={selectedConnections}
+            multiple
+          />
+        </div>
+      )
+    } else if (!connections.length && !isNil(searchQuery)) {
+      return (
+        <div className={css(style.tableOverflow)}>
+          <Text size='largeI' element='div'>
+            0 people match '{searchQuery}'
+          </Text>
+          <Text element='div' style={mss.mtReg}>
+            We can&#39;t find anyone in your contacts that matches your query.
+            Try another search term or add them manually using the link below
+          </Text>
+        </div>
+      )
     }
+
+    return null
   }
 
   return (
@@ -224,7 +223,7 @@ const ConnectionsQuestionPage = props => {
               their details below so you can nudj them.
             </Text>
             <ConnectionsForm
-              style={[mss.mtr, mss.plLgIi, mss.prLgIi]}
+              style={[mss.mtReg, mss.plLgIi, mss.prLgIi]}
               csrfToken={get(props, 'csrfToken')}
               onChange={getHandleConnectionChange(dispatch)}
               onSubmit={getHandleConnectionSubmit(dispatch)}
