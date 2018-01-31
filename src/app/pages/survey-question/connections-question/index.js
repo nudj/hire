@@ -94,7 +94,7 @@ const ConnectionsQuestionPage = props => {
   }
 
   const renderSearchTable = () => {
-    if (!!connections.length) {
+    if (connections.length) {
       return (
         <div className={css(style.tableOverflow)}>
           <ConnectionsTable
@@ -122,7 +122,7 @@ const ConnectionsQuestionPage = props => {
       )
     }
 
-    return null 
+    return null
   }
 
   return (
