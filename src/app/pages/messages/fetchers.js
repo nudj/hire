@@ -185,7 +185,7 @@ const getActiveJobs = (props) => {
           }
         }
       }
-      recipient: personByFilters(filters: {id: $recipientId}) {
+      recipient: person(id: $recipientId) {
         firstName
         lastName
         asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
@@ -236,7 +236,7 @@ const getMessageTemplate = (props) => {
           }
         }
       }
-      recipient: personByFilters(filters: {id: $recipientId}) {
+      recipient: person(id: $recipientId) {
         firstName
         lastName
         asAConnection: asAConnectionByFilters(filters: { from: $userId }) {
