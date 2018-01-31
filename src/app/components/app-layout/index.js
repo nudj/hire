@@ -36,6 +36,15 @@ const ApplicationLayout = props => {
                   <NavLink
                     className={css(style.navigationLink)}
                     activeClassName={css(style.navigationLinkActive)}
+                    to='/Messages'
+                  >
+                    Messages
+                  </NavLink>
+                </li>
+                <li className={css(style.navigationListItem)}>
+                  <NavLink
+                    className={css(style.navigationLink)}
+                    activeClassName={css(style.navigationLinkActive)}
                     to='/recommendations'
                   >
                     Recommendations
@@ -45,18 +54,9 @@ const ApplicationLayout = props => {
                   <NavLink
                     className={css(style.navigationLink)}
                     activeClassName={css(style.navigationLinkActive)}
-                    to='/messages'
-                  >
-                    Messages
-                  </NavLink>
-                </li>
-                <li className={css(style.navigationListItem)}>
-                  <NavLink
-                    className={css(style.navigationLink)}
-                    activeClassName={css(style.navigationLinkActive)}
                     to='/contacts'
                   >
-                    Contacts
+                    All contacts
                   </NavLink>
                 </li>
               </ul>

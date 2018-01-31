@@ -89,7 +89,7 @@ const ContactsPage = props => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>Contacts</title>
+        <title>All contacts</title>
       </Helmet>
       <Main>
         <Section padding>

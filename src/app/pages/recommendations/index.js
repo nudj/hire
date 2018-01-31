@@ -35,7 +35,7 @@ const RecommendationsPage = (props: Object) => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>Your recommendations</title>
+        <title>Recommendations</title>
       </Helmet>
       <Main>
         <Section padding width='regular' style={mss.left}>
