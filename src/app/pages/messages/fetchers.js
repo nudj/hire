@@ -295,37 +295,15 @@ const sendNewMessage = ({ session, params, body }) => {
   }
 }
 
-const setEmailPreference = ({ body, params, session }) => {
-  const gql = `
-    mutation SetEmailPreference(
-      $userId: ID!,
-      $data: PersonUpdateInput!
-    ) {
-      updatePerson(id: $userId, data: $data) {
-        id
-        emailPreference
-      }
-    }
-  `
-
-  const variables = {
-    userId: session.userId,
-    data: {
-      emailPreference: body.emailProvider
-    }
-  }
-
-  // TODO: Dry up with survey-complete/fetchers.js `setEmailPreference`
-  const respond = data => {
+const redirectToGoogleAuth = ({ session }) => ({
+  respond: data => {
     session.returnTo = `/messages`
     session.returnFail = `/messages`
     throw new Redirect({
       url: '/auth/google'
     })
   }
-
-  return { gql, variables, respond }
-}
+})
 
 module.exports = {
   getMessages,
@@ -334,5 +312,5 @@ module.exports = {
   getMessageTemplate,
   replyTo,
   sendNewMessage,
-  setEmailPreference
+  redirectToGoogleAuth
 }

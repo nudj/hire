@@ -3,6 +3,7 @@ const { Strategy: GoogleStrategy } = require('passport-google-oauth20')
 const createRouter = require('@nudj/framework/router')
 
 const requestGql = require('../../lib/requestGql')
+const { emailPreferences } = require('../../lib/constants')
 const { createNotification } = require('../../lib')
 
 passport.use(new GoogleStrategy({
@@ -13,7 +14,10 @@ passport.use(new GoogleStrategy({
 },
 async (req, accessToken, refreshToken, profile, cb) => {
   const query = `
-    mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID!) {
+    mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID! $personData: PersonUpdateInput!) {
+      updatePerson(id: $userId, data: $personData) {
+        id
+      }
       user (id: $userId) {
         account: createOrUpdateAccount(type: $type data: $data) {
           id
@@ -24,6 +28,9 @@ async (req, accessToken, refreshToken, profile, cb) => {
   const variables = {
     userId: req.session.userId,
     type: 'GOOGLE',
+    personData: {
+      emailPreference: emailPreferences.GOOGLE
+    },
     data: {
       accessToken,
       refreshToken

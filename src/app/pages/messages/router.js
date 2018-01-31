@@ -46,7 +46,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   router.postHandlers(
     '/sync-google',
     ensureOnboarded,
-    respondWithGql(fetchers.setEmailPreference)
+    respondWithGql(fetchers.redirectToGoogleAuth)
   )
 
   return router
