@@ -130,21 +130,27 @@ const setEmailPreference = ({ body, params, query, session }) => {
     }
   }
 
-  const respond = data => {
-    if (body.emailProvider === emailPreferences.GOOGLE) {
-      session.returnTo = `/messages/new/${query.id}`
-      session.returnFail = `/surveys/${params.surveySlug}/complete`
-      throw new Redirect({
-        url: '/auth/google'
-      })
-    }
-
+  const respondGoogle = () => {
+    session.returnTo = `/messages/new/${query.id}`
+    session.returnFail = `/surveys/${params.surveySlug}/complete`
     throw new Redirect({
-      url: `/messages/new/${query.id}`
+      url: '/auth/google'
     })
   }
 
-  return { gql, variables, respond }
+  if (body.emailProvider === emailPreferences.GOOGLE) {
+    return { respond: respondGoogle }
+  }
+
+  return {
+    gql,
+    variables,
+    respond: () => {
+      throw new Redirect({
+        url: `/messages/new/${query.id}`
+      })
+    }
+  }
 }
 
 module.exports = {
