@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const sortBy = require('lodash/sortBy')
+const isNil = require('lodash/isNil')
 const URLSearchParams = require('url-search-params')
 
 const { getFirstNonNil } = require('@nudj/library')
@@ -74,9 +75,10 @@ const ContactsPage = props => {
   const selectedConnectionId = get(selectedConnection, 'person.id')
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
-  const searchQuery = getFirstNonNil(
+  const searchQuery = queryParams.get('search')
+  const searchInput = getFirstNonNil(
     state.searchQuery,
-    queryParams.get('search'),
+    searchQuery,
     ''
   )
 
@@ -84,6 +86,37 @@ const ContactsPage = props => {
   const handleSearchClear = ({ value }) => {
     handleSearchChange(value)
     history.push(match.url)
+  }
+
+  const renderSearchTable = () => {
+    if (!!connections.length) {
+      return (
+        <div className={css(style.tableOverflow)}>
+          <ConnectionsTable
+            styleSheet={{
+              root: style.table
+            }}
+            connections={sortBy(connections, ['firstName', 'lastName'])}
+            onSelect={getHandleSelectContacts(dispatch)}
+            selectedConnections={selectedContacts}
+          />
+        </div>
+      )
+    } else if (!connections.length && !isNil(searchQuery)) {
+      return (
+        <div className={css(style.tableOverflow)}>
+          <Text size='largeI' element='div'>
+            0 people match '{searchQuery}'
+          </Text>
+          <Text element='div' style={mss.mtReg}>
+            We can&#39;t find anyone in your contacts that matches your query.
+            Try another search term or add them manually using the link below
+          </Text>
+        </div>
+      )
+    }
+
+    return null 
   }
 
   return (
@@ -118,7 +151,7 @@ const ContactsPage = props => {
                 name='search'
                 label='search'
                 type='search'
-                value={searchQuery}
+                value={searchInput}
                 onChange={handleSearchChange}
                 onClear={handleSearchClear}
                 placeholder='e.g., Jonny Ive'
@@ -140,18 +173,7 @@ const ContactsPage = props => {
                 ) : 'Search' }
               </Button>
             </form>
-            { connections.length > 0 && (
-              <div className={css(style.tableOverflow)}>
-                <ConnectionsTable
-                  styleSheet={{
-                    root: style.table
-                  }}
-                  connections={sortBy(connections, ['firstName', 'lastName'])}
-                  onSelect={getHandleSelectContacts(dispatch)}
-                  selectedConnections={selectedContacts}
-                />
-              </div>
-            )}
+            {renderSearchTable()}
           </Card>
           <Button
             subtle
