@@ -48,7 +48,7 @@ const googleAuthentication = passport.authorize('google', {
     'https://www.googleapis.com/auth/gmail.readonly'
   ],
   accessType: 'offline',
-  approvalPrompt: 'force'
+  prompt: 'consent'
 })
 
 const authenticationFailureHandler = (req, res, next) => {
