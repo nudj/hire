@@ -60,3 +60,24 @@ const { app, getMockApiApps } = server({
   gqlFragments,
   LoadingComponent: LoadingPage
 })
+
+app.listen(80, () => {
+  logger.log('info', 'Application running')
+})
+
+if (process.env.USE_MOCKS === 'true') {
+  const mockExternalRequests = require('./mocks')
+  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
+
+  jsonServer.listen(81, () => {
+    logger.log('info', 'JSONServer running')
+  })
+
+  gqlServer.listen(82, () => {
+    logger.log('info', 'Mock GQL running')
+  })
+
+  mockExternalRequests(() => {
+    logger.log('info', 'Mocking external requests')
+  })
+}
