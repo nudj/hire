@@ -25,3 +25,8 @@ Nudj website for hirers
 
 Both `run` and `dev` runs the application on `localhost:90`. You can also access
 the JSON server on `localhost:91` and GraphQL on `localhost:92`
+
+# How to lunch 
+
+- [x] burger
+- [ ] burrito
