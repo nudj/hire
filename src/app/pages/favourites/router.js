@@ -7,7 +7,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/recommendations', ensureOnboarded, respondWithGql(fetchers.get))
+  router.getHandlers('/favourites', ensureOnboarded, respondWithGql(fetchers.get))
 
   return router
 }

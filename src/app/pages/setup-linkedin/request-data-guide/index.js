@@ -17,14 +17,14 @@ const {
 const style = require('../style.css')
 
 const LinkedinRequestGuidePage = (props: Object) => (
-  <Layout {...props} title='Part 1 - Unlock your network'>
+  <Layout {...props} title='Part 1: Unlock your network'>
     <Helmet>
-      <title>Requesting your data from LinkedIn</title>
+      <title>Request your connections from LinkedIn</title>
     </Helmet>
     <Main>
       <Section padding>
         <Heading>
-          Requesting your data from LinkedIn
+          Request your connections from LinkedIn
         </Heading>
       </Section>
       <Section padding>

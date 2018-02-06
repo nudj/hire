@@ -67,7 +67,6 @@ const getHandleConnectionSubmit = dispatch => (field, value) => {
 const ContactsPage = props => {
   const { user, contactsPage: state, dispatch, history, match } = props
   const connections = get(user, 'connections', [])
-  const totalConnectionsCount = get(user, 'connectionsCount', 0)
   const selectedContacts = get(state, 'selectedContacts', [])
   const selectedContactId = get(state, 'selectedContacts', [])[0]
 
@@ -122,19 +121,15 @@ const ContactsPage = props => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>All contacts</title>
+        <title>Contacts</title>
       </Helmet>
       <Main>
         <Section padding>
           <Heading>
-            You currently have{' '}
-            <span className={css(mss.fgMidRed)}>
-              {totalConnectionsCount}
-            </span>{' '}
-            people in your network
+            Search your contacts
           </Heading>
           <Para>
-            Search for people to ask for recommendations or add more people to grow your network.
+            Find people who are worth nudj&#39;ing or add more to grow your network.
           </Para>
         </Section>
         <Section padding width='largeI'>
@@ -181,7 +176,7 @@ const ContactsPage = props => {
             onClick={getHandleAddClick(dispatch)}
             style={mss.mtReg}
           >
-            Add person
+            Add an individual contact
           </Button>
           <Modal
             isOpen={get(state, 'showAddIndividualConnectionModal')}

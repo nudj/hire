@@ -52,24 +52,25 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
-    <Layout {...props} title='Part 2 - Uncover hidden gems'>
+    <Layout {...props} title='Part 2: Uncover hidden gems'>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>
       <Main>
         <Section padding>
           <Heading>
-            Finding awesome people to join{' '}
-            <span className={css(mss.fgMidRed)}>
-              {get(company, 'name', '')}
-            </span>
+            Explore your network to find your next hire
           </Heading>
           <Para>
-            The best way to find great people to hire is to source them from
-            your network. However, you need to ask the right people to get the best recommendations.
+            The people you need to hire are already in your network, you just have to
+             remember them or find friends that know them.
           </Para>
           <Para>
-          To help, we&#39;re now going to ask you a series of questions that have been designed to systematically unlock the best people from your past.
+            To help, you&#39;ll now be asked a series of questions designed to unlock all the
+             people from your past who are worth asking.
+          </Para>
+          <Para>
+            <em className={css(mss.i)}>Remember to think broadly and inclusively.</em>
           </Para>
         </Section>
         <Section padding>

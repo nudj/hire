@@ -89,17 +89,16 @@ const ComposeMessagePage = props => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>Send your message</title>
+        <title>Compose a message</title>
       </Helmet>
       <Main>
         <Section padding>
           <Heading level={1} style={mss.fgPrimary}>
-            Now compose your masterpiece
+            Compose a message
           </Heading>
           <Para>
-            We know that the best way to get a response is to make sure the
-            message you send is personal, so take a bit of time to tailor the
-            template below.
+            Take a bit of time to personalise the template below to the person
+             you&#39;re sending it to.
           </Para>
         </Section>
         <Section width='largeI'>

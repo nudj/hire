@@ -15,7 +15,7 @@ const ButtonLink = require('../../components/button-link')
 
 const Main = require('../../components/main')
 const Section = require('../../components/section')
-const { Heading, Para } = require('../../components/app')
+const { Heading, Para } = require('../../components/wizard')
 
 const style = require('./style.css')
 
@@ -36,50 +36,60 @@ const MessagesPage = props => {
       <Main>
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
           ? syncedConversations.length > 0 ? (
-            <Section width='largeI'>
-              <Card style={[mss.pa0, mss.mtReg, mss.ofHide]}>
-                <ol className={css(style.list)}>
-                  {syncedConversations.map(conversation => {
-                    const { id, message, subject, recipient } = conversation
-                    const { body } = message
-                    const { firstName, lastName } = getPersonOrConnectionName(recipient)
+            <div>
+              <Section padding>
+                <Heading>
+                  View your messages
+                </Heading>
+                <Para>
+                  Keep track of the messages you&#39;ve sent and reply to conversations.
+                </Para>
+              </Section>
+              <Section width='largeI'>
+                <Card style={[mss.pa0, mss.mtReg, mss.ofHide]}>
+                  <ol className={css(style.list)}>
+                    {syncedConversations.map(conversation => {
+                      const { id, message, subject, recipient } = conversation
+                      const { body } = message
+                      const { firstName, lastName } = getPersonOrConnectionName(recipient)
 
-                    return (
-                      <li className={css(style.listItem)} key={id}>
-                        <MessagePreview
-                          subject={subject}
-                          body={
-                            message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS
-                              ? 'Google was unable to send your previous message. Most likely because the recipient email address is invalid. Get in touch if you have further questions.'
-                              : body
-                          }
-                          href={`/messages/${id}`}
-                          recipient={`${firstName} ${lastName}`}
-                        />
-                      </li>
-                    )
-                  })}
-                </ol>
-              </Card>
-              <div className={css(mss.center, mss.plReg, mss.prReg)}>
-                <ButtonLink
-                  href='/contacts'
-                  style={mss.mtLgI}
-                  name='emailProvider'
-                  volume='cheer'
-                  subtle
-                >
-                  Start new conversation
-                </ButtonLink>
-              </div>
-            </Section>
+                      return (
+                        <li className={css(style.listItem)} key={id}>
+                          <MessagePreview
+                            subject={subject}
+                            body={
+                              message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS
+                                ? 'Google was unable to send your previous message. Most likely because the recipient email address is invalid. Get in touch if you have further questions.'
+                                : body
+                            }
+                            href={`/messages/${id}`}
+                            recipient={`${firstName} ${lastName}`}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ol>
+                </Card>
+                <div className={css(mss.center, mss.plReg, mss.prReg)}>
+                  <ButtonLink
+                    href='/contacts'
+                    style={mss.mtLgI}
+                    name='emailProvider'
+                    volume='cheer'
+                    subtle
+                  >
+                    Start new conversation
+                  </ButtonLink>
+                </div>
+              </Section>
+            </div>
           ) : (
             <Section width='largeI' padding>
               <Heading level={1} style={mss.fgPrimary}>
                 You haven&apos;t sent any messages
               </Heading>
               <Para>
-                To get candidates you need to send out some requests. After all, those jobs aren&apos;t going to fill themselves.
+                To get candidates you need to nudj someone. After all, those jobs aren&apos;t going to fill themselves.
               </Para>
               <div className={css(mss.center)}>
                 <ButtonLink
@@ -105,7 +115,7 @@ const MessagesPage = props => {
                 display them.
               </Para>
               <Para>
-                We recommend syncing with Gmail, which will ensure you can track
+                We recommend syncing with Gmail, which will allow you to track
                 all your messages going forward. If however, you&apos;d like to use a
                 different email provider then let us know.
               </Para>
