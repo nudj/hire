@@ -19,15 +19,15 @@ const style = require('../style.css')
 const LinkedinDownloadGuidePage = (props: Object) => (
   <Layout
     {...props}
-    title='Part 1 - Unlock your network'
+    title='Part 1: Unlock your network'
   >
     <Helmet>
-      <title>Downloading your connections from LinkedIn</title>
+      <title>Download your connections from LinkedIn</title>
     </Helmet>
     <Main>
       <Section padding>
         <Heading>
-          Downloading your connections from LinkedIn
+          Download your connections from LinkedIn
         </Heading>
       </Section>
       <Section padding>

@@ -32,7 +32,7 @@ const NETWORKS = {
 }
 
 const ChooseNetworkPage = (props: Object) => (
-  <Layout {...props} title='Part 1 - Unlock your network'>
+  <Layout {...props} title='Part 1: Unlock your network'>
     <Helmet>
       <title>Select a network</title>
     </Helmet>
@@ -42,9 +42,7 @@ const ChooseNetworkPage = (props: Object) => (
           Select a network
         </Heading>
         <Para>
-          We recommend choosing the network where you feel the best
-          recommendations will come from based on your company and the roles
-          your hiring for.
+          Pick a network and we&#39;ll help you upload your contacts.
         </Para>
       </Section>
       <Section padding>

@@ -9,8 +9,6 @@ const URLSearchParams = require('url-search-params')
 const isNil = require('lodash/isNil')
 
 const { Modal } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
@@ -26,12 +24,6 @@ const {
   Para,
   styleSheet: wizardStyles
 } = require('../../components/wizard')
-
-const getRecommendationCountString = recommendationCount => {
-  if (recommendationCount === 1) return `${recommendationCount} person`
-
-  return `${recommendationCount} people`
-}
 
 type ViewRecommendationsProps = {
   user?: Person,
@@ -68,22 +60,18 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
   }
 
   return (
-    <Layout {...props} title='Part 3 - Send nudjes'>
+    <Layout {...props} title='Part 3: Send a nudj'>
       <Helmet>
-        <title>View recommendations</title>
+        <title>Send a nudj</title>
       </Helmet>
       {connections.length > 0 ? (
         <Main>
           <Section padding>
             <Heading>
-              You’ve uncovered{' '}
-              <span className={css(mss.fgMidRed)}>
-                {getRecommendationCountString(connections.length)}
-              </span>{' '}
-              worth nudj’ing from within your network
+              Send your first nudj
             </Heading>
             <Para>
-              Now choose someone you’d like to send a nudj request to.
+              Choose a person who you want to get referrals from or encourage to apply for a job.
             </Para>
           </Section>
           <Section padding width='regular'>

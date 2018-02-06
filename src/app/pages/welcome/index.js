@@ -25,12 +25,10 @@ const WelcomePage = (props: Object) => (
     <Main>
       <Section padding>
         <Heading>
-          Welcome to nudj
+          Start hiring with nudj
         </Heading>
         <Para>
-          Before we being, we need you to complete a number of short tasks that
-          will maximise your chances of finding someone awesome to hire and work
-          with.
+          You are a few short tasks away from hiring someone great.
         </Para>
       </Section>
       <Section>
@@ -47,8 +45,7 @@ const WelcomePage = (props: Object) => (
                 Unlock your network
               </Text>
               <Text style={style.listItemBody} element='p'>
-                Export your connections from
-                various sources, allowing you to explore your entire network.
+                Get all your contacts together to explore your entire network in one place.
               </Text>
             </Card>
           </li>
@@ -64,8 +61,7 @@ const WelcomePage = (props: Object) => (
                 Uncover hidden gems
               </Text>
               <Text style={style.listItemBody} element='p'>
-                Identify key people within your network who are
-                worth asking for recommendations.
+                Find the people in your network who can connect you to the best talent.
               </Text>
             </Card>
           </li>
@@ -78,11 +74,11 @@ const WelcomePage = (props: Object) => (
                 alt=''
               />
               <Text element='div' style={style.listItemHeading} size='largeI'>
-                Send nudjes
+                Send a nudj
               </Text>
               <Text style={style.listItemBody} element='p'>
-                Compose and send personalised
-                messages to the people you&#39;ve identified.
+                Write and send personalised
+                messages to get the responses you need.
               </Text>
             </Card>
           </li>

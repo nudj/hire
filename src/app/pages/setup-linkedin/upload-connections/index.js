@@ -46,17 +46,17 @@ const LinkedinUploadPage = (props: Props) => {
   const { dispatch, uploadLinkedinConnectionsPage: state } = props
 
   return (
-    <Layout {...props} title='Part 1 - Unlock your network'>
+    <Layout {...props} title='Part 1: Unlock your network'>
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
       <Main>
         <Section padding>
           <Heading>
-            Upload your Connections.csv file
+            Upload your connections
           </Heading>
           <Para>
-            Unzip the folder you&#39;ve just downloaded, then drag and drop the Connections.csv file onto the box below.
+            Unzip the folder you&#39;ve just downloaded, then drag and drop the Connections.csv file onto the box.
           </Para>
         </Section>
         <Section padding width='regular'>
@@ -87,7 +87,8 @@ const LinkedinUploadPage = (props: Props) => {
                   'Ok, this is taking the biscuit',
                   'Speaking of biscuits, why don\'t you grab one while you wait',
                   'Nearly there',
-                  'Just a few more seconds'
+                  'Just a few more seconds',
+                  'Good things come to those who wait'
                 ]}
                 threshold={4000}
                 ellipsis

@@ -129,7 +129,7 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       notification={notification}
-      title='Part 2 - Uncover hidden gems'
+      title='Part 2: Uncover hidden gems'
     >
       <Helmet>
         <title>Uncover hidden gems</title>
@@ -205,7 +205,7 @@ const ConnectionsQuestionPage = props => {
               onClick={getHandleAddClick(dispatch)}
               style={mss.mtReg}
             >
-              Add person
+              Add an individual
             </Button>
           )}
           <Modal
