@@ -4,7 +4,6 @@ const getContacts = ({ session, query }) => {
   const preSearchQuery = `
     query SurveyQuestionPage($userId: ID!, $blankSearch: Boolean!) {
       user(id: $userId) {
-        connectionsCount
         connections @include(if: $blankSearch) {
           id
           firstName
@@ -31,7 +30,6 @@ const getContacts = ({ session, query }) => {
   const searchQuery = `
     query SurveyQuestionPage($userId: ID!, $search: String!, $fields: [[String!]!]!) {
       user(id: $userId) {
-        connectionsCount
         connections: searchConnections(query: $search, fields: $fields) {
           id
           firstName
