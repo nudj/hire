@@ -24,6 +24,11 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
+  jobCard: {
+    ':nth-child(1) ~ *': {
+      marginTop: sizes.largeI
+    }
+  },
   durationButtonGroup: {
     display: 'flex',
     justifyContent: 'space-around',
