@@ -5,6 +5,7 @@ const get = require('lodash/get')
 const uniqBy = require('lodash/uniqBy')
 const flatten = require('lodash/flatten')
 
+const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const ButtonLink = require('../../components/button-link')
@@ -13,7 +14,7 @@ const Layout = require('../../components/app-layout')
 
 const Main = require('../../components/main')
 const Section = require('../../components/section')
-const { Heading, Para } = require('../../components/wizard')
+const { Heading, Para } = require('../../components/app')
 
 const RecommendationsPage = (props: Object) => {
   const surveyAnswers = get(props, 'surveyAnswers', [])
@@ -46,7 +47,7 @@ const RecommendationsPage = (props: Object) => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading>
+          <Heading level={1} style={mss.fgPrimary}>
             View your favourites
           </Heading>
           <Para>
@@ -69,14 +70,16 @@ const RecommendationsPage = (props: Object) => {
             })
           }
         </Section>
-        <ButtonLink
-          subtle
-          volume='cheer'
-          href={'/contacts'}
-          style={mss.mtReg}
-        >
-          View all contacts
-        </ButtonLink>
+        <div className={css(mss.center)}>
+          <ButtonLink
+            subtle
+            volume='cheer'
+            href={'/contacts'}
+            style={mss.mtReg}
+          >
+            View all contacts
+          </ButtonLink>
+        </div>
       </Main>
     </Layout>
   )

@@ -77,7 +77,7 @@ const FormConnection = (props) => {
         style={style.submit}
         type='submit'
       >
-        Add person
+        Add contact
       </Button>
     </form>
   )

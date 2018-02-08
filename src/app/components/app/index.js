@@ -22,7 +22,7 @@ const Heading = ({ children, style, level, ...props }) => {
       {...props}
       element={element}
       size={size}
-      style={style}
+      style={[styleSheet.heading, style]}
     >
       {children}
     </Text>
