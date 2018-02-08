@@ -31,27 +31,33 @@ const styleSheet = StyleSheet.create({
   },
   durationButtonGroup: {
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     width: '100%',
-    [`@media(min-width: ${breakpoint})`]: {
-      width: 'auto',
-      display: 'block'
-    }
+    borderBottomColor: colors.greyLight,
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid'
   },
   durationButton: {
     textDecoration: 'none',
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    color: colors.greyDarkest,
+    paddingLeft: sizes.smallIi,
+    paddingRight: sizes.smallIi,
+    position: 'relative',
     [`@media(min-width: ${breakpoint})`]: {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular
     }
   },
   durationButtonActive: {
-    textDecoration: 'underline'
+    color: colors.greyDarker,
+    ':after': {
+      content: '""',
+      width: '100%',
+      height: '1px',
+      bottom: '-1px',
+      position: 'absolute',
+      backgroundColor: colors.greyDarker,
+      left: 0
+    }
   }
 })
 
