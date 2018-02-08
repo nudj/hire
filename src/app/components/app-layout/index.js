@@ -39,7 +39,7 @@ const ApplicationLayout = props => {
                     to='/'
                     exact
                   >
-                    Dashboard
+                    Activity
                   </NavLink>
                 </li>
                 <li className={css(style.navigationListItem)}>
