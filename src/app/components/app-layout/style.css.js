@@ -153,6 +153,10 @@ const styleSheet = StyleSheet.create({
     fontWeight: typography.fontWeight.bold,
     height: '100%',
     verticalAlign: 'middle',
+    paddingLeft: sizes.smallIi,
+    paddingRight: sizes.smallIi,
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
     ':before': {
       content: '""',
       display: 'inline-block',
