@@ -15,7 +15,7 @@ const ButtonLink = require('../../components/button-link')
 
 const Main = require('../../components/main')
 const Section = require('../../components/section')
-const { Heading, Para } = require('../../components/wizard')
+const { Heading, Para } = require('../../components/app')
 
 const style = require('./style.css')
 
@@ -38,11 +38,11 @@ const MessagesPage = props => {
           ? syncedConversations.length > 0 ? (
             <div>
               <Section padding>
-                <Heading>
-                  View your messages
+                <Heading level={1} style={mss.fgPrimary}>
+                  Keep track of your messages
                 </Heading>
                 <Para>
-                  Keep track of the messages you&#39;ve sent and reply to conversations.
+                  View and reply to your nudj requests without having to dig through your inbox.
                 </Para>
               </Section>
               <Section width='largeI'>
@@ -78,7 +78,7 @@ const MessagesPage = props => {
                     volume='cheer'
                     subtle
                   >
-                    Start new conversation
+                    Start a new conversation
                   </ButtonLink>
                 </div>
               </Section>

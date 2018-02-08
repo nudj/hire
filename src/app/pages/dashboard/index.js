@@ -11,7 +11,7 @@ const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
-const { Heading } = require('../../components/app')
+const { Heading, Para } = require('../../components/app')
 const JobPerformance = require('../../components/job-performance')
 const style = require('./style.css')
 
@@ -72,13 +72,16 @@ const DashboardPage = (props) => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>Job dashboard</title>
+        <title>Activity</title>
       </Helmet>
       <Main>
         <Section padding>
-          <Heading style={mss.fgPrimary}>
-            Here is what’s going on across all your jobs
+          <Heading level={1} style={mss.fgPrimary}>
+            View your job activity
           </Heading>
+          <Para>
+            See what&#39;s going on across all your company&#39;s open jobs.
+          </Para>
           <div className={css(mss.mtReg, style.durationButtonGroup)}>
             <ButtonLink
               style={[

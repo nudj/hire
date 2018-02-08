@@ -20,9 +20,9 @@ const ConnectionsForm = require('../../components/form-connection')
 const Loader = require('../../components/staged-loader')
 const {
   Heading,
-  Para,
-  Footer
-} = require('../../components/wizard')
+  Para
+} = require('../../components/app')
+const { Footer } = require('../../components/wizard')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
@@ -126,7 +126,7 @@ const ContactsPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading>
+          <Heading level={1} style={mss.fgPrimary}>
             Search your contacts
           </Heading>
           <Para>
@@ -171,14 +171,16 @@ const ContactsPage = props => {
             </form>
             {renderSearchTable()}
           </Card>
-          <Button
-            subtle
-            volume='cheer'
-            onClick={getHandleAddClick(dispatch)}
-            style={mss.mtReg}
-          >
-            Add an individual contact
-          </Button>
+          <div className={css(mss.center)}>
+            <Button
+              subtle
+              volume='cheer'
+              onClick={getHandleAddClick(dispatch)}
+              style={mss.mtReg}
+            >
+              Add an individual contact
+            </Button>
+          </div>
           <Modal
             isOpen={get(state, 'showAddIndividualConnectionModal')}
             style={style.modalWindow}
@@ -187,7 +189,7 @@ const ContactsPage = props => {
             onRequestClose={getHandleModalClose(dispatch)}
           >
             <Text element='div' size='largeI' style={style.modalHeading}>
-              Add an individual
+              Add an individual contact
             </Text>
             <Text element='p' style={style.modalBody}>
               Thought of someone who might help you in your search? Just add
