@@ -149,7 +149,7 @@ const DashboardPage = (props) => {
         </Section>
         <Section padding>
           { jobs.map(job => (
-            <Card key={job.id}>
+            <Card key={job.id} style={style.jobCard}>
               <JobPerformance
                 title={job.title}
                 location={job.location}

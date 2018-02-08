@@ -19,7 +19,7 @@ const JobPerformance = props => {
 
   return (
     <div className={css(style.root)}>
-      <div>
+      <div className={css(style.header)}>
         <Text element='div' size='largeI' style={style.title}>
           {title}
         </Text>

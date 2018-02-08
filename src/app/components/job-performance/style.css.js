@@ -10,9 +10,19 @@ const styleSheet = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'left',
-    '@media(min-width: 50rem)': {
+    '@media(min-width: 62.5rem)': {
       flexDirection: 'row',
       alignItems: 'center'
+    }
+  },
+  header: {
+    '@media(min-width: 38.75rem)': {
+      textAlign: 'center'
+    },
+    '@media(min-width: 62.5rem)': {
+      width: '33.333%',
+      maxWidth: '13.125rem',
+      textAlign: 'left'
     }
   },
   title: {
@@ -29,10 +39,15 @@ const styleSheet = StyleSheet.create({
     marginBottom: 0,
     marginLeft: `-${sizes.smallIi}`,
     marginRight: `-${sizes.smallIi}`,
-    '@media(min-width: 50rem)': {
+    textAlign: 'left',
+    '@media(min-width: 38.75rem)': {
+      textAlign: 'center'
+    },
+    '@media(min-width: 62.5rem)': {
       flexGrow: 1,
       marginLeft: sizes.smallIi,
-      marginRight: sizes.smallIi
+      marginRight: sizes.smallIi,
+      textAlign: 'left'
     }
   },
   statisticItem: {
@@ -41,9 +56,9 @@ const styleSheet = StyleSheet.create({
     flexBasis: '33.33333%',
     paddingLeft: sizes.smallIi,
     paddingRight: sizes.smallIi,
-    marginTop: sizes.regular,
+    marginTop: sizes.largeIi,
     flexGrow: 1,
-    '@media(min-width: 50rem)': {
+    '@media(min-width: 62.5rem)': {
       marginTop: 0
     }
   },
@@ -59,22 +74,31 @@ const styleSheet = StyleSheet.create({
     marginTop: sizes.smallIi
   },
   actions: {
-    marginTop: sizes.regular,
+    marginTop: sizes.largeIi,
     display: 'flex',
     flexDirection: 'column',
-    '@media(min-width: 50rem)': {
-      flexDirection: 'row-reverse',
+    '@media(min-width: 38.75rem)': {
+      flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center'
+    },
+    '@media(min-width: 62.5rem)': {
+      flexDirection: 'row-reverse',
       marginTop: 0
     }
   },
   action: {
     width: '100%',
+    maxWidth: '12.5rem',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     ':nth-child(n + 2)': {
       marginTop: sizes.regular
     },
-    '@media(min-width: 50rem)': {
+    '@media(min-width: 38.75rem)': {
       width: 'auto',
+      marginLeft: 0,
+      marginRight: 0,
       ':nth-child(n + 2)': {
         marginTop: 0
       }
