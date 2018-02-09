@@ -2,7 +2,7 @@ const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   heading: {
-    ':nth-child(1) + *': {
+    ':nth-child(1) + p': {
       marginTop: sizes.regular
     }
   },

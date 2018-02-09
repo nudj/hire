@@ -1,9 +1,10 @@
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 
 const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { Global } = require('../../lib/graphql')
 
-const completeSurvey = ({ session, params }) => {
+const completeSurvey = ({ session, params, res }) => {
   const gql = `
     mutation SurveyPage (
       $userId: ID!,
@@ -36,6 +37,7 @@ const completeSurvey = ({ session, params }) => {
       user (id: $userId) {
         emailPreference
         hirer {
+          onboarded
           setOnboarded
           company {
             survey: surveyByFilters (filters: {
@@ -63,7 +65,15 @@ const completeSurvey = ({ session, params }) => {
     userId: session.userId,
     surveySlug: params.surveySlug
   }
-  return { gql, variables }
+
+  const transformData = data => {
+    const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
+    if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+
+    return data
+  }
+
+  return { gql, variables, transformData }
 }
 
 const setEmailPreference = ({ body, params, query, session }) => {

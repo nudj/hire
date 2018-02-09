@@ -13,15 +13,15 @@ const getLevelSize = level => {
   }
 }
 
-const Heading = ({ children, style, level, ...props }) => {
+const Heading = ({ children, style, level, size, ...props }) => {
   const element = `h${level}`
-  const size = getLevelSize(level)
+  const calculatedSize = size || getLevelSize(level)
 
   return (
     <Text
       {...props}
       element={element}
-      size={size}
+      size={calculatedSize}
       style={[styleSheet.heading, style]}
     >
       {children}
