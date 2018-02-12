@@ -100,7 +100,7 @@ class MessageThreadPage extends React.Component {
               <form className={css(style.threadSection)} method='post'>
                 <Textarea name='body' placeholder='Write your message here...' />
                 <input name='_csrf' value={csrfToken} type='hidden' />
-                <Button style={style.replyButton} type='submit' volume='cheer'>
+                <Button style={mss.mtReg} type='submit' volume='cheer'>
                   Reply
                 </Button>
               </form>
