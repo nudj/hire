@@ -22,9 +22,6 @@ const MessagePreview = ({
   href
 }: MessagePreviewProps) => (
   <Link className={css(style.root)} to={href}>
-    <div className={css(style.leftContainer)}>
-      <div className={css(style.indicator, unread && style.unreadIndicator)} />
-    </div>
     <div className={css(style.centerContainer)}>
       <Text style={[style.recipient, unread && style.unreadText]} element='div' size='largeI'>
         {recipient}

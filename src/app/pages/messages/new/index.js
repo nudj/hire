@@ -29,11 +29,11 @@ const NewConversationPage = props => {
       <Main>
         <Section padding>
           <Heading level={1} style={mss.fgPrimary}>
-            Select the job you’d like to send {recipient}
+            Choose a job
           </Heading>
           <Para>
-            Select which of your company&#39;s open jobs this person is most
-            likely to provide the best recommendations for.
+            Select the job that {recipient} is most
+            likely to apply for or know people who are worth referring.
           </Para>
         </Section>
         <Section padding width='smallI'>

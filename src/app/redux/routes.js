@@ -1,6 +1,7 @@
 const checkMobileDevice = require('../pages/check-device-wrapper')
 
 module.exports = {
+  '/': require('../pages/dashboard'),
   '/welcome': checkMobileDevice(require('../pages/welcome')),
   '/setup-network': checkMobileDevice(require('../pages/setup-network')),
   '/setup-network/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
@@ -9,11 +10,12 @@ module.exports = {
   '/surveys/:surveySlug': checkMobileDevice(require('../pages/survey')),
   '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': checkMobileDevice(require('../pages/survey-question')),
   '/surveys/:surveySlug/complete': checkMobileDevice(require('../pages/survey-complete')),
-  '/recommendations': require('../pages/recommendations'),
+  '/favourites': require('../pages/favourites'),
   '/messages': require('../pages/messages'),
   '/messages/:conversationId': require('../pages/messages/thread'),
   '/messages/new/:recipientId': require('../pages/messages/new'),
   '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
+  '/contacts/job/:jobId': require('../pages/contacts'),
   '/notification-sent': require('../pages/notification-sent')
 }

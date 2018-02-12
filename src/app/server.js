@@ -29,13 +29,13 @@ const expressRouters = {
     require('./pages/check-device-wrapper/router'),
     require('./pages/contacts/router'),
     require('./pages/messages/router'),
-    require('./pages/recommendations/router'),
+    require('./pages/favourites/router'),
     require('./pages/setup-linkedin/router'),
     require('./pages/survey-complete/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey/router'),
     require('./pages/notification-sent/router'),
-    require('./pages/tasks/router'),
+    require('./pages/dashboard/router'),
     require('./server/routers/catch-all')
   ]
 }

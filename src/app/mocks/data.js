@@ -1,3 +1,5 @@
+const { format } = require('date-fns')
+
 const {
   questionTypes,
   emailPreferences
@@ -13,6 +15,8 @@ const {
   COMPANIES,
   CONNECTIONS
 } = questionTypes
+
+const today = format(new Date())
 
 const data = {
   assets: [],
@@ -43,7 +47,8 @@ const data = {
   connections: [],
   employments: [],
   roles: [],
-  sources: []
+  sources: [],
+  events: []
 }
 data.conversations = data.conversations.concat([
   {
@@ -216,7 +221,8 @@ data.jobs = data.jobs.concat([
     company: 'company99',
     relatedJobs: [
       '2'
-    ]
+    ],
+    viewCount: 0
   },
   {
     id: 'job2',
@@ -241,7 +247,8 @@ data.jobs = data.jobs.concat([
     company: 'company1',
     relatedJobs: [
       '1'
-    ]
+    ],
+    viewCount: 0
   },
   {
     id: 'job3',
@@ -266,7 +273,8 @@ data.jobs = data.jobs.concat([
     company: 'company2',
     relatedJobs: [
       '1'
-    ]
+    ],
+    viewCount: 0
   }
 ])
 data.people = data.people.concat([
@@ -376,7 +384,7 @@ data.hirers = data.hirers.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     person: 'person5',
     company: 'company1',
-    onboarded: false
+    onboarded: true
   },
   {
     id: 'hirer2',
@@ -426,8 +434,8 @@ data.referrals = data.referrals.concat([
     job: 'job2',
     person: 'person2',
     parent: null,
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00'
+    created: today,
+    modified: today
   }
 ])
 data.applications = data.applications.concat([
@@ -436,8 +444,8 @@ data.applications = data.applications.concat([
     job: 'job2',
     person: 'person3',
     referral: 'referral1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00'
+    created: today,
+    modified: today
   }
 ])
 data.recommendations = data.recommendations.concat([
@@ -601,6 +609,16 @@ data.sources = data.sources.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     name: 'linkedin'
+  }
+])
+data.events = data.events.concat([
+  {
+    eventType: 'viewed',
+    entityType: 'jobs',
+    entityId: 'job2',
+    browserId: 'Yummy_Cookie_Hash_Thing',
+    created: today,
+    modified: today
   }
 ])
 

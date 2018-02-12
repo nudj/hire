@@ -20,9 +20,9 @@ const ConnectionsForm = require('../../components/form-connection')
 const Loader = require('../../components/staged-loader')
 const {
   Heading,
-  Para,
-  Footer
-} = require('../../components/wizard')
+  Para
+} = require('../../components/app')
+const { Footer } = require('../../components/wizard')
 const {
   setSelectedContacts,
   updateContactsSearchQuery,
@@ -51,9 +51,9 @@ const getHandleModalClose = dispatch => event => {
   dispatch(hideAddContactForm())
 }
 
-const getHandleSearchSubmit = dispatch => event => {
+const getHandleSearchSubmit = (dispatch, url) => event => {
   event.preventDefault()
-  dispatch(search())
+  dispatch(search(url))
 }
 
 const getHandleConnectionChange = dispatch => (field, value) => {
@@ -66,8 +66,8 @@ const getHandleConnectionSubmit = dispatch => (field, value) => {
 
 const ContactsPage = props => {
   const { user, contactsPage: state, dispatch, history, match } = props
+  const jobId = get(match, 'params.jobId')
   const connections = get(user, 'connections', [])
-  const totalConnectionsCount = get(user, 'connectionsCount', 0)
   const selectedContacts = get(state, 'selectedContacts', [])
   const selectedContactId = get(state, 'selectedContacts', [])[0]
 
@@ -122,25 +122,21 @@ const ContactsPage = props => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>All contacts</title>
+        <title>Contacts</title>
       </Helmet>
       <Main>
         <Section padding>
-          <Heading>
-            You currently have{' '}
-            <span className={css(mss.fgMidRed)}>
-              {totalConnectionsCount}
-            </span>{' '}
-            people in your network
+          <Heading level={1} style={mss.fgPrimary}>
+            Search your contacts
           </Heading>
           <Para>
-            Search for people to ask for recommendations or add more people to grow your network.
+            Find people who are worth nudj&#39;ing or add more to grow your network.
           </Para>
         </Section>
         <Section padding width='largeI'>
           <Card style={[mss.pl0, mss.pr0]}>
             <form
-              onSubmit={getHandleSearchSubmit(dispatch)}
+              onSubmit={getHandleSearchSubmit(dispatch, match.url)}
               className={css(mss.plLgIi, mss.prLgIi)}
             >
               <Text element='label' size='smallI' htmlFor='search'>
@@ -175,14 +171,16 @@ const ContactsPage = props => {
             </form>
             {renderSearchTable()}
           </Card>
-          <Button
-            subtle
-            volume='cheer'
-            onClick={getHandleAddClick(dispatch)}
-            style={mss.mtReg}
-          >
-            Add person
-          </Button>
+          <div className={css(mss.center)}>
+            <Button
+              subtle
+              volume='cheer'
+              onClick={getHandleAddClick(dispatch)}
+              style={mss.mtReg}
+            >
+              Add an individual contact
+            </Button>
+          </div>
           <Modal
             isOpen={get(state, 'showAddIndividualConnectionModal')}
             style={style.modalWindow}
@@ -191,7 +189,7 @@ const ContactsPage = props => {
             onRequestClose={getHandleModalClose(dispatch)}
           >
             <Text element='div' size='largeI' style={style.modalHeading}>
-              Add an individual
+              Add an individual contact
             </Text>
             <Text element='p' style={style.modalBody}>
               Thought of someone who might help you in your search? Just add
@@ -209,7 +207,10 @@ const ContactsPage = props => {
             <Align
               rightChildren={
                 <ButtonLink
-                  href={`/messages/new/${selectedConnectionId}`}
+                  href={jobId
+                    ? `/messages/new/${selectedConnectionId}/${jobId}`
+                    : `/messages/new/${selectedConnectionId}`
+                  }
                   volume='cheer'
                   disabled={!selectedConnectionId}
                 >

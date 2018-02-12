@@ -129,7 +129,7 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       notification={notification}
-      title='Part 2 - Uncover hidden gems'
+      title='Part 2: Uncover hidden gems'
     >
       <Helmet>
         <title>Uncover hidden gems</title>
@@ -205,7 +205,7 @@ const ConnectionsQuestionPage = props => {
               onClick={getHandleAddClick(dispatch)}
               style={mss.mtReg}
             >
-              Add person
+              Add an individual contact
             </Button>
           )}
           <Modal
@@ -216,7 +216,7 @@ const ConnectionsQuestionPage = props => {
             onRequestClose={getHandleModalClose(dispatch)}
           >
             <Text element='div' size='largeI' style={style.modalHeading}>
-              Add an individual
+              Add an individual contact
             </Text>
             <Text element='p' style={style.modalBody}>
               Thought of someone who might help you in your search? Just add

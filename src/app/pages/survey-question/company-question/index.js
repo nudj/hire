@@ -56,7 +56,7 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
   return (
     <Layout
       {...props}
-      title='Part 2 - Uncover hidden gems'
+      title='Part 2: Uncover hidden gems'
       notification={notification}
     >
       <Helmet>

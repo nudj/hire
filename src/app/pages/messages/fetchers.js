@@ -43,7 +43,7 @@ const getMessages = props => {
 }
 
 const getThread = props => {
-  const { session, params } = props
+  const { session, params, req, res } = props
 
   const gql = `
     query GetThread($userId: ID!, $conversationId: ID!) {
@@ -86,7 +86,17 @@ const getThread = props => {
     conversationId: params.conversationId
   }
 
-  return { gql, variables }
+  const transformData = data => {
+    const { newlyOnboarded } = req.cookies
+    res.cookie('newlyOnboarded', false)
+
+    return {
+      ...data,
+      newlyOnboarded: newlyOnboarded === 'true'
+    }
+  }
+
+  return { gql, variables, transformData }
 }
 
 const replyTo = (props) => {
