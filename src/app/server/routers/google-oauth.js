@@ -13,8 +13,8 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 async (req, accessToken, refreshToken, profile, cb) => {
-  const emails = profile.emails.map(email => email.value)
-  const email = emails[0]
+  const emailAddresses = profile.emails.map(email => email.value)
+  const emailAddress = emailAddresses[0]
   const query = `
     mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID! $personData: PersonUpdateInput!) {
       updatePerson(id: $userId, data: $personData) {
@@ -34,8 +34,8 @@ async (req, accessToken, refreshToken, profile, cb) => {
       emailPreference: emailPreferences.GOOGLE
     },
     data: {
-      email,
-      emails,
+      emailAddress,
+      emailAddresses,
       data: {
         accessToken,
         refreshToken
