@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   stepCounter: {
@@ -34,6 +34,24 @@ const styleSheet = StyleSheet.create({
   modalBody: {
     marginTop: sizes.regular,
     textAlign: 'center'
+  },
+  searchForm: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: sizes.smallIi,
+    paddingLeft: sizes.smallIi
+  },
+  searchInput: {
+    flexGrow: 1
+  },
+  searchButton: {
+    flexShrink: 1
+  },
+  resultsContainer: {
+    marginTop: sizes.smallIi,
+    borderTopColor: colors.greyLight,
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid'
   }
 })
 
