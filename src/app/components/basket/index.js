@@ -5,6 +5,16 @@ const { Align, Text } = require('@nudj/components')
 const ButtonLink = require('../button-link')
 const style = require('./style.css')
 
+const getButtonColor = count => {
+  if (count >= 3) {
+    return 'shout'
+  } else if (count) {
+    return 'cheer'
+  }
+
+  return 'murmur'
+}
+
 const Basket = ({ basket, skipLabel, nextLabel, nextHref, nextClick }) => (
   <Align
     leftChildren={
@@ -14,7 +24,7 @@ const Basket = ({ basket, skipLabel, nextLabel, nextHref, nextClick }) => (
     }
     rightChildren={
       <ButtonLink
-        volume={basket.length ? 'cheer' : 'murmur'}
+        volume={getButtonColor(basket.length)}
         href={nextHref}
         onClick={nextClick}
       >

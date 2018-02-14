@@ -179,6 +179,7 @@ const ConnectionsQuestionPage = props => {
           <Basket
             basket={selectedConnections}
             skipLabel="I don't know anyone"
+            nextLabel="That's everyone"
             nextClick={handleSaveAnswers(dispatch, question.id)}
           />
         </Footer>
