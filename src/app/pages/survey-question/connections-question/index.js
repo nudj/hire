@@ -91,8 +91,6 @@ const ConnectionsQuestionPage = props => {
     notification
   } = props
 
-  const fullSelectedConnections = connections.filter(connection => selectedConnections.indexOf(connection.id) > -1)
-
   const handleSetConnections = getHandleSetConnections(question.id, dispatch)
   const handleSearchChange = getHandleSearchChange(dispatch)
   const handleSearchClear = ({ value }) => {
@@ -177,7 +175,11 @@ const ConnectionsQuestionPage = props => {
         </Section>
         <Footer>
           <Basket
-            basket={selectedConnections}
+            basket={selectedConnections.map(connection => ({
+              id: connection.id,
+              value: `${connection.firstName} ${connection.lastName}`
+            }))}
+            itemLabel='people'
             skipLabel="I don't know anyone"
             nextLabel="That's everyone"
             nextClick={handleSaveAnswers(dispatch, question.id)}
