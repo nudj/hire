@@ -5,7 +5,7 @@ const getSavedSurveyQuestionConnections = (questionId, surveyAnswers) =>
   flatten(
     surveyAnswers.filter(answer => {
       return get(answer, 'surveyQuestion.id') === questionId
-    }).map(answer => answer.connections.map(connection => connection.id))
+    }).map(answer => answer.connections)
   )
 
 module.exports = getSavedSurveyQuestionConnections
