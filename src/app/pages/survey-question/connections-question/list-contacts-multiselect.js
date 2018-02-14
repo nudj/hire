@@ -1,5 +1,6 @@
 const React = require('react')
 const PropTypes = require('prop-types')
+const find = require('lodash/find')
 
 const { Checkbox } = require('@nudj/components')
 
@@ -15,9 +16,11 @@ const ListContactsMultiSelect = (props) => {
   const handleChange = ({ value, preventDefault, stopPropagation }) => {
     let newSelectedContacts
 
-    if (selectedContacts.includes(value)) {
+    const shouldRemoveSelection = !!find(selectedContacts, { id: value.id })
+
+    if (shouldRemoveSelection) {
       newSelectedContacts = selectedContacts.filter(
-        val => val !== value
+        contact => contact.id !== value.id
       )
     } else {
       newSelectedContacts = [...selectedContacts, value]
@@ -35,10 +38,12 @@ const ListContactsMultiSelect = (props) => {
       contacts={contacts}
       onItemClick={handleChange}
       contactChild={({ id }) => {
+        const checked = !!find(selectedContacts, { id })
+
         return (
           <Checkbox
             value={id}
-            checked={selectedContacts.indexOf(id) > -1}
+            checked={checked}
             presentation
           />
         )
@@ -49,7 +54,7 @@ const ListContactsMultiSelect = (props) => {
 
 ListContactsMultiSelect.propTypes = {
   contacts: PropTypes.array,
-  selectedContacts: PropTypes.arrayOf(PropTypes.string),
+  selectedContacts: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
 }
 

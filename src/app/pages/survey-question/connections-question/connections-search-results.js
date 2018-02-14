@@ -52,7 +52,7 @@ const ContactsSearchResults = (props) => {
 
 ContactsSearchResults.propTypes = {
   contacts: PropTypes.array,
-  selectedContacts: PropTypes.arrayOf(PropTypes.string),
+  selectedContacts: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func,
   onAddIndividualClick: PropTypes.func,
   query: PropTypes.string

@@ -137,6 +137,8 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     surveyAnswers: surveyAnswersByFilters(filters: { person: $userId }) {
       connections {
         id
+        firstName
+        lastName
       }
       surveyQuestion {
         id

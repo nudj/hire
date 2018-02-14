@@ -24,7 +24,7 @@ const ListContacts = (props) => {
         const handleItemClick = (e) => {
           onItemClick({
             name: contact.id,
-            value: contact.id,
+            value: contact,
             preventDefault: e.preventDefault,
             stopPropagation: e.stopPropagation
           })
