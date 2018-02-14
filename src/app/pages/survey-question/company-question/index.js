@@ -100,7 +100,10 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           </Card>
           <Footer>
             <Basket
-              basket={companies}
+              basket={companies.map((item) => ({
+                id: item.company.id,
+                value: item.company.name
+              }))}
               skipLabel='This is my first job'
               nextHref={nextUri}
             />
