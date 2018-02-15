@@ -1,5 +1,10 @@
 const { merge } = require('@nudj/library')
-const { SELECT_JOB, UPDATE_SUBJECT, UPDATE_MESSAGE } = require('./actions')
+const {
+  SELECT_JOB,
+  UPDATE_SUBJECT,
+  UPDATE_MESSAGE,
+  SEND_MESSAGE
+} = require('./actions')
 const { createReducer } = require('../../../lib')
 
 const selectJob = (state, action) => {
@@ -20,16 +25,24 @@ const updateMessage = (state, action) => {
   })
 }
 
+const startLoading = state => {
+  return merge(state, {
+    loading: true
+  })
+}
+
 const reducers = {
   [SELECT_JOB]: selectJob,
   [UPDATE_SUBJECT]: updateSubject,
-  [UPDATE_MESSAGE]: updateMessage
+  [UPDATE_MESSAGE]: updateMessage,
+  [SEND_MESSAGE]: startLoading
 }
 
 const initialState = {
   jobId: null,
   subject: null,
-  message: null
+  message: null,
+  loading: false
 }
 
 module.exports = createReducer(initialState, reducers)

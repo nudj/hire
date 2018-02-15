@@ -20,16 +20,18 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const { render } = require('../../../lib/templater')
 const Layout = require('../../../components/app-layout')
-const { updateSubject, updateMessage } = require('./actions')
+const { updateSubject, updateMessage, sendMessage } = require('./actions')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const { Heading, Para } = require('../../../components/app')
+const Loader = require('../../../components/staged-loader')
 const style = require('./style.css')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
   dispatch(updateSubject(value))
 const getHandleMessageChange = dispatch => ({ value }) =>
   dispatch(updateMessage(value))
+const getHandleSendMessage = dispatch => () => dispatch(sendMessage)
 
 const parseJobMessageTemplate = (template, job, user, recipient, link) =>
   render({
@@ -103,7 +105,7 @@ const ComposeMessagePage = props => {
         </Section>
         <Section width='largeI'>
           <Card>
-            <form method='post'>
+            <form method='post' onSubmit={getHandleSendMessage(dispatch)}>
               <Input
                 name='subject'
                 value={subjectValue}
@@ -120,8 +122,16 @@ const ComposeMessagePage = props => {
               <input name='_csrf' value={csrfToken} type='hidden' />
               <div className={css(mss.center)}>
                 {emailPreference === emailPreferences.GOOGLE ? (
-                  <Button type='submit' volume='cheer' style={mss.mtReg}>
-                    Send message
+                  <Button
+                    type='submit'
+                    volume='cheer'
+                    style={mss.mtReg}
+                    disabled={composeMessage.loading}
+                  >
+                    { composeMessage.loading
+                        ? <Loader messages={['Sending']} ellipsis />
+                        : 'Send message'
+                    }
                   </Button>
                 ) : (
                   <Link
