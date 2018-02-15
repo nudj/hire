@@ -16,6 +16,7 @@ const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const { Heading, Para } = require('../../../components/app')
 const ButtonLink = require('../../../components/button-link')
+const Loader = require('../../../components/staged-loader')
 const style = require('./style.css')
 
 class MessageThreadPage extends React.Component {
@@ -23,7 +24,8 @@ class MessageThreadPage extends React.Component {
     super(props)
 
     this.state = {
-      showOnboardingSuccessModal: !!props.newlyOnboarded
+      showOnboardingSuccessModal: !!props.newlyOnboarded,
+      loading: false
     }
   }
 
@@ -33,8 +35,16 @@ class MessageThreadPage extends React.Component {
     })
   }
 
+  handleSubmit = (e) => {
+    e.persist()
+    e.preventDefault()
+    this.setState({ loading: true }, () => {
+      e.target.submit()
+    })
+  }
+
   render () {
-    const { showOnboardingSuccessModal } = this.state
+    const { showOnboardingSuccessModal, loading } = this.state
     const { user } = this.props
     const { conversation } = user
     const { recipient, newMessage } = conversation
@@ -97,11 +107,23 @@ class MessageThreadPage extends React.Component {
                     </div>
                   )
                 })}
-              <form className={css(style.threadSection)} method='post'>
+              <form
+                className={css(style.threadSection)}
+                method='post'
+                onSubmit={this.handleSubmit}
+              >
                 <Textarea name='body' placeholder='Write your message here...' />
                 <input name='_csrf' value={csrfToken} type='hidden' />
-                <Button style={mss.mtReg} type='submit' volume='cheer'>
-                  Reply
+                <Button
+                  style={mss.mtReg}
+                  type='submit'
+                  volume='cheer'
+                  disabled={loading}
+                >
+                  { loading
+                      ? <Loader messages={['Sending']} ellipsis />
+                      : 'Send reply'
+                  }
                 </Button>
               </form>
             </Card>
