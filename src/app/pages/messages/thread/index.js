@@ -86,11 +86,11 @@ class MessageThreadPage extends React.Component {
                     firstName: messageFirstName,
                     lastName: messageLastName
                   } = getPersonOrConnectionName(message.from)
-
+                  const fromEmail = get(message, 'from.account.emailAddress', get(message, 'from.email'))
                   return (
                     <div className={css(style.threadSection)} key={message.id}>
                       <ThreadItem
-                        from={`${messageFirstName} ${messageLastName} <${message.from.email}>`}
+                        from={`${messageFirstName} ${messageLastName} <${fromEmail}>`}
                         body={message.body}
                         date={format(message.date, 'DD MMM YY HH:mm')}
                       />

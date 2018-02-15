@@ -2,6 +2,7 @@ const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
 const { Global } = require('../../lib/graphql')
+const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
 
 const getMessages = props => {
   const { session } = props
@@ -46,8 +47,12 @@ const getThread = props => {
   const { session, params, req, res } = props
 
   const gql = `
-    query GetThread($userId: ID!, $conversationId: ID!) {
-      user (id: $userId) {
+    query GetThread(
+      $userId: ID!,
+      $conversationId: ID!,
+      $accountType: AccountType!
+    ) {
+      user(id: $userId) {
         emailPreference
         conversation: conversationByFilters(filters: { id: $conversationId }) {
           subject
@@ -73,6 +78,9 @@ const getThread = props => {
                 firstName
                 lastName
               }
+              account: accountByFilters(filters: { type: $accountType }) {
+                emailAddress
+              }
             }
           }
         }
@@ -83,7 +91,8 @@ const getThread = props => {
 
   const variables = {
     userId: session.userId,
-    conversationId: params.conversationId
+    conversationId: params.conversationId,
+    accountType: emailPreferences.GOOGLE
   }
 
   const transformData = data => {

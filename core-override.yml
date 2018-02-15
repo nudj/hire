@@ -1,0 +1,5 @@
+version: '2'
+services:
+  hire:
+    stdin_open: true
+    command: /bin/zsh

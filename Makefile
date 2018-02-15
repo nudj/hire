@@ -1,8 +1,11 @@
-IMAGE:=nudj/hire
-IMAGEDEV:=nudj/hire-dev
+APP:=hire
+IMAGE:=nudj/$(APP)
+IMAGEDEV:=nudj/$(APP)-dev
 CWD=$(shell pwd)
+COREAPPS:=server api redis db
+DOCKERCOMPOSE:=docker-compose -f $(CWD)/../server/local/docker-compose-dev.yml -f $(CWD)/core-override.yml
 
-.PHONY: build buildLocal ssh test
+.PHONY: build buildLocal coreUp coreDown coreLogs up ssh down test
 
 build:
 	@./build.sh $(IMAGEDEV)
@@ -10,44 +13,33 @@ build:
 buildLocal:
 	@docker build \
 		-t $(IMAGE):local \
-		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		--build-arg NODE_ENV=production \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		-f $(CWD)/Dockerfile \
 		.
 
+coreUp:
+	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(COREAPPS)
+
+coreDown:
+	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
+
+coreLogs:
+	@$(DOCKERCOMPOSE) logs -f api
+
+up:
+	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(APP)
+
 ssh:
-	-@docker rm -f hire-dev 2> /dev/null || true
-	@docker run --rm -it \
-		--env-file $(CWD)/.env \
-		--name hire-dev \
-		-e NPM_TOKEN=${NPM_TOKEN} \
-		-p 0.0.0.0:90:80 \
-		-p 0.0.0.0:91:81 \
-		-p 0.0.0.0:92:82 \
-		-v $(CWD)/.zshrc:/root/.zshrc \
-		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/test:/usr/src/test \
-		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
-		-v $(CWD)/src/.babelrc:/usr/src/.babelrc \
-		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
-		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
-		-v $(CWD)/src/package.json:/usr/src/package.json \
-		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
-		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/src/yarn.lock:/usr/src/yarn.lock \
-		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
-		-v $(CWD)/../framework/src:/usr/src/@nudj/framework \
-		-v $(CWD)/../api/src:/usr/src/@nudj/api \
-		-v $(CWD)/../library/src:/usr/src/@nudj/library \
-		-v $(CWD)/../components/src:/usr/src/@nudj/components \
-		$(IMAGEDEV) \
-		/bin/zsh
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/zsh
+
+down:
+	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 test:
-	-@docker rm -f hire-test 2> /dev/null || true
+	-@docker rm -f $(APP)-test 2> /dev/null || true
 	@docker run --rm -it \
-		--env-file $(CWD)/.env \
-		--name hire-test \
+		--name $(APP)-test \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
@@ -60,10 +52,10 @@ test:
 		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
 
 standardFix:
-	-@docker rm -f hire-dev 2> /dev/null || true
+	-@docker rm -f $(APP)-dev 2> /dev/null || true
 	@docker run --rm -it \
 		--env-file $(CWD)/.env \
-		--name hire-dev \
+		--name $(APP)-dev \
 		-e NPM_TOKEN=${NPM_TOKEN} \
 		-v $(CWD)/src/app:/usr/src/app \
 		$(IMAGEDEV) \
