@@ -224,7 +224,7 @@ const submitNewConnection = () => (dispatch, getState) => {
     dispatch(clearAddForm())
     dispatch(setSelectedConnections(
       question.id,
-      newSelectedConnections.concat(response.data.app.user.newConnection.id)
+      newSelectedConnections.concat(response.data.app.user.newConnection)
     ))
     dispatch(actions.app.showNotification({
       type: 'success',
