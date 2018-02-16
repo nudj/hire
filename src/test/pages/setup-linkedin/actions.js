@@ -2,9 +2,11 @@
 const chai = require('chai')
 const sinon = require('sinon')
 const chaiAsPromised = require('chai-as-promised')
-const configureMockStore = require('redux-mock-store').default
 const thunk = require('redux-thunk').default
 const proxyquire = require('proxyquire')
+
+let configureMockStore = require('redux-mock-store')
+configureMockStore = configureMockStore.default || configureMockStore
 
 const expect = chai.expect
 chai.use(chaiAsPromised)
