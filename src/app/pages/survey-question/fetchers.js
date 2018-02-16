@@ -421,6 +421,8 @@ const postNewConnection = ({ session, params, body }) => {
           source: $source
         ) {
           id
+          firstName
+          lastName
         }
       }
     }
