@@ -2,16 +2,15 @@ APP:=hire
 IMAGE:=nudj/$(APP)
 IMAGEDEV:=nudj/$(APP)-dev
 IMAGEUI:=nudj/$(APP)-ui
-CONTAINERTEST:=$(APP)-test
-CONTAINERUI:=$(APP)-ui
 CWD=$(shell pwd)
 COREAPPS:=server api redis db
 DOCKERCOMPOSE:=docker-compose -f $(CWD)/../server/local/docker-compose-dev.yml -f $(CWD)/core-override.yml
 
-.PHONY: build buildLocal coreUp coreDown coreLogs up ssh down ui test
+.PHONY: build buildLocal coreUp coreDown coreLogs up ssh test ui cmd down
 
 build:
 	@./build.sh $(IMAGEDEV)
+	@docker build -t $(IMAGEUI) -f ./Dockerfile.ui .
 
 buildLocal:
 	@docker build \
@@ -36,33 +35,23 @@ up:
 ssh:
 	@$(DOCKERCOMPOSE) exec $(APP) /bin/zsh
 
-down:
-	@$(DOCKERCOMPOSE) rm -f -s $(APP)
+test:
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
+		&& ./node_modules/.bin/flow --quiet \
+		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
 
 ui:
 	@$(DOCKERCOMPOSE) run --rm \
+		-v $(CWD)/src/test/ui:/usr/src/ui \
 		-v $(CWD)/src/test/output:/usr/src/output \
 		ui \
-		node -e "`cat ./src/test/ui/index.js`"
+		node /usr/src/ui/index.js
 
 cmd:
-	@$(DOCKERCOMPOSE) run --force-recreate --rm --no-deps $(APP) wget http://hire/
+	@$(DOCKERCOMPOSE) run --force-recreate --rm --no-deps $(APP) wget http://$(APP)/
 
-test:
-	-@docker rm -f $(CONTAINERTEST) 2> /dev/null || true
-	@docker run --rm -it \
-		--name $(CONTAINERTEST) \
-		--env-file $(CWD)/.env \
-		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/test:/usr/src/test \
-		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
-		-v $(CWD)/src/.babelrc:/usr/src/.babelrc \
-		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
-		-v $(CWD)/src/package.json:/usr/src/package.json \
-		$(IMAGEDEV) \
-		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
-		  && ./node_modules/.bin/flow --quiet \
-		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
+down:
+	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 standardFix:
 	-@docker rm -f $(APP)-dev 2> /dev/null || true

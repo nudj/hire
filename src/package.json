@@ -24,8 +24,7 @@
       "app/node_modules",
       "webpack*",
       "@nudj",
-      "flow-typed",
-      "test/ui"
+      "flow-typed"
     ]
   },
   "dependencies": {
