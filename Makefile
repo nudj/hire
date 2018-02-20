@@ -25,7 +25,7 @@ coreDown:
 	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
 
 coreLogs:
-	@$(DOCKERCOMPOSE) logs -f api
+	@$(DOCKERCOMPOSE) logs -f $(COREAPPS)
 
 up:
 	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(APP)
