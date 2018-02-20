@@ -1,6 +1,9 @@
 APP:=hire
 IMAGE:=nudj/$(APP)
 IMAGEDEV:=nudj/$(APP)-dev
+IMAGEUI:=nudj/$(APP)-ui
+CONTAINERTEST:=$(APP)-test
+CONTAINERUI:=$(APP)-ui
 CWD=$(shell pwd)
 COREAPPS:=server api redis db
 DOCKERCOMPOSE:=docker-compose -f $(CWD)/../server/local/docker-compose-dev.yml -f $(CWD)/core-override.yml
@@ -37,9 +40,9 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 test:
-	-@docker rm -f $(APP)-test 2> /dev/null || true
+	-@docker rm -f $(CONTAINERTEST) 2> /dev/null || true
 	@docker run --rm -it \
-		--name $(APP)-test \
+		--name $(CONTAINERTEST) \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
@@ -50,6 +53,18 @@ test:
 		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
 		  && ./node_modules/.bin/flow --quiet \
 		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
+
+ui:
+	-@docker rm -f $(CONTAINERUI) 2> /dev/null || true
+	@docker run -i --rm \
+		--name $(CONTAINERUI) \
+		--shm-size=1gb \
+		--cap-add=SYS_ADMIN \
+		$(IMAGEUI) \
+		node -e "`cat ./src/test/ui/index.js`"
+
+uicp:
+	@$(DOCKERCOMPOSE) run --rm ui node -e "`cat ./src/test/ui/index.js`"
 
 standardFix:
 	-@docker rm -f $(APP)-dev 2> /dev/null || true
