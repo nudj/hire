@@ -5,3 +5,5 @@ services:
     command: /bin/zsh
   ui:
     image: nudj/hire-ui
+    shm_size: 1gb
+    cap_add: ['SYS_ADMIN']
