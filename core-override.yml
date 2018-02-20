@@ -3,3 +3,5 @@ services:
   hire:
     stdin_open: true
     command: /bin/zsh
+  ui:
+    image: nudj/hire-ui
