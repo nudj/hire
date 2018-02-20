@@ -18,7 +18,7 @@ steps:
     commands:
       - ./node_modules/.bin/standard
       - ./node_modules/.bin/flow --quiet
-      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test
+      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit
 
   build_latest:
     title: Build Latest
