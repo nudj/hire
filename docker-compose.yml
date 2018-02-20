@@ -1,35 +1,21 @@
 version: '2'
 services:
   hire:
-    image: nudj/hire:latest
-    env_file: .env
+    image: nudj/hire:development
     environment:
-      - NODE_ENV=production
-      - SPOOF_USER=false
-    depends_on:
-      - api
-      - redis
-    ports:
-      - "80:80"
-  api:
-    image: nudj/api:latest
-    depends_on:
-      - db
-    ports:
-      - "81:81"
-  redis:
-    image: redis:alpine
+      - NPM_TOKEN
+    env_file: ../hire/.env
     volumes:
-      - sessionData:/data
-  db:
-    image: arangodb
-    environment:
-      - ARANGO_NO_AUTH=1
-    volumes:
-      - dbdata:/var/lib/arangodb
-    ports:
-      - "8529:8529"
-    command: arangod --server.authentication false
-volumes:
-  dbdata:
-  sessionData:
+      - ../hire/.zshrc:/root/.zshrc
+      - ../hire/src/app:/usr/src/app
+      - ../hire/src/test:/usr/src/test
+      - ../hire/src/.flowconfig:/usr/src/.flowconfig
+      - ../hire/src/.npmrc:/usr/src/.npmrc
+      - ../hire/src/nodemon.json:/usr/src/nodemon.json
+      - ../hire/src/package.json:/usr/src/package.json
+      - ../hire/src/webpack.config.js:/usr/src/webpack.config.js
+      - ../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
+      - ../hire/src/yarn.lock:/usr/src/yarn.lock
+      - ../hire/src/flow-typed:/usr/src/flow-typed
+    stdin_open: true
+    command: /bin/zsh
