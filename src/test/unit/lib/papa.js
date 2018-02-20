@@ -2,7 +2,7 @@
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 
-const Papa = require('../../app/lib/papa')
+const Papa = require('../../../app/lib/papa')
 
 const expect = chai.expect
 chai.use(chaiAsPromised)

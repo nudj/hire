@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 const nock = require('nock')
 
-const conversations = require('../../app/server/modules/conversations')
+const conversations = require('../../../app/server/modules/conversations')
 
 const api = nock('http://localhost:82')
 const mockConversationsPost = () => {

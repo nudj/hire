@@ -23,7 +23,7 @@ const {
   completeConnectionsUpload,
   parseLinkedinConnections,
   uploadLinkedinConnections
-} = proxyquire('../../../app/pages/setup-linkedin/actions', {
+} = proxyquire('../../../../app/pages/setup-linkedin/actions', {
   '../../lib/papa': {
     asyncParse: file => Promise.resolve()
   },

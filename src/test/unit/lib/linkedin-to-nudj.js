@@ -4,7 +4,7 @@ const {
   normaliseLinkedinContact,
   linkedinToNudjPerson,
   linkedinToNudjPeople
-} = require('../../app/lib/linkedin-to-nudj')
+} = require('../../../app/lib/linkedin-to-nudj')
 
 const inputWithSpaces = {
   'Email Address': 'example@email.tld',

@@ -3,7 +3,7 @@
 const nock = require('nock')
 const { Unauthorized } = require('@nudj/library/errors')
 
-const gmail = require('../../app/server/modules/gmail')
+const gmail = require('../../../app/server/modules/gmail')
 
 const api = nock('http://localhost:82')
 const googleAccounts = nock('https://accounts.google.com')

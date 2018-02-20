@@ -5,8 +5,8 @@ const {
   COMPLETE_PARSING_LINKEDIN_CONNECTIONS,
   START_CONNECTIONS_UPLOAD,
   COMPLETE_CONNECTIONS_UPLOAD
-} = require('../../../app/pages/setup-linkedin/actions')
-const reducer = require('../../../app/pages/setup-linkedin/reducer')
+} = require('../../../../app/pages/setup-linkedin/actions')
+const reducer = require('../../../../app/pages/setup-linkedin/reducer')
 
 describe('connections reducer', () => {
   it('should return the initial state', () => {
