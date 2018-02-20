@@ -40,7 +40,13 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 ui:
-	@$(DOCKERCOMPOSE) run --rm ui node -e "`cat ./src/test/ui/index.js`"
+	@$(DOCKERCOMPOSE) run --rm \
+		-v $(CWD)/src/test/output:/usr/src/output \
+		ui \
+		node -e "`cat ./src/test/ui/index.js`"
+
+cmd:
+	@$(DOCKERCOMPOSE) run --force-recreate --rm --no-deps $(APP) wget http://hire/
 
 test:
 	-@docker rm -f $(CONTAINERTEST) 2> /dev/null || true
