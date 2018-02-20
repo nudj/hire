@@ -286,7 +286,7 @@ const getMessageTemplate = (props) => {
   return { gql, variables }
 }
 
-const sendNewMessage = ({ session, params, body }) => {
+const sendNewMessage = ({ session, params, body, req }) => {
   const gql = `
     mutation SendNewMessage($userId: ID!, $recipientId: ID!, $subject: String!, $body: String!) {
       user(id: $userId) {
@@ -308,8 +308,16 @@ const sendNewMessage = ({ session, params, body }) => {
     gql,
     variables,
     respond: (pageData) => {
+      const { newlyOnboarded } = req.cookies
+
       // prevents multiple submissions on refresh
-      throw new Redirect({ url: `/messages/${pageData.user.conversation.id}` })
+      throw new Redirect({
+        url: `/messages/${pageData.user.conversation.id}`,
+        notification: newlyOnboarded !== 'true' ? createNotification(
+          'success',
+          'Message sent'
+        ) : null
+      })
     }
   }
 }
