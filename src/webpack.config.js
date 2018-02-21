@@ -14,9 +14,7 @@ let plugins = [
   new webpack.EnvironmentPlugin(['NODE_ENV'])
 ]
 if (process.env.DEBUG !== 'true') {
-  plugins = plugins.concat([
-    new UglifyJSPlugin()
-  ])
+  plugins = plugins.concat([new UglifyJSPlugin()])
 }
 
 module.exports = {
@@ -36,24 +34,35 @@ module.exports = {
         test: /\.js$/,
         include: [
           path.join(__dirname, 'app'),
+          path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
+        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
         loader: 'babel-loader',
         options: {
+          babelrc: false,
           presets: [
             'react',
-            ["env", {
-              "targets": {
-                "browsers": ["last 2 versions", "safari >= 7"]
+            'flow',
+            [
+              'env',
+              {
+                targets: {
+                  browsers: ['last 2 versions', 'safari >= 7']
+                }
               }
-            }]
+            ]
+          ],
+          plugins: [
+            'babel-plugin-transform-class-properties',
+            'babel-plugin-transform-object-rest-spread'
           ]
         }
       }
     ]
   },
   resolve: {
-    mainFields: ["main"]
+    mainFields: ['main']
   },
   plugins,
   stats: {

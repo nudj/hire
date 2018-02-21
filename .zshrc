@@ -1,23 +1,24 @@
 source /root/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='hire» '
 
 alias run="node ."
-alias dev='./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && \
-	./node_modules/.bin/nodemon \
-		--config ./nodemon.json \
-		-e js,html,css \
-		--quiet \
-		--watch ./ \
-		--delay 250ms \
-		-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
-alias test="./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test"
-alias tdd='./node_modules/.bin/nodemon \
+alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+alias test="standard && flow && mocha  --compilers js:babel-core/register --recursive test"
+alias tdd='nodemon \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
-	-x "./node_modules/.bin/mocha --recursive test || exit 1"'
+	-x "mocha --compilers js:babel-core/register --recursive test || exit 1"'
+alias flow='flow --quiet'
+alias standardFix='./node_modules/.bin/standard --fix'
 
+yank () {
+	cd ./@nudj/$1 && yarn link && cd ../.. && yarn link @nudj/$1
+}
+
+alias idev="yank framework && yank components && yank api && yank library && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"

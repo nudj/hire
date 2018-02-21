@@ -1,8 +1,11 @@
 require('envkey')
 require('babel-register')({
-  presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/app/)) {
+    if (
+      filename.match(
+        /\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/
+      )
+    ) {
       return false
     }
     return true
@@ -10,44 +13,42 @@ require('babel-register')({
 })
 const path = require('path')
 const server = require('@nudj/framework/server')
-const find = require('lodash/find')
+const logger = require('@nudj/framework/logger')
 
-const App = require('./redux')
+const mockData = require('./mocks/data')
+const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
-const LoadingComponent = require('./components/loading/loading')
+const LoadingPage = require('./pages/loading')
+
 const expressRouters = {
   insecure: [],
   secure: [
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
-    require('./pages/tasks/router'),
-    require('./pages/import-contacts/router'),
-    require('./pages/survey-compose/router'),
+    require('./pages/check-device-wrapper/router'),
+    require('./pages/contacts/router'),
+    require('./pages/messages/router'),
+    require('./pages/favourites/router'),
+    require('./pages/setup-linkedin/router'),
+    require('./pages/survey-complete/router'),
+    require('./pages/survey-question/router'),
     require('./pages/survey/router'),
-    require('./pages/jobs/router'),
-    require('./pages/job/router'),
-    require('./pages/nudj/router'),
-    require('./pages/internal-compose/router'),
-    require('./pages/external-select/router'),
-    require('./pages/external-compose/router'),
+    require('./pages/notification-sent/router'),
+    require('./pages/dashboard/router'),
     require('./server/routers/catch-all')
   ]
 }
 const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
-const mockData = require('./mock-data')
 const spoofLoggedIn = (req, res, next) => {
-  req.session.data = req.session.data || {
-    hirer: find(mockData.hirers, { id: 'hirer1' }),
-    person: find(mockData.people, { id: 'person5' }),
-    company: find(mockData.companies, { id: 'company1' })
-  }
+  req.session.userId = 'person5'
   next()
 }
 const errorHandlers = {}
-server({
-  App,
+const gqlFragments = require('./lib/graphql')
+const { app, getMockApiApps } = server({
+  App: reactApp,
   reduxRoutes,
   reduxReducers,
   mockData,
@@ -56,5 +57,27 @@ server({
   expressRouters,
   spoofLoggedIn,
   errorHandlers,
-  LoadingComponent
+  gqlFragments,
+  LoadingComponent: LoadingPage
 })
+
+app.listen(80, () => {
+  logger.log('info', 'Application running')
+})
+
+if (process.env.USE_MOCKS === 'true') {
+  const mockExternalRequests = require('./mocks')
+  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
+
+  jsonServer.listen(81, () => {
+    logger.log('info', 'JSONServer running')
+  })
+
+  gqlServer.listen(82, () => {
+    logger.log('info', 'Mock GQL running')
+  })
+
+  mockExternalRequests(() => {
+    logger.log('info', 'Mocking external requests')
+  })
+}

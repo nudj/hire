@@ -22,3 +22,6 @@ Nudj website for hirers
 1. `test` to run the tests
 1. `tdd` to run the tests with a watcher
 1. `exit` to leave the container and close the ssh session
+
+Both `run` and `dev` runs the application on `localhost:90`. You can also access
+the JSON server on `localhost:91` and GraphQL on `localhost:92`

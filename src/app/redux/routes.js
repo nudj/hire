@@ -1,13 +1,21 @@
+const checkMobileDevice = require('../pages/check-device-wrapper')
+
 module.exports = {
-  '/': require('../pages/tasks'),
-  '/import-contacts': require('../pages/import-contacts'),
-  '/send-survey': require('../pages/survey-compose'),
-  '/survey': require('../pages/survey'),
-  '/jobs': require('../pages/jobs'),
-  '/jobs/:jobSlug': require('../pages/job'),
-  '/jobs/:jobSlug/nudj': require('../pages/nudj'),
-  '/jobs/:jobSlug/internal': require('../pages/internal-compose'),
-  '/jobs/:jobSlug/internal/:messageId': require('../pages/internal-compose'),
-  '/jobs/:jobSlug/external': require('../pages/external-select'),
-  '/jobs/:jobSlug/external/:messageId': require('../pages/external-compose')
+  '/': require('../pages/dashboard'),
+  '/welcome': checkMobileDevice(require('../pages/welcome')),
+  '/setup-network': checkMobileDevice(require('../pages/setup-network')),
+  '/setup-network/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
+  '/setup-network/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
+  '/setup-network/linkedin/upload': checkMobileDevice(require('../pages/setup-linkedin/upload-connections')),
+  '/surveys/:surveySlug': checkMobileDevice(require('../pages/survey')),
+  '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': checkMobileDevice(require('../pages/survey-question')),
+  '/surveys/:surveySlug/complete': checkMobileDevice(require('../pages/survey-complete')),
+  '/favourites': require('../pages/favourites'),
+  '/messages': require('../pages/messages'),
+  '/messages/:conversationId': require('../pages/messages/thread'),
+  '/messages/new/:recipientId': require('../pages/messages/new'),
+  '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
+  '/contacts': require('../pages/contacts'),
+  '/contacts/job/:jobId': require('../pages/contacts'),
+  '/notification-sent': require('../pages/notification-sent')
 }

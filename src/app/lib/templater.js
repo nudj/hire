@@ -1,5 +1,6 @@
 const get = require('lodash/get')
 const identity = require('lodash/identity')
+const { merge } = require('@nudj/library')
 const { stripDelims } = require('.')
 
 const applyTags = (para, data, tagify, chunkify, indexStart) => {
@@ -14,6 +15,11 @@ const applyTags = (para, data, tagify, chunkify, indexStart) => {
     }
   })
   return chunks
+}
+
+module.exports.appendTrackingToken = (email, pixelToken) => {
+  const trackedBody = { body: `${email.body} <img src="http://${process.env.WEB_HOSTNAME}/tracker/${pixelToken}/pixel.png" />` }
+  return merge(email, trackedBody)
 }
 
 module.exports.render = ({

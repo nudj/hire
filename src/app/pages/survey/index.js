@@ -1,71 +1,104 @@
+/* global ID SurveyQuestionType */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const actions = require('@nudj/framework/actions')
+const toLower = require('lodash/toLower')
 
-const LayoutApp = require('../../components/layout-app')
-const PageHeader = require('../../components/page-header/page-header')
-const Tooltip = require('../../components/tooltip/tooltip')
+const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
+
+const ButtonLink = require('../../components/button-link')
+const Layout = require('../../components/app-layout')
+
+const Main = require('../../components/main')
+const Section = require('../../components/section')
 const {
-  showDialog
-} = actions.app
+  Heading,
+  Para,
+  styleSheet: wizardStyles
+} = require('../../components/wizard')
 
-const getStyle = require('./style.css')
+type Question = {
+  id: ID,
+  type: SurveyQuestionType
+}
 
-const HirerSurvey = (props) => {
-  const style = getStyle()
-  const title = 'Complete our survey and jog your memory'
-  const subtitle = 'This survey will help you uncover all the people worth asking for recommendations, whether they be ex-colleagues or friends, by asking you questions you wouldn’t necessarily ask yourself.'
-  const tooltip = get(props, 'tooltip')
-  const surveyUrl = get(props, 'survey.link', 'about:blank')
-  const surveyFrame = (<iframe src={surveyUrl} className={style.surveyFrame} />)
+type SectionProps = {
+  id: ID,
+  questions: Array<Question>
+}
 
-  const handlePageLeave = (event) => {
-    event.preventDefault()
-    let url = event.target.getAttribute('href')
-
-    if (!url) {
-      url = '/'
-    }
-
-    return props.dispatch(showDialog({
-      options: [
-        {
-          type: 'cancel',
-          action: {
-            name: 'hideDialog'
-          }
-        },
-        {
-          type: 'link',
-          url
+type SurveyProps = {
+  user: {
+    hirer: {
+      company: {
+        name?: string,
+        survey: {
+          id?: ID,
+          slug?: string,
+          sections: Array<SectionProps>
         }
-      ]
-    }))
+      }
+    }
   }
+}
+
+const SurveyPage = (props: SurveyProps) => {
+  const { user } = props
+  const company = get(user, 'hirer.company')
+  const survey = get(company, 'survey')
+  const initialSection = get(survey, 'sections[0]', {})
+  const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
-    <LayoutApp {...props} onPageLeave={handlePageLeave} className={style.pageBody}>
+    <Layout {...props} title='Part 2: Uncover hidden gems'>
       <Helmet>
-        <title>nudj - Discover referrers in your network</title>
+        <title>Uncover hidden gems</title>
       </Helmet>
-      <input type='hidden' name='_csrf' value={props.csrfToken} />
-      <PageHeader
-        title='Discover referrers in your network'
-        subtitle='On-boarding'
-      />
-      <h3 className={style.pageHeadline}>{title}</h3>
-      <p className={style.copy}>{subtitle}</p>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          {surveyFrame}
-        </div>
-        <div className={style.pageSidebar}>
-          {tooltip ? <Tooltip {...tooltip} /> : ''}
-        </div>
-      </div>
-    </LayoutApp>
+      <Main>
+        <Section padding>
+          <Heading>
+            Explore your network to find your next hire
+          </Heading>
+          <Para>
+            The people you need to hire are already in your network, you just have to
+             remember them or find friends that know them.
+          </Para>
+          <Para>
+            To help, you&#39;ll now be asked a series of questions designed to unlock all the
+             people from your past who are worth asking.
+          </Para>
+          <Para>
+            <em className={css(mss.i)}>Remember to think broadly and inclusively.</em>
+          </Para>
+        </Section>
+        <Section padding>
+          <ButtonLink
+            style={wizardStyles.action}
+            volume='cheer'
+            href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
+              toLower(initialQuestion.type)
+            }/${initialQuestion.id}`}
+          >
+            Start
+          </ButtonLink>
+        </Section>
+      </Main>
+    </Layout>
   )
 }
 
-module.exports = HirerSurvey
+SurveyPage.defaultProps = {
+  user: {
+    hirer: {
+      company: {
+        survey: {
+          sections: []
+        }
+      }
+    }
+  }
+}
+
+module.exports = SurveyPage

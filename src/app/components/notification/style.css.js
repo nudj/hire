@@ -1,47 +1,64 @@
-const { css, merge } = require('@nudj/framework/css')
-const { mixins, variables } = require('../../lib/css')
+const { merge } = require('@nudj/library')
 
-module.exports = css({
-  notification: {
+const {
+  StyleSheet,
+  colors,
+  sizes,
+  utilities,
+  typography
+} = require('@nudj/components/lib/css')
+
+const styleSheet = StyleSheet.create({
+  root: {
     display: 'flex',
     justifyContent: 'stretch',
     alignItems: 'center',
-    width: variables.sizing.overlayDialogWidth,
-    borderRadius: variables.sizing.baseBorderRadius,
-    boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
-    backgroundColor: variables.colors.lightGrey,
+    width: '100%',
+    backgroundColor: colors.grey,
     position: 'absolute',
-    left: '50%',
-    top: variables.sizing.notificationTop,
-    transition: 'transform 300ms ease-in-out',
-    transform: 'translateX(-50%) translateY(-200%)',
-    overflow: 'hidden'
+    left: 0,
+    top: 0,
+    transition: 'transform 150ms ease-in-out',
+    transform: 'translate3d(0, -100%, 0)',
+    overflow: 'hidden',
+    // TODO: Scalable zIndex implementation
+    zIndex: 10
   },
   info: {
-    backgroundColor: variables.colors.royalBlueFade
+    backgroundColor: colors.blueDark
   },
   warn: {
-    backgroundColor: variables.colors.lightYellow
+    backgroundColor: colors.warning
   },
   error: {
-    backgroundColor: variables.colors.pink
+    backgroundColor: colors.danger
   },
   success: {
-    backgroundColor: variables.colors.green
+    backgroundColor: colors.success
   },
-  message: merge(mixins.headings.p2, {
+  message: merge(typography.type.regular, {
     flex: 1,
-    padding: `${variables.padding.de} ${variables.padding.d}`,
-    color: variables.colors.white
+    paddingTop: sizes.smallI,
+    paddingBottom: sizes.smallI,
+    paddingLeft: sizes.smallI,
+    paddingRight: sizes.smallI,
+    color: colors.white,
+    '@media(min-width: 30rem)': merge(typography.type.regular, {
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular
+    })
   }),
   close: {
-    backgroundColor: variables.colors.genericLightShade,
+    backgroundColor: 'transparent',
     border: 0,
     display: 'block',
     cursor: 'pointer',
-    color: variables.colors.white,
+    color: colors.white,
     alignSelf: 'stretch',
-    padding: variables.padding.de,
+    paddingTop: sizes.smallI,
+    paddingBottom: sizes.smallI,
+    paddingLeft: sizes.smallI,
+    paddingRight: sizes.smallI,
     ':active': {
       outline: 'none',
       border: 'none'
@@ -49,12 +66,19 @@ module.exports = css({
     ':focus': {
       outline: 'none',
       border: 'none'
-    }
+    },
+    '@media(min-width: 30rem)': merge(typography.type.regular, {
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular
+    })
   },
   closeIcon: {
     display: 'block'
   },
   visible: {
-    transform: 'translateX(-50%) translateY(-30%)'
+    transform: 'translate3d(0, 0, 0)',
+    boxShadow: utilities.boxShadow[10].narrow
   }
 })
+
+module.exports = styleSheet

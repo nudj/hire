@@ -1,0 +1,144 @@
+const React = require('react')
+const { Helmet } = require('react-helmet')
+const get = require('lodash/get')
+const createHash = require('hash-generator')
+
+const {
+  Card,
+  Button,
+  Input,
+  Link,
+  Textarea
+} = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
+const {
+  values: emailPreferences
+} = require('@nudj/api/gql/schema/enums/email-preference-types')
+const { getFirstNonNil } = require('@nudj/library')
+const mss = require('@nudj/components/lib/css/modifiers.css')
+
+const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
+const { render } = require('../../../lib/templater')
+const Layout = require('../../../components/app-layout')
+const { updateSubject, updateMessage } = require('./actions')
+const Main = require('../../../components/main')
+const Section = require('../../../components/section')
+const { Heading, Para } = require('../../../components/app')
+const style = require('./style.css')
+
+const getHandleSubjectChange = dispatch => ({ value }) =>
+  dispatch(updateSubject(value))
+const getHandleMessageChange = dispatch => ({ value }) =>
+  dispatch(updateMessage(value))
+
+const parseJobMessageTemplate = (template, job, user, recipient, link) =>
+  render({
+    template: template,
+    data: {
+      recipient: {
+        firstname: recipient.firstName
+      },
+      job: {
+        title: job.title,
+        link
+      },
+      sender: {
+        firstname: user.firstName
+      }
+    },
+    splitter: createHash(16),
+    brify: () => '\n\n'
+  })[0].join('')
+
+const getMailTo = (to, subject, message) =>
+  `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
+
+const ComposeMessagePage = props => {
+  const { composeMessage, dispatch, user, recipient, template, csrfToken } = props
+  const toEmail = get(recipient, 'email', '')
+  const job = get(user, 'hirer.company.job', {})
+  const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
+  const companySlug = get(user, 'hirer.company.slug', '')
+  const jobSlug = get(job, 'slug', '')
+  const referralId = get(job, 'referral.id', '')
+
+  const { firstName } = getPersonOrConnectionName(recipient)
+
+  const subjectTemplate = render({
+    template: template.subject,
+    data: {
+      recipient: {
+        firstname: firstName
+      }
+    }
+  })[0].join('')
+  const referralLink = `${get(props, 'web.protocol')}://${get(props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const messageTemplate = parseJobMessageTemplate(template.message, job, user, { firstName }, referralLink)
+
+  const subjectValue = getFirstNonNil(
+    composeMessage.subject,
+    subjectTemplate,
+    ''
+  )
+  const messageValue = getFirstNonNil(
+    composeMessage.message,
+    messageTemplate,
+    ''
+  )
+
+  return (
+    <Layout {...props}>
+      <Helmet>
+        <title>Compose a message</title>
+      </Helmet>
+      <Main>
+        <Section padding>
+          <Heading level={1} style={mss.fgPrimary}>
+            Compose a message
+          </Heading>
+          <Para>
+            Take a bit of time to personalise the template below to the person
+             you&#39;re sending it to.
+          </Para>
+        </Section>
+        <Section width='largeI'>
+          <Card>
+            <form method='post'>
+              <Input
+                name='subject'
+                value={subjectValue}
+                onChange={getHandleSubjectChange(dispatch)}
+                styleSheet={{ input: style.subjectInput }}
+              />
+              <Textarea
+                name='body'
+                value={messageValue}
+                onChange={getHandleMessageChange(dispatch)}
+                styleSheet={{ input: style.messageInput }}
+                autosize
+              />
+              <input name='_csrf' value={csrfToken} type='hidden' />
+              <div className={css(mss.center)}>
+                {emailPreference === emailPreferences.GOOGLE ? (
+                  <Button type='submit' volume='cheer' style={mss.mtReg}>
+                    Send message
+                  </Button>
+                ) : (
+                  <Link
+                    volume='cheer'
+                    style={mss.mtReg}
+                    href={getMailTo(toEmail, subjectValue, messageValue)}
+                  >
+                    Send message
+                  </Link>
+                )}
+              </div>
+            </form>
+          </Card>
+        </Section>
+      </Main>
+    </Layout>
+  )
+}
+
+module.exports = ComposeMessagePage

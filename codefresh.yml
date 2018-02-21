@@ -17,7 +17,8 @@ steps:
     working_directory: 'IMAGE_WORK_DIR'
     commands:
       - ./node_modules/.bin/standard
-      - ./node_modules/.bin/mocha --recursive test
+      - ./node_modules/.bin/flow --quiet
+      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test
 
   build_latest:
     title: Build Latest
@@ -59,13 +60,27 @@ steps:
     when:
       branch:
         only:
+          - LEGACY-V1
           - master
+
+  push_legacy:
+    title: Push
+    type: push
+    candidate: '${{build}}'
+    tag: LEGACY-V1
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - LEGACY-V1
 
   push:
     title: Push
     type: push
     candidate: '${{build}}'
-    tag: 3.0.0
+    tag: 7.2.0
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'

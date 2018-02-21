@@ -1,29 +1,10 @@
-const express = require('express')
 const passport = require('passport')
 const { Strategy: GoogleStrategy } = require('passport-google-oauth20')
-const get = require('lodash/get')
-const find = require('lodash/find')
-const { actionMapAssign } = require('@nudj/library')
-const { cacheReturnTo } = require('@nudj/library/server')
+const createRouter = require('@nudj/framework/router')
 
-const accounts = require('../modules/accounts')
+const requestGql = require('../../lib/requestGql')
+const { emailPreferences } = require('../../lib/constants')
 const { createNotification } = require('../../lib')
-
-const authenticationFailureHandler = (req, res, next) => {
-  req.session.notification = createNotification('error', 'Something went wrong during authentication.')
-  const failureRoute = req.session.returnFail || '/'
-  delete req.session.gmailSecret
-  delete req.session.returnFail
-  res.redirect(failureRoute)
-}
-
-const addProviderToAccountForPerson = (name, data, account, person) => {
-  account = account || {}
-  account.person = person.id
-  account.providers = account.providers || {}
-  account.providers[name] = data
-  return accounts.createOrUpdate(account)
-}
 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -31,41 +12,72 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_AUTH_CALLBACK,
   passReqToCallback: true
 },
-(req, accessToken, refreshToken, profile, cb) => {
-  const email = get(find(profile.emails, { type: 'account' }), 'value')
-  return actionMapAssign(
-    {
-      account: () => accounts.getByFilters({ person: req.session.data.person.id })
-    },
-    {
-      account: data => addProviderToAccountForPerson(
-        'google',
-        { accessToken, refreshToken, email },
-        data.account,
-        req.session.data.person
-      )
+async (req, accessToken, refreshToken, profile, cb) => {
+  const query = `
+    mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID! $personData: PersonUpdateInput!) {
+      updatePerson(id: $userId, data: $personData) {
+        id
+      }
+      user (id: $userId) {
+        account: createOrUpdateAccount(type: $type data: $data) {
+          id
+        }
+      }
     }
-  )
-  .then(data => cb(null, data.account))
+  `
+  const variables = {
+    userId: req.session.userId,
+    type: 'GOOGLE',
+    personData: {
+      emailPreference: emailPreferences.GOOGLE
+    },
+    data: {
+      accessToken,
+      refreshToken
+    }
+  }
+  await requestGql(query, variables)
+  return cb(null, {})
 }))
 
-const Router = ({
-  ensureLoggedIn,
-  respondWith
-}) => {
-  let router = express.Router()
+const googleAuthentication = passport.authorize('google', {
+  scope: [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/gmail.send',
+    'https://www.googleapis.com/auth/gmail.readonly'
+  ],
+  accessType: 'offline',
+  prompt: 'consent'
+})
 
-  router.get('/auth/google', cacheReturnTo, passport.authorize('google', {
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/gmail.send'
-    ],
-    accessType: 'offline',
-    approvalPrompt: 'force'
-  }))
-  router.get('/auth/google/callback', passport.authorize('google', { failureRedirect: '/auth/google/failure' }), (req, res) => res.redirect(req.session.returnTo || '/'))
-  router.get('/auth/google/failure', authenticationFailureHandler)
+const authenticationFailureHandler = (req, res, next) => {
+  req.session.notification = createNotification('error', 'Something went wrong during authentication.')
+  const failureRoute = req.session.returnFail || '/'
+  delete req.session.returnTo
+  delete req.session.returnFail
+  res.redirect(failureRoute)
+}
+
+const Router = ({
+  ensureLoggedIn
+}) => {
+  const router = createRouter()
+  router.use(ensureLoggedIn)
+
+  router.getHandlers('/auth/google', googleAuthentication)
+  router.getHandlers('/auth/google/failure', authenticationFailureHandler)
+  router.getHandlers(
+    '/auth/google/callback',
+    passport.authorize('google', { failureRedirect: '/auth/google/failure' }),
+    (req, res) => {
+      req.session.notification = createNotification(
+        'success',
+        'We have successfully synced your Gmail account'
+      )
+      res.redirect(req.session.returnTo || '/')
+    }
+  )
 
   return router
 }
