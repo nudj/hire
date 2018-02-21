@@ -1,3 +1,4 @@
+const { values: jobStatuses } = require('@nudj/api/gql/schema/enums/job-status-types')
 const { Global } = require('../../lib/graphql')
 const {
   format,
@@ -20,13 +21,14 @@ const get = ({ session, query }) => {
       $dateFrom: DateTime,
       $dateTo: DateTime,
       $pastDateFrom: DateTime,
-      $pastDateTo: DateTime
+      $pastDateTo: DateTime,
+      $jobStatus: JobStatus
     ) {
       user(id: $userId) {
         hirer {
           company {
             slug
-            jobs {
+            jobs: jobsByFilters (filters: { status: $jobStatus }) {
               id
               title
               slug
@@ -46,7 +48,8 @@ const get = ({ session, query }) => {
   `
 
   const variables = {
-    userId: session.userId
+    userId: session.userId,
+    jobStatus: jobStatuses.PUBLISHED
   }
 
   const now = new Date()

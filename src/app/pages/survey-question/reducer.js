@@ -39,7 +39,7 @@ const setSelectedConnections = (state, action) => ({
 const addConnection = (state, action) => {
   const questions = merge(state.questions)
   const questionItems = get(questions, action.questionId, []).concat(
-    action.newItem.id
+    action.newItem
   )
   questions[action.questionId] = questionItems
 

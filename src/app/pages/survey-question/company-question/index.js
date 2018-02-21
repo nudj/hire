@@ -1,5 +1,3 @@
-/* global SurveyQuestion Company Notification */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -30,18 +28,7 @@ function onAddCompany (dispatch, questionId) {
   }
 }
 
-type CompanyQuestionProps = {
-  question: SurveyQuestion,
-  nextUri: string,
-  companies: Array<Company>,
-  questionCount: number,
-  questionNumber: number,
-  employment: Company,
-  notification: Notification,
-  dispatch: Function
-}
-
-const CompanyQuestionPage = (props: CompanyQuestionProps) => {
+const CompanyQuestionPage = (props) => {
   const {
     question,
     questionNumber,
@@ -100,7 +87,10 @@ const CompanyQuestionPage = (props: CompanyQuestionProps) => {
           </Card>
           <Footer>
             <Basket
-              basket={companies}
+              basket={companies.map((item) => ({
+                id: item.company.id,
+                value: item.company.name
+              }))}
               skipLabel='This is my first job'
               nextHref={nextUri}
             />

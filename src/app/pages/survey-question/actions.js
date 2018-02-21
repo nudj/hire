@@ -125,6 +125,8 @@ const saveSurveyAnswers = questionId => async (dispatch, getState) => {
     newSelectedConnections = uniq(newSelectedConnections.concat(savedConnections))
   }
 
+  const connectionIds = newSelectedConnections.map(connection => connection.id)
+
   try {
     await dispatch(
       actions.app.postData(
@@ -135,7 +137,7 @@ const saveSurveyAnswers = questionId => async (dispatch, getState) => {
           method: 'post',
           data: {
             surveyQuestion: questionId,
-            connections: newSelectedConnections
+            connections: connectionIds
           }
         }
       )
@@ -222,7 +224,7 @@ const submitNewConnection = () => (dispatch, getState) => {
     dispatch(clearAddForm())
     dispatch(setSelectedConnections(
       question.id,
-      newSelectedConnections.concat(response.data.app.user.newConnection.id)
+      newSelectedConnections.concat(response.data.app.user.newConnection)
     ))
     dispatch(actions.app.showNotification({
       type: 'success',

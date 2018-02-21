@@ -1,10 +1,15 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const isNil = require('lodash/isNil')
 const get = require('lodash/get')
 const sortBy = require('lodash/sortBy')
 
-const { Text, Card, Input, Button, Modal } = require('@nudj/components')
+const {
+  Button,
+  Card,
+  Input,
+  Modal,
+  Text
+} = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -21,9 +26,8 @@ const {
 const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
-const Loader = require('../../../components/staged-loader')
-const ConnectionsTable = require('../../../components/connections-table')
 const ConnectionsForm = require('../../../components/form-connection')
+const SearchResults = require('./connections-search-results')
 
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
@@ -87,42 +91,11 @@ const ConnectionsQuestionPage = props => {
     notification
   } = props
 
+  const handleSetConnections = getHandleSetConnections(question.id, dispatch)
   const handleSearchChange = getHandleSearchChange(dispatch)
   const handleSearchClear = ({ value }) => {
     handleSearchChange(value)
     history.push(match.url)
-  }
-
-  const renderSearchTable = () => {
-    if (connections.length) {
-      return (
-        <div className={css(style.tableOverflow)}>
-          <ConnectionsTable
-            styleSheet={{
-              root: style.table
-            }}
-            onSelect={getHandleSetConnections(question.id, dispatch)}
-            connections={sortBy(connections, ['firstName', 'lastName'])}
-            selectedConnections={selectedConnections}
-            multiple
-          />
-        </div>
-      )
-    } else if (!connections.length && !isNil(searchQuery)) {
-      return (
-        <div className={css(style.tableOverflow)}>
-          <Text size='largeI' element='div'>
-            0 people match '{searchQuery}'
-          </Text>
-          <Text element='div' style={mss.mtReg}>
-            We can&#39;t find anyone in your contacts that matches your query.
-            Try another search term or add them manually using the link below
-          </Text>
-        </div>
-      )
-    }
-
-    return null
   }
 
   return (
@@ -146,18 +119,15 @@ const ConnectionsQuestionPage = props => {
             {question.description}
           </Para>
         </Section>
-        <Section padding width='largeI'>
-          <Card style={[mss.pl0, mss.pr0]}>
-            {hasConnections || selectedConnections.length ? (
+        <Section padding width='regular'>
+          {hasConnections || selectedConnections.length ? (
+            <Card style={mss.pa0}>
               <form
+                className={css(style.searchForm)}
                 onSubmit={getHandleSearchSubmit(dispatch)}
-                className={css(mss.plLgIi, mss.prLgIi)}
+                autoComplete='off'
               >
-                <Text element='label' size='smallI' htmlFor='search'>
-                  Search by name and select from the results
-                </Text>
                 <Input
-                  styleSheet={{ root: mss.mtReg }}
                   name='search'
                   label='search'
                   type='search'
@@ -165,28 +135,33 @@ const ConnectionsQuestionPage = props => {
                   placeholder='e.g., Jonny Ive'
                   onChange={handleSearchChange}
                   onClear={handleSearchClear}
+                  styleSheet={{ root: style.searchInput }}
                 />
                 <Button
-                  style={mss.mtReg}
+                  style={style.searchButton}
                   type='submit'
                   volume='cheer'
                   disabled={loading}
+                  subtle
                 >
-                  { loading ? (
-                    <Loader
-                      messages={[
-                        'Searching connections'
-                      ]}
-                      threshold={4000}
-                      ellipsis
-                    />
-                  ) : 'Search' }
+                  Search
                 </Button>
               </form>
-            ) : (
+              <div className={css(style.resultsContainer)}>
+                <SearchResults
+                  contacts={sortBy(connections, ['firstName', 'lastName'])}
+                  selectedContacts={selectedConnections}
+                  onChange={handleSetConnections}
+                  onAddIndividualClick={getHandleAddClick(dispatch)}
+                  query={searchQuery}
+                />
+              </div>
+            </Card>
+          ) : (
+            <Card style={mss.pa0}>
               <div className={css(mss.plLgIi, mss.prLgIi)}>
                 <Text element='label'>
-                  Add their details below
+                    Add their details below
                 </Text>
                 <ConnectionsForm
                   csrfToken={get(props, 'csrfToken')}
@@ -195,50 +170,44 @@ const ConnectionsQuestionPage = props => {
                   connection={get(props, 'newConnection')}
                 />
               </div>
-            )}
-            {renderSearchTable()}
-          </Card>
-          {(hasConnections || !!selectedConnections.length) && (
-            <Button
-              subtle
-              volume='cheer'
-              onClick={getHandleAddClick(dispatch)}
-              style={mss.mtReg}
-            >
-              Add an individual contact
-            </Button>
+            </Card>
           )}
-          <Modal
-            isOpen={get(props, 'showAddIndividualConnectionModal')}
-            style={style.modalWindow}
-            shouldCloseOnOverlayClick
-            shouldCloseOnEsc
-            onRequestClose={getHandleModalClose(dispatch)}
-          >
-            <Text element='div' size='largeI' style={style.modalHeading}>
-              Add an individual contact
-            </Text>
-            <Text element='p' style={style.modalBody}>
-              Thought of someone who might help you in your search? Just add
-              their details below so you can nudj them.
-            </Text>
-            <ConnectionsForm
-              style={[mss.mtReg, mss.plLgIi, mss.prLgIi]}
-              csrfToken={get(props, 'csrfToken')}
-              onChange={getHandleConnectionChange(dispatch)}
-              onSubmit={getHandleConnectionSubmit(dispatch)}
-              connection={get(props, 'newConnection')}
-            />
-          </Modal>
         </Section>
         <Footer>
           <Basket
-            basket={selectedConnections}
+            basket={selectedConnections.map(connection => ({
+              id: connection.id,
+              value: `${connection.firstName} ${connection.lastName}`
+            }))}
+            itemLabel='people'
             skipLabel="I don't know anyone"
+            nextLabel="That's everyone"
             nextClick={handleSaveAnswers(dispatch, question.id)}
           />
         </Footer>
       </Main>
+      <Modal
+        isOpen={get(props, 'showAddIndividualConnectionModal')}
+        style={style.modalWindow}
+        shouldCloseOnOverlayClick
+        shouldCloseOnEsc
+        onRequestClose={getHandleModalClose(dispatch)}
+      >
+        <Text element='div' size='largeI' style={style.modalHeading}>
+          Add an individual contact
+        </Text>
+        <Text element='p' style={style.modalBody}>
+          Thought of someone who might help you in your search? Just add
+          their details below so you can nudj them.
+        </Text>
+        <ConnectionsForm
+          style={[mss.mtReg, mss.plLgIi, mss.prLgIi]}
+          csrfToken={get(props, 'csrfToken')}
+          onChange={getHandleConnectionChange(dispatch)}
+          onSubmit={getHandleConnectionSubmit(dispatch)}
+          connection={get(props, 'newConnection')}
+        />
+      </Modal>
     </Layout>
   )
 }
