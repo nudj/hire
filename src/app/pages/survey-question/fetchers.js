@@ -222,7 +222,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     questionId: params.questionId,
     search: query.search,
     blankSearch: query.search === '',
-    fields: [['firstName', 'lastName']]
+    fields: [
+      ['firstName', 'lastName'],
+      ['company.name'],
+      ['person.email']
+    ]
   }
   return { gql, variables }
 }

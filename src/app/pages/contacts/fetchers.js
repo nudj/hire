@@ -63,7 +63,11 @@ const getContacts = ({ session, query }) => {
   const searchVariables = {
     ...commonVariables,
     search: query.search,
-    fields: [['firstName', 'lastName']]
+    fields: [
+      ['firstName', 'lastName'],
+      ['company.name'],
+      ['person.email']
+    ]
   }
 
   return query.search
