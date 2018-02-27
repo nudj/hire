@@ -3,7 +3,7 @@ IMAGE:=nudj/$(APP)
 IMAGEDEV:=nudj/$(APP):development
 CWD=$(shell pwd)
 COREAPPS:=server api redis db
-DOCKERCOMPOSE:=docker-compose -p nudj -f $(CWD)/../server/compose-core.yml -f $(CWD)/docker-compose.yml
+DOCKERCOMPOSE:=docker-compose -p nudj
 
 .PHONY: build buildLocal coreUp coreDown coreLogs up ssh ui cmd down test standardFix
 
