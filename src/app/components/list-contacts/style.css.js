@@ -1,12 +1,6 @@
 const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
-  list: {
-    listStyleType: 'none',
-    paddingLeft: 0,
-    marginBottom: 0,
-    marginTop: 0
-  },
   listItem: {
     ':nth-child(n + 2)': {
       borderTopColor: colors.greyLight,
