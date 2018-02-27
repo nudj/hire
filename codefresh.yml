@@ -28,6 +28,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY}}
       - NODE_ENV=production
       - DEBUG=true
     when:
@@ -56,6 +57,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY}}
       - NODE_ENV=production
     when:
       branch:
