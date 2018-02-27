@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const sortBy = require('lodash/sortBy')
 
 const {
   Button,
@@ -119,7 +118,7 @@ const ConnectionsQuestionPage = props => {
             {question.description}
           </Para>
         </Section>
-        <Section padding width='regular'>
+        <Section width='regular'>
           {hasConnections || selectedConnections.length ? (
             <Card style={mss.pa0}>
               <form
@@ -149,7 +148,7 @@ const ConnectionsQuestionPage = props => {
               </form>
               <div className={css(style.resultsContainer)}>
                 <SearchResults
-                  contacts={sortBy(connections, ['firstName', 'lastName'])}
+                  contacts={connections}
                   selectedContacts={selectedConnections}
                   onChange={handleSetConnections}
                   onAddIndividualClick={getHandleAddClick(dispatch)}

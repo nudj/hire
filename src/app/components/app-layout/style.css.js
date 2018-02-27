@@ -2,6 +2,9 @@ const { merge } = require('@nudj/library')
 const { StyleSheet, typography, sizes, colors } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
+  htmlBody: {
+    backgroundColor: colors.greyLightest
+  },
   root: {
     backgroundColor: colors.greyLightest,
     minHeight: '100%'
