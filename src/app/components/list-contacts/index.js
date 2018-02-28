@@ -13,67 +13,100 @@ const { ButtonContainer } = require('@nudj/components')
 const Item = require('../contact')
 const style = require('./style.css')
 
-const getRowRenderer = ({
-  cache,
-  contacts,
-  onClick,
-  child
-}) => ({
-  key,
-  index,
-  isScrolling,
-  isVisible,
-  style: rowStyle,
-  parent,
-}) => {
-  const contact = contacts[index]
+const getRowRenderer = (sharedProps) => {
+  const {
+    cache,
+    contacts,
+    onClick,
+    child
+  } = sharedProps
 
-  const person = get(contact, 'person')
-  const firstName = person.firstName || contact.firstName
-  const lastName = person.lastName || contact.lastName
+  return (rowProps) => {
+    const {
+      key,
+      index,
+      style: rowStyle,
+      parent
+    } = rowProps
+    const contact = contacts[index]
 
-  const handleItemClick = (e) => {
-    onClick({
-      name: contact.id,
-      value: contact,
-      preventDefault: e.preventDefault,
-      stopPropagation: e.stopPropagation
-    })
+    const person = get(contact, 'person')
+    const firstName = person.firstName || contact.firstName
+    const lastName = person.lastName || contact.lastName
+
+    const handleItemClick = (event) => {
+      onClick && onClick({
+        name: contact.id,
+        value: contact,
+        preventDefault: event.preventDefault,
+        stopPropagation: event.stopPropagation
+      })
+    }
+
+    const Wrapper = onClick ? ButtonContainer : 'div'
+    const wrapperProps = onClick ? {
+      onClick: handleItemClick,
+      style: [style.item, style.itemInteractive]
+    } : {
+      className: css(style.item)
+    }
+
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={0}
+        key={key}
+        parent={parent}
+        rowIndex={index}
+      >
+        <div className={css(style.listItem)} style={rowStyle}>
+          <Wrapper {...wrapperProps}>
+            <Item
+              id={contact.id}
+              firstName={firstName}
+              lastName={lastName}
+              role={get(contact, 'role.name')}
+              company={get(contact, 'company.name')}
+              email={person.email}
+              children={child}
+            />
+          </Wrapper>
+        </div>
+      </CellMeasurer>
+    )
   }
-
-  return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      key={key}
-      parent={parent}
-      rowIndex={index}
-    >
-      <div className={css(style.listItem)} style={rowStyle}>
-        <ButtonContainer
-          onClick={handleItemClick}
-          style={[
-            style.item,
-            handleItemClick && style.itemInteractive
-          ]}
-        >
-          <Item
-            id={contact.id}
-            firstName={firstName}
-            lastName={lastName}
-            role={get(contact, 'role.name')}
-            company={get(contact, 'company.name')}
-            email={person.email}
-            children={child}
-          />
-        </ButtonContainer>
-      </div>
-    </CellMeasurer>
-  )
 }
 
 class ListContacts extends React.Component {
-  constructor(props) {
+  static propTypes = {
+    contactChild: PropTypes.func,
+    onItemClick: PropTypes.func,
+    contacts: PropTypes.arrayOf(
+      PropTypes.shape({
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        person: PropTypes.shape({
+          person: PropTypes.shape({
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            email: PropTypes.string
+          }),
+          role: PropTypes.shape({
+            name: PropTypes.string
+          }),
+          company: PropTypes.shape({
+            name: PropTypes.string
+          })
+        })
+      })
+    )
+  }
+
+  static defaultProps = {
+    contacts: []
+  }
+
+  constructor (props) {
     super(props)
 
     this.cache = new CellMeasurerCache({
@@ -81,12 +114,17 @@ class ListContacts extends React.Component {
       minHeight: 80,
       fixedWidth: true
     })
+
+    this.unmounting = false
   }
 
-  componentDidMount() {
+  componentDidMount () {
     setTimeout(() => {
       this.cache.clearAll()
-      this.forceUpdate()
+
+      if (!this.unmounting) {
+        this.forceUpdate()
+      }
     }, 0)
   }
 
@@ -94,7 +132,11 @@ class ListContacts extends React.Component {
     this.cache.clearAll()
   }
 
-  render() {
+  componentWillUnmount () {
+    this.unmounting = true
+  }
+
+  render () {
     const {
       contacts,
       contactChild,
@@ -132,34 +174,6 @@ class ListContacts extends React.Component {
       </AutoSizer>
     )
   }
-}
-
-ListContacts.propTypes = {
-  contactChild: PropTypes.func,
-  onItemClick: PropTypes.func,
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      person: PropTypes.shape({
-        person: PropTypes.shape({
-          firstName: PropTypes.string,
-          lastName: PropTypes.string,
-          email: PropTypes.string
-        }),
-        role: PropTypes.shape({
-          name: PropTypes.string
-        }),
-        company: PropTypes.shape({
-          name: PropTypes.string
-        })
-      })
-    })
-  )
-}
-
-ListContacts.defaultPros = {
-  contacts: []
 }
 
 module.exports = ListContacts
