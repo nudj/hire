@@ -151,12 +151,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $userId: ID!,
       $surveySlug: String!,
       $sectionId: ID!,
-      $questionId: ID!,
-      $blankSearch: Boolean!
+      $questionId: ID!
     ) {
       ${surveyAnswersFragment}
       user (id: $userId) {
-        connections @include(if: $blankSearch) {
+        connections {
           id
           firstName
           lastName
@@ -179,6 +178,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       ${Global}
     }
   `
+
   if (query.search) {
     gql = `
       query SurveyQuestionPage (
@@ -215,13 +215,13 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       }
     `
   }
+
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
     search: query.search,
-    blankSearch: query.search === '',
     fields: [
       ['firstName', 'lastName'],
       ['company.name'],
