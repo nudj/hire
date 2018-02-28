@@ -1,12 +1,12 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const sortBy = require('lodash/sortBy')
-const isNil = require('lodash/isNil')
+const find = require('lodash/find')
 const URLSearchParams = require('url-search-params')
 
 const { getFirstNonNil } = require('@nudj/library')
-const { Text, Align, Card, Input, Button, Modal } = require('@nudj/components')
+const { Icon, Text, Card, Input, Button, Modal } = require('@nudj/components')
+const { buttonStyleSheet } = require('@nudj/components/lib/components/inline-action/style.css')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -14,17 +14,15 @@ const style = require('./style.css')
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
-const ButtonLink = require('../../components/button-link')
-const ConnectionsTable = require('../../components/connections-table')
 const ConnectionsForm = require('../../components/form-connection')
-const Loader = require('../../components/staged-loader')
+const SearchResults = require('../../components/contacts-search-results')
+const ListContacts = require('../../components/list-contacts')
+
 const {
   Heading,
   Para
 } = require('../../components/app')
-const { Footer } = require('../../components/wizard')
 const {
-  setSelectedContacts,
   updateContactsSearchQuery,
   showAddContactForm,
   hideAddContactForm,
@@ -35,10 +33,6 @@ const {
 
 const getHandleSearchChange = dispatch => ({ value }) => {
   dispatch(updateContactsSearchQuery(value))
-}
-
-const getHandleSelectContacts = dispatch => ({ value }) => {
-  dispatch(setSelectedContacts(value))
 }
 
 const getHandleAddClick = dispatch => event => {
@@ -68,11 +62,6 @@ const ContactsPage = props => {
   const { user, contactsPage: state, dispatch, history, match } = props
   const jobId = get(match, 'params.jobId')
   const connections = get(user, 'connections', [])
-  const selectedContacts = get(state, 'selectedContacts', [])
-  const selectedContactId = get(state, 'selectedContacts', [])[0]
-
-  const selectedConnection = connections.filter(connection => selectedContactId === connection.id)[0]
-  const selectedConnectionId = get(selectedConnection, 'person.id')
 
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const searchQuery = queryParams.get('search')
@@ -86,37 +75,6 @@ const ContactsPage = props => {
   const handleSearchClear = ({ value }) => {
     handleSearchChange(value)
     history.push(match.url)
-  }
-
-  const renderSearchTable = () => {
-    if (connections.length) {
-      return (
-        <div className={css(style.tableOverflow)}>
-          <ConnectionsTable
-            styleSheet={{
-              root: style.table
-            }}
-            connections={sortBy(connections, ['firstName', 'lastName'])}
-            onSelect={getHandleSelectContacts(dispatch)}
-            selectedConnections={selectedContacts}
-          />
-        </div>
-      )
-    } else if (!connections.length && !isNil(searchQuery)) {
-      return (
-        <div className={css(style.tableOverflow)}>
-          <Text size='largeI' element='div'>
-            0 people match '{searchQuery}'
-          </Text>
-          <Text element='div' style={mss.mtReg}>
-            We can&#39;t find anyone in your contacts that matches your query.
-            Try another search term or add them manually using the link below
-          </Text>
-        </div>
-      )
-    }
-
-    return null
   }
 
   return (
@@ -133,94 +91,88 @@ const ContactsPage = props => {
             Find people who are worth nudj&#39;ing or add more to grow your network.
           </Para>
         </Section>
-        <Section padding width='largeI'>
-          <Card style={[mss.pl0, mss.pr0]}>
+        <Section width='largeI'>
+          <Card style={mss.pa0}>
             <form
-              onSubmit={getHandleSearchSubmit(dispatch, match.url)}
-              className={css(mss.plLgIi, mss.prLgIi)}
+              className={css(style.searchForm)}
+              onSubmit={getHandleSearchSubmit(dispatch)}
+              autoComplete='off'
             >
-              <Text element='label' size='smallI' htmlFor='search'>
-                Search by name and select from the results
-              </Text>
               <Input
-                styleSheet={{ root: mss.mtReg }}
                 name='search'
                 label='search'
                 type='search'
                 value={searchInput}
+                placeholder='e.g., Jonny Ive'
                 onChange={handleSearchChange}
                 onClear={handleSearchClear}
-                placeholder='e.g., Jonny Ive'
+                styleSheet={{ root: style.searchInput }}
               />
               <Button
+                style={style.searchButton}
                 type='submit'
                 volume='cheer'
-                style={mss.mtReg}
                 disabled={state.loading}
+                subtle
               >
-                { state.loading ? (
-                  <Loader
-                    messages={[
-                      'Searching contacts'
-                    ]}
-                    threshold={4000}
-                    ellipsis
-                  />
-                ) : 'Search' }
+                Search
               </Button>
             </form>
-            {renderSearchTable()}
+            <div className={css(style.resultsContainer)}>
+              <SearchResults
+                contacts={connections}
+                onAddIndividualClick={getHandleAddClick(dispatch)}
+                query={searchInput}
+                ListComponent={ListContacts}
+                listProps={{
+                  onItemClick: ({ name }) => {
+                    const personId = find(connections, { id: name }).person.id
+
+                    const url = jobId
+                      ? `/messages/new/${personId}/${jobId}`
+                      : `/messages/new/${personId}`
+
+                    history.push(url)
+                  },
+                  contactChild: () => (
+                    <span
+                      className={css(
+                        buttonStyleSheet.root,
+                        buttonStyleSheet.murmur,
+                        style.messageButton
+                      )}
+                    >
+                      <Icon name='email' />
+                    </span>
+                  )
+                }}
+              />
+            </div>
           </Card>
-          <div className={css(mss.center)}>
-            <Button
-              subtle
-              volume='cheer'
-              onClick={getHandleAddClick(dispatch)}
-              style={mss.mtReg}
-            >
-              Add an individual contact
-            </Button>
-          </div>
-          <Modal
-            isOpen={get(state, 'showAddIndividualConnectionModal')}
-            style={style.modalWindow}
-            shouldCloseOnOverlayClick
-            shouldCloseOnEsc
-            onRequestClose={getHandleModalClose(dispatch)}
-          >
-            <Text element='div' size='largeI' style={style.modalHeading}>
-              Add an individual contact
-            </Text>
-            <Text element='p' style={style.modalBody}>
-              Thought of someone who might help you in your search? Just add
-              their details below so you can nudj them.
-            </Text>
-            <ConnectionsForm
-              className={css(mss.plLgIi, mss.prLgIi)}
-              csrfToken={get(props, 'csrfToken')}
-              onChange={getHandleConnectionChange(dispatch)}
-              onSubmit={getHandleConnectionSubmit(dispatch)}
-              connection={get(state, 'newContact')}
-            />
-          </Modal>
-          <Footer>
-            <Align
-              rightChildren={
-                <ButtonLink
-                  href={jobId
-                    ? `/messages/new/${selectedConnectionId}/${jobId}`
-                    : `/messages/new/${selectedConnectionId}`
-                  }
-                  volume='cheer'
-                  disabled={!selectedConnectionId}
-                >
-                  Next
-                </ButtonLink>
-              }
-            />
-          </Footer>
         </Section>
       </Main>
+      <Modal
+        isOpen={get(state, 'showAddIndividualConnectionModal')}
+        style={style.modalWindow}
+        shouldCloseOnOverlayClick
+        shouldCloseOnEsc
+        onRequestClose={getHandleModalClose(dispatch)}
+      >
+        <Text element='div' size='largeI' style={style.modalHeading}>
+          Add an individual contact
+        </Text>
+        <Text element='p' style={style.modalBody}>
+          Thought of someone who might help you in your search? Just add
+          their details below so you can nudj them.
+        </Text>
+        <ConnectionsForm
+          className={css(mss.plLgIi, mss.prLgIi)}
+          csrfToken={get(props, 'csrfToken')}
+          onChange={getHandleConnectionChange(dispatch)}
+          onSubmit={getHandleConnectionSubmit(dispatch)}
+          connection={get(state, 'newContact')}
+        />
+      </Modal>
     </Layout>
   )
 }

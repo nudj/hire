@@ -2,7 +2,6 @@ const { merge } = require('@nudj/library')
 const { createReducer } = require('../../lib')
 const {
   UPDATE_CONTACT_SEARCH_QUERY,
-  SET_SELECTED_CONTACTS,
   SHOW_ADD_CONTACT_FORM,
   HIDE_ADD_CONTACT_FORM,
   CLEAR_ADD_CONTACT_FORM,
@@ -14,11 +13,6 @@ const {
 const updateContactSearchQuery = (state, action) => ({
   ...state,
   searchQuery: action.query
-})
-
-const setSelectedContacts = (state, action) => ({
-  ...state,
-  selectedContacts: action.contacts
 })
 
 const showAddContactForm = state => ({
@@ -57,7 +51,6 @@ const setNewItemValue = (state, action) => {
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
   [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
-  [SET_SELECTED_CONTACTS]: setSelectedContacts,
   [SHOW_ADD_CONTACT_FORM]: showAddContactForm,
   [HIDE_ADD_CONTACT_FORM]: hideAddContactForm,
   [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm,
