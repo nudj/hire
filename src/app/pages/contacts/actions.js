@@ -16,11 +16,6 @@ const updateContactsSearchQuery = (query) => ({
   query
 })
 
-const setSelectedContacts = (contacts) => ({
-  type: SET_SELECTED_CONTACTS,
-  contacts
-})
-
 const showAddContactForm = () => ({
   type: SHOW_ADD_CONTACT_FORM
 })
@@ -101,7 +96,6 @@ const search = (url = '/contacts') => async (dispatch, getState, ...args) => {
 module.exports = {
   // constants
   UPDATE_CONTACT_SEARCH_QUERY,
-  SET_SELECTED_CONTACTS,
   SET_NEW_ITEM_VALUE,
   SHOW_ADD_CONTACT_FORM,
   HIDE_ADD_CONTACT_FORM,
@@ -110,7 +104,6 @@ module.exports = {
   STOP_LOADING,
   // action creators
   updateContactsSearchQuery,
-  setSelectedContacts,
   showAddContactForm,
   hideAddContactForm,
   clearAddContactForm,
