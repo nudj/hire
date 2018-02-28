@@ -2,9 +2,9 @@ const { Global } = require('../../lib/graphql')
 
 const getContacts = ({ session, query }) => {
   const preSearchQuery = `
-    query SurveyQuestionPage($userId: ID!, $blankSearch: Boolean!) {
+    query SurveyQuestionPage($userId: ID!) {
       user(id: $userId) {
-        connections @include(if: $blankSearch) {
+        connections {
           id
           firstName
           lastName
@@ -53,10 +53,7 @@ const getContacts = ({ session, query }) => {
     }
   `
 
-  const commonVariables = {
-    userId: session.userId,
-    blankSearch: query.search === ''
-  }
+  const commonVariables = { userId: session.userId }
 
   const preSearchVariables = commonVariables
 
