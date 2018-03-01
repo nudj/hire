@@ -1,4 +1,4 @@
-const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
+const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 
 const getContacts = ({ session, query }) => {

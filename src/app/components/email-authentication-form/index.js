@@ -5,7 +5,7 @@ const React = require('react')
 const { Button, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
+const { emailPreferences } = require('../../lib/constants')
 const style = require('./style.css')
 
 type Props = {

@@ -2,8 +2,8 @@ const axios = require('axios')
 const get = require('lodash/get')
 const uniq = require('lodash/uniq')
 const actions = require('@nudj/framework/actions')
-const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 
+const { dataSources } = require('../../lib/constants')
 const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
 
 const ADD_CONNECTION = 'SURVEY_ADD_CONNECTION'
