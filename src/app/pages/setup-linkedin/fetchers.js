@@ -29,33 +29,18 @@ const uploadConnections = ({ session, body, files }) => {
   const gql = `
     mutation ImportPage (
       $userId: ID!,
-      $connections: [ConnectionCreateInput!]!,
+      $connections: [Data!]!,
       $source: String!
     ) {
       user (id: $userId) {
         firstName
         lastName
         email
-        newConnections: getOrCreateConnections (
+        newConnections: importLinkedinConnections (
           connections: $connections,
           source: $source
         ) {
           id
-          firstName
-          lastName
-          role {
-            name
-          }
-          company {
-            name
-          }
-          source {
-            name
-          }
-          person {
-            id
-            email
-          }
         }
         hirer {
           company {
@@ -74,6 +59,7 @@ const uploadConnections = ({ session, body, files }) => {
     connections: body.connections,
     source: 'linkedin'
   }
+
   return {
     gql,
     variables,
