@@ -20,5 +20,6 @@ services:
       - ../framework/src:/usr/src/@nudj/framework
       - ../library/src:/usr/src/@nudj/library
       - ../components/src:/usr/src/@nudj/components
+      - ../api/src:/usr/src/@nudj/api
     stdin_open: true
     command: /bin/zsh

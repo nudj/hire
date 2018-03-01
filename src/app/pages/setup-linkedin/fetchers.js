@@ -1,4 +1,5 @@
 const { Redirect } = require('@nudj/framework/errors')
+const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 const get = require('lodash/get')
 
 const { Global } = require('../../lib/graphql')
@@ -30,7 +31,7 @@ const uploadConnections = ({ session, body, files }) => {
     mutation ImportPage (
       $userId: ID!,
       $connections: [Data!]!,
-      $source: String!
+      $source: DataSource!
     ) {
       user (id: $userId) {
         firstName
@@ -57,7 +58,7 @@ const uploadConnections = ({ session, body, files }) => {
   const variables = {
     userId,
     connections: body.connections,
-    source: 'linkedin'
+    source: dataSources.LINKEDIN
   }
 
   return {

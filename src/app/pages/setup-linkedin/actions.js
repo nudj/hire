@@ -2,6 +2,7 @@
 // @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
+const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 
 const Papa = require('../../lib/papa')
 
@@ -56,7 +57,7 @@ const uploadLinkedinConnections = (): ((
     const method = 'post'
     const data = {
       connections: getState().uploadLinkedinConnectionsPage.connections,
-      source: 'linkedin'
+      source: dataSources.LINKEDIN
     }
     await dispatch(
       actions.app.postData({

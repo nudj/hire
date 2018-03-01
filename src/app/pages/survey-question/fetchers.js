@@ -1,6 +1,7 @@
 const toUpper = require('lodash/toUpper')
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
+const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 
 const { Global } = require('../../lib/graphql')
 const { questionTypes } = require('../../lib/constants')
@@ -26,14 +27,11 @@ const getCompaniesQuestion = ({ session, params, query }) => {
       user (id: $userId) {
         employments {
           id
-          source {
-            id
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         hirer {
           company {
@@ -165,13 +163,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
         ${hirerFragment}
       }
@@ -201,13 +197,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
             company {
               name
             }
-            source {
-              name
-            }
             person {
               id
               email
             }
+            source
           }
           ${hirerFragment}
         }
@@ -239,7 +233,7 @@ const postEmployment = ({ session, params, body }) => {
       $sectionId: ID!,
       $questionId: ID!,
       $company: String!,
-      $source: String!
+      $source: DataSource!
     ) {
       notification: setNotification (type: "success", message: "Company added") {
         type
@@ -251,23 +245,19 @@ const postEmployment = ({ session, params, body }) => {
           source: $source
         ) {
           id
-          source {
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         employments {
           id
-          source {
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         hirer {
           company {
@@ -411,7 +401,7 @@ const postNewConnection = ({ session, params, body }) => {
       $email: String!
       $title: String
       $company: String
-      $source: SourceCreateInput!
+      $source: DataSource!
     ) {
       user (id: $userId) {
         newConnection: getOrCreateConnection (
@@ -438,7 +428,7 @@ const postNewConnection = ({ session, params, body }) => {
     email: body.email,
     title: body.title,
     company: body.company,
-    source: { name: 'manual' }
+    source: dataSources.MANUAL
   }
   return { gql, variables }
 }
