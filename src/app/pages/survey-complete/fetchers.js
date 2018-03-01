@@ -23,15 +23,13 @@ const completeSurvey = ({ session, params, res }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
             firstName
             lastName
           }
+          source
         }
       }
       user (id: $userId) {
@@ -119,13 +117,11 @@ const setEmailPreference = ({ body, params, query, session }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
       }
       ${Global}

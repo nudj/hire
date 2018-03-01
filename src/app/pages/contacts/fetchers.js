@@ -1,3 +1,4 @@
+const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 const { Global } = require('../../lib/graphql')
 
 const getContacts = ({ session, query }) => {
@@ -14,13 +15,11 @@ const getContacts = ({ session, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
       }
       ${Global}
@@ -40,13 +39,11 @@ const getContacts = ({ session, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
       }
       ${Global}
@@ -76,22 +73,12 @@ const postContact = ({ session, params, body }) => {
   const gql = `
     mutation addNewContact (
       $userId: ID!
-      $firstName: String!
-      $lastName: String!
-      $email: String!
-      $title: String
-      $company: String
-      $source: SourceCreateInput!
+      $to: ConnectionCreateInput!
+      $source: DataSource!
     ) {
       user (id: $userId) {
         newContact: getOrCreateConnection (
-          to: {
-            firstName: $firstName,
-            lastName: $lastName,
-            email: $email,
-            title: $title,
-            company: $company
-          }
+          to: $to
           source: $source
         ) {
           id
@@ -101,12 +88,14 @@ const postContact = ({ session, params, body }) => {
   `
   const variables = {
     userId: session.userId,
-    firstName: body.firstName,
-    lastName: body.lastName,
-    email: body.email,
-    title: body.title,
-    company: body.company,
-    source: { name: 'manual' }
+    to: {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      title: body.title,
+      company: body.company
+    },
+    source: dataSources.MANUAL
   }
   return { gql, variables }
 }

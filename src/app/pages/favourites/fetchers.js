@@ -23,15 +23,13 @@ const get = ({ session }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
             firstName
             lastName
           }
+          source
         }
       }
       ${Global}

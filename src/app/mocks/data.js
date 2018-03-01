@@ -47,7 +47,6 @@ const data = {
   connections: [],
   employments: [],
   roles: [],
-  sources: [],
   events: []
 }
 data.conversations = data.conversations.concat([
@@ -118,7 +117,7 @@ data.connections = data.connections.concat([
     firstName: 'Nicholas',
     lastName: 'Collings',
     from: 'person5',
-    source: 'source1',
+    source: 'LINKEDIN',
     role: 'role1',
     person: 'person1',
     id: 'connection1'
@@ -128,7 +127,7 @@ data.connections = data.connections.concat([
     firstName: 'Timothy',
     lastName: 'Robinson',
     from: 'person5',
-    source: 'source1',
+    source: 'LINKEDIN',
     role: 'role1',
     person: 'person6',
     id: 'connection2'
@@ -138,7 +137,7 @@ data.connections = data.connections.concat([
     firstName: 'Robyn',
     lastName: 'McGirl',
     from: 'person5',
-    source: 'source1',
+    source: 'LINKEDIN',
     role: 'role1',
     person: 'person2',
     id: 'connection3'
@@ -148,7 +147,7 @@ data.connections = data.connections.concat([
     firstName: 'Matt',
     lastName: 'Ellis',
     from: 'person5',
-    source: 'source1',
+    source: 'LINKEDIN',
     role: 'role1',
     person: 'person4',
     id: 'connection4'
@@ -157,7 +156,7 @@ data.connections = data.connections.concat([
     firstName: 'Rich',
     lastName: 'Palmer',
     from: 'person5',
-    source: 'source1',
+    source: 'LINKEDIN',
     person: 'person7',
     id: 'connection5'
   }
@@ -601,14 +600,6 @@ data.surveyAnswers = data.surveyAnswers.concat([
       'connection1',
       'connection2'
     ]
-  }
-])
-data.sources = data.sources.concat([
-  {
-    id: 'source1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
-    name: 'linkedin'
   }
 ])
 data.events = data.events.concat([
