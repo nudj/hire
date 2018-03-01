@@ -1,10 +1,9 @@
 const toUpper = require('lodash/toUpper')
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
-const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 
 const { Global } = require('../../lib/graphql')
-const { questionTypes } = require('../../lib/constants')
+const { dataSources, questionTypes } = require('../../lib/constants')
 const getNextSurveyUri = require('./getNextSurveyUri')
 
 const getQuestion = data => {

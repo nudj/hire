@@ -1,4 +1,6 @@
 const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
+const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
+const { values: jobStatuses } = require('@nudj/api/gql/schema/enums/job-status-types')
 
 const surveyTypes = {
   EMPLOYEE_SURVEY: 'EMPLOYEE_SURVEY',
@@ -28,11 +30,15 @@ const taskTypes = {
 const GOOGLE_MAILER_DAEMON_ADDRESS = 'mailer-daemon@googlemail.com'
 
 module.exports = {
+  emailPreferences,
+  dataSources,
+  jobStatuses,
+
   surveyTypes,
-  taskTypes,
   notificationTypes,
   booleanChoices,
-  emailPreferences,
   questionTypes,
+  taskTypes,
+
   GOOGLE_MAILER_DAEMON_ADDRESS
 }

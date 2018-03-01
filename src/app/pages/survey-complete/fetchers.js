@@ -1,7 +1,7 @@
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
+const { emailPreferences } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 
 const completeSurvey = ({ session, params, res }) => {

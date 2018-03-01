@@ -2,7 +2,7 @@ const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
 const { Global } = require('../../lib/graphql')
-const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-preference-types')
+const { emailPreferences } = require('../../lib/constants')
 
 const getMessages = props => {
   const { session } = props

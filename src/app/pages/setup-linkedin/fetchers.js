@@ -1,7 +1,7 @@
 const { Redirect } = require('@nudj/framework/errors')
-const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 const get = require('lodash/get')
 
+const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
 const intercom = require('../../lib/intercom')

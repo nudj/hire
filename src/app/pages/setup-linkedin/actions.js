@@ -2,8 +2,8 @@
 // @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 
+const { dataSources } = require('../../lib/constants')
 const Papa = require('../../lib/papa')
 
 const START_PARSING_LINKEDIN_CONNECTIONS = 'START_PARSING_LINKEDIN_CONNECTIONS'
