@@ -26,7 +26,7 @@ const {
 } = proxyquire('../../../../app/pages/setup-linkedin/actions', {
   '../../lib/papa': {
     asyncParse: file => Promise.resolve({
-      data: [{ emailAddress: 'example@email.tld' }] 
+      data: [{ emailAddress: 'example@email.tld' }]
     })
   },
   '@nudj/framework/actions': {
