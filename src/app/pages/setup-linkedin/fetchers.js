@@ -1,7 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 const get = require('lodash/get')
 
-const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
 const intercom = require('../../lib/intercom')
@@ -30,18 +29,14 @@ const uploadConnections = ({ session, body, files }) => {
   const gql = `
     mutation ImportPage (
       $userId: ID!,
-      $connections: [Data!]!,
-      $source: DataSource!
+      $connections: [Data!]!
     ) {
       user (id: $userId) {
         firstName
         lastName
         email
-        newConnections: importLinkedinConnections (
-          connections: $connections,
-          source: $source
-        ) {
-          id
+        importedConnections: importLinkedinConnections (connections: $connections) {
+          created
         }
         hirer {
           company {
@@ -57,8 +52,7 @@ const uploadConnections = ({ session, body, files }) => {
   `
   const variables = {
     userId,
-    connections: body.connections,
-    source: dataSources.LINKEDIN
+    connections: body.connections
   }
 
   return {
