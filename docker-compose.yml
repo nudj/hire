@@ -17,5 +17,8 @@ services:
       - ../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
       - ../hire/src/yarn.lock:/usr/src/yarn.lock
       - ../hire/src/flow-typed:/usr/src/flow-typed
+      - ../framework/src:/usr/src/@nudj/framework
+      - ../library/src:/usr/src/@nudj/library
+      - ../components/src:/usr/src/@nudj/components
     stdin_open: true
     command: /bin/zsh
