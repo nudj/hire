@@ -1,4 +1,4 @@
-const { values: jobStatuses } = require('@nudj/api/gql/schema/enums/job-status-types')
+const { jobStatuses } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const {
   format,

@@ -1,10 +1,11 @@
+const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 
 const getContacts = ({ session, query }) => {
   const preSearchQuery = `
-    query SurveyQuestionPage($userId: ID!, $blankSearch: Boolean!) {
+    query SurveyQuestionPage($userId: ID!) {
       user(id: $userId) {
-        connections @include(if: $blankSearch) {
+        connections {
           id
           firstName
           lastName
@@ -14,13 +15,11 @@ const getContacts = ({ session, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
       }
       ${Global}
@@ -40,30 +39,29 @@ const getContacts = ({ session, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
       }
       ${Global}
     }
   `
 
-  const commonVariables = {
-    userId: session.userId,
-    blankSearch: query.search === ''
-  }
+  const commonVariables = { userId: session.userId }
 
   const preSearchVariables = commonVariables
 
   const searchVariables = {
     ...commonVariables,
     search: query.search,
-    fields: [['firstName', 'lastName']]
+    fields: [
+      ['firstName', 'lastName'],
+      ['company.name'],
+      ['person.email']
+    ]
   }
 
   return query.search
@@ -75,22 +73,12 @@ const postContact = ({ session, params, body }) => {
   const gql = `
     mutation addNewContact (
       $userId: ID!
-      $firstName: String!
-      $lastName: String!
-      $email: String!
-      $title: String
-      $company: String
-      $source: SourceCreateInput!
+      $to: ConnectionCreateInput!
+      $source: DataSource!
     ) {
       user (id: $userId) {
         newContact: getOrCreateConnection (
-          to: {
-            firstName: $firstName,
-            lastName: $lastName,
-            email: $email,
-            title: $title,
-            company: $company
-          }
+          to: $to
           source: $source
         ) {
           id
@@ -100,12 +88,14 @@ const postContact = ({ session, params, body }) => {
   `
   const variables = {
     userId: session.userId,
-    firstName: body.firstName,
-    lastName: body.lastName,
-    email: body.email,
-    title: body.title,
-    company: body.company,
-    source: { name: 'manual' }
+    to: {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      title: body.title,
+      company: body.company
+    },
+    source: dataSources.MANUAL
   }
   return { gql, variables }
 }

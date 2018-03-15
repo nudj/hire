@@ -4,7 +4,6 @@ const actions = require('@nudj/framework/actions')
 const { logger } = require('@nudj/library')
 
 const UPDATE_CONTACT_SEARCH_QUERY = 'CONTACTS_UPDATE_CONTACT_SEARCH_QUERY'
-const SET_SELECTED_CONTACTS = 'CONTACTS_SET_SELECTED_CONTACTS'
 const SHOW_ADD_CONTACT_FORM = 'CONTACTS_SHOW_ADD_CONTACT_FORM'
 const HIDE_ADD_CONTACT_FORM = 'CONTACTS_HIDE_ADD_CONTACT_FORM'
 const SET_NEW_ITEM_VALUE = 'CONTACTS_SET_NEW_ITEM_VALUE'
@@ -15,11 +14,6 @@ const STOP_LOADING = 'CONTACTS_STOP_LOADING'
 const updateContactsSearchQuery = (query) => ({
   type: UPDATE_CONTACT_SEARCH_QUERY,
   query
-})
-
-const setSelectedContacts = (contacts) => ({
-  type: SET_SELECTED_CONTACTS,
-  contacts
 })
 
 const showAddContactForm = () => ({
@@ -102,7 +96,6 @@ const search = (url = '/contacts') => async (dispatch, getState, ...args) => {
 module.exports = {
   // constants
   UPDATE_CONTACT_SEARCH_QUERY,
-  SET_SELECTED_CONTACTS,
   SET_NEW_ITEM_VALUE,
   SHOW_ADD_CONTACT_FORM,
   HIDE_ADD_CONTACT_FORM,
@@ -111,7 +104,6 @@ module.exports = {
   STOP_LOADING,
   // action creators
   updateContactsSearchQuery,
-  setSelectedContacts,
   showAddContactForm,
   hideAddContactForm,
   clearAddContactForm,

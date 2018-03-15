@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const sortBy = require('lodash/sortBy')
 
 const {
   Button,
@@ -27,7 +26,8 @@ const Layout = require('../../../components/app-layout')
 const style = require('../style.css')
 const Basket = require('../../../components/basket')
 const ConnectionsForm = require('../../../components/form-connection')
-const SearchResults = require('./connections-search-results')
+const SearchResults = require('../../../components/contacts-search-results')
+const ListContactsMultiSelect = require('./list-contacts-multiselect')
 
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
@@ -119,7 +119,7 @@ const ConnectionsQuestionPage = props => {
             {question.description}
           </Para>
         </Section>
-        <Section padding width='regular'>
+        <Section width='regular'>
           {hasConnections || selectedConnections.length ? (
             <Card style={mss.pa0}>
               <form
@@ -149,11 +149,14 @@ const ConnectionsQuestionPage = props => {
               </form>
               <div className={css(style.resultsContainer)}>
                 <SearchResults
-                  contacts={sortBy(connections, ['firstName', 'lastName'])}
-                  selectedContacts={selectedConnections}
-                  onChange={handleSetConnections}
+                  contacts={connections}
                   onAddIndividualClick={getHandleAddClick(dispatch)}
                   query={searchQuery}
+                  ListComponent={ListContactsMultiSelect}
+                  listProps={{
+                    selectedContacts: selectedConnections,
+                    onChange: handleSetConnections
+                  }}
                 />
               </div>
             </Card>
@@ -161,7 +164,7 @@ const ConnectionsQuestionPage = props => {
             <Card style={mss.pa0}>
               <div className={css(mss.plLgIi, mss.prLgIi)}>
                 <Text element='label'>
-                    Add their details below
+                  Add their details below
                 </Text>
                 <ConnectionsForm
                   csrfToken={get(props, 'csrfToken')}

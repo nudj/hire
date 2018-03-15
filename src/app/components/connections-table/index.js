@@ -27,9 +27,7 @@ type Connection = {
   from: {
     name: string
   },
-  source: {
-    name: string
-  },
+  source: string,
   role: {
     name: string
   },

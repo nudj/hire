@@ -1,4 +1,5 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const { Link: RouterLink, NavLink } = require('react-router-dom')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
@@ -21,6 +22,9 @@ const ApplicationLayout = props => {
   return (
     <ScrollTop ignore={history.action === 'REPLACE'}>
       <div className={css(style.root)}>
+        <Helmet>
+          <body className={css(style.htmlBody)} />
+        </Helmet>
         <Notification notification={notification} dispatch={dispatch} />
         <div className={css(style.pageHeader)}>
           <RouterLink className={css(style.logoContainer)} to='/'>

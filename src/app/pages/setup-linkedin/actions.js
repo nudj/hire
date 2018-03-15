@@ -3,8 +3,8 @@
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 
+const { dataSources } = require('../../lib/constants')
 const Papa = require('../../lib/papa')
-const { linkedinToNudjPeople } = require('../../lib/linkedin-to-nudj')
 
 const START_PARSING_LINKEDIN_CONNECTIONS = 'START_PARSING_LINKEDIN_CONNECTIONS'
 const COMPLETE_PARSING_LINKEDIN_CONNECTIONS =
@@ -40,8 +40,7 @@ const parseLinkedinConnections = (
       dynamicTyping: true
     })
     const data = get(result, 'data', [])
-    const connections = linkedinToNudjPeople(data)
-    return dispatch(completeParsingLinkedinConnections(connections))
+    return dispatch(completeParsingLinkedinConnections(data))
   } catch (error) {
     throw new Error(error)
   }
@@ -58,7 +57,7 @@ const uploadLinkedinConnections = (): ((
     const method = 'post'
     const data = {
       connections: getState().uploadLinkedinConnectionsPage.connections,
-      source: 'linkedin'
+      source: dataSources.LINKEDIN
     }
     await dispatch(
       actions.app.postData({

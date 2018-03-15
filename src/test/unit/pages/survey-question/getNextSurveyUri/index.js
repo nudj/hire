@@ -1,6 +1,6 @@
 /* global expect */
 /* eslint-env mocha */
-const getNextSurveyUri = require('../../../app/pages/survey-question/getNextSurveyUri')
+const getNextSurveyUri = require('../../../../../app/pages/survey-question/getNextSurveyUri')
 
 const twoQuestionSurvey = {
   id: 'survey1',

@@ -6,15 +6,13 @@ const { Button, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const ListContactsMultiSelect = require('./list-contacts-multiselect')
-
 const ContactsSearchResults = (props) => {
   const {
     contacts,
-    selectedContacts,
-    onChange,
     onAddIndividualClick,
-    query
+    query,
+    ListComponent,
+    listProps
   } = props
 
   if (!contacts.length && isNil(query)) {
@@ -42,25 +40,23 @@ const ContactsSearchResults = (props) => {
   }
 
   return (
-    <ListContactsMultiSelect
+    <ListComponent
+      {...listProps}
       contacts={contacts}
-      selectedContacts={selectedContacts}
-      onChange={onChange}
     />
   )
 }
 
 ContactsSearchResults.propTypes = {
   contacts: PropTypes.array,
-  selectedContacts: PropTypes.arrayOf(PropTypes.object),
-  onChange: PropTypes.func,
   onAddIndividualClick: PropTypes.func,
-  query: PropTypes.string
+  query: PropTypes.string,
+  ListComponent: PropTypes.func.isRequired,
+  listProps: PropTypes.object
 }
 
 ContactsSearchResults.defaultProps = {
-  contacts: [],
-  selectedContacts: []
+  contacts: []
 }
 
 module.exports = ContactsSearchResults

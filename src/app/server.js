@@ -42,7 +42,7 @@ const expressRouters = {
 const expressAssetPath = path.join(__dirname, 'server/assets')
 const buildAssetPath = path.join(__dirname, 'server/build')
 const spoofLoggedIn = (req, res, next) => {
-  req.session.userId = 'person5'
+  req.session.userId = process.env.SPOOF_USER_ID
   next()
 }
 const errorHandlers = {}

@@ -23,12 +23,11 @@ const {
   completeConnectionsUpload,
   parseLinkedinConnections,
   uploadLinkedinConnections
-} = proxyquire('../../../app/pages/setup-linkedin/actions', {
+} = proxyquire('../../../../app/pages/setup-linkedin/actions', {
   '../../lib/papa': {
-    asyncParse: file => Promise.resolve()
-  },
-  '../../lib/linkedin-to-nudj': {
-    linkedinToNudjPeople: () => [{ email: 'example@email.tld' }]
+    asyncParse: file => Promise.resolve({
+      data: [{ emailAddress: 'example@email.tld' }]
+    })
   },
   '@nudj/framework/actions': {
     app: {
@@ -92,7 +91,7 @@ describe('linkedin connections upload action creators', () => {
         { type: START_PARSING_LINKEDIN_CONNECTIONS },
         {
           type: COMPLETE_PARSING_LINKEDIN_CONNECTIONS,
-          connections: [{ email: 'example@email.tld' }]
+          connections: [{ emailAddress: 'example@email.tld' }]
         }
       ]
 

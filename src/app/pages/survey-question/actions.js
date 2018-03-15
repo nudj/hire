@@ -3,6 +3,7 @@ const get = require('lodash/get')
 const uniq = require('lodash/uniq')
 const actions = require('@nudj/framework/actions')
 
+const { dataSources } = require('../../lib/constants')
 const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
 
 const ADD_CONNECTION = 'SURVEY_ADD_CONNECTION'
@@ -47,7 +48,7 @@ const addConnection = questionId => (dispatch, getState) => {
         method: 'post',
         data: {
           connection,
-          source: 'survey'
+          source: dataSources.SURVEY
         }
       },
       () => {
@@ -81,7 +82,7 @@ const addEmployment = questionId => (dispatch, getState) => {
         method: 'post',
         data: {
           employment: employment.name,
-          source: 'survey'
+          source: dataSources.SURVEY
         }
       },
       () => {

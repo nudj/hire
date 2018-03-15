@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@nudj/components": "2.5.0",
-    "@nudj/framework": "13.3.0",
+    "@nudj/framework": "14.0.0",
     "@nudj/library": "4.1.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
@@ -60,6 +60,7 @@
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "react-textarea-autosize": "^5.1.0",
+    "react-virtualized": "^9.18.5",
     "redux": "^3.6.0",
     "regenerator-runtime": "0.11.1",
     "route-parser": "^0.0.5",

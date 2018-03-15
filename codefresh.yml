@@ -18,7 +18,7 @@ steps:
     commands:
       - ./node_modules/.bin/standard
       - ./node_modules/.bin/flow --quiet
-      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test
+      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit
 
   build_latest:
     title: Build Latest
@@ -28,6 +28,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY}}
       - NODE_ENV=production
       - DEBUG=true
     when:
@@ -56,6 +57,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY}}
       - NODE_ENV=production
     when:
       branch:
@@ -80,7 +82,7 @@ steps:
     title: Push
     type: push
     candidate: '${{build}}'
-    tag: 7.3.0
+    tag: 8.0.0
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'

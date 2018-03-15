@@ -3,7 +3,7 @@ const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
-const { questionTypes } = require('../../lib/constants')
+const { dataSources, questionTypes } = require('../../lib/constants')
 const getNextSurveyUri = require('./getNextSurveyUri')
 
 const getQuestion = data => {
@@ -26,14 +26,11 @@ const getCompaniesQuestion = ({ session, params, query }) => {
       user (id: $userId) {
         employments {
           id
-          source {
-            id
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         hirer {
           company {
@@ -151,12 +148,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $userId: ID!,
       $surveySlug: String!,
       $sectionId: ID!,
-      $questionId: ID!,
-      $blankSearch: Boolean!
+      $questionId: ID!
     ) {
       ${surveyAnswersFragment}
       user (id: $userId) {
-        connections @include(if: $blankSearch) {
+        connections {
           id
           firstName
           lastName
@@ -166,19 +162,18 @@ const getConnectionsQuestion = ({ session, params, query }) => {
           company {
             name
           }
-          source {
-            name
-          }
           person {
             id
             email
           }
+          source
         }
         ${hirerFragment}
       }
       ${Global}
     }
   `
+
   if (query.search) {
     gql = `
       query SurveyQuestionPage (
@@ -201,13 +196,11 @@ const getConnectionsQuestion = ({ session, params, query }) => {
             company {
               name
             }
-            source {
-              name
-            }
             person {
               id
               email
             }
+            source
           }
           ${hirerFragment}
         }
@@ -215,14 +208,18 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       }
     `
   }
+
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
     search: query.search,
-    blankSearch: query.search === '',
-    fields: [['firstName', 'lastName']]
+    fields: [
+      ['firstName', 'lastName'],
+      ['company.name'],
+      ['person.email']
+    ]
   }
   return { gql, variables }
 }
@@ -235,7 +232,7 @@ const postEmployment = ({ session, params, body }) => {
       $sectionId: ID!,
       $questionId: ID!,
       $company: String!,
-      $source: String!
+      $source: DataSource!
     ) {
       notification: setNotification (type: "success", message: "Company added") {
         type
@@ -247,23 +244,19 @@ const postEmployment = ({ session, params, body }) => {
           source: $source
         ) {
           id
-          source {
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         employments {
           id
-          source {
-            name
-          }
           company {
             id
             name
           }
+          source
         }
         hirer {
           company {
@@ -407,7 +400,7 @@ const postNewConnection = ({ session, params, body }) => {
       $email: String!
       $title: String
       $company: String
-      $source: SourceCreateInput!
+      $source: DataSource!
     ) {
       user (id: $userId) {
         newConnection: getOrCreateConnection (
@@ -434,7 +427,7 @@ const postNewConnection = ({ session, params, body }) => {
     email: body.email,
     title: body.title,
     company: body.company,
-    source: { name: 'manual' }
+    source: dataSources.MANUAL
   }
   return { gql, variables }
 }
