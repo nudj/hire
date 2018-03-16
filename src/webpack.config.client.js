@@ -14,7 +14,7 @@ const plugins = [
   }),
   new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER']),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
-  process.env.USE_DEV_SERVER &&  new webpack.NamedModulesPlugin(),
+  process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
   process.env.NODE_ENV === 'production' && new UglifyJSPlugin()
 ].filter(plugin => plugin)
 
@@ -25,7 +25,7 @@ const config = {
       process.env.USE_DEV_SERVER && 'react-hot-loader/patch',
       process.env.USE_DEV_SERVER && 'webpack-dev-server/client?https://localhost:83',
       process.env.USE_DEV_SERVER && 'webpack/hot/only-dev-server',
-      './app/client',
+      './app/client'
     ].filter(entry => entry)
   },
   output: {
@@ -44,7 +44,7 @@ const config = {
           path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
-        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
+        exclude: /node_modules\/(?!@nudj)/,
         loader: 'babel-loader',
         options: {
           babelrc: false,
