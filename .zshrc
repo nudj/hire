@@ -9,7 +9,7 @@ alias test="standard && flow && mocha  --compilers js:babel-core/register --recu
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
-	--watch ./ \ 
+	--watch ./ \
 	--delay 250ms \
 	-x "mocha --compilers js:babel-core/register --recursive test/unit || exit 1"'
 alias flow='flow --quiet'

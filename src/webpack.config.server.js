@@ -30,7 +30,7 @@ module.exports = {
           path.join(__dirname, 'node_modules', '@nudj')
         ],
         exclude: [
-          /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
+          /node_modules\/(?!@nudj)/,
           path.join(__dirname, 'app/server/hot-build.js'),
           path.join(__dirname, 'app/server/hot')
         ]
