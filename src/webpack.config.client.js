@@ -25,6 +25,7 @@ const config = {
       process.env.USE_DEV_SERVER && 'react-hot-loader/patch',
       process.env.USE_DEV_SERVER && 'webpack-dev-server/client?https://localhost:83',
       process.env.USE_DEV_SERVER && 'webpack/hot/only-dev-server',
+      'babel-polyfill',
       './app/client'
     ].filter(entry => entry)
   },
