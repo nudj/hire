@@ -15,7 +15,7 @@ const plugins = [
   new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER']),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
-  process.env.NODE_ENV === 'production' && new UglifyJSPlugin()
+  process.env.DEBUG !== 'true' && new UglifyJSPlugin()
 ].filter(plugin => plugin)
 
 const config = {
