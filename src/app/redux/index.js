@@ -1,4 +1,3 @@
-require('../lib/polyfills')
 const React = require('react')
 const classnames = require('classnames')
 const { Helmet } = require('react-helmet')

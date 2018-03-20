@@ -13,8 +13,9 @@ services:
       - ../hire/src/.npmrc:/usr/src/.npmrc
       - ../hire/src/nodemon.json:/usr/src/nodemon.json
       - ../hire/src/package.json:/usr/src/package.json
-      - ../hire/src/webpack.config.js:/usr/src/webpack.config.js
-      - ../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
+      - ../hire/src/webpack.config.server.js:/usr/src/webpack.config.server.js
+      - ../hire/src/webpack.config.client.js:/usr/src/webpack.config.client.js
+      - ../hire/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       - ../hire/src/yarn.lock:/usr/src/yarn.lock
       - ../hire/src/flow-typed:/usr/src/flow-typed
       - ../framework/src:/usr/src/@nudj/framework
@@ -23,3 +24,5 @@ services:
       - ../api/src:/usr/src/@nudj/api
     stdin_open: true
     command: /bin/zsh
+    ports:
+      - "83:83"

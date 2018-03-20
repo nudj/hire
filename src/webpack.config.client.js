@@ -7,26 +7,33 @@ process.noDeprecation = true
 
 console.log('Building for environment:', process.env.NODE_ENV)
 
-let plugins = [
+const plugins = [
   new webpack.DllReferencePlugin({
     context: '.',
     manifest: require('./vendors-manifest.json')
   }),
-  new webpack.EnvironmentPlugin(['NODE_ENV'])
-]
-if (process.env.DEBUG !== 'true') {
-  plugins = plugins.concat([new UglifyJSPlugin()])
-}
+  new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER']),
+  process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
+  process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
+  process.env.DEBUG !== 'true' && new UglifyJSPlugin()
+].filter(plugin => plugin)
 
-module.exports = {
+const config = {
   cache: true,
   entry: {
-    'app/server/build/app': './app/client'
+    app: [
+      process.env.USE_DEV_SERVER && 'react-hot-loader/patch',
+      process.env.USE_DEV_SERVER && 'webpack-dev-server/client?https://localhost:83',
+      process.env.USE_DEV_SERVER && 'webpack/hot/only-dev-server',
+      'babel-polyfill',
+      './app/client'
+    ].filter(entry => entry)
   },
   output: {
-    path: __dirname,
+    path: path.resolve(__dirname, 'app/server/build'),
     filename: '[name].js',
-    chunkFilename: '[id].js'
+    chunkFilename: '[id].js',
+    publicPath: 'https://localhost:83/build/'
   },
   devtool: 'source-map',
   module: {
@@ -38,7 +45,7 @@ module.exports = {
           path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
-        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
+        exclude: /node_modules\/(?!@nudj)/,
         loader: 'babel-loader',
         options: {
           babelrc: false,
@@ -75,3 +82,18 @@ module.exports = {
     warnings: false
   }
 }
+
+if (process.env.USE_DEV_SERVER) {
+  config.devServer = {
+    contentBase: path.resolve(__dirname, 'app/server'),
+    host: '0.0.0.0',
+    port: '83',
+    publicPath: '/build/',
+    public: 'localhost:83',
+    https: true,
+    hot: true,
+    headers: { 'Access-Control-Allow-Origin': '*' }
+  }
+}
+
+module.exports = config
