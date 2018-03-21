@@ -99,12 +99,43 @@ if (module.hot) {
     './redux/routes',
     './redux/reducers',
     path.resolve('./pages'),
-    path.resolve('./components')
+    path.resolve('./components'),
+    './server/routers/auth',
+    './server/routers/google-oauth',
+    './pages/check-device-wrapper/router',
+    './pages/contacts/router',
+    './pages/messages/router',
+    './pages/favourites/router',
+    './pages/setup-linkedin/router',
+    './pages/survey-complete/router',
+    './pages/survey-question/router',
+    './pages/survey/router',
+    './pages/notification-sent/router',
+    './pages/dashboard/router',
+    './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
     const updatedReduxRoutes = require('./redux/routes')
     const updatedReduxReducers = require('./redux/reducers')
     const updatedLoadingPage = require('./pages/loading')
+    const updatedExpressRouters = {
+      insecure: [],
+      secure: [
+        require('./server/routers/auth'),
+        require('./server/routers/google-oauth'),
+        require('./pages/check-device-wrapper/router'),
+        require('./pages/contacts/router'),
+        require('./pages/messages/router'),
+        require('./pages/favourites/router'),
+        require('./pages/setup-linkedin/router'),
+        require('./pages/survey-complete/router'),
+        require('./pages/survey-question/router'),
+        require('./pages/survey/router'),
+        require('./pages/notification-sent/router'),
+        require('./pages/dashboard/router'),
+        require('./server/routers/catch-all')
+      ]
+    }
 
     server.removeListener('request', app)
     const { app: newApp } = createNudjApps({
@@ -113,7 +144,7 @@ if (module.hot) {
       reduxReducers: updatedReduxReducers,
       expressAssetPath,
       buildAssetPath,
-      expressRouters,
+      expressRouters: updatedExpressRouters,
       spoofLoggedIn,
       errorHandlers,
       gqlFragments,
