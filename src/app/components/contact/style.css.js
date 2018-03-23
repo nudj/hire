@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   root: {
@@ -12,14 +12,32 @@ const styleSheet = StyleSheet.create({
     flexGrow: 1
   },
   children: {
-    flexShrink: 1
+    flexShrink: 1,
+    marginLeft: sizes.regular
   },
   name: {
     color: colors.primary
   },
-  attributes: {
-    color: colors.text,
+  job: {
+    display: 'inline-block',
+    fontWeight: typography.fontWeight.bold,
+    color: colors.midRed,
+    marginRight: sizes.regular
+  },
+  email: {
+    display: 'inline-block',
+    color: colors.text
+  },
+  tagContainer: {
     marginTop: sizes.smallIi
+  },
+  metaTitle: {
+    ...typography.type.smallIi,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.text
+  },
+  tagGroup: {
+    paddingTop: sizes.smallIii
   }
 })
 
