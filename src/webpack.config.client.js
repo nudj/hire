@@ -12,7 +12,7 @@ const plugins = [
     context: '.',
     manifest: require('./vendors-manifest.json')
   }),
-  new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER']),
+  new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER', 'DEV_SERVER_PATH']),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
   process.env.DEBUG !== 'true' && new UglifyJSPlugin()
@@ -23,7 +23,7 @@ const config = {
   entry: {
     app: [
       process.env.USE_DEV_SERVER && 'react-hot-loader/patch',
-      process.env.USE_DEV_SERVER && 'webpack-dev-server/client?https://localhost:83',
+      process.env.USE_DEV_SERVER && `webpack-dev-server/client?${process.env.DEV_SERVER_PATH}`,
       process.env.USE_DEV_SERVER && 'webpack/hot/only-dev-server',
       'babel-polyfill',
       './app/client'
@@ -33,7 +33,7 @@ const config = {
     path: path.resolve(__dirname, 'app/server/build'),
     filename: '[name].js',
     chunkFilename: '[id].js',
-    publicPath: 'https://localhost:83/build/'
+    publicPath: `${process.env.DEV_SERVER_PATH}/build/`
   },
   devtool: 'source-map',
   module: {
@@ -89,10 +89,11 @@ if (process.env.USE_DEV_SERVER) {
     host: '0.0.0.0',
     port: '83',
     publicPath: '/build/',
-    public: 'localhost:83',
-    https: true,
+    public: process.env.DEV_SERVER_PATH,
+    https: false,
     hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' }
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    disableHostCheck: true
   }
 }
 
