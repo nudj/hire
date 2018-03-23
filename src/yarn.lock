@@ -198,6 +198,10 @@
   version "9.4.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"
 
+"@types/react@>=15":
+  version "16.0.41"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.41.tgz#72146737f4d439dc95a53315de4bfb43ac8542ca"
+
 "@types/serve-static@*":
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.13.1.tgz#1d2801fa635d274cd97d4ec07e26b21b44127492"
@@ -7438,6 +7442,15 @@ rc@^1.1.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-animate-height@^0.10.10:
+  version "0.10.10"
+  resolved "https://registry.yarnpkg.com/react-animate-height/-/react-animate-height-0.10.10.tgz#c9f5095f30eb7317f30c1eecf5a4fec2f86b30cf"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.8"
+  optionalDependencies:
+    "@types/react" ">=15"
 
 react-content-loader@^1.3.1:
   version "1.7.3"

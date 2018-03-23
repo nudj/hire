@@ -1,28 +1,28 @@
 const { merge } = require('@nudj/library')
 const { createReducer } = require('../../lib')
 const {
-  UPDATE_CONTACT_SEARCH_QUERY,
-  SHOW_ADD_CONTACT_FORM,
-  HIDE_ADD_CONTACT_FORM,
+  UPDATE_SEARCH_QUERY,
+  UPDATE_FAVOURITES_FILTER,
+  UPDATE_EXPERTISE_TAG_FILTER,
   CLEAR_ADD_CONTACT_FORM,
   SET_NEW_ITEM_VALUE,
   START_LOADING,
   STOP_LOADING
 } = require('./actions')
 
-const updateContactSearchQuery = (state, action) => ({
+const updateSearchQuery = (state, action) => ({
   ...state,
   searchQuery: action.query
 })
 
-const showAddContactForm = state => ({
+const updateFavouritesFilter = (state, action) => ({
   ...state,
-  showAddIndividualConnectionModal: true
+  favouritesFilter: action.filter
 })
 
-const hideAddContactForm = state => ({
+const updateExpertiseTagFilter = (state, { tags }) => ({
   ...state,
-  showAddIndividualConnectionModal: false
+  expertiseTagFilter: tags
 })
 
 const clearAddContactForm = state => ({
@@ -50,9 +50,9 @@ const setNewItemValue = (state, action) => {
 
 const reducers = {
   [SET_NEW_ITEM_VALUE]: setNewItemValue,
-  [UPDATE_CONTACT_SEARCH_QUERY]: updateContactSearchQuery,
-  [SHOW_ADD_CONTACT_FORM]: showAddContactForm,
-  [HIDE_ADD_CONTACT_FORM]: hideAddContactForm,
+  [UPDATE_SEARCH_QUERY]: updateSearchQuery,
+  [UPDATE_FAVOURITES_FILTER]: updateFavouritesFilter,
+  [UPDATE_EXPERTISE_TAG_FILTER]: updateExpertiseTagFilter,
   [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm,
   [START_LOADING]: startLoading,
   [STOP_LOADING]: stopLoading
@@ -63,7 +63,9 @@ const initialState = {
   newContact: {},
   searchQuery: null,
   loading: false,
-  showAddIndividualConnectionModal: false
+  showAddIndividualConnectionModal: false,
+  favouritesFilter: false,
+  expertiseTagFilter: []
 }
 
 module.exports = createReducer(initialState, reducers)
