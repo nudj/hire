@@ -3,25 +3,27 @@ const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const { logger } = require('@nudj/library')
 
-const UPDATE_CONTACT_SEARCH_QUERY = 'CONTACTS_UPDATE_CONTACT_SEARCH_QUERY'
-const SHOW_ADD_CONTACT_FORM = 'CONTACTS_SHOW_ADD_CONTACT_FORM'
-const HIDE_ADD_CONTACT_FORM = 'CONTACTS_HIDE_ADD_CONTACT_FORM'
+const UPDATE_SEARCH_QUERY = 'CONTACTS_UPDATE_SEARCH_QUERY'
+const UPDATE_FAVOURITES_FILTER = 'UPDATE_FAVOURITES_FILTER'
+const UPDATE_EXPERTISE_TAG_FILTER = 'UPDATE_EXPERTISE_TAG_FILTER'
 const SET_NEW_ITEM_VALUE = 'CONTACTS_SET_NEW_ITEM_VALUE'
 const CLEAR_ADD_CONTACT_FORM = 'CONTACTS_CLEAR_ADD_CONTACT_FORM'
 const START_LOADING = 'CONTACTS_START_LOADING'
 const STOP_LOADING = 'CONTACTS_STOP_LOADING'
 
-const updateContactsSearchQuery = (query) => ({
-  type: UPDATE_CONTACT_SEARCH_QUERY,
+const updateSearchQuery = (query) => ({
+  type: UPDATE_SEARCH_QUERY,
   query
 })
 
-const showAddContactForm = () => ({
-  type: SHOW_ADD_CONTACT_FORM
+const updateFavouritesFilter = (filter) => ({
+  type: UPDATE_FAVOURITES_FILTER,
+  filter
 })
 
-const hideAddContactForm = () => ({
-  type: HIDE_ADD_CONTACT_FORM
+const updateExpertiseTagFilter = (tags) => ({
+  type: UPDATE_EXPERTISE_TAG_FILTER,
+  tags
 })
 
 const clearAddContactForm = () => ({
@@ -59,7 +61,6 @@ const submitNewConnection = () => (dispatch, getState) => {
     data
   })
   .then(() => {
-    dispatch(hideAddContactForm())
     dispatch(clearAddContactForm())
     dispatch(actions.app.showNotification({
       type: 'success',
@@ -95,17 +96,17 @@ const search = (url = '/contacts') => async (dispatch, getState, ...args) => {
 
 module.exports = {
   // constants
-  UPDATE_CONTACT_SEARCH_QUERY,
+  UPDATE_SEARCH_QUERY,
+  UPDATE_FAVOURITES_FILTER,
+  UPDATE_EXPERTISE_TAG_FILTER,
   SET_NEW_ITEM_VALUE,
-  SHOW_ADD_CONTACT_FORM,
-  HIDE_ADD_CONTACT_FORM,
   CLEAR_ADD_CONTACT_FORM,
   START_LOADING,
   STOP_LOADING,
   // action creators
-  updateContactsSearchQuery,
-  showAddContactForm,
-  hideAddContactForm,
+  updateSearchQuery,
+  updateFavouritesFilter,
+  updateExpertiseTagFilter,
   clearAddContactForm,
   setNewItemValue,
   submitNewConnection,

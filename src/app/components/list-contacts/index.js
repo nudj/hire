@@ -140,7 +140,8 @@ class ListContacts extends React.Component {
     const {
       contacts,
       contactChild,
-      onItemClick
+      onItemClick,
+      ...props
     } = this.props
 
     const rowRenderer = getRowRenderer({
@@ -156,6 +157,7 @@ class ListContacts extends React.Component {
           <WindowScroller>
             {({ height, isScrolling, onChildScroll, scrollTop }) => (
               <List
+                {...props}
                 autoHeight
                 height={height}
                 width={width}
