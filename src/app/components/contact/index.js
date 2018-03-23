@@ -2,31 +2,20 @@ const React = require('react')
 const PropTypes = require('prop-types')
 
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
-const { Text } = require('@nudj/components')
+const { PillGroup, Text } = require('@nudj/components')
 
 const defaultStyleSheet = require('./style.css')
 
-const renderContactInfo = (jobTitle, company, email) => {
-  if (!jobTitle && !company && !email) return null
-  const contactInfo = []
-
+const renderJobInfo = (jobTitle, company) => {
   if (jobTitle && company) {
-    contactInfo.push(`${jobTitle} at ${company}`)
+    return `${jobTitle}, ${company}`
   } else if (jobTitle) {
-    contactInfo.push(jobTitle)
+    return jobTitle
   } else if (company) {
-    contactInfo.push(company)
+    return company
   }
 
-  if (email) {
-    if (contactInfo.length) {
-      contactInfo.push(' • ')
-    }
-
-    contactInfo.push(email)
-  }
-
-  return contactInfo
+  return null
 }
 
 const Contact = props => {
@@ -37,10 +26,11 @@ const Contact = props => {
     company,
     email,
     children,
-    styleSheet
+    styleSheet,
+    experienceTags
   } = props
 
-  const contactInfo = renderContactInfo(role, company, email)
+  const jobInfo = renderJobInfo(role, company)
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
 
   return (
@@ -49,11 +39,22 @@ const Contact = props => {
         <Text element='div' size='largeI' style={style.name}>
           {firstName} {lastName}
         </Text>
-        { contactInfo && (
-          <Text element='span' size='smallI' style={style.attributes}>
-            {contactInfo}
+        { jobInfo && (
+          <Text element='span' size='smallI' style={style.job}>
+            {jobInfo}
           </Text>
         ) }
+        { email && (
+          <Text element='span' size='smallI' style={style.email}>
+            {email}
+          </Text>
+        )}
+        {experienceTags.length > 0 && (
+          <div className={css(style.tagContainer)}>
+            <div className={css(style.metaTitle)}>Experience</div>
+            <PillGroup styleSheet={{root: style.tagGroup}} values={experienceTags} />
+          </div>
+        )}
       </div>
       {typeof children === 'function' && (
         <div className={css(style.children)}>
@@ -77,7 +78,12 @@ Contact.propTypes = {
     details: PropTypes.object,
     attributes: PropTypes.object,
     children: PropTypes.object
-  })
+  }),
+  experienceTags: PropTypes.arrayOf(PropTypes.string)
+}
+
+Contact.defaultProps = {
+  experienceTags: []
 }
 
 module.exports = Contact
