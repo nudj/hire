@@ -4,35 +4,6 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const URLSearchParams = require('url-search-params')
 
-/**
- * TODO: Remove
- * It's mock data until we can fetch this from the API
- */
-const expertiseTags = [
-  'ceo',
-  'communications',
-  'consulting',
-  'customerService',
-  'education',
-  'engineering',
-  'finance',
-  'founder',
-  'healthProfessional',
-  'humanResources',
-  'informationTechnology',
-  'legal',
-  'marketing',
-  'operations',
-  'owner',
-  'president',
-  'product',
-  'publicRelations',
-  'realEstate',
-  'recruiting',
-  'research',
-  'sales'
-]
-
 const { getFirstNonNil } = require('@nudj/library')
 const {
   AnimateHeight,
@@ -67,7 +38,8 @@ const {
   updateExpertiseTagFilter,
   setNewItemValue,
   submitNewConnection,
-  search
+  submitQuery,
+  submitSearch
 } = require('./actions')
 
 const featureTags = process.env.FEATURE_TAGS === 'true'
@@ -104,25 +76,26 @@ class ContactsPage extends React.Component {
   handleQueryClear = ({ value }) => {
     const { dispatch } = this.props
     dispatch(updateSearchQuery(value))
-    dispatch(search())
+    dispatch(submitSearch())
   }
 
-  handleToggleFilterFavouritesChange = ({ value }) => {
+  handleToggleFavourites = ({ value }) => {
     const { dispatch } = this.props
     const filterFavourites = value === 'true'
-
     dispatch(updateFavouritesFilter(filterFavourites))
+    dispatch(submitSearch())
   }
 
   handleExpertiseTagChange = ({ values }) => {
     const { dispatch } = this.props
     dispatch(updateExpertiseTagFilter(values))
+    dispatch(submitSearch())
   }
 
-  handleSearchSubmit = event => {
+  handleSubmit = (event) => {
     const { dispatch } = this.props
     event.preventDefault()
-    dispatch(search())
+    dispatch(submitQuery())
   }
 
   handleConnectionFieldChange = (field, value) => {
@@ -146,22 +119,32 @@ class ContactsPage extends React.Component {
       location
     } = this.props
     const { showModal, showFilters } = this.state
+    const { newContact } = state
     const jobId = get(match, 'params.jobId')
-    const connections = get(user, 'connections', [])
+    const connections = get(user, 'results.connections', [])
+    const expertiseTags = get(user, 'results.tags', [])
+      .filter(tag => tag.type === 'EXPERTISE')
 
     const queryParams = new URLSearchParams(location.search || '')
     const searchQuery = queryParams.get('search')
+
     const searchInput = getFirstNonNil(
       state.searchQuery,
       searchQuery,
       ''
     )
 
-    const {
-      newContact,
-      favouritesFilter,
-      expertiseTagFilter
-    } = state
+    const favouritesFilter = getFirstNonNil(
+      state.favouritesFilter,
+      queryParams.get('favourites'),
+      false
+    )
+
+    const expertiseTagFilter = getFirstNonNil(
+      state.expertiseTagFilter,
+      queryParams.getAll('expertiseTags[]'),
+      []
+    )
 
     return (
       <Layout {...this.props}>
@@ -186,7 +169,7 @@ class ContactsPage extends React.Component {
                 className={css(
                   featureTags && style.form
                 )}
-                onSubmit={this.handleSearchSubmit}
+                onSubmit={this.handleSubmit}
                 autoComplete='off'
               >
                 <div className={css(style.searchForm)}>
@@ -246,7 +229,7 @@ class ContactsPage extends React.Component {
                           toggleFavourites={favouritesFilter.toString()}
                           expertiseTagsValues={expertiseTagFilter}
                           expertiseTags={expertiseTags}
-                          onToggleFavourites={this.handleToggleFilterFavouritesChange}
+                          onToggleFavourites={this.handleToggleFavourites}
                           onExpertiseChange={this.handleExpertiseTagChange}
                         />
                       </div>
@@ -282,7 +265,9 @@ class ContactsPage extends React.Component {
                       </span>
                     ),
                     query: searchInput,
-                    showFilters
+                    showFilters,
+                    favouritesFilter,
+                    expertiseTags
                   }}
                 />
               </div>

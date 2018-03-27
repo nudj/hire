@@ -1,6 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 const get = require('lodash/get')
+const isEqual = require('lodash/isEqual')
 const List = require('react-virtualized/dist/commonjs/List').List
 const WindowScroller = require('react-virtualized/dist/commonjs/WindowScroller').WindowScroller
 const AutoSizer = require('react-virtualized/dist/commonjs/AutoSizer').AutoSizer
@@ -10,6 +11,7 @@ const CellMeasurerCache = require('react-virtualized/dist/commonjs/CellMeasurer'
 const { css } = require('@nudj/components/lib/css')
 const { ButtonContainer } = require('@nudj/components')
 
+const formatExpertiseTag = require('../../lib/format-expertise-tag')
 const Item = require('../contact')
 const style = require('./style.css')
 
@@ -23,7 +25,6 @@ const getRowRenderer = (sharedProps) => {
 
   return (rowProps) => {
     const {
-      key,
       index,
       style: rowStyle,
       parent
@@ -51,11 +52,15 @@ const getRowRenderer = (sharedProps) => {
       className: css(style.item)
     }
 
+    const expertiseTags = get(contact, 'tags', [])
+      .filter(tag => tag.type === 'EXPERTISE')
+      .map(tag => formatExpertiseTag(tag.name))
+
     return (
       <CellMeasurer
         cache={cache}
         columnIndex={0}
-        key={key}
+        key={contact.id}
         parent={parent}
         rowIndex={index}
       >
@@ -67,6 +72,7 @@ const getRowRenderer = (sharedProps) => {
               lastName={lastName}
               role={get(contact, 'role.name')}
               company={get(contact, 'company.name')}
+              expertiseTags={expertiseTags}
               email={person.email}
               children={child}
             />
@@ -121,15 +127,44 @@ class ListContacts extends React.Component {
   componentDidMount () {
     setTimeout(() => {
       this.cache.clearAll()
-
       if (!this.unmounting) {
-        this.forceUpdate()
+        this.list.forceUpdateGrid()
       }
     }, 0)
   }
 
+  componentDidUpdate (prevProps) {
+    const {
+      contacts: prevContacts,
+      contactChild: prevContactChild, // not for comparison
+      onItemClick: prevItemClick, // not for comparison
+      ...prevRest
+    } = prevProps
+
+    const {
+      contacts,
+      contactChild, // not for comparison
+      onItemClick, // not for comparison
+      ...rest
+    } = this.props
+
+    if (
+      !isEqual(prevContacts, contacts) ||
+      !isEqual(prevRest, rest)
+    ) {
+      this.cache.clearAll()
+
+      if (!this.unmounting) {
+        this.list.forceUpdateGrid()
+      }
+    }
+  }
+
   handleResize = () => {
     this.cache.clearAll()
+    if (!this.unmounting) {
+      this.list.forceUpdateGrid()
+    }
   }
 
   componentWillUnmount () {
@@ -158,6 +193,7 @@ class ListContacts extends React.Component {
             {({ height, isScrolling, onChildScroll, scrollTop }) => (
               <List
                 {...props}
+                ref={c => { this.list = c }}
                 autoHeight
                 height={height}
                 width={width}
