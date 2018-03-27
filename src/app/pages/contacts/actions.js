@@ -4,12 +4,13 @@ const actions = require('@nudj/framework/actions')
 const { logger } = require('@nudj/library')
 
 const UPDATE_SEARCH_QUERY = 'CONTACTS_UPDATE_SEARCH_QUERY'
-const UPDATE_FAVOURITES_FILTER = 'UPDATE_FAVOURITES_FILTER'
-const UPDATE_EXPERTISE_TAG_FILTER = 'UPDATE_EXPERTISE_TAG_FILTER'
+const UPDATE_FAVOURITES_FILTER = 'CONTACTS_UPDATE_FAVOURITES_FILTER'
+const UPDATE_EXPERTISE_TAG_FILTER = 'CONTACTS_UPDATE_EXPERTISE_TAG_FILTER'
 const SET_NEW_ITEM_VALUE = 'CONTACTS_SET_NEW_ITEM_VALUE'
 const CLEAR_ADD_CONTACT_FORM = 'CONTACTS_CLEAR_ADD_CONTACT_FORM'
-const START_LOADING = 'CONTACTS_START_LOADING'
-const STOP_LOADING = 'CONTACTS_STOP_LOADING'
+const START_SEARCH = 'CONTACTS_START_SEARCH'
+const START_SEARCH_AND_CLEAR_FILTERS = 'CONTACTS_START_SEARCH_AND_CLEAR_FILTERS'
+const COMPLETE_SEARCH = 'CONTACTS_COMPLETE_SEARCH'
 
 const updateSearchQuery = (query) => ({
   type: UPDATE_SEARCH_QUERY,
@@ -30,12 +31,16 @@ const clearAddContactForm = () => ({
   type: CLEAR_ADD_CONTACT_FORM
 })
 
-const startLoading = () => ({
-  type: START_LOADING
+const startSearch = () => ({
+  type: START_SEARCH
 })
 
-const stopLoading = () => ({
-  type: STOP_LOADING
+const startSearchAndClearTagFilters = () => ({
+  type: START_SEARCH_AND_CLEAR_FILTERS
+})
+
+const completeSearch = () => ({
+  type: COMPLETE_SEARCH
 })
 
 const setNewItemValue = (name, key, value) => ({
@@ -76,22 +81,40 @@ const submitNewConnection = () => (dispatch, getState) => {
   })
 }
 
-const search = (url = '/contacts') => async (dispatch, getState, ...args) => {
-  const state = getState()
-  const search = get(state, 'contactsPage.searchQuery') || ''
+const search = (data) => actions.app.postData({
+  url: '/contacts',
+  method: 'get',
+  params: data,
+  showLoadingState: false
+})
 
-  dispatch(startLoading())
-  await dispatch(
-    actions.app.postData(
-      {
-        url,
-        method: 'get',
-        params: { search },
-        showLoadingState: false
-      }
-    )
-  )
-  dispatch(stopLoading())
+const submitQuery = () => async (dispatch, getState) => {
+  const state = getState()
+  const { searchQuery, favouritesFilter } = state.contactsPage
+
+  dispatch(startSearchAndClearTagFilters())
+
+  await dispatch(search({
+    search: searchQuery,
+    favourites: favouritesFilter
+  }))
+
+  dispatch(completeSearch())
+}
+
+const submitSearch = () => async (dispatch, getState) => {
+  const state = getState()
+  const { searchQuery, favouritesFilter, expertiseTagFilter } = state.contactsPage
+
+  dispatch(startSearch())
+
+  await dispatch(search({
+    search: searchQuery,
+    favourites: favouritesFilter,
+    expertiseTags: expertiseTagFilter
+  }))
+
+  dispatch(completeSearch())
 }
 
 module.exports = {
@@ -101,8 +124,9 @@ module.exports = {
   UPDATE_EXPERTISE_TAG_FILTER,
   SET_NEW_ITEM_VALUE,
   CLEAR_ADD_CONTACT_FORM,
-  START_LOADING,
-  STOP_LOADING,
+  START_SEARCH,
+  START_SEARCH_AND_CLEAR_FILTERS,
+  COMPLETE_SEARCH,
   // action creators
   updateSearchQuery,
   updateFavouritesFilter,
@@ -110,5 +134,6 @@ module.exports = {
   clearAddContactForm,
   setNewItemValue,
   submitNewConnection,
-  search
+  submitQuery,
+  submitSearch
 }

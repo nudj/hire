@@ -27,7 +27,7 @@ const Contact = props => {
     email,
     children,
     styleSheet,
-    experienceTags
+    expertiseTags
   } = props
 
   const jobInfo = renderJobInfo(role, company)
@@ -49,10 +49,10 @@ const Contact = props => {
             {email}
           </Text>
         )}
-        {experienceTags.length > 0 && (
+        {expertiseTags.length > 0 && (
           <div className={css(style.tagContainer)}>
-            <div className={css(style.metaTitle)}>Experience</div>
-            <PillGroup styleSheet={{root: style.tagGroup}} values={experienceTags} />
+            <div className={css(style.metaTitle)}>Expertise</div>
+            <PillGroup styleSheet={{root: style.tagGroup}} values={expertiseTags} />
           </div>
         )}
       </div>
@@ -79,11 +79,11 @@ Contact.propTypes = {
     attributes: PropTypes.object,
     children: PropTypes.object
   }),
-  experienceTags: PropTypes.arrayOf(PropTypes.string)
+  expertiseTags: PropTypes.arrayOf(PropTypes.string)
 }
 
 Contact.defaultProps = {
-  experienceTags: []
+  expertiseTags: []
 }
 
 module.exports = Contact
