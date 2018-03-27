@@ -31,11 +31,12 @@
       "app/node_modules",
       "webpack*",
       "@nudj",
-      "flow-typed"
+      "flow-typed",
+      "app/server/hot*"
     ]
   },
   "dependencies": {
-    "@nudj/components": "2.5.0",
+    "@nudj/components": "2.6.0",
     "@nudj/framework": "15.0.0",
     "@nudj/library": "4.1.0",
     "babel-polyfill": "^6.26.0",
