@@ -54,9 +54,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.5.0.tgz#433e06f2ce1ba97e9f6163f7d326f445889c9c04"
+"@nudj/components@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.6.0.tgz#33c239d135489f69bbe814a8b5f4b8e16e8bf948"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -68,6 +68,7 @@
     lorem-ipsum "^1.0.4"
     prop-types "15.5.10"
     react "15.6.2"
+    react-animate-height "^0.10.10"
     react-dom "15.6.2"
     react-dropzone "4.2.3"
     react-modal "^3.1.10"
