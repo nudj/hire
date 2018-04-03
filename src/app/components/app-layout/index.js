@@ -64,15 +64,6 @@ const ApplicationLayout = props => {
                     Contacts
                   </NavLink>
                 </li>
-                <li className={css(style.navigationListItem)}>
-                  <NavLink
-                    className={css(style.navigationLink)}
-                    activeClassName={css(style.navigationLinkActive)}
-                    to='/favourites'
-                  >
-                    Favourites
-                  </NavLink>
-                </li>
               </ul>
             ) : (
               <div className={css(style.title)}>{title}</div>
