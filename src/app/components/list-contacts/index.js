@@ -52,8 +52,7 @@ const getRowRenderer = (sharedProps) => {
       className: css(style.item)
     }
 
-    const expertiseTags = get(contact, 'tags', [])
-      .filter(tag => tag.type === 'EXPERTISE')
+    const expertiseTags = (contact.tags || []).filter(tag => tag.type === 'EXPERTISE')
       .map(tag => formatExpertiseTag(tag.name))
 
     return (
