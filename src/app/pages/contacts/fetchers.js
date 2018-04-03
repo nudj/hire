@@ -60,6 +60,7 @@ const getContacts = ({ session, query }) => {
     fields: [
       ['firstName', 'lastName'],
       ['company.name'],
+      ['role.name'],
       ['person.email']
     ]
   }
