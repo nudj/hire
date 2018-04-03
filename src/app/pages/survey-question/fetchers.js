@@ -218,6 +218,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
     fields: [
       ['firstName', 'lastName'],
       ['company.name'],
+      ['role.name'],
       ['person.email']
     ]
   }
