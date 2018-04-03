@@ -4,16 +4,20 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const flatten = require('lodash/flatten')
-const uniqBy = require('lodash/uniqBy')
-const URLSearchParams = require('url-search-params')
+const find = require('lodash/find')
+const findIndex = require('lodash/findIndex')
 const isNil = require('lodash/isNil')
+const URLSearchParams = require('url-search-params')
 
-const { Modal } = require('@nudj/components')
+const { Card, Icon, Modal } = require('@nudj/components')
+const { buttonStyleSheet } = require('@nudj/components/lib/components/inline-action/style.css')
+const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
 const { emailPreferences } = require('../../lib/constants')
-const ListRecommendations = require('../../components/list-recommendations')
+const ListContacts = require('../../components/list-contacts')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
 const EmailAuthForm = require('../../components/email-authentication-form')
@@ -41,19 +45,35 @@ type ViewRecommendationsProps = {
 }
 
 const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
-  const { user, surveyAnswers } = props
+  const { user, surveyAnswers, history } = props
 
-  const connections = uniqBy(
-    flatten(surveyAnswers.map(answer => answer.connections)),
-    connection => connection.id
-  )
+  const connectionsByAnswers = flatten(surveyAnswers.map(answer => answer.connections))
+
+  const connections = connectionsByAnswers.reduce((arr, connection) => {
+    const index = findIndex(arr, { id: connection.id })
+    const existing = arr[index]
+
+    if (existing) {
+      const tags = existing.tags || []
+
+      const updated = {
+        ...existing,
+        tags: tags.concat(connection.tags || [])
+      }
+
+      arr[index] = updated
+      return arr
+    }
+
+    return [...arr, connection]
+  }, [])
 
   const csrfToken = get(props, 'csrfToken')
   const queryParams = new URLSearchParams(get(props, 'location.search', ''))
   const selectedContactId = queryParams.get('id')
   const emailPreference = get(user, 'emailPreference', null)
 
-  const getRecommendationHref = ({id}) => {
+  const getRecommendationHref = ({ id }) => {
     return emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
       ? `/messages/new/${id}`
       : `?id=${id}`
@@ -74,11 +94,29 @@ const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
               Choose a person who you want to get referrals from or encourage to apply for a job.
             </Para>
           </Section>
-          <Section padding width='regular'>
-            <ListRecommendations
-              recommendations={connections}
-              getHref={getRecommendationHref}
-            />
+          <Section width='regular'>
+            <Card style={mss.pa0}>
+              <ListContacts
+                contacts={connections}
+                onItemClick={({ name }) => {
+                  const personId = find(connections, { id: name }).person.id
+                  const url = getRecommendationHref({ id: personId })
+
+                  history.push(url)
+                }}
+                contactChild={childProps => (
+                  <span
+                    className={css(
+                      buttonStyleSheet.root,
+                      buttonStyleSheet.murmur,
+                      style.messageButton
+                    )}
+                  >
+                    <Icon name='email' />
+                  </span>
+                )}
+              />
+            </Card>
           </Section>
           <Modal isOpen={!!selectedContactId} style={style.modalWindow}>
             <EmailAuthForm

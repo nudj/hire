@@ -30,6 +30,11 @@ const completeSurvey = ({ session, params, res }) => {
             lastName
           }
           source
+          tags {
+            id
+            type
+            name
+          }
         }
       }
       user (id: $userId) {
