@@ -4,6 +4,7 @@ const get = require('lodash/get')
 const flatten = require('lodash/flatten')
 const find = require('lodash/find')
 const findIndex = require('lodash/findIndex')
+const uniqBy = require('lodash/uniqBy')
 const isNil = require('lodash/isNil')
 const URLSearchParams = require('url-search-params')
 
@@ -41,7 +42,7 @@ const ViewRecommendationsPage = props => {
 
       const updated = {
         ...existing,
-        tags: tags.concat(connection.tags || [])
+        tags: uniqBy(tags.concat(connection.tags || []), 'id')
       }
 
       arr[index] = updated
