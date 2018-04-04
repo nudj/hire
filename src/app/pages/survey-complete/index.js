@@ -1,5 +1,3 @@
-/* global Person SurveyAnswer Location */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -29,22 +27,7 @@ const {
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 
-type ViewRecommendationsProps = {
-  user?: Person,
-  surveyAnswers: Array<SurveyAnswer>,
-  surveyQuestionPage: {
-    selectedConnections: Array<number>
-  },
-  surveyCompletePage: {
-    googleAuthModalOpen: boolean
-  },
-  location: Location,
-  app: {
-    csrfToken: string
-  }
-}
-
-const ViewRecommendationsPage = (props: ViewRecommendationsProps) => {
+const ViewRecommendationsPage = props => {
   const { user, surveyAnswers, history } = props
 
   const connectionsByAnswers = flatten(surveyAnswers.map(answer => answer.connections))
