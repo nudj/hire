@@ -16,8 +16,6 @@ const http = require('http')
 const path = require('path')
 const createNudjApps = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
-
-const mockData = require('./mocks/data')
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
@@ -54,7 +52,7 @@ const spoofLoggedIn = (req, res, next) => {
 
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
-let { app, getMockApiApps } = createNudjApps({
+let app = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
@@ -72,26 +70,6 @@ const server = http.createServer(app)
 server.listen(80, () => {
   logger.log('info', 'Application running')
 })
-
-if (process.env.USE_MOCKS === 'true') {
-  const mockExternalRequests = require('./mocks')
-  const { jsonServer: jsonServerApp, gqlServer: gqlServerApp } = getMockApiApps({ data: mockData })
-
-  const jsonServer = http.createServer(jsonServerApp)
-  const gqlServer = http.createServer(gqlServerApp)
-
-  jsonServer.listen(81, () => {
-    logger.log('info', 'JSONServer running')
-  })
-
-  gqlServer.listen(82, () => {
-    logger.log('info', 'Mock GQL running')
-  })
-
-  mockExternalRequests(() => {
-    logger.log('info', 'Mocking external requests')
-  })
-}
 
 if (module.hot) {
   module.hot.accept([
@@ -138,7 +116,7 @@ if (module.hot) {
     }
 
     server.removeListener('request', app)
-    const { app: newApp } = createNudjApps({
+    const newApp = createNudjApps({
       App: updatedReactApp,
       reduxRoutes: updatedReduxRoutes,
       reduxReducers: updatedReduxReducers,

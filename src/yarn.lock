@@ -2,11 +2,11 @@
 # yarn lockfile v1
 
 
-"@nudj/api@10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-10.0.0.tgz#7f17d4312cd4de2b388434212cd41b8b89ca08cd"
+"@nudj/api@14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-14.0.0.tgz#b788cd4d71f6484efbfa798ecfd5ac2367a2f3c9"
   dependencies:
-    "@nudj/library" "4.2.0"
+    "@nudj/library" "5.0.0"
     apollo-server-express "^1.2.0"
     arangojs "^6.0.1"
     axios "^0.17.1"
@@ -20,12 +20,10 @@
     glob "^7.1.2"
     googleapis "^21.3.0"
     graphql "0.10.3"
-    graphql-server-express "1.0.0"
     graphql-tools "1.1.0"
     hash-generator "^0.1.0"
     intercom-client "^2.8.7"
     js-base64 "^2.1.9"
-    json-server "0.11.2"
     lodash "4.17.4"
     mailgun-js "^0.14.1"
     morgan "1.8.2"
@@ -36,6 +34,7 @@
     random-words "^0.0.1"
     restify "4.3.0"
     semi "^4.0.5"
+    slug "^0.9.1"
     striptags "^3.1.1"
 
 "@nudj/components@2.0.0":
@@ -54,9 +53,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.6.0.tgz#33c239d135489f69bbe814a8b5f4b8e16e8bf948"
+"@nudj/components@2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.7.0.tgz#72dec783777a47ce07a854e6a4a2f2d854d8d552"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -74,11 +73,11 @@
     react-modal "^3.1.10"
     react-textarea-autosize "^5.2.1"
 
-"@nudj/framework@15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-15.0.0.tgz#a814049532954e05a1e5ef58b249809f60680b60"
+"@nudj/framework@16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-16.0.1.tgz#e14e0154f8a330170cf6f5f820163699690513e6"
   dependencies:
-    "@nudj/api" "10.0.0"
+    "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
     "@nudj/library" "4.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
@@ -137,9 +136,9 @@
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
-"@nudj/library@4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.2.0.tgz#f568d5d98e4b0f8a1f08d53f13109ca1829a95e7"
+"@nudj/library@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-5.0.0.tgz#a1ce9170867febd3235ab2e666bc29f017332fcb"
   dependencies:
     axios "^0.16.2"
     deepmerge "^1.5.0"
@@ -160,54 +159,13 @@
   dependencies:
     samsam "1.3.0"
 
-"@types/body-parser@*":
-  version "1.16.8"
-  resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.16.8.tgz#687ec34140624a3bec2b1a8ea9268478ae8f3be3"
-  dependencies:
-    "@types/express" "*"
-    "@types/node" "*"
-
-"@types/events@*":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"
-
-"@types/express-serve-static-core@*":
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.11.1.tgz#f6f7212382d59b19d696677bcaa48a37280f5d45"
-  dependencies:
-    "@types/events" "*"
-    "@types/node" "*"
-
-"@types/express@*", "@types/express@^4.0.35":
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.1.tgz#f99663b3ab32d04cb11db612ef5dd7933f75465b"
-  dependencies:
-    "@types/body-parser" "*"
-    "@types/express-serve-static-core" "*"
-    "@types/serve-static" "*"
-
-"@types/graphql@^0.9.0", "@types/graphql@^0.9.1":
+"@types/graphql@^0.9.0":
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.4.tgz#cdeb6bcbef9b6c584374b81aa7f48ecf3da404fa"
-
-"@types/mime@*":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
-
-"@types/node@*":
-  version "9.4.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"
 
 "@types/react@>=15":
   version "16.0.41"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.41.tgz#72146737f4d439dc95a53315de4bfb43ac8542ca"
-
-"@types/serve-static@*":
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.13.1.tgz#1d2801fa635d274cd97d4ec07e26b21b44127492"
-  dependencies:
-    "@types/express-serve-static-core" "*"
-    "@types/mime" "*"
 
 abbrev@1:
   version "1.1.1"
@@ -398,7 +356,7 @@ apollo-server-express@^1.2.0:
     apollo-server-core "^1.3.2"
     apollo-server-module-graphiql "^1.3.0"
 
-apollo-server-module-graphiql@^1.3.0, apollo-server-module-graphiql@^1.3.2:
+apollo-server-module-graphiql@^1.3.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.3.2.tgz#0a9e4c48dece3af904fee333f95f7b9817335ca7"
 
@@ -4201,28 +4159,6 @@ graphql-extensions@^0.0.x:
     core-js "^2.5.3"
     source-map-support "^0.5.1"
 
-graphql-server-core@^1.0.0:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-1.3.2.tgz#d5bd49970b179f1943e926595480f0ae78c6043b"
-  dependencies:
-    apollo-server-core "^1.3.2"
-
-graphql-server-express@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.0.0.tgz#038b73552255f6180c51a73bee8d7f9d68c5e201"
-  dependencies:
-    graphql-server-core "^1.0.0"
-    graphql-server-module-graphiql "^1.0.0"
-  optionalDependencies:
-    "@types/express" "^4.0.35"
-    "@types/graphql" "^0.9.1"
-
-graphql-server-module-graphiql@^1.0.0:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-1.3.2.tgz#be76bb09e96456962a6d18b6ba1b60450185557f"
-  dependencies:
-    apollo-server-module-graphiql "^1.3.2"
-
 graphql-tools@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-1.1.0.tgz#8d86ea6997b0dea3089b62dc655e47146a663ebb"
@@ -5199,33 +5135,6 @@ json-schema-traverse@^0.3.0:
 json-schema@0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
-
-json-server@0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/json-server/-/json-server-0.11.2.tgz#f31b366bd3c540ecebf0cf3e0f4d04c427b21781"
-  dependencies:
-    body-parser "^1.15.2"
-    chalk "^1.1.3"
-    compression "^1.6.0"
-    connect-pause "^0.1.0"
-    cors "^2.3.0"
-    errorhandler "^1.2.0"
-    express "^4.9.5"
-    express-urlrewrite "^1.2.0"
-    json-parse-helpfulerror "^1.0.3"
-    lodash "^4.11.2"
-    lodash-id "^0.13.0"
-    lowdb "^0.15.0"
-    method-override "^2.1.2"
-    morgan "^1.3.1"
-    object-assign "^4.0.1"
-    please-upgrade-node "^1.0.0"
-    pluralize "^3.0.0"
-    request "^2.72.0"
-    server-destroy "^1.0.1"
-    shortid "^2.2.6"
-    update-notifier "^1.0.2"
-    yargs "^6.0.0"
 
 json-server@^0.9.6:
   version "0.9.6"
@@ -6807,10 +6716,6 @@ pkg-up@^1.0.0:
 pkginfo@0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
-
-please-upgrade-node@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-1.0.1.tgz#f92dd3443d9797f5742510ea2fd205f811b3b1f7"
 
 pluralize@5.0.0:
   version "5.0.0"
@@ -8440,6 +8345,12 @@ slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
 
+slug@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/slug/-/slug-0.9.1.tgz#af08f608a7c11516b61778aa800dce84c518cfda"
+  dependencies:
+    unicode ">= 0.3.1"
+
 smart-buffer@^1.0.13:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
@@ -9201,6 +9112,10 @@ underscore@~1.6.0:
 unfetch@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-3.0.0.tgz#8d1e0513a4ecd0e5ff2d41a6ba77771aae8b6482"
+
+"unicode@>= 0.3.1":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/unicode/-/unicode-10.0.0.tgz#e5d51c1db93b6c71a0b879e0b0c4af7e6fdf688e"
 
 union-value@^1.0.0:
   version "1.0.0"
