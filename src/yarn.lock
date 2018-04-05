@@ -73,9 +73,9 @@
     react-modal "^3.1.10"
     react-textarea-autosize "^5.2.1"
 
-"@nudj/framework@16.0.1":
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-16.0.1.tgz#e14e0154f8a330170cf6f5f820163699690513e6"
+"@nudj/framework@16.0.3":
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-16.0.3.tgz#55e658f9ca2008bc415c8bd159e7298b0fe3faa8"
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
