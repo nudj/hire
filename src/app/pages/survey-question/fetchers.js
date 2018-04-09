@@ -86,107 +86,58 @@ const getCompaniesQuestion = ({ session, params, query }) => {
 }
 
 const getConnectionsQuestion = ({ session, params, query }) => {
-  const hirerFragment = `
-    connectionsCount
-    hirer {
-      company {
-        survey: surveyByFilters (filters: {
-          slug: $surveySlug
-        }) {
-          id
-          slug
-          sections: surveySections {
-            id
-            questions: surveyQuestions {
-              id
-              type
-            }
-          }
-          section: surveySectionByFilters (
-            filters: {
-              id: $sectionId
-            }
-          ) {
-            id
-            questions: surveyQuestions {
-              id
-              type
-            }
-            question: surveyQuestionByFilters (
-              filters: {
-                id: $questionId
-              }
-            ) {
-              id
-              title
-              description
-              name
-              type
-              required
-            }
-          }
-        }
-      }
-    }
-  `
-
-  const surveyAnswersFragment = `
-    surveyAnswers: surveyAnswersByFilters(filters: { person: $userId }) {
-      connections {
-        id
-        firstName
-        lastName
-      }
-      surveyQuestion {
-        id
-      }
-    }
-  `
-
-  let gql = `
-    query SurveyQuestionPage (
+  const gql = `
+    query ConnectionSurveyQuestion(
       $userId: ID!,
+      $search: String!
       $surveySlug: String!,
       $sectionId: ID!,
       $questionId: ID!
     ) {
-      ${surveyAnswersFragment}
-      user (id: $userId) {
-        connections {
-          id
-          firstName
-          lastName
-          role {
-            name
-          }
+      user(id: $userId) {
+        connectionsCount
+        hirer {
           company {
-            name
+            survey: surveyByFilters (filters: {
+              slug: $surveySlug
+            }) {
+              id
+              slug
+              sections: surveySections {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+              }
+              section: surveySectionByFilters (
+                filters: {
+                  id: $sectionId
+                }
+              ) {
+                id
+                questions: surveyQuestions {
+                  id
+                  type
+                }
+                question: surveyQuestionByFilters (
+                  filters: {
+                    id: $questionId
+                  }
+                ) {
+                  id
+                  title
+                  description
+                  name
+                  type
+                  required
+                }
+              }
+            }
           }
-          person {
-            id
-            email
-          }
-          source
         }
-        ${hirerFragment}
-      }
-      ${Global}
-    }
-  `
-
-  if (query.search) {
-    gql = `
-      query SurveyQuestionPage (
-        $userId: ID!,
-        $surveySlug: String!,
-        $sectionId: ID!,
-        $questionId: ID!,
-        $search: String!,
-        $fields: [[String!]!]!
-      ) {
-        ${surveyAnswersFragment}
-        user (id: $userId) {
-          connections: searchConnections(query: $search, fields: $fields) {
+        results: searchConnections(query: $search) {
+          connections {
             id
             firstName
             lastName
@@ -201,27 +152,36 @@ const getConnectionsQuestion = ({ session, params, query }) => {
               email
             }
             source
+            tags {
+              id
+              type
+              name
+            }
           }
-          ${hirerFragment}
         }
-        ${Global}
       }
-    `
-  }
+      surveyAnswers: surveyAnswersByFilters(filters: { person: $userId }) {
+        connections {
+          id
+          firstName
+          lastName
+        }
+        surveyQuestion {
+          id
+        }
+      }
+      ${Global}
+    }
+  `
 
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
-    search: query.search,
-    fields: [
-      ['firstName', 'lastName'],
-      ['company.name'],
-      ['role.name'],
-      ['person.email']
-    ]
+    search: query.search || ''
   }
+
   return { gql, variables }
 }
 

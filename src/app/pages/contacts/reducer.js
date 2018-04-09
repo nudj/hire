@@ -6,8 +6,9 @@ const {
   UPDATE_EXPERTISE_TAG_FILTER,
   CLEAR_ADD_CONTACT_FORM,
   SET_NEW_ITEM_VALUE,
-  START_LOADING,
-  STOP_LOADING
+  START_SEARCH_AND_CLEAR_FILTERS,
+  START_SEARCH,
+  COMPLETE_SEARCH
 } = require('./actions')
 
 const updateSearchQuery = (state, action) => ({
@@ -35,6 +36,15 @@ const startLoading = state => ({
   loading: true
 })
 
+const clearFilters = state => ({
+  ...state,
+  expertiseTagFilter: []
+})
+
+const startLoadingAndClearFilters = state => {
+  return startLoading(clearFilters(state))
+}
+
 const stopLoading = state => ({
   ...state,
   loading: false
@@ -53,9 +63,10 @@ const reducers = {
   [UPDATE_SEARCH_QUERY]: updateSearchQuery,
   [UPDATE_FAVOURITES_FILTER]: updateFavouritesFilter,
   [UPDATE_EXPERTISE_TAG_FILTER]: updateExpertiseTagFilter,
-  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm,
-  [START_LOADING]: startLoading,
-  [STOP_LOADING]: stopLoading
+  [START_SEARCH_AND_CLEAR_FILTERS]: startLoadingAndClearFilters,
+  [START_SEARCH]: startLoading,
+  [COMPLETE_SEARCH]: stopLoading,
+  [CLEAR_ADD_CONTACT_FORM]: clearAddContactForm
 }
 
 const initialState = {
@@ -64,8 +75,8 @@ const initialState = {
   searchQuery: null,
   loading: false,
   showAddIndividualConnectionModal: false,
-  favouritesFilter: false,
-  expertiseTagFilter: []
+  favouritesFilter: null,
+  expertiseTagFilter: null
 }
 
 module.exports = createReducer(initialState, reducers)

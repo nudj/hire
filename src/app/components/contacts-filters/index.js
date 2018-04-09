@@ -1,28 +1,13 @@
 const React = require('react')
 const PropTypes = require('prop-types')
-const startCase = require('lodash/startCase')
+const sortBy = require('lodash/sortBy')
 
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 const { InputField, SegmentedControl, SelectablePillGroup } = require('@nudj/components')
 
-const defaultStyleSheet = require('./style.css')
+const formatExpertiseTag = require('../../lib/format-expertise-tag')
 
-/**
- * TODO: Remove
- * This is here to temporarily format tags so they're in roughly the right
- * format for display, e.g., `CEO` instead of `ceo` or `Ceo`.
- */
-const getTagLabel = (tag) => {
-  if (tag.length === 3 && tag.indexOf('c') === 0 && tag.indexOf('o') === 2) {
-    return tag.toUpperCase()
-  } else if (tag.indexOf('vp') === 0) {
-    const tagParts = tag.split(' ')
-    tagParts[0] = tagParts[0].toUpperCase()
-    return tagParts.join(' ')
-  } else {
-    return startCase(tag)
-  }
-}
+const defaultStyleSheet = require('./style.css')
 
 const ContactsFilters = (props) => {
   const {
@@ -78,11 +63,11 @@ const ContactsFilters = (props) => {
             values={expertiseTagsValues}
             onChange={onExpertiseChange}
           >
-            {pill => expertiseTags.map(tag => pill({
-              id: tag,
-              key: tag,
-              value: tag,
-              label: getTagLabel(tag)
+            {pill => sortBy(expertiseTags, 'name').map(tag => pill({
+              id: tag.id,
+              key: tag.id,
+              value: tag.id,
+              label: formatExpertiseTag(tag.name)
             }))}
           </SelectablePillGroup>
         </InputField>
@@ -98,7 +83,11 @@ ContactsFilters.defaultProps = {
 
 ContactsFilters.propTypes = {
   toggleFavourites: PropTypes.oneOf(['true', 'false']),
-  expertiseTags: PropTypes.arrayOf(PropTypes.string),
+  expertiseTags: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    type: PropTypes.string,
+    name: PropTypes.string
+  })),
   onToggleFavourites: PropTypes.func.isRequired,
   onExpertiseChange: PropTypes.func.isRequired
 }

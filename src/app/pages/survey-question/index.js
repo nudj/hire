@@ -35,7 +35,7 @@ const SurveyQuestionPage = props => {
     employments.concat(get(user, 'newEmployment', [])),
     employment => employment.id
   )
-  const connections = get(user, 'connections', []).concat(
+  const connections = get(user, 'results.connections', []).concat(
     get(user, 'newConnection', [])
   )
   const surveyAnswers = get(props, 'surveyAnswers', [])

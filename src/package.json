@@ -36,8 +36,8 @@
     ]
   },
   "dependencies": {
-    "@nudj/components": "2.6.0",
-    "@nudj/framework": "15.0.0",
+    "@nudj/components": "2.7.0",
+    "@nudj/framework": "16.0.3",
     "@nudj/library": "4.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-flow": "^6.23.0",
