@@ -11,7 +11,6 @@ const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
-const { Heading, Para } = require('../../components/app')
 const JobPerformance = require('../../components/job-performance')
 const style = require('./style.css')
 

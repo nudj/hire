@@ -36,6 +36,7 @@ const expressRouters = {
     require('./pages/survey/router'),
     require('./pages/notification-sent/router'),
     require('./pages/dashboard/router'),
+    require('./pages/applications/router'),
     require('./server/routers/catch-all')
   ]
 }
@@ -90,6 +91,7 @@ if (module.hot) {
     './pages/survey/router',
     './pages/notification-sent/router',
     './pages/dashboard/router',
+    './pages/applications/router',
     './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
@@ -111,6 +113,7 @@ if (module.hot) {
         require('./pages/survey/router'),
         require('./pages/notification-sent/router'),
         require('./pages/dashboard/router'),
+        require('./pages/applications/router'),
         require('./server/routers/catch-all')
       ]
     }

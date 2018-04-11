@@ -16,5 +16,6 @@ module.exports = {
   '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
   '/contacts': require('../pages/contacts'),
   '/contacts/job/:jobId': require('../pages/contacts'),
+  '/applications': require('../pages/applications'),
   '/notification-sent': require('../pages/notification-sent')
 }
