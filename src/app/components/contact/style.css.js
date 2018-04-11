@@ -28,8 +28,14 @@ const styleSheet = StyleSheet.create({
     display: 'inline-block',
     color: colors.text
   },
+  link: {
+    ...typography.type.smallI,
+    display: 'block',
+    textAlign: 'left',
+    marginTop: sizes.smallIii
+  },
   tagContainer: {
-    marginTop: sizes.smallIi
+    marginTop: sizes.regular
   },
   metaTitle: {
     ...typography.type.smallIi,
@@ -38,6 +44,9 @@ const styleSheet = StyleSheet.create({
   },
   tagGroup: {
     paddingTop: sizes.smallIii
+  },
+  footer: {
+    marginTop: sizes.regular
   }
 })
 

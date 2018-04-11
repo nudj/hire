@@ -2,7 +2,8 @@ const React = require('react')
 const PropTypes = require('prop-types')
 
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
-const { PillGroup, Text } = require('@nudj/components')
+const { PillGroup, Link, Text } = require('@nudj/components')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const defaultStyleSheet = require('./style.css')
 
@@ -27,7 +28,10 @@ const Contact = props => {
     email,
     children,
     styleSheet,
-    expertiseTags
+    expertiseTags,
+    profileUrl,
+    applicationDate,
+    referrer
   } = props
 
   const jobInfo = renderJobInfo(role, company)
@@ -49,10 +53,39 @@ const Contact = props => {
             {email}
           </Text>
         )}
+        {profileUrl && (
+          <Link
+            href={profileUrl}
+            target='_blank'
+            volume='cheer'
+            style={style.link}
+            inline
+            subtle
+            external
+          >
+            {profileUrl}
+          </Link>
+        )}
         {expertiseTags.length > 0 && (
           <div className={css(style.tagContainer)}>
             <div className={css(style.metaTitle)}>Expertise</div>
             <PillGroup styleSheet={{root: style.tagGroup}} values={expertiseTags} />
+          </div>
+        )}
+        {(applicationDate || referrer) && (
+          <div className={css(style.footer)}>
+            {applicationDate && (
+              <Text element='div' size='smallI'>
+                Applied on{' '}
+                <span className={css(mss.bold)}>{applicationDate}</span>
+              </Text>
+            )}
+            {referrer && (
+              <Text element='div' size='smallI'>
+                Referred by{' '}
+                <span className={css(mss.bold)}>{referrer}</span>
+              </Text>
+            )}
           </div>
         )}
       </div>
@@ -79,7 +112,10 @@ Contact.propTypes = {
     attributes: PropTypes.object,
     children: PropTypes.object
   }),
-  expertiseTags: PropTypes.arrayOf(PropTypes.string)
+  expertiseTags: PropTypes.arrayOf(PropTypes.string),
+  profileUrl: PropTypes.string,
+  applicationDate: PropTypes.string,
+  referrer: PropTypes.string
 }
 
 Contact.defaultProps = {
