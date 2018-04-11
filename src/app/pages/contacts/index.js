@@ -27,11 +27,6 @@ const ConnectionsForm = require('../../components/form-connection')
 const SearchResults = require('../../components/contacts-search-results')
 const ListContacts = require('../../components/list-contacts')
 const ContactsFilters = require('../../components/contacts-filters')
-
-const {
-  Heading,
-  Para
-} = require('../../components/app')
 const {
   updateSearchQuery,
   updateFavouritesFilter,

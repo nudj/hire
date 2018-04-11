@@ -8,6 +8,7 @@ const getLevelSize = level => {
     case 1:
       return 'largeIi'
     case 2:
+      return 'largeI'
     default:
       return 'regular'
   }
