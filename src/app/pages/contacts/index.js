@@ -147,14 +147,6 @@ class ContactsPage extends React.Component {
           <title>Contacts</title>
         </Helmet>
         <Main>
-          <Section padding>
-            <Heading level={1} style={mss.fgPrimary}>
-              Search your contacts
-            </Heading>
-            <Para>
-              Find people who are worth nudj&#39;ing or add more to grow your network.
-            </Para>
-          </Section>
           <Section
             style={style.mainSection}
             width={!featureTags ? 'largeI' : undefined}

@@ -75,13 +75,7 @@ const DashboardPage = (props) => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading level={1} style={mss.fgPrimary}>
-            View your job activity
-          </Heading>
-          <Para>
-            See what&#39;s going on across all your company&#39;s open jobs.
-          </Para>
-          <div className={css(mss.mtReg, style.durationButtonGroup)}>
+          <div className={css(style.durationButtonGroup)}>
             <ButtonLink
               style={[
                 style.durationButton,
