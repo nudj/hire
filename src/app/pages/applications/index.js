@@ -71,19 +71,19 @@ const ApplicationsPage = (props) => {
 
                     window.open(url, '_blank')
                   }}
-                    applicationChild={(props) => props.email && (
-                      <span
-                        className={css(
-                          buttonStyleSheet.root,
-                          buttonStyleSheet.murmur,
-                          style.messageButton
-                        )}
-                      >
-                        <Icon name='email' />
-                      </span>
-                    )}
-                  />
-                </Card>
+                  applicationChild={(props) => props.email && (
+                    <span
+                      className={css(
+                        buttonStyleSheet.root,
+                        buttonStyleSheet.murmur,
+                        style.messageButton
+                      )}
+                    >
+                      <Icon name='email' />
+                    </span>
+                  )}
+                />
+              </Card>
             </Section>
           ))}
         ) : (
