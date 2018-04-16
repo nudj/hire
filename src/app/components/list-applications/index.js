@@ -1,6 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 const get = require('lodash/get')
+const { getFirstNonNil } = require('@nudj/library')
 const { format } = require('date-fns')
 
 const { css } = require('@nudj/components/lib/css')
@@ -25,7 +26,7 @@ const Row = (props) => {
   const { application, onClick, children } = props
 
   const person = get(application, 'person')
-  const connection = get(person, 'connection')
+  const connection = getFirstNonNil(person.connection, {})
   const firstName = person.firstName || connection.firstName
   const lastName = person.lastName || connection.lastName
   const role = get(connection, 'role.name', '')
@@ -33,6 +34,8 @@ const Row = (props) => {
   const referrer = get(application, 'referral', {})
   const referrerName = getReferrerName(referrer)
   const applicationDate = format(application.created, 'DD/MM/YYYY')
+
+  const hasName = firstName && lastName
 
   const handleItemClick = (event) => {
     onClick && onClick({
@@ -56,7 +59,7 @@ const Row = (props) => {
       <Wrapper {...wrapperProps}>
         <Item
           id={application.id}
-          firstName={firstName}
+          firstName={hasName ? firstName : person.email}
           lastName={lastName}
           role={role}
           company={company}
