@@ -36,19 +36,20 @@ const Contact = props => {
 
   const jobInfo = renderJobInfo(role, company)
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
+  const hasName = firstName && lastName
 
   return (
     <div className={css(style.root)}>
       <div className={css(style.details)}>
         <Text element='div' size='largeI' style={style.name}>
-          {firstName} {lastName}
+          {hasName ? `${firstName} ${lastName}` : email}
         </Text>
         { jobInfo && (
           <Text element='span' size='smallI' style={style.job}>
             {jobInfo}
           </Text>
         ) }
-        { email && (
+        { hasName && (
           <Text element='span' size='smallI' style={style.email}>
             {email}
           </Text>
@@ -100,11 +101,11 @@ const Contact = props => {
 
 Contact.propTypes = {
   id: PropTypes.string.isRequired,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
   role: PropTypes.string,
   company: PropTypes.string,
-  email: PropTypes.string,
+  email: PropTypes.string.isRequired,
   children: PropTypes.func,
   styleSheet: PropTypes.shape({
     root: PropTypes.object,
