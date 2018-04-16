@@ -20,18 +20,8 @@ const getApplications = ({ session }) => {
                   lastName
                   email
                   url
-                  connection: asAConnectionByFilters(filters: {from: $userId}) {
-                    firstName
-                    lastName
-                    role {
-                      name
-                    }
-                  }
-                  employments {
-                    company {
-                      name
-                    }
-                  }
+                  title
+                  company
                 }
                 referral {
                   id
