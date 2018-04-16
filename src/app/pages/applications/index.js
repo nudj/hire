@@ -85,7 +85,7 @@ const ApplicationsPage = (props) => {
                 />
               </Card>
             </Section>
-          ))}
+          ))
         ) : (
           <Section padding>
             <Heading level={1} style={mss.fgPrimary}>
