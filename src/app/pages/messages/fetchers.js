@@ -244,7 +244,7 @@ const getMessageTemplate = (props) => {
           company {
             slug
             job: jobByFilters(filters: {id: $jobId}) {
-              referral: createReferralAndParent(
+              referral: createReferralWithParentForPerson(
                 person: $recipientId,
                 parentPerson: $userId
               ) {
