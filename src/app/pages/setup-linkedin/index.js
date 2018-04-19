@@ -1,1 +1,1 @@
-module.exports = require('./request-data-guide')
+module.exports = require('./instructions')
