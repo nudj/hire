@@ -197,7 +197,10 @@ class Instructions extends React.Component {
           <div className={css(mss.mtReg)}>
             <Button
               volume='cheer'
-              onClick={this.refreshLinkedin}
+              onClick={() => {
+                this.refreshLinkedin()
+                this.incrementStage()
+              }}
               style={mss.mrSmIi}
             >
               Refresh LinkedIn
