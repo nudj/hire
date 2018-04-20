@@ -6,6 +6,7 @@ const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
+const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
@@ -185,8 +186,7 @@ class Instructions extends React.Component {
         </Heading>
         <Para>
           Listen to Jamie, our product manager, give his tips for exploring your
-          network to find more people worth asking for recommendations of who
-          to hire.
+          network to find more people worth asking for referrals
         </Para>
         <Countdown
           startTime={81000}
@@ -222,7 +222,7 @@ class Instructions extends React.Component {
           </Button>
           <Button
             volume='shout'
-            onClick={this.incrementStage}
+            onClick={this.finish}
             style={mss.mlSmIi}
           >
             Downloaded!
@@ -235,15 +235,16 @@ class Instructions extends React.Component {
             Nice one!
           </Heading>
           <Para>
-            Now we'll sync them with Nudj 😎
+            We're almost done syncing your connections with nudj. The last
+            step is to upload them into nudj and start making referrals!
           </Para>
-          <Button
+          <ButtonLink
             volume='cheer'
-            onClick={() => { alert('🙌 🙌 🙌') }}
+            href='/setup-network/linkedin/upload'
             style={mss.mtReg}
           >
-            Upload
-          </Button>
+            Sync LinkedIn connections
+          </ButtonLink>
         </Section>
       </Main>
     ]
