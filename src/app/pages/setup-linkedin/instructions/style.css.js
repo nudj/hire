@@ -2,13 +2,12 @@ const {
   StyleSheet,
   sizes,
   colors,
-  typography,
-  utilities
+  typography
 } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
   main: {
-    position: 'relative',
+    position: 'relative'
   },
   instructionPanel: {
     backgroundColor: colors.white,
@@ -16,8 +15,6 @@ const styleSheet = StyleSheet.create({
     width: '100%',
     left: 0,
     bottom: 0,
-    width: '100%',
-    backgroundColor: 'white',
     borderTopColor: colors.greyLight,
     borderTopWidth: '1px',
     borderTopStyle: 'solid',
@@ -30,14 +27,19 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.largeI,
     paddingRight: sizes.largeI,
     paddingTop: sizes.largeI,
-    paddingBottom: sizes.largeI,
+    paddingBottom: sizes.largeI
   },
   instructionActionsContainer: {
     flexGrow: 0,
     paddingLeft: sizes.largeI,
     paddingRight: sizes.largeI,
     paddingTop: sizes.largeI,
-    paddingBottom: sizes.largeI,
+    paddingBottom: sizes.largeI
+  },
+  video: {
+    maxWidth: '40rem',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 })
 

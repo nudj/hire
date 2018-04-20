@@ -15,17 +15,27 @@ const {
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
 const Countdown = require('./timer')
+const Video = require('./video')
 
 const panelHeight = 150
 
-const InstructionsPanel = ({ children }) => (
-  <div
-    className={css(style.instructionPanel)}
-    style={{
-      height: `${panelHeight}px`
-    }}
-  >
-    {children}
+const InstructionsPanel = ({ children, onRefocus }) => (
+  <div>
+    { onRefocus && (
+      <Main>
+        <Para>
+          Don't see LinkedIn? <Button onClick={onRefocus} inline subtle>Reopen</Button>
+        </Para>
+      </Main> 
+    ) }
+    <div
+      className={css(style.instructionPanel)}
+      style={{
+        height: `${panelHeight}px`
+      }}
+    >
+      {children}
+    </div>
   </div>
 )
 
@@ -51,7 +61,7 @@ const Stage0 = ({ onAction }) => {
         <Para>
           We're going to sync your LinkedIn connections with nudj, so we can give you better
           insights into whose suitable for your open roles, and so you'll be able to email
-          them directly—which always provides better results 😎
+          them directly—which always provides better results.
         </Para>
         <Para>
           To start, we'll need to download your connections from LinkedIn
@@ -70,8 +80,7 @@ const Stage0 = ({ onAction }) => {
 
 class Instructions extends React.Component {
   state = {
-    stage: 0
-    ,
+    stage: 0,
     reset: false,
     countdownComplete: false,
   }
@@ -118,7 +127,9 @@ class Instructions extends React.Component {
         reset: true
       }, this.openLinkedin)
     } else {
-      this.linkedin.focus()
+      if (this.state.stage + 1 !== 2) {
+        this.linkedin.focus()
+      }
 
       this.setState(state => ({
         stage: state.stage + 1
@@ -140,52 +151,81 @@ class Instructions extends React.Component {
     this.linkedin.close()
   }
 
+  refocus = () => {
+    if (this.linkedin.closed) {
+      this.setState({
+        stage: 0,
+        reset: true
+      }, this.openLinkedin)
+    } else {
+      this.linkedin.focus()
+    }
+  }
+
   render() {
     const { stage, countdownComplete } = this.state
 
     const stages = [
       <Stage0 onAction={ this.openLinkedin } />,
-      <InstructionsPanel>
+      <InstructionsPanel onRefocus={this.refocus}>
         <IntructionContent>
-          Select <span className={css(mss.fgMidRed)}>"pick & choose"</span>
+          <ol>
+            <li>Select <span className={css(mss.fgMidRed)}>"pick & choose"</span></li>
+            <li>Tick <span className={css(mss.fgMidRed)}>"connections"</span></li>
+            <li>Click <span className={css(mss.fgMidRed)}>"request archive"</span></li>
+          </ol>
         </IntructionContent>
         <ActionContainer>
-          <Button volume='cheer' onClick={this.incrementStage}>Selected it!</Button>
+          <Button volume='cheer' onClick={this.incrementStage}>All done!</Button>
         </ActionContainer>
       </InstructionsPanel>,
-      <InstructionsPanel>
+      <Main>
+        <Heading>
+          While you wait for LinkedIn to do its thing…
+        </Heading>
+        <Para>
+          Listen to Jamie, our product manager, give his tips for exploring your
+          network to find more people worth asking for recommendations of who
+          to hire.
+        </Para>
+        <Countdown
+          startTime={81000}
+          onFinish={this.handleCountdownComplete}
+        />
+        <Video className={css(style.video, mss.mtLgIi)} />
+        {countdownComplete && (
+          <div className={css(mss.mtReg)}>
+            <Button
+              volume='cheer'
+              onClick={this.refreshLinkedin}
+              style={mss.mrSmIi}
+            >
+              Refresh LinkedIn
+            </Button>
+          </div>
+        )}
+      </Main>,
+      <InstructionsPanel onRefocus={this.refocus}>
         <IntructionContent>
-          Tick <span className={css(mss.fgMidRed)}>"connections"</span>
+          And finally, <span className={css(mss.fgMidRed)}>download your archive</span>
         </IntructionContent>
         <ActionContainer>
-          <Button volume='cheer' onClick={this.incrementStage}>Ticked it!</Button>
+          <Button
+            volume='cheer'
+            onClick={this.refreshLinkedin}
+            style={mss.mrSmIi}
+          >
+            Refresh again
+          </Button>
+          <Button
+            volume='shout'
+            onClick={this.incrementStage}
+            style={mss.mlSmIi}
+          >
+            Downloaded!
+          </Button>
         </ActionContainer>
       </InstructionsPanel>,
-      <InstructionsPanel>
-        <IntructionContent>
-          Click <span className={css(mss.fgMidRed)}>"request archive"</span>
-        </IntructionContent>
-        <ActionContainer>
-          <Button volume='cheer' onClick={this.incrementStage}>Clicked</Button>
-        </ActionContainer>
-      </InstructionsPanel>,
-      !countdownComplete ? (
-        <InstructionsPanel>
-          <IntructionContent>
-            LinkedIn will tell you to await an email, but you can actually just
-            refresh the page. You can do that in{' '}
-            <Countdown
-              startTime={60000}
-              onFinish={this.handleCountdownComplete}
-            />
-          </IntructionContent>
-        </InstructionsPanel>
-      ) : (
-        <InstructionsPanel>
-          <Button volume='cheer' onClick={this.refreshLinkedin}>Refresh LinkedIn</Button>
-          <Button volume='shout' onClick={this.finish}>I've downloaded the archive</Button>
-        </InstructionsPanel>
-      ),
       <Main>
         <Section padding>
           <Heading>

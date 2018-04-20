@@ -1,19 +1,5 @@
 const React = require('react')
 
-const formatTime = (totalSeconds) => {
-  let hours = Math.floor(totalSeconds / 3600);
-  let minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-  let seconds = totalSeconds - (hours * 3600) - (minutes * 60);
-
-  // round seconds
-  seconds = Math.floor(Math.round(seconds * 100) / 100);
-
-  let result = (hours < 10 ? "0" + hours : hours);
-  result += ":" + (minutes < 10 ? "0" + minutes : minutes);
-  result += ":" + (seconds < 10 ? "0" + seconds : seconds);
-  return result;
-}
-
 module.exports = class Countdown extends React.Component {
   constructor(props) {
     super(props)
@@ -74,10 +60,6 @@ module.exports = class Countdown extends React.Component {
   };
 
   render() {
-    const { onComplete, ...rest } = this.props
-    const { clock } = this.state
-    const time = formatTime(clock / 1000)
-
-    return <span {...rest}>{time}</span>
+    return null
   }
 }
