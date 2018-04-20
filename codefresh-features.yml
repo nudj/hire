@@ -2,23 +2,6 @@ version: '1.0'
 
 steps:
 
-  build_test:
-    title: Build Test
-    type: build
-    image_name: nudj/hire-test
-    working_directory: ${{main_clone}}
-    dockerfile: Dockerfile.dev
-    build_arguments:
-      - NPM_TOKEN=${{NPM_TOKEN}}
-
-  test:
-    title: Test
-    image: ${{build_test}}
-    working_directory: 'IMAGE_WORK_DIR'
-    commands:
-      - ./node_modules/.bin/standard
-      - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit
-
   build_latest:
     title: Build Latest
     type: build
