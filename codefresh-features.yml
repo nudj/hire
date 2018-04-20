@@ -18,3 +18,22 @@ steps:
     commands:
       - ./node_modules/.bin/standard
       - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit
+
+  build_latest:
+    title: Build Latest
+    type: build
+    image_name: nudj/hire
+    tag: latest
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_STAGING}}
+
+  push_latest:
+    title: Push Latest
+    type: push
+    candidate: '${{build_latest}}'
+    tag: latest
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
