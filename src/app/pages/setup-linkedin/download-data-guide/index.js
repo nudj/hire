@@ -19,7 +19,7 @@ const style = require('../style.css')
 const LinkedinDownloadGuidePage = (props: Object) => (
   <Layout
     {...props}
-    title='Part 1: Unlock your network'
+    title='Step 1: Unlock your network'
   >
     <Helmet>
       <title>Download your connections from LinkedIn</title>

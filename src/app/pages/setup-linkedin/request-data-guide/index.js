@@ -17,7 +17,7 @@ const {
 const style = require('../style.css')
 
 const LinkedinRequestGuidePage = (props: Object) => (
-  <Layout {...props} title='Part 1: Unlock your network'>
+  <Layout {...props} title='Step 1: Unlock your network'>
     <Helmet>
       <title>Request your connections from LinkedIn</title>
     </Helmet>

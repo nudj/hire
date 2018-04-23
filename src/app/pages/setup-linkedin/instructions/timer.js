@@ -1,7 +1,7 @@
 const React = require('react')
 
 module.exports = class Countdown extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -9,11 +9,11 @@ module.exports = class Countdown extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.startTimer()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.pauseTimer()
   }
 
@@ -22,7 +22,7 @@ module.exports = class Countdown extends React.Component {
     const { clock } = this.state
     if (clock <= 0) return
 
-    const newClock = clock - this.calculateTimeOffset();
+    const newClock = clock - this.calculateTimeOffset()
 
     if (newClock <= 0) {
       this.setState({
@@ -40,26 +40,26 @@ module.exports = class Countdown extends React.Component {
 
   startTimer = () => {
     if (!this.interval) {
-      this.offset = Date.now();
-      this.interval = setInterval(this.updateTimer, 1000);
+      this.offset = Date.now()
+      this.interval = setInterval(this.updateTimer, 1000)
     }
   };
 
   pauseTimer = () => {
     if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
+      clearInterval(this.interval)
+      this.interval = null
     }
   };
 
   calculateTimeOffset = () => {
-    const now = Date.now();
-    const newOffset = now - this.offset;
-    this.offset = now;
-    return newOffset;
+    const now = Date.now()
+    const newOffset = now - this.offset
+    this.offset = now
+    return newOffset
   };
 
-  render() {
+  render () {
     return null
   }
 }

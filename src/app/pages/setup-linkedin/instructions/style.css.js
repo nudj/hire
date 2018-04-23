@@ -22,9 +22,8 @@ const styleSheet = StyleSheet.create({
     alignItems: 'center'
   },
   instructionContent: {
-    ...typography.type.largeIi,
+    ...typography.type.largeI,
     flexGrow: 1,
-    paddingLeft: sizes.largeI,
     paddingRight: sizes.largeI,
     paddingTop: sizes.largeI,
     paddingBottom: sizes.largeI

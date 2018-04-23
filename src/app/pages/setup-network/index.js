@@ -32,7 +32,7 @@ const NETWORKS = {
 }
 
 const ChooseNetworkPage = (props: Object) => (
-  <Layout {...props} title='Part 1: Unlock your network'>
+  <Layout {...props} title='Step 1: Unlock your network'>
     <Helmet>
       <title>Select a network</title>
     </Helmet>
@@ -42,7 +42,7 @@ const ChooseNetworkPage = (props: Object) => (
           Select a network
         </Heading>
         <Para>
-          Pick a network and we&#39;ll help you upload your contacts.
+          Choose a network and we&#39;ll help import your contacts into nudj.
         </Para>
       </Section>
       <Section padding>

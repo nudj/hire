@@ -52,7 +52,7 @@ module.exports = class YourVideo extends React.Component {
                   left: 0,
                   opacity: 0,
                   overflow: 'hidden',
-                  position: 'absolute', 
+                  position: 'absolute',
                   top: 0,
                   transition: 'opacity 200ms',
                   width: '100%'

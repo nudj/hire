@@ -52,7 +52,7 @@ const SurveyPage = (props: SurveyProps) => {
   const initialQuestion = get(initialSection, 'questions[0]', {})
 
   return (
-    <Layout {...props} title='Part 2: Uncover hidden gems'>
+    <Layout {...props} title='Step 2: Uncover hidden gems'>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>

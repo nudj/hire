@@ -102,7 +102,7 @@ const ConnectionsQuestionPage = props => {
     <Layout
       {...props}
       notification={notification}
-      title='Part 2: Uncover hidden gems'
+      title='Step 2: Uncover hidden gems'
     >
       <Helmet>
         <title>Uncover hidden gems</title>

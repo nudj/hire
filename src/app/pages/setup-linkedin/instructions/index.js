@@ -27,7 +27,7 @@ const InstructionsPanel = ({ children, onRefocus }) => (
         <Para>
           Don't see LinkedIn? <Button onClick={onRefocus} inline subtle>Reopen</Button>
         </Para>
-      </Main> 
+      </Main>
     ) }
     <div
       className={css(style.instructionPanel)}
@@ -57,20 +57,20 @@ const Stage0 = ({ onAction }) => {
     <Main>
       <Section padding>
         <Heading>
-          Request your connections from LinkedIn
+          Importing your LinkedIn connections into nudj
         </Heading>
         <Para>
-          We're going to sync your LinkedIn connections with nudj, so we can give you better
-          insights into whose suitable for your open roles, and so you'll be able to email
-          them directly—which always provides better results.
+          With nudj you can easily uncover who from your LinkedIn network can help you in your search for your next hires.
         </Para>
         <Para>
-          To start, we'll need to download your connections from LinkedIn
+          Before you can start exploring your network, however, you need to export your connections from LinkedIn and then upload them into nudj.
         </Para>
+      </Section>
+      <Section padding>
         <Button
+          style={wizardStyles.action}
           volume='cheer'
           onClick={onAction}
-          style={mss.mtReg}
         >
           Open LinkedIn
         </Button>
@@ -83,7 +83,7 @@ class Instructions extends React.Component {
   state = {
     stage: 0,
     reset: false,
-    countdownComplete: false,
+    countdownComplete: false
   }
 
   openLinkedin = () => {
@@ -163,102 +163,97 @@ class Instructions extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { stage, countdownComplete } = this.state
 
     const stages = [
-      <Stage0 onAction={ this.openLinkedin } />,
+      <Stage0 onAction={this.openLinkedin} />,
       <InstructionsPanel onRefocus={this.refocus}>
         <IntructionContent>
           <ol>
-            <li>Select <span className={css(mss.fgMidRed)}>"pick & choose"</span></li>
-            <li>Tick <span className={css(mss.fgMidRed)}>"connections"</span></li>
-            <li>Click <span className={css(mss.fgMidRed)}>"request archive"</span></li>
+            <li>Login</li>
+            <li>Select <span className={css(mss.fgMidRed)}>"Pick and choose"</span></li>
+            <li>Tick <span className={css(mss.fgMidRed)}>"Connections"</span></li>
+            <li>Click <span className={css(mss.fgMidRed)}>"Request archive"</span></li>
+            <li>Enter your LinkedIn password</li>
           </ol>
         </IntructionContent>
         <ActionContainer>
-          <Button volume='cheer' onClick={this.incrementStage}>All done!</Button>
+          <Button volume='cheer' onClick={this.incrementStage}>Done</Button>
         </ActionContainer>
       </InstructionsPanel>,
       <Main>
         <Heading>
-          While you wait for LinkedIn to do its thing…
+          Wait for LinkedIn to prepare your download
         </Heading>
         <Para>
-          Listen to Jamie, our product manager, give his tips for exploring your
-          network to find more people worth asking for referrals
+          It usually takes a couple of minutes to prepare a download of all your connections -
+          we&apos;ll get you to check if its ready shortly.
+        </Para>
+        <Para>
+          In the meantime, listen to Jamie, our product lead, share his tips for exploring your
+          network to find more people worth nudj'ing.
         </Para>
         <Countdown
-          startTime={81000}
+          startTime={70000}
           onFinish={this.handleCountdownComplete}
         />
         <Video className={css(style.video, mss.mtLgIi)} />
         {countdownComplete && (
-          <div className={css(mss.mtReg)}>
+          <Section padding>
             <Button
               volume='cheer'
               onClick={() => {
                 this.refreshLinkedin()
                 this.incrementStage()
               }}
-              style={mss.mrSmIi}
+              style={wizardStyles.action}
             >
               Refresh LinkedIn
             </Button>
-          </div>
+          </Section>
         )}
       </Main>,
       <InstructionsPanel onRefocus={this.refocus}>
         <IntructionContent>
-          And finally, <span className={css(mss.fgMidRed)}>download your archive</span>
+          <ol start='6'>
+            <li>
+              Finally, click <span className={css(mss.fgMidRed)}>"Download archive"</span>
+            </li>
+          </ol>
         </IntructionContent>
         <ActionContainer>
           <Button
-            volume='cheer'
+            volume='murmur'
             onClick={this.refreshLinkedin}
             style={mss.mrSmIi}
           >
             Refresh again
           </Button>
-          <Button
-            volume='shout'
-            onClick={this.finish}
-            style={mss.mlSmIi}
-          >
-            Downloaded!
-          </Button>
-        </ActionContainer>
-      </InstructionsPanel>,
-      <Main>
-        <Section padding>
-          <Heading>
-            Nice one!
-          </Heading>
-          <Para>
-            We're almost done syncing your connections with nudj. The last
-            step is to upload them into nudj and start making referrals!
-          </Para>
           <ButtonLink
             volume='cheer'
+            onClick={this.finish}
             href='/setup-network/linkedin/upload'
-            style={mss.mtReg}
+            style={mss.mlSmIi}
           >
-            Sync LinkedIn connections
+            I've downloaded the file
           </ButtonLink>
-        </Section>
-      </Main>
+        </ActionContainer>
+      </InstructionsPanel>
     ]
 
     return (
-      <Layout {...this.props}>
+      <Layout
+        {...this.props}
+        title='Step 1: Unlock your network'
+      >
         <Helmet>
-          <title>Request your connections from LinkedIn</title>
+          <title>Importing your connections from LinkedIn</title>
         </Helmet>
         {stages[stage]}
       </Layout>
     )
   }
 }
-
 
 module.exports = Instructions
