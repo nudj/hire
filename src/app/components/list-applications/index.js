@@ -25,7 +25,7 @@ const Row = (props) => {
   const { application, onClick, children } = props
 
   const person = get(application, 'person')
-  const { firstName, lastName, email, title, company } = person
+  const { firstName, lastName, email, role, company } = person
   const referrer = get(application, 'referral', {})
   const referrerName = getReferrerName(referrer)
   const applicationDate = format(application.created, 'DD/MM/YYYY')
@@ -54,8 +54,8 @@ const Row = (props) => {
           id={application.id}
           firstName={firstName}
           lastName={lastName}
-          role={title}
-          company={company}
+          role={role.name}
+          company={company.name}
           referrer={referrerName}
           email={email}
           applicationDate={applicationDate}

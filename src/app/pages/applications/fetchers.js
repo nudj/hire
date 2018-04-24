@@ -20,8 +20,12 @@ const getApplications = ({ session }) => {
                   lastName
                   email
                   url
-                  title
-                  company
+                  role {
+                    name
+                  }
+                  company {
+                    name
+                  }
                 }
                 referral {
                   id
