@@ -20,7 +20,7 @@ async (req, accessToken, refreshToken, profile, cb) => {
       updatePerson(id: $userId, data: $personData) {
         id
       }
-      user (id: $userId) {
+      user {
         account: createOrUpdateAccount(type: $type, data: $data) {
           id
         }
@@ -42,7 +42,7 @@ async (req, accessToken, refreshToken, profile, cb) => {
       }
     }
   }
-  await requestGql(query, variables)
+  await requestGql(req.session.userId, query, variables)
   return cb(null, {})
 }))
 

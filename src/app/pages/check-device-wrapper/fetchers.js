@@ -3,10 +3,10 @@ const { Redirect } = require('@nudj/framework/errors')
 const { createNotification } = require('../../lib')
 const template = require('./email-template')
 
-const sendMagicLink = ({ session }) => {
+const sendMagicLink = () => {
   const gql = `
-    query getUser($userId: ID!, $subject: String!, $body: String!) {
-      user (id: $userId) {
+    query getUser($subject: String!, $body: String!) {
+      user {
         notifyByEmail(subject: $subject, body: $body) {
           success
         }
@@ -15,7 +15,6 @@ const sendMagicLink = ({ session }) => {
   `
 
   const variables = {
-    userId: session.userId,
     subject: 'Continue setting up your nudj account',
     body: template
   }

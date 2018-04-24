@@ -1,10 +1,10 @@
 const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 
-const getContacts = ({ session, query }) => {
+const getContacts = ({ query }) => {
   const gql = `
-    query ContactsSearch($userId: ID!, $search: String!, $filters: ConnectionSearchFilters) {
-      user(id: $userId) {
+    query ContactsSearch($search: String!, $filters: ConnectionSearchFilters) {
+      user {
         results: searchConnections(query: $search, filters: $filters) {
           connections {
             id
@@ -39,7 +39,6 @@ const getContacts = ({ session, query }) => {
   `
 
   const variables = {
-    userId: session.userId,
     search: query.search || '',
     filters: {
       favourites: query.favourites === 'true',
@@ -53,14 +52,13 @@ const getContacts = ({ session, query }) => {
   }
 }
 
-const postContact = ({ session, params, body }) => {
+const postContact = ({ params, body }) => {
   const gql = `
     mutation addNewContact (
-      $userId: ID!
       $to: ConnectionCreateInput!
       $source: DataSource!
     ) {
-      user (id: $userId) {
+      user {
         newContact: getOrCreateConnection (
           to: $to
           source: $source
@@ -71,7 +69,6 @@ const postContact = ({ session, params, body }) => {
     }
   `
   const variables = {
-    userId: session.userId,
     to: {
       firstName: body.firstName,
       lastName: body.lastName,

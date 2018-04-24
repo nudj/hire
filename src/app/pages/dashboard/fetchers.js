@@ -12,19 +12,18 @@ const {
 
 const formatServerDate = (date) => format(date, 'YYYY-MM-DD')
 
-const get = ({ session, query }) => {
+const get = ({ query }) => {
   const { period } = query
 
   const gql = `
     query GetDashboardStatistics(
-      $userId: ID!,
       $dateFrom: DateTime,
       $dateTo: DateTime,
       $pastDateFrom: DateTime,
       $pastDateTo: DateTime,
       $jobStatus: JobStatus
     ) {
-      user(id: $userId) {
+      user {
         hirer {
           company {
             slug
@@ -48,7 +47,6 @@ const get = ({ session, query }) => {
   `
 
   const variables = {
-    userId: session.userId,
     jobStatus: jobStatuses.PUBLISHED
   }
 

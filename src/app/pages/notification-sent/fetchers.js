@@ -2,17 +2,14 @@ const { Global } = require('../../lib/graphql')
 
 const getUser = ({ session }) => {
   const gql = `
-    query NotificationSentPage ($userId: ID!) {
-      user (id: $userId) {
+    query NotificationSentPage {
+      user {
         email
       }
       ${Global}
     }
   `
-  const variables = {
-    userId: session.userId
-  }
-  return { gql, variables }
+  return { gql }
 }
 
 module.exports = { getUser }
