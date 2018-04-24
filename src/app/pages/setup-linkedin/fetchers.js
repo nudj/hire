@@ -8,8 +8,8 @@ const mailer = require('../../lib/mailer')
 
 const fetchPageData = ({ session }) => {
   const gql = `
-    query ImportPage ($userId: ID!) {
-      user (id: $userId) {
+    query ImportPage {
+      user {
         hirer {
           id
         }
@@ -17,21 +17,13 @@ const fetchPageData = ({ session }) => {
       ${Global}
     }
   `
-  const variables = {
-    userId: session.userId
-  }
-  return { gql, variables }
+  return { gql }
 }
 
-const uploadConnections = ({ session, body, files }) => {
-  const userId = session.userId
-
+const uploadConnections = ({ body, files }) => {
   const gql = `
-    mutation ImportPage (
-      $userId: ID!,
-      $connections: [Data!]!
-    ) {
-      user (id: $userId) {
+    mutation ImportPage ($connections: [Data!]!) {
+      user {
         firstName
         lastName
         email
@@ -51,7 +43,6 @@ const uploadConnections = ({ session, body, files }) => {
     }
   `
   const variables = {
-    userId,
     connections: body.connections
   }
 

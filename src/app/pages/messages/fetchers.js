@@ -4,12 +4,10 @@ const { createNotification } = require('../../lib')
 const { Global } = require('../../lib/graphql')
 const { emailPreferences } = require('../../lib/constants')
 
-const getMessages = props => {
-  const { session } = props
-
+const getMessages = ({ session }) => {
   const gql = `
-    query GetMessages($userId: ID!) {
-      user (id: $userId) {
+    query GetMessages ($userId: ID!) {
+      user {
         emailPreference
         conversations {
           id
@@ -35,11 +33,9 @@ const getMessages = props => {
       ${Global}
     }
   `
-
   const variables = {
     userId: session.userId
   }
-
   return { gql, variables }
 }
 
@@ -52,7 +48,7 @@ const getThread = props => {
       $conversationId: ID!,
       $accountType: AccountType!
     ) {
-      user(id: $userId) {
+      user {
         emailPreference
         conversation: conversationByFilters(filters: { id: $conversationId }) {
           subject
@@ -108,14 +104,18 @@ const getThread = props => {
   return { gql, variables, transformData }
 }
 
-const replyTo = (props) => {
+const replyTo = props => {
   const { session, params, body } = props
 
   // TODO: API side validation
   if (body.body.length > 0) {
     const gql = `
-      mutation ReplyTo ($userId: ID!, $conversationId: ID!, $body: String!) {
-        user (id: $userId) {
+      mutation ReplyTo (
+        $userId: ID!,
+        $conversationId: ID!,
+        $body: String!
+      ) {
+        user {
           conversation: conversationByFilters(filters: { id: $conversationId }) {
             newMessage: sendMessage(body: $body) {
               id
@@ -188,11 +188,15 @@ const replyTo = (props) => {
   }
 }
 
-const getActiveJobs = (props) => {
+const getActiveJobs = props => {
   const { session, params } = props
   const gql = `
-    query GetJobs($userId: ID!, $recipientId: ID!, $status: JobStatus) {
-      user (id: $userId) {
+    query GetJobs(
+      $userId: ID!,
+      $recipientId: ID!,
+      $status: JobStatus
+    ) {
+      user {
         hirer {
           company {
             id
@@ -225,7 +229,7 @@ const getActiveJobs = (props) => {
   return { gql, variables }
 }
 
-const getMessageTemplate = (props) => {
+const getMessageTemplate = props => {
   const { session, params } = props
 
   const gql = `
@@ -237,7 +241,7 @@ const getMessageTemplate = (props) => {
       $templateType: String!,
       $templateTags: [String!]!
     ) {
-      user(id: $userId) {
+      user {
         firstName
         emailPreference
         hirer {
@@ -291,8 +295,8 @@ const getMessageTemplate = (props) => {
 
 const sendNewMessage = ({ session, params, body, req }) => {
   const gql = `
-    mutation SendNewMessage($userId: ID!, $recipientId: ID!, $subject: String!, $body: String!) {
-      user(id: $userId) {
+    mutation SendNewMessage($recipientId: ID!, $subject: String!, $body: String!) {
+      user {
         conversation: sendEmail(to: $recipientId, subject: $subject, body: $body) {
           id
         }
@@ -301,7 +305,6 @@ const sendNewMessage = ({ session, params, body, req }) => {
   `
 
   const variables = {
-    userId: session.userId,
     recipientId: params.recipientId,
     subject: body.subject,
     body: body.body

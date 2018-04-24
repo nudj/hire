@@ -1,5 +1,5 @@
 const Global = `
-  user (id: $userId) {
+  user {
     hirer {
       onboarded
     }

@@ -1,10 +1,10 @@
 const express = require('express')
 const { Global } = require('../../lib/graphql')
 
-const get = ({ session }) => {
+const get = () => {
   const gql = `
-    query Page ($userId: ID!) {
-      user (id: $userId) {
+    query Page {
+      user {
         hirer {
           id
         }
@@ -12,10 +12,7 @@ const get = ({ session }) => {
       ${Global}
     }
   `
-  const variables = {
-    userId: session.userId
-  }
-  return { gql, variables }
+  return { gql }
 }
 
 const Router = ({

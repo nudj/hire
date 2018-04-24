@@ -37,7 +37,7 @@ const completeSurvey = ({ session, params, res }) => {
           }
         }
       }
-      user (id: $userId) {
+      user {
         emailPreference
         hirer {
           onboarded

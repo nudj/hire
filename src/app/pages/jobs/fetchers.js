@@ -4,8 +4,8 @@ const get = ({
   session
 }) => {
   const gql = `
-    query TasksPage ($userId: ID!) {
-      user (id: $userId) {
+    query TasksPage {
+      user {
         hirer {
           company {
             name
@@ -30,10 +30,7 @@ const get = ({
       ${Global}
     }
   `
-  const variables = {
-    userId: session.userId
-  }
-  return { gql, variables }
+  return { gql }
 }
 
 module.exports = {

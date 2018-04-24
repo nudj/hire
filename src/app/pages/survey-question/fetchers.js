@@ -15,15 +15,14 @@ const getQuestion = data => {
   }
 }
 
-const getCompaniesQuestion = ({ session, params, query }) => {
+const getCompaniesQuestion = ({ params, query }) => {
   const gql = `
     query CompaniesQuestionPage (
-      $userId: ID!,
       $surveySlug: String!,
       $sectionId: ID!,
       $questionId: ID!
     ) {
-      user (id: $userId) {
+      user {
         employments {
           id
           company {
@@ -77,7 +76,6 @@ const getCompaniesQuestion = ({ session, params, query }) => {
     }
   `
   const variables = {
-    userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId
@@ -94,7 +92,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $sectionId: ID!,
       $questionId: ID!
     ) {
-      user(id: $userId) {
+      user {
         connectionsCount
         hirer {
           company {
@@ -185,10 +183,9 @@ const getConnectionsQuestion = ({ session, params, query }) => {
   return { gql, variables }
 }
 
-const postEmployment = ({ session, params, body }) => {
+const postEmployment = ({ params, body }) => {
   const gql = `
     mutation AddEmployment (
-      $userId: ID!,
       $surveySlug: String,
       $sectionId: ID!,
       $questionId: ID!,
@@ -200,7 +197,7 @@ const postEmployment = ({ session, params, body }) => {
         type
         message
       }
-      user (id: $userId) {
+      user {
         newEmployment: getOrCreateEmployment (
           company: $company,
           current: $current,
@@ -266,7 +263,6 @@ const postEmployment = ({ session, params, body }) => {
     }
   `
   const variables = {
-    userId: session.userId,
     surveySlug: params.surveySlug,
     sectionId: params.sectionId,
     questionId: params.questionId,
@@ -293,7 +289,7 @@ const postConnectionAnswer = ({ session, params, body }) => {
       ) {
         id
       }
-      user(id: $userId) {
+      user {
         hirer {
           company {
             survey: surveyByFilters(filters: {slug: $surveySlug}) {
@@ -355,10 +351,9 @@ const postConnectionAnswer = ({ session, params, body }) => {
   return { gql, variables, respond }
 }
 
-const postNewConnection = ({ session, params, body }) => {
+const postNewConnection = ({ params, body }) => {
   const gql = `
     mutation addNewConnection (
-      $userId: ID!
       $firstName: String!
       $lastName: String!
       $email: String!
@@ -366,7 +361,7 @@ const postNewConnection = ({ session, params, body }) => {
       $company: String
       $source: DataSource!
     ) {
-      user (id: $userId) {
+      user {
         newConnection: getOrCreateConnection (
           to: {
             firstName: $firstName,
@@ -385,7 +380,6 @@ const postNewConnection = ({ session, params, body }) => {
     }
   `
   const variables = {
-    userId: session.userId,
     firstName: body.firstName,
     lastName: body.lastName,
     email: body.email,

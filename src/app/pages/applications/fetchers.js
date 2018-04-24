@@ -2,8 +2,8 @@ const { Global } = require('../../lib/graphql')
 
 const getApplications = ({ session }) => {
   const gql = `
-    query GetApplications($userId: ID!) {
-      user(id: $userId) {
+    query GetApplications {
+      user {
         emailPreference
         hirer {
           company {
@@ -43,15 +43,7 @@ const getApplications = ({ session }) => {
       ${Global}
     }
   `
-
-  const variables = {
-    userId: session.userId
-  }
-
-  return {
-    gql,
-    variables
-  }
+  return { gql }
 }
 
 module.exports = {
