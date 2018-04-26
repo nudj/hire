@@ -54,8 +54,8 @@ const Row = (props) => {
           id={application.id}
           firstName={firstName}
           lastName={lastName}
-          role={role.name}
-          company={company.name}
+          role={get(role, 'name')}
+          company={get(company, 'name')}
           referrer={referrerName}
           email={email}
           applicationDate={applicationDate}
