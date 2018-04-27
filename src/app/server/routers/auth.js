@@ -18,6 +18,22 @@ async function fetchPerson (email) {
   }
 }
 
+async function updatePerson (id, patch) {
+  try {
+    const person = await request(`people/${id}`, {
+      baseURL: `http://${process.env.API_HOST}:81`,
+      method: 'patch',
+      data: patch
+    })
+    if (!person) throw new Error('Person not found')
+    if (person.error) throw new Error('Unable to update person')
+    return person
+  } catch (error) {
+    logger.log('error', error.log || error)
+    throw error
+  }
+}
+
 async function fetchHirer (personId) {
   try {
     const hirer = await request(`hirers/first?person=${personId}`, {
@@ -30,6 +46,21 @@ async function fetchHirer (personId) {
     logger.log('error', error.log || error)
     throw error
   }
+}
+
+function getNames (user) {
+  const name = user.name ? user.name.split(' ') : ['', '']
+  const firstName = user.firstName || user.given_name || name[0]
+  const lastName = user.lastName || user.family_name || name[1]
+  return {firstName, lastName}
+}
+
+function getUserInfo (user) {
+  const email = user.email
+  const {firstName, lastName} = user.user_metadata ? getNames(user.user_metadata) : getNames(user)
+  const url = user.html_url || user.publicProfileUrl || user.url
+
+  return {email, firstName, lastName, url}
 }
 
 const Router = ({
@@ -62,7 +93,11 @@ const Router = ({
       }
 
       try {
-        const user = await fetchPerson(req.user._json.email)
+        const { email, firstName, lastName } = getUserInfo(req.user._json)
+        let user = await fetchPerson(email)
+        if (!user.firstName || !user.lastName) {
+          user = await updatePerson(user.id, { firstName, lastName })
+        }
         await fetchHirer(user.id) // ensure hirer exists
         req.session.userId = user.id
         res.redirect(req.session.returnTo || '/')
