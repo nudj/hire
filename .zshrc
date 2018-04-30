@@ -5,14 +5,13 @@ PROMPT='hire» '
 
 alias run="yarn start"
 alias dev="yarn run dev"
-alias test="standard && flow && mocha  --compilers js:babel-core/register --recursive test/unit"
+alias test="standard && mocha  --compilers js:babel-core/register --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
 	-x "mocha --compilers js:babel-core/register --recursive test/unit || exit 1"'
-alias flow='flow --quiet'
 alias standardFix='./node_modules/.bin/standard --fix'
 
 yank () {
