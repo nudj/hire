@@ -1,5 +1,3 @@
-/* global Dispatch, Connection */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -23,15 +21,6 @@ const {
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
 
-type Props = {
-  dispatch: Dispatch,
-  uploadLinkedinConnectionsPage: {
-    connections: Array<Connection>,
-    loading: boolean,
-    parsing: boolean
-  }
-}
-
 const getHandleDrop = dispatch => (acceptedFiles, rejectedFiles) => {
   if (acceptedFiles.length > 0) {
     dispatch(parseLinkedinConnections(acceptedFiles[0]))
@@ -42,7 +31,7 @@ const getHandleNext = dispatch => () => {
   dispatch(uploadLinkedinConnections())
 }
 
-const LinkedinUploadPage = (props: Props) => {
+const LinkedinUploadPage = props => {
   const { dispatch, uploadLinkedinConnectionsPage: state } = props
 
   return (

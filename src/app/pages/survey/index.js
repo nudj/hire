@@ -1,5 +1,3 @@
-/* global ID SurveyQuestionType */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
@@ -19,32 +17,7 @@ const {
   styleSheet: wizardStyles
 } = require('../../components/wizard')
 
-type Question = {
-  id: ID,
-  type: SurveyQuestionType
-}
-
-type SectionProps = {
-  id: ID,
-  questions: Array<Question>
-}
-
-type SurveyProps = {
-  user: {
-    hirer: {
-      company: {
-        name?: string,
-        survey: {
-          id?: ID,
-          slug?: string,
-          sections: Array<SectionProps>
-        }
-      }
-    }
-  }
-}
-
-const SurveyPage = (props: SurveyProps) => {
+const SurveyPage = props => {
   const { user } = props
   const company = get(user, 'hirer.company')
   const survey = get(company, 'survey')

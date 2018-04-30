@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -17,7 +16,7 @@ const {
 } = require('../../components/wizard')
 const style = require('./style.css')
 
-const WelcomePage = (props: Object) => (
+const WelcomePage = props => (
   <Layout {...props}>
     <Helmet>
       <title>Welcome</title>

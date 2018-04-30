@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -16,7 +15,7 @@ const {
 } = require('../../../components/wizard')
 const style = require('../style.css')
 
-const LinkedinRequestGuidePage = (props: Object) => (
+const LinkedinRequestGuidePage = props => (
   <Layout {...props} title='Part 1: Unlock your network'>
     <Helmet>
       <title>Request your connections from LinkedIn</title>
