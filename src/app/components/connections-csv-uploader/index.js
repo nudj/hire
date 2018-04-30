@@ -1,29 +1,15 @@
-/* global Connection, DataTransferItem */
-// @flow
 const React = require('react')
 const { css } = require('@nudj/components/lib/css')
 const { Dropzone, Text, Loader } = require('@nudj/components')
 
 const style = require('./style.css')
 
-type ChildProps = {
-  isDragActive: boolean,
-  acceptedFiles: Array<DataTransferItem>,
-  rejectedFiles: Array<DataTransferItem>
-}
-
-type Props = {
-  connections: Array<Connection>,
-  loading: boolean,
-  rest?: Array<mixed>
-}
-
-const ConnectionsCsvUploader = (props: Props) => {
+const ConnectionsCsvUploader = props => {
   const { connections, loading, ...rest } = props
 
   return (
     <Dropzone accept='.csv' className='example' {...rest}>
-      {(childProps: ChildProps) => {
+      {childProps => {
         const { isDragActive, acceptedFiles, rejectedFiles } = childProps
 
         if (loading) {

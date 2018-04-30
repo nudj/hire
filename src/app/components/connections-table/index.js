@@ -1,5 +1,3 @@
-/* global ID */
-// @flow
 const React = require('react')
 const { Table, Checkbox, RadioButton } = require('@nudj/components')
 const { merge } = require('@nudj/library')
@@ -7,44 +5,6 @@ const { mergeStyleSheets } = require('@nudj/components/lib/css')
 const isEqual = require('lodash/isEqual')
 
 const style = require('./style.css')
-
-type StyleSheetType = {
-  root?: Object,
-  header?: Object,
-  headerRow?: Object,
-  heading?: Object,
-  body?: Object,
-  row?: Object,
-  cell?: Object
-}
-
-type Connection = {
-  company: {
-    name: string
-  },
-  firstName: string,
-  lastName: string,
-  from: {
-    name: string
-  },
-  source: string,
-  role: {
-    name: string
-  },
-  person: {
-    id: ID,
-    email: string
-  },
-  id: ID
-}
-
-type ConnectionsTableProps = {
-  onSelect?: Object => void,
-  connections: Array<Connection>,
-  selectedConnections: Array<ID>,
-  styleSheet: StyleSheetType,
-  multiple?: boolean
-}
 
 const checkboxColumn = {
   heading: '',
@@ -75,7 +35,7 @@ const defaultColumns = [
   }
 ]
 
-module.exports = class ConnectionsTable extends React.Component<ConnectionsTableProps> {
+module.exports = class ConnectionsTable extends React.Component {
   static defaultProps = {
     connections: [],
     selectedConnections: [],
@@ -91,7 +51,7 @@ module.exports = class ConnectionsTable extends React.Component<ConnectionsTable
       : [multiple ? checkboxColumn : radioColumn, ...defaultColumns]
   }
 
-  handleSelect = ({ value, ...rest }: { value: string, rest?: Array<mixed> }) => {
+  handleSelect = ({ value, ...rest }) => {
     const {
       onSelect,
       multiple,
@@ -120,7 +80,7 @@ module.exports = class ConnectionsTable extends React.Component<ConnectionsTable
     })
   }
 
-  shouldComponentUpdate (nextProps: ConnectionsTableProps) {
+  shouldComponentUpdate (nextProps) {
     if (
       isEqual(this.props.connections, nextProps.connections) &&
       isEqual(this.props.selectedConnections, nextProps.selectedConnections)

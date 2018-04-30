@@ -1,21 +1,13 @@
-// @flow
 const React = require('react')
 const { Link: RouterLink } = require('react-router-dom')
 const { Link: StyledLink } = require('@nudj/components')
-
-type Props = {
-  href: string,
-  onClick?: Object => void,
-  restProps?: Array<mixed>,
-  preventReload?: boolean
-}
 
 const handleClick = ({ preventReload, href, onClick }) => event => {
   if (preventReload && href === window.location.pathname) event.preventDefault()
   typeof onClick === 'function' && onClick(event)
 }
 
-const ButtonLink = (props: Props) => {
+const ButtonLink = props => {
   const { href, preventReload: _preventReload, ...restProps } = props
 
   return (
@@ -23,7 +15,7 @@ const ButtonLink = (props: Props) => {
       {...restProps}
       href={href}
       onClick={handleClick(props)}
-      Component={({ href, ...restSubProps }: Props) => (
+      Component={({ href, ...restSubProps }) => (
         <RouterLink to={href} {...restSubProps} />
       )}
     />
