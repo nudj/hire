@@ -3,6 +3,8 @@ const checkMobileDevice = require('../pages/check-device-wrapper')
 module.exports = {
   '/': require('../pages/dashboard'),
   '/welcome': checkMobileDevice(require('../pages/welcome')),
+  '/invite-team': checkMobileDevice(require('../pages/invite-team')),
+  '/get-started': checkMobileDevice(require('../pages/get-started')),
   '/setup-network': checkMobileDevice(require('../pages/setup-network')),
   '/setup-network/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/setup-network/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
