@@ -44,8 +44,7 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 test:
-	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
-		&& ./node_modules/.bin/flow --quiet \
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard \
 		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
 
 standardFix:
@@ -56,4 +55,4 @@ standardFix:
 		-e NPM_TOKEN=${NPM_TOKEN} \
 		-v $(CWD)/src/app:/usr/src/app \
 		$(IMAGEDEV) \
-		/bin/sh -c './node_modules/.bin/standard --fix --parser babel-eslint --plugin flowtype'
+		/bin/sh -c './node_modules/.bin/standard --fix'
