@@ -3,17 +3,15 @@ const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
 const breakpoint = '56.25rem'
 
 const styleSheet = StyleSheet.create({
-  card: {
-    height: '100%'
-  },
   list: {
     listStyleType: 'none',
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: 0,
     [`@media(min-width: ${breakpoint})`]: {
-      marginTop: `-${sizes.smallIi}`,
-      marginBottom: `-${sizes.smallIi}`,
+      display: 'flex',
+      marginLeft: `-${sizes.smallIi}`,
+      marginRight: `-${sizes.smallIi}`,
       alignItems: 'stretch'
     }
   },
@@ -22,18 +20,26 @@ const styleSheet = StyleSheet.create({
       marginTop: sizes.largeI
     },
     [`@media(min-width: ${breakpoint})`]: {
-      paddingTop: sizes.smallIi,
-      paddingBottom: sizes.smallIi,
+      flexBasis: '33.33333%',
+      paddingLeft: sizes.smallIi,
+      paddingRight: sizes.smallIi,
       ':nth-child(1) ~ *': {
         marginTop: 0
       }
     }
   },
-  listItemContainer: {
-    maxWidth: '500px',
+  card: {
+    height: '100%'
+  },
+  listItemImage: {
+    display: 'block',
+    height: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    textAlign: 'left'
+    marginTop: sizes.regular,
+    maxHeight: '10.625rem',
+    maxWidth: '10.625rem',
+    width: '100%'
   },
   listItemHeading: {
     color: colors.primary,

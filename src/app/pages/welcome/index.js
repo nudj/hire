@@ -16,84 +16,72 @@ const {
 } = require('../../components/wizard')
 const style = require('./style.css')
 
-const WelcomePage = props => (
-  <Layout {...props}>
-    <Helmet>
-      <title>Welcome</title>
-    </Helmet>
-    <Main>
-      <Section padding>
-        <Heading>
-          Start hiring with nudj
-        </Heading>
-        <Para>
-          You are a few short tasks away from hiring someone great.
-        </Para>
-      </Section>
-      <Section>
-        <ul className={css(style.list)}>
-          <li className={css(style.listItem)}>
-            <Card style={style.card}>
-              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 1</Text>
-              <img
-                className={css(style.listItemImage)}
-                src='/assets/images/unlock-network.svg'
-                alt=''
-              />
-              <Text element='div' style={style.listItemHeading} size='largeI'>
-                Unlock your network
-              </Text>
-              <Text style={style.listItemBody} element='p'>
-                Get all your contacts together to explore your entire network in one place.
-              </Text>
-            </Card>
-          </li>
-          <li className={css(style.listItem)}>
-            <Card style={style.card}>
-              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 2</Text>
-              <img
-                className={css(style.listItemImage)}
-                src='/assets/images/uncover-gems.svg'
-                alt=''
-              />
-              <Text element='div' style={style.listItemHeading} size='largeI'>
-                Uncover hidden gems
-              </Text>
-              <Text style={style.listItemBody} element='p'>
-                Find the people in your network who can connect you to the best talent.
-              </Text>
-            </Card>
-          </li>
-          <li className={css(style.listItem)}>
-            <Card style={style.card}>
-              <Text element='div' size='largeIi' style={mss.fgMidRed}>Step 3</Text>
-              <img
-                className={css(style.listItemImage)}
-                src='/assets/images/send-nudjes.svg'
-                alt=''
-              />
-              <Text element='div' style={style.listItemHeading} size='largeI'>
-                Send a nudj
-              </Text>
-              <Text style={style.listItemBody} element='p'>
-                Write and send personalised
-                messages to get the responses you need.
-              </Text>
-            </Card>
-          </li>
-        </ul>
-      </Section>
-      <Section padding>
-        <ButtonLink
-          style={wizardStyles.action}
-          href='/setup-network'
-          volume='cheer'
-        >
-          Let&#39;s do this
-        </ButtonLink>
-      </Section>
-    </Main>
-  </Layout>
-)
+const WelcomePage = props => {
+  const { hirerTypes } = props.enums
+  const { type: hirerStatus } = props.user.hirer
+
+  return (
+    <Layout {...props}>
+      <Helmet>
+        <title>Welcome</title>
+      </Helmet>
+      <Main>
+        <Section padding>
+          <Heading>
+            Welcome to nudj
+          </Heading>
+          <Para>
+            So you&apos;ve decided to give nudj a try - here&apos;s why you won&apos;t be disappointed.
+          </Para>
+        </Section>
+        <Section>
+          <Card style={style.card}>
+            <ul className={css(style.list)}>
+              <li className={css(style.listItem)}>
+                <div className={css(style.listItemContainer)}>
+                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
+                    <span className={css(mss.fgMidRed)}>1. </span> Easily find who to ask
+                  </Text>
+                  <Text style={style.listItemBody} element='p'>
+                    It can be hard to know who to ask for referrals. With nudj, however, you can quickly and easily uncover who from your network can help.
+                  </Text>
+                </div>
+              </li>
+              <li className={css(style.listItem)}>
+                <div className={css(style.listItemContainer)}>
+                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
+                    <span className={css(mss.fgMidRed)}>2. </span> Get help asking them
+                  </Text>
+                  <Text style={style.listItemBody} element='p'>
+                    We&apos;ve created simple message templates for you because we know the last thing you want to have to do is write another email.
+                  </Text>
+                </div>
+              </li>
+              <li className={css(style.listItem)}>
+                <div className={css(style.listItemContainer)}>
+                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
+                    <span className={css(mss.fgMidRed)}>3. </span> Everyone gets rewarded
+                  </Text>
+                  <Text style={style.listItemBody} element='p'>
+                    With nudj, your company is able to pay for successful referrals regardless of where they came from - meaning your friends can get rewarded too.
+                  </Text>
+                </div>
+              </li>
+            </ul>
+          </Card>
+        </Section>
+        <Section padding>
+          <ButtonLink
+            style={wizardStyles.action}
+            href={hirerStatus === hirerTypes.ADMIN ? '/invite-team' : '/get-started'}
+            volume='cheer'
+          >
+            Ok, I&apos;m ready
+          </ButtonLink>
+        </Section>
+      </Main>
+    </Layout>
+  )
+}
 
 module.exports = WelcomePage
