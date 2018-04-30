@@ -1,5 +1,3 @@
-/* global FormMethod */
-// @flow
 const React = require('react')
 
 const { Button, Text } = require('@nudj/components')
@@ -8,14 +6,7 @@ const { css } = require('@nudj/components/lib/css')
 const { emailPreferences } = require('../../lib/constants')
 const style = require('./style.css')
 
-type Props = {
-  action: string,
-  method: FormMethod,
-  onSubmit: Object => void,
-  csrfToken: string
-}
-
-const EmailAuthenticationForm = (props: Props) => {
+const EmailAuthenticationForm = props => {
   const { action, method, onSubmit, csrfToken } = props
 
   return (
