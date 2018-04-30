@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -31,7 +30,7 @@ const NETWORKS = {
   }
 }
 
-const ChooseNetworkPage = (props: Object) => (
+const ChooseNetworkPage = props => (
   <Layout {...props} title='Part 1: Unlock your network'>
     <Helmet>
       <title>Select a network</title>

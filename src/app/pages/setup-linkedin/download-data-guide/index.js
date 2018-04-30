@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -16,7 +15,7 @@ const {
 } = require('../../../components/wizard')
 const style = require('../style.css')
 
-const LinkedinDownloadGuidePage = (props: Object) => (
+const LinkedinDownloadGuidePage = props => (
   <Layout
     {...props}
     title='Part 1: Unlock your network'

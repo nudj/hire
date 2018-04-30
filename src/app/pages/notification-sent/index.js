@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
@@ -7,7 +6,7 @@ const Main = require('../../components/main')
 const Section = require('../../components/section')
 const { Heading, Para } = require('../../components/wizard')
 
-const NotificationSentPage = (props: Object) => {
+const NotificationSentPage = props => {
   const email = props.user.email
 
   return (
