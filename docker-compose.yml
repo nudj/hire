@@ -9,7 +9,6 @@ services:
       - ../hire/.zshrc:/root/.zshrc
       - ../hire/src/app:/usr/src/app
       - ../hire/src/test:/usr/src/test
-      - ../hire/src/.flowconfig:/usr/src/.flowconfig
       - ../hire/src/.npmrc:/usr/src/.npmrc
       - ../hire/src/nodemon.json:/usr/src/nodemon.json
       - ../hire/src/package.json:/usr/src/package.json
@@ -17,7 +16,6 @@ services:
       - ../hire/src/webpack.config.client.js:/usr/src/webpack.config.client.js
       - ../hire/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       - ../hire/src/yarn.lock:/usr/src/yarn.lock
-      - ../hire/src/flow-typed:/usr/src/flow-typed
       - ../framework/src:/usr/src/@nudj/framework
       - ../library/src:/usr/src/@nudj/library
       - ../components/src:/usr/src/@nudj/components
