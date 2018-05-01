@@ -72,11 +72,4 @@ const InviteTeamPage = props => {
   )
 }
 
-InviteTeamPage.defaultProps = {
-  invitePage: {
-    fieldValues: {},
-    fieldCount: 3
-  }
-}
-
 module.exports = InviteTeamPage

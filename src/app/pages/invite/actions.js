@@ -1,3 +1,4 @@
+const values = require('lodash/values')
 const actions = require('@nudj/framework/actions')
 
 const SET_FIELD_VALUE = 'INVITE_SET_FIELD_VALUE'
@@ -27,9 +28,7 @@ const resetForm = () => ({
 const submitInvitations = () => async (dispatch, getState) => {
   const state = getState()
   const { fieldValues } = state.invitePage
-  const emailAddresses = Object.keys(fieldValues).map(key => {
-    return fieldValues[key]
-  }).filter(Boolean)
+  const emailAddresses = values(fieldValues).filter(Boolean)
 
   if (!emailAddresses.length) {
     return dispatch(actions.app.showNotification({
