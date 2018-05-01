@@ -17,5 +17,6 @@ module.exports = {
   '/contacts': require('../pages/contacts'),
   '/contacts/job/:jobId': require('../pages/contacts'),
   '/applications': require('../pages/applications'),
-  '/notification-sent': require('../pages/notification-sent')
+  '/notification-sent': require('../pages/notification-sent'),
+  '/invite': require('../pages/invite')
 }
