@@ -47,9 +47,6 @@ const AddCompanyForm = props => {
 }
 
 AddCompanyForm.defaultProps = {
-  company: {},
-  values: {},
-  fieldCount: 3,
   onAddField: () => {},
   onChange: () => {},
   onSubmit: () => {}
