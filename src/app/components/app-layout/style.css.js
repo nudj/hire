@@ -46,6 +46,12 @@ const styleSheet = StyleSheet.create({
       flexGrow: 1
     }
   },
+  inviteLink: {
+    color: colors.greyDark
+  },
+  inviteLinkActive: {
+    color: colors.royalBlue
+  },
   helpContainer: {
     flexBasis: '50%',
     textAlign: 'right',

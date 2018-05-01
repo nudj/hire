@@ -79,6 +79,15 @@ const ApplicationLayout = props => {
             )}
           </div>
           <div className={css(style.helpContainer)}>
+            {showNavigation && (
+              <NavLink
+                className={css(style.helpLink, style.inviteLink)}
+                activeClassName={css(style.inviteLinkActive)}
+                to='/invite'
+              >
+                Invite
+              </NavLink>
+            )}
             <Link href='mailto:help@nudj.co' id='open-intercom' subtle style={style.helpLink}>
               Chat
             </Link>
