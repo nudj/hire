@@ -1,55 +1,58 @@
 const React = require('react')
 
-const { Input, Button, InputField } = require('@nudj/components')
+const { Input, Button, ScreenReadable } = require('@nudj/components')
 const style = require('./style.css')
 const { css } = require('@nudj/components/lib/css')
 
-const AddCompanyForm = props => {
+const AddInviteForm = props => {
   const { onChange, onAddField, values, fieldCount } = props
-
-  const fields = Array.apply(null, { length: fieldCount }).map((_, index) => {
-    const key = `email${index}`
-    return (
-      <Input
-        type='email'
-        key={key}
-        value={values[key] || ''}
-        name={key}
-        onChange={onChange}
-        placeholder='name@example.com'
-        styleSheet={{ root: style.field }}
-      />
-    )
-  })
 
   return (
     <form className={css(style.form)}>
-      <InputField
-        required
-        htmlFor='email'
-        label='Email address'
-        styleSheet={{
-          root: style.fieldLabel
-        }}
-      >
-        {fields}
-      </InputField>
-      <Button
-        subtle
-        volume='murmur'
-        onClick={onAddField}
-        style={style.addFieldButton}
-      >
-        + Add another
-      </Button>
+      <fieldset className={css(style.fieldset)}>
+        <legend className={css(style.fieldLabel)}>
+          Email addresses
+          <span className={css(style.asterisk)}>*</span>
+        </legend>
+        {
+          Array.apply(null, { length: fieldCount }).map((_, index) => {
+            const key = `email${index}`
+            return (
+              <div>
+                <ScreenReadable>
+                  <label htmlFor={key}>Email address {index + 1}</label>
+                </ScreenReadable>
+                <Input
+                  type='email'
+                  id={key}
+                  key={index}
+                  value={values[key] || ''}
+                  name={key}
+                  onChange={onChange}
+                  placeholder='name@example.com'
+                  styleSheet={{ root: style.field }}
+                />
+              </div>
+            )
+          })
+        }
+        <Button
+          subtle
+          volume='murmur'
+          onClick={onAddField}
+          style={style.addFieldButton}
+        >
+          + Add another
+        </Button>
+      </fieldset>
     </form>
   )
 }
 
-AddCompanyForm.defaultProps = {
+AddInviteForm.defaultProps = {
   onAddField: () => {},
   onChange: () => {},
   onSubmit: () => {}
 }
 
-module.exports = AddCompanyForm
+module.exports = AddInviteForm
