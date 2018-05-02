@@ -1,4 +1,6 @@
-const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, typography, sizes } = require('@nudj/components/lib/css')
+
+const { merge } = require('@nudj/library')
 
 const stylesheet = StyleSheet.create({
   addFieldButton: {
@@ -7,12 +9,17 @@ const stylesheet = StyleSheet.create({
     marginLeft: 0,
     paddingLeft: 0
   },
-  form: {
-    marginTop: sizes.regular
-  },
-  fieldLabel: {
+  fieldLabel: merge(typography.type.largeI, {
+    color: colors.primary,
     textAlign: 'left'
+  }),
+  fieldset: {
+    border: 'none'
   },
+  asterisk: merge(typography.type.smallIi, {
+    color: colors.greyDark,
+    verticalAlign: 'super'
+  }),
   field: {
     marginTop: sizes.regular
   }
