@@ -34,7 +34,7 @@ const WelcomePage = props => {
             So you&apos;ve decided to give nudj a try - here&apos;s why you won&apos;t be disappointed.
           </Para>
         </Section>
-        <Section padding width='largeI'>
+        <Section>
           <Card style={style.card}>
             <ul className={css(style.list)}>
               <li className={css(style.listItem)}>
