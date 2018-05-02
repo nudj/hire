@@ -1,4 +1,4 @@
-const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const breakpoint = '56.25rem'
 
@@ -34,16 +34,6 @@ const styleSheet = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'left'
-  },
-  listItemHeading: {
-    color: colors.primary,
-    marginTop: sizes.regular
-  },
-  listItemBody: {
-    marginTop: sizes.regular
-  },
-  button: {
-    marginTop: sizes.largeIi
   }
 })
 
