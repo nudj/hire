@@ -34,35 +34,35 @@ const WelcomePage = props => {
             So you&apos;ve decided to give nudj a try - here&apos;s why you won&apos;t be disappointed.
           </Para>
         </Section>
-        <Section>
+        <Section padding width='largeI'>
           <Card style={style.card}>
             <ul className={css(style.list)}>
               <li className={css(style.listItem)}>
                 <div className={css(style.listItemContainer)}>
-                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
-                    <span className={css(mss.fgMidRed)}>1. </span> Easily find who to ask
+                  <Text element='h2' size='largeIi' style={mss.fgPrimary}>
+                    <span className={css(mss.fgMidRed)}>1.</span> Easily find who to ask
                   </Text>
-                  <Text style={style.listItemBody} element='p'>
+                  <Text style={mss.mtReg} element='p'>
                     It can be hard to know who to ask for referrals. With nudj, however, you can quickly and easily uncover who from your network can help.
                   </Text>
                 </div>
               </li>
               <li className={css(style.listItem)}>
                 <div className={css(style.listItemContainer)}>
-                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
-                    <span className={css(mss.fgMidRed)}>2. </span> Get help asking them
+                  <Text element='h2' size='largeIi' style={mss.fgPrimary}>
+                    <span className={css(mss.fgMidRed)}>2.</span> Get help asking them
                   </Text>
-                  <Text style={style.listItemBody} element='p'>
+                  <Text style={mss.mtReg} element='p'>
                     We&apos;ve created simple message templates for you because we know the last thing you want to have to do is write another email.
                   </Text>
                 </div>
               </li>
               <li className={css(style.listItem)}>
                 <div className={css(style.listItemContainer)}>
-                  <Text element='h2' size='largeIi' style={style.listItemHeading}>
-                    <span className={css(mss.fgMidRed)}>3. </span> Everyone gets rewarded
+                  <Text element='h2' size='largeIi' style={mss.fgPrimary}>
+                    <span className={css(mss.fgMidRed)}>3.</span> Everyone gets rewarded
                   </Text>
-                  <Text style={style.listItemBody} element='p'>
+                  <Text style={mss.mtReg} element='p'>
                     With nudj, your company is able to pay for successful referrals regardless of where they came from - meaning your friends can get rewarded too.
                   </Text>
                 </div>
