@@ -6,7 +6,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/welcome', respondWithGql(fetchers.get))
+  router.getHandlers('/welcome', ensureLoggedIn, respondWithGql(fetchers.get))
 
   return router
 }
