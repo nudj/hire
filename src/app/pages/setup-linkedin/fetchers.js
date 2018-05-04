@@ -1,5 +1,6 @@
-const { Redirect } = require('@nudj/framework/errors')
 const get = require('lodash/get')
+const { Redirect } = require('@nudj/framework/errors')
+const logger = require('@nudj/framework/logger')
 
 const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
@@ -49,25 +50,31 @@ const uploadConnections = ({ body, files }) => {
   return {
     gql,
     variables,
-    respond: async data => {
-      if (process.env.USE_MOCKS !== 'true') {
-        await Promise.all([
-          sendImportEmail({
-            name: `${get(data, 'user.firstName', '')} ${get(
-              data,
-              'user.lastName',
-              ''
-            )}`,
-            company: get(data, 'user.hirer.company.name', '')
-          }),
-          intercom.logEvent({
-            event_name: 'linkedin network uploaded',
-            email: data.user.email,
-            metadata: {
-              category: 'onboarding'
-            }
-          })
-        ])
+    respond: data => {
+      try {
+        sendImportEmail({
+          name: `${get(data, 'user.firstName', '')} ${get(
+            data,
+            'user.lastName',
+            ''
+          )}`,
+          company: get(data, 'user.hirer.company.name', '')
+        })
+        intercom.logEvent({
+          event_name: 'linkedin network uploaded',
+          email: data.user.email,
+          metadata: {
+            category: 'onboarding'
+          }
+        })
+        intercom.updateUser({
+          email: data.user.email,
+          custom_attributes: {
+            connections: body.connections.length
+          }
+        })
+      } catch (error) {
+        logger.log('error', 'Intercom Error', error)
       }
 
       const message = `You just added ${body.connections.length} connections 🙌`
