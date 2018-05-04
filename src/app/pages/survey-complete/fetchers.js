@@ -1,7 +1,11 @@
 const get = require('lodash/get')
+const uniqBy = require('lodash/uniqBy')
+const flatten = require('lodash/flatten')
 const { Redirect } = require('@nudj/framework/errors')
+const logger = require('@nudj/framework/logger')
 
 const { emailPreferences } = require('../../lib/constants')
+const intercom = require('../../lib/intercom')
 const { Global } = require('../../lib/graphql')
 
 const completeSurvey = ({ session, params, res }) => {
@@ -38,6 +42,7 @@ const completeSurvey = ({ session, params, res }) => {
         }
       }
       user {
+        email
         emailPreference
         hirer {
           onboarded
@@ -72,6 +77,25 @@ const completeSurvey = ({ session, params, res }) => {
   const transformData = data => {
     const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
     if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+
+    try {
+      const favourites = flatten(data.surveyAnswers.map(answer => answer.connections))
+      intercom.logEvent({
+        event_name: 'survey completed',
+        email: data.user.email,
+        metadata: {
+          category: 'onboarding'
+        }
+      })
+      intercom.updateUser({
+        email: data.user.email,
+        custom_attributes: {
+          favourites: uniqBy(favourites, 'id').length
+        }
+      })
+    } catch (error) {
+      logger.log('error', 'Intercom Error', data.user.email, error)
+    }
 
     return data
   }
