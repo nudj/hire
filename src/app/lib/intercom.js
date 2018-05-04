@@ -5,11 +5,12 @@ const intercom = new Intercom.Client({
   token: process.env.INTERCOM_ACCESS_TOKEN
 })
 
-function getBody (response) {
-  if (response.status !== 200) {
-    throw new Error(`Intercom gone done broke: ${response.status}`)
+function getBody ({ status, statusCode, body }) {
+  const code = status || statusCode
+  if (code !== 200) {
+    throw new Error(`Intercom gone done broke: ${code}`)
   }
-  return response.body
+  return body
 }
 
 function getFirstFromResult (result) {
@@ -27,6 +28,17 @@ function createLead (data) {
   return intercom.leads
     .create(data)
     .then(getBody)
+}
+
+function updateUser (patch) {
+  logger.log('info', 'updateUser', patch)
+  return intercom.users
+    .update(patch)
+    .then(response => {
+      logger.log('info', 'User updated', patch)
+      return getBody(response)
+    })
+    .catch((error) => logger.log('error', 'Intercom', 'updateUser', patch, error))
 }
 
 function tagUser (user, tag) {
@@ -68,5 +80,6 @@ function logEvent ({ event_name, email, metadata }) {
 
 module.exports = {
   createUniqueLeadAndTag,
-  logEvent
+  logEvent,
+  updateUser
 }
