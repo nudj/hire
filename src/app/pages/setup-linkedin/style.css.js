@@ -9,11 +9,8 @@ const styleSheet = StyleSheet.create({
   list: {
     textAlign: 'left',
     maxWidth: '40rem',
-    marginLeft: 'auto',
     marginRight: 'auto',
-    paddingLeft: 0,
-    listStylePosition: 'inside',
-    marginTop: sizes.largeIi,
+    marginTop: 0,
     marginBottom: 0
   },
   image: {

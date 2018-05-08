@@ -36,7 +36,7 @@ const styleSheet = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     maxWidth: '38rem',
-    marginTop: sizes.largeIi,
+    marginTop: sizes.regular,
     ':nth-of-type(n + 2)': {
       marginTop: sizes.regular
     }
