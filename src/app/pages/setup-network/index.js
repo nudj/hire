@@ -41,7 +41,7 @@ const ChooseNetworkPage = props => (
           Select a network
         </Heading>
         <Para>
-          Pick a network and we&#39;ll help you upload your contacts.
+          Pick a network and we&apos;ll help you sync your contacts with nudj.
         </Para>
       </Section>
       <Section padding>
