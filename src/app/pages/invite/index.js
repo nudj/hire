@@ -59,6 +59,8 @@ const InviteTeamPage = props => {
               onSubmit={onSubmit(dispatch)}
             />
           </Card>
+        </Section>
+        <Section padding>
           <Button
             onClick={onSubmit(dispatch)}
             volume='cheer'

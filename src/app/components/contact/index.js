@@ -7,6 +7,10 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const defaultStyleSheet = require('./style.css')
 
+const stopPropagation = (event) => {
+  event.stopPropagation()
+}
+
 const renderJobInfo = (jobTitle, company) => {
   if (jobTitle && company) {
     return `${jobTitle}, ${company}`
@@ -60,6 +64,7 @@ const Contact = props => {
             target='_blank'
             volume='cheer'
             style={style.link}
+            onClick={stopPropagation}
             inline
             subtle
             external
