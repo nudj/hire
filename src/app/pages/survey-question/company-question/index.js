@@ -43,7 +43,7 @@ const CompanyQuestionPage = (props) => {
   return (
     <Layout
       {...props}
-      title='Part 2: Uncover hidden gems'
+      title='Step 2: Uncover hidden gems'
       notification={notification}
     >
       <Helmet>
@@ -52,7 +52,7 @@ const CompanyQuestionPage = (props) => {
       <Main>
         <Section padding>
           <Text element='div' style={style.stepCounter}>
-            Step {questionNumber} of {questionCount}
+            Question {questionNumber} of {questionCount}
           </Text>
           <Heading>
             {question.title}
