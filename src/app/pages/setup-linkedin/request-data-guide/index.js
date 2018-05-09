@@ -57,7 +57,7 @@ class LinkedinRequestGuidePage extends React.Component {
     ]
 
     return (
-      <Layout {...this.props} title='Part 1: Unlock your network'>
+      <Layout {...this.props} title='Step 1: Unlock your network'>
         <Helmet>
           <title>Syncing your LinkedIn connections</title>
         </Helmet>

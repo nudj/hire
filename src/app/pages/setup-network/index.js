@@ -31,7 +31,7 @@ const NETWORKS = {
 }
 
 const ChooseNetworkPage = props => (
-  <Layout {...props} title='Part 1: Unlock your network'>
+  <Layout {...props} title='Step 1: Unlock your network'>
     <Helmet>
       <title>Select a network</title>
     </Helmet>

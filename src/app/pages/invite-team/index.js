@@ -59,6 +59,8 @@ const InviteTeamPage = props => {
               onSubmit={onSubmit(dispatch)}
             />
           </Card>
+        </Section>
+        <Section padding>
           <Button
             onClick={onSubmit(dispatch)}
             volume='cheer'
@@ -66,16 +68,15 @@ const InviteTeamPage = props => {
           >
             Send invites
           </Button>
-        </Section>
-        <Section padding>
-          <Link
-            subtle
-            inline
-            volume='cheer'
-            href='/get-started'
-          >
-            I&apos;ll do this later
-          </Link>
+          <Para>
+            <Link
+              subtle
+              volume='cheer'
+              href='/get-started'
+            >
+              I&apos;ll do this later
+            </Link>
+          </Para>
         </Section>
       </Main>
     </Layout>

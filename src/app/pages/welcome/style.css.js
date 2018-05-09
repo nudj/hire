@@ -9,7 +9,7 @@ const styleSheet = StyleSheet.create({
     height: '100%',
     margin: '0 auto',
     [`@media(min-width: ${breakpoint})`]: {
-      maxWidth: 'initial'
+      maxWidth: '56rem'
     }
   },
   list: {
@@ -24,11 +24,15 @@ const styleSheet = StyleSheet.create({
     }
   },
   listItem: {
+    marginTop: 0,
+    ':nth-child(1) ~ *': {
+      marginTop: sizes.regular
+    },
     ':nth-child(1) *': {
       ':after': {
         backgroundImage: 'none',
         [`@media(min-width: ${breakpoint})`]: {
-          width: '45rem',
+          width: '30rem',
           height: '6.5rem',
           left: '100%',
           backgroundPosition: 'left',
@@ -40,7 +44,7 @@ const styleSheet = StyleSheet.create({
       ':after': {
         backgroundImage: 'none',
         [`@media(min-width: ${breakpoint})`]: {
-          width: '45rem',
+          width: '25rem',
           height: '6.5rem',
           right: 'calc(100% + 1.25rem)',
           backgroundPosition: 'right',
@@ -52,20 +56,13 @@ const styleSheet = StyleSheet.create({
       ':after': {
         backgroundImage: 'none',
         [`@media(min-width: ${breakpoint})`]: {
-          width: '20rem',
+          width: '17rem',
           height: '24rem',
           left: 'calc(100% - 8.75rem)',
           backgroundPosition: 'left',
           top: 'calc(50% - 6.25rem)',
           backgroundImage: 'url(/assets/images/three-fingers.svg)'
         }
-      }
-    },
-    [`@media(min-width: ${breakpoint})`]: {
-      paddingTop: sizes.smallIi,
-      paddingBottom: sizes.smallIi,
-      ':nth-child(1) ~ *': {
-        marginTop: 0
       }
     }
   },
