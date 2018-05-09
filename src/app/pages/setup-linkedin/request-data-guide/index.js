@@ -22,13 +22,9 @@ class LinkedinRequestGuidePage extends React.Component {
   }
 
   openLinkedin = () => {
-    if (!this.linkedin || this.linkedin.closed) {
-      this.linkedin = window.open('https://www.linkedin.com/psettings/member-data?trk=eml-email_security_dataexport_fast_only_01-hero-1-export', 'nudjLinkedIn')
-      window.linkedin = this.linkedin
-      this.incrementStage()
-    } else {
-      this.linkedin = window.open('https://www.linkedin.com/psettings/member-data?trk=eml-email_security_dataexport_fast_only_01-hero-1-export', 'nudjLinkedIn')
-    }
+    this.linkedin = window.open('https://www.linkedin.com/psettings/member-data?trk=eml-email_security_dataexport_fast_only_01-hero-1-export', 'nudjLinkedIn')
+    window.linkedin = this.linkedin
+    this.incrementStage()
   }
 
   incrementStage = () => {
@@ -47,8 +43,14 @@ class LinkedinRequestGuidePage extends React.Component {
       >
         Open LinkedIn in a new tab
       </Button>,
-      <ButtonLink
+      <Button
         volume='cheer'
+        onClick={this.openLinkedin}
+      >
+        Refresh LinkedIn
+      </Button>,
+      <ButtonLink
+        volume='shout'
         href='/setup-network/linkedin/upload'
         style={wizardStyles.action}
       >
@@ -98,9 +100,6 @@ class LinkedinRequestGuidePage extends React.Component {
           </Section>
           <Section padding>
             {stages[stage]}
-            <Para>
-              {stage === 1 && <Button subtle volume='cheer' onClick={this.openLinkedin}>Refresh LinkedIn</Button>}
-            </Para>
           </Section>
         </Main>
       </Layout>
