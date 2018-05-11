@@ -1,4 +1,5 @@
 const get = require('lodash/get')
+const find = require('lodash/find')
 const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
 
@@ -30,6 +31,7 @@ const uploadConnections = ({ body, files }) => {
         email
         importedConnections: importLinkedinConnections (connections: $connections) {
           created
+          collection
         }
         hirer {
           company {
@@ -52,13 +54,19 @@ const uploadConnections = ({ body, files }) => {
     variables,
     respond: data => {
       try {
+        const companiesUploaded = find(data.user.importedConnections, {
+          collection: 'companies'
+        })
         sendImportEmail({
           name: `${get(data, 'user.firstName', '')} ${get(
             data,
             'user.lastName',
             ''
           )}`,
-          company: get(data, 'user.hirer.company.name', '')
+          company: get(data, 'user.hirer.company.name', ''),
+          data: {
+            newCompanyCount: companiesUploaded && companiesUploaded.created
+          }
         })
         intercom.logEvent({
           event_name: 'linkedin network uploaded',
@@ -87,11 +95,15 @@ const uploadConnections = ({ body, files }) => {
   }
 }
 
-function sendImportEmail ({ name, company, location }) {
+function sendImportEmail ({ name, company, location, data }) {
   const subject = `${name} @ ${company} has uploaded their connections`
-  const html = 'Go check them out!'
   const from = 'hello@nudj.co'
   const to = process.env.NUDJ_INTERNAL_NOTIFICATION_EMAIL
+
+  let html = 'Go check them out!'
+  if (data.newCompanyCount) {
+    html = `${html} ${data.newCompanyCount} new companies are ready to be enriched!`
+  }
 
   return mailer.send({ from, to, subject, html })
 }
