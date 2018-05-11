@@ -1,79 +1,127 @@
 const React = require('react')
+const PropTypes = require('prop-types')
+let memoize = require('memoize-one')
+memoize = memoize.default || memoize
 
-const { Link, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Text } = require('@nudj/components')
+const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { StylePropType } = require('@nudj/components/lib/helpers/prop-types')
 
-const ButtonLink = require('../button-link')
-const style = require('./style.css')
+const defaultStyleSheet = require('./style.css')
 
-const Job = props => {
-  const {
-    title,
-    location,
-    viewCount,
-    referralCount,
-    applicationCount,
-    jobHref,
-    nudjHref
-  } = props
+class Job extends React.Component {
+  static defaultProps = {
+    viewCount: 0,
+    referralCount: 0,
+    applicationCount: 0,
+    renderStats: true
+  }
 
-  return (
-    <div className={css(style.root)}>
-      <div className={css(style.header)}>
-        <Text nonsensitive element='div' size='largeI' style={style.title}>
-          {title}
-        </Text>
-        <Text nonsensitive element='div' size='smallI' style={style.location}>
-          {location}
-        </Text>
-      </div>
-      <dl className={css(style.statisticsList)}>
-        <div className={css(style.statisticItem)}>
-          <Text nonsensitive size='smallI' element='dt' style={style.statisticValue}>
-            {viewCount}
-          </Text>
-          <Text nonsensitive element='dd' style={style.statisticLabel}>
-            Page views
-          </Text>
-        </div>
-        <div className={css(style.statisticItem)}>
-          <Text nonsensitive size='smallI' element='dt' style={style.statisticValue}>
-            {referralCount}
-          </Text>
-          <Text element='dd' style={style.statisticLabel}>
-            Referrals
-          </Text>
-        </div>
-        <div className={css(style.statisticItem)}>
-          <Text nonsensitive size='smallI' element='dt' style={style.statisticValue}>
-            {applicationCount}
-          </Text>
-          <Text nonsensitive element='dd' style={style.statisticLabel}>
-            Applications
-          </Text>
-        </div>
-      </dl>
-      <div className={css(style.actions)}>
-        <ButtonLink nonsensitive href={nudjHref} style={style.action} volume='cheer'>
-          nudj job
-        </ButtonLink>
-        <Link
-          nonsensitive
-          href={jobHref}
-          style={style.action}
-          subtle
-        >
-          View job page
-        </Link>
-      </div>
-    </div>
+  static propTypes = {
+    title: PropTypes.string,
+    location: PropTypes.string,
+    renderStats: PropTypes.bool,
+    viewCount: PropTypes.number,
+    referralCount: PropTypes.number,
+    applicationCount: PropTypes.number,
+    children: PropTypes.node,
+    styleSheet: StylePropType
+  }
+
+  getStyle = memoize(
+    (defaultStyleSheet, styleSheet) => mergeStyleSheets(defaultStyleSheet, styleSheet)
   )
-}
 
-Job.defaultProps = {
-  viewCount: 0,
-  referralCount: 0,
-  applicationCount: 0
+  render () {
+    const {
+      title,
+      location,
+      viewCount,
+      referralCount,
+      applicationCount,
+      renderStats,
+      children,
+      styleSheet
+    } = this.props
+
+    const style = this.getStyle(defaultStyleSheet, styleSheet)
+
+    return (
+      <div className={css(style.root)}>
+        <div className={css(style.body)}>
+          <div className={css(style.details)}>
+            <Text element='div' size='largeI' style={style.title} nonsensitive>
+              {title}
+            </Text>
+            {location && (
+              <Text element='span' size='smallI' style={style.location} nonsensitive>
+                {location}
+              </Text>
+            )}
+          </div>
+          {renderStats && (
+            <dl className={css(style.statisticsList)}>
+              <div className={css(style.statisticItem)}>
+                <Text
+                  size='smallI'
+                  element='dt'
+                  style={style.statisticValue}
+                  nonsensitive
+                >
+                  {viewCount}
+                </Text>
+                <Text
+                  size='smallI'
+                  element='dd'
+                  style={style.statisticLabel}
+                  nonsensitive
+                >
+                  Page views
+                </Text>
+              </div>
+              <div className={css(style.statisticItem)}>
+                <Text
+                  size='smallI'
+                  element='dt'
+                  style={style.statisticValue}
+                  nonsensitive
+                >
+                  {referralCount}
+                </Text>
+                <Text
+                  size='smallI'
+                  element='dd'
+                  style={style.statisticLabel}
+                  nonsensitive
+                >
+                  Referrals
+                </Text>
+              </div>
+              <div className={css(style.statisticItem)}>
+                <Text
+                  size='smallI'
+                  element='dt'
+                  style={style.statisticValue}
+                  nonsensitive
+                >
+                  {applicationCount}
+                </Text>
+                <Text
+                  size='smallI'
+                  element='dd'
+                  style={style.statisticLabel}
+                  nonsensitive
+                >
+                  Applications
+                </Text>
+              </div>
+            </dl>
+          )}
+        </div>
+        {children}
+      </div>
+    )
+  }
 }
 
 module.exports = Job
