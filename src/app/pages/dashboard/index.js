@@ -11,7 +11,7 @@ const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
-const JobPerformance = require('../../components/job-performance')
+const Job = require('../../components/job')
 const style = require('./style.css')
 
 const getJobLink = (web, company, job, referralId) => {
@@ -152,7 +152,7 @@ const DashboardPage = (props) => {
         <Section padding>
           { jobs.map(job => (
             <Card key={job.id} style={style.jobCard}>
-              <JobPerformance
+              <Job
                 title={job.title}
                 location={job.location}
                 viewCount={job.viewCount}

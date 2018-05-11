@@ -6,7 +6,7 @@ const { css } = require('@nudj/components/lib/css')
 const ButtonLink = require('../button-link')
 const style = require('./style.css')
 
-const JobPerformance = props => {
+const Job = props => {
   const {
     title,
     location,
@@ -70,10 +70,10 @@ const JobPerformance = props => {
   )
 }
 
-JobPerformance.defaultProps = {
+Job.defaultProps = {
   viewCount: 0,
   referralCount: 0,
   applicationCount: 0
 }
 
-module.exports = JobPerformance
+module.exports = Job
