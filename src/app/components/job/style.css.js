@@ -7,102 +7,60 @@ const {
 
 const styleSheet = StyleSheet.create({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
     textAlign: 'left',
-    '@media(min-width: 62.5rem)': {
-      flexDirection: 'row',
-      alignItems: 'center'
-    }
-  },
-  header: {
-    '@media(min-width: 38.75rem)': {
-      textAlign: 'center'
-    },
-    '@media(min-width: 62.5rem)': {
-      width: '33.333%',
-      maxWidth: '13.125rem',
-      textAlign: 'left'
-    }
+    position: 'relative',
+    paddingTop: sizes.regular,
+    paddingRight: sizes.regular,
+    paddingBottom: sizes.regular,
+    paddingLeft: sizes.regular,
+    overflow: 'hidden'
   },
   title: {
-    color: colors.greyDarker
+    color: colors.primary
   },
   location: {
-    color: colors.greyDarker
+    display: 'inline-block',
+    fontWeight: typography.fontWeight.bold,
+    color: colors.midRed,
+    marginRight: sizes.regular
   },
   statisticsList: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 0,
+    marginTop: sizes.regular,
     marginBottom: 0,
     marginLeft: `-${sizes.smallIi}`,
     marginRight: `-${sizes.smallIi}`,
     textAlign: 'left',
-    '@media(min-width: 38.75rem)': {
-      textAlign: 'center'
-    },
-    '@media(min-width: 62.5rem)': {
-      flexGrow: 1,
-      marginLeft: sizes.smallIi,
-      marginRight: sizes.smallIi,
-      textAlign: 'left'
-    }
+    maxWidth: '21.25rem'
   },
   statisticItem: {
     display: 'flex',
     flexDirection: 'column',
-    flexBasis: '33.33333%',
     paddingLeft: sizes.smallIi,
     paddingRight: sizes.smallIi,
-    marginTop: sizes.largeIi,
-    flexGrow: 1,
-    '@media(min-width: 62.5rem)': {
-      marginTop: 0
+    flexBasis: '100%',
+    ':nth-child(1) ~ *': {
+      marginTop: sizes.smallIi
+    },
+    '@media(min-width: 23.75rem)': {
+      flexBasis: 'auto',
+      ':nth-child(1) ~ *': {
+        marginTop: 0
+      }
     }
   },
   statisticLabel: {
     order: 1,
-    color: colors.primary,
-    fontWeight: typography.fontWeight.bold,
+    color: colors.text,
     marginLeft: 0
   },
   statisticValue: {
     order: 2,
+    color: colors.text,
     fontWeight: typography.fontWeight.bold,
-    marginTop: sizes.smallIi
-  },
-  actions: {
-    marginTop: sizes.largeIi,
-    display: 'flex',
-    flexDirection: 'column',
-    '@media(min-width: 38.75rem)': {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    '@media(min-width: 62.5rem)': {
-      flexDirection: 'row-reverse',
-      marginTop: 0
-    }
-  },
-  action: {
-    width: '100%',
-    maxWidth: '12.5rem',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    ':nth-child(n + 2)': {
-      marginTop: sizes.regular
-    },
-    '@media(min-width: 38.75rem)': {
-      width: 'auto',
-      marginLeft: 0,
-      marginRight: 0,
-      ':nth-child(n + 2)': {
-        marginTop: 0
-      }
-    }
+    marginTop: sizes.smallIii
   }
 })
 

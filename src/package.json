@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@nudj/components": "2.9.1",
+    "@nudj/components": "2.10.0",
     "@nudj/framework": "17.0.0",
     "@nudj/library": "4.1.0",
     "babel-polyfill": "^6.26.0",
@@ -50,6 +50,7 @@
     "linkifyjs": "^2.1.5",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.9.1",
+    "memoize-one": "^3.1.1",
     "node-email-reply-parser": "^0.1.0",
     "papaparse": "^4.3.5",
     "passport": "^0.3.2",
@@ -63,6 +64,7 @@
     "react-helmet": "^5.0.3",
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
+    "react-router-hash-link": "^1.2.0",
     "react-textarea-autosize": "^5.1.0",
     "react-virtualized": "^9.18.5",
     "redux": "^3.6.0",
