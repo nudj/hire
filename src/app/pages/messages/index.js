@@ -63,6 +63,7 @@ const MessagesPage = props => {
               </Card>
               <div className={css(mss.center, mss.plReg, mss.prReg)}>
                 <ButtonLink
+                  fsShow
                   href='/contacts'
                   style={mss.mtLgI}
                   name='emailProvider'
@@ -75,14 +76,15 @@ const MessagesPage = props => {
             </Section>
           ) : (
             <Section width='largeI' padding>
-              <Heading level={1} style={mss.fgPrimary}>
+              <Heading fsShow level={1} style={mss.fgPrimary}>
                 You haven&apos;t sent any messages
               </Heading>
-              <Para>
+              <Para fsShow>
                 To get candidates you need to nudj someone. After all, those jobs aren&apos;t going to fill themselves.
               </Para>
               <div className={css(mss.center)}>
                 <ButtonLink
+                  fsShow
                   href='/contacts'
                   style={mss.mtLgI}
                   name='emailProvider'
@@ -97,14 +99,14 @@ const MessagesPage = props => {
         : (
           <Section padding>
             <form method='post' action='/sync-google'>
-              <Heading level={1} style={mss.fgPrimary}>
+              <Heading fsShow level={1} style={mss.fgPrimary}>
                 Keeping track of your messages
               </Heading>
-              <Para>
+              <Para fsShow>
                 If you&apos;ve sent messages using something other than Gmail, we can’t
                 display them.
               </Para>
-              <Para>
+              <Para fsShow>
                 We recommend syncing with Gmail, which will allow you to track
                 all your messages going forward. If however, you&apos;d like to use a
                 different email provider then let us know.
@@ -112,6 +114,7 @@ const MessagesPage = props => {
               <input name='_csrf' value={csrfToken} type='hidden' />
               <div className={css(mss.center)}>
                 <Button
+                  fsShow
                   style={mss.mtLgI}
                   name='emailProvider'
                   type='submit'

@@ -71,10 +71,10 @@ const ViewRecommendationsPage = props => {
       {connections.length > 0 ? (
         <Main>
           <Section padding>
-            <Heading>
+            <Heading fsShow>
               Send your first nudj
             </Heading>
-            <Para>
+            <Para fsShow>
               Choose a person who you want to get referrals from or encourage to apply for a job.
             </Para>
           </Section>
@@ -113,10 +113,10 @@ const ViewRecommendationsPage = props => {
       ) : (
         <Main>
           <Section padding>
-            <Heading>
+            <Heading fsShow>
               You haven&#39;t found anyone worth nudj&#39;ing within your network
             </Heading>
-            <Para>
+            <Para fsShow>
               We suggest taking the survey again, only this time try to identify
               people who could give you good recommendations, not neccessarily
               those you&#39;d hire.
@@ -124,6 +124,7 @@ const ViewRecommendationsPage = props => {
           </Section>
           <Section padding>
             <ButtonLink
+              fsShow
               style={wizardStyles.action}
               href={`/surveys/${get(user, 'hirer.company.survey.slug', '')}`}
               volume='cheer'

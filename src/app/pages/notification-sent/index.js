@@ -16,7 +16,7 @@ const NotificationSentPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading>
+          <Heading fsShow>
             Check your inbox!
           </Heading>
           <Para>
