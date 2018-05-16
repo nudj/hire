@@ -22,10 +22,10 @@ const EmailAuthenticationForm = props => {
           src='/assets/images/New_Logo_Gmail.svg'
           alt=''
         />
-        <Text element='div' size='largeI' style={style.heading}>
+        <Text fsShow element='div' size='largeI' style={style.heading}>
           Send your messages using Gmail
         </Text>
-        <Text element='p' style={style.body}>
+        <Text fsShow element='p' style={style.body}>
           Sync with your Gmail account to send all your messages directly from
           your personal email address instantly.
         </Text>
@@ -33,6 +33,7 @@ const EmailAuthenticationForm = props => {
       </div>
       <div className={css(style.buttonGroup)}>
         <Button
+          fsShow
           style={style.button}
           name='emailProvider'
           type='submit'
@@ -41,6 +42,7 @@ const EmailAuthenticationForm = props => {
           No, thanks
         </Button>
         <Button
+          fsShow
           style={style.button}
           name='emailProvider'
           type='submit'

@@ -88,7 +88,7 @@ const ApplicationLayout = props => {
                 Invite
               </NavLink>
             )}
-            <Link href='mailto:help@nudj.co' id='open-intercom' subtle style={style.helpLink}>
+            <Link fsShow href='mailto:help@nudj.co' id='open-intercom' subtle style={style.helpLink}>
               Chat
             </Link>
           </div>
