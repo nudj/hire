@@ -65,7 +65,7 @@ const Basket = (props) => {
       leftChildren={
         basket.length > 0 && (
           <div className={css(style.basketContainer)}>
-            <Text fsShow>Selected: </Text>
+            <Text nonsensitive>Selected: </Text>
             <span className={css(style.fullBasket)}>
               {renderFullBasketItems(basket, maxItems)}
             </span>
@@ -77,7 +77,7 @@ const Basket = (props) => {
       }
       rightChildren={
         <ButtonLink
-          fsShow
+          nonsensitive
           volume={getButtonColor(basket.length)}
           href={nextHref}
           onClick={nextClick}

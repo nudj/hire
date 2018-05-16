@@ -57,14 +57,14 @@ const checkMobileDevice = Component =>
           </Helmet>
           <Main>
             <Section padding>
-              <Heading fsShow>
+              <Heading nonsensitive>
                 You need to be at a computer to setup your account
               </Heading>
-              <Para fsShow>
+              <Para nonsensitive>
                 Because you need to download large files and upload them, you
                 need to use a desktop or laptop computer to set up your account.
               </Para>
-              <Para fsShow>
+              <Para nonsensitive>
                 We can email you a link so you can pick this up as soon as
                 you’re back at a computer.
               </Para>
@@ -72,7 +72,7 @@ const checkMobileDevice = Component =>
             <Section padding>
               <form action='/continue-onboarding'>
                 <Button
-                  fsShow
+                  nonsensitive
                   type='submit'
                   volume='cheer'
                   style={wizardStyles.action}
@@ -81,7 +81,7 @@ const checkMobileDevice = Component =>
                 </Button>
               </form>
               <Button
-                fsShow
+                nonsensitive
                 subtle
                 onClick={this.dismissOverlay}
                 style={[wizardStyles.action, mss.pl0, mss.pr0]}

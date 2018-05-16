@@ -28,10 +28,10 @@ const NewConversationPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading fsShow level={1} style={mss.fgPrimary}>
+          <Heading nonsensitive level={1} style={mss.fgPrimary}>
             Choose a job
           </Heading>
-          <Para fsShow>
+          <Para nonsensitive>
             Select the job that {recipient} is most
             likely to apply for or know people who are worth referring.
           </Para>
@@ -48,7 +48,7 @@ const NewConversationPage = props => {
         </Section>
         <Section padding style={mss.center}>
           <ButtonLink
-            fsShow
+            nonsensitive
             href={`${props.match.url}/${selectedJobId}`}
             volume='cheer'
             disabled={!selectedJobId}

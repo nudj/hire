@@ -38,21 +38,21 @@ class LinkedinRequestGuidePage extends React.Component {
 
     const stages = [
       <Button
-        fsShow
+        nonsensitive
         onClick={this.openLinkedin}
         style={wizardStyles.action}
       >
         Open LinkedIn in a new tab
       </Button>,
       <Button
-        fsShow
+        nonsensitive
         volume='cheer'
         onClick={this.openLinkedin}
       >
         Refresh LinkedIn
       </Button>,
       <ButtonLink
-        fsShow
+        nonsensitive
         volume='shout'
         href='/setup-network/linkedin/upload'
         style={wizardStyles.action}
@@ -68,10 +68,10 @@ class LinkedinRequestGuidePage extends React.Component {
         </Helmet>
         <Main>
           <Section padding>
-            <Heading fsShow>
+            <Heading nonsensitive>
               Syncing your LinkedIn connections
             </Heading>
-            <Para fsShow>
+            <Para nonsensitive>
               To sync your LinkedIn connections withn nudj you need to export them.
               Read the instructions below and then hit the button to go to LinkedIn.
             </Para>
@@ -79,23 +79,23 @@ class LinkedinRequestGuidePage extends React.Component {
           <Section padding width='largeI'>
             <Card>
               <ol className={css(style.list)}>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   Login to LinkedIn
                 </Text>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   Click <strong className={css(mss.fgMidRed, mss.bold)}>Pick &amp; Choose</strong>
                 </Text>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   Tick <strong className={css(mss.fgMidRed, mss.bold)}>Connections</strong>
                 </Text>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   Click <strong className={css(mss.fgMidRed, mss.bold)}>Request archive</strong>
                 </Text>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   You&apos;ll now need to wait for LinkedIn to prepare a download.
                   <strong className={css(mss.bold)}>Wait a minute, then give the other window a refresh.</strong>
                 </Text>
-                <Text fsShow element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
+                <Text nonsensitive element='li' size='largeIi' style={[mss.light, mss.mtSmIi]}>
                   Finally, click <strong className={css(mss.fgMidRed, mss.bold)}>Download archive</strong>
                 </Text>
               </ol>

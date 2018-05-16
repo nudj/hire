@@ -37,27 +37,27 @@ const ChooseNetworkPage = props => (
     </Helmet>
     <Main>
       <Section padding>
-        <Heading fsShow>
+        <Heading nonsensitive>
           Select a network
         </Heading>
-        <Para fsShow>
+        <Para nonsensitive>
           Pick a network and we&apos;ll help you sync your contacts with nudj.
         </Para>
       </Section>
       <Section padding>
         <ButtonLink
-          fsShow
+          nonsensitive
           style={wizardStyles.action}
           href={NETWORKS.linkedin.url}
           volume='cheer'
         >
           {NETWORKS.linkedin.label}
         </ButtonLink>
-        <ButtonLink fsShow style={wizardStyles.action} href={NETWORKS.facebook.url} disabled>
-          {NETWORKS.facebook.label} <Text fsShow size='smallI'>- coming soon</Text>
+        <ButtonLink nonsensitive style={wizardStyles.action} href={NETWORKS.facebook.url} disabled>
+          {NETWORKS.facebook.label} <Text nonsensitive size='smallI'>- coming soon</Text>
         </ButtonLink>
-        <ButtonLink fsShow style={wizardStyles.action} href={NETWORKS.google.url} disabled>
-          {NETWORKS.google.label} <Text fsShow size='smallI'>- coming soon</Text>
+        <ButtonLink nonsensitive style={wizardStyles.action} href={NETWORKS.google.url} disabled>
+          {NETWORKS.google.label} <Text nonsensitive size='smallI'>- coming soon</Text>
         </ButtonLink>
       </Section>
     </Main>

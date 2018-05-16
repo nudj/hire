@@ -12,7 +12,7 @@ const MessagePreview = ({
   unread,
   href
 }) => (
-  <Link fsShow className={css(style.root)} to={href}>
+  <Link nonsensitive className={css(style.root)} to={href}>
     <div className={css(style.centerContainer)}>
       <Text style={[style.recipient, unread && style.unreadText]} element='div' size='largeI'>
         {recipient}

@@ -77,7 +77,7 @@ const DashboardPage = (props) => {
         <Section padding>
           <div className={css(style.durationButtonGroup)}>
             <ButtonLink
-              fsShow
+              nonsensitive
               style={[
                 style.durationButton,
                 selectedPeriod === 'week' && style.durationButtonActive
@@ -89,7 +89,7 @@ const DashboardPage = (props) => {
               This week
             </ButtonLink>
             <ButtonLink
-              fsShow
+              nonsensitive
               style={[
                 style.durationButton,
                 selectedPeriod === 'month' && style.durationButtonActive
@@ -101,7 +101,7 @@ const DashboardPage = (props) => {
               This month
             </ButtonLink>
             <ButtonLink
-              fsShow
+              nonsensitive
               style={[
                 style.durationButton,
                 !selectedPeriod && style.durationButtonActive
@@ -117,7 +117,7 @@ const DashboardPage = (props) => {
         <Section style={style.statisticsList} padding>
           <Card style={style.statisticItem}>
             <Statistic
-              fsShow
+              nonsensitive
               styleSheet={{ root: mss.fgPrimary }}
               value={totalViewCount}
               label='Page views'
@@ -128,7 +128,7 @@ const DashboardPage = (props) => {
           </Card>
           <Card style={style.statisticItem}>
             <Statistic
-              fsShow
+              nonsensitive
               styleSheet={{ root: mss.fgPrimary }}
               value={totalReferralCount}
               label='Referrals'
@@ -139,7 +139,7 @@ const DashboardPage = (props) => {
           </Card>
           <Card style={style.statisticItem}>
             <Statistic
-              fsShow
+              nonsensitive
               styleSheet={{ root: mss.fgPrimary }}
               value={totalApplicationCount}
               label='Applications'

@@ -23,10 +23,10 @@ const GetStartedPage = (props) => (
     </Helmet>
     <Main>
       <Section padding>
-        <Heading fsShow>
+        <Heading nonsensitive>
           Start hiring with nudj
         </Heading>
-        <Para fsShow>
+        <Para nonsensitive>
           You are a few short tasks away from hiring someone great.
         </Para>
       </Section>
@@ -34,48 +34,48 @@ const GetStartedPage = (props) => (
         <ul className={css(style.list)}>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text fsShow element='div' size='largeIi' style={mss.fgMidRed}>Step 1</Text>
+              <Text nonsensitive element='div' size='largeIi' style={mss.fgMidRed}>Step 1</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/unlock-network.svg'
                 alt=''
               />
-              <Text fsShow element='div' style={style.listItemHeading} size='largeI'>
+              <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
                 Unlock your network
               </Text>
-              <Text fsShow style={style.listItemBody} element='p'>
+              <Text nonsensitive style={style.listItemBody} element='p'>
                 Get all your contacts together to explore your entire network in one place.
               </Text>
             </Card>
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text fsShow element='div' size='largeIi' style={mss.fgMidRed}>Step 2</Text>
+              <Text nonsensitive element='div' size='largeIi' style={mss.fgMidRed}>Step 2</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/uncover-gems.svg'
                 alt=''
               />
-              <Text fsShow element='div' style={style.listItemHeading} size='largeI'>
+              <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
                 Uncover hidden gems
               </Text>
-              <Text fsShow style={style.listItemBody} element='p'>
+              <Text nonsensitive style={style.listItemBody} element='p'>
                 Find the people in your network who can connect you to the best talent.
               </Text>
             </Card>
           </li>
           <li className={css(style.listItem)}>
             <Card style={style.card}>
-              <Text fsShow element='div' size='largeIi' style={mss.fgMidRed}>Step 3</Text>
+              <Text nonsensitive element='div' size='largeIi' style={mss.fgMidRed}>Step 3</Text>
               <img
                 className={css(style.listItemImage)}
                 src='/assets/images/send-nudjes.svg'
                 alt=''
               />
-              <Text fsShow element='div' style={style.listItemHeading} size='largeI'>
+              <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
                 Send a nudj
               </Text>
-              <Text fsShow style={style.listItemBody} element='p'>
+              <Text nonsensitive style={style.listItemBody} element='p'>
                 Write and send personalised
                 messages to get the responses you need.
               </Text>
@@ -85,7 +85,7 @@ const GetStartedPage = (props) => (
       </Section>
       <Section padding>
         <ButtonLink
-          fsShow
+          nonsensitive
           style={wizardStyles.action}
           href='/setup-network'
           volume='cheer'
