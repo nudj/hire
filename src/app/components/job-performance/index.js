@@ -20,24 +20,24 @@ const JobPerformance = props => {
   return (
     <div className={css(style.root)}>
       <div className={css(style.header)}>
-        <Text element='div' size='largeI' style={style.title}>
+        <Text fsShow element='div' size='largeI' style={style.title}>
           {title}
         </Text>
-        <Text element='div' size='smallI' style={style.location}>
+        <Text fsShow element='div' size='smallI' style={style.location}>
           {location}
         </Text>
       </div>
       <dl className={css(style.statisticsList)}>
         <div className={css(style.statisticItem)}>
-          <Text size='smallI' element='dt' style={style.statisticValue}>
+          <Text fsShow size='smallI' element='dt' style={style.statisticValue}>
             {viewCount}
           </Text>
-          <Text element='dd' style={style.statisticLabel}>
+          <Text fsShow element='dd' style={style.statisticLabel}>
             Page views
           </Text>
         </div>
         <div className={css(style.statisticItem)}>
-          <Text size='smallI' element='dt' style={style.statisticValue}>
+          <Text fsShow size='smallI' element='dt' style={style.statisticValue}>
             {referralCount}
           </Text>
           <Text element='dd' style={style.statisticLabel}>
@@ -45,19 +45,20 @@ const JobPerformance = props => {
           </Text>
         </div>
         <div className={css(style.statisticItem)}>
-          <Text size='smallI' element='dt' style={style.statisticValue}>
+          <Text fsShow size='smallI' element='dt' style={style.statisticValue}>
             {applicationCount}
           </Text>
-          <Text element='dd' style={style.statisticLabel}>
+          <Text fsShow element='dd' style={style.statisticLabel}>
             Applications
           </Text>
         </div>
       </dl>
       <div className={css(style.actions)}>
-        <ButtonLink href={nudjHref} style={style.action} volume='cheer'>
+        <ButtonLink fsShow href={nudjHref} style={style.action} volume='cheer'>
           nudj job
         </ButtonLink>
         <Link
+          fsShow
           href={jobHref}
           style={style.action}
           subtle

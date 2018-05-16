@@ -19,10 +19,10 @@ const ConnectionsCsvUploader = props => {
                 <Loader />
               </div>
               <div className={css(style.copy)}>
-                <Text element='div' size='largeIi'>
+                <Text fsShow element='div' size='largeIi'>
                   Hold on
                 </Text>
-                <Text element='div' size='regular'>
+                <Text fsShow element='div' size='regular'>
                   We&#39;re just having a quick look through these lovely people
                 </Text>
               </div>
@@ -35,10 +35,10 @@ const ConnectionsCsvUploader = props => {
             <div className={css(style.dropzone)}>
               <div className={css(style.thumbsDownIllustration)} />
               <div className={css(style.copy)}>
-                <Text element='div' size='largeIi' style={style.messageReject}>
+                <Text fsShow element='div' size='largeIi' style={style.messageReject}>
                   Something doesn&#39;t look right
                 </Text>
-                <Text element='div' size='regular'>
+                <Text fsShow element='div' size='regular'>
                   Make sure it&#39;s the Connections.csv file
                 </Text>
               </div>
@@ -51,10 +51,10 @@ const ConnectionsCsvUploader = props => {
             <div className={css(style.dropzone)}>
               <div className={css(style.thumbsUpIllustration)} />
               <div className={css(style.copy)}>
-                <Text element='div' size='largeIi'>
+                <Text fsShow element='div' size='largeIi'>
                   What a great bunch!
                 </Text>
-                <Text element='div' size='regular'>
+                <Text fsShow element='div' size='regular'>
                   You&#39;ve added{' '}
                   <span className={css(style.connectionsCount)}>
                     {connections.length} people
@@ -69,7 +69,7 @@ const ConnectionsCsvUploader = props => {
           return (
             <div className={css(style.dropzone)}>
               <div className={css(style.copyTop)}>
-                <Text element='div' size='largeIi'>
+                <Text fsShow element='div' size='largeIi'>
                   Now drop the file
                 </Text>
               </div>
@@ -82,10 +82,10 @@ const ConnectionsCsvUploader = props => {
           <div className={css(style.dropzone)}>
             <div className={css(style.pointIllustration)} />
             <div className={css(style.copy)}>
-              <Text element='div' size='largeIi' style={style.message}>
+              <Text fsShow element='div' size='largeIi' style={style.message}>
                 Drag & drop here
               </Text>
-              <Text element='div' size='regular'>
+              <Text fsShow element='div' size='regular'>
                 or click to browse your computer
               </Text>
             </div>

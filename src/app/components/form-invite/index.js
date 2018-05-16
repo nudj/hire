@@ -41,6 +41,7 @@ const AddInviteForm = props => {
           volume='murmur'
           onClick={onAddField}
           style={style.addFieldButton}
+          fsShow
         >
           + Add another
         </Button>
