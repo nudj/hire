@@ -71,7 +71,7 @@ const DashboardPage = (props) => {
   return (
     <Layout {...props}>
       <Helmet>
-        <title>Activity</title>
+        <title>Jobs</title>
       </Helmet>
       <Main>
         <Section padding>
