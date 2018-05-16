@@ -41,10 +41,10 @@ const LinkedinUploadPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading fsShow>
+          <Heading nonsensitive>
             Upload your connections
           </Heading>
-          <Para fsShow>
+          <Para nonsensitive>
             Unzip the folder you&#39;ve just downloaded, then drag and drop the Connections.csv file onto the box.
           </Para>
         </Section>
@@ -58,7 +58,7 @@ const LinkedinUploadPage = props => {
         </Section>
         <Section padding>
           <ButtonLink
-            fsShow
+            nonsensitive
             href='/setup-network/linkedin/upload'
             volume='cheer'
             style={wizardStyles.action}

@@ -49,7 +49,7 @@ const Contact = props => {
           {hasName ? `${firstName} ${lastName}` : email}
         </Text>
         { jobInfo && (
-          <Text fsShow element='span' size='smallI' style={style.job}>
+          <Text nonsensitive element='span' size='smallI' style={style.job}>
             {jobInfo}
           </Text>
         ) }
@@ -81,7 +81,7 @@ const Contact = props => {
         {(applicationDate || referrer) && (
           <div className={css(style.footer)}>
             {applicationDate && (
-              <Text fsShow element='div' size='smallI'>
+              <Text nonsensitive element='div' size='smallI'>
                 Applied on{' '}
                 <span className={css(mss.bold)}>{applicationDate}</span>
               </Text>

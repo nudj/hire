@@ -171,7 +171,7 @@ class ContactsPage extends React.Component {
                     styleSheet={{ root: style.searchInput }}
                   />
                   <Button
-                    fsShow
+                    nonsensitive
                     style={style.searchButton}
                     type='submit'
                     volume='cheer'
@@ -184,7 +184,7 @@ class ContactsPage extends React.Component {
                 {featureTags && (
                   <div className={css(style.filterContainer)}>
                     <div className={css(style.filterBar)}>
-                      <Text fsShow size='regular' style={style.resultCount}>
+                      <Text nonsensitive size='regular' style={style.resultCount}>
                         Showing{' '}
                         <span className={css(mss.bold)}>
                           {connections.length}
@@ -192,7 +192,7 @@ class ContactsPage extends React.Component {
                         contacts
                       </Text>
                       <Button
-                        fsShow
+                        nonsensitive
                         onClick={this.toggleFilters}
                         style={style.filterButton}
                         subtle
@@ -270,10 +270,10 @@ class ContactsPage extends React.Component {
           shouldCloseOnEsc
           onRequestClose={this.hideModal}
         >
-          <Text fsShow element='div' size='largeI' style={style.modalHeading}>
+          <Text nonsensitive element='div' size='largeI' style={style.modalHeading}>
             Add an individual contact
           </Text>
-          <Text fsShow element='p' style={style.modalBody}>
+          <Text nonsensitive element='p' style={style.modalBody}>
             Thought of someone who might help you in your search? Just add
             their details below so you can nudj them.
           </Text>

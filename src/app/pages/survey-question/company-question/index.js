@@ -51,20 +51,20 @@ const CompanyQuestionPage = (props) => {
       </Helmet>
       <Main>
         <Section padding>
-          <Text fsShow element='div' style={style.stepCounter}>
+          <Text nonsensitive element='div' style={style.stepCounter}>
             Question {questionNumber} of {questionCount}
           </Text>
-          <Heading fsShow>
+          <Heading nonsensitive>
             {question.title}
           </Heading>
-          <Para fsShow>
+          <Para nonsensitive>
             {question.description}
           </Para>
         </Section>
         <Section padding width='largeI'>
           <Card>
             <form onSubmit={onAddCompany(dispatch, question.id)}>
-              <Text fsShow element='label' size='smallI' htmlFor='name'>
+              <Text nonsensitive element='label' size='smallI' htmlFor='name'>
                 Add the names of all companies you&#39;ve worked at
               </Text>
               <Input
@@ -77,7 +77,7 @@ const CompanyQuestionPage = (props) => {
                 required
               />
               <Button
-                fsShow
+                nonsensitive
                 type='submit'
                 volume='cheer'
                 style={mss.mtReg}

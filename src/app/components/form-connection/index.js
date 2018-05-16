@@ -73,7 +73,7 @@ const FormConnection = (props) => {
         </InputField>
       ))}
       <Button
-        fsShow
+        nonsensitive
         volume='cheer'
         style={style.submit}
         type='submit'

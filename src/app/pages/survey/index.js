@@ -31,24 +31,24 @@ const SurveyPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading fsShow>
+          <Heading nonsensitive>
             Explore your network to find your next hire
           </Heading>
-          <Para fsShow>
+          <Para nonsensitive>
             The people you need to hire are already in your network, you just have to
              remember them or find friends that know them.
           </Para>
-          <Para fsShow>
+          <Para nonsensitive>
             To help, you&#39;ll now be asked a series of questions designed to unlock all the
              people from your past who are worth asking.
           </Para>
-          <Para fsShow>
+          <Para nonsensitive>
             <em className={css(mss.i)}>Remember to think broadly and inclusively.</em>
           </Para>
         </Section>
         <Section padding>
           <ButtonLink
-            fsShow
+            nonsensitive
             style={wizardStyles.action}
             volume='cheer'
             href={`/surveys/${survey.slug}/sections/${initialSection.id}/${

@@ -25,7 +25,7 @@ const LinkedinDownloadGuidePage = props => (
     </Helmet>
     <Main>
       <Section padding>
-        <Heading fsShow>
+        <Heading nonsensitive>
           Download your connections from LinkedIn
         </Heading>
       </Section>
@@ -36,36 +36,36 @@ const LinkedinDownloadGuidePage = props => (
             src='/assets/images/linkedin-request-2.gif'
           />
           <ol className={css(style.list)}>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Log into your email account (the one you use to access LinkedIn)
             </Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Search for an email from LinkedIn with the subject -{' '}
               <em className={css(mss.i)}>
                 Your LinkedIn data is ready!
               </em>{' '}
               If it’s not there, give it 5 minutes and check again
             </Text>
-            <Text fsShow element='li'>Open the email</Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>Open the email</Text>
+            <Text nonsensitive element='li'>
               Click the link to download your data - it will take you back to
               LinkedIn
             </Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Click <em className={css(mss.i)}>Download archive</em>
             </Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Next, click on{' '}
               <em className={css(mss.i)}>Pick & Choose</em>
             </Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Then select <em className={css(mss.i)}>Connections</em>
             </Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>
               Click on <em className={css(mss.i)}>Request archive</em>
             </Text>
-            <Text fsShow element='li'>Enter your password</Text>
-            <Text fsShow element='li'>
+            <Text nonsensitive element='li'>Enter your password</Text>
+            <Text nonsensitive element='li'>
               Hit <em className={css(mss.i)}>Done</em>
             </Text>
           </ol>
@@ -73,7 +73,7 @@ const LinkedinDownloadGuidePage = props => (
       </Section>
       <Section padding>
         <ButtonLink
-          fsShow
+          nonsensitive
           href='/setup-network/linkedin/upload'
           volume='cheer'
           style={wizardStyles.action}

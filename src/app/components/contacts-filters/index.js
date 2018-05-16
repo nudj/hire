@@ -59,7 +59,7 @@ const ContactsFilters = (props) => {
           label='Expertise'
         >
           <SelectablePillGroup
-            fsShow
+            nonsensitive
             name='expertiseTags'
             values={expertiseTagsValues}
             onChange={onExpertiseChange}

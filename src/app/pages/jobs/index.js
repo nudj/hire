@@ -64,7 +64,7 @@ const JobsPage = (props) => {
                 description: `£${get(job, 'bonus')}`
               }]}
               actions={[
-                <Link fsShow className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>{label}</Link>
+                <Link nonsensitive className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>{label}</Link>
               ]}
             />
           )

@@ -109,13 +109,13 @@ const ConnectionsQuestionPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Text fsShow element='div' style={style.stepCounter}>
+          <Text nonsensitive element='div' style={style.stepCounter}>
             Question {questionNumber} of {questionCount}
           </Text>
-          <Heading fsShow>
+          <Heading nonsensitive>
             {question.title}
           </Heading>
-          <Para fsShow>
+          <Para nonsensitive>
             {question.description}
           </Para>
         </Section>
@@ -138,7 +138,7 @@ const ConnectionsQuestionPage = props => {
                   styleSheet={{ root: style.searchInput }}
                 />
                 <Button
-                  fsShow
+                  nonsensitive
                   style={style.searchButton}
                   type='submit'
                   volume='cheer'
@@ -164,7 +164,7 @@ const ConnectionsQuestionPage = props => {
           ) : (
             <Card style={mss.pa0}>
               <div className={css(mss.plLgIi, mss.prLgIi)}>
-                <Text fsShow element='label'>
+                <Text nonsensitive element='label'>
                   Add their details below
                 </Text>
                 <ConnectionsForm
@@ -197,10 +197,10 @@ const ConnectionsQuestionPage = props => {
         shouldCloseOnEsc
         onRequestClose={getHandleModalClose(dispatch)}
       >
-        <Text fsShow element='div' size='largeI' style={style.modalHeading}>
+        <Text nonsensitive element='div' size='largeI' style={style.modalHeading}>
           Add an individual contact
         </Text>
-        <Text fsShow element='p' style={style.modalBody}>
+        <Text nonsensitive element='p' style={style.modalBody}>
           Thought of someone who might help you in your search? Just add
           their details below so you can nudj them.
         </Text>
