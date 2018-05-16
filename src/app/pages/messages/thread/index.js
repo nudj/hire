@@ -86,7 +86,7 @@ class MessageThreadPage extends React.Component {
                 fullThread.map(message => {
                   if (message.from.email === GOOGLE_MAILER_DAEMON_ADDRESS) {
                     return (
-                      <Text element='div' style={style.threadSection} key={message.id}>
+                      <Text fsShow element='div' style={style.threadSection} key={message.id}>
                         Google was unable to send your previous message. Most likely because the recipient email address is invalid. Get in touch if you have further questions.
                       </Text>
                     )
@@ -115,6 +115,7 @@ class MessageThreadPage extends React.Component {
                 <Textarea name='body' placeholder='Write your message here...' />
                 <input name='_csrf' value={csrfToken} type='hidden' />
                 <Button
+                  fsShow
                   style={mss.mtReg}
                   type='submit'
                   volume='cheer'
@@ -137,6 +138,7 @@ class MessageThreadPage extends React.Component {
           style={mss.center}
         >
           <Heading
+            fsShow
             level={2}
             size='largeIi'
             style={mss.fgPrimary}
@@ -148,21 +150,23 @@ class MessageThreadPage extends React.Component {
             src='/assets/images/fist-bump.svg'
             alt=''
           />
-          <Para>
+          <Para fsShow>
             You&#39;re well on your way to finding your next hire and are now free to nudj whenever you want.
           </Para>
-          <Para>
+          <Para fsShow>
             To maximise your chances of finding someone great, however, we recommend
             sending a minimum of <em className={css(mss.italic)}>3 requests per job</em>.
           </Para>
           <div className={css(style.buttonGroup)}>
             <Button
+              fsShow
               style={style.button}
               onClick={this.handleOnboardingSuccessModalClose}
             >
               Maybe later
             </Button>
             <ButtonLink
+              fsShow
               style={style.button}
               href='/favourites'
               volume='cheer'

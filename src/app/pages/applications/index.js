@@ -48,12 +48,12 @@ const ApplicationsPage = (props) => {
                   right: style.listMeta
                 }}
                 leftChildren={(
-                  <Heading level={2} style={mss.left}>
+                  <Heading fsShow level={2} style={mss.left}>
                     {job.title}
                   </Heading>
                 )}
                 rightChildren={(
-                  <Text element='div' size='smallIi'>
+                  <Text fsShow element='div' size='smallIi'>
                     Status: <strong className={css(mss.bold)}>{startCase(job.status.toLowerCase())}</strong>
                     {' - '}
                     Created: <strong className={css(mss.bold)}>{format(job.created, 'DD/MM/YYYY')}</strong>
@@ -88,14 +88,15 @@ const ApplicationsPage = (props) => {
           ))
         ) : (
           <Section padding>
-            <Heading level={1} style={mss.fgPrimary}>
+            <Heading fsShow level={1} style={mss.fgPrimary}>
               You haven&apos;t received any applications yet
             </Heading>
-            <Para>
+            <Para fsShow>
               To get applications, you&apos;ll need to send some messages. How else will anyone know about your jobs?
             </Para>
             <div className={css(mss.center)}>
               <ButtonLink
+                fsShow
                 href='/contacts'
                 style={mss.mtLgI}
                 name='emailProvider'

@@ -41,7 +41,7 @@ const OnboardingPage = props => {
       </Helmet>
       <p className={style.copy}>We&quot;re going to onboard you now</p>
       <div className={style.buttonContainer}>
-        <Link to='/setup-network' className={style.confirmButton}>
+        <Link fsShow to='/setup-network' className={style.confirmButton}>
           Next
         </Link>
       </div>

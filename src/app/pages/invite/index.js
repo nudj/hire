@@ -42,10 +42,10 @@ const InviteTeamPage = props => {
       </Helmet>
       <Main>
         <Section padding>
-          <Heading>
+          <Heading fsShow>
             Get your team on nudj
           </Heading>
-          <Para>
+          <Para fsShow>
             With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
           </Para>
         </Section>
@@ -62,6 +62,7 @@ const InviteTeamPage = props => {
         </Section>
         <Section padding>
           <Button
+            fsShow
             onClick={onSubmit(dispatch)}
             volume='cheer'
             style={style.sendInvitesButton}
