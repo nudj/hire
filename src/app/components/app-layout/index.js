@@ -43,7 +43,7 @@ const ApplicationLayout = props => {
                     to='/'
                     exact
                   >
-                    Activity
+                    Jobs
                   </NavLink>
                 </li>
                 <li className={css(style.navigationListItem)}>
