@@ -273,12 +273,11 @@ class ContactsPage extends React.Component {
                   You don&apos;t have any contacts
                 </Heading>
                 <Para nonsensitive>
-                  With nudj you can easily uncover who from your LinkedIn network can
-                  help you in your search for your next hires.
+                  To get the most out of nudj, you&apos;ll need to upload your LinkedIn contacts.
                 </Para>
                 <Para nonsensitive>
-                  Before you can start exploring your network, however, you need to
-                  export your connections from LinkedIn and then upload them into nudj.
+                  Once uploaded, you can then use nudj to easily uncover people who
+                  are suitable for an open role, or are worth asking for referrals.
                 </Para>
                 <div className={css(mss.center)}>
                   <ButtonLink
