@@ -1,7 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 const isNil = require('lodash/isNil')
-const { HashLink: Link } = require('react-router-dom')
+const { HashLink: Link } = require('react-router-hash-link')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 

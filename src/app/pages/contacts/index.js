@@ -7,15 +7,15 @@ const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 const {
   AnimateHeight,
-  Icon,
-  Text,
-  Card,
-  Input,
   Button,
-  Modal
+  Card,
+  Icon,
+  IconLink,
+  Input,
+  Modal,
+  Text
 } = require('@nudj/components')
 
-const { buttonStyleSheet } = require('@nudj/components/lib/components/inline-action/style.css')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -249,15 +249,7 @@ class ContactsPage extends React.Component {
                         history.push(url)
                       },
                       contactChild: () => (
-                        <span
-                          className={css(
-                            buttonStyleSheet.root,
-                            buttonStyleSheet.murmur,
-                            style.messageButton
-                          )}
-                        >
-                          <Icon name='email' />
-                        </span>
+                        <IconLink iconName='email' />
                       ),
                       query: searchInput,
                       showFilters,

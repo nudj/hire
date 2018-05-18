@@ -16,6 +16,7 @@ const {
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
 const mss = require('@nudj/components/lib/css/modifiers.css')
+const { getJobUrl } = require('@nudj/library')
 
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const { render } = require('../../../lib/templater')
@@ -56,7 +57,15 @@ const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
 
 const ComposeMessagePage = props => {
-  const { composeMessage, dispatch, user, recipient, template, csrfToken } = props
+  const {
+    composeMessage,
+    dispatch,
+    user,
+    recipient,
+    template,
+    csrfToken,
+    web
+  } = props
   const toEmail = get(recipient, 'email', '')
   const job = get(user, 'hirer.company.job', {})
   const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
@@ -74,7 +83,13 @@ const ComposeMessagePage = props => {
       }
     }
   })[0].join('')
-  const referralLink = `${get(props, 'web.protocol')}://${get(props, 'web.hostname')}/jobs/${companySlug}+${jobSlug}+${referralId}`
+  const referralLink = getJobUrl({
+    protocol: web.protocol,
+    hostname: web.hostname,
+    company: companySlug,
+    job: jobSlug,
+    referralId
+  })
   const messageTemplate = parseJobMessageTemplate(template.message, job, user, { firstName }, referralLink)
 
   const subjectValue = getFirstNonNil(

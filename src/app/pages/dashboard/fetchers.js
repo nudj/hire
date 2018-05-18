@@ -12,11 +12,12 @@ const {
 
 const formatServerDate = (date) => format(date, 'YYYY-MM-DD')
 
-const get = ({ query }) => {
+const get = ({ session, query }) => {
   const { period } = query
 
   const gql = `
-    query GetDashboardStatistics(
+    mutation GetDashboardStatistics(
+      $userId: ID!,
       $dateFrom: DateTime,
       $dateTo: DateTime,
       $pastDateFrom: DateTime,
@@ -24,14 +25,20 @@ const get = ({ query }) => {
       $jobStatus: JobStatus
     ) {
       user {
+        firstName
+        emailPreference
         hirer {
           company {
+            name
             slug
             jobs: jobsByFilters (filters: { status: $jobStatus }) {
               id
               title
               slug
               location
+              referral: getOrCreateReferralForUser(person: $userId) {
+                id
+              }
               applicationCount: applicationsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
               referralCount: referralsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
               viewCount: viewCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
@@ -42,11 +49,15 @@ const get = ({ query }) => {
           }
         }
       }
+      whatsappTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["whatsapp"])
+      emailTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["email"])
+      twitterTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["twitter"])
       ${Global}
     }
   `
 
   const variables = {
+    userId: session.userId,
     jobStatus: jobStatuses.PUBLISHED
   }
 

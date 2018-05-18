@@ -12,7 +12,7 @@ const scale = val => `scale(${val})`
 const springIn = animations.getKeyframes('transform', 100, 0, translateY)
 const springOut = animations.getKeyframes('transform', 0, 100, translateY)
 const scaleUp = animations.getKeyframes('transform', 0, 1, scale)
-const scaleUpDelays = animations.getStaggeredAnimationDelay(5, 50, 50)
+const scaleUpDelays = animations.getStaggeredAnimationDelay(6, 50, 50)
 
 const action = {
   ...typography.type.regular,
@@ -73,7 +73,8 @@ const styleSheet = StyleSheet.create({
     ...action,
     color: colors.primary,
     ':hover': {
-      color: colors.primaryLight
+      color: colors.primaryLight,
+      boxShadow: 'inset 0 1px 7px -4px rgba(0, 0, 0, 0.3)'
     },
     ':focus': {
       color: colors.primaryLight
