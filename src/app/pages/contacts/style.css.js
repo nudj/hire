@@ -105,16 +105,6 @@ const rawStyleSheet = {
     marginTop: sizes.largeIi,
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
-  },
-  messageButton: {
-    paddingTop: sizes.smallI,
-    paddingRight: sizes.smallI,
-    paddingBottom: sizes.smallI,
-    paddingLeft: sizes.smallI,
-    width: '2.75rem',
-    height: '2.75rem',
-    lineHeight: 0,
-    cursor: 'pointer'
   }
 }
 

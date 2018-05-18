@@ -12,6 +12,7 @@ const getApplications = ({ session }) => {
               title
               status
               created
+              slug
               applications {
                 id
                 created

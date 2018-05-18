@@ -4,10 +4,9 @@ const get = require('lodash/get')
 const { format } = require('date-fns')
 const startCase = require('lodash/startCase')
 
-const { buttonStyleSheet } = require('@nudj/components/lib/components/inline-action/style.css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 const { css } = require('@nudj/components/lib/css')
-const { Align, Card, Icon, Text } = require('@nudj/components')
+const { Align, Card, EmailButton, Text } = require('@nudj/components')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
@@ -15,10 +14,11 @@ const Section = require('../../components/section')
 const ListApplications = require('../../components/list-applications')
 const { Heading, Para } = require('../../components/app')
 const ButtonLink = require('../../components/button-link')
+const { emailPreferences } = require('../../lib/constants')
 
 const style = require('./style.css')
 
-const getGmailUrl = (email) => `https://mail.google.com/mail/?view=cm&ui=2&tf=0&fs=1&to=${encodeURI(email)}`
+const getGmailUrl = (email) => `https://mail.google.com/mail/?view=cm&ui=2&tf=0&fs=1&to=${email.replace(/\+/g, '%2B')}`
 
 const ApplicationsPage = (props) => {
   const user = get(props, 'app.user')
@@ -26,6 +26,8 @@ const ApplicationsPage = (props) => {
     if (a.status === 'PUBLISHED') return -1
     return 1
   })
+
+  const gmailEmailPreference = user.emailPreference === emailPreferences.GOOGLE
 
   const hasApplications = jobs
     .map(job => job.applications.length)
@@ -48,7 +50,12 @@ const ApplicationsPage = (props) => {
                   right: style.listMeta
                 }}
                 leftChildren={(
-                  <Heading nonsensitive level={2} style={mss.left}>
+                  <Heading
+                    id={job.slug}
+                    level={2}
+                    style={mss.left}
+                    nonsensitive
+                  >
                     {job.title}
                   </Heading>
                 )}
@@ -65,22 +72,14 @@ const ApplicationsPage = (props) => {
                   applications={job.applications}
                   onItemClick={({ value }) => {
                     const email = value.person.email
-                    const url = user.emailPreference === 'GOOGLE'
+                    const url = gmailEmailPreference
                       ? getGmailUrl(email)
                       : `mailto:${email}`
 
                     window.open(url, '_blank')
                   }}
                   applicationChild={(props) => props.email && (
-                    <span
-                      className={css(
-                        buttonStyleSheet.root,
-                        buttonStyleSheet.murmur,
-                        style.messageButton
-                      )}
-                    >
-                      <Icon name='email' />
-                    </span>
+                    <EmailButton to='' subject='' body='' />
                   )}
                 />
               </Card>

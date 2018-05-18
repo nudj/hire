@@ -197,9 +197,9 @@
     mailbuild "^0.3.7"
     shortid "^2.2.8"
 
-"@nudj/library@6.1.1":
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-6.1.1.tgz#337f63cb9e1ba88e0cf826b1b1a67678d5fe5cd8"
+"@nudj/library@6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-6.2.0.tgz#b9d79a09533f6cc6c45f0af0b8107183354070c9"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
