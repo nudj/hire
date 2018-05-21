@@ -2,6 +2,7 @@ const { values: emailPreferences } = require('@nudj/api/gql/schema/enums/email-p
 const { values: dataSources } = require('@nudj/api/gql/schema/enums/data-sources')
 const { values: jobStatuses } = require('@nudj/api/gql/schema/enums/job-status-types')
 const { values: expertiseTags } = require('@nudj/api/gql/schema/enums/expertise-tags')
+const { values: memberTypes } = require('@nudj/api/gql/schema/enums/hirer-types')
 
 const surveyTypes = {
   EMPLOYEE_SURVEY: 'EMPLOYEE_SURVEY',
@@ -35,6 +36,7 @@ module.exports = {
   dataSources,
   jobStatuses,
   expertiseTags,
+  memberTypes,
 
   surveyTypes,
   notificationTypes,
