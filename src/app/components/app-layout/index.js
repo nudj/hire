@@ -9,12 +9,14 @@ const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 
 const Notification = require('../notification')
 const ScrollTop = require('../scroll-top')
+const { memberTypes } = require('../../lib/constants')
 
 const defaultStyleSheet = require('./style.css')
 
 const ApplicationLayout = props => {
   const { children, title, styleSheet, dispatch, notification, history } = props
   const onboarded = get(props, 'user.hirer.onboarded', false)
+  const type = get(props, 'user.hirer.type', memberTypes.MEMBER)
   const showNavigation = onboarded && isNil(title)
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
@@ -64,15 +66,17 @@ const ApplicationLayout = props => {
                     Contacts
                   </NavLink>
                 </li>
-                <li className={css(style.navigationListItem)}>
-                  <NavLink
-                    className={css(style.navigationLink)}
-                    activeClassName={css(style.navigationLinkActive)}
-                    to='/applications'
-                  >
-                    Applications
-                  </NavLink>
-                </li>
+                {type === memberTypes.ADMIN && (
+                  <li className={css(style.navigationListItem)}>
+                    <NavLink
+                      className={css(style.navigationLink)}
+                      activeClassName={css(style.navigationLinkActive)}
+                      to='/applications'
+                    >
+                      Applications
+                    </NavLink>
+                  </li>
+                )}
               </ul>
             ) : (
               <div className={css(style.title)}>{title}</div>

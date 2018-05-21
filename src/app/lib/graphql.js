@@ -2,6 +2,7 @@ const Global = `
   user {
     hirer {
       onboarded
+      type
     }
   }
 `

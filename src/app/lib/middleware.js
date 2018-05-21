@@ -1,4 +1,4 @@
-const { Redirect } = require('@nudj/library/errors')
+const { Redirect, NotFound } = require('@nudj/library/errors')
 const logger = require('@nudj/framework/logger')
 const get = require('lodash/get')
 const { createNotification } = require('./')
@@ -34,6 +34,29 @@ async function ensureOnboarded (req, res, next) {
   )
 }
 
+async function ensureAdmin (req, res, next) {
+  try {
+    const query = `
+      query {
+        user {
+          hirer {
+            type
+          }
+        }
+      }
+    `
+    const responseData = await request(req.session.userId, query)
+    if (get(responseData, 'user.hirer.type') === 'ADMIN') {
+      return next()
+    }
+  } catch (error) {
+    logger.log('error', error)
+  }
+
+  next(new NotFound({ log: ['Unauthorised access of admin-only page'] }))
+}
+
 module.exports = {
-  ensureOnboarded
+  ensureOnboarded,
+  ensureAdmin
 }
