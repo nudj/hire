@@ -49,7 +49,8 @@ const styleSheet = StyleSheet.create({
   },
   body: {
     opacity: 1,
-    transition: 'opacity 400ms'
+    transition: 'opacity 400ms',
+    minHeight: '6.875rem'
   },
   fadeOut: {
     opacity: 0

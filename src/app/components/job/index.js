@@ -3,10 +3,11 @@ const PropTypes = require('prop-types')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
-const { Text } = require('@nudj/components')
+const { PillGroup, Text } = require('@nudj/components')
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 const { StylePropType } = require('@nudj/components/lib/helpers/prop-types')
 
+const formatExpertiseTag = require('../../lib/format-expertise-tag')
 const defaultStyleSheet = require('./style.css')
 
 class Job extends React.Component {
@@ -14,7 +15,8 @@ class Job extends React.Component {
     viewCount: 0,
     referralCount: 0,
     applicationCount: 0,
-    renderStats: true
+    renderStats: true,
+    expertiseTags: []
   }
 
   static propTypes = {
@@ -25,11 +27,20 @@ class Job extends React.Component {
     referralCount: PropTypes.number,
     applicationCount: PropTypes.number,
     children: PropTypes.node,
+    expertiseTags: PropTypes.array,
     styleSheet: StylePropType
   }
 
   getStyle = memoize(
     (defaultStyleSheet, styleSheet) => mergeStyleSheets(defaultStyleSheet, styleSheet)
+  )
+
+  getTagStyleSheet = memoize(
+    style => ({root: style.tagGroup})
+  )
+
+  getExpertiseTags = memoize(
+    tags => tags.map(formatExpertiseTag)
   )
 
   render () {
@@ -41,10 +52,12 @@ class Job extends React.Component {
       applicationCount,
       renderStats,
       children,
-      styleSheet
+      styleSheet,
+      expertiseTags
     } = this.props
 
     const style = this.getStyle(defaultStyleSheet, styleSheet)
+    const tagStyleSheet = this.getTagStyleSheet(style)
 
     return (
       <div className={css(style.root)}>
@@ -116,6 +129,14 @@ class Job extends React.Component {
                 </Text>
               </div>
             </dl>
+          )}
+          {expertiseTags.length > 0 && (
+            <div className={css(style.tagContainer)}>
+              <PillGroup
+                styleSheet={tagStyleSheet}
+                values={this.getExpertiseTags(expertiseTags)}
+              />
+            </div>
           )}
         </div>
         {children}
