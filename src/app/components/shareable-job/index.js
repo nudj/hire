@@ -142,7 +142,7 @@ class ShareableJob extends React.Component {
                 onClick={this.openSharePanel}
                 tabIndex={showSharePanel ? -1 : 0}
               >
-                nudj job
+                Share job
               </ButtonContainer>
             )}
           </div>

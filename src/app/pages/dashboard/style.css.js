@@ -1,6 +1,7 @@
 const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
+const { modal } = require('../../lib/css/breakpoints')
 
-const breakpoint = '56.25rem'
+const breakpoint = '41.176470588rem'
 
 const styleSheet = StyleSheet.create({
   statisticsList: {
@@ -12,6 +13,10 @@ const styleSheet = StyleSheet.create({
     }
   },
   statisticItem: {
+    paddingTop: sizes.regular,
+    paddingRight: sizes.regular,
+    paddingBottom: sizes.regular,
+    paddingLeft: sizes.regular,
     ':nth-child(1) ~ *': {
       marginTop: sizes.largeI
     },
@@ -62,6 +67,37 @@ const styleSheet = StyleSheet.create({
       backgroundColor: colors.greyDarker,
       left: 0
     }
+  },
+  buttonGroup: {
+    marginTop: sizes.largeIi,
+    [`@media(${modal.unstackButtons})`]: {
+      display: 'flex',
+      justifyContent: 'center'
+    }
+  },
+  button: {
+    width: '100%',
+    ':not(:first-of-type)': {
+      marginTop: sizes.regular
+    },
+    [`@media(${modal.unstackButtons})`]: {
+      width: 'auto',
+      marginLeft: sizes.smallIi,
+      marginRight: sizes.smallIi,
+      ':not(:first-of-type)': {
+        marginTop: 0
+      }
+    }
+  },
+  banner: {
+    position: 'relative',
+    textAlign: 'left'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: sizes.smallIi,
+    right: sizes.smallIi,
+    left: 'auto'
   }
 })
 

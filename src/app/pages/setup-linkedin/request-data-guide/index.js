@@ -54,7 +54,7 @@ class LinkedinRequestGuidePage extends React.Component {
       <ButtonLink
         nonsensitive
         volume='shout'
-        href='/setup-network/linkedin/upload'
+        href='/sync-contacts/linkedin/upload'
         style={wizardStyles.action}
       >
         I&apos;ve downloaded my connections
@@ -62,7 +62,7 @@ class LinkedinRequestGuidePage extends React.Component {
     ]
 
     return (
-      <Layout {...this.props} title='Step 1: Unlock your network'>
+      <Layout {...this.props}>
         <Helmet>
           <title>Syncing your LinkedIn connections</title>
         </Helmet>

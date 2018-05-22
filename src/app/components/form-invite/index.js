@@ -1,22 +1,24 @@
 const React = require('react')
+const times = require('lodash/times')
 
 const { Input, Button, ScreenReadable } = require('@nudj/components')
-const style = require('./style.css')
 const { css } = require('@nudj/components/lib/css')
 
+const style = require('./style.css')
+
 const AddInviteForm = props => {
-  const { onChange, onAddField, values, fieldCount } = props
+  const { onChange, onSubmit, onAddField, values, fieldCount } = props
 
   return (
-    <form className={css(style.form)}>
+    <form className={css(style.form)} onSubmit={onSubmit}>
       <fieldset className={css(style.fieldset)}>
         <legend className={css(style.fieldLabel)}>
           Email addresses
           <span className={css(style.asterisk)}>*</span>
         </legend>
         {
-          Array.apply(null, { length: fieldCount }).map((_, index) => {
-            const key = `email-${index}`
+          times(fieldCount).map((_, index) => {
+            const key = `email${index}`
             return (
               <div key={key}>
                 <ScreenReadable>
@@ -36,11 +38,11 @@ const AddInviteForm = props => {
           })
         }
         <Button
-          subtle
           volume='murmur'
           onClick={onAddField}
           style={style.addFieldButton}
           nonsensitive
+          subtle
         >
           + Add another
         </Button>

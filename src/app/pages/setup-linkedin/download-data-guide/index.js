@@ -16,10 +16,7 @@ const {
 const style = require('../style.css')
 
 const LinkedinDownloadGuidePage = props => (
-  <Layout
-    {...props}
-    title='Step 1: Unlock your network'
-  >
+  <Layout {...props}>
     <Helmet>
       <title>Download your connections from LinkedIn</title>
     </Helmet>
@@ -74,7 +71,7 @@ const LinkedinDownloadGuidePage = props => (
       <Section padding>
         <ButtonLink
           nonsensitive
-          href='/setup-network/linkedin/upload'
+          href='/sync-contacts/linkedin/upload'
           volume='cheer'
           style={wizardStyles.action}
         >

@@ -6,14 +6,8 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers(
-    '/sync-contacts/linkedin/upload',
-    respondWithGql(fetchers.fetchPageData)
-  )
-  router.postHandlers(
-    '/sync-contacts/linkedin/upload',
-    respondWithGql(fetchers.uploadConnections)
-  )
+  router.getHandlers('/share-jobs', respondWithGql(fetchers.get))
+  router.postHandlers('/share-jobs', respondWithGql(fetchers.post))
 
   return router
 }

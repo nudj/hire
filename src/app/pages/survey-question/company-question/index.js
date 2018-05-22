@@ -36,16 +36,11 @@ const CompanyQuestionPage = (props) => {
     dispatch,
     companies,
     nextUri,
-    employment,
-    notification
+    employment
   } = props
 
   return (
-    <Layout
-      {...props}
-      title='Step 2: Uncover hidden gems'
-      notification={notification}
-    >
+    <Layout {...props}>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>

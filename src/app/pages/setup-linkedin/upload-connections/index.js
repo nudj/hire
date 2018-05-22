@@ -35,7 +35,7 @@ const LinkedinUploadPage = props => {
   const { dispatch, uploadLinkedinConnectionsPage: state } = props
 
   return (
-    <Layout {...props} title='Step 1: Unlock your network'>
+    <Layout {...props}>
       <Helmet>
         <title>Upload your LinkedIn connections</title>
       </Helmet>
@@ -59,7 +59,7 @@ const LinkedinUploadPage = props => {
         <Section padding>
           <ButtonLink
             nonsensitive
-            href='/setup-network/linkedin/upload'
+            href='/sync-contacts/linkedin/upload'
             volume='cheer'
             style={wizardStyles.action}
             onClick={getHandleNext(dispatch)}
