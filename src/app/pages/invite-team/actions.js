@@ -20,6 +20,17 @@ const resetForm = () => ({
   type: RESET_FORM
 })
 
+const skipInvitation = () => async (dispatch) => {
+  dispatch(resetForm())
+  await dispatch(
+    actions.app.postData({
+      url: '/invite-team',
+      method: 'post',
+      data: {}
+    })
+  )
+}
+
 const submitInvitations = () => async (dispatch, getState) => {
   const state = getState()
   const { fieldValues } = state.inviteTeamPage
@@ -51,5 +62,6 @@ module.exports = {
   // action creators
   setFieldValue,
   submitInvitations,
+  skipInvitation,
   addAdditionalField
 }

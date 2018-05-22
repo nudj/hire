@@ -15,74 +15,87 @@ const {
 const {
   setFieldValue,
   addAdditionalField,
+  skipInvitation,
   submitInvitations
 } = require('./actions')
 
-const onChange = dispatch => ({ name, value }) => {
-  dispatch(setFieldValue(name, value))
-}
+class InviteTeamPage extends React.Component {
+  handleChange = ({ name, value }) => {
+    const { dispatch } = this.props
+    dispatch(setFieldValue(name, value))
+  }
 
-const onAddField = dispatch => () => {
-  dispatch(addAdditionalField())
-}
+  handleAddField = () => {
+    const { dispatch } = this.props
+    dispatch(addAdditionalField())
+  }
 
-const onSubmit = dispatch => event => {
-  event.preventDefault()
-  dispatch(submitInvitations())
-}
+  handleSkip = event => {
+    event.preventDefault()
+    const { dispatch } = this.props
+    dispatch(skipInvitation())
+  }
 
-const InviteTeamPage = props => {
-  const { inviteTeamPage: state, dispatch } = props
-  const { fieldValues, fieldCount } = state
+  handleSubmit = event => {
+    event.preventDefault()
+    const { dispatch } = this.props
+    dispatch(submitInvitations())
+  }
 
-  return (
-    <Layout {...props}>
-      <Helmet>
-        <title>Invite team</title>
-      </Helmet>
-      <Main>
-        <Section padding>
-          <Heading nonsensitive>
-            Invite your team to nudj
-          </Heading>
-          <Para nonsensitive>
-            With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
-          </Para>
-        </Section>
-        <Section padding width='regular'>
-          <Card>
-            <InviteForm
-              fieldCount={fieldCount}
-              values={fieldValues}
-              onChange={onChange(dispatch)}
-              onAddField={onAddField(dispatch)}
-              onSubmit={onSubmit(dispatch)}
-            />
-          </Card>
-        </Section>
-        <Section padding>
-          <Button
-            nonsensitive
-            onClick={onSubmit(dispatch)}
-            volume='cheer'
-            style={style.sendInvitesButton}
-          >
-            Send invites
-          </Button>
-          <Para nonsensitive>
-            <Link
+  render () {
+    const { inviteTeamPage: state } = this.props
+    const { fieldValues, fieldCount } = state
+
+    return (
+      <Layout {...this.props}>
+        <Helmet>
+          <title>Invite team</title>
+        </Helmet>
+        <Main>
+          <Section padding>
+            <Heading nonsensitive>
+              Invite your team to nudj
+            </Heading>
+            <Para nonsensitive>
+              With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
+            </Para>
+          </Section>
+          <Section padding width='regular'>
+            <Card>
+              <InviteForm
+                fieldCount={fieldCount}
+                values={fieldValues}
+                onChange={this.handleChange}
+                onAddField={this.handleAddField}
+                onSubmit={this.handleSubmit}
+              />
+            </Card>
+          </Section>
+          <Section padding>
+            <Button
               nonsensitive
-              subtle
+              onClick={this.handleSubmit}
               volume='cheer'
-              href='/get-started'
+              style={style.sendInvitesButton}
             >
-              I&apos;ll do this later
-            </Link>
-          </Para>
-        </Section>
-      </Main>
-    </Layout>
-  )
+              Send invites
+            </Button>
+            <Para nonsensitive>
+              <Link
+                nonsensitive
+                subtle
+                onClick={this.handleSkip}
+                volume='cheer'
+                href='/'
+              >
+                I&apos;ll do this later
+              </Link>
+            </Para>
+          </Section>
+        </Main>
+      </Layout>
+    )
+  }
 }
 
 module.exports = InviteTeamPage

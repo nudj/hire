@@ -64,7 +64,7 @@ const ViewRecommendationsPage = props => {
   }
 
   return (
-    <Layout {...props} title='Step 3: Send a nudj'>
+    <Layout {...props}>
       <Helmet>
         <title>Send a nudj</title>
       </Helmet>

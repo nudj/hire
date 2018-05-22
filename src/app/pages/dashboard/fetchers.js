@@ -12,7 +12,7 @@ const {
 
 const formatServerDate = (date) => format(date, 'YYYY-MM-DD')
 
-const get = ({ session, query }) => {
+const get = ({ req, res, session, query }) => {
   const { period } = query
 
   const gql = `
@@ -27,8 +27,15 @@ const get = ({ session, query }) => {
       user {
         firstName
         emailPreference
+        connectionsCount
         hirer {
+          type
+          id
           company {
+            hirers {
+              id
+              type
+            }
             name
             slug
             jobs: jobsByFilters (filters: { status: $jobStatus }) {
@@ -85,9 +92,21 @@ const get = ({ session, query }) => {
     variables.pastDateTo = formatServerDate(pastDateTo)
   }
 
+  const transformData = data => {
+    const { newlyOnboarded } = req.cookies
+
+    res.cookie('newlyOnboarded', false)
+
+    return {
+      ...data,
+      newlyOnboarded: newlyOnboarded === 'true'
+    }
+  }
+
   return {
     gql,
-    variables
+    variables,
+    transformData
   }
 }
 

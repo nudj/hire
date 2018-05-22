@@ -1,7 +1,8 @@
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 const { Global } = require('../../lib/graphql')
 
-const get = () => {
+const getNothing = () => {
   const gql = `
     query {
       ${Global}
@@ -11,48 +12,77 @@ const get = () => {
   return { gql }
 }
 
-const post = ({ body }) => {
+const post = ({ res, body }) => {
   const { emailAddresses } = body
-  const gql = `
-    mutation sendInvitations ($emailAddresses: [String!]!) {
-      user {
-        hirer {
-          company {
-            inviteMembers(emailAddresses: $emailAddresses) {
-              success
+
+  if (emailAddresses && emailAddresses.length) {
+    const gql = `
+      mutation sendInvitations ($emailAddresses: [String!]!) {
+        user {
+          hirer {
+            setOnboarded
+            onboarded
+            company {
+              inviteMembers(emailAddresses: $emailAddresses) {
+                success
+              }
             }
           }
         }
+        ${Global}
       }
-      ${Global}
-    }
-  `
-  const variables = {
-    emailAddresses
-  }
-  const respond = () => {
-    throw new Redirect({
-      url: '/get-started',
-      notification: {
-        type: 'success',
-        message: 'Invitations sent! 🎉'
-      }
-    })
-  }
-  const catcher = () => {
-    throw new Redirect({
-      url: '/invite-team',
-      notification: {
-        type: 'error',
-        message: 'Something went wrong while sending your invitations! Please try again.'
-      }
-    })
-  }
+    `
 
-  return { gql, variables, respond, catcher }
+    const variables = {
+      emailAddresses
+    }
+
+    const respond = data => {
+      const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
+      if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+
+      throw new Redirect({
+        url: '/'
+      })
+    }
+
+    const catcher = () => {
+      throw new Redirect({
+        url: '/invite-team',
+        notification: {
+          type: 'error',
+          message: 'Something went wrong while sending your invitations! Please try again.'
+        }
+      })
+    }
+
+    return { gql, variables, respond, catcher }
+  } else {
+    const gql = `
+      mutation skipInvites {
+        user {
+          hirer {
+            setOnboarded
+            onboarded
+          }
+        }
+      }
+    `
+
+    const respond = data => {
+      throw new Redirect({
+        url: '/'
+      })
+    }
+
+    return {
+      gql,
+      respond
+    }
+  }
 }
 
 module.exports = {
-  get,
+  get: getNothing,
   post
 }

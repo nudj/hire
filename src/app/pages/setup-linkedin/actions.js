@@ -46,7 +46,7 @@ const uploadLinkedinConnections = () => async (dispatch, getState) => {
   dispatch(startConnectionsUpload())
 
   try {
-    const url = '/setup-network/linkedin/upload'
+    const url = '/sync-contacts/linkedin/upload'
     const method = 'post'
     const data = {
       connections: getState().uploadLinkedinConnectionsPage.connections,

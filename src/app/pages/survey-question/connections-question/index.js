@@ -87,8 +87,7 @@ const ConnectionsQuestionPage = props => {
     searchQuery,
     history,
     match,
-    loading,
-    notification
+    loading
   } = props
 
   const handleSetConnections = getHandleSetConnections(question.id, dispatch)
@@ -99,11 +98,7 @@ const ConnectionsQuestionPage = props => {
   }
 
   return (
-    <Layout
-      {...props}
-      notification={notification}
-      title='Step 2: Uncover hidden gems'
-    >
+    <Layout {...props}>
       <Helmet>
         <title>Uncover hidden gems</title>
       </Helmet>

@@ -7,7 +7,12 @@ const isEqual = require('lodash/isEqual')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
-const { Card, Statistic } = require('@nudj/components')
+const {
+  Button,
+  Card,
+  Modal,
+  Statistic
+} = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 const { getJobUrl, getReferralUrl } = require('@nudj/library')
@@ -18,7 +23,9 @@ const Main = require('../../components/main')
 const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ShareableJob = require('../../components/shareable-job')
+const { Heading, Para } = require('../../components/app')
 const { emailPreferences, memberTypes } = require('../../lib/constants')
+const { InviteTeamBanner, GetRewardedBanner } = require('./banners')
 
 const style = require('./style.css')
 
@@ -125,6 +132,14 @@ const getIndividualShareProps = (args) => {
 }
 
 class DashboardPage extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showOnboardingSuccessModal: !!props.newlyOnboarded
+    }
+  }
+
   getSharePropsGetters = memoize(
     jobs => jobs.reduce((map, job) => {
       map[job.id] = memoize(getIndividualShareProps, isEqual)
@@ -132,14 +147,33 @@ class DashboardPage extends React.Component {
     }, {})
   )
 
+  handleOnboardingSuccessModalClose = () => {
+    this.setState({
+      showOnboardingSuccessModal: false
+    })
+  }
+
   render () {
-    const { user, location, whatsappTemplate, emailTemplate, twitterTemplate } = this.props
+    const { showOnboardingSuccessModal } = this.state
+    const {
+      user,
+      location,
+      whatsappTemplate,
+      emailTemplate,
+      twitterTemplate,
+      newlyOnboarded
+    } = this.props
+    const { hirer, connectionsCount } = user
     const memberType = get(user, 'hirer.type', memberTypes.MEMBER)
     const company = get(user, 'hirer.company', {})
     const jobs = get(company, 'jobs', [])
 
+    const isAdmin = memberType === memberTypes.ADMIN
     const getShareProps = this.getSharePropsGetters(jobs)
     const queryParams = new URLSearchParams(get(location, 'search', ''))
+    const invitedCount = get(company, 'hirers', [])
+      .filter(item => item.id !== hirer.id)
+      .length
 
     const {
       totalViewCount,
@@ -165,6 +199,8 @@ class DashboardPage extends React.Component {
     })
 
     const selectedPeriod = queryParams.get('period')
+    const renderInviteTeamBanner = isAdmin && invitedCount < 5 && !newlyOnboarded
+    const renderGetRewardedBanner = !isAdmin && connectionsCount < 1
 
     return (
       <Layout {...this.props}>
@@ -172,6 +208,16 @@ class DashboardPage extends React.Component {
           <title>Jobs</title>
         </Helmet>
         <Main>
+          { renderInviteTeamBanner && (
+            <Section padding>
+              <InviteTeamBanner />
+            </Section>
+          ) }
+          { renderGetRewardedBanner && (
+            <Section padding>
+              <GetRewardedBanner />
+            </Section>
+          ) }
           <Section padding>
             <div className={css(style.durationButtonGroup)}>
               <ButtonLink
@@ -180,7 +226,7 @@ class DashboardPage extends React.Component {
                   style.durationButton,
                   selectedPeriod === 'week' && style.durationButtonActive
                 ]}
-                href={`/?period=week`}
+                href='/?period=week`'
                 subtle
                 preventReload={false}
               >
@@ -192,7 +238,7 @@ class DashboardPage extends React.Component {
                   style.durationButton,
                   selectedPeriod === 'month' && style.durationButtonActive
                 ]}
-                href={`/?period=month`}
+                href='/?period=month'
                 subtle
                 preventReload={false}
               >
@@ -286,7 +332,7 @@ class DashboardPage extends React.Component {
                     jobUrl={jobUrl}
                     referralUrl={referralUrl}
                     applicantsUrl={
-                      memberType === memberTypes.ADMIN
+                      isAdmin
                         ? `/applications#${job.slug}`
                         : undefined
                     }
@@ -297,6 +343,79 @@ class DashboardPage extends React.Component {
             }) }
           </Section>
         </Main>
+        <Modal
+          isOpen={showOnboardingSuccessModal}
+          shouldCloseOnOverlayClick
+          shouldCloseOnEsc
+          onRequestClose={this.handleOnboardingSuccessModalClose}
+          style={mss.center}
+        >
+          { isAdmin ? (
+            <div>
+              <Heading
+                nonsensitive
+                level={2}
+                size='largeIi'
+                style={mss.fgPrimary}
+              >
+                Nice one!
+              </Heading>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
+              <Para nonsensitive>
+                We&apos;ve sent invites to your team and we&apos;ll update you as soon as
+                they sign up. In the meantime, feel free to have a look around
+                our app or kick back and wait for applicants to come rolling in.
+              </Para>
+              <div className={css(style.buttonGroup)}>
+                <Button
+                  nonsensitive
+                  style={style.button}
+                  onClick={this.handleOnboardingSuccessModalClose}
+                  volume='cheer'
+                >
+                  Start exploring
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <Heading
+                nonsensitive
+                level={2}
+                size='largeIi'
+                style={mss.fgPrimary}
+              >
+                Congratulations, you&apos;ve sent your first nudj!
+              </Heading>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
+              <Para nonsensitive>
+                You&apos;re well on your way to finding your next hire and are now free to nudj whenever you want.
+              </Para>
+              <Para nonsensitive>
+                To maximise your chances of finding someone great, however, we recommend
+                sending a minimum of <em className={css(mss.italic)}>3 requests per job</em>.
+              </Para>
+              <div className={css(style.buttonGroup)}>
+                <Button
+                  nonsensitive
+                  style={style.button}
+                  onClick={this.handleOnboardingSuccessModalClose}
+                  volume='cheer'
+                >
+                  Continue nudjing
+                </Button>
+              </div>
+            </div>
+          ) }
+        </Modal>
       </Layout>
     )
   }
