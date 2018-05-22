@@ -156,7 +156,7 @@ class ContactsPage extends React.Component {
             style={style.mainSection}
             width={!featureTags ? 'largeI' : undefined}
           >
-            {connections.length ? (
+            {searchInput || connections.length > 0 ? (
               <Card style={[mss.pa0, style.card]}>
                 <form
                   className={css(
@@ -269,7 +269,7 @@ class ContactsPage extends React.Component {
               </Card>
             ) : (
               <Section width='largeI' padding>
-                <Heading level={1} style={mss.fgPrimary} nonsensitive>
+                <Heading style={mss.fgPrimary} nonsensitive>
                   You don&apos;t have any contacts
                 </Heading>
                 <Para nonsensitive>
