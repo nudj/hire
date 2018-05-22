@@ -61,6 +61,12 @@ const styleSheet = StyleSheet.create({
     color: colors.text,
     fontWeight: typography.fontWeight.bold,
     marginTop: sizes.smallIii
+  },
+  tagContainer: {
+    marginTop: sizes.regular
+  },
+  tagGroup: {
+    paddingTop: sizes.smallIii
   }
 })
 
