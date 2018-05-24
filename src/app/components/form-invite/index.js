@@ -16,16 +16,15 @@ const AddInviteForm = props => {
         </legend>
         {
           Array.apply(null, { length: fieldCount }).map((_, index) => {
-            const key = `email${index}`
+            const key = `email-${index}`
             return (
-              <div>
+              <div key={key}>
                 <ScreenReadable>
                   <label htmlFor={key}>Email address {index + 1}</label>
                 </ScreenReadable>
                 <Input
                   type='email'
                   id={key}
-                  key={index}
                   value={values[key] || ''}
                   name={key}
                   onChange={onChange}

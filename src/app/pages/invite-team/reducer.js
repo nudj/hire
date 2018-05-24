@@ -28,7 +28,7 @@ const reducers = {
 
 const initialState = {
   fieldValues: {},
-  fieldCount: 3,
+  fieldCount: 5,
   loading: false
 }
 
