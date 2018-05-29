@@ -275,7 +275,7 @@ class DashboardPage extends React.Component {
                 nonsensitive
                 styleSheet={{ root: mss.fgPrimary }}
                 value={totalReferralCount}
-                label='Referrals'
+                label='Links created'
                 direction={getStatisticDirection(totalReferralCount, pastTotalReferralCount)}
                 correlation={getStatisticCorrelation(totalReferralCount, pastTotalReferralCount)}
                 comparator={getComparatorString(pastTotalReferralCount, selectedPeriod)}
