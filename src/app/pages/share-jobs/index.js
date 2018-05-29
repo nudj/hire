@@ -45,6 +45,16 @@ const getIndividualShareProps = (args) => {
     gmail
   } = args
 
+  const emailBody = parseTemplate(
+    emailTemplate.message,
+    {
+      name,
+      referralUrl,
+      jobTitle,
+      company
+    }
+  )
+
   return {
     whatsapp: {
       text: parseTemplate(
@@ -87,15 +97,7 @@ const getIndividualShareProps = (args) => {
           company
         }
       ),
-      body: encodeURI(parseTemplate(
-        emailTemplate.message,
-        {
-          name,
-          referralUrl,
-          jobTitle,
-          company
-        }
-      ))
+      body: gmail ? encodeURI(emailBody) : emailBody
     }
   }
 }

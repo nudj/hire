@@ -72,6 +72,16 @@ const getIndividualShareProps = (args) => {
     gmail
   } = args
 
+  const emailBody = parseTemplate(
+    emailTemplate.message,
+    {
+      name,
+      referralUrl,
+      jobTitle,
+      company
+    }
+  )
+
   return {
     nudj: {
       to: `/contacts/job/${id}`,
@@ -118,15 +128,7 @@ const getIndividualShareProps = (args) => {
           company
         }
       ),
-      body: encodeURI(parseTemplate(
-        emailTemplate.message,
-        {
-          name,
-          referralUrl,
-          jobTitle,
-          company
-        }
-      ))
+      body: gmail ? encodeURI(emailBody) : emailBody
     }
   }
 }
