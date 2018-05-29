@@ -18,6 +18,7 @@ const ApplicationLayout = props => {
   const onboarded = get(props, 'user.hirer.onboarded', false)
   const type = get(props, 'user.hirer.type', memberTypes.MEMBER)
   const showNavigation = onboarded && isNil(title)
+  const isAdmin = type === memberTypes.ADMIN
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
 
@@ -66,7 +67,7 @@ const ApplicationLayout = props => {
                     Contacts
                   </NavLink>
                 </li>
-                {type === memberTypes.ADMIN && (
+                {isAdmin && (
                   <li className={css(style.navigationListItem)}>
                     <NavLink
                       className={css(style.navigationLink)}
@@ -83,7 +84,7 @@ const ApplicationLayout = props => {
             )}
           </div>
           <div className={css(style.helpContainer)}>
-            {showNavigation && (
+            {isAdmin && showNavigation && (
               <NavLink
                 className={css(style.helpLink, style.inviteLink)}
                 activeClassName={css(style.inviteLinkActive)}
