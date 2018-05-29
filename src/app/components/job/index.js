@@ -107,7 +107,7 @@ class Job extends React.Component {
                   style={style.statisticLabel}
                   nonsensitive
                 >
-                  Referrals
+                  Links created
                 </Text>
               </div>
               <div className={css(style.statisticItem)}>
