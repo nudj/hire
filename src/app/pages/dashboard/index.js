@@ -226,7 +226,7 @@ class DashboardPage extends React.Component {
                   style.durationButton,
                   selectedPeriod === 'week' && style.durationButtonActive
                 ]}
-                href='/?period=week`'
+                href='/?period=week'
                 subtle
                 preventReload={false}
               >
