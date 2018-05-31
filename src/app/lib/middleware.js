@@ -28,7 +28,7 @@ async function ensureOnboarded (req, res, next) {
       url: '/welcome',
       notification: req.originalUrl !== '/' ? createNotification(
         'error',
-        "We're still setting up your account, so you can't complete on-boarding just yet."
+        'Your account hasn\'t been fully set up just yet!'
       ) : null
     })
   )
