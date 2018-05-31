@@ -30,11 +30,12 @@ const WelcomeAdmin = ({ style }) => (
             <div className={css(style.listItemContainer)}>
               <Text nonsensitive element='h2' size='largeIi' style={mss.fgPrimary}>
                 <span className={css(mss.fgMidRed)}>1.</span>{' '}
-                Invite your team
+                Set up your company in seconds
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Get your team on nudj, so they can share your jobs and help you
-                find more awesome people to hire.
+                Tell us about your company, add a brief description of the roles
+                you&apos;re currently hiring for, set the referral bonuses and we&apos;ll
+                automatically add job pages to our platform for you.
               </Text>
             </div>
           </li>
@@ -71,7 +72,7 @@ const WelcomeAdmin = ({ style }) => (
       <ButtonLink
         nonsensitive
         style={wizardStyles.action}
-        href='/invite-team'
+        href='/setup-company'
         volume='cheer'
       >
         Ok, I&apos;m ready
