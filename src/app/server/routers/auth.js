@@ -4,13 +4,30 @@ const request = require('@nudj/library/request')
 const logger = require('@nudj/framework/logger')
 const { cacheReturnTo } = require('@nudj/library/server')
 
-async function fetchPerson (email) {
+const requestGql = require('../../lib/requestGql')
+
+async function getOrCreatePerson ({ email, firstName, lastName }) {
   try {
-    const person = await request(`people/first?email=${encodeURIComponent(email)}`, {
-      baseURL: `http://${process.env.API_HOST}:81`
-    })
-    if (!person) throw new Error('Person not found')
-    if (person.error) throw new Error('Unable to fetch person')
+    const gql = `
+      mutation getOrCreatePerson ($person: PersonCreateInput!) {
+        person: getOrCreatePerson(person: $person) {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+    `
+    const variables = {
+      person: {
+        email,
+        firstName,
+        lastName
+      }
+    }
+
+    const { person } = await requestGql(null, gql, variables)
+    if (!person) throw new Error('Error fetching or creating person')
     return person
   } catch (error) {
     logger.log('error', error.log || error)
@@ -28,20 +45,6 @@ async function updatePerson (id, patch) {
     if (!person) throw new Error('Person not found')
     if (person.error) throw new Error('Unable to update person')
     return person
-  } catch (error) {
-    logger.log('error', error.log || error)
-    throw error
-  }
-}
-
-async function fetchHirer (personId) {
-  try {
-    const hirer = await request(`hirers/first?person=${personId}`, {
-      baseURL: `http://${process.env.API_HOST}:81`
-    })
-    if (!hirer) throw new Error('Not a registered hirer')
-    if (hirer.error) throw new Error('Error fetching hirer')
-    return hirer
   } catch (error) {
     logger.log('error', error.log || error)
     throw error
@@ -94,11 +97,10 @@ const Router = ({
 
       try {
         const { email, firstName, lastName } = getUserInfo(req.user._json)
-        let user = await fetchPerson(email)
+        let user = await getOrCreatePerson({ email, firstName, lastName })
         if (!user.firstName || !user.lastName) {
           user = await updatePerson(user.id, { firstName, lastName })
         }
-        await fetchHirer(user.id) // ensure hirer exists
         req.session.userId = user.id
         res.redirect(req.session.returnTo || '/')
       } catch (error) {
