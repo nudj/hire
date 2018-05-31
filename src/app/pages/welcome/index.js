@@ -10,15 +10,15 @@ const TeamMemberContent = require('./team-member')
 
 const WelcomePage = props => {
   const { hirerTypes } = props.enums
-  const { type: hirerStatus } = props.user.hirer
-  const isAdmin = hirerStatus === hirerTypes.ADMIN
+  const { hirer } = props.user
+  const onAdminJourney = !hirer || hirer.type === hirerTypes.ADMIN
 
   return (
     <Layout {...props}>
       <Helmet>
         <title>Welcome</title>
       </Helmet>
-      { isAdmin ? (
+      { onAdminJourney ? (
         <AdminContent {...props} style={adminStyle} />
       ) : (
         <TeamMemberContent {...props} style={teamMemberStyle} />
