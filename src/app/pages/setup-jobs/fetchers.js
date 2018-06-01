@@ -1,6 +1,7 @@
 const { Redirect } = require('@nudj/framework/errors')
-
-const { createNotification } = require('../../lib')
+const {
+  values: jobStatusTypes
+} = require('@nudj/api/gql/schema/enums/job-status-types')
 
 const get = () => {
   const gql = `
@@ -18,7 +19,50 @@ const get = () => {
   return { gql }
 }
 
-const postOnboarding = ({ body }) => {
+const post = ({ body }) => {
+  const gql = `
+    mutation CreateJob ($job: JobCreateInput!) {
+      user {
+        hirer {
+          company {
+            id
+            createJob(data: $job) {
+              id
+            }
+          }
+        }
+      }
+      notification: setNotification (type: "success", message: "Job created! 🎉") {
+        type
+        message
+      }
+    }
+  `
+  const variables = {
+    job: {
+      ...body,
+      // Setting required defaults
+      description: '',
+      templateTags: [],
+      tags: [],
+      status: jobStatusTypes.PUBLISHED,
+      type: 'PERMANENT'
+    }
+  }
+  const catcher = () => {
+    throw new Redirect({
+      url: '/setup-company',
+      notification: {
+        type: 'error',
+        message: 'Something went wrong while adding your job! Please try again.'
+      }
+    })
+  }
+
+  return { gql, variables, catcher }
+}
+
+const postOnboarding = ({ body, res }) => {
   const { companyId } = body
   const gql = `
     mutation SetCompany ($companyId: ID!, $companyUpdate: CompanyUpdateInput!) {
@@ -35,6 +79,9 @@ const postOnboarding = ({ body }) => {
           setOnboarded
         }
       }
+      newlyOnboarded: companies {
+        id
+      }
     }
   `
   const variables = {
@@ -45,18 +92,17 @@ const postOnboarding = ({ body }) => {
   }
   const respond = () => {
     throw new Redirect({
-      url: '/',
-      notification: createNotification(
-        'success',
-        'Welcome to nudj! 🎉'
-      )
+      url: '/'
     })
   }
+
+  res.cookie('newlyOnboarded', true)
 
   return { gql, variables, respond }
 }
 
 module.exports = {
   get,
+  post,
   postOnboarding
 }
