@@ -36,7 +36,7 @@ const uploadConnections = ({ body, files }) => {
         hirer {
           company {
             name
-            surveys {
+            survey: surveyOrDefault {
               slug
             }
           }
@@ -88,7 +88,7 @@ const uploadConnections = ({ body, files }) => {
       const message = `You just added ${body.connections.length} connections 🙌`
 
       throw new Redirect({
-        url: `/surveys/${get(data, 'user.hirer.company.surveys[0].slug', '')}`,
+        url: `/surveys/${get(data, 'user.hirer.company.survey.slug', '')}`,
         notification: createNotification('success', message)
       })
     }
