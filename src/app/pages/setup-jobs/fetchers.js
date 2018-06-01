@@ -19,7 +19,7 @@ const get = () => {
   return { gql }
 }
 
-const post = ({ body }) => {
+const post = ({ body, res }) => {
   const gql = `
     mutation CreateJob ($job: JobCreateInput!) {
       user {
@@ -30,11 +30,8 @@ const post = ({ body }) => {
               id
             }
           }
+          setOnboarded
         }
-      }
-      notification: setNotification (type: "success", message: "Job created! 🎉") {
-        type
-        message
       }
     }
   `
@@ -49,6 +46,12 @@ const post = ({ body }) => {
       type: 'PERMANENT'
     }
   }
+  const respond = () => {
+    res.cookie('newlyOnboarded', true)
+    throw new Redirect({
+      url: '/'
+    })
+  }
   const catcher = () => {
     throw new Redirect({
       url: '/setup-jobs',
@@ -59,50 +62,10 @@ const post = ({ body }) => {
     })
   }
 
-  return { gql, variables, catcher }
-}
-
-const postOnboarding = ({ body, res }) => {
-  const { companyId } = body
-  const gql = `
-    mutation SetCompany ($companyId: ID!, $companyUpdate: CompanyUpdateInput!) {
-      updateCompany(
-        id: $companyId,
-        companyUpdate: $companyUpdate
-      ) {
-        id
-        name
-        onboarded
-      }
-      user {
-        hirer {
-          setOnboarded
-        }
-      }
-      newlyOnboarded: companies {
-        id
-      }
-    }
-  `
-  const variables = {
-    companyId,
-    companyUpdate: {
-      onboarded: true
-    }
-  }
-  const respond = () => {
-    throw new Redirect({
-      url: '/'
-    })
-  }
-
-  res.cookie('newlyOnboarded', true)
-
-  return { gql, variables, respond }
+  return { gql, variables, respond, catcher }
 }
 
 module.exports = {
   get,
-  post,
-  postOnboarding
+  post
 }
