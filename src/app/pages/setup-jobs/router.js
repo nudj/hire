@@ -8,7 +8,8 @@ const Router = ({ respondWithGql }) => {
   const router = createRouter()
 
   router.getHandlers('/setup-jobs', ensureNotOnboarded, respondWithGql(fetchers.get))
-  router.postHandlers('/setup-jobs', ensureNotOnboarded, respondWithGql(fetchers.postOnboarding))
+  router.postHandlers('/setup-jobs', ensureNotOnboarded, respondWithGql(fetchers.post))
+  router.postHandlers('/onboard', ensureNotOnboarded, respondWithGql(fetchers.postOnboarding))
 
   return router
 }
