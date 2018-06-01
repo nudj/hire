@@ -354,23 +354,25 @@ class DashboardPage extends React.Component {
         >
           { isAdmin ? (
             <div>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
               <Heading
                 nonsensitive
                 level={2}
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Nice one!
+                Nice one, you&apos;re all set up!
               </Heading>
-              <img
-                className={css(mss.mtLgIi)}
-                src='/assets/images/fist-bump.svg'
-                alt=''
-              />
               <Para nonsensitive>
-                We&apos;ve sent invites to your team and we&apos;ll update you as soon as
-                they sign up. In the meantime, feel free to have a look around
-                our app or kick back and wait for applicants to come rolling in.
+                We&apos;ve added your company and posted your jobs to our platform.
+              </Para>
+              <Para nonsensitive>
+                You can now explore the rest of the app and, when you&apos;re ready,
+                send out invites to your team so they can start sharing your jobs.
               </Para>
               <div className={css(style.buttonGroup)}>
                 <Button
