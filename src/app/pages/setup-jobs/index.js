@@ -16,17 +16,11 @@ const {
   Para
 } = require('../../components/wizard')
 const {
-  onboardCompany,
   setFieldValue,
   submitJob
 } = require('./actions')
 
 class SetupJobsPage extends React.Component {
-  finishOnboarding = () => {
-    const { dispatch } = this.props
-    dispatch(onboardCompany())
-  }
-
   handleChange = ({ name, value }) => {
     const { dispatch } = this.props
     dispatch(setFieldValue(name, value))
@@ -71,17 +65,9 @@ class SetupJobsPage extends React.Component {
               volume='cheer'
               onClick={this.handleSubmit}
             >
-              Save and add another
+              Publish job
             </Button>
           </Section>
-          <Button
-            nonsensitive
-            subtle
-            volume='cheer'
-            onClick={this.finishOnboarding}
-          >
-            That&apos;s all for now
-          </Button>
         </Main>
       </Layout>
     )
