@@ -51,7 +51,7 @@ const post = ({ body }) => {
   }
   const catcher = () => {
     throw new Redirect({
-      url: '/setup-company',
+      url: '/setup-jobs',
       notification: {
         type: 'error',
         message: 'Something went wrong while adding your job! Please try again.'
