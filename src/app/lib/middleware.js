@@ -62,20 +62,25 @@ async function ensureNotOnboarded (req, res, next) {
       query {
         user {
           hirer {
-            id
+            onboarded
           }
         }
       }
     `
     const responseData = await request(req.session.userId, query)
-    if (!get(responseData, 'user.hirer.id')) {
+    if (!get(responseData, 'user.hirer.onboarded')) {
       return next()
     }
   } catch (error) {
     logger.log('error', error)
   }
 
-  next(new NotFound({ log: ['Signed-up hirer attempted to access onboarding flow'] }))
+  logger.log('info', 'Signed-up hirer attempted to access onboarding flow')
+  next(
+    new Redirect({
+      url: '/'
+    })
+  )
 }
 
 module.exports = {
