@@ -41,6 +41,7 @@ const expressRouters = {
     require('./pages/invite-team/router'),
     require('./pages/welcome/router'),
     require('./pages/share-jobs/router'),
+    require('./pages/setup-company/router'),
     require('./server/routers/catch-all')
   ]
 }
@@ -100,6 +101,7 @@ if (module.hot) {
     './pages/applications/router',
     './pages/welcome/router',
     './pages/share-jobs/router',
+    './pages/setup-company/router',
     './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
@@ -126,6 +128,7 @@ if (module.hot) {
         require('./pages/invite-team/router'),
         require('./pages/welcome/router'),
         require('./pages/share-jobs/router'),
+        require('./pages/setup-company/router'),
         require('./server/routers/catch-all')
       ]
     }
