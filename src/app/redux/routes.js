@@ -5,6 +5,7 @@ module.exports = {
   '/welcome': checkMobileDevice(require('../pages/welcome')),
   '/invite-team': checkMobileDevice(require('../pages/invite-team')),
   '/share-jobs': require('../pages/share-jobs'),
+  '/setup-company': require('../pages/setup-company'),
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/sync-contacts/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
