@@ -26,16 +26,19 @@ const experienceRequiredPlaceholder = dedent(`
   and the world around us.
 `).replace(/\n/g, ' ')
 
+const inputFieldStylesheet = {
+  root: style.field,
+  label: style.fieldLabel
+}
+const textareaStylesheet = { input: style.textarea }
+
 const JobForm = props => {
   const { fieldValues, onFieldChange, onSubmit } = props
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='title'
         label='Title'
         required
@@ -50,10 +53,7 @@ const JobForm = props => {
         />
       </InputField>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='location'
         label='Location'
         required
@@ -68,10 +68,7 @@ const JobForm = props => {
         />
       </InputField>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='roleDescription'
         label='Role Description'
         required
@@ -82,7 +79,7 @@ const JobForm = props => {
           name='roleDescription'
           value={fieldValues.roleDescription}
           onChange={onFieldChange}
-          styleSheet={{ input: style.textarea }}
+          styleSheet={textareaStylesheet}
           required
         />
         <Text element='div' nonsensitive style={mss.mtSmIi}>
@@ -90,10 +87,7 @@ const JobForm = props => {
         </Text>
       </InputField>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='candidateDescription'
         label='Experience Required'
         required
@@ -104,7 +98,7 @@ const JobForm = props => {
           name='candidateDescription'
           value={fieldValues.candidateDescription}
           onChange={onFieldChange}
-          styleSheet={{ input: style.textarea }}
+          styleSheet={textareaStylesheet}
           required
         />
         <Text element='div' style={mss.mtSmIi} nonsensitive>
@@ -112,10 +106,7 @@ const JobForm = props => {
         </Text>
       </InputField>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='remuneration'
         label='Salary'
         required
@@ -133,10 +124,7 @@ const JobForm = props => {
         </Text>
       </InputField>
       <InputField
-        styleSheet={{
-          root: style.field,
-          label: style.fieldLabel
-        }}
+        styleSheet={inputFieldStylesheet}
         htmlFor='bonus'
         label='Referral bonus'
         required
