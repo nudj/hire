@@ -5,7 +5,6 @@ const {
   Button,
   Card
 } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
@@ -50,8 +49,8 @@ class SetupJobsPage extends React.Component {
               we&apos;ll add them to our platform.
             </Para>
           </Section>
-          <Section padding width='regular'>
-            <Card style={mss.ptSmI}>
+          <Section padding width='largeI'>
+            <Card>
               <JobsForm
                 fieldValues={state.fieldValues}
                 onFieldChange={this.handleChange}
@@ -66,7 +65,7 @@ class SetupJobsPage extends React.Component {
               volume='cheer'
               onClick={this.handleSubmit}
             >
-              Save
+              Publish job
             </Button>
           </Section>
         </Main>

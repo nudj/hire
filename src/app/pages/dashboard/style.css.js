@@ -98,6 +98,10 @@ const styleSheet = StyleSheet.create({
     top: sizes.smallIi,
     right: sizes.smallIi,
     left: 'auto'
+  },
+  actions: {
+    marginTop: sizes.largeIii,
+    textAlign: 'right'
   }
 })
 

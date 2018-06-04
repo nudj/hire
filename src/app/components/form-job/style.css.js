@@ -11,7 +11,9 @@ const stylesheet = StyleSheet.create({
     color: colors.primary
   }),
   field: {
-    marginTop: sizes.regular
+    ':nth-child(n + 2)': {
+      marginTop: sizes.regular
+    }
   },
   textarea: {
     minHeight: '12rem',

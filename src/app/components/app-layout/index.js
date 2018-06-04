@@ -88,15 +88,6 @@ const ApplicationLayout = props => {
               <NavLink
                 className={css(style.helpLink, style.inviteLink)}
                 activeClassName={css(style.inviteLinkActive)}
-                to='/jobs/new'
-              >
-                Add jobs
-              </NavLink>
-            )}
-            {isAdmin && showNavigation && (
-              <NavLink
-                className={css(style.helpLink, style.inviteLink)}
-                activeClassName={css(style.inviteLinkActive)}
                 to='/invite'
               >
                 Invite

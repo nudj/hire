@@ -10,6 +10,7 @@ memoize = memoize.default || memoize
 const {
   Button,
   Card,
+  Link: Anchor,
   Modal,
   Statistic
 } = require('@nudj/components')
@@ -296,6 +297,18 @@ class DashboardPage extends React.Component {
             </Card>
           </Section>
           <Section padding>
+            <div className={css(style.actions)}>
+              <Anchor nonsensitive href='mailto:help@nudj.co' id='open-intercom'>
+                Edit jobs
+              </Anchor>
+              <ButtonLink
+                volume='cheer'
+                to='/jobs/new'
+                style={mss.mlReg}
+              >
+                Add job
+              </ButtonLink>
+            </div>
             { jobs.map(job => {
               const jobUrl = getJobUrl({
                 protocol: this.props.web.protocol,
