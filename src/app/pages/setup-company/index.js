@@ -71,7 +71,7 @@ class SetupCompanyPage extends React.Component {
                     label: style.fieldLabel
                   }}
                   htmlFor='name'
-                  label='Name'
+                  label='Company Name'
                   required
                 >
                   <Input
