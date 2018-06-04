@@ -26,11 +26,10 @@ const post = ({ body, res }) => {
         hirer {
           company {
             id
-            createJob(data: $job) {
+            createJobAndOnboardHirer(data: $job) {
               id
             }
           }
-          setOnboarded
         }
       }
     }
@@ -39,9 +38,7 @@ const post = ({ body, res }) => {
     job: {
       ...body,
       // Setting required defaults
-      description: '',
       templateTags: [],
-      tags: [],
       status: jobStatusTypes.PUBLISHED,
       type: 'PERMANENT'
     }
