@@ -21,16 +21,11 @@ const post = ({ body }) => {
       user {
         hirer {
           company {
-            id
             createJob(data: $job) {
               id
             }
           }
         }
-      }
-      notification: setNotification (type: "success", message: "Job created! 🎉") {
-        type
-        message
       }
       ${Global}
     }
@@ -46,6 +41,15 @@ const post = ({ body }) => {
       type: 'PERMANENT'
     }
   }
+  const respond = () => {
+    throw new Redirect({
+      url: '/',
+      notification: {
+        type: 'success',
+        message: `${body.title} created! 🎉`
+      }
+    })
+  }
   const catcher = () => {
     throw new Redirect({
       url: '/jobs/new',
@@ -56,7 +60,7 @@ const post = ({ body }) => {
     })
   }
 
-  return { gql, variables, catcher }
+  return { gql, variables, respond, catcher }
 }
 
 module.exports = {
