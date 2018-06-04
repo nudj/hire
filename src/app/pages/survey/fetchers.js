@@ -7,7 +7,7 @@ const get = ({ params }) => {
         hirer {
           company {
             name
-            survey: surveyByFilters (filters: {
+            survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
               id

@@ -48,7 +48,7 @@ const completeSurvey = ({ session, params, res }) => {
           onboarded
           setOnboarded
           company {
-            survey: surveyByFilters (filters: {
+            survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
               id

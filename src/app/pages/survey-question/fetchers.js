@@ -33,7 +33,7 @@ const getCompaniesQuestion = ({ params, query }) => {
         }
         hirer {
           company {
-            survey: surveyByFilters (filters: {
+            survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
               id
@@ -96,7 +96,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
         connectionsCount
         hirer {
           company {
-            survey: surveyByFilters (filters: {
+            survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
               id
@@ -220,7 +220,7 @@ const postEmployment = ({ params, body }) => {
         }
         hirer {
           company {
-            survey: surveyByFilters (filters: {
+            survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
               id
@@ -292,7 +292,9 @@ const postConnectionAnswer = ({ session, params, body }) => {
       user {
         hirer {
           company {
-            survey: surveyByFilters(filters: {slug: $surveySlug}) {
+            survey: surveyByFiltersOrDefault (filters: {
+              slug: $surveySlug
+            }) {
               id
               slug
               sections: surveySections {
