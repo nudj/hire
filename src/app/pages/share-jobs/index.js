@@ -141,7 +141,7 @@ class FirstNudjPage extends React.Component {
               a&nbsp;good&nbsp;fit.
             </Para>
           </Section>
-          <Section padding width='largeI'>
+          <Section padding width='regular'>
             { jobs.map(job => {
               const jobUrl = getJobUrl({
                 protocol: this.props.web.protocol,
@@ -176,6 +176,7 @@ class FirstNudjPage extends React.Component {
                     location={job.location}
                     renderStats={false}
                     expertiseTags={job.tags}
+                    bonus={job.bonus}
                     jobUrl={jobUrl}
                     referralUrl={referralUrl}
                     shareProps={shareProps}

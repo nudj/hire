@@ -43,6 +43,7 @@ const get = ({ req, res, session, query }) => {
               title
               slug
               location
+              bonus
               referral: getOrCreateReferralForUser(person: $userId) {
                 id
               }

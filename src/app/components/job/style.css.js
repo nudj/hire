@@ -33,7 +33,7 @@ const styleSheet = StyleSheet.create({
     marginLeft: `-${sizes.smallIi}`,
     marginRight: `-${sizes.smallIi}`,
     textAlign: 'left',
-    maxWidth: '21.25rem'
+    maxWidth: '28.25rem'
   },
   statisticItem: {
     display: 'flex',
@@ -44,9 +44,21 @@ const styleSheet = StyleSheet.create({
     ':nth-child(1) ~ *': {
       marginTop: sizes.smallIi
     },
-    '@media(min-width: 23.75rem)': {
+    '@media(min-width: 12rem)': {
+      flexBasis: '50%',
+      ':nth-child(1) ~ *': {
+        marginTop: 0
+      },
+      ':nth-child(2) ~ *': {
+        marginTop: sizes.smallIi
+      }
+    },
+    '@media(min-width: 28.75rem)': {
       flexBasis: 'auto',
       ':nth-child(1) ~ *': {
+        marginTop: 0
+      },
+      ':nth-child(2) ~ *': {
         marginTop: 0
       }
     }
