@@ -1,5 +1,6 @@
 const React = require('react')
 const PropTypes = require('prop-types')
+const isNil = require('lodash/isNil')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
@@ -12,20 +13,16 @@ const defaultStyleSheet = require('./style.css')
 
 class Job extends React.Component {
   static defaultProps = {
-    viewCount: 0,
-    referralCount: 0,
-    applicationCount: 0,
-    renderStats: true,
     expertiseTags: []
   }
 
   static propTypes = {
     title: PropTypes.string,
     location: PropTypes.string,
-    renderStats: PropTypes.bool,
     viewCount: PropTypes.number,
     referralCount: PropTypes.number,
     applicationCount: PropTypes.number,
+    bonus: PropTypes.string,
     children: PropTypes.node,
     expertiseTags: PropTypes.array,
     styleSheet: StylePropType
@@ -50,7 +47,7 @@ class Job extends React.Component {
       viewCount,
       referralCount,
       applicationCount,
-      renderStats,
+      bonus,
       children,
       styleSheet,
       expertiseTags
@@ -58,6 +55,12 @@ class Job extends React.Component {
 
     const style = this.getStyle(defaultStyleSheet, styleSheet)
     const tagStyleSheet = this.getTagStyleSheet(style)
+    const hasMeta = !(
+      isNil(viewCount) ||
+      isNil(referralCount) ||
+      isNil(applicationCount) ||
+      isNil(bonus)
+    )
 
     return (
       <div className={css(style.root)}>
@@ -72,62 +75,88 @@ class Job extends React.Component {
               </Text>
             )}
           </div>
-          {renderStats && (
+          { hasMeta && (
             <dl className={css(style.statisticsList)}>
-              <div className={css(style.statisticItem)}>
-                <Text
-                  size='smallI'
-                  element='dt'
-                  style={style.statisticValue}
-                  nonsensitive
-                >
-                  {viewCount}
-                </Text>
-                <Text
-                  size='smallI'
-                  element='dd'
-                  style={style.statisticLabel}
-                  nonsensitive
-                >
-                  Page views
-                </Text>
-              </div>
-              <div className={css(style.statisticItem)}>
-                <Text
-                  size='smallI'
-                  element='dt'
-                  style={style.statisticValue}
-                  nonsensitive
-                >
-                  {referralCount}
-                </Text>
-                <Text
-                  size='smallI'
-                  element='dd'
-                  style={style.statisticLabel}
-                  nonsensitive
-                >
-                  Links created
-                </Text>
-              </div>
-              <div className={css(style.statisticItem)}>
-                <Text
-                  size='smallI'
-                  element='dt'
-                  style={style.statisticValue}
-                  nonsensitive
-                >
-                  {applicationCount}
-                </Text>
-                <Text
-                  size='smallI'
-                  element='dd'
-                  style={style.statisticLabel}
-                  nonsensitive
-                >
-                  Applications
-                </Text>
-              </div>
+              {!isNil(viewCount) && (
+                <div className={css(style.statisticItem)}>
+                  <Text
+                    size='smallI'
+                    element='dt'
+                    style={style.statisticValue}
+                    nonsensitive
+                  >
+                    {viewCount}
+                  </Text>
+                  <Text
+                    size='smallI'
+                    element='dd'
+                    style={style.statisticLabel}
+                    nonsensitive
+                  >
+                    Page views
+                  </Text>
+                </div>
+              )}
+              {!isNil(referralCount) && (
+                <div className={css(style.statisticItem)}>
+                  <Text
+                    size='smallI'
+                    element='dt'
+                    style={style.statisticValue}
+                    nonsensitive
+                  >
+                    {referralCount}
+                  </Text>
+                  <Text
+                    size='smallI'
+                    element='dd'
+                    style={style.statisticLabel}
+                    nonsensitive
+                  >
+                    Links created
+                  </Text>
+                </div>
+              )}
+              {!isNil(applicationCount) && (
+                <div className={css(style.statisticItem)}>
+                  <Text
+                    size='smallI'
+                    element='dt'
+                    style={style.statisticValue}
+                    nonsensitive
+                  >
+                    {applicationCount}
+                  </Text>
+                  <Text
+                    size='smallI'
+                    element='dd'
+                    style={style.statisticLabel}
+                    nonsensitive
+                  >
+                    Applications
+                  </Text>
+                </div>
+              )}
+              {!isNil(bonus) && (
+                <div className={css(style.statisticItem)}>
+                  <Text
+                    size='smallI'
+                    element='dt'
+                    style={style.statisticValue}
+                    nonsensitive
+                  >
+                    {bonus}
+                  </Text>
+                  <Text
+                    size='smallI'
+                    element='dd'
+                    style={style.statisticLabel}
+                    nonsensitive
+                  >
+                    Your bonus
+                  </Text>
+                </div>
+              )}
             </dl>
           )}
           {expertiseTags.length > 0 && (

@@ -23,6 +23,7 @@ const getGql = ({ session, query }) => {
               slug
               location
               tags
+              bonus
               referral: getOrCreateReferralForUser(person: $userId) {
                 id
               }

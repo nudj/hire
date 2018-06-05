@@ -346,6 +346,7 @@ class DashboardPage extends React.Component {
                     applicationCount={job.applicationCount}
                     jobUrl={jobUrl}
                     referralUrl={referralUrl}
+                    bonus={job.bonus}
                     applicantsUrl={
                       isAdmin
                         ? `/applications#${job.slug}`
