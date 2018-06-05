@@ -273,7 +273,7 @@ class ContactsPage extends React.Component {
                 </Para>
                 <div className={css(mss.center)}>
                   <ButtonLink
-                    href='/sync-contacts/linkedin/upload'
+                    href='/sync-contacts/linkedin'
                     style={mss.mtLgI}
                     name='emailProvider'
                     volume='cheer'
