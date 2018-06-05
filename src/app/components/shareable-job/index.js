@@ -123,6 +123,7 @@ class ShareableJob extends React.Component {
                 href={jobUrl}
                 className={css(style.action)}
                 tabIndex={showSharePanel ? -1 : 0}
+                target='_blank'
               >
                 View job listing
               </a>
