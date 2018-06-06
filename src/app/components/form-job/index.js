@@ -33,7 +33,7 @@ const inputFieldStylesheet = {
 const textareaStylesheet = { input: style.textarea }
 
 const JobForm = props => {
-  const { fieldValues, onFieldChange, onSubmit } = props
+  const { fieldValues, onFieldChange, onSubmit, csrfToken } = props
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
@@ -141,6 +141,7 @@ const JobForm = props => {
           We recommend a bonus of £500
         </Text>
       </InputField>
+      <input name='_csrf' value={csrfToken} type='hidden' />
     </form>
   )
 }

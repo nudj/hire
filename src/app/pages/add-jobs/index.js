@@ -32,7 +32,7 @@ class SetupJobsPage extends React.Component {
   }
 
   render () {
-    const { addJobsPage: state } = this.props
+    const { addJobsPage: state, csrfToken } = this.props
 
     return (
       <Layout {...this.props}>
@@ -52,6 +52,7 @@ class SetupJobsPage extends React.Component {
           <Section padding width='largeI'>
             <Card>
               <JobsForm
+                csrfToken={csrfToken}
                 fieldValues={state.fieldValues}
                 onFieldChange={this.handleChange}
                 onSubmit={this.handleSubmit}
