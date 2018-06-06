@@ -1,3 +1,4 @@
+const { cookies } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
 const {
   values: jobStatusTypes
@@ -44,7 +45,7 @@ const post = ({ body, res }) => {
     }
   }
   const respond = () => {
-    res.cookie('newlyOnboarded', true)
+    cookies.set(res, 'newlyOnboarded', true)
     throw new Redirect({
       url: '/'
     })

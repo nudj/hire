@@ -1,3 +1,4 @@
+const { cookies } = require('@nudj/library')
 const { Redirect } = require('@nudj/library/errors')
 
 const { createNotification } = require('../../lib')
@@ -92,8 +93,8 @@ const getThread = props => {
   }
 
   const transformData = data => {
-    const { newlyOnboarded } = req.cookies
-    res.cookie('newlyOnboarded', false)
+    const newlyOnboarded = cookies.get(req, 'newlyOnboarded')
+    cookies.set(res, 'newlyOnboarded', false)
 
     return {
       ...data,
@@ -314,7 +315,7 @@ const sendNewMessage = ({ session, params, body, req }) => {
     gql,
     variables,
     respond: (pageData) => {
-      const { newlyOnboarded } = req.cookies
+      const newlyOnboarded = cookies.get(req, 'newlyOnboarded')
 
       // prevents multiple submissions on refresh
       throw new Redirect({

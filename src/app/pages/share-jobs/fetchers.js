@@ -1,3 +1,4 @@
+const { cookies } = require('@nudj/library')
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 
@@ -63,7 +64,7 @@ const postGql = ({ res }) => {
 
   const respond = (data) => {
     const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
-    if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+    if (newlyOnboarded) cookies.set(res, 'newlyOnboarded', true)
 
     throw new Redirect({
       url: '/'

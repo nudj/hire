@@ -1,3 +1,4 @@
+const { cookies } = require('@nudj/library')
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 const { Global } = require('../../lib/graphql')
@@ -39,7 +40,7 @@ const post = ({ res, body }) => {
 
     const respond = data => {
       const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
-      if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+      if (newlyOnboarded) cookies.set(res, 'newlyOnboarded', true)
 
       throw new Redirect({
         url: '/'
