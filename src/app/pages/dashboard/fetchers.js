@@ -1,3 +1,4 @@
+const { cookies } = require('@nudj/library')
 const { jobStatuses } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const {
@@ -94,9 +95,8 @@ const get = ({ req, res, session, query }) => {
   }
 
   const transformData = data => {
-    const { newlyOnboarded } = req.cookies
-
-    res.cookie('newlyOnboarded', false)
+    const newlyOnboarded = cookies.get(req, 'newlyOnboarded')
+    cookies.set(res, 'newlyOnboarded', false)
 
     return {
       ...data,

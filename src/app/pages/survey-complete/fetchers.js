@@ -3,6 +3,7 @@ const uniqBy = require('lodash/uniqBy')
 const flatten = require('lodash/flatten')
 const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
+const { cookies } = require('@nudj/library')
 
 const { emailPreferences } = require('../../lib/constants')
 const intercom = require('../../lib/intercom')
@@ -76,7 +77,7 @@ const completeSurvey = ({ session, params, res }) => {
 
   const transformData = data => {
     const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
-    if (newlyOnboarded) res.cookie('newlyOnboarded', true)
+    if (newlyOnboarded) cookies.set(res, 'newlyOnboarded', true)
 
     try {
       const favourites = flatten(data.surveyAnswers.map(answer => answer.connections))

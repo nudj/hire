@@ -3,6 +3,7 @@ const passport = require('passport')
 const request = require('@nudj/library/request')
 const logger = require('@nudj/framework/logger')
 const { cacheReturnTo } = require('@nudj/library/server')
+const { cookies } = require('@nudj/library')
 
 const requestGql = require('../../lib/requestGql')
 
@@ -78,7 +79,7 @@ const Router = ({
     delete req.session.data
     req.session.logout = true
     req.session.returnTo = req.query.returnTo
-    res.clearCookie('connect.sid', {path: '/'})
+    cookies.clear(res, 'session')
     res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?returnTo=${encodeURIComponent(`${process.env.PROTOCOL_DOMAIN}/loggedout`)}&client_id=${process.env.AUTH0_CLIENT_ID}`)
   })
 
