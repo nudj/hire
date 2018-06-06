@@ -1,6 +1,7 @@
 const Intercom = require('intercom-client')
 const format = require('date-fns/format')
 const logger = require('@nudj/framework/logger')
+const { intercom: libIntercom } = require('@nudj/library/analytics')
 const intercom = new Intercom.Client({
   token: process.env.INTERCOM_ACCESS_TOKEN
 })
@@ -78,8 +79,29 @@ function logEvent ({ event_name, email, metadata }) {
   .catch((error) => logger.log('error', 'Intercom', 'logEvent', event_name, email, metadata, error))
 }
 
+const logNewJobToIntercom = async (data, body) => {
+  try {
+    const user = await libIntercom.user.getBy({
+      email: data.user.email
+    })
+
+    await libIntercom.user.logEvent({
+      user,
+      event: {
+        name: 'added job',
+        metadata: {
+          title: body.title
+        }
+      }
+    })
+  } catch (error) {
+    logger.log('error', error)
+  }
+}
+
 module.exports = {
   createUniqueLeadAndTag,
+  logNewJobToIntercom,
   logEvent,
   updateUser
 }
