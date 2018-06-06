@@ -1,9 +1,31 @@
 const { Redirect } = require('@nudj/framework/errors')
+const logger = require('@nudj/framework/logger')
+const { intercom } = require('@nudj/library/analytics')
 const {
   values: jobStatusTypes
 } = require('@nudj/api/gql/schema/enums/job-status-types')
 
 const { Global } = require('../../lib/graphql')
+
+const triggerIntercomTracking = async (data, body) => {
+  try {
+    const user = await intercom.user.getBy({
+      email: data.user.email
+    })
+
+    await intercom.user.logEvent({
+      user,
+      event: {
+        name: 'added job',
+        metadata: {
+          title: body.title
+        }
+      }
+    })
+  } catch (error) {
+    logger.log('error', error)
+  }
+}
 
 const get = () => {
   const gql = `
@@ -19,6 +41,7 @@ const post = ({ body }) => {
   const gql = `
     mutation CreateJob ($job: JobCreateInput!) {
       user {
+        email
         hirer {
           company {
             createJob(data: $job) {
@@ -41,7 +64,9 @@ const post = ({ body }) => {
       type: 'PERMANENT'
     }
   }
-  const respond = () => {
+  const respond = data => {
+    triggerIntercomTracking(data, body)
+
     throw new Redirect({
       url: '/',
       notification: {
