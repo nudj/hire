@@ -39,7 +39,7 @@ class SetupCompanyPage extends React.Component {
   }
 
   render () {
-    const { setupCompanyPage: state } = this.props
+    const { setupCompanyPage: state, csrfToken } = this.props
     const { fieldValues } = state
 
     const descriptionPlaceholder = dedent(`
@@ -124,6 +124,7 @@ class SetupCompanyPage extends React.Component {
                   />
                   <Text element='div' style={mss.mtSmIi} nonsensitive>Briefly describe your company</Text>
                 </InputField>
+                <input name='_csrf' value={csrfToken} type='hidden' />
               </form>
             </Card>
           </Section>
