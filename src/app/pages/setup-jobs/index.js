@@ -1,11 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const {
-  Button,
-  Card
-} = require('@nudj/components')
-
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
@@ -37,7 +32,7 @@ class SetupJobsPage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Add your jobs</title>
+          <title>Add a job</title>
         </Helmet>
         <Main>
           <Section padding>
@@ -45,28 +40,17 @@ class SetupJobsPage extends React.Component {
             Add your job
             </Heading>
             <Para nonsensitive>
-              Add a few details about each role you&apos;re hiring for, and
+              Add a few details about a role you&apos;re currently hiring for, and
               we&apos;ll add them to our platform.
             </Para>
           </Section>
           <Section padding width='largeI'>
-            <Card>
-              <JobsForm
-                csrfToken={csrfToken}
-                fieldValues={state.fieldValues}
-                onFieldChange={this.handleChange}
-                onSubmit={this.handleSubmit}
-              />
-            </Card>
-          </Section>
-          <Section>
-            <Button
-              nonsensitive
-              volume='cheer'
-              onClick={this.handleSubmit}
-            >
-              Publish job
-            </Button>
+            <JobsForm
+              csrfToken={csrfToken}
+              fieldValues={state.fieldValues}
+              onFieldChange={this.handleChange}
+              onSubmit={this.handleSubmit}
+            />
           </Section>
         </Main>
       </Layout>

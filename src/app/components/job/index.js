@@ -153,7 +153,7 @@ class Job extends React.Component {
                     style={style.statisticLabel}
                     nonsensitive
                   >
-                    Your bonus
+                    Referral bonus
                   </Text>
                 </div>
               )}
