@@ -1,6 +1,5 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const dedent = require('dedent')
 
 const {
   Button,
@@ -42,11 +41,10 @@ class SetupCompanyPage extends React.Component {
     const { setupCompanyPage: state, csrfToken } = this.props
     const { fieldValues } = state
 
-    const descriptionPlaceholder = dedent(`
-      Apple Inc. is an American multinational technology company headquartered in
-      Cupertino, California, that designs, develops, and sells consumer electronics,
-      computer software, and online services
-    `)
+    const descriptionPlaceholder = 'Apple Inc. is an American multinational ' +
+    'technology company headquartered in Cupertino, California, that ' +
+    'designs, develops, and sells consumer electronics, computer software, ' +
+    'and online services.'
 
     return (
       <Layout {...this.props}>
@@ -62,9 +60,9 @@ class SetupCompanyPage extends React.Component {
               Tell us a bit more about your business, including where you&apos;re based.
             </Para>
           </Section>
-          <Section padding width='regular'>
-            <Card style={mss.ptSmI}>
-              <form className={css(style.form)} onSubmit={this.handleSubmit}>
+          <Section padding width='largeI'>
+            <form className={css(style.form)} onSubmit={this.handleSubmit}>
+              <Card style={style.card}>
                 <InputField
                   styleSheet={{
                     root: style.field,
@@ -125,18 +123,16 @@ class SetupCompanyPage extends React.Component {
                   <Text element='div' style={mss.mtSmIi} nonsensitive>Briefly describe your company</Text>
                 </InputField>
                 <input name='_csrf' value={csrfToken} type='hidden' />
-              </form>
-            </Card>
-          </Section>
-          <Section padding>
-            <Button
-              nonsensitive
-              onClick={this.handleSubmit}
-              volume='cheer'
-              style={style.sendInvitesButton}
-            >
-              Create company
-            </Button>
+              </Card>
+              <Button
+                nonsensitive
+                type='submit'
+                volume='cheer'
+                style={mss.mtLgIi}
+              >
+                Create company
+              </Button>
+            </form>
           </Section>
         </Main>
       </Layout>

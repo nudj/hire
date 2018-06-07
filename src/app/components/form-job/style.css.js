@@ -4,8 +4,11 @@ const { merge } = require('@nudj/library')
 
 const stylesheet = StyleSheet.create({
   form: {
-    textAlign: 'left',
+    textAlign: 'center',
     marginTop: 0
+  },
+  card: {
+    textAlign: 'left'
   },
   fieldLabel: merge(typography.type.largeI, {
     color: colors.primary

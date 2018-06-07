@@ -4,8 +4,11 @@ const { merge } = require('@nudj/library')
 
 const stylesheet = StyleSheet.create({
   form: {
-    textAlign: 'left',
+    textAlign: 'center',
     marginTop: 0
+  },
+  card: {
+    textAlign: 'left'
   },
   addFieldButton: {
     display: 'block',
@@ -31,7 +34,9 @@ const stylesheet = StyleSheet.create({
     verticalAlign: 'super'
   }),
   field: {
-    marginTop: sizes.regular
+    ':nth-child(n + 2)': {
+      marginTop: sizes.regular
+    }
   },
   textarea: {
     minHeight: '10rem',

@@ -1,11 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const {
-  Button,
-  Card
-} = require('@nudj/components')
-
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
@@ -50,24 +45,12 @@ class SetupJobsPage extends React.Component {
             </Para>
           </Section>
           <Section padding width='largeI'>
-            <Card>
-              <JobsForm
-                csrfToken={csrfToken}
-                fieldValues={state.fieldValues}
-                onFieldChange={this.handleChange}
-                onSubmit={this.handleSubmit}
-              />
-            </Card>
-          </Section>
-          <Section>
-            <Button
-              type='submit'
-              nonsensitive
-              volume='cheer'
-              onClick={this.handleSubmit}
-            >
-              Publish job
-            </Button>
+            <JobsForm
+              csrfToken={csrfToken}
+              fieldValues={state.fieldValues}
+              onFieldChange={this.handleChange}
+              onSubmit={this.handleSubmit}
+            />
           </Section>
         </Main>
       </Layout>

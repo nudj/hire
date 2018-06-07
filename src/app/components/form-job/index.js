@@ -2,6 +2,8 @@ const React = require('react')
 const dedent = require('dedent')
 
 const {
+  Button,
+  Card,
   Input,
   InputField,
   Text,
@@ -37,111 +39,120 @@ const JobForm = props => {
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='title'
-        label='Title'
-        required
-      >
-        <Input
-          id='title'
-          placeholder='Marketing specialist'
-          name='title'
-          value={fieldValues.title}
-          onChange={onFieldChange}
+      <Card style={style.card}>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='title'
+          label='Title'
           required
-        />
-      </InputField>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='location'
-        label='Location'
-        required
-      >
-        <Input
-          id='location'
-          placeholder='London'
-          name='location'
-          value={fieldValues.location}
-          onChange={onFieldChange}
+        >
+          <Input
+            id='title'
+            placeholder='Marketing specialist'
+            name='title'
+            value={fieldValues.title}
+            onChange={onFieldChange}
+            required
+          />
+        </InputField>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='location'
+          label='Location'
           required
-        />
-      </InputField>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='roleDescription'
-        label='Role Description'
-        required
-      >
-        <Textarea
-          id='roleDescription'
-          placeholder={roleDescriptionPlaceholder}
-          name='roleDescription'
-          value={fieldValues.roleDescription}
-          onChange={onFieldChange}
-          styleSheet={textareaStylesheet}
+        >
+          <Input
+            id='location'
+            placeholder='London'
+            name='location'
+            value={fieldValues.location}
+            onChange={onFieldChange}
+            required
+          />
+        </InputField>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='roleDescription'
+          label='Role Description'
           required
-        />
-        <Text element='div' nonsensitive style={mss.mtSmIi}>
-          Define what this person will do at your company
-        </Text>
-      </InputField>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='candidateDescription'
-        label='Experience Required'
-        required
-      >
-        <Textarea
-          id='candidateDescription'
-          placeholder={experienceRequiredPlaceholder}
-          name='candidateDescription'
-          value={fieldValues.candidateDescription}
-          onChange={onFieldChange}
-          styleSheet={textareaStylesheet}
+        >
+          <Textarea
+            id='roleDescription'
+            placeholder={roleDescriptionPlaceholder}
+            name='roleDescription'
+            value={fieldValues.roleDescription}
+            onChange={onFieldChange}
+            styleSheet={textareaStylesheet}
+            required
+          />
+          <Text element='div' nonsensitive style={mss.mtSmIi}>
+            Define what this person will do at your company
+          </Text>
+        </InputField>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='candidateDescription'
+          label='Experience Required'
           required
-        />
-        <Text element='div' style={mss.mtSmIi} nonsensitive>
-          Outline what experience this person should have
-        </Text>
-      </InputField>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='remuneration'
-        label='Salary'
-        required
-      >
-        <Input
-          id='remuneration'
-          placeholder='£500'
-          name='remuneration'
-          value={fieldValues.remuneration}
-          onChange={onFieldChange}
+        >
+          <Textarea
+            id='candidateDescription'
+            placeholder={experienceRequiredPlaceholder}
+            name='candidateDescription'
+            value={fieldValues.candidateDescription}
+            onChange={onFieldChange}
+            styleSheet={textareaStylesheet}
+            required
+          />
+          <Text element='div' style={mss.mtSmIi} nonsensitive>
+            Outline what experience this person should have
+          </Text>
+        </InputField>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='remuneration'
+          label='Salary'
           required
-        />
-        <Text element='div' style={mss.mtSmIi} nonsensitive>
-          If you&apos;d rather not say, just put Competitive
-        </Text>
-      </InputField>
-      <InputField
-        styleSheet={inputFieldStylesheet}
-        htmlFor='bonus'
-        label='Referral bonus'
-        required
-      >
-        <Input
-          id='bonus'
-          placeholder='£500'
-          name='bonus'
-          value={fieldValues.bonus}
-          onChange={onFieldChange}
+        >
+          <Input
+            id='remuneration'
+            placeholder='£500'
+            name='remuneration'
+            value={fieldValues.remuneration}
+            onChange={onFieldChange}
+            required
+          />
+          <Text element='div' style={mss.mtSmIi} nonsensitive>
+            If you&apos;d rather not say, just put Competitive
+          </Text>
+        </InputField>
+        <InputField
+          styleSheet={inputFieldStylesheet}
+          htmlFor='bonus'
+          label='Referral bonus'
           required
-        />
-        <Text element='div' style={mss.mtSmIi} nonsensitive>
-          We recommend a bonus of £500
-        </Text>
-      </InputField>
-      <input name='_csrf' value={csrfToken} type='hidden' />
+        >
+          <Input
+            id='bonus'
+            placeholder='£500'
+            name='bonus'
+            value={fieldValues.bonus}
+            onChange={onFieldChange}
+            required
+          />
+          <Text element='div' style={mss.mtSmIi} nonsensitive>
+            We recommend a bonus of £500
+          </Text>
+        </InputField>
+        <input name='_csrf' value={csrfToken} type='hidden' />
+      </Card>
+      <Button
+        style={mss.mtLgIi}
+        type='submit'
+        volume='cheer'
+      >
+        Publish job
+      </Button>
     </form>
   )
 }
