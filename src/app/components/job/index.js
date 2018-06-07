@@ -55,11 +55,11 @@ class Job extends React.Component {
 
     const style = this.getStyle(defaultStyleSheet, styleSheet)
     const tagStyleSheet = this.getTagStyleSheet(style)
-    const hasMeta = !(
-      isNil(viewCount) ||
-      isNil(referralCount) ||
-      isNil(applicationCount) ||
-      isNil(bonus)
+    const hasMeta = (
+      !isNil(viewCount) ||
+      !isNil(referralCount) ||
+      !isNil(applicationCount) ||
+      !isNil(bonus)
     )
 
     return (
