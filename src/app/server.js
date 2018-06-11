@@ -60,6 +60,47 @@ const spoofLoggedIn = (req, res, next) => {
 
 const errorHandlers = {}
 const gqlFragments = require('./lib/graphql')
+
+const helmetConfig = {
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'widget.intercom.io',
+        'www.googletagmanager.com',
+        'js.intercomcdn.com'
+      ],
+      connectSrc: [
+        "'self'",
+        'api-iam.intercom.io',
+        'nexus-websocket-a.intercom.io',
+        'wss://nexus-websocket-a.intercom.io',
+        'nexus-websocket-b.intercom.io',
+        'wss://nexus-websocket-b.intercom.io'
+      ],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'cdnjs.cloudflare.com'
+      ],
+      fontSrc: [
+        "'self'",
+        'js.intercomcdn.com'
+      ],
+      imgSrc: [
+        "'self'",
+        'https://static.intercomassets.com'
+      ]
+    }
+  }
+}
+if (useDevServer) {
+  helmetConfig.contentSecurityPolicy.directives.scriptSrc.push('hire-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.connectSrc.push('hire-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.connectSrc.push('wss://hire-wds.local.nudj.co')
+}
+
 let app = createNudjApps({
   App: reactApp,
   reduxRoutes,
@@ -70,7 +111,8 @@ let app = createNudjApps({
   spoofLoggedIn,
   errorHandlers,
   gqlFragments,
-  LoadingComponent: LoadingPage
+  LoadingComponent: LoadingPage,
+  helmetConfig
 })
 
 const server = http.createServer(app)
