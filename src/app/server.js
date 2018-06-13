@@ -99,6 +99,7 @@ if (useDevServer) {
   helmetConfig.contentSecurityPolicy.directives.scriptSrc.push('hire-wds.local.nudj.co')
   helmetConfig.contentSecurityPolicy.directives.connectSrc.push('hire-wds.local.nudj.co')
   helmetConfig.contentSecurityPolicy.directives.connectSrc.push('wss://hire-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.scriptSrc.push("'unsafe-eval'")
 }
 
 let app = createNudjApps({
@@ -192,7 +193,8 @@ if (module.hot) {
       spoofLoggedIn,
       errorHandlers,
       gqlFragments,
-      LoadingComponent: updatedLoadingPage
+      LoadingComponent: updatedLoadingPage,
+      helmetConfig
     })
 
     server.on('request', newApp)
