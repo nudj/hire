@@ -2,7 +2,6 @@ const { Redirect } = require('@nudj/framework/errors')
 const { intercom } = require('@nudj/library/analytics')
 const logger = require('@nudj/framework/logger')
 
-const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
 
 const triggerIntercomTracking = async (data, body) => {
@@ -51,8 +50,8 @@ const triggerIntercomTracking = async (data, body) => {
 
 const get = () => {
   const gql = `
-    query {
-      ${Global}
+    mutation GetEnrichmentData {
+      enrichmentData: getCompanyEnrichmentDataByUserEmail
     }
   `
 
