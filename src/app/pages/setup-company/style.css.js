@@ -42,6 +42,9 @@ const stylesheet = StyleSheet.create({
     minHeight: '10rem',
     width: '100%',
     height: '100%'
+  },
+  errorLink: {
+    color: colors.white
   }
 })
 

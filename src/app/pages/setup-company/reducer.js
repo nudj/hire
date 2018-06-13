@@ -1,9 +1,15 @@
 const { createReducer } = require('../../lib')
 const {
+  INIT_FIELD_VALUES,
   SET_FIELD_VALUE,
   ADD_ADDITIONAL_FIELD,
   RESET_FORM
 } = require('./actions')
+
+const initFieldValues = (state, action) => ({
+  ...state,
+  fieldValues: action.fieldValues
+})
 
 const setFieldValue = (state, action) => ({
   ...state,
@@ -21,6 +27,7 @@ const addAdditionalField = state => ({
 const resetForm = state => initialState
 
 const reducers = {
+  [INIT_FIELD_VALUES]: initFieldValues,
   [SET_FIELD_VALUE]: setFieldValue,
   [ADD_ADDITIONAL_FIELD]: addAdditionalField,
   [RESET_FORM]: resetForm

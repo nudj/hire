@@ -21,11 +21,24 @@ const {
   Para
 } = require('../../components/wizard')
 const {
+  initFieldValues,
   setFieldValue,
   submitCompany
 } = require('./actions')
 
 class SetupCompanyPage extends React.Component {
+  componentDidMount () {
+    const { dispatch, enrichmentData } = this.props
+    const { enrichedCompany } = enrichmentData
+    const { name, location, description } = enrichedCompany
+
+    dispatch(initFieldValues({
+      name,
+      location,
+      description
+    }))
+  }
+
   handleChange = ({ name, value }) => {
     const { dispatch } = this.props
     dispatch(setFieldValue(name, value))
@@ -38,13 +51,30 @@ class SetupCompanyPage extends React.Component {
   }
 
   render () {
-    const { setupCompanyPage: state, csrfToken } = this.props
+    const { setupCompanyPage: state, csrfToken, enrichmentData } = this.props
     const { fieldValues } = state
 
+    const companyName = enrichmentData.company && enrichmentData.company.name
+    const isClient = enrichmentData.company && enrichmentData.company.client
+    const nameError = isClient && fieldValues.name === companyName
+      ? (
+        <span>
+          It looks like your company is already using nudj.<br />
+          Something not right?{' '}
+          <a
+            className={css(style.errorLink)}
+            id='open-intercom'
+            href='mailto:help@nudj.co'
+          >
+            Get in touch
+          </a>.
+        </span>
+      ) : false
+
     const descriptionPlaceholder = 'Apple Inc. is an American multinational ' +
-    'technology company headquartered in Cupertino, California, that ' +
-    'designs, develops, and sells consumer electronics, computer software, ' +
-    'and online services.'
+      'technology company headquartered in Cupertino, California, that ' +
+      'designs, develops, and sells consumer electronics, computer software, ' +
+      'and online services.'
 
     return (
       <Layout {...this.props}>
@@ -79,6 +109,7 @@ class SetupCompanyPage extends React.Component {
                     value={fieldValues.name}
                     onChange={this.handleChange}
                     styleSheet={{ root: style.field }}
+                    error={nameError}
                     required
                   />
                 </InputField>
