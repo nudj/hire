@@ -14,18 +14,11 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
-const roleDescriptionPlaceholder = dedent(`
+const descriptionPlaceholder = dedent(`
   You will be responsible for executing projects from concept through production
   and delivery, working alongside a global cross-functional team. You must possess
   a keen creative vision, be a great story teller, have the organisational skills of
   a project manager and the pixel-perfect obsession of a designer.
-`).replace(/\n/g, ' ')
-
-const experienceRequiredPlaceholder = dedent(`
-  You should have proven experience in delivering multi-channel Marketing
-  programmes. Experience with Customer Service Marketing is also a bonus.
-  You must also be on point with trends in retail, marketing, technology,
-  and the world around us.
 `).replace(/\n/g, ' ')
 
 const inputFieldStylesheet = {
@@ -72,59 +65,19 @@ const JobForm = props => {
         </InputField>
         <InputField
           styleSheet={inputFieldStylesheet}
-          htmlFor='roleDescription'
-          label='Role Description'
+          htmlFor='description'
+          label='Description'
           required
         >
           <Textarea
-            id='roleDescription'
-            placeholder={roleDescriptionPlaceholder}
-            name='roleDescription'
-            value={fieldValues.roleDescription}
+            id='description'
+            placeholder={descriptionPlaceholder}
+            name='description'
+            value={fieldValues.description}
             onChange={onFieldChange}
             styleSheet={textareaStylesheet}
             required
           />
-          <Text element='div' nonsensitive style={mss.mtSmIi}>
-            Define what this person will do at your company
-          </Text>
-        </InputField>
-        <InputField
-          styleSheet={inputFieldStylesheet}
-          htmlFor='candidateDescription'
-          label='Experience Required'
-          required
-        >
-          <Textarea
-            id='candidateDescription'
-            placeholder={experienceRequiredPlaceholder}
-            name='candidateDescription'
-            value={fieldValues.candidateDescription}
-            onChange={onFieldChange}
-            styleSheet={textareaStylesheet}
-            required
-          />
-          <Text element='div' style={mss.mtSmIi} nonsensitive>
-            Outline what experience this person should have
-          </Text>
-        </InputField>
-        <InputField
-          styleSheet={inputFieldStylesheet}
-          htmlFor='remuneration'
-          label='Salary'
-          required
-        >
-          <Input
-            id='remuneration'
-            placeholder='£500'
-            name='remuneration'
-            value={fieldValues.remuneration}
-            onChange={onFieldChange}
-            required
-          />
-          <Text element='div' style={mss.mtSmIi} nonsensitive>
-            If you&apos;d rather not say, just put Competitive
-          </Text>
         </InputField>
         <InputField
           styleSheet={inputFieldStylesheet}

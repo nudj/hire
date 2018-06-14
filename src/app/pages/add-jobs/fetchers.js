@@ -36,7 +36,6 @@ const post = ({ body }) => {
     job: {
       ...body,
       // Setting required defaults
-      description: '',
       templateTags: [],
       tags: [],
       status: jobStatusTypes.PUBLISHED,
