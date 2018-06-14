@@ -30,13 +30,16 @@ class SetupCompanyPage extends React.Component {
   componentDidMount () {
     const { dispatch, enrichmentData } = this.props
     const { enrichedCompany } = enrichmentData
-    const { name, location, description } = enrichedCompany
 
-    dispatch(initFieldValues({
-      name,
-      location,
-      description
-    }))
+    if (enrichedCompany) {
+      const { name, location, description } = enrichedCompany
+
+      dispatch(initFieldValues({
+        name,
+        location,
+        description
+      }))
+    }
   }
 
   handleChange = ({ name, value }) => {
