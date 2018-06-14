@@ -27,6 +27,10 @@ const {
 } = require('./actions')
 
 class SetupCompanyPage extends React.Component {
+  static defaultProps = {
+    enrichmentData: {}
+  }
+
   componentDidMount () {
     const { dispatch, enrichmentData } = this.props
     const { enrichedCompany } = enrichmentData
