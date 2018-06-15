@@ -1,5 +1,4 @@
 const React = require('react')
-const dedent = require('dedent')
 
 const {
   Button,
@@ -14,12 +13,9 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
 
-const descriptionPlaceholder = dedent(`
-  You will be responsible for executing projects from concept through production
-  and delivery, working alongside a global cross-functional team. You must possess
-  a keen creative vision, be a great story teller, have the organisational skills of
-  a project manager and the pixel-perfect obsession of a designer.
-`).replace(/\n/g, ' ')
+const descriptionPlaceholder =
+  'Briefly outline responsibilities of this role and ' +
+  'the experience the desired candidate should have.'
 
 const inputFieldStylesheet = {
   root: style.field,
