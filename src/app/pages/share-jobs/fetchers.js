@@ -27,6 +27,7 @@ const getGql = ({ session, query }) => {
               bonus
               referral: getOrCreateReferralForUser(person: $userId) {
                 id
+                slug
               }
             }
           }

@@ -14,27 +14,31 @@ passport.use(new GoogleStrategy({
 },
 async (req, accessToken, refreshToken, profile, cb) => {
   const emailAddresses = profile.emails.map(email => email.value)
-  const emailAddress = emailAddresses[0]
+  const email = emailAddresses[0]
   const query = `
-    mutation createGoogleAccount ($data: Data! $type: AccountType! $userId: ID! $personData: PersonUpdateInput!) {
-      updatePerson(id: $userId, data: $personData) {
+    mutation createGoogleAccount (
+      $personId: ID!
+      $personData: PersonUpdateInput!
+      $accountData: AccountCreateInput!
+    ) {
+      updatePerson(id: $personId, data: $personData) {
         id
       }
       user {
-        account: createOrUpdateAccount(type: $type, data: $data) {
+        account: createOrUpdateAccount(data: $accountData) {
           id
         }
       }
     }
   `
   const variables = {
-    userId: req.session.userId,
-    type: 'GOOGLE',
+    personId: req.session.userId,
     personData: {
       emailPreference: emailPreferences.GOOGLE
     },
-    data: {
-      emailAddress,
+    accountData: {
+      type: 'GOOGLE',
+      email,
       emailAddresses,
       data: {
         accessToken,
@@ -42,6 +46,7 @@ async (req, accessToken, refreshToken, profile, cb) => {
       }
     }
   }
+
   await requestGql(req.session.userId, query, variables)
   return cb(null, {})
 }))

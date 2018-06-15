@@ -36,10 +36,8 @@ const post = ({ body }) => {
     job: {
       ...body,
       // Setting required defaults
-      templateTags: [],
       tags: [],
-      status: jobStatusTypes.PUBLISHED,
-      type: 'PERMANENT'
+      status: jobStatusTypes.PUBLISHED
     }
   }
   const respond = data => {

@@ -172,7 +172,7 @@ class FirstNudjPage extends React.Component {
               const referralUrl = getReferralUrl({
                 protocol: this.props.web.protocol,
                 hostname: this.props.web.hostname,
-                referralId: job.referral.id
+                referral: job.referral.slug
               })
 
               const shareProps = getShareProps[job.id]({

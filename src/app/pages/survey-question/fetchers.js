@@ -63,7 +63,7 @@ const getCompaniesQuestion = ({ params, query }) => {
                   id
                   title
                   description
-                  name
+                  title
                   type
                   required
                 }
@@ -126,7 +126,7 @@ const getConnectionsQuestion = ({ session, params, query }) => {
                   id
                   title
                   description
-                  name
+                  title
                   type
                   required
                 }
@@ -250,7 +250,7 @@ const postEmployment = ({ params, body }) => {
                   id
                   title
                   description
-                  name
+                  title
                   type
                   required
                 }
@@ -322,7 +322,7 @@ const postConnectionAnswer = ({ session, params, body }) => {
                   id
                   title
                   description
-                  name
+                  title
                   type
                   required
                 }

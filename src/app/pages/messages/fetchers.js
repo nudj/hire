@@ -76,7 +76,7 @@ const getThread = props => {
                 lastName
               }
               account: accountByFilters(filters: { type: $accountType }) {
-                emailAddress
+                email
               }
             }
           }
@@ -258,7 +258,7 @@ const getMessageTemplate = props => {
               slug
               title
               url
-              templateTags
+              template
             }
           }
         }
