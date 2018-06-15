@@ -14,8 +14,8 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const style = require('./style.css')
 
 const descriptionPlaceholder =
-  'Briefly outline responsibilities of this role and ' +
-  'the experience the desired candidate should have.'
+  'Briefly outline the responsibilities and ' +
+  'experience required for this role.'
 
 const inputFieldStylesheet = {
   root: style.field,
