@@ -1,6 +1,6 @@
 const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
 
-const breakpoint = '56.25rem'
+const breakpoint = '40rem'
 
 const styleSheet = StyleSheet.create({
   list: {
@@ -20,7 +20,7 @@ const styleSheet = StyleSheet.create({
       marginTop: sizes.largeI
     },
     [`@media(min-width: ${breakpoint})`]: {
-      flexBasis: '33.33333%',
+      flexBasis: '50%',
       paddingLeft: sizes.smallIi,
       paddingRight: sizes.smallIi,
       ':nth-child(1) ~ *': {
