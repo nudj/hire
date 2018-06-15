@@ -79,7 +79,7 @@ const WelcomeTeamMember = ({ style }) => (
       <ButtonLink
         nonsensitive
         style={wizardStyles.action}
-        href='/sync-contacts'
+        href='/share-jobs'
         volume='cheer'
       >
         Let&#39;s do this
