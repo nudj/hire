@@ -28,6 +28,7 @@ const getGql = ({ session, query }) => {
               status
               referral: getOrCreateReferralForUser(person: $userId) {
                 id
+                slug
               }
             }
           }
