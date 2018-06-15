@@ -23,24 +23,8 @@ const WelcomeTeamMember = ({ style }) => (
         rewarded&nbsp;a&nbsp;doddle.
       </Para>
     </Section>
-    <Section>
+    <Section width='largeI'>
       <ul className={css(style.list)}>
-        <li className={css(style.listItem)}>
-          <Card style={style.card}>
-            <img
-              className={css(style.listItemImage)}
-              src='/assets/images/unlock-network.svg'
-              alt=''
-            />
-            <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
-              Explore your network
-            </Text>
-            <Text nonsensitive style={style.listItemBody} element='p'>
-              Get help finding who is worth referring from your LinkedIn
-              connections. It&apos;s easier than doing&nbsp;it&nbsp;yourself!
-            </Text>
-          </Card>
-        </li>
         <li className={css(style.listItem)}>
           <Card style={style.card}>
             <img
