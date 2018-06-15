@@ -67,13 +67,17 @@ const helmetConfig = {
       scriptSrc: [
         "'self'",
         "'unsafe-inline'",
+        'snap.licdn.com',
         'widget.intercom.io',
+        'tagmanager.google.com',
         'www.googletagmanager.com',
+        'www.google-analytics.com',
         'js.intercomcdn.com'
       ],
       connectSrc: [
         "'self'",
         'api-iam.intercom.io',
+        'www.google-analytics.com',
         'nexus-websocket-a.intercom.io',
         'wss://nexus-websocket-a.intercom.io',
         'nexus-websocket-b.intercom.io',
@@ -90,6 +94,7 @@ const helmetConfig = {
       ],
       imgSrc: [
         "'self'",
+        'www.google-analytics.com',
         'https://static.intercomassets.com'
       ]
     }
