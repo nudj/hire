@@ -49,6 +49,7 @@ const get = ({ req, res, session, query }) => {
               bonus
               referral: getOrCreateReferralForUser(person: $userId) {
                 id
+                slug
               }
               applicationCount: applicationsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
               referralCount: referralsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})

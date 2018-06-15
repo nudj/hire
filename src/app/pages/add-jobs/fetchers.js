@@ -64,7 +64,6 @@ const post = ({ body, analytics }) => {
     job: {
       ...body,
       // Setting required defaults
-      templateTags: [],
       tags: [],
       status: jobStatusTypes.DRAFT,
       type: 'PERMANENT'

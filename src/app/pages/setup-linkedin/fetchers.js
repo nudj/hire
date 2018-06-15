@@ -30,8 +30,7 @@ const uploadConnections = ({ body, files, analytics }) => {
         lastName
         email
         importedConnections: importLinkedinConnections (connections: $connections) {
-          created
-          collection
+          id
         }
         hirer {
           company {
