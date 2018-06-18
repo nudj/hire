@@ -67,6 +67,11 @@ function getUserInfo (user) {
   return {email, firstName, lastName, url}
 }
 
+function passportAuthentication (req, res, next) {
+  const hint = req.query && req.query.email
+  passport.authenticate('auth0', { login_hint: hint })(req, res, next)
+}
+
 const Router = ({
   ensureLoggedIn,
   respondWith
@@ -111,7 +116,9 @@ const Router = ({
     }
   )
 
-  router.get('/login', cacheReturnTo, passport.authenticate('auth0', {}), (req, res, next) => res.redirect(req.session.returnTo || '/'))
+  router.get('/login', cacheReturnTo, passportAuthentication, (req, res, next) => {
+    res.redirect(req.session.returnTo || '/')
+  })
 
   return router
 }
