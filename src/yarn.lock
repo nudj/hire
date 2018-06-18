@@ -202,6 +202,14 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
+"@nudj/passport-auth0@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@nudj/passport-auth0/-/passport-auth0-0.1.0.tgz#698349f8a1f0cd14a78d50edeb8204566bf39faa"
+  dependencies:
+    passport-oauth "^1.0.0"
+    request "^2.61.0"
+    xtend "^4.0.0"
+
 "@nudj/react-router-redux@0.2.0--5.0.0-alpha.6":
   version "0.2.0--5.0.0-alpha.6"
   resolved "https://registry.yarnpkg.com/@nudj/react-router-redux/-/react-router-redux-0.2.0--5.0.0-alpha.6.tgz#78d775a52604384e2c106772d810d3d9aff2b3e5"
