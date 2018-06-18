@@ -5,7 +5,6 @@ const {
   Card,
   Input,
   InputField,
-  Text,
   Textarea
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
@@ -75,24 +74,6 @@ const JobForm = props => {
             required
           />
         </InputField>
-        <InputField
-          styleSheet={inputFieldStylesheet}
-          htmlFor='bonus'
-          label='Referral bonus'
-          required
-        >
-          <Input
-            id='bonus'
-            placeholder='£500'
-            name='bonus'
-            value={fieldValues.bonus}
-            onChange={onFieldChange}
-            required
-          />
-          <Text element='div' style={mss.mtSmIi} nonsensitive>
-            We recommend a bonus of £500
-          </Text>
-        </InputField>
         <input name='_csrf' value={csrfToken} type='hidden' />
       </Card>
       <Button
@@ -100,7 +81,7 @@ const JobForm = props => {
         type='submit'
         volume='cheer'
       >
-        Publish job
+        Save draft
       </Button>
     </form>
   )
