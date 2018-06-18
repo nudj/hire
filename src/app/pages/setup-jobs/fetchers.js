@@ -21,7 +21,7 @@ const get = () => {
   return { gql }
 }
 
-const post = ({ body, res }) => {
+const post = ({ res, body }) => {
   const gql = `
     mutation CreateJob ($job: JobCreateInput!) {
       user {
@@ -30,8 +30,8 @@ const post = ({ body, res }) => {
           company {
             id
             name
-            createJobAndOnboardHirer(data: $job) {
-              id
+            job: createJobAndOnboardHirer(data: $job) {
+              slug
             }
           }
         }
@@ -43,16 +43,17 @@ const post = ({ body, res }) => {
       ...body,
       // Setting required defaults
       templateTags: [],
-      status: jobStatusTypes.PUBLISHED,
+      status: jobStatusTypes.DRAFT,
       type: 'PERMANENT'
     }
   }
   const respond = data => {
-    cookies.set(res, 'newlyOnboarded', true)
     logNewJobToIntercom(data, body)
+    const { slug } = data.user.hirer.company.job
+    cookies.set(res, 'newlyOnboarded', true)
 
     throw new Redirect({
-      url: '/'
+      url: `/setup-jobs/${slug}/bonus`
     })
   }
   const catcher = () => {
