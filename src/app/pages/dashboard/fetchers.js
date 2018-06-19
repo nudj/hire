@@ -61,6 +61,7 @@ const get = ({ req, res, session, query }) => {
       whatsappTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["whatsapp"])
       emailTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["email"])
       twitterTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["twitter"])
+      linkedinTemplate: fetchTemplate(repo: "hirer", type: "share-job", tags: ["linkedin"])
       ${Global}
     }
   `

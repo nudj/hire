@@ -4,6 +4,7 @@ const PropTypes = require('prop-types')
 const {
   IconLink,
   FacebookButton,
+  LinkedinButton,
   MessengerButton,
   TwitterButton,
   WhatsappButton,
@@ -18,6 +19,7 @@ const ShareButtons = (props) => {
     whatsapp,
     facebook,
     messenger,
+    linkedin,
     twitter,
     email,
     tabIndex
@@ -50,6 +52,13 @@ const ShareButtons = (props) => {
       {messenger && (
         <MessengerButton
           {...messenger}
+          style={style}
+          tabIndex={tabIndex}
+        />
+      )}
+      {linkedin && (
+        <LinkedinButton
+          {...linkedin}
           style={style}
           tabIndex={tabIndex}
         />
@@ -88,6 +97,11 @@ ShareButtons.propTypes = {
     link: PropTypes.string.isRequired,
     redirectUri: PropTypes.string.isRequired,
     appId: PropTypes.string.isRequired
+  }),
+  linkedin: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    summary: PropTypes.string.isRequired
   }),
   twitter: PropTypes.shape({
     text: PropTypes.string.isRequired,

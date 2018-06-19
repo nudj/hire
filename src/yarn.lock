@@ -92,9 +92,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.12.0.tgz#8803aa720b491b48e8ab66bb4dad1df58dfcccd6"
+"@nudj/components@2.14.0":
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.14.0.tgz#60686de5bf5caed3916d5d82a9300eab19da5717"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -115,13 +115,14 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.2.1":
-  version "17.2.1"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.2.1.tgz#40abd3aaa8f05d803c636cb7f4fa2f81f6880b6d"
+"@nudj/framework@17.3.0":
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.3.0.tgz#7a71695bd6cdddcf1584bf6adc0e0bc926275078"
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
     "@nudj/library" "6.3.0"
+    "@nudj/passport-auth0" "0.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
     aphrodite "^1.2.0"
     axios "^0.16.1"

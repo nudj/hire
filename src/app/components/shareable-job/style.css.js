@@ -12,7 +12,7 @@ const scale = val => `scale(${val})`
 const springIn = animations.getKeyframes('transform', 100, 0, translateY)
 const springOut = animations.getKeyframes('transform', 0, 100, translateY)
 const scaleUp = animations.getKeyframes('transform', 0, 1, scale)
-const scaleUpDelays = animations.getStaggeredAnimationDelay(6, 50, 50)
+const scaleUpDelays = animations.getStaggeredAnimationDelay(7, 50, 50)
 
 const action = {
   ...typography.type.regular,
