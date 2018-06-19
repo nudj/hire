@@ -38,6 +38,8 @@ const getIndividualShareProps = (args) => {
     whatsappTemplate,
     twitterTemplate,
     emailTemplate,
+    linkedinTemplate,
+    bonus,
     name,
     jobTitle,
     company,
@@ -73,6 +75,22 @@ const getIndividualShareProps = (args) => {
       link: referralUrl,
       redirectUri: 'https://nudj.co',
       appId: '1945143509142278'
+    },
+    linkedin: {
+      url: referralUrl,
+      title: parseTemplate(
+        linkedinTemplate.subject,
+        {
+          job: { title: jobTitle }
+        }
+      ),
+      summary: parseTemplate(
+        linkedinTemplate.message,
+        {
+          job: { title: jobTitle, bonus },
+          company: { name: company }
+        }
+      )
     },
     twitter: {
       text: parseTemplate(
@@ -118,6 +136,7 @@ class FirstNudjPage extends React.Component {
       whatsappTemplate,
       emailTemplate,
       twitterTemplate,
+      linkedinTemplate,
       csrfToken
     } = this.props
     const company = get(this.props, 'user.hirer.company', {})
@@ -160,8 +179,10 @@ class FirstNudjPage extends React.Component {
                 whatsappTemplate,
                 twitterTemplate,
                 emailTemplate,
+                linkedinTemplate,
                 referralUrl,
                 id: job.id,
+                bonus: job.bonus,
                 name: user.firstName,
                 jobTitle: job.title,
                 company: company.name,
