@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const URLSearchParams = require('url-search-params')
 const { Link } = require('react-router-dom')
 const isEqual = require('lodash/isEqual')
 let memoize = require('memoize-one')
@@ -11,8 +10,7 @@ const {
   Button,
   Card,
   Link: Anchor,
-  Modal,
-  Statistic
+  Modal
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
@@ -29,22 +27,6 @@ const { emailPreferences, memberTypes } = require('../../lib/constants')
 const { InviteTeamBanner, GetRewardedBanner } = require('./banners')
 
 const style = require('./style.css')
-
-const getComparatorString = (value, period) => {
-  if (period === 'week') return `${value} last week`
-  if (period === 'month') return `${value} last month`
-  return null
-}
-
-const getStatisticDirection = (currentValue, previousValue) => {
-  if (currentValue === previousValue) return null
-  return currentValue > previousValue ? 'asc' : 'desc'
-}
-
-const getStatisticCorrelation = (currentValue, previousValue) => {
-  if (currentValue === previousValue) return null
-  return currentValue > previousValue ? 'positive' : 'negative'
-}
 
 const createHash = require('hash-generator')
 
@@ -178,7 +160,6 @@ class DashboardPage extends React.Component {
     const { showOnboardingSuccessModal } = this.state
     const {
       user,
-      location,
       whatsappTemplate,
       emailTemplate,
       twitterTemplate,
@@ -193,35 +174,10 @@ class DashboardPage extends React.Component {
 
     const isAdmin = memberType === memberTypes.ADMIN
     const getShareProps = this.getSharePropsGetters(jobs)
-    const queryParams = new URLSearchParams(get(location, 'search', ''))
     const invitedCount = get(company, 'hirers', [])
       .filter(item => item.id !== hirer.id)
       .length
 
-    const {
-      totalViewCount,
-      totalReferralCount,
-      totalApplicationCount,
-      pastTotalViewCount,
-      pastTotalReferralCount,
-      pastTotalApplicationCount
-    } = jobs.reduce((counts, job) => ({
-      totalViewCount: counts.totalViewCount + job.viewCount,
-      totalReferralCount: counts.totalReferralCount + job.referralCount,
-      totalApplicationCount: counts.totalApplicationCount + job.applicationCount,
-      pastTotalViewCount: counts.pastTotalViewCount + job.pastViewCount,
-      pastTotalReferralCount: counts.pastTotalReferralCount + job.pastReferralCount,
-      pastTotalApplicationCount: counts.pastTotalApplicationCount + job.pastApplicationCount
-    }), {
-      totalViewCount: 0,
-      totalReferralCount: 0,
-      totalApplicationCount: 0,
-      pastTotalViewCount: 0,
-      pastTotalReferralCount: 0,
-      pastTotalApplicationCount: 0
-    })
-
-    const selectedPeriod = queryParams.get('period')
     const renderInviteTeamBanner = isAdmin && invitedCount < 5 && !newlyOnboarded
     const renderGetRewardedBanner = !isAdmin && connectionsCount < 1
 
@@ -241,81 +197,6 @@ class DashboardPage extends React.Component {
               <GetRewardedBanner />
             </Section>
           ) }
-          <Section padding>
-            <div className={css(style.durationButtonGroup)}>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  selectedPeriod === 'week' && style.durationButtonActive
-                ]}
-                href='/?period=week'
-                subtle
-                preventReload={false}
-              >
-                This week
-              </ButtonLink>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  selectedPeriod === 'month' && style.durationButtonActive
-                ]}
-                href='/?period=month'
-                subtle
-                preventReload={false}
-              >
-                This month
-              </ButtonLink>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  !selectedPeriod && style.durationButtonActive
-                ]}
-                href='/'
-                subtle
-                preventReload={false}
-              >
-                All time
-              </ButtonLink>
-            </div>
-          </Section>
-          <Section style={style.statisticsList} padding>
-            <Card style={style.statisticItem}>
-              <Statistic
-                nonsensitive
-                styleSheet={{ root: mss.fgPrimary }}
-                value={totalViewCount}
-                label='Page views'
-                direction={getStatisticDirection(totalViewCount, pastTotalViewCount)}
-                correlation={getStatisticCorrelation(totalViewCount, pastTotalViewCount)}
-                comparator={getComparatorString(pastTotalViewCount, selectedPeriod)}
-              />
-            </Card>
-            <Card style={style.statisticItem}>
-              <Statistic
-                nonsensitive
-                styleSheet={{ root: mss.fgPrimary }}
-                value={totalReferralCount}
-                label='Links created'
-                direction={getStatisticDirection(totalReferralCount, pastTotalReferralCount)}
-                correlation={getStatisticCorrelation(totalReferralCount, pastTotalReferralCount)}
-                comparator={getComparatorString(pastTotalReferralCount, selectedPeriod)}
-              />
-            </Card>
-            <Card style={style.statisticItem}>
-              <Statistic
-                nonsensitive
-                styleSheet={{ root: mss.fgPrimary }}
-                value={totalApplicationCount}
-                label='Applications'
-                direction={getStatisticDirection(totalApplicationCount, pastTotalApplicationCount)}
-                correlation={getStatisticCorrelation(totalApplicationCount, pastTotalApplicationCount)}
-                comparator={getComparatorString(pastTotalApplicationCount, selectedPeriod)}
-              />
-            </Card>
-          </Section>
           <Section padding>
             {isAdmin && (
               <div className={css(style.actions)}>
@@ -392,25 +273,27 @@ class DashboardPage extends React.Component {
         >
           { isAdmin ? (
             <div>
-              <img
-                className={css(mss.mtLgIi)}
-                src='/assets/images/fist-bump.svg'
-                alt=''
-              />
               <Heading
                 nonsensitive
                 level={2}
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Nice one, you&apos;re all set up!
+                Nice one, you&apos;re all setup!
               </Heading>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
               <Para nonsensitive>
-                We&apos;ve added your company and posted your jobs to our platform.
+                We&apos;ve created your company and posted your job to our
+                platform.
               </Para>
               <Para nonsensitive>
-                You can now explore the rest of the app and, when you&apos;re ready,
-                send out invites to your team so they can start sharing your jobs.
+                You can now explore the rest of the app, add more jobs and,
+                when you&apos;re ready, send out invites to your team so
+                they can start getting the word out.
               </Para>
               <div className={css(style.buttonGroup)}>
                 <Button
@@ -419,7 +302,7 @@ class DashboardPage extends React.Component {
                   onClick={this.handleOnboardingSuccessModalClose}
                   volume='cheer'
                 >
-                  Start exploring
+                  Ok, great!
                 </Button>
               </div>
             </div>
@@ -431,7 +314,7 @@ class DashboardPage extends React.Component {
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Congratulations, you&apos;ve sent your first nudj!
+                Help is on the way!
               </Heading>
               <img
                 className={css(mss.mtLgIi)}
@@ -439,11 +322,12 @@ class DashboardPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                You&apos;re well on your way to finding your next hire and are now free to nudj whenever you want.
+                Great work on sharing your company&apos;s jobs. We&apos;ll be sure
+                to let you know when someone applies.
               </Para>
               <Para nonsensitive>
-                To maximise your chances of finding someone great, however, we recommend
-                sending a minimum of <em className={css(mss.italic)}>3 requests per job</em>.
+                TIn the meantime, if you want to share share your unique links again,
+                simply click 'Share job' under each job.
               </Para>
               <div className={css(style.buttonGroup)}>
                 <Button
@@ -452,7 +336,7 @@ class DashboardPage extends React.Component {
                   onClick={this.handleOnboardingSuccessModalClose}
                   volume='cheer'
                 >
-                  Continue nudjing
+                  Got it!
                 </Button>
               </div>
             </div>
