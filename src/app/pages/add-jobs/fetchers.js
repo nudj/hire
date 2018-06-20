@@ -25,6 +25,7 @@ const post = ({ body }) => {
           company {
             createJob(data: $job) {
               id
+              slug
             }
           }
         }
@@ -38,15 +39,16 @@ const post = ({ body }) => {
       // Setting required defaults
       templateTags: [],
       tags: [],
-      status: jobStatusTypes.PUBLISHED,
+      status: jobStatusTypes.DRAFT,
       type: 'PERMANENT'
     }
   }
   const respond = data => {
     logNewJobToIntercom(data, body)
+    const { slug } = data.user.hirer.company.createJob
 
     throw new Redirect({
-      url: '/',
+      url: `/jobs/set-bonus/${slug}`,
       notification: {
         type: 'success',
         message: `${body.title} created! 🎉`
