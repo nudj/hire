@@ -22,7 +22,7 @@ const WelcomeTeamMember = ({ style }) => (
         Learn how easy it is to refer someone for a job and get rewarded with nudj.
       </Para>
     </Section>
-    <Section width='largeI'>
+    <Section>
       <ul className={css(style.list)}>
         <li className={css(style.listItem)}>
           <Card style={style.card}>
@@ -65,7 +65,7 @@ const WelcomeTeamMember = ({ style }) => (
               Get rewarded
             </Text>
             <Text nonsensitive style={style.listItemBody} element='p'>
-              If someone you refer gets the job, you&apos;ll get the juicy bonus on offer.
+              If someone you refer gets the job, you&apos;ll get the bonus that&apos;s on offer.
             </Text>
           </Card>
         </li>
