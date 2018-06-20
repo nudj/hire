@@ -279,7 +279,7 @@ class DashboardPage extends React.Component {
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Nice one, you&apos;re all setup!
+                Nice one, you&apos;re all set up!
               </Heading>
               <img
                 className={css(mss.mtLgIi)}
@@ -314,7 +314,7 @@ class DashboardPage extends React.Component {
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Help is on the way!
+                Thanks for sharing!
               </Heading>
               <img
                 className={css(mss.mtLgIi)}
@@ -326,7 +326,7 @@ class DashboardPage extends React.Component {
                 to let you know when someone applies.
               </Para>
               <Para nonsensitive>
-                TIn the meantime, if you want to share share your unique links again,
+                In the meantime, if you want to share share your unique links again,
                 simply click 'Share job' under each job.
               </Para>
               <div className={css(style.buttonGroup)}>

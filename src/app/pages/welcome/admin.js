@@ -58,7 +58,7 @@ const WelcomeAdmin = ({ style }) => (
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
                 Referred applicants often have a poor experience, because they
-                don&apos;t get “referrential” treatment - by putting them in
+                don&apos;t get “referrential” treatment. By putting them in
                 one place, you can make sure they do.
               </Text>
             </div>
