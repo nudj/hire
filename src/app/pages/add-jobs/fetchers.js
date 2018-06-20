@@ -48,11 +48,7 @@ const post = ({ body }) => {
     const { slug } = data.user.hirer.company.createJob
 
     throw new Redirect({
-      url: `/jobs/set-bonus/${slug}`,
-      notification: {
-        type: 'success',
-        message: `${body.title} created! 🎉`
-      }
+      url: `/jobs/${slug}/bonus`
     })
   }
   const catcher = () => {
