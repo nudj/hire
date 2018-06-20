@@ -43,7 +43,9 @@ const expressRouters = {
     require('./pages/share-jobs/router'),
     require('./pages/setup-company/router'),
     require('./pages/setup-jobs/router'),
+    require('./pages/setup-jobs/set-bonus/router'),
     require('./pages/add-jobs/router'),
+    require('./pages/add-jobs/set-bonus/router'),
     require('./server/routers/catch-all')
   ]
 }
@@ -153,7 +155,9 @@ if (module.hot) {
     './pages/share-jobs/router',
     './pages/setup-company/router',
     './pages/setup-jobs/router',
+    './pages/setup-jobs/set-bonus/router',
     './pages/add-jobs/router',
+    './pages/add-jobs/set-bonus/router',
     './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
@@ -182,7 +186,9 @@ if (module.hot) {
         require('./pages/share-jobs/router'),
         require('./pages/setup-company/router'),
         require('./pages/setup-jobs/router'),
+        require('./pages/setup-jobs/set-bonus/router'),
         require('./pages/add-jobs/router'),
+        require('./pages/add-jobs/set-bonus/router'),
         require('./server/routers/catch-all')
       ]
     }
