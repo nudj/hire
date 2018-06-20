@@ -37,10 +37,10 @@ class SetupJobsPage extends React.Component {
         <Main>
           <Section padding>
             <Heading nonsensitive>
-            Add your job
+            Add a job
             </Heading>
             <Para nonsensitive>
-              Add a few details about a role you&apos;re currently hiring for, and
+              Add a few details about a role you&apos;re currently hiring for and
               we&apos;ll add them to our platform.
             </Para>
           </Section>

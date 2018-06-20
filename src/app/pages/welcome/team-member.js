@@ -16,11 +16,10 @@ const WelcomeTeamMember = ({ style }) => (
   <Main>
     <Section padding>
       <Heading nonsensitive>
-        Welcome to nudj
+        Welcome to nudj!
       </Heading>
       <Para nonsensitive>
-        Here&apos;s how nudj makes referring someone for a job and getting
-        rewarded&nbsp;a&nbsp;doddle.
+        Learn how easy it is to refer someone for a job and get rewarded with nudj.
       </Para>
     </Section>
     <Section width='largeI'>
@@ -33,11 +32,25 @@ const WelcomeTeamMember = ({ style }) => (
               alt=''
             />
             <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
-              Share your jobs
+              Share your company&apos;s jobs
             </Text>
             <Text nonsensitive style={style.listItemBody} element='p'>
-              Share a trackable link to each of your company&apos;s jobs, any
-              way you like - WhatsApp, Messenger or plain&nbsp;ol&apos;&nbsp;email.
+              Share a trackable link to each of your company&apos;s jobs, however you want.
+            </Text>
+          </Card>
+        </li>
+        <li className={css(style.listItem)}>
+          <Card style={style.card}>
+            <img
+              className={css(style.listItemImage)}
+              src='/assets/images/unlock-network.svg'
+              alt=''
+            />
+            <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
+              Explore your network
+            </Text>
+            <Text nonsensitive style={style.listItemBody} element='p'>
+              Search your LinkedIn connections to find more people worth referring.
             </Text>
           </Card>
         </li>
@@ -49,11 +62,10 @@ const WelcomeTeamMember = ({ style }) => (
               alt=''
             />
             <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
-              Get paid
+              Get rewarded
             </Text>
             <Text nonsensitive style={style.listItemBody} element='p'>
-              For every friend you refer who gets a job, you&apos;ll recieve the
-              bonus on offer within 30 days of them&nbsp;starting.
+              If someone you refer gets the job, you&apos;ll get the juicy bonus on offer.
             </Text>
           </Card>
         </li>

@@ -17,10 +17,10 @@ const WelcomeAdmin = ({ style }) => (
   <Main>
     <Section padding>
       <Heading nonsensitive>
-        Welcome to nudj
+        Welcome to nudj!
       </Heading>
       <Para nonsensitive>
-        So you&apos;ve decided to give nudj a try - here&apos;s why you won&apos;t&nbsp;be&nbsp;disappointed.
+        Thanks for giving us a try, here are just a few things you can expect.
       </Para>
     </Section>
     <Section>
@@ -33,9 +33,8 @@ const WelcomeAdmin = ({ style }) => (
                 Set up your company in seconds
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Tell us about your company, add a brief description of the roles
-                you&apos;re currently hiring for, set the referral bonuses and we&apos;ll
-                automatically add job pages to our platform for you.
+                Tell us about your company and the roles you&apos;re currently hiring
+                for, we&apos;ll then add them to our platform for you.
               </Text>
             </div>
           </li>
@@ -46,9 +45,8 @@ const WelcomeAdmin = ({ style }) => (
                 Easily track your performance
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Quickly understand who&apos;s referring and who&apos;s applying
-                for your jobs, allowing you to focus on the jobs that
-                need your attention.
+                Quickly understand what is going on with your jobs, so you can focus
+                on just those that need your attention.
               </Text>
             </div>
           </li>
@@ -59,9 +57,9 @@ const WelcomeAdmin = ({ style }) => (
                 View all your applicants in one place
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Most referred applicants have a bad experience, because they
+                Referred applicants often have a poor experience, because they
                 don&apos;t get “referrential” treatment - by putting them in
-                one place, you can keep on top of them.
+                one place, you can make sure they do.
               </Text>
             </div>
           </li>

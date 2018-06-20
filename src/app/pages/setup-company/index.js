@@ -4,7 +4,6 @@ const { Helmet } = require('react-helmet')
 const {
   Button,
   Card,
-  Text,
   Input,
   InputField,
   Textarea
@@ -86,12 +85,12 @@ class SetupCompanyPage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Set up company</title>
+          <title>Create company</title>
         </Helmet>
         <Main>
           <Section padding>
             <Heading nonsensitive>
-            Set up your company
+            Create company
             </Heading>
             <Para nonsensitive>
               Tell us a bit more about your business, including where you&apos;re based.
@@ -138,7 +137,6 @@ class SetupCompanyPage extends React.Component {
                     styleSheet={{ root: style.field }}
                     required
                   />
-                  <Text element='div' nonsensitive style={mss.mtSmIi}>If you&apos;re all remote, just put remote</Text>
                 </InputField>
                 <InputField
                   styleSheet={{
@@ -158,7 +156,6 @@ class SetupCompanyPage extends React.Component {
                     styleSheet={{ input: style.textarea }}
                     required
                   />
-                  <Text element='div' style={mss.mtSmIi} nonsensitive>Briefly describe your company</Text>
                 </InputField>
                 <input name='_csrf' value={csrfToken} type='hidden' />
               </Card>

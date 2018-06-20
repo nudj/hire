@@ -91,18 +91,18 @@ const ApplicationsPage = (props) => {
               You haven&apos;t received any applications yet
             </Heading>
             <Para nonsensitive>
-              To get applications, you&apos;ll need to send some messages. How else will anyone know about your jobs?
+              To get people to apply, you&apos;ll need to share your jobs far and wide.
             </Para>
             <div className={css(mss.center)}>
               <ButtonLink
                 nonsensitive
-                href='/contacts'
+                href='/share-jobs'
                 style={mss.mtLgI}
                 name='emailProvider'
                 volume='cheer'
                 subtle
               >
-                Start a conversation
+                Share a job
               </ButtonLink>
             </div>
           </Section>
