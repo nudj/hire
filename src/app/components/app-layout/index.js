@@ -49,24 +49,6 @@ const ApplicationLayout = props => {
                     Jobs
                   </NavLink>
                 </li>
-                <li className={css(style.navigationListItem)}>
-                  <NavLink
-                    className={css(style.navigationLink)}
-                    activeClassName={css(style.navigationLinkActive)}
-                    to='/messages'
-                  >
-                    Messages
-                  </NavLink>
-                </li>
-                <li className={css(style.navigationListItem)}>
-                  <NavLink
-                    className={css(style.navigationLink)}
-                    activeClassName={css(style.navigationLinkActive)}
-                    to='/contacts'
-                  >
-                    Contacts
-                  </NavLink>
-                </li>
                 {isAdmin && (
                   <li className={css(style.navigationListItem)}>
                     <NavLink
@@ -78,6 +60,24 @@ const ApplicationLayout = props => {
                     </NavLink>
                   </li>
                 )}
+                <li className={css(style.navigationListItem)}>
+                  <NavLink
+                    className={css(style.navigationLink)}
+                    activeClassName={css(style.navigationLinkActive)}
+                    to='/contacts'
+                  >
+                    Contacts
+                  </NavLink>
+                </li>
+                <li className={css(style.navigationListItem)}>
+                  <NavLink
+                    className={css(style.navigationLink)}
+                    activeClassName={css(style.navigationLinkActive)}
+                    to='/messages'
+                  >
+                    Messages
+                  </NavLink>
+                </li>
               </ul>
             ) : (
               <div className={css(style.title)}>{title}</div>
@@ -93,8 +93,14 @@ const ApplicationLayout = props => {
                 Invite
               </NavLink>
             )}
-            <Link nonsensitive href='mailto:help@nudj.co' id='open-intercom' subtle style={style.helpLink}>
-              Chat
+            <Link
+              nonsensitive
+              href='mailto:help@nudj.co'
+              id='open-intercom'
+              subtle
+              style={style.helpLink}
+            >
+              Help
             </Link>
           </div>
         </div>
