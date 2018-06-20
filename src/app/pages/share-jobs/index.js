@@ -209,7 +209,7 @@ class FirstNudjPage extends React.Component {
           <form method='post' className={css(mss.mtLgIi)}>
             <input name='_csrf' value={csrfToken} type='hidden' />
             <Button type='submit' nonsensitive>
-              I&apos;m all shared out
+              I&apos;ve finished sharing
             </Button>
           </form>
         </Main>

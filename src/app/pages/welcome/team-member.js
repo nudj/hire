@@ -50,7 +50,7 @@ const WelcomeTeamMember = ({ style }) => (
               Explore your network
             </Text>
             <Text nonsensitive style={style.listItemBody} element='p'>
-              Search your LinkedIn connections to find more people worth referring.
+              Search your LinkedIn connections to find more people worth referring (optional).
             </Text>
           </Card>
         </li>
