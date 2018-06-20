@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const { Button, Card } = require('@nudj/components')
+const { Button, Card, Text } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -80,7 +80,8 @@ const MessagesPage = props => {
                 You haven&apos;t sent any messages
               </Heading>
               <Para nonsensitive>
-                To get candidates you need to nudj someone. After all, those jobs aren&apos;t going to fill themselves.
+                To get candidates you need to nudj someone. After all, those jobs aren&apos;t going
+                to fill themselves.
               </Para>
               <div className={css(mss.center)}>
                 <ButtonLink
@@ -98,18 +99,19 @@ const MessagesPage = props => {
           )
         : (
           <Section padding>
+            <div className={css(style.betaFeature)}>
+              <span className={css(style.betaTag)}>Beta</span>
+            </div>
             <form method='post' action='/sync-google'>
               <Heading nonsensitive level={1} style={mss.fgPrimary}>
-                Keeping track of your messages
+                Keep track of all the messages you send
               </Heading>
               <Para nonsensitive>
-                If you&apos;ve sent messages using something other than Gmail, we can’t
-                display them.
+                If you want to view and reply to messages you&apos;ve sent via Gmail,
+                all you need to do is sync your account.
               </Para>
               <Para nonsensitive>
-                We recommend syncing with Gmail, which will allow you to track
-                all your messages going forward. If however, you&apos;d like to use a
-                different email provider then let us know.
+                Then every time you message someone using Gmail, it will show up here.
               </Para>
               <input name='_csrf' value={csrfToken} type='hidden' />
               <div className={css(mss.center)}>
@@ -126,6 +128,7 @@ const MessagesPage = props => {
                 </Button>
               </div>
             </form>
+            <Text size='smallI' style={style.newProviders}>Other email providers coming soon.</Text>
           </Section>
         )}
       </Main>

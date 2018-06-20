@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, typography, sizes, colors } = require('@nudj/components/lib/css')
 const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
@@ -35,6 +35,27 @@ const styleSheet = StyleSheet.create({
         marginTop: 0
       }
     }
+  },
+  betaFeature: {
+    marginTop: '0',
+    marginBottom: '2rem'
+  },
+  betaTag: {
+    ...typography.type.smallIi,
+    textTransform: 'uppercase',
+    backgroundColor: colors.midRed,
+    color: colors.white,
+    paddingTop: sizes.smallIi,
+    paddingLeft: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
+    paddingRight: sizes.smallIi,
+    borderRadius: '0.25rem'
+  },
+  newProviders: {
+    color: colors.greyDarker,
+    opacity: 0.8,
+    display: 'inline-block',
+    paddingTop: sizes.regular
   }
 })
 
