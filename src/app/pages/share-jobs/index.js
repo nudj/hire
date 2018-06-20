@@ -8,6 +8,7 @@ memoize = memoize.default || memoize
 
 const { Button, Card } = require('@nudj/components')
 const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css } = require('@nudj/components/lib/css')
 const { getJobUrl, getReferralUrl } = require('@nudj/library')
 
 const { render } = require('../../lib/templater')
@@ -147,17 +148,16 @@ class FirstNudjPage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Your first nudj</title>
+          <title>Share a job</title>
         </Helmet>
         <Main>
           <Section padding>
             <Heading nonsensitive>
-              Share {company.name}&apos;s jobs with your friends
+              Pick a job and share it
             </Heading>
             <Para nonsensitive>
-              Below is a list of roles that your company is currently hiring
-              for. Simply, share each one with anyone who you think might be
-              a&nbsp;good&nbsp;fit.
+              Below are all the roles that {company.name} are
+              currently hiring for.
             </Para>
           </Section>
           <Section padding width='regular'>
@@ -205,13 +205,13 @@ class FirstNudjPage extends React.Component {
                 </Card>
               )
             }) }
-            <form method='post'>
-              <input name='_csrf' value={csrfToken} type='hidden' />
-              <Button type='submit' nonsensitive>
-                I&apos;m done sharing
-              </Button>
-            </form>
           </Section>
+          <form method='post' className={css(mss.mtLgIi)}>
+            <input name='_csrf' value={csrfToken} type='hidden' />
+            <Button type='submit' nonsensitive>
+              I&apos;m all shared out
+            </Button>
+          </form>
         </Main>
       </Layout>
     )

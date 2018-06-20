@@ -262,14 +262,15 @@ class ContactsPage extends React.Component {
             ) : (
               <Section width='largeI' padding>
                 <Heading style={mss.fgPrimary} nonsensitive>
-                  You don&apos;t have any contacts
+                  You haven&apos;t added any contacts yet
                 </Heading>
                 <Para nonsensitive>
-                  To get the most out of nudj, you&apos;ll need to upload your LinkedIn contacts.
+                  To find more people worth referring, we recommend syncing your
+                  LinkedIn connections into nudj.
                 </Para>
                 <Para nonsensitive>
-                  Once uploaded, you can then use nudj to easily uncover people who
-                  are suitable for an open role, or are worth asking for referrals.
+                  Once synced, we&apos;ll help you find all the people you&apos;re
+                  connected to who suitable for an open role.
                 </Para>
                 <div className={css(mss.center)}>
                   <ButtonLink
@@ -295,11 +296,11 @@ class ContactsPage extends React.Component {
           onRequestClose={this.hideModal}
         >
           <Text nonsensitive element='div' size='largeI' style={style.modalHeading}>
-            Add an individual contact
+            Add a person to your contacts
           </Text>
           <Text nonsensitive element='p' style={style.modalBody}>
-            Thought of someone who might help you in your search? Just add
-            their details below so you can nudj them.
+            Thought of someone else who might help you in your search? Just add
+            their details below to add them to your contacts.
           </Text>
           <ConnectionsForm
             className={css(mss.plLgIi, mss.prLgIi)}

@@ -37,7 +37,7 @@ const JobForm = props => {
         >
           <Input
             id='title'
-            placeholder='Marketing specialist'
+            placeholder='Marketing Manager'
             name='title'
             value={fieldValues.title}
             onChange={onFieldChange}

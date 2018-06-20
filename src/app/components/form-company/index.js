@@ -23,7 +23,7 @@ const AddCompanyForm = props => {
         volume='cheer'
         style={style.addCompanyButton}
       >
-        Add company
+        Create company
       </Button>
     </form>
   )
