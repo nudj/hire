@@ -6,6 +6,8 @@ const invitePage = require('../pages/invite/reducer')
 const inviteTeamPage = require('../pages/invite-team/reducer')
 const setupCompanyPage = require('../pages/setup-company/reducer')
 const setupJobsPage = require('../pages/setup-jobs/reducer')
+const setBonusPage = require('../pages/setup-jobs/set-bonus/reducer')
+const addBonusPage = require('../pages/add-jobs/set-bonus/reducer')
 const addJobsPage = require('../pages/add-jobs/reducer')
 
 module.exports = {
@@ -16,6 +18,8 @@ module.exports = {
   inviteTeamPage,
   setupCompanyPage,
   setupJobsPage,
+  setBonusPage,
+  addBonusPage,
   addJobsPage,
   composeMessage
 }
