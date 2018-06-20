@@ -29,6 +29,32 @@ const taskTypes = {
   UNLOCK_NETWORK_LINKEDIN: 'UNLOCK_NETWORK_LINKEDIN'
 }
 
+const currencyKeys = {
+  GBP: 'GBP',
+  USD: 'USD',
+  EUR: 'EUR',
+  CUSTOM: 'CUSTOM'
+}
+
+const currencies = {
+  [currencyKeys.GBP]: {
+    symbol: '£',
+    icon: 'poundBold'
+  },
+  [currencyKeys.USD]: {
+    symbol: '$',
+    icon: 'dollarBold'
+  },
+  [currencyKeys.EUR]: {
+    symbol: '€',
+    icon: 'euroBold'
+  },
+  [currencyKeys.CUSTOM]: {
+    symbol: null,
+    icon: 'moreVert'
+  }
+}
+
 const GOOGLE_MAILER_DAEMON_ADDRESS = 'mailer-daemon@googlemail.com'
 
 module.exports = {
@@ -43,6 +69,9 @@ module.exports = {
   booleanChoices,
   questionTypes,
   taskTypes,
+
+  currencies,
+  currencyKeys,
 
   GOOGLE_MAILER_DAEMON_ADDRESS
 }
