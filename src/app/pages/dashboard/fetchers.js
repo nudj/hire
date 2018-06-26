@@ -1,5 +1,4 @@
 const { cookies } = require('@nudj/library')
-const { jobStatuses } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const {
   format,
@@ -22,8 +21,7 @@ const get = ({ req, res, session, query }) => {
       $dateFrom: DateTime,
       $dateTo: DateTime,
       $pastDateFrom: DateTime,
-      $pastDateTo: DateTime,
-      $jobStatus: JobStatus
+      $pastDateTo: DateTime
     ) {
       user {
         firstName
@@ -39,10 +37,12 @@ const get = ({ req, res, session, query }) => {
             }
             name
             slug
-            jobs: jobsByFilters (filters: { status: $jobStatus }) {
+            jobs {
               id
+              created
               title
               slug
+              status
               location
               bonus
               referral: getOrCreateReferralForUser(person: $userId) {
@@ -67,8 +67,7 @@ const get = ({ req, res, session, query }) => {
   `
 
   const variables = {
-    userId: session.userId,
-    jobStatus: jobStatuses.PUBLISHED
+    userId: session.userId
   }
 
   const now = new Date()
