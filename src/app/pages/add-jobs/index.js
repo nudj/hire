@@ -27,7 +27,7 @@ class SetupJobsPage extends React.Component {
   }
 
   render () {
-    const { addJobsPage: state, csrfToken } = this.props
+    const { addJobPage: state, csrfToken } = this.props
 
     return (
       <Layout {...this.props}>
