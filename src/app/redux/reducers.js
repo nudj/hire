@@ -9,6 +9,7 @@ const setupJobsPage = require('../pages/setup-jobs/reducer')
 const setBonusPage = require('../pages/setup-jobs/set-bonus/reducer')
 const addBonusPage = require('../pages/add-jobs/set-bonus/reducer')
 const addJobsPage = require('../pages/add-jobs/reducer')
+const editJobsPage = require('../pages/edit-jobs/reducer')
 
 module.exports = {
   surveyQuestionPage,
@@ -21,5 +22,6 @@ module.exports = {
   setBonusPage,
   addBonusPage,
   addJobsPage,
+  editJobsPage,
   composeMessage
 }
