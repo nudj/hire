@@ -15,8 +15,24 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.regular,
     overflow: 'hidden'
   },
+  editIcon: {
+    marginTop: '0.3rem',
+    marginRight: '0.3rem'
+  },
+  editLink: {
+    color: colors.primary,
+    textDecoration: 'none',
+    display: 'flex',
+    ':hover': {
+      opacity: '0.8'
+    }
+  },
+  titleContainer: {
+    display: 'flex'
+  },
   title: {
-    color: colors.primary
+    color: colors.primary,
+    flexBasis: '100%'
   },
   location: {
     display: 'inline-block',

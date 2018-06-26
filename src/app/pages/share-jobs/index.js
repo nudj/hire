@@ -194,6 +194,7 @@ class FirstNudjPage extends React.Component {
                 <Card key={job.id} style={jobCardStyle}>
                   <ShareableJob
                     title={job.title}
+                    slug={job.slug}
                     location={job.location}
                     renderStats={false}
                     expertiseTags={job.tags}

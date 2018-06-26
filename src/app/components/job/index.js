@@ -1,10 +1,11 @@
 const React = require('react')
+const { Link } = require('react-router-dom')
 const PropTypes = require('prop-types')
 const isNil = require('lodash/isNil')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
-const { PillGroup, Text } = require('@nudj/components')
+const { PillGroup, Text, Icon } = require('@nudj/components')
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 const { StylePropType } = require('@nudj/components/lib/helpers/prop-types')
 
@@ -43,6 +44,7 @@ class Job extends React.Component {
   render () {
     const {
       title,
+      slug,
       location,
       viewCount,
       referralCount,
@@ -50,6 +52,7 @@ class Job extends React.Component {
       bonus,
       children,
       styleSheet,
+      showEdit,
       expertiseTags
     } = this.props
 
@@ -66,9 +69,26 @@ class Job extends React.Component {
       <div className={css(style.root)}>
         <div className={css(style.body)}>
           <div className={css(style.details)}>
-            <Text element='div' size='largeI' style={style.title} nonsensitive>
-              {title}
-            </Text>
+            <div className={css(style.titleContainer)}>
+              <Text element='div' size='largeI' style={style.title} nonsensitive>
+                {title}
+              </Text>
+              {showEdit && (
+                <Link
+                  className={css(style.editLink)}
+                  to={`/jobs/${slug}/edit`}
+                >
+                  <Icon style={style.editIcon} name='edit' />
+                  <Text
+                    element='div'
+                    size='largeI'
+                    nonsensitive
+                  >
+                    Edit
+                  </Text>
+                </Link>
+              )}
+            </div>
             {location && (
               <Text element='span' size='smallI' style={style.location} nonsensitive>
                 {location}
