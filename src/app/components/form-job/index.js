@@ -1,15 +1,19 @@
 const React = require('react')
+const values = require('lodash/values')
+const capitalize = require('lodash/capitalize')
 
 const {
   Button,
   Card,
   Input,
   InputField,
-  Textarea
+  Textarea,
+  Select
 } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
+const { jobStatuses } = require('../../lib/constants')
 const style = require('./style.css')
 
 const descriptionPlaceholder =
@@ -23,7 +27,13 @@ const inputFieldStylesheet = {
 const textareaStylesheet = { input: style.textarea }
 
 const JobForm = props => {
-  const { fieldValues, onFieldChange, onSubmit, csrfToken } = props
+  const {
+    edit,
+    fieldValues,
+    onFieldChange,
+    onSubmit,
+    csrfToken
+  } = props
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
@@ -74,6 +84,44 @@ const JobForm = props => {
             required
           />
         </InputField>
+        {edit && (
+          <div className={css(style.field)}>
+            <InputField
+              styleSheet={inputFieldStylesheet}
+              htmlFor='status'
+              label='Status'
+              required
+            >
+              <Select
+                id='status'
+                name='status'
+                value={fieldValues.status}
+                onChange={onFieldChange}
+              >
+                {values(jobStatuses).map(status => (
+                  <option key={status} value={status}>
+                    {capitalize(jobStatuses[status])}
+                  </option>
+                ))}
+              </Select>
+            </InputField>
+            <InputField
+              styleSheet={inputFieldStylesheet}
+              htmlFor='bonus'
+              label='Referral bonus'
+              required
+            >
+              <Input
+                id='bonus'
+                placeholder='£500'
+                name='bonus'
+                value={fieldValues.bonus}
+                onChange={onFieldChange}
+                required
+              />
+            </InputField>
+          </div>
+        )}
         <input name='_csrf' value={csrfToken} type='hidden' />
       </Card>
       <Button
