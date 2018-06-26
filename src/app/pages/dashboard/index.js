@@ -364,6 +364,7 @@ class DashboardPage extends React.Component {
                 <Card key={job.id} style={jobCardStyle}>
                   <ShareableJob
                     title={job.title}
+                    slug={job.slug}
                     location={job.location}
                     viewCount={job.viewCount}
                     referralCount={job.referralCount}
@@ -371,6 +372,7 @@ class DashboardPage extends React.Component {
                     jobUrl={jobUrl}
                     referralUrl={referralUrl}
                     bonus={job.bonus}
+                    showEdit={isAdmin}
                     applicantsUrl={
                       isAdmin
                         ? `/applications#${job.slug}`
