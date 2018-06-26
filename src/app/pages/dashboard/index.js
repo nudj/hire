@@ -24,7 +24,7 @@ const Section = require('../../components/section')
 const ButtonLink = require('../../components/button-link')
 const ShareableJob = require('../../components/shareable-job')
 const { Heading, Para } = require('../../components/app')
-const { emailPreferences, memberTypes } = require('../../lib/constants')
+const { emailPreferences, memberTypes, jobStatuses } = require('../../lib/constants')
 const { InviteTeamBanner, GetRewardedBanner } = require('./banners')
 
 const style = require('./style.css')
@@ -197,32 +197,72 @@ class DashboardPage extends React.Component {
       .filter(item => item.id !== hirer.id)
       .length
 
+    const categoriseJob = (jobs, job) => {
+      if (job.status === jobStatuses.PUBLISHED) {
+        jobs.publishedJobs = jobs.publishedJobs.concat(job)
+      } else if (job.status === jobStatuses.ARCHIVED) {
+        jobs.archivedJobs = jobs.archivedJobs.concat(job)
+      } else {
+        jobs.draftJobs = jobs.draftJobs.concat(job)
+      }
+
+      return jobs
+    }
+
     const {
       totalViewCount,
       totalReferralCount,
       totalApplicationCount,
       pastTotalViewCount,
       pastTotalReferralCount,
-      pastTotalApplicationCount
-    } = jobs.reduce((counts, job) => ({
-      totalViewCount: counts.totalViewCount + job.viewCount,
-      totalReferralCount: counts.totalReferralCount + job.referralCount,
-      totalApplicationCount: counts.totalApplicationCount + job.applicationCount,
-      pastTotalViewCount: counts.pastTotalViewCount + job.pastViewCount,
-      pastTotalReferralCount: counts.pastTotalReferralCount + job.pastReferralCount,
-      pastTotalApplicationCount: counts.pastTotalApplicationCount + job.pastApplicationCount
+      pastTotalApplicationCount,
+      publishedJobs,
+      draftJobs,
+      archivedJobs
+    } = jobs.reduce((all, job) => ({
+      totalViewCount: all.totalViewCount + job.viewCount,
+      totalReferralCount: all.totalReferralCount + job.referralCount,
+      totalApplicationCount: all.totalApplicationCount + job.applicationCount,
+      pastTotalViewCount: all.pastTotalViewCount + job.pastViewCount,
+      pastTotalReferralCount: all.pastTotalReferralCount + job.pastReferralCount,
+      pastTotalApplicationCount: all.pastTotalApplicationCount + job.pastApplicationCount,
+      ...categoriseJob(all, job)
     }), {
       totalViewCount: 0,
       totalReferralCount: 0,
       totalApplicationCount: 0,
       pastTotalViewCount: 0,
       pastTotalReferralCount: 0,
-      pastTotalApplicationCount: 0
+      pastTotalApplicationCount: 0,
+      publishedJobs: [],
+      draftJobs: [],
+      archivedJobs: []
     })
 
     const selectedPeriod = queryParams.get('period')
     const renderInviteTeamBanner = isAdmin && invitedCount < 5 && !newlyOnboarded
     const renderGetRewardedBanner = !isAdmin && connectionsCount < 1
+
+    const orderByDate = jobs => jobs.sort((a, b) => (
+      new Date(a.created) - new Date(b.created)
+    ))
+
+    const allJobs = [
+      {
+        title: 'Published',
+        jobs: orderByDate(publishedJobs)
+      },
+      {
+        title: 'Drafts',
+        jobs: orderByDate(draftJobs),
+        style: style.draft
+      },
+      {
+        title: 'Archived',
+        jobs: orderByDate(archivedJobs),
+        style: style.archived
+      }
+    ]
 
     return (
       <Layout {...this.props}>
@@ -327,58 +367,74 @@ class DashboardPage extends React.Component {
                 </ButtonLink>
               </div>
             )}
-            { jobs.map(job => {
-              const jobUrl = getJobUrl({
-                protocol: this.props.web.protocol,
-                hostname: this.props.web.hostname,
-                company: company.slug,
-                job: job.slug
-              })
+            {
+              allJobs.map(jobGroup => {
+                if (!jobGroup.jobs.length) return null
+                return (
+                  <div key={jobGroup.title}>
+                    <Heading
+                      level={2}
+                      style={[mss.left, mss.mtLgI]}
+                      nonsensitive
+                    >
+                      {jobGroup.title}
+                    </Heading>
+                    {jobGroup.jobs.map(job => {
+                      const jobUrl = getJobUrl({
+                        protocol: this.props.web.protocol,
+                        hostname: this.props.web.hostname,
+                        company: company.slug,
+                        job: job.slug
+                      })
 
-              const referralUrl = getReferralUrl({
-                protocol: this.props.web.protocol,
-                hostname: this.props.web.hostname,
-                referralId: job.referral.id
-              })
+                      const referralUrl = getReferralUrl({
+                        protocol: this.props.web.protocol,
+                        hostname: this.props.web.hostname,
+                        referralId: job.referral.id
+                      })
 
-              const shareProps = getShareProps[job.id]({
-                whatsappTemplate,
-                twitterTemplate,
-                emailTemplate,
-                linkedinTemplate,
-                referralUrl,
-                bonus: job.bonus,
-                id: job.id,
-                name: user.firstName,
-                jobTitle: job.title,
-                company: company.name,
-                nudjLinkComponent: Link,
-                gmail: user.emailPreference === emailPreferences.GOOGLE
-              })
+                      const shareProps = getShareProps[job.id]({
+                        whatsappTemplate,
+                        twitterTemplate,
+                        emailTemplate,
+                        linkedinTemplate,
+                        referralUrl,
+                        bonus: job.bonus,
+                        id: job.id,
+                        name: user.firstName,
+                        jobTitle: job.title,
+                        company: company.name,
+                        nudjLinkComponent: Link,
+                        gmail: user.emailPreference === emailPreferences.GOOGLE
+                      })
 
-              return (
-                <Card key={job.id} style={jobCardStyle}>
-                  <ShareableJob
-                    title={job.title}
-                    slug={job.slug}
-                    location={job.location}
-                    viewCount={job.viewCount}
-                    referralCount={job.referralCount}
-                    applicationCount={job.applicationCount}
-                    jobUrl={jobUrl}
-                    referralUrl={referralUrl}
-                    bonus={job.bonus}
-                    showEdit={isAdmin}
-                    applicantsUrl={
-                      isAdmin
-                        ? `/applications#${job.slug}`
-                        : undefined
-                    }
-                    shareProps={shareProps}
-                  />
-                </Card>
-              )
-            }) }
+                      return (
+                        <Card key={job.id} style={[jobCardStyle, jobGroup.style]}>
+                          <ShareableJob
+                            title={job.title}
+                            slug={job.slug}
+                            status={job.status}
+                            location={job.location}
+                            viewCount={job.viewCount}
+                            referralCount={job.referralCount}
+                            applicationCount={job.applicationCount}
+                            jobUrl={jobUrl}
+                            referralUrl={referralUrl}
+                            bonus={job.bonus}
+                            applicantsUrl={
+                              isAdmin
+                                ? `/applications#${job.slug}`
+                                : undefined
+                            }
+                            shareProps={shareProps}
+                          />
+                        </Card>
+                      )
+                    })}
+                  </div>
+                )
+              })
+            }
           </Section>
         </Main>
         <Modal
@@ -443,7 +499,7 @@ class DashboardPage extends React.Component {
                 to let you know when someone applies.
               </Para>
               <Para nonsensitive>
-                In the meantime, if you want to share share your unique links again,
+                In the meantime, if you want to share your unique links again,
                 simply click 'Share job' under each job.
               </Para>
               <div className={css(style.buttonGroup)}>
