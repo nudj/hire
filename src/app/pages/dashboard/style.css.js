@@ -29,6 +29,12 @@ const styleSheet = StyleSheet.create({
       }
     }
   },
+  draft: {
+    opacity: '0.7'
+  },
+  archived: {
+    opacity: '0.4'
+  },
   jobCard: {
     paddingTop: 0,
     paddingRight: 0,
