@@ -16,7 +16,7 @@ const resetForm = () => ({
 
 const submitJob = () => async (dispatch, getState) => {
   const state = getState()
-  const { fieldValues: data } = state.addJobsPage
+  const { fieldValues: data } = state.addJobPage
 
   dispatch(resetForm())
 

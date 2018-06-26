@@ -22,7 +22,7 @@ const initialiseValues = values => ({
 
 const submitJob = () => async (dispatch, getState) => {
   const state = getState()
-  const { fieldValues: data } = state.editJobsPage
+  const { fieldValues: data } = state.editJobPage
 
   dispatch(resetForm())
 

@@ -40,7 +40,7 @@ class SetupJobsPage extends React.Component {
   }
 
   render () {
-    const { editJobsPage: state, csrfToken } = this.props
+    const { editJobPage: state, csrfToken } = this.props
     const { job } = this.props.user.company
 
     const pageTitle = `Edit ${job.title}`
