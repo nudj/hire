@@ -10,6 +10,7 @@ module.exports = {
   '/setup-jobs/:jobSlug/bonus': require('../pages/setup-jobs/set-bonus'),
   '/jobs/new': require('../pages/add-jobs'),
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),
+  '/jobs/:jobSlug/edit': require('../pages/edit-jobs'),
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/sync-contacts/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
