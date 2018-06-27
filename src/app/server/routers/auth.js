@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const request = require('@nudj/library/request')
+const { intercom } = require('@nudj/library/analytics')
 const logger = require('@nudj/framework/logger')
 const { cacheReturnTo } = require('@nudj/library/server')
 const { cookies } = require('@nudj/library')
@@ -104,6 +105,13 @@ const Router = ({
       try {
         const { email, firstName, lastName } = getUserInfo(req.user._json)
         let user = await getOrCreatePerson({ email, firstName, lastName })
+        intercom.user.logEvent({
+          user,
+          event: {
+            name: 'signed up',
+            unique: true
+          }
+        })
         if (!user.firstName || !user.lastName) {
           user = await updatePerson(user.id, { firstName, lastName })
         }
