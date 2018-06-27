@@ -35,7 +35,8 @@ class SetupCompanyPage extends React.Component {
     const { enrichedCompany } = enrichmentData
 
     if (enrichedCompany) {
-      const { name, location, description } = enrichedCompany
+      const { name, geo, description } = enrichedCompany
+      const location = (geo && geo.city) || enrichedCompany.location
 
       dispatch(initFieldValues({
         name,
