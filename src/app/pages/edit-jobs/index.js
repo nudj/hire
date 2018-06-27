@@ -15,15 +15,17 @@ const {
 class SetupJobsPage extends React.Component {
   static defaultProps = {
     user: {
-      company: {
-        job: {}
+      hirer: {
+        company: {
+          job: {}
+        }
       }
     }
   }
 
   componentDidMount () {
     const { dispatch } = this.props
-    const { job } = this.props.user.company
+    const { job } = this.props.user.hirer.company
 
     dispatch(initialiseValues(job))
   }
@@ -41,7 +43,7 @@ class SetupJobsPage extends React.Component {
 
   render () {
     const { editJobPage: state, csrfToken } = this.props
-    const { job } = this.props.user.company
+    const { job } = this.props.user.hirer.company
 
     const pageTitle = `Edit ${job.title}`
 

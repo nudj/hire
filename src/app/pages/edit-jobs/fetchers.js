@@ -4,15 +4,17 @@ const get = ({ params }) => {
   const gql = `
     query EditJob ($jobSlug: String!) {
       user {
-        company {
-          job: jobByFilters(filters: { slug: $jobSlug }) {
-            title
-            id
-            slug
-            status
-            location
-            description
-            bonus
+        hirer {
+          company {
+            job: jobByFilters(filters: { slug: $jobSlug }) {
+              title
+              id
+              slug
+              status
+              location
+              description
+              bonus
+            }
           }
         }
       }
@@ -30,15 +32,17 @@ const post = ({ body, params, res }) => {
   const gql = `
     mutation updateJob ($id: ID!, $data: JobUpdateInput!) {
       user {
-        company {
-          job: updateJob(id: $id, data: $data) {
-            title
-            id
-            slug
-            status
-            location
-            description
-            bonus
+        hirer {
+          company {
+            job: updateJob(id: $id, data: $data) {
+              title
+              id
+              slug
+              status
+              location
+              description
+              bonus
+            }
           }
         }
       }
