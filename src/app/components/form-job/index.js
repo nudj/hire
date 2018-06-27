@@ -129,7 +129,7 @@ const JobForm = props => {
         type='submit'
         volume='cheer'
       >
-        Save draft
+        {edit ? 'Save changes' : 'Save draft'}
       </Button>
     </form>
   )
