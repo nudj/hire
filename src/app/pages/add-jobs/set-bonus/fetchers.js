@@ -39,6 +39,7 @@ const post = ({ body, params }) => {
           company {
             updateJob(id: $jobId, data: $jobData) {
               id
+              title
             }
           }
         }
@@ -51,12 +52,13 @@ const post = ({ body, params }) => {
     jobData: { bonus, status }
   }
 
-  const respond = () => {
+  const respond = data => {
+    const { title } = data.user.hirer.company.updateJob
     throw new Redirect({
       url: '/',
       notification: {
         type: 'success',
-        message: `${body.title} published! 🎉`
+        message: `${title} published! 🎉`
       }
     })
   }
