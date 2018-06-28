@@ -356,29 +356,30 @@ class DashboardPage extends React.Component {
             </Card>
           </Section>
           <Section padding>
-            {isAdmin && (
-              <div className={css(style.actions)}>
-                <ButtonLink
-                  volume='cheer'
-                  to='/jobs/new'
-                  style={mss.mlReg}
-                >
-                  Add job
-                </ButtonLink>
-              </div>
-            )}
             {
               allJobs.map(jobGroup => {
                 if (!jobGroup.jobs.length) return null
                 return (
-                  <div key={jobGroup.title}>
-                    <Heading
-                      level={2}
-                      style={[mss.left, mss.mtLgI]}
-                      nonsensitive
-                    >
-                      {jobGroup.title}
-                    </Heading>
+                  <div className={css(style.jobGroup)} key={jobGroup.title}>
+                    <div className={css(style.actions)}>
+                      <Heading
+                        level={2}
+                        style={style.statusHeader}
+                        nonsensitive
+                      >
+                        {jobGroup.title}
+                      </Heading>
+                      {allJobs.indexOf(jobGroup) === 0 && isAdmin && (
+                        <ButtonLink
+                          style={style.addJobButton}
+                          volume='cheer'
+                          to='/jobs/new'
+                          subtle
+                        >
+                          Add job
+                        </ButtonLink>
+                      )}
+                    </div>
                     {jobGroup.jobs.map(job => {
                       const jobUrl = getJobUrl({
                         protocol: this.props.web.protocol,
@@ -411,6 +412,7 @@ class DashboardPage extends React.Component {
                       return (
                         <Card key={job.id} style={[jobCardStyle, jobGroup.style]}>
                           <ShareableJob
+                            showEdit={isAdmin}
                             title={job.title}
                             slug={job.slug}
                             status={job.status}

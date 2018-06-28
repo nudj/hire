@@ -106,8 +106,23 @@ const styleSheet = StyleSheet.create({
     left: 'auto'
   },
   actions: {
-    marginTop: sizes.largeIii,
-    textAlign: 'right'
+    display: 'flex'
+  },
+  statusHeader: {
+    textAlign: 'left',
+    flexBasis: '100%'
+  },
+  jobGroup: {
+    ':not(:first-of-type)': {
+      marginTop: sizes.largeI
+    }
+  },
+  addJobButton: {
+    whiteSpace: 'nowrap',
+    paddingTop: 0,
+    paddingRight: 0,
+    paddingLeft: 0,
+    paddingBottom: 0
   }
 })
 
