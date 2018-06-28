@@ -1,7 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 const isNil = require('lodash/isNil')
-const { HashLink: Link } = require('react-router-hash-link')
+const { HashLink } = require('react-router-hash-link')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
@@ -15,12 +15,14 @@ const {
   Icon,
   ScreenReadable,
   Input,
+  Link,
   CopyString,
   Text
 } = require('@nudj/components')
 
 const Job = require('../job')
 const ShareButtons = require('../share-buttons')
+const { jobStatuses } = require('../../lib/constants')
 const { styleSheet: defaultStyleSheet, inputStyleSheet } = require('./style.css')
 
 class ShareableJob extends React.Component {
@@ -88,9 +90,12 @@ class ShareableJob extends React.Component {
       jobUrl,
       applicantsUrl,
       title,
+      status,
       shareProps,
       ...rest
     } = this.props
+
+    const isLive = status === jobStatuses.PUBLISHED
 
     const style = this.getStyle(defaultStyleSheet, styleSheet)
     const jobStyleSheet = this.getJobStyleSheet(style, showSharePanel)
@@ -119,29 +124,33 @@ class ShareableJob extends React.Component {
         <div>
           <div className={css(style.actions)}>
             {jobUrl && (
-              <a
+              <Link
+                inline
+                subtle
+                disabled={!isLive}
                 href={jobUrl}
-                className={css(style.action)}
+                style={style.action}
                 tabIndex={showSharePanel ? -1 : 0}
                 target='_blank'
               >
                 View job listing
-              </a>
+              </Link>
             )}
             {applicantsUrl && (
-              <Link
+              <HashLink
                 to={applicantsUrl}
                 className={css(style.action)}
                 tabIndex={showSharePanel ? -1 : 0}
               >
                 View applicants
-              </Link>
+              </HashLink>
             )}
             {shareProps && (
               <ButtonContainer
                 style={style.actionPrimary}
                 onClick={this.openSharePanel}
                 tabIndex={showSharePanel ? -1 : 0}
+                disabled={!isLive}
               >
                 Share job
               </ButtonContainer>
