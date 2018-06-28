@@ -15,6 +15,12 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.regular,
     overflow: 'hidden'
   },
+  edit: {
+    display: 'none',
+    '@media(min-width: 40.75rem)': {
+      display: 'block'
+    }
+  },
   editIcon: {
     marginTop: '0.3rem',
     marginRight: '0.3rem'
