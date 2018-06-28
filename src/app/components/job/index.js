@@ -80,6 +80,7 @@ class Job extends React.Component {
                 >
                   <Icon style={style.editIcon} name='edit' />
                   <Text
+                    style={style.edit}
                     element='div'
                     size='largeI'
                     nonsensitive
