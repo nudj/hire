@@ -81,6 +81,14 @@ const styleSheet = StyleSheet.create({
       color: colors.primaryLight
     }
   },
+  actionPrimaryDisabled: {
+    ...action,
+    color: colors.primary,
+    cursor: 'default',
+    ':hover': {
+      color: colors.primary
+    }
+  },
   sharePanel: {
     position: 'absolute',
     boxShadow: 'none',

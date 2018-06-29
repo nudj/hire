@@ -147,7 +147,10 @@ class ShareableJob extends React.Component {
             )}
             {shareProps && (
               <ButtonContainer
-                style={style.actionPrimary}
+                style={isLive
+                  ? style.actionPrimary
+                  : style.actionPrimaryDisabled
+                }
                 onClick={this.openSharePanel}
                 tabIndex={showSharePanel ? -1 : 0}
                 disabled={!isLive}
