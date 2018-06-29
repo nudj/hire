@@ -36,8 +36,7 @@ const reducers = {
 const initialState = {
   fieldValues: {
     currencyValue: 'GBP',
-    presetValue: '500',
-    inputValue: ''
+    inputValue: '500'
   }
 }
 

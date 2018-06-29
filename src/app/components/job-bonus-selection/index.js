@@ -50,21 +50,11 @@ class JobBonusSelection extends React.Component {
   }
 
   handleCurrencyChange = ({ value }) => {
-    const { presetValue, onCurrencyChange } = this.props
+    const { inputValue, onCurrencyChange } = this.props
 
     onCurrencyChange({
       currencyValue: value,
-      inputValue: '',
-      presetValue: value === currencyKeys.CUSTOM ? '' : presetValue
-    })
-  }
-
-  handlePresetChange = ({ value }) => {
-    const { onPresetChange } = this.props
-
-    onPresetChange({
-      presetValue: value,
-      inputValue: ''
+      inputValue: value === currencyKeys.CUSTOM ? '' : inputValue
     })
   }
 
@@ -72,7 +62,6 @@ class JobBonusSelection extends React.Component {
     const { onInputChange } = this.props
 
     onInputChange({
-      presetValue: '',
       inputValue: value
     })
   }
@@ -80,7 +69,6 @@ class JobBonusSelection extends React.Component {
   render () {
     const {
       currencyValue,
-      presetValue,
       inputValue
     } = this.props
 
@@ -110,9 +98,9 @@ class JobBonusSelection extends React.Component {
         {currencyValue !== currencyKeys.CUSTOM && (
           <RadioBlockGroup
             name='value'
-            value={presetValue}
+            value={inputValue}
             styles={presetValueRadioGroupStyles}
-            onChange={this.handlePresetChange}
+            onChange={this.handleInputChange}
             radioButtonStyleSheet={presetRadioButtonStyleSheet}
           >
             {block => presetBonusAmounts.map(amount => block({

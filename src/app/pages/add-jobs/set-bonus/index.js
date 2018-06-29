@@ -32,13 +32,12 @@ class SetBonusPage extends React.Component {
       setBonusPage: {
         fieldValues: {
           currencyValue,
-          inputValue,
-          presetValue
+          inputValue
         }
       }
     } = this.props
 
-    if (!presetValue && !inputValue) {
+    if (!inputValue) {
       return dispatch(appActions.showNotification({
         message: 'Please enter a bonus',
         type: 'error'
@@ -47,7 +46,7 @@ class SetBonusPage extends React.Component {
 
     const bonus = currencyValue === currencyKeys.CUSTOM
       ? inputValue
-      : `${currencies[currencyValue].symbol}${presetValue || inputValue}`
+      : `${currencies[currencyValue].symbol}${inputValue}`
 
     dispatch(submitBonusAndPublishJob(bonus))
   }
@@ -73,7 +72,6 @@ class SetBonusPage extends React.Component {
             <form onSubmit={this.handleSubmit} method='POST'>
               <JobBonusSelection
                 currencyValue={state.fieldValues.currencyValue}
-                presetValue={state.fieldValues.presetValue}
                 inputValue={state.fieldValues.inputValue}
                 onPresetChange={this.handleChange}
                 onInputChange={this.handleChange}
