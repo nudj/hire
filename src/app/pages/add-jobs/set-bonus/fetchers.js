@@ -1,4 +1,5 @@
 const { Redirect, NotFound } = require('@nudj/library/errors')
+const { createEnumMap } = require('../../../lib')
 
 const get = ({ params }) => {
   const gql = `
@@ -33,15 +34,32 @@ const post = ({ body, params }) => {
   const { id, bonus, status } = body
 
   const gql = `
-    mutation updateJob ($jobId: ID!, $jobData: JobUpdateInput!) {
+    query updateJob (
+      $jobId: ID!
+      $jobData: JobUpdateInput!
+      $notifyTeam: Boolean
+    ) {
       user {
         hirer {
           company {
-            updateJob(id: $jobId, data: $jobData) {
+            updateJob(
+              id: $jobId
+              data: $jobData
+              notifyTeam: $notifyTeam
+            ) {
               id
               title
+              status
             }
           }
+        }
+      }
+      job (id: $jobId) {
+        status
+      }
+      jobStatusTypes: __type(name: "JobStatus") {
+        values: enumValues {
+          name
         }
       }
     }
@@ -49,16 +67,26 @@ const post = ({ body, params }) => {
 
   const variables = {
     jobId: id,
-    jobData: { bonus, status }
+    jobData: { bonus, status },
+    notifyTeam: true
   }
 
   const respond = data => {
-    const { title } = data.user.hirer.company.updateJob
+    const existingJob = data.job
+    const updatedJob = data.user.hirer.company.updateJob
+    const jobStatusMap = createEnumMap(data.jobStatusTypes.values)
+    let publishedMessage = ''
+    if (
+      existingJob.status !== jobStatusMap.PUBLISHED &&
+      updatedJob.status === jobStatusMap.PUBLISHED
+    ) {
+      publishedMessage = ' Your team have been notified.'
+    }
     throw new Redirect({
       url: '/',
       notification: {
         type: 'success',
-        message: `${title} published! 🎉`
+        message: `${updatedJob.title} published!${publishedMessage}`
       }
     })
   }

@@ -43,10 +43,18 @@ const createReducer = (initialState, reducers) => (
   return reducer ? reducer(state, action) : state
 }
 
+const createEnumMap = (enumTypes) => {
+  return enumTypes.reduce((enumTypeMap, enumType) => {
+    enumTypeMap[enumType.name] = enumType.name
+    return enumTypeMap
+  }, {})
+}
+
 module.exports = {
   stripDelims,
   getActiveStep,
   createNotification,
   formattedModifiedDate,
-  createReducer
+  createReducer,
+  createEnumMap
 }
