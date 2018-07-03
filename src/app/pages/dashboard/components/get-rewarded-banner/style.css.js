@@ -1,7 +1,7 @@
 const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
-  banner: {
+  root: {
     position: 'relative',
     textAlign: 'left',
     overflow: 'hidden'

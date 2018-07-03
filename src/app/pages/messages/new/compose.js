@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const createHash = require('hash-generator')
 
 const {
   Card,
@@ -19,7 +18,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const { getJobUrl } = require('@nudj/library')
 
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
-const { render } = require('../../../lib/templater')
+const compilePrismicTemplate = require('../../../lib/compile-prismic-template')
 const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage, sendMessage } = require('./actions')
 const Main = require('../../../components/main')
@@ -33,25 +32,6 @@ const getHandleSubjectChange = dispatch => ({ value }) =>
 const getHandleMessageChange = dispatch => ({ value }) =>
   dispatch(updateMessage(value))
 const getHandleSendMessage = dispatch => () => dispatch(sendMessage)
-
-const parseJobMessageTemplate = (template, job, user, recipient, link) =>
-  render({
-    template: template,
-    data: {
-      recipient: {
-        firstname: recipient.firstName
-      },
-      job: {
-        title: job.title,
-        link
-      },
-      sender: {
-        firstname: user.firstName
-      }
-    },
-    splitter: createHash(16),
-    brify: () => '\n\n'
-  })[0].join('')
 
 const getMailTo = (to, subject, message) =>
   `mailto:${to}?subject=${encodeURI(subject)}&body=${encodeURI(message)}`
@@ -75,14 +55,15 @@ const ComposeMessagePage = props => {
 
   const { firstName } = getPersonOrConnectionName(recipient)
 
-  const subjectTemplate = render({
-    template: template.subject,
-    data: {
+  const subjectTemplate = compilePrismicTemplate(
+    template.subject,
+    {
       recipient: {
         firstname: firstName
       }
     }
-  })[0].join('')
+  )
+
   const referralLink = getJobUrl({
     protocol: web.protocol,
     hostname: web.hostname,
@@ -90,7 +71,22 @@ const ComposeMessagePage = props => {
     job: jobSlug,
     referralId
   })
-  const messageTemplate = parseJobMessageTemplate(template.message, job, user, { firstName }, referralLink)
+
+  const messageTemplate = compilePrismicTemplate(
+    template.message,
+    {
+      recipient: {
+        firstname: firstName
+      },
+      job: {
+        title: job.title,
+        link: referralLink
+      },
+      sender: {
+        firstname: user.firstName
+      }
+    }
+  )
 
   const subjectValue = getFirstNonNil(
     composeMessage.subject,

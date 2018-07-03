@@ -15,36 +15,35 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.regular,
     overflow: 'hidden'
   },
-  edit: {
-    display: 'none',
-    '@media(min-width: 40.75rem)': {
-      display: 'block'
-    }
-  },
-  editIcon: {
-    marginTop: '0.3rem',
-    marginRight: '0.3rem'
-  },
   editLink: {
     color: colors.primary,
     textDecoration: 'none',
-    display: 'flex',
+    display: 'block',
+    whiteSpace: 'nowrap',
+    lineHeight: 1,
+    fontWeight: typography.fontWeight.bold,
     ':hover': {
       opacity: '0.8'
     }
+  },
+  editIcon: {
+    marginRight: sizes.smallIii,
+    verticalAlign: 'middle'
   },
   titleContainer: {
     display: 'flex'
   },
   title: {
     color: colors.primary,
-    flexBasis: '100%'
+    flexBasis: '100%',
+    lineHeight: 1
   },
   location: {
     display: 'inline-block',
     fontWeight: typography.fontWeight.bold,
     color: colors.midRed,
-    marginRight: sizes.regular
+    marginRight: sizes.regular,
+    marginTop: sizes.smallIii
   },
   statisticsList: {
     display: 'flex',
@@ -54,19 +53,18 @@ const styleSheet = StyleSheet.create({
     marginBottom: 0,
     marginLeft: `-${sizes.smallIi}`,
     marginRight: `-${sizes.smallIi}`,
-    textAlign: 'left',
-    maxWidth: '28.25rem'
+    textAlign: 'left'
   },
   statisticItem: {
     display: 'flex',
     flexDirection: 'column',
+    flexBasis: '100%',
     paddingLeft: sizes.smallIi,
     paddingRight: sizes.smallIi,
-    flexBasis: '100%',
     ':nth-child(1) ~ *': {
       marginTop: sizes.smallIi
     },
-    '@media(min-width: 12rem)': {
+    '@media(min-width: 28rem)': {
       flexBasis: '50%',
       ':nth-child(1) ~ *': {
         marginTop: 0
@@ -75,7 +73,7 @@ const styleSheet = StyleSheet.create({
         marginTop: sizes.smallIi
       }
     },
-    '@media(min-width: 28.75rem)': {
+    '@media(min-width: 40.75rem)': {
       flexBasis: 'auto',
       ':nth-child(1) ~ *': {
         marginTop: 0

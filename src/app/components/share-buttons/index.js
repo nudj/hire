@@ -1,5 +1,6 @@
 const React = require('react')
 const PropTypes = require('prop-types')
+const { Link } = require('react-router-dom')
 
 const {
   IconLink,
@@ -29,6 +30,8 @@ const ShareButtons = (props) => {
     <div>
       {nudj && (
         <IconLink
+          /* Default Component, allow override via props */
+          Component={Link}
           {...nudj}
           style={style}
           iconName='nudj'

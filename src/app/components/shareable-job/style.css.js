@@ -31,13 +31,25 @@ const action = {
     color: colors.grey
   },
   ':nth-child(1) ~ *': {
-    borderLeftColor: colors.greyLight,
-    borderLeftWidth: '1px',
-    borderLeftStyle: 'solid',
+    borderTopColor: colors.greyLight,
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
     ':hover': {
+      borderTopColor: colors.greyLight,
+      borderTopWidth: '1px',
+      borderTopStyle: 'solid'
+    },
+    '@media(min-width: 36.5rem)': {
+      borderTopWidth: '0',
       borderLeftColor: colors.greyLight,
       borderLeftWidth: '1px',
-      borderLeftStyle: 'solid'
+      borderLeftStyle: 'solid',
+      ':hover': {
+        borderTopWidth: '0',
+        borderLeftColor: colors.greyLight,
+        borderLeftWidth: '1px',
+        borderLeftStyle: 'solid'
+      }
     }
   }
 }
@@ -57,7 +69,7 @@ const styleSheet = StyleSheet.create({
   },
   actions: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     borderTopColor: colors.greyLight,
     borderTopWidth: '1px',
     borderTopStyle: 'solid',
@@ -65,7 +77,10 @@ const styleSheet = StyleSheet.create({
     justifyContent: 'stretch',
     marginLeft: `-${sizes.regular}`,
     marginRight: `-${sizes.regular}`,
-    marginTop: sizes.regular
+    marginTop: sizes.regular,
+    '@media(min-width: 36.5rem)': {
+      flexDirection: 'row'
+    }
   },
   action: {
     ...action
@@ -84,6 +99,7 @@ const styleSheet = StyleSheet.create({
   actionPrimaryDisabled: {
     ...action,
     color: colors.primary,
+    opacity: 0.5,
     cursor: 'default',
     ':hover': {
       color: colors.primary
