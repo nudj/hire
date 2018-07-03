@@ -11,7 +11,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const { css } = require('@nudj/components/lib/css')
 const { getJobUrl, getReferralUrl } = require('@nudj/library')
 
-const { render } = require('../../lib/templater')
+const compilePrismicTemplate = require('../../lib/compile-prismic-template')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
@@ -22,17 +22,6 @@ const Layout = require('../../components/app-layout')
 const ShareableJob = require('../../components/shareable-job')
 const { emailPreferences } = require('../../lib/constants')
 const style = require('./style.css')
-
-const createHash = require('hash-generator')
-
-const parseTemplate = (template, data) => {
-  return render({
-    template: template,
-    data,
-    splitter: createHash(16),
-    brify: () => '\n\n'
-  })[0].join('')
-}
 
 const getIndividualShareProps = (args) => {
   const {
@@ -48,7 +37,7 @@ const getIndividualShareProps = (args) => {
     gmail
   } = args
 
-  const emailBody = parseTemplate(
+  const emailBody = compilePrismicTemplate(
     emailTemplate.message,
     {
       name,
@@ -60,7 +49,7 @@ const getIndividualShareProps = (args) => {
 
   return {
     whatsapp: {
-      text: parseTemplate(
+      text: compilePrismicTemplate(
         whatsappTemplate.message,
         {
           referralUrl,
@@ -79,13 +68,13 @@ const getIndividualShareProps = (args) => {
     },
     linkedin: {
       url: referralUrl,
-      title: parseTemplate(
+      title: compilePrismicTemplate(
         linkedinTemplate.subject,
         {
           job: { title: jobTitle }
         }
       ),
-      summary: parseTemplate(
+      summary: compilePrismicTemplate(
         linkedinTemplate.message,
         {
           job: { title: jobTitle, bonus },
@@ -94,7 +83,7 @@ const getIndividualShareProps = (args) => {
       )
     },
     twitter: {
-      text: parseTemplate(
+      text: compilePrismicTemplate(
         twitterTemplate.message,
         {
           referralUrl,
@@ -108,7 +97,7 @@ const getIndividualShareProps = (args) => {
     email: {
       gmail,
       to: '',
-      subject: parseTemplate(
+      subject: compilePrismicTemplate(
         emailTemplate.subject,
         {
           referralUrl,
@@ -202,6 +191,7 @@ class FirstNudjPage extends React.Component {
                     jobUrl={jobUrl}
                     referralUrl={referralUrl}
                     shareProps={shareProps}
+                    status={job.status}
                   />
                 </Card>
               )

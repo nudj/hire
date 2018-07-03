@@ -74,20 +74,15 @@ class Job extends React.Component {
                 {title}
               </Text>
               {showEdit && (
-                <Link
-                  className={css(style.editLink)}
+                <Text
+                  style={style.editLink}
+                  element={Link}
                   to={`/jobs/${slug}/edit`}
+                  nonsensitive
                 >
                   <Icon style={style.editIcon} name='edit' />
-                  <Text
-                    style={style.edit}
-                    element='div'
-                    size='largeI'
-                    nonsensitive
-                  >
-                    Edit
-                  </Text>
-                </Link>
+                  Edit
+                </Text>
               )}
             </div>
             {location && (
