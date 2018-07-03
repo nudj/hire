@@ -1,4 +1,5 @@
 const { Global } = require('../../lib/graphql')
+const { createEnumMap } = require('../../lib')
 
 const get = () => {
   const gql = `
@@ -17,11 +18,7 @@ const get = () => {
     }
   `
   const transformData = data => {
-    const hirerTypeEnums = data.hirerTypeEnum.values
-    const hirerTypes = hirerTypeEnums.reduce((allEnums, nextEnum) => {
-      allEnums[nextEnum.name] = nextEnum.name
-      return allEnums
-    }, {})
+    const hirerTypes = createEnumMap(data.hirerTypeEnum.values)
 
     return {
       ...data,
