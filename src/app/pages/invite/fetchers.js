@@ -19,13 +19,14 @@ const get = () => {
 }
 
 const post = ({ body }) => {
-  const { emailAddresses } = body
+  const { members } = body
   const gql = `
-    mutation sendInvitations ($emailAddresses: [String!]!) {
+    mutation sendInvitations ($members: [InviteMemberPersonInput!]!) {
       user {
         hirer {
           company {
-            inviteMembers(emailAddresses: $emailAddresses) {
+            id
+            inviteMembers(members: $members) {
               success
             }
           }
@@ -39,9 +40,9 @@ const post = ({ body }) => {
     }
   `
   const variables = {
-    emailAddresses
+    members
   }
-  const catcher = () => {
+  const catcher = (e) => {
     throw new Redirect({
       url: '/invite',
       notification: {

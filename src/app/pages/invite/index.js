@@ -13,7 +13,7 @@ const {
   Para
 } = require('../../components/wizard')
 const {
-  setFieldValue,
+  setNestedFieldValue,
   addAdditionalField,
   submitInvitations
 } = require('./actions')
@@ -21,7 +21,8 @@ const {
 class InviteTeamPage extends React.Component {
   handleChange = ({ name, value }) => {
     const { dispatch } = this.props
-    dispatch(setFieldValue(name, value))
+    const [ person, key ] = name.split('-')
+    dispatch(setNestedFieldValue(person, key, value))
   }
 
   handleAddField = () => {
@@ -53,7 +54,7 @@ class InviteTeamPage extends React.Component {
               With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
             </Para>
           </Section>
-          <Section padding width='regular'>
+          <Section padding width='largeI'>
             <Card>
               <InviteForm
                 fieldCount={fieldCount}
