@@ -3,9 +3,10 @@ const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 const { Global } = require('../../lib/graphql')
 
-const getNothing = () => {
+const getMessageTemplate = () => {
   const gql = `
     query {
+      messageTemplate: fetchTemplate(repo: "hirer", type: "composemessage", tags: ["invite-onboarding"])
       ${Global}
     }
   `
@@ -14,17 +15,25 @@ const getNothing = () => {
 }
 
 const post = ({ res, body }) => {
-  const { emailAddresses } = body
+  const { members, inviteTemplate } = body
 
-  if (emailAddresses && emailAddresses.length) {
+  if (members && members.length) {
     const gql = `
-      mutation sendInvitations ($emailAddresses: [String!]!) {
+      mutation sendInvitations (
+        $members: [InviteMemberPersonInput!]!,
+        $subject: String!,
+        $body: String!
+      ) {
         user {
           hirer {
             setOnboarded
             onboarded
             company {
-              inviteMembers(emailAddresses: $emailAddresses) {
+              inviteMembersOnboarding(
+                members: $members,
+                subject: $subject,
+                body: $body
+              ) {
                 success
               }
             }
@@ -35,7 +44,9 @@ const post = ({ res, body }) => {
     `
 
     const variables = {
-      emailAddresses
+      members,
+      subject: inviteTemplate.subject,
+      body: inviteTemplate.message
     }
 
     const respond = data => {
@@ -84,6 +95,6 @@ const post = ({ res, body }) => {
 }
 
 module.exports = {
-  get: getNothing,
+  get: getMessageTemplate,
   post
 }

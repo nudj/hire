@@ -1,13 +1,14 @@
 const values = require('lodash/values')
 const actions = require('@nudj/framework/actions')
 
-const SET_FIELD_VALUE = 'INVITE_TEAM_SET_FIELD_VALUE'
+const SET_NESTED_FIELD_VALUE = 'INVITE_TEAM_SET_NESTED_FIELD_VALUE'
 const ADD_ADDITIONAL_FIELD = 'INVITE_TEAM_ADD_ADDITIONAL_FIELD'
 const SUBMIT_INVITATIONS = 'INVITE_TEAM_SUBMIT_INVITATIONS'
 const RESET_FORM = 'INVITE_TEAM_RESET_FORM'
 
-const setFieldValue = (key, value) => ({
-  type: SET_FIELD_VALUE,
+const setNestedFieldValue = (person, key, value) => ({
+  type: SET_NESTED_FIELD_VALUE,
+  person,
   key,
   value
 })
@@ -31,12 +32,12 @@ const skipInvitation = () => async (dispatch) => {
   )
 }
 
-const submitInvitations = () => async (dispatch, getState) => {
+const submitInvitations = inviteTemplate => async (dispatch, getState) => {
   const state = getState()
   const { fieldValues } = state.inviteTeamPage
-  const emailAddresses = values(fieldValues).filter(Boolean)
+  const members = values(fieldValues).filter(member => !!member.email)
 
-  if (!emailAddresses.length) {
+  if (!members.length) {
     return dispatch(actions.app.showNotification({
       type: 'error',
       message: 'Please add an email address'
@@ -48,19 +49,22 @@ const submitInvitations = () => async (dispatch, getState) => {
     actions.app.postData({
       url: '/invite-team',
       method: 'post',
-      data: { emailAddresses }
+      data: {
+        members,
+        inviteTemplate
+      }
     })
   )
 }
 
 module.exports = {
   // constants
-  SET_FIELD_VALUE,
+  SET_NESTED_FIELD_VALUE,
   ADD_ADDITIONAL_FIELD,
   SUBMIT_INVITATIONS,
   RESET_FORM,
   // action creators
-  setFieldValue,
+  setNestedFieldValue,
   submitInvitations,
   skipInvitation,
   addAdditionalField
