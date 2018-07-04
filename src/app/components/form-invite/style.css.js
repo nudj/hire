@@ -10,7 +10,8 @@ const stylesheet = StyleSheet.create({
   },
   fieldLabel: merge(typography.type.largeI, {
     color: colors.primary,
-    textAlign: 'left'
+    textAlign: 'left',
+    display: 'flex'
   }),
   fieldset: {
     border: 'none',
@@ -29,6 +30,16 @@ const stylesheet = StyleSheet.create({
   }),
   field: {
     marginTop: sizes.regular
+  },
+  flex: {
+    display: 'flex'
+  },
+  inputGroup: {
+    flexBasis: '50%'
+  },
+  label: {
+    textAlign: 'left',
+    flexBasis: '50%'
   }
 })
 
