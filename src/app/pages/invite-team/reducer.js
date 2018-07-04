@@ -1,15 +1,18 @@
 const { createReducer } = require('../../lib')
 const {
-  SET_FIELD_VALUE,
+  SET_NESTED_FIELD_VALUE,
   ADD_ADDITIONAL_FIELD,
   RESET_FORM
 } = require('./actions')
 
-const setFieldValue = (state, action) => ({
+const setNestedFieldValue = (state, action) => ({
   ...state,
   fieldValues: {
     ...state.fieldValues,
-    [action.key]: action.value
+    [action.person]: {
+      ...state.fieldValues[action.person],
+      [action.key]: action.value
+    }
   }
 })
 
@@ -21,7 +24,7 @@ const addAdditionalField = state => ({
 const resetForm = state => initialState
 
 const reducers = {
-  [SET_FIELD_VALUE]: setFieldValue,
+  [SET_NESTED_FIELD_VALUE]: setNestedFieldValue,
   [ADD_ADDITIONAL_FIELD]: addAdditionalField,
   [RESET_FORM]: resetForm
 }
