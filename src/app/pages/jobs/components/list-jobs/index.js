@@ -2,7 +2,7 @@ const React = require('react')
 const groupBy = require('lodash/groupBy')
 
 const { getJobUrl, getReferralUrl, merge } = require('@nudj/library')
-const { Card } = require('@nudj/components')
+const { Card, Checkbox, ListMultiSelect } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -10,11 +10,63 @@ const { emailPreferences } = require('../../../../lib/constants')
 const compilePrismicTemplate = require('../../../../lib/compile-prismic-template')
 const ShareableJob = require('../../../../components/shareable-job')
 const { Heading } = require('../../../../components/app')
+const ActionBar = require('../../../../components/action-bar')
+const ButtonLink = require('../../../../components/button-link')
 const styleSheet = require('./style.css')
+
+const selectableJobStyleSheet = {
+  root: [mss.ptReg, mss.plReg, mss.prReg]
+}
 
 const orderByDate = jobs => jobs.sort((a, b) => (
   new Date(a.created) - new Date(b.created)
 ))
+
+const getShareButtonCopy = (selected, total) => {
+  if (selected === 1) {
+    return 'Share 1 job'
+  } else if (selected === total) {
+    return 'Share all jobs'
+  }
+
+  return `Share ${selected} jobs`
+}
+
+const ListSelectableJobs = (props) => {
+  const {
+    jobs,
+    name,
+    onChange,
+    values,
+    isAdmin,
+    disabled,
+    style
+  } = props
+
+  return (
+    <ListMultiSelect
+      name={name}
+      onChange={onChange}
+      values={values}
+      joined={false}
+      disabled={disabled}
+      style={style}
+    >
+      {listItem => jobs.map(job => listItem({
+        value: job.id,
+        key: job.id,
+        id: job.id,
+        children: (
+          <ShareableJob
+            {...job}
+            styleSheet={selectableJobStyleSheet}
+            showEdit={isAdmin}
+          />
+        )
+      }))}
+    </ListMultiSelect>
+  )
+}
 
 const ListJobs = (props) => {
   const {
@@ -140,8 +192,26 @@ class ListAllJobs extends React.Component {
     )
   }
 
+  handleToggleAllPublished = () => {
+    const { jobs, values, onChange } = this.props
+    const { PUBLISHED: published } = groupBy(jobs, 'status')
+
+    if (values.length !== published.length) {
+      const publishedIds = published.map(job => job.id)
+      onChange({ values: publishedIds })
+    } else {
+      onChange({ values: [] })
+    }
+  }
+
   render () {
-    const { isAdmin, style } = this.props
+    const {
+      isAdmin,
+      style,
+      values,
+      onChange
+    } = this.props
+
     const jobs = this.formatJobs(this.props.jobs)
 
     const {
@@ -150,12 +220,60 @@ class ListAllJobs extends React.Component {
       ARCHIVED: archived
     } = groupBy(jobs, 'status')
 
+    const noPublishedSelected = !values.length
+    const allPublishedSelected = values.length === published.length
+    const somePublishedSelected = !allPublishedSelected && values.length > 0
+
+    const ListComponent = isAdmin ? ListSelectableJobs : ListJobs
+
     return (
       <div className={css(style)}>
+        {isAdmin && (
+          <ActionBar>
+            {actionStyle => [
+              <Checkbox
+                key='select-all-published'
+                onChange={this.handleToggleAllPublished}
+                checked={allPublishedSelected}
+                indeterminate={somePublishedSelected}
+                id='select-all-published'
+                name='select-all-published'
+                styleSheet={{
+                  wrapper: styleSheet.selectAllCheckboxWrapper,
+                  labelContainer: styleSheet.selectAllCheckbox
+                }}
+              />,
+              noPublishedSelected ? (
+                <ButtonLink
+                  key='add-job-button'
+                  style={actionStyle}
+                  volume='cheer'
+                  to='/jobs/new'
+                  subtle
+                >
+                  Add job
+                </ButtonLink>
+              ) : (
+                <ButtonLink
+                  key='share-jobs-button'
+                  style={actionStyle}
+                  volume='cheer'
+                  to='/jobs/share-with-team'
+                  subtle
+                >
+                  {getShareButtonCopy(values.length, published.length)}
+                </ButtonLink>
+              )
+            ]}
+          </ActionBar>
+        ) }
         { published && published.length > 0 && (
-          <ListJobs
+          <ListComponent
             jobs={published}
             isAdmin={isAdmin}
+            onChange={onChange}
+            values={values}
+            style={mss.mtReg}
           />
         )}
         {draft && draft.length > 0 && (
@@ -163,10 +281,13 @@ class ListAllJobs extends React.Component {
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Drafts
             </Heading>
-            <ListJobs
+            <ListComponent
               jobs={draft}
               isAdmin={isAdmin}
               style={mss.mtReg}
+              onChange={onChange}
+              values={values}
+              disabled
             />
           </div>
         )}
@@ -175,10 +296,13 @@ class ListAllJobs extends React.Component {
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Archived
             </Heading>
-            <ListJobs
+            <ListComponent
               jobs={archived}
               isAdmin={isAdmin}
               style={mss.mtReg}
+              onChange={onChange}
+              values={values}
+              disabled
             />
           </div>
         )}

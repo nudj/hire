@@ -1,77 +1,230 @@
 const React = require('react')
-const get = require('lodash/get')
-const format = require('date-fns/format')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./style.css')
-const LayoutPage = require('../../components/layout-page')
-const Link = require('../../components/link/link')
-const RowItem = require('../../components/row-item/row-item')
+const get = require('lodash/get')
+const URLSearchParams = require('url-search-params')
 
-const JobsPage = (props) => {
-  const style = getStyle()
-  const {
-    tooltip,
-    user,
-    history,
-    dispatch,
-    overlay,
-    dialog,
-    onPageLeave,
-    notification
-  } = props
-  const company = get(user, 'hirer.company')
-  const jobs = get(company, 'jobs', [])
-  const headerProps = {
-    title: 'Jobs',
-    subtitle: `@ ${get(company, 'name')}`,
-    children: <button className={style.upload} id='open-intercom'>Upload job</button>
+const { Button, Modal } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
+const mss = require('@nudj/components/lib/css/modifiers.css')
+
+const Layout = require('../../components/app-layout')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const { Heading, Para } = require('../../components/app')
+const ButtonLink = require('../../components/button-link')
+const { memberTypes } = require('../../lib/constants')
+const InviteTeamBanner = require('./components/invite-team-banner')
+const GetRewardedBanner = require('./components/get-rewarded-banner')
+const ListHeadlineStatistics = require('./components/statistics')
+const ListJobs = require('./components/list-jobs')
+const style = require('./style.css')
+
+const { updateJobSelection } = require('../../redux/actions/selections')
+
+class JobsPage extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showOnboardingSuccessModal: !!props.newlyOnboarded
+    }
   }
-  const headline = `You currently have ${jobs.length} job${jobs.length === 1 ? '' : 's'} listed on nudj`
 
-  return (
-    <LayoutPage
-      tooltip={tooltip}
-      user={user}
-      history={history}
-      dispatch={dispatch}
-      overlay={overlay}
-      dialog={dialog}
-      onPageLeave={onPageLeave}
-      notification={notification}
-      header={headerProps}
-      headline={headline}
-    >
-      <Helmet>
-        <title>{`nudj - Jobs @ ${get(company, 'name')}`}</title>
-      </Helmet>
-      <ul className={style.jobs}>
-        {jobs.map((job) => {
-          const hasSent = !![].concat(get(job, 'internalMessages', []), get(job, 'externalMessages', [])).length
-          const label = hasSent ? 'View job activity' : 'Get nudj\'ing'
-          return (
-            <RowItem
-              key={get(job, 'slug')}
-              title={get(job, 'title')}
-              uri={`//${get(props, 'web.hostname')}/jobs/${get(company, 'slug')}+${get(job, 'slug')}`}
-              details={[{
-                term: 'Location',
-                description: get(job, 'location')
-              }, {
-                term: 'Added',
-                description: format(get(job, 'created'), 'DD.MM.YYYY')
-              }, {
-                term: 'Bonus',
-                description: `£${get(job, 'bonus')}`
-              }]}
-              actions={[
-                <Link nonsensitive className={style.nudj} to={`/jobs/${get(job, 'slug')}`}>{label}</Link>
-              ]}
+  handleOnboardingSuccessModalClose = () => {
+    this.setState({
+      showOnboardingSuccessModal: false
+    })
+  }
+
+  handleJobChange = ({ values }) => {
+    const { dispatch } = this.props
+    dispatch(updateJobSelection(values))
+  }
+
+  render () {
+    const { showOnboardingSuccessModal } = this.state
+    const {
+      user,
+      location,
+      newlyOnboarded,
+      web,
+      whatsappTemplate,
+      linkedinTemplate,
+      twitterTemplate,
+      emailTemplate,
+      selections
+    } = this.props
+
+    const { hirer, connectionsCount } = user
+    const company = get(user, 'hirer.company', {})
+    const jobs = get(company, 'jobs', [])
+    const memberType = get(user, 'hirer.type', memberTypes.MEMBER)
+
+    const isAdmin = memberType === memberTypes.ADMIN
+    const queryParams = new URLSearchParams(get(location, 'search', ''))
+    const invitedCount = get(company, 'hirers', [])
+      .filter(item => item.id !== hirer.id)
+      .length
+
+    const selectedPeriod = queryParams.get('period')
+    const renderInviteTeamBanner = isAdmin && invitedCount < 5 && !newlyOnboarded
+    const renderGetRewardedBanner = !isAdmin && connectionsCount < 1
+
+    return (
+      <Layout {...this.props}>
+        <Helmet>
+          <title>Jobs</title>
+        </Helmet>
+        <Main>
+          { renderInviteTeamBanner && (
+            <Section padding>
+              <InviteTeamBanner />
+            </Section>
+          ) }
+          { renderGetRewardedBanner && (
+            <Section padding>
+              <GetRewardedBanner />
+            </Section>
+          ) }
+          <Section padding>
+            <div className={css(style.durationButtonGroup)}>
+              <ButtonLink
+                nonsensitive
+                style={[
+                  style.durationButton,
+                  selectedPeriod === 'week' && style.durationButtonActive
+                ]}
+                href='/?period=week'
+                subtle
+                preventReload={false}
+              >
+                This week
+              </ButtonLink>
+              <ButtonLink
+                nonsensitive
+                style={[
+                  style.durationButton,
+                  selectedPeriod === 'month' && style.durationButtonActive
+                ]}
+                href='/?period=month'
+                subtle
+                preventReload={false}
+              >
+                This month
+              </ButtonLink>
+              <ButtonLink
+                nonsensitive
+                style={[
+                  style.durationButton,
+                  !selectedPeriod && style.durationButtonActive
+                ]}
+                href='/'
+                subtle
+                preventReload={false}
+              >
+                All time
+              </ButtonLink>
+            </div>
+          </Section>
+          <ListHeadlineStatistics jobs={jobs} period={selectedPeriod} />
+          <Section padding>
+            <ListJobs
+              style={mss.mtReg}
+              user={user}
+              jobs={jobs}
+              web={web}
+              isAdmin={isAdmin}
+              company={company}
+              whatsappTemplate={whatsappTemplate}
+              linkedinTemplate={linkedinTemplate}
+              twitterTemplate={twitterTemplate}
+              emailTemplate={emailTemplate}
+              values={selections.jobs}
+              onChange={this.handleJobChange}
             />
-          )
-        })}
-      </ul>
-    </LayoutPage>
-  )
+          </Section>
+        </Main>
+        <Modal
+          isOpen={showOnboardingSuccessModal}
+          shouldCloseOnOverlayClick
+          shouldCloseOnEsc
+          onRequestClose={this.handleOnboardingSuccessModalClose}
+          style={mss.center}
+        >
+          { isAdmin ? (
+            <div>
+              <Heading
+                nonsensitive
+                level={2}
+                size='largeIi'
+                style={mss.fgPrimary}
+              >
+                Nice one, you&apos;re all set up!
+              </Heading>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
+              <Para nonsensitive>
+                We&apos;ve created your company and posted your job to our
+                platform
+              </Para>
+              <Para nonsensitive>
+                You can now explore the rest of the app, add more jobs and,
+                when you&apos;re ready, send out invites to your team so
+                they can start getting the word out.
+              </Para>
+              <div className={css(style.buttonGroup)}>
+                <Button
+                  nonsensitive
+                  style={style.button}
+                  onClick={this.handleOnboardingSuccessModalClose}
+                  volume='cheer'
+                >
+                  Ok, great!
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <Heading
+                nonsensitive
+                level={2}
+                size='largeIi'
+                style={mss.fgPrimary}
+              >
+                Thanks for sharing!
+              </Heading>
+              <img
+                className={css(mss.mtLgIi)}
+                src='/assets/images/fist-bump.svg'
+                alt=''
+              />
+              <Para nonsensitive>
+                Great work on sharing your company&apos;s jobs. We&apos;ll be sure
+                to let you know when someone applies.
+              </Para>
+              <Para nonsensitive>
+                In the meantime, if you want to share your unique links again,
+                simply click 'Share job' under each job.
+              </Para>
+              <div className={css(style.buttonGroup)}>
+                <Button
+                  nonsensitive
+                  style={style.button}
+                  onClick={this.handleOnboardingSuccessModalClose}
+                  volume='cheer'
+                >
+                  Got it!
+                </Button>
+              </div>
+            </div>
+          ) }
+        </Modal>
+      </Layout>
+    )
+  }
 }
 
 module.exports = JobsPage

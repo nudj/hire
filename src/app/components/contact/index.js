@@ -105,7 +105,6 @@ const Contact = props => {
 }
 
 Contact.propTypes = {
-  id: PropTypes.string.isRequired,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   role: PropTypes.string,

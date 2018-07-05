@@ -1,7 +1,7 @@
 const checkMobileDevice = require('../pages/check-device-wrapper')
 
 module.exports = {
-  '/': require('../pages/dashboard'),
+  '/': require('../pages/jobs'),
   '/welcome': checkMobileDevice(require('../pages/welcome')),
   '/invite-team': checkMobileDevice(require('../pages/invite-team')),
   '/share-jobs': require('../pages/share-jobs'),
@@ -9,6 +9,7 @@ module.exports = {
   '/setup-jobs': require('../pages/setup-jobs'),
   '/setup-jobs/:jobSlug/bonus': require('../pages/setup-jobs/set-bonus'),
   '/jobs/new': require('../pages/add-jobs'),
+  '/jobs/share-with-team': require('../pages/jobs/share-with-team'),
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),
   '/jobs/:jobSlug/edit': require('../pages/edit-jobs'),
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
