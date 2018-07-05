@@ -32,16 +32,16 @@ class SetupJobsPage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Add your jobs</title>
+          <title>Add a job</title>
         </Helmet>
         <Main>
           <Section padding>
             <Heading nonsensitive>
-            Add your jobs
+            Add a job
             </Heading>
             <Para nonsensitive>
-              Add a few details about each role you&apos;re hiring for, and
-              we&apos;ll add them to our platform.
+              Add a few details about the role you&apos;re hiring for, and
+              we&apos;ll add it to our platform.
             </Para>
           </Section>
           <Section padding width='largeI'>
