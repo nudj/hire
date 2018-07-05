@@ -2,14 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const {
-  Card,
-  Button,
-  Input,
-  Link,
-  Textarea
-} = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Card } = require('@nudj/components')
 const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
@@ -24,8 +17,7 @@ const { updateSubject, updateMessage, sendMessage } = require('./actions')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const { Heading, Para } = require('../../../components/app')
-const Loader = require('../../../components/staged-loader')
-const style = require('./style.css')
+const ComposeMessageForm = require('../../../components/form-compose-message')
 
 const getHandleSubjectChange = dispatch => ({ value }) =>
   dispatch(updateSubject(value))
@@ -116,45 +108,17 @@ const ComposeMessagePage = props => {
         </Section>
         <Section width='largeI'>
           <Card>
-            <form method='post' onSubmit={getHandleSendMessage(dispatch)}>
-              <Input
-                name='subject'
-                value={subjectValue}
-                onChange={getHandleSubjectChange(dispatch)}
-                styleSheet={{ input: style.subjectInput }}
-              />
-              <Textarea
-                name='body'
-                value={messageValue}
-                onChange={getHandleMessageChange(dispatch)}
-                styleSheet={{ input: style.messageInput }}
-                autosize
-              />
-              <input name='_csrf' value={csrfToken} type='hidden' />
-              <div className={css(mss.center)}>
-                {emailPreference === emailPreferences.GOOGLE ? (
-                  <Button
-                    type='submit'
-                    volume='cheer'
-                    style={mss.mtReg}
-                    disabled={composeMessage.loading}
-                  >
-                    { composeMessage.loading
-                        ? <Loader messages={['Sending']} ellipsis />
-                        : 'Send message'
-                    }
-                  </Button>
-                ) : (
-                  <Link
-                    volume='cheer'
-                    style={mss.mtReg}
-                    href={getMailTo(toEmail, subjectValue, messageValue)}
-                  >
-                    Send message
-                  </Link>
-                )}
-              </div>
-            </form>
+            <ComposeMessageForm
+              csrfToken={csrfToken}
+              loading={composeMessage.loading}
+              subject={subjectValue}
+              message={messageValue}
+              emailPreference={emailPreference}
+              mailto={getMailTo(toEmail, subjectValue, messageValue)}
+              onSend={getHandleSendMessage(dispatch)}
+              onSubjectChange={getHandleSubjectChange(dispatch)}
+              onMessageChange={getHandleMessageChange(dispatch)}
+            />
           </Card>
         </Section>
       </Main>
