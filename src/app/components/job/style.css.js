@@ -9,10 +9,6 @@ const styleSheet = StyleSheet.create({
   root: {
     textAlign: 'left',
     position: 'relative',
-    paddingTop: sizes.regular,
-    paddingRight: sizes.regular,
-    paddingBottom: sizes.regular,
-    paddingLeft: sizes.regular,
     overflow: 'hidden'
   },
   editLink: {
