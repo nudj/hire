@@ -1,11 +1,13 @@
-const { StyleSheet, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/lib/css')
 
 const styleSheet = StyleSheet.create({
-  subjectInput: {
-    fontWeight: typography.fontWeight.bold
+  field: {
+    textAlign: 'left',
+    ':nth-child(n + 2)': {
+      marginTop: sizes.regular
+    }
   },
   messageInput: {
-    marginTop: sizes.regular,
     width: '100%',
     height: '100%'
   }
