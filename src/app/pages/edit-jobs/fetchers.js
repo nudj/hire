@@ -31,7 +31,7 @@ const get = ({ params }) => {
 const post = ({ body, params, res }) => {
   const { id, ...data } = body
   const gql = `
-    mutation updateJob (
+    query updateJob (
       $id: ID!
       $data: JobUpdateInput!
       $notifyTeam: Boolean
@@ -55,7 +55,7 @@ const post = ({ body, params, res }) => {
           }
         }
       }
-      job (id: $jobId) {
+      job (id: $id) {
         status
       }
       jobStatusTypes: __type(name: "JobStatus") {
