@@ -55,10 +55,11 @@ class InviteTeamPage extends React.Component {
         <Main>
           <Section padding>
             <Heading nonsensitive>
-              Invite your team to nudj
+              Share the job with your team
             </Heading>
             <Para nonsensitive>
-              With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
+              Now that you&apos;ve published your first job it&apos;s time to ask your team for help.
+              Enter all the people who you think might know someone good.
             </Para>
           </Section>
           <Section padding width='largeI'>

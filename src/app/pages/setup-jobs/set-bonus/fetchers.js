@@ -54,7 +54,7 @@ const post = ({ res, body, params }) => {
 
   const respond = () => {
     throw new Redirect({
-      url: '/'
+      url: '/invite-team'
     })
   }
   const catcher = () => {
