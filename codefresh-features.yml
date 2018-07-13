@@ -3,7 +3,7 @@ version: '1.0'
 steps:
 
   build_test:
-    title: Build Test
+    title: Build
     type: build
     image_name: nudj/hire-test
     working_directory: ${{main_clone}}
