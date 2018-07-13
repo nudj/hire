@@ -2,8 +2,8 @@ version: '1.0'
 
 steps:
 
-  build_latest:
-    title: Build Latest
+  build:
+    title: Build
     type: build
     image_name: nudj/hire
     tag: latest
@@ -15,11 +15,22 @@ steps:
   push_latest:
     title: Push Latest
     type: push
-    candidate: '${{build_latest}}'
+    candidate: '${{build}}'
     tag: latest
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
+
+  push_ecr:
+    title: Push ECR
+    type: push
+    candidate: ${{build}}
+    tag: latest
+    provider: 'ecr'
+    registry: ecr
+    accessKeyId: ${{AWS_ACCESS_KEY}}
+    secretAccessKey: ${{AWS_SECRET_KEY}}
+    region: ${{AWS_REGION}}
 
   # deploy:
   #   title: Deploy
