@@ -147,7 +147,7 @@ class ListAllJobs extends React.Component {
     const {
       PUBLISHED: published,
       DRAFT: draft,
-      ACRCHIVED: archived
+      ARCHIVED: archived
     } = groupBy(jobs, 'status')
 
     return (
