@@ -22,7 +22,7 @@ async function getOrCreatePerson ({ email, firstName, lastName }) {
     `
     const variables = {
       person: {
-        email: email.toLowerCase(),
+        email,
         firstName,
         lastName
       }
