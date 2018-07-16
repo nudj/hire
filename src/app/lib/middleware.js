@@ -4,6 +4,29 @@ const get = require('lodash/get')
 const { createNotification } = require('./')
 const request = require('./requestGql')
 
+async function ensureValidCompanyHash (req, res, next) {
+  const { hash } = req.params
+  try {
+    const query = `
+      query validateCompanyHash ($hash: String!) {
+        companyByFilters(filters: { hash: $hash }) {
+          id
+        }
+      }
+    `
+    const responseData = await request(req.session.userId, query, { hash })
+    if (get(responseData, 'companyByFilters.id')) {
+      return next()
+    }
+  } catch (error) {
+    logger.log('error', error)
+  }
+
+  return next(
+    new NotFound({ log: ['User accessed an invalid invitation hash', hash] })
+  )
+}
+
 async function ensureOnboarded (req, res, next) {
   try {
     const query = `
@@ -85,6 +108,7 @@ async function ensureNotOnboarded (req, res, next) {
 
 module.exports = {
   ensureNotOnboarded,
+  ensureValidCompanyHash,
   ensureOnboarded,
   ensureAdmin
 }
