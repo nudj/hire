@@ -16,9 +16,7 @@ async function getHirer (email) {
         }
       }
     `
-    const variables = {
-      email: email.toLowerCase()
-    }
+    const variables = { email }
 
     const response = await requestGql(null, gql, variables)
     const hirer = get(response, 'person.hirer')
