@@ -24,6 +24,7 @@ const LoadingPage = require('./pages/loading')
 const expressRouters = {
   insecure: [],
   secure: [
+    require('./server/routers/invitation'),
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
     require('./pages/check-device-wrapper/router'),
@@ -137,6 +138,7 @@ if (module.hot) {
     './redux/reducers',
     path.resolve('./pages'),
     path.resolve('./components'),
+    './server/routers/invitation',
     './server/routers/auth',
     './server/routers/google-oauth',
     './pages/check-device-wrapper/router',
@@ -169,6 +171,7 @@ if (module.hot) {
     const updatedExpressRouters = {
       insecure: [],
       secure: [
+        require('./server/routers/invitation'),
         require('./server/routers/auth'),
         require('./server/routers/google-oauth'),
         require('./pages/check-device-wrapper/router'),
