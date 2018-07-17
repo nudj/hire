@@ -22,7 +22,9 @@ const reduxReducers = require('./redux/reducers')
 const LoadingPage = require('./pages/loading')
 
 const expressRouters = {
-  insecure: [],
+  insecure: [
+    require('./server/routers/health-check')
+  ],
   secure: [
     require('./server/routers/invitation'),
     require('./server/routers/auth'),
