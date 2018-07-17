@@ -92,9 +92,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@2.15.1":
-  version "2.15.1"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.15.1.tgz#f65b9484b3c62f27e25ac4eb7b793abda579a63a"
+"@nudj/components@2.16.1":
+  version "2.16.1"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.16.1.tgz#30683193c40744e9891ee4a1e28360bd90d9c315"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
