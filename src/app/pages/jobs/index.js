@@ -61,6 +61,7 @@ class JobsPage extends React.Component {
     const memberType = get(user, 'hirer.type', memberTypes.MEMBER)
 
     const isAdmin = memberType === memberTypes.ADMIN
+    const hasTeam = company.hirers.length > 1
     const queryParams = new URLSearchParams(get(location, 'search', ''))
     const invitedCount = get(company, 'hirers', [])
       .filter(item => item.id !== hirer.id)
@@ -134,6 +135,7 @@ class JobsPage extends React.Component {
               jobs={jobs}
               web={web}
               isAdmin={isAdmin}
+              hasTeam={hasTeam}
               company={company}
               whatsappTemplate={whatsappTemplate}
               linkedinTemplate={linkedinTemplate}
