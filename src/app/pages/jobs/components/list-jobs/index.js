@@ -209,6 +209,7 @@ class ListAllJobs extends React.Component {
   render () {
     const {
       isAdmin,
+      hasTeam,
       style,
       values,
       onChange
@@ -260,7 +261,7 @@ class ListAllJobs extends React.Component {
                   key='share-jobs-button'
                   style={actionStyle}
                   volume='cheer'
-                  to='/jobs/share-with-team'
+                  to={hasTeam ? '/jobs/share-with-team' : '/invite'}
                   subtle
                 >
                   {getShareButtonCopy(values.length, published.length)}
