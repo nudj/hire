@@ -86,6 +86,8 @@ const ListJobs = (props) => {
   )
 }
 
+const defaultJobGroup = []
+
 class ListAllJobs extends React.Component {
   getJobUrl = (slug) => {
     const { web, company } = this.props
@@ -194,7 +196,7 @@ class ListAllJobs extends React.Component {
 
   handleToggleAllPublished = () => {
     const { jobs, values, onChange } = this.props
-    const { PUBLISHED: published } = groupBy(jobs, 'status')
+    const { PUBLISHED: published = defaultJobGroup } = groupBy(jobs, 'status')
 
     if (values.length !== published.length) {
       const publishedIds = published.map(job => job.id)
@@ -215,9 +217,9 @@ class ListAllJobs extends React.Component {
     const jobs = this.formatJobs(this.props.jobs)
 
     const {
-      PUBLISHED: published,
-      DRAFT: draft,
-      ARCHIVED: archived
+      PUBLISHED: published = defaultJobGroup,
+      DRAFT: draft = defaultJobGroup,
+      ARCHIVED: archived = defaultJobGroup
     } = groupBy(jobs, 'status')
 
     const noPublishedSelected = !values.length
@@ -267,7 +269,7 @@ class ListAllJobs extends React.Component {
             ]}
           </ActionBar>
         ) }
-        { published && published.length > 0 && (
+        { published.length > 0 && (
           <ListComponent
             jobs={published}
             isAdmin={isAdmin}
