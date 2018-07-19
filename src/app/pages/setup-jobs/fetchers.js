@@ -30,7 +30,7 @@ const post = ({ res, body }) => {
           company {
             id
             name
-            job: createJobAndOnboardHirer(data: $job) {
+            job: createJob(data: $job) {
               slug
             }
           }
