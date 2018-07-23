@@ -1,8 +1,25 @@
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 const { intercom } = require('@nudj/library/analytics')
+const { ALREADY_EXISTS } = require('@nudj/library/lib/errors/constants')
 const logger = require('@nudj/framework/logger')
 
 const { createNotification } = require('../../lib')
+const requestGql = require('../../lib/requestGql')
+
+const fetchCompanySlug = async companyId => {
+  const gql = `
+    query fetchCompanySlug ($companyId: ID!) {
+      company(id: $companyId) {
+        slug
+      }
+    }
+  `
+  const variables = { companyId }
+
+  const { company } = await requestGql(null, gql, variables)
+  return company.slug
+}
 
 const triggerIntercomTracking = async (data, body) => {
   try {
@@ -48,7 +65,7 @@ const triggerIntercomTracking = async (data, body) => {
   }
 }
 
-const get = () => {
+const getEnrichmentData = () => {
   const gql = `
     mutation GetEnrichmentData {
       enrichmentData: getCompanyEnrichmentDataByUserEmail
@@ -87,20 +104,25 @@ const post = ({ body }) => {
       )
     })
   }
-  const catcher = () => {
-    throw new Redirect({
-      url: '/setup-company',
-      notification: {
-        type: 'error',
-        message: 'Something went wrong while setting up your company! Please try again.'
-      }
-    })
+  const catcher = async error => {
+    if (get(error, 'errors[0].type') === ALREADY_EXISTS) {
+      const slug = await fetchCompanySlug(error.errors[0].identifier)
+      throw new Redirect({ url: `/request-access/${slug}` })
+    } else {
+      throw new Redirect({
+        url: '/setup-company',
+        notification: {
+          type: 'error',
+          message: 'Something went wrong while setting up your company! Please try again.'
+        }
+      })
+    }
   }
 
   return { gql, variables, catcher, respond }
 }
 
 module.exports = {
-  get,
+  getEnrichmentData,
   post
 }
