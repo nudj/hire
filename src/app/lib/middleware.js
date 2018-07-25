@@ -6,6 +6,7 @@ const request = require('./requestGql')
 
 async function ensureValidCompanyHash (req, res, next) {
   const { hash } = req.params
+  const { userId } = req.session
   try {
     const query = `
       query validateCompanyHash ($hash: String!) {
@@ -14,7 +15,7 @@ async function ensureValidCompanyHash (req, res, next) {
         }
       }
     `
-    const responseData = await request(req.session.userId, query, { hash })
+    const responseData = await request(userId, query, { hash })
     if (get(responseData, 'companyByFilters.id')) {
       return next()
     }
@@ -23,7 +24,7 @@ async function ensureValidCompanyHash (req, res, next) {
   }
 
   return next(
-    new NotFound({ log: ['User accessed an invalid invitation hash', hash] })
+    new NotFound({ log: [`User (${userId}) accessed an invalid invitation hash`, hash] })
   )
 }
 
