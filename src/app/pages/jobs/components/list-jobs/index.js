@@ -224,7 +224,7 @@ class ListAllJobs extends React.Component {
     } = groupBy(jobs, 'status')
 
     const noPublishedSelected = !values.length
-    const allPublishedSelected = values.length === published.length
+    const allPublishedSelected = published.length > 0 && values.length === published.length
     const somePublishedSelected = !allPublishedSelected && values.length > 0
 
     const ListComponent = isAdmin ? ListSelectableJobs : ListJobs
