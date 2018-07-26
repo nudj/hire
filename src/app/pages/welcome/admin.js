@@ -34,7 +34,7 @@ const WelcomeAdmin = ({ style }) => (
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
                 Tell us about your company and the roles you&apos;re currently hiring
-                for, we&apos;ll then add them to our platform for you.
+                for and they&apos;ll be added to our platform automatically.
               </Text>
             </div>
           </li>
