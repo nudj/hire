@@ -79,7 +79,7 @@ const ListJobs = (props) => {
     <div className={css(style)}>
       {jobs.map(job => (
         <Card key={job.id} style={styleSheet.jobCard}>
-          <ShareableJob {...job} showEdit={isAdmin} />
+          <ShareableJob {...job} showEdit={isAdmin} styleSheet={selectableJobStyleSheet} />
         </Card>
       ))}
     </div>

@@ -112,6 +112,10 @@ const getIndividualShareProps = (args) => {
 
 const jobCardStyle = [style.jobCard, mss.mtReg]
 
+const shareableJobStyleSheet = {
+  root: [mss.ptReg, mss.plReg, mss.prReg]
+}
+
 class FirstNudjPage extends React.Component {
   getSharePropsGetters = memoize(
     jobs => jobs.reduce((map, job) => {
@@ -192,6 +196,7 @@ class FirstNudjPage extends React.Component {
                     referralUrl={referralUrl}
                     shareProps={shareProps}
                     status={job.status}
+                    styleSheet={shareableJobStyleSheet}
                   />
                 </Card>
               )
