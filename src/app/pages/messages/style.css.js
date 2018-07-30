@@ -50,12 +50,6 @@ const styleSheet = StyleSheet.create({
     paddingBottom: sizes.smallIi,
     paddingRight: sizes.smallIi,
     borderRadius: '0.25rem'
-  },
-  newProviders: {
-    color: colors.greyDarker,
-    opacity: 0.8,
-    display: 'inline-block',
-    paddingTop: sizes.regular
   }
 })
 

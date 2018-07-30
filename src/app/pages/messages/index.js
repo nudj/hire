@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const { Button, Card, Text } = require('@nudj/components')
+const { Button, Card } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -15,6 +15,7 @@ const ButtonLink = require('../../components/button-link')
 
 const Main = require('../../components/main')
 const Section = require('../../components/section')
+const Small = require('../../components/small')
 const { Heading, Para } = require('../../components/app')
 
 const style = require('./style.css')
@@ -128,7 +129,9 @@ const MessagesPage = props => {
                 </Button>
               </div>
             </form>
-            <Text size='smallI' style={style.newProviders}>Other email providers coming soon.</Text>
+            <Small style={mss.mtReg}>
+              Other email providers coming soon.
+            </Small>
           </Section>
         )}
       </Main>

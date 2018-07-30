@@ -3,7 +3,11 @@ const { StyleSheet, typography, sizes, colors } = require('@nudj/components/lib/
 
 const styleSheet = StyleSheet.create({
   htmlBody: {
-    backgroundColor: colors.greyLightest
+    backgroundColor: colors.greyLightest,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0
   },
   root: {
     backgroundColor: colors.greyLightest,
