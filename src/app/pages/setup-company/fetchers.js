@@ -105,7 +105,8 @@ const post = ({ body }) => {
     })
   }
   const catcher = async error => {
-    if (get(error, 'errors[0].type') === ALREADY_EXISTS) {
+    // Check to ensure error type and that request access flow is enabled
+    if (get(error, 'errors[0].type') === ALREADY_EXISTS && process.env.FEATURE_REQUEST_ACCESS === 'true') {
       const slug = await fetchCompanySlug(error.errors[0].identifier)
       throw new Redirect({ url: `/request-access/${slug}` })
     } else {
