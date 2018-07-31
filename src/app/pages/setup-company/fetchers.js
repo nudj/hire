@@ -123,6 +123,6 @@ const post = ({ body }) => {
 }
 
 module.exports = {
-  getEnrichmentData,
+  get: getEnrichmentData,
   post
 }
