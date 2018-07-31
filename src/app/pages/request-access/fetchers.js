@@ -1,22 +1,38 @@
+const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 
-const get = ({ query, params }) => {
+const getPage = ({ query, params, session }) => {
   const gql = `
-    query requestAccessPage ($slug: String!) {
+    query requestAccessPage ($slug: String!, $personId: ID!) {
       company: companyByFilters(filters: { slug: $slug }) {
         name
         slug
+        accessRequest: accessRequestByFilters(filters: { person: $personId }) {
+          acceptedBy {
+            id
+          }
+        }
       }
     }
   `
 
   const variables = {
-    slug: params.companySlug
+    slug: params.companySlug,
+    personId: session.userId
+  }
+
+  const transformData = data => {
+    // If access request is accepted, redirect to home
+    if (get(data, 'company.accessRequest.acceptedBy')) {
+      throw new Redirect({ url: '/' })
+    }
+    return data
   }
 
   return {
     gql,
-    variables
+    variables,
+    transformData
   }
 }
 
@@ -24,7 +40,9 @@ const post = ({ params, session }) => {
   const gql = `
     mutation requestAccess ($slug: String!, $personId: ID!) {
       company: companyByFilters(filters: { slug: $slug }) {
-        createAccessRequest(person: $personId) {
+        name
+        slug
+        accessRequest: createAccessRequest(person: $personId) {
           id
         }
       }
@@ -34,16 +52,11 @@ const post = ({ params, session }) => {
     personId: session.userId,
     slug: params.companySlug
   }
-  const respond = () => {
-    throw new Redirect({
-      url: `/request-access/${params.companySlug}/requested`
-    })
-  }
 
-  return { gql, variables, respond }
+  return { gql, variables }
 }
 
 module.exports = {
-  get,
+  get: getPage,
   post
 }
