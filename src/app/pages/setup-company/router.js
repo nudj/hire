@@ -4,8 +4,9 @@ const fetchers = require('./fetchers')
 
 const { ensureNotOnboarded } = require('../../lib/middleware')
 
-const Router = ({ respondWithGql }) => {
+const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
+  router.use('/setup-company', ensureLoggedIn)
 
   router.getHandlers('/setup-company', ensureNotOnboarded, respondWithGql(fetchers.get))
   router.postHandlers('/setup-company', ensureNotOnboarded, respondWithGql(fetchers.post))

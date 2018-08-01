@@ -20,9 +20,8 @@ const Router = ({
   respondWithGql
 }) => {
   const router = express.Router()
-  router.use(ensureLoggedIn)
 
-  router.get('*', respondWithGql(get))
+  router.get('*', ensureLoggedIn, respondWithGql(get))
 
   return router
 }

@@ -69,7 +69,7 @@ const Router = ({
   ensureLoggedIn
 }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/auth/google', ensureLoggedIn)
 
   router.getHandlers('/auth/google', googleAuthentication)
   router.getHandlers('/auth/google/failure', authenticationFailureHandler)

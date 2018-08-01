@@ -6,9 +6,9 @@ const { ensureOnboarded, ensureAdmin } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/jobs/share-with-team', ensureLoggedIn)
 
-  router.getHandlers('/', ensureOnboarded, respondWithGql(fetchers.get))
+  router.getHandlers('/', ensureLoggedIn, ensureOnboarded, respondWithGql(fetchers.get))
   router.getHandlers(
     '/jobs/share-with-team',
     ensureAdmin,

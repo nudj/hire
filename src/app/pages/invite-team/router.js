@@ -5,7 +5,7 @@ const { ensureAdmin } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/invite-team', ensureLoggedIn)
 
   router.getHandlers('/invite-team', ensureLoggedIn, ensureAdmin, respondWithGql(fetchers.get))
   router.postHandlers('/invite-team', ensureLoggedIn, ensureAdmin, respondWithGql(fetchers.post))
