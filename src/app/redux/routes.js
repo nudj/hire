@@ -28,5 +28,6 @@ module.exports = {
   '/applications': require('../pages/applications'),
   '/notification-sent': require('../pages/notification-sent'),
   '/invite': require('../pages/invite'),
-  '/request-access/:companySlug': require('../pages/request-access')
+  '/request-access/:companySlug': require('../pages/request-access'),
+  '/access-request/:accessRequestSlug': require('../pages/access-request')
 }

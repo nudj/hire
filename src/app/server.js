@@ -51,6 +51,7 @@ const expressRouters = {
     require('./pages/add-jobs/set-bonus/router'),
     require('./pages/edit-jobs/router'),
     require('./pages/request-access/router'),
+    require('./pages/access-request/router'),
     require('./server/routers/catch-all')
   ]
 }
