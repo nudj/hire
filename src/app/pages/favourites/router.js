@@ -1,9 +1,12 @@
 const { Redirect } = require('@nudj/library/errors')
 const createRouter = require('@nudj/framework/router')
 
+const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
+
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use('/favourites', ensureLoggedIn)
+  router.use('/favourites', ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/favourites',
