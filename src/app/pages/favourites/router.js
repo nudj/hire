@@ -3,7 +3,7 @@ const createRouter = require('@nudj/framework/router')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/favourites', ensureLoggedIn)
 
   router.getHandlers(
     '/favourites',

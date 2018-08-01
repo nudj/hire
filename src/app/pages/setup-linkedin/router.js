@@ -4,7 +4,7 @@ const fetchers = require('./fetchers')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/sync-contacts/linkedin/upload', ensureLoggedIn)
 
   router.getHandlers(
     '/sync-contacts/linkedin/upload',

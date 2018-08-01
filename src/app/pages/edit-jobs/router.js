@@ -4,8 +4,9 @@ const fetchers = require('./fetchers')
 
 const { ensureAdmin } = require('../../lib/middleware')
 
-const Router = ({ respondWithGql }) => {
+const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
+  router.use('/jobs/:jobSlug/edit', ensureLoggedIn)
 
   router.getHandlers('/jobs/:jobSlug/edit', ensureAdmin, respondWithGql(fetchers.get))
   router.postHandlers('/jobs/:jobSlug/edit', ensureAdmin, respondWithGql(fetchers.post))

@@ -7,7 +7,7 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/notification-sent', ensureLoggedIn)
 
   router.getHandlers('/notification-sent', respondWithGql(fetchers.getUser))
 

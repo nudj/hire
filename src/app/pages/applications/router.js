@@ -8,7 +8,7 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/applications', ensureLoggedIn)
 
   router.getHandlers(
     '/applications',

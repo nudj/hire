@@ -5,7 +5,7 @@ const { ensureOnboarded } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/messages', ensureLoggedIn)
 
   router.getHandlers(
     '/messages',
@@ -45,6 +45,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
 
   router.postHandlers(
     '/sync-google',
+    ensureLoggedIn,
     ensureOnboarded,
     respondWithGql(fetchers.redirectToGoogleAuth)
   )

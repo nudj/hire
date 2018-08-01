@@ -8,7 +8,7 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use(ensureLoggedIn)
+  router.use('/contacts', ensureLoggedIn)
 
   router.getHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.getContacts))
   router.postHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.postContact))
