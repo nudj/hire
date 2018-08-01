@@ -1,11 +1,12 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
-const { ensureOnboarded } = require('../../lib/middleware')
+const { ensureOnboarded, ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use('/messages', ensureLoggedIn)
+  router.use('/messages', ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/messages',

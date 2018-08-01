@@ -1,7 +1,11 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
-const { ensureOnboarded, ensureAdmin } = require('../../lib/middleware')
+const {
+  ensureOnboarded,
+  ensureAdmin,
+  ensureNoAccessRequestsPending
+} = require('../../lib/middleware')
 
 const Router = ({
   ensureLoggedIn,
@@ -9,6 +13,7 @@ const Router = ({
 }) => {
   const router = createRouter()
   router.use('/applications', ensureLoggedIn)
+  router.use('/applications', ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/applications',

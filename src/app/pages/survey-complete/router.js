@@ -1,10 +1,12 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
+const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use('/surveys/:surveySlug/complete', ensureLoggedIn)
+  router.use('/surveys/:surveySlug/complete', ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/surveys/:surveySlug/complete',
