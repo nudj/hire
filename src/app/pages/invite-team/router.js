@@ -5,11 +5,10 @@ const { ensureAdmin, ensureNoAccessRequestsPending } = require('../../lib/middle
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/invite-team', ensureLoggedIn)
-  router.use('/invite-team', ensureNoAccessRequestsPending)
+  router.use('/invite-team', ensureLoggedIn, ensureNoAccessRequestsPending, ensureAdmin)
 
-  router.getHandlers('/invite-team', ensureLoggedIn, ensureAdmin, respondWithGql(fetchers.get))
-  router.postHandlers('/invite-team', ensureLoggedIn, ensureAdmin, respondWithGql(fetchers.post))
+  router.getHandlers('/invite-team', respondWithGql(fetchers.get))
+  router.postHandlers('/invite-team', respondWithGql(fetchers.post))
 
   return router
 }

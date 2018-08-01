@@ -9,11 +9,16 @@ const {
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/invite', ensureLoggedIn)
-  router.use('/invite', ensureNoAccessRequestsPending)
+  router.use(
+    '/invite',
+    ensureLoggedIn,
+    ensureNoAccessRequestsPending,
+    ensureOnboarded,
+    ensureAdmin
+  )
 
-  router.getHandlers('/invite', ensureOnboarded, ensureAdmin, respondWithGql(fetchers.get))
-  router.postHandlers('/invite', ensureOnboarded, ensureAdmin, respondWithGql(fetchers.post))
+  router.getHandlers('/invite', respondWithGql(fetchers.get))
+  router.postHandlers('/invite', respondWithGql(fetchers.post))
 
   return router
 }

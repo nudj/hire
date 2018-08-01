@@ -6,11 +6,10 @@ const { ensureOnboarded, ensureNoAccessRequestsPending } = require('../../lib/mi
 
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
-  router.use('/jobs/new', ensureLoggedIn)
-  router.use('/jobs/new', ensureNoAccessRequestsPending)
+  router.use('/jobs/new', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
 
-  router.getHandlers('/jobs/new', ensureOnboarded, respondWithGql(fetchers.get))
-  router.postHandlers('/jobs/new', ensureOnboarded, respondWithGql(fetchers.post))
+  router.getHandlers('/jobs/new', respondWithGql(fetchers.get))
+  router.postHandlers('/jobs/new', respondWithGql(fetchers.post))
 
   return router
 }

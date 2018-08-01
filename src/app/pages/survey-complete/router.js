@@ -5,8 +5,7 @@ const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/surveys/:surveySlug/complete', ensureLoggedIn)
-  router.use('/surveys/:surveySlug/complete', ensureNoAccessRequestsPending)
+  router.use('/surveys/:surveySlug/complete', ensureLoggedIn, ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/surveys/:surveySlug/complete',

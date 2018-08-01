@@ -3,6 +3,7 @@ const { Strategy: GoogleStrategy } = require('passport-google-oauth20')
 const createRouter = require('@nudj/framework/router')
 
 const requestGql = require('../../lib/requestGql')
+const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 const { emailPreferences } = require('../../lib/constants')
 const { createNotification } = require('../../lib')
 
@@ -69,7 +70,7 @@ const Router = ({
   ensureLoggedIn
 }) => {
   const router = createRouter()
-  router.use('/auth/google', ensureLoggedIn)
+  router.use('/auth/google', ensureLoggedIn, ensureNoAccessRequestsPending)
 
   router.getHandlers('/auth/google', googleAuthentication)
   router.getHandlers('/auth/google/failure', authenticationFailureHandler)

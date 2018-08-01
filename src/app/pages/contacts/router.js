@@ -8,14 +8,13 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use('/contacts', ensureLoggedIn)
-  router.use('/contacts', ensureNoAccessRequestsPending)
+  router.use('/contacts', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
 
-  router.getHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.getContacts))
-  router.postHandlers('/contacts', ensureOnboarded, respondWithGql(fetchers.postContact))
+  router.getHandlers('/contacts', respondWithGql(fetchers.getContacts))
+  router.postHandlers('/contacts', respondWithGql(fetchers.postContact))
 
-  router.getHandlers('/contacts/job/:jobId', ensureOnboarded, respondWithGql(fetchers.getContacts))
-  router.postHandlers('/contacts/job/:jobId', ensureOnboarded, respondWithGql(fetchers.postContact))
+  router.getHandlers('/contacts/job/:jobId', respondWithGql(fetchers.getContacts))
+  router.postHandlers('/contacts/job/:jobId', respondWithGql(fetchers.postContact))
 
   return router
 }

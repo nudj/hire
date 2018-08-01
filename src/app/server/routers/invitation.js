@@ -2,7 +2,7 @@ const express = require('express')
 const get = require('lodash/get')
 const logger = require('@nudj/framework/logger')
 
-const { ensureValidCompanyHash } = require('../../lib/middleware')
+const { ensureValidCompanyHash, ensureNoAccessRequestsPending } = require('../../lib/middleware')
 const requestGql = require('../../lib/requestGql')
 
 async function getHirer (email) {
@@ -68,6 +68,7 @@ const Router = ({
       next()
     },
     ensureLoggedIn,
+    ensureNoAccessRequestsPending,
     async (req, res) => {
       const { email } = req.user._json
       const { hash } = req.params

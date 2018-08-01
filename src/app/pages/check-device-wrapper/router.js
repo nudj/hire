@@ -9,8 +9,7 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use('/continue-onboarding', ensureLoggedIn)
-  router.use('/continue-onboarding', ensureNoAccessRequestsPending)
+  router.use('/continue-onboarding', ensureLoggedIn, ensureNoAccessRequestsPending)
 
   router.getHandlers('/continue-onboarding', respondWithGql(fetchers.sendMagicLink))
 
