@@ -5,8 +5,7 @@ const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/favourites', ensureLoggedIn)
-  router.use('/favourites', ensureNoAccessRequestsPending)
+  router.use('/favourites', ensureLoggedIn, ensureNoAccessRequestsPending)
 
   router.getHandlers(
     '/favourites',

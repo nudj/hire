@@ -6,11 +6,10 @@ const { ensureAdmin, ensureNoAccessRequestsPending } = require('../../lib/middle
 
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
-  router.use('/jobs/:jobSlug/edit', ensureLoggedIn)
-  router.use('/jobs/:jobSlug/edit', ensureNoAccessRequestsPending)
+  router.use('/jobs/:jobSlug/edit', ensureLoggedIn, ensureNoAccessRequestsPending, ensureAdmin)
 
-  router.getHandlers('/jobs/:jobSlug/edit', ensureAdmin, respondWithGql(fetchers.get))
-  router.postHandlers('/jobs/:jobSlug/edit', ensureAdmin, respondWithGql(fetchers.post))
+  router.getHandlers('/jobs/:jobSlug/edit', respondWithGql(fetchers.get))
+  router.postHandlers('/jobs/:jobSlug/edit', respondWithGql(fetchers.post))
 
   return router
 }

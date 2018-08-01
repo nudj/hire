@@ -5,8 +5,7 @@ const { ensureNoAccessRequestsPending } = require('../../../lib/middleware')
 
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
-  router.use('/jobs/:jobSlug/bonus', ensureLoggedIn)
-  router.use('/jobs/:jobSlug/bonus', ensureNoAccessRequestsPending)
+  router.use('/jobs/:jobSlug/bonus', ensureLoggedIn, ensureNoAccessRequestsPending)
 
   router.getHandlers('/jobs/:jobSlug/bonus', respondWithGql(fetchers.get))
   router.postHandlers('/jobs/:jobSlug/bonus', respondWithGql(fetchers.post))

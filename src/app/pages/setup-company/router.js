@@ -6,11 +6,10 @@ const { ensureNotOnboarded, ensureNoAccessRequestsPending } = require('../../lib
 
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
-  router.use('/setup-company', ensureLoggedIn)
-  router.use('/setup-company', ensureNoAccessRequestsPending)
+  router.use('/setup-company', ensureLoggedIn, ensureNoAccessRequestsPending, ensureNotOnboarded)
 
-  router.getHandlers('/setup-company', ensureNotOnboarded, respondWithGql(fetchers.get))
-  router.postHandlers('/setup-company', ensureNotOnboarded, respondWithGql(fetchers.post))
+  router.getHandlers('/setup-company', respondWithGql(fetchers.get))
+  router.postHandlers('/setup-company', respondWithGql(fetchers.post))
 
   return router
 }

@@ -10,8 +10,7 @@ const {
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/jobs/share-with-team', ensureLoggedIn)
-  router.use('/jobs/share-with-team', ensureNoAccessRequestsPending)
+  router.use('/jobs/share-with-team', ensureLoggedIn, ensureNoAccessRequestsPending, ensureAdmin)
 
   router.getHandlers(
     '/',
@@ -20,16 +19,8 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
     ensureOnboarded,
     respondWithGql(fetchers.get)
   )
-  router.getHandlers(
-    '/jobs/share-with-team',
-    ensureAdmin,
-    respondWithGql(shareWithTeamFetchers.get)
-  )
-  router.postHandlers(
-    '/jobs/share-with-team',
-    ensureAdmin,
-    respondWithGql(shareWithTeamFetchers.post)
-  )
+  router.getHandlers('/jobs/share-with-team', respondWithGql(shareWithTeamFetchers.get))
+  router.postHandlers('/jobs/share-with-team', respondWithGql(shareWithTeamFetchers.post))
 
   return router
 }

@@ -12,15 +12,15 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use('/applications', ensureLoggedIn)
-  router.use('/applications', ensureNoAccessRequestsPending)
-
-  router.getHandlers(
+  router.use(
     '/applications',
+    ensureLoggedIn,
+    ensureNoAccessRequestsPending,
     ensureOnboarded,
-    ensureAdmin,
-    respondWithGql(fetchers.getApplications)
+    ensureAdmin
   )
+
+  router.getHandlers('/applications', respondWithGql(fetchers.getApplications))
 
   return router
 }

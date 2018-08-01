@@ -5,45 +5,14 @@ const { ensureOnboarded, ensureNoAccessRequestsPending } = require('../../lib/mi
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/messages', ensureLoggedIn)
-  router.use('/messages', ensureNoAccessRequestsPending)
+  router.use('/messages', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
 
-  router.getHandlers(
-    '/messages',
-    ensureOnboarded,
-    respondWithGql(fetchers.getMessages)
-  )
-
-  router.getHandlers(
-    '/messages/:conversationId',
-    ensureOnboarded,
-    respondWithGql(fetchers.getThread)
-  )
-
-  router.postHandlers(
-    '/messages/:conversationId',
-    ensureOnboarded,
-    respondWithGql(fetchers.replyTo)
-  )
-
-  router.getHandlers(
-    '/messages/new/:recipientId',
-    ensureOnboarded,
-    respondWithGql(fetchers.getActiveJobs)
-  )
-
-  router.getHandlers(
-    '/messages/new/:recipientId/:jobId',
-    ensureOnboarded,
-    respondWithGql(fetchers.getMessageTemplate)
-  )
-
-  router.postHandlers(
-    '/messages/new/:recipientId/:jobId',
-    ensureOnboarded,
-    respondWithGql(fetchers.sendNewMessage)
-  )
-
+  router.getHandlers('/messages', respondWithGql(fetchers.getMessages))
+  router.getHandlers('/messages/:conversationId', respondWithGql(fetchers.getThread))
+  router.postHandlers('/messages/:conversationId', respondWithGql(fetchers.replyTo))
+  router.getHandlers('/messages/new/:recipientId', respondWithGql(fetchers.getActiveJobs))
+  router.getHandlers('/messages/new/:recipientId/:jobId', respondWithGql(fetchers.getMessageTemplate))
+  router.postHandlers('/messages/new/:recipientId/:jobId', respondWithGql(fetchers.sendNewMessage))
   router.postHandlers(
     '/sync-google',
     ensureLoggedIn,
