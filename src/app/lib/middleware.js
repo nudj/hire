@@ -4,6 +4,33 @@ const get = require('lodash/get')
 const { createNotification } = require('./')
 const request = require('./requestGql')
 
+async function ensureNoAccessRequestsPending (req, res, next) {
+  const gql = `
+    query ensureNoAccessRequestsPending ($personId: ID!) {
+      accessRequest: accessRequestByFilters(filters: { person: $personId }) {
+        id
+        company {
+          slug
+        }
+        acceptedBy {
+          id
+        }
+      }
+    }
+  `
+  const variables = {
+    personId: req.session.userId
+  }
+
+  const data = await request(req.session.userId, gql, variables)
+
+  // If access request exists and acceptedBy does not, then redirect to request page
+  if (get(data, 'accessRequest') && !get(data, 'accessRequest.acceptedBy')) {
+    return res.redirect(`/request-access/${data.accessRequest.company.slug}`)
+  }
+  next()
+}
+
 async function ensureValidCompanyHash (req, res, next) {
   const { hash } = req.params
   try {
@@ -110,5 +137,6 @@ module.exports = {
   ensureNotOnboarded,
   ensureValidCompanyHash,
   ensureOnboarded,
-  ensureAdmin
+  ensureAdmin,
+  ensureNoAccessRequestsPending
 }
