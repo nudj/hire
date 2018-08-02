@@ -66,6 +66,7 @@ const postContact = ({ params, body }) => {
           id
         }
       }
+      ${Global}
     }
   `
   const variables = {

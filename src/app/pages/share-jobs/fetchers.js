@@ -61,6 +61,7 @@ const postGql = ({ res }) => {
           setOnboarded
         }
       }
+      ${Global}
     }
   `
 

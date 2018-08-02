@@ -2,6 +2,7 @@ const { Redirect } = require('@nudj/framework/errors')
 
 const { createNotification } = require('../../lib')
 const template = require('./email-template')
+const { Global } = require('../../lib/graphql')
 
 const sendMagicLink = () => {
   const gql = `
@@ -11,6 +12,7 @@ const sendMagicLink = () => {
           success
         }
       }
+      ${Global}
     }
   `
 

@@ -1,5 +1,6 @@
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
+const { Global } = require('../../lib/graphql')
 
 const getPage = ({ query, params, session }) => {
   const gql = `
@@ -13,6 +14,7 @@ const getPage = ({ query, params, session }) => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -46,6 +48,7 @@ const post = ({ params, session }) => {
           id
         }
       }
+      ${Global}
     }
   `
   const variables = {

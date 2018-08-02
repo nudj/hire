@@ -1,4 +1,5 @@
 const { NotFound, Redirect } = require('@nudj/library/errors')
+const { Global } = require('../../lib/graphql')
 
 const get = ({ params }) => {
   const gql = `
@@ -30,6 +31,7 @@ const get = ({ params }) => {
           }
         }
       }
+      ${Global}
     }
   `
   const variables = {
@@ -79,6 +81,7 @@ const post = ({ params }) => {
           }
         }
       }
+      ${Global}
     }
   `
   const variables = {
