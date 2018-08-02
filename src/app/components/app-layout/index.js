@@ -30,12 +30,21 @@ const ApplicationLayout = props => {
         </Helmet>
         <Notification notification={notification} dispatch={dispatch} />
         <div className={css(style.pageHeader)}>
-          <RouterLink className={css(style.logoContainer)} to='/'>
-            <img
-              className={css(style.logo)}
-              src='/assets/images/nudj-logo-dark.svg'
-            />
-          </RouterLink>
+          {onboarded ? (
+            <RouterLink className={css(style.logoContainer)} to='/'>
+              <img
+                className={css(style.logo)}
+                src='/assets/images/nudj-logo-dark.svg'
+              />
+            </RouterLink>
+          ) : (
+            <div className={css(style.logoContainer)}>
+              <img
+                className={css(style.logo)}
+                src='/assets/images/nudj-logo-dark.svg'
+              />
+            </div>
+          )}
           <div className={css(style.bodyContainer)}>
             {showNavigation ? (
               <ul className={css(style.navigationList)}>
