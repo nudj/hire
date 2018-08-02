@@ -1,9 +1,11 @@
 const { cookies } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
-const { logNewJobToIntercom } = require('../../lib/intercom')
 const {
   values: jobStatusTypes
 } = require('@nudj/api/gql/schema/enums/job-status-types')
+
+const { logNewJobToIntercom } = require('../../lib/intercom')
+const { Global } = require('../../lib/graphql')
 
 const get = () => {
   const gql = `
@@ -15,6 +17,7 @@ const get = () => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -36,6 +39,7 @@ const post = ({ res, body }) => {
           }
         }
       }
+      ${Global}
     }
   `
   const variables = {

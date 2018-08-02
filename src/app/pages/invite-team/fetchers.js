@@ -78,6 +78,7 @@ const post = ({ res, body }) => {
             onboarded
           }
         }
+        ${Global}
       }
     `
 

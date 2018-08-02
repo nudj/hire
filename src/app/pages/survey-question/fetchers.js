@@ -331,6 +331,7 @@ const postConnectionAnswer = ({ session, params, body }) => {
           }
         }
       }
+      ${Global}
     }
   `
 
@@ -379,6 +380,7 @@ const postNewConnection = ({ params, body }) => {
           lastName
         }
       }
+      ${Global}
     }
   `
   const variables = {

@@ -302,6 +302,7 @@ const sendNewMessage = ({ session, params, body, req }) => {
           id
         }
       }
+      ${Global}
     }
   `
 

@@ -6,6 +6,7 @@ const logger = require('@nudj/framework/logger')
 
 const { createNotification } = require('../../lib')
 const requestGql = require('../../lib/requestGql')
+const { Global } = require('../../lib/graphql')
 
 const fetchCompanySlug = async companyId => {
   const gql = `
@@ -13,6 +14,7 @@ const fetchCompanySlug = async companyId => {
       company(id: $companyId) {
         slug
       }
+      ${Global}
     }
   `
   const variables = { companyId }
@@ -69,6 +71,7 @@ const getEnrichmentData = () => {
   const gql = `
     mutation GetEnrichmentData {
       enrichmentData: getCompanyEnrichmentDataByUserEmail
+      ${Global}
     }
   `
 
@@ -84,6 +87,7 @@ const post = ({ body }) => {
           id
         }
       }
+      ${Global}
     }
   `
   const variables = {

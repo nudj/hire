@@ -1,5 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 const { createEnumMap } = require('../../lib')
+const { Global } = require('../../lib/graphql')
 
 const get = ({ params }) => {
   const gql = `
@@ -19,6 +20,7 @@ const get = ({ params }) => {
           }
         }
       }
+      ${Global}
     }
   `
   const variables = {
@@ -63,6 +65,7 @@ const post = ({ body, params, res }) => {
           name
         }
       }
+      ${Global}
     }
   `
   const variables = { id, data, notifyTeam: true }
