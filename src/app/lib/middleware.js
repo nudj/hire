@@ -123,6 +123,7 @@ async function ensureNotOnboarded (req, res, next) {
     }
   } catch (error) {
     logger.log('error', error)
+    return next(error)
   }
 
   logger.log('info', 'Signed-up hirer attempted to access onboarding flow')

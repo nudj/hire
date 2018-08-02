@@ -6,7 +6,7 @@ const accept = () => async (dispatch, getState) => {
   const slug = get(state, 'app.accessRequest.slug')
 
   await dispatch(actions.app.postData({
-    url: `/access-request/${slug}`,
+    url: `/access-requests/${slug}`,
     method: 'post',
     data: {}
   }))

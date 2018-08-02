@@ -10,8 +10,8 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/access-request/:accessRequestSlug', ensureOnboarded, respondWithGql(fetchers.get))
-  router.postHandlers('/access-request/:accessRequestSlug', ensureOnboarded, respondWithGql(fetchers.post))
+  router.getHandlers('/access-requests/:accessRequestSlug', ensureOnboarded, respondWithGql(fetchers.get))
+  router.postHandlers('/access-requests/:accessRequestSlug', ensureOnboarded, respondWithGql(fetchers.post))
 
   return router
 }
