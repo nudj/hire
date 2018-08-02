@@ -29,5 +29,5 @@ module.exports = {
   '/notification-sent': require('../pages/notification-sent'),
   '/invite': require('../pages/invite'),
   '/request-access/:companySlug': require('../pages/request-access'),
-  '/access-request/:accessRequestSlug': require('../pages/access-request')
+  '/access-requests/:accessRequestSlug': require('../pages/access-request')
 }
