@@ -3,6 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const URLSearchParams = require('url-search-params')
 
+const { possessiveCase } = require('@nudj/library')
 const { Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
@@ -169,8 +170,7 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                We&apos;ve created your company and posted your job to our
-                platform
+                Your job is now live!
               </Para>
               <Para nonsensitive>
                 You can now explore the rest of the app, add more jobs and,
@@ -184,7 +184,7 @@ class JobsPage extends React.Component {
                   onClick={this.handleOnboardingSuccessModalClose}
                   volume='cheer'
                 >
-                  Ok, great!
+                  Okay!
                 </Button>
               </div>
             </div>
@@ -204,12 +204,12 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                Great work on sharing your company&apos;s jobs. We&apos;ll be sure
+                Great work on sharing {possessiveCase(company.name)}&apos;s jobs. We&apos;ll be sure
                 to let you know when someone applies.
               </Para>
               <Para nonsensitive>
                 In the meantime, if you want to share your unique links again,
-                simply click 'Share job' under each job.
+                simply click 'Share job'.
               </Para>
               <div className={css(style.buttonGroup)}>
                 <Button

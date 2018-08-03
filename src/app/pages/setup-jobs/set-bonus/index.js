@@ -61,10 +61,10 @@ class SetBonusPage extends React.Component {
         <Main>
           <Section padding>
             <Heading nonsensitive>
-              Set the job&apos;s referral bonus
+              Set the referral bonus
             </Heading>
             <Para nonsensitive>
-              Choose what you want to reward the referrer with.
+              Pick or customise what you&apos;d like to reward for a successful referral
             </Para>
           </Section>
           <Section padding width='regular'>
@@ -81,7 +81,7 @@ class SetBonusPage extends React.Component {
                 style={mss.mtReg}
                 type='submit'
               >
-                Set bonus and publish job
+                Save
               </Button>
             </form>
           </Section>

@@ -91,10 +91,11 @@ class SetupCompanyPage extends React.Component {
         <Main>
           <Section padding>
             <Heading nonsensitive>
-            Create company
+            Company profile
             </Heading>
             <Para nonsensitive>
-              Tell us a bit more about your business, including where you&apos;re based.
+              This will appear on all of your job listings. Give a short description
+              of your company and why it&apos;s a great place to work.
             </Para>
           </Section>
           <Section padding width='largeI'>
@@ -166,7 +167,7 @@ class SetupCompanyPage extends React.Component {
                 volume='cheer'
                 style={mss.mtLgIi}
               >
-                Create company
+                Save
               </Button>
             </form>
           </Section>

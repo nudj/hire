@@ -6,6 +6,9 @@ const get = () => {
     query {
       user {
         hirer {
+          company {
+            name
+          }
           type
         }
       }

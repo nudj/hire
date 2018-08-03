@@ -1,4 +1,5 @@
 const React = require('react')
+const dedent = require('dedent')
 const values = require('lodash/values')
 const capitalize = require('lodash/capitalize')
 
@@ -16,9 +17,11 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 const { jobStatuses } = require('../../lib/constants')
 const style = require('./style.css')
 
-const descriptionPlaceholder =
-  'Briefly outline the responsibilities and ' +
-  'experience required for this role.'
+const descriptionPlaceholder = dedent`
+  Describe the responsibilities, experience and any requirements for the role and what a candidate might do on a typical day.
+
+  Tip: Try to inject a bit of personality
+`
 
 const inputFieldStylesheet = {
   root: style.field,
