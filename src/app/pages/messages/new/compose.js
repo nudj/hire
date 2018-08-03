@@ -96,16 +96,15 @@ class ComposeMessagePage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Compose a message</title>
+          <title>Tweak the message</title>
         </Helmet>
         <Main>
           <Section padding>
             <Heading level={1} style={mss.fgPrimary}>
-              Compose a message
+              Tweak the message
             </Heading>
             <Para>
-              Take a bit of time to personalise the template for those
-               you&#39;re sending it to.
+              Take a bit of time to personalise the template. You&apos;ll get a better response if you add a little personality
             </Para>
           </Section>
           <Section width='largeI'>

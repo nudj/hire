@@ -32,15 +32,15 @@ const SurveyPage = props => {
       <Main>
         <Section padding>
           <Heading nonsensitive>
-            Explore your network to find your next hire
+            Explore your network to find your next teammate
           </Heading>
           <Para nonsensitive>
-            The people you need to hire are already in your network, you just have to
-             remember them or find friends that know them.
+            The people you need to hire are already in your network, to find them
+            you&apos;ve got to do a little digging.
           </Para>
           <Para nonsensitive>
-            To help, you&#39;ll now be asked a series of questions designed to unlock all the
-             people from your past who are worth asking.
+            Stealing a little of Google&apos;s wisdom, we&apos;ll run you through a few key
+            questions to help you uncover who you know beyond the usual suspects.
           </Para>
           <Para nonsensitive>
             <em className={css(mss.i)}>Remember to think broadly and inclusively.</em>

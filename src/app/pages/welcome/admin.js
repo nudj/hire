@@ -20,7 +20,7 @@ const WelcomeAdmin = ({ style }) => (
         Welcome to nudj!
       </Heading>
       <Para nonsensitive>
-        Thanks for giving us a try, here are just a few things you can expect.
+        Get started with nudj and find out how you can source the best talent.
       </Para>
     </Section>
     <Section>
@@ -33,8 +33,8 @@ const WelcomeAdmin = ({ style }) => (
                 Set up your company in seconds
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Tell us about your company and the roles you&apos;re currently hiring
-                for and they&apos;ll be added to our platform automatically.
+                Tell us about your company and the roles you&apos;re hiring
+                for.
               </Text>
             </div>
           </li>
@@ -73,7 +73,7 @@ const WelcomeAdmin = ({ style }) => (
         href='/setup-company'
         volume='cheer'
       >
-        Ok, I&apos;m ready
+        Okay, I&apos;m ready
       </ButtonLink>
     </Section>
   </Main>

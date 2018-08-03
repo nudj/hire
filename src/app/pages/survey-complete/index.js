@@ -72,10 +72,10 @@ const ViewRecommendationsPage = props => {
         <Main>
           <Section padding>
             <Heading nonsensitive>
-              Send your first nudj
+              Time to nudj your network
             </Heading>
             <Para nonsensitive>
-              Choose a person who you want to get referrals from or encourage to apply for a job.
+              You&apos;re only a few steps away from great introductions.
             </Para>
           </Section>
           <Section width='regular'>
