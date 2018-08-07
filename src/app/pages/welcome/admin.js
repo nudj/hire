@@ -30,11 +30,10 @@ const WelcomeAdmin = ({ style }) => (
             <div className={css(style.listItemContainer)}>
               <Text nonsensitive element='h2' size='largeIi' style={mss.fgPrimary}>
                 <span className={css(mss.fgMidRed)}>1.</span>{' '}
-                Set up your company in seconds
+                Build a best-in-class referral program
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Tell us about your company and the roles you&apos;re hiring
-                for.
+                A referral program that consistently delivers results - top talent and faster hires for less cash.
               </Text>
             </div>
           </li>
@@ -42,11 +41,10 @@ const WelcomeAdmin = ({ style }) => (
             <div className={css(style.listItemContainer)}>
               <Text nonsensitive element='h2' size='largeIi' style={mss.fgPrimary}>
                 <span className={css(mss.fgMidRed)}>2.</span>{' '}
-                Easily track your performance
+                Steal Google&apos;s magic
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Quickly understand what is going on with your jobs, so you can focus
-                on just those that need your attention.
+                Use techniques pioneered by Google&apos;s hiring team to help your employees uncover those hidden gems from their networks.
               </Text>
             </div>
           </li>
@@ -54,12 +52,10 @@ const WelcomeAdmin = ({ style }) => (
             <div className={css(style.listItemContainer)}>
               <Text nonsensitive element='h2' size='largeIi' style={mss.fgPrimary}>
                 <span className={css(mss.fgMidRed)}>3.</span>{' '}
-                View all your applicants in one place
+                Hire like a hero
               </Text>
               <Text nonsensitive style={mss.mtReg} element='p'>
-                Referred applicants often have a poor experience, because they
-                don&apos;t get “referrential” treatment. By putting them in
-                one place, you can make sure they do.
+                Track performance, manage applicants and make more referrals happen all from within the app.
               </Text>
             </div>
           </li>
