@@ -3,11 +3,8 @@ const checkMobileDevice = require('../pages/check-device-wrapper')
 module.exports = {
   '/': require('../pages/jobs'),
   '/welcome': checkMobileDevice(require('../pages/welcome')),
-  '/invite-team': checkMobileDevice(require('../pages/invite-team')),
   '/share-jobs': require('../pages/share-jobs'),
   '/setup-company': require('../pages/setup-company'),
-  '/setup-jobs': require('../pages/setup-jobs'),
-  '/setup-jobs/:jobSlug/bonus': require('../pages/setup-jobs/set-bonus'),
   '/jobs/new': require('../pages/add-jobs'),
   '/jobs/share-with-team': require('../pages/jobs/share-with-team'),
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),
