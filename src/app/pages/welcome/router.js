@@ -6,7 +6,7 @@ const fetchers = require('./fetchers')
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
 
-  router.getHandlers('/welcome', ensureLoggedIn, ensureNoAccessRequestsPending, ensureNotOnboarded, respondWithGql(fetchers.get))
+  router.getHandlers('/welcome', ensureNoAccessRequestsPending, ensureNotOnboarded, respondWithGql(fetchers.get))
 
   return router
 }
