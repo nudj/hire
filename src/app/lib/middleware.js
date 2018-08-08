@@ -77,7 +77,7 @@ async function ensureOnboarded (req, res, next) {
 
   next(
     new Redirect({
-      url: '/welcome',
+      url: '/setup-company',
       notification: req.originalUrl !== '/' ? createNotification(
         'error',
         'Your account hasn\'t been fully set up just yet!'
