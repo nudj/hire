@@ -170,10 +170,7 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                Your job is now live!
-              </Para>
-              <Para nonsensitive>
-                You can now explore the rest of the app, add more jobs and,
+                You can now explore the rest of the app, add some jobs and,
                 when you&apos;re ready, send out invites to your team so
                 they can start getting the word out.
               </Para>

@@ -3,8 +3,8 @@ const { Redirect } = require('@nudj/framework/errors')
 const { intercom } = require('@nudj/library/analytics')
 const { ALREADY_EXISTS } = require('@nudj/library/lib/errors/constants')
 const logger = require('@nudj/framework/logger')
+const { cookies } = require('@nudj/library')
 
-const { createNotification } = require('../../lib')
 const requestGql = require('../../lib/requestGql')
 const { Global } = require('../../lib/graphql')
 
@@ -78,12 +78,13 @@ const getEnrichmentData = () => {
   return { gql }
 }
 
-const post = ({ body }) => {
+const post = ({ res, body }) => {
   const gql = `
     mutation setupCompany ($company: CompanyCreateInput!) {
       user {
         email
         addCompanyAndAssignUserAsHirer(company: $company) {
+          setOnboarded
           id
         }
       }
@@ -98,15 +99,9 @@ const post = ({ body }) => {
   }
   const respond = data => {
     triggerIntercomTracking(data, body)
+    cookies.set(res, 'newlyOnboarded', true)
 
-    const companyName = body.name
-    throw new Redirect({
-      url: '/setup-jobs',
-      notification: createNotification(
-        'success',
-        `${companyName} created!`
-      )
-    })
+    throw new Redirect({ url: '/' })
   }
   const catcher = async error => {
     // Check to ensure error type and that request access flow is enabled
