@@ -5,6 +5,8 @@ const { createNotification } = require('./')
 const request = require('./requestGql')
 
 async function ensureNoAccessRequestsPending (req, res, next) {
+  if (!req.session.userId) return next()
+
   const gql = `
     query ensureNoAccessRequestsPending ($personId: ID!) {
       accessRequest: accessRequestByFilters(filters: { person: $personId }) {
