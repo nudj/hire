@@ -26,7 +26,6 @@ const expressRouters = {
     require('./server/routers/health-check')
   ],
   secure: [
-    require('./server/routers/invitation'),
     require('./server/routers/auth'),
     require('./server/routers/google-oauth'),
     require('./pages/check-device-wrapper/router'),
@@ -49,6 +48,7 @@ const expressRouters = {
     require('./pages/edit-jobs/router'),
     require('./pages/request-access/router'),
     require('./pages/access-request/router'),
+    require('./pages/invitation-accept/router'),
     require('./server/routers/catch-all')
   ]
 }
@@ -139,7 +139,6 @@ if (module.hot) {
     './redux/reducers',
     path.resolve('./pages'),
     path.resolve('./components'),
-    './server/routers/invitation',
     './server/routers/auth',
     './server/routers/google-oauth',
     './pages/check-device-wrapper/router',
@@ -161,6 +160,7 @@ if (module.hot) {
     './pages/add-jobs/set-bonus/router',
     './pages/edit-jobs/router',
     './pages/request-access/router',
+    './pages/invitation-accept/router',
     './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
@@ -170,7 +170,6 @@ if (module.hot) {
     const updatedExpressRouters = {
       insecure: [],
       secure: [
-        require('./server/routers/invitation'),
         require('./server/routers/auth'),
         require('./server/routers/google-oauth'),
         require('./pages/check-device-wrapper/router'),
@@ -192,6 +191,7 @@ if (module.hot) {
         require('./pages/add-jobs/set-bonus/router'),
         require('./pages/edit-jobs/router'),
         require('./pages/request-access/router'),
+        require('./pages/invitation-accept/router'),
         require('./server/routers/catch-all')
       ]
     }
