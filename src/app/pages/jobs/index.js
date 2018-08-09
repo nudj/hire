@@ -201,7 +201,7 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                Great work on sharing {possessiveCase(company.name)}&apos;s jobs. We&apos;ll be sure
+                Great work on sharing {possessiveCase(company.name)} jobs. We&apos;ll be sure
                 to let you know when someone applies.
               </Para>
               <Para nonsensitive>
