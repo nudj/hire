@@ -176,7 +176,7 @@ class JobsPage extends React.Component {
           onRequestClose={this.handleOnboardingSuccessModalClose}
           style={mss.center}
         >
-          { isAdmin ? (
+          {isAdmin ? (
             <div>
               <Heading
                 nonsensitive
@@ -192,7 +192,7 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                You can now explore the rest of the app, add some jobs and,
+                You can now explore nudj, add jobs and,
                 when you&apos;re ready, send out invites to your team so
                 they can start getting the word out.
               </Para>
@@ -215,7 +215,7 @@ class JobsPage extends React.Component {
                 size='largeIi'
                 style={mss.fgPrimary}
               >
-                Thanks for sharing!
+                Referring for rewards
               </Heading>
               <img
                 className={css(mss.mtLgIi)}
@@ -223,12 +223,8 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
-                Great work on sharing {possessiveCase(company.name)} jobs. We&apos;ll be sure
-                to let you know when someone applies.
-              </Para>
-              <Para nonsensitive>
-                In the meantime, if you want to share your unique links again,
-                simply click 'Share job'.
+                It&apos;s time to start sharing {possessiveCase(company.name)} jobs.
+                You&apos;ll be rewarded if anyone you refer gets hired.
               </Para>
               <div className={css(style.buttonGroup)}>
                 <Button
@@ -237,7 +233,7 @@ class JobsPage extends React.Component {
                   onClick={this.handleOnboardingSuccessModalClose}
                   volume='cheer'
                 >
-                  Got it!
+                  Start sharing
                 </Button>
               </div>
             </div>
