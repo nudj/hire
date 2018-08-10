@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const URLSearchParams = require('url-search-params')
 
 const { possessiveCase } = require('@nudj/library')
 const { Button, Modal } = require('@nudj/components')
@@ -14,9 +13,6 @@ const Section = require('../../components/section')
 const { Heading, Para } = require('../../components/app')
 const ButtonLink = require('../../components/button-link')
 const { memberTypes } = require('../../lib/constants')
-const InviteTeamBanner = require('./components/invite-team-banner')
-const GetRewardedBanner = require('./components/get-rewarded-banner')
-const ListHeadlineStatistics = require('./components/statistics')
 const ListJobs = require('./components/list-jobs')
 const style = require('./style.css')
 
@@ -46,8 +42,6 @@ class JobsPage extends React.Component {
     const { showOnboardingSuccessModal } = this.state
     const {
       user,
-      location,
-      newlyOnboarded,
       web,
       whatsappTemplate,
       linkedinTemplate,
@@ -56,21 +50,13 @@ class JobsPage extends React.Component {
       selections
     } = this.props
 
-    const { hirer, connectionsCount } = user
+    const { connectionsCount } = user
     const company = get(user, 'hirer.company', {})
     const jobs = get(company, 'jobs', [])
     const memberType = get(user, 'hirer.type', memberTypes.MEMBER)
 
     const isAdmin = memberType === memberTypes.ADMIN
     const hasTeam = company.hirers.length > 1
-    const queryParams = new URLSearchParams(get(location, 'search', ''))
-    const invitedCount = get(company, 'hirers', [])
-      .filter(item => item.id !== hirer.id)
-      .length
-
-    const selectedPeriod = queryParams.get('period')
-    const renderInviteTeamBanner = isAdmin && invitedCount < 5 && !newlyOnboarded
-    const renderGetRewardedBanner = !isAdmin && connectionsCount < 1
 
     return (
       <Layout {...this.props}>
@@ -78,57 +64,6 @@ class JobsPage extends React.Component {
           <title>Jobs</title>
         </Helmet>
         <Main>
-          { renderInviteTeamBanner && (
-            <Section padding>
-              <InviteTeamBanner />
-            </Section>
-          ) }
-          { renderGetRewardedBanner && (
-            <Section padding>
-              <GetRewardedBanner />
-            </Section>
-          ) }
-          <Section padding>
-            <div className={css(style.durationButtonGroup)}>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  selectedPeriod === 'week' && style.durationButtonActive
-                ]}
-                href='/?period=week'
-                subtle
-                preventReload={false}
-              >
-                This week
-              </ButtonLink>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  selectedPeriod === 'month' && style.durationButtonActive
-                ]}
-                href='/?period=month'
-                subtle
-                preventReload={false}
-              >
-                This month
-              </ButtonLink>
-              <ButtonLink
-                nonsensitive
-                style={[
-                  style.durationButton,
-                  !selectedPeriod && style.durationButtonActive
-                ]}
-                href='/'
-                subtle
-                preventReload={false}
-              >
-                All time
-              </ButtonLink>
-            </div>
-          </Section>
-          <ListHeadlineStatistics jobs={jobs} period={selectedPeriod} />
           <Section padding>
             <ListJobs
               style={mss.mtReg}
@@ -146,6 +81,93 @@ class JobsPage extends React.Component {
               onChange={this.handleJobChange}
             />
           </Section>
+          {isAdmin ? (
+            <Section padding>
+              <div className={css(style.helpPanels)}>
+                <div className={css(style.helpPanel)}>
+                  <Heading level={2} style={mss.fgPrimary}>
+                    Spread the word
+                  </Heading>
+                  <Para size='smallI'>
+                    Your network holds the key to finding top candidates. Be sure
+                    to get the word out and start sharing.
+                  </Para>
+                </div>
+                <div className={css(style.helpPanel)}>
+                  <Heading level={2} style={mss.fgPrimary}>
+                    Onboard your team
+                  </Heading>
+                  <Para size='smallI'>
+                    Be sure to invite your entire team to nudj. After all, many
+                    hands make light work (and more referrals).
+                  </Para>
+                  <ButtonLink
+                    href='/invite'
+                    volume='cheer'
+                    style={style.helpLink}
+                    subtle
+                    inline
+                  >
+                    Invite team
+                  </ButtonLink>
+                </div>
+                {!connectionsCount && (
+                  <div className={css(style.helpPanel)}>
+                    <Heading level={2} style={mss.fgPrimary}>
+                      Discover more candidates
+                    </Heading>
+                    <Para size='smallI'>
+                      Jog your team&apos;s memory with an aided recall survey to help
+                      them unearth all the top candidates from their networks,
+                      not just the obvious ones.
+                    </Para>
+                    <ButtonLink
+                      href='/contacts'
+                      volume='cheer'
+                      style={style.helpLink}
+                      subtle
+                      inline
+                    >
+                      Learn more
+                    </ButtonLink>
+                  </div>
+                )}
+              </div>
+            </Section>
+          ) : (
+            <Section padding>
+              <div className={css(style.helpPanels)}>
+                <div className={css(style.helpPanel)}>
+                  <Heading level={2} style={mss.fgPrimary}>
+                    Hiring&apos;s a team sport
+                  </Heading>
+                  <Para size='smallI'>
+                    Pitch in to find the best people to join your team and get
+                    rewarded for doing so.
+                  </Para>
+                </div>
+                <div className={css(style.helpPanel)}>
+                  <Heading level={2} style={mss.fgPrimary}>
+                    Explore your network
+                  </Heading>
+                  <Para size='smallI'>
+                    Take nudj&apos;s guided survey to start exploring your network
+                    further. You&apos;ll be surprised by how many people you
+                    actually know.
+                  </Para>
+                  <ButtonLink
+                    href='/sync-contacts/linkedin'
+                    volume='cheer'
+                    style={style.helpLink}
+                    subtle
+                    inline
+                  >
+                    Take the survey
+                  </ButtonLink>
+                </div>
+              </div>
+            </Section>
+          )}
         </Main>
         <Modal
           isOpen={showOnboardingSuccessModal}
