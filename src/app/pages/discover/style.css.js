@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
 const breakpoints = require('../../lib/css/breakpoints')
 
 const featureTags = process.env.FEATURE_TAGS === 'true'
@@ -109,6 +109,10 @@ const rawStyleSheet = {
   privacyNotice: {
     marginTop: sizes.largeI,
     maxWidth: '30rem'
+  },
+  privacyLink: {
+    ...typography.type.smallI,
+    fontWeight: typography.fontWeight.bold
   }
 }
 
