@@ -12,7 +12,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
     (req, res, next) => {
       next(
         new Redirect({
-          url: '/contacts?favourites=true'
+          url: '/discover?favourites=true'
         })
       )
     }

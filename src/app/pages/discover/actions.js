@@ -3,14 +3,14 @@ const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const { logger } = require('@nudj/library')
 
-const UPDATE_SEARCH_QUERY = 'CONTACTS_UPDATE_SEARCH_QUERY'
-const UPDATE_FAVOURITES_FILTER = 'CONTACTS_UPDATE_FAVOURITES_FILTER'
-const UPDATE_EXPERTISE_TAG_FILTER = 'CONTACTS_UPDATE_EXPERTISE_TAG_FILTER'
-const SET_NEW_ITEM_VALUE = 'CONTACTS_SET_NEW_ITEM_VALUE'
-const CLEAR_ADD_CONTACT_FORM = 'CONTACTS_CLEAR_ADD_CONTACT_FORM'
-const START_SEARCH = 'CONTACTS_START_SEARCH'
-const START_SEARCH_AND_CLEAR_FILTERS = 'CONTACTS_START_SEARCH_AND_CLEAR_FILTERS'
-const COMPLETE_SEARCH = 'CONTACTS_COMPLETE_SEARCH'
+const UPDATE_SEARCH_QUERY = 'DISCOVER_UPDATE_SEARCH_QUERY'
+const UPDATE_FAVOURITES_FILTER = 'DISCOVER_UPDATE_FAVOURITES_FILTER'
+const UPDATE_EXPERTISE_TAG_FILTER = 'DISCOVER_UPDATE_EXPERTISE_TAG_FILTER'
+const SET_NEW_ITEM_VALUE = 'DISCOVER_SET_NEW_ITEM_VALUE'
+const CLEAR_ADD_CONTACT_FORM = 'DISCOVER_CLEAR_ADD_CONTACT_FORM'
+const START_SEARCH = 'DISCOVER_START_SEARCH'
+const START_SEARCH_AND_CLEAR_FILTERS = 'DISCOVER_START_SEARCH_AND_CLEAR_FILTERS'
+const COMPLETE_SEARCH = 'DISCOVER_COMPLETE_SEARCH'
 
 const updateSearchQuery = (query) => ({
   type: UPDATE_SEARCH_QUERY,
@@ -52,11 +52,11 @@ const setNewItemValue = (name, key, value) => ({
 
 const submitNewConnection = () => (dispatch, getState) => {
   const state = getState()
-  const data = get(state, 'contactsPage.newContact')
+  const data = get(state, 'discoverPage.newContact')
   const csrfToken = get(state, 'app.csrfToken')
 
   return axios({
-    url: '/contacts',
+    url: '/discover',
     method: 'post',
     headers: {
       Accept: 'application/json',
@@ -82,7 +82,7 @@ const submitNewConnection = () => (dispatch, getState) => {
 }
 
 const search = (data) => actions.app.postData({
-  url: '/contacts',
+  url: '/discover',
   method: 'get',
   params: data,
   showLoadingState: false
@@ -90,7 +90,7 @@ const search = (data) => actions.app.postData({
 
 const submitQuery = () => async (dispatch, getState) => {
   const state = getState()
-  const { searchQuery, favouritesFilter } = state.contactsPage
+  const { searchQuery, favouritesFilter } = state.discoverPage
 
   dispatch(startSearchAndClearTagFilters())
 
@@ -104,7 +104,7 @@ const submitQuery = () => async (dispatch, getState) => {
 
 const submitSearch = () => async (dispatch, getState) => {
   const state = getState()
-  const { searchQuery, favouritesFilter, expertiseTagFilter } = state.contactsPage
+  const { searchQuery, favouritesFilter, expertiseTagFilter } = state.discoverPage
 
   dispatch(startSearch())
 

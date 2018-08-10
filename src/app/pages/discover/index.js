@@ -46,7 +46,7 @@ const {
 
 const featureTags = process.env.FEATURE_TAGS === 'true'
 
-class ContactsPage extends React.Component {
+class DiscoverPage extends React.Component {
   state = {
     showModal: false,
     showFilters: false
@@ -115,7 +115,7 @@ class ContactsPage extends React.Component {
     const { hirerTypes } = this.props.enums
     const {
       user,
-      contactsPage: state,
+      discoverPage: state,
       csrfToken,
       match,
       history,
@@ -154,7 +154,7 @@ class ContactsPage extends React.Component {
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Contacts</title>
+          <title>Discover</title>
         </Helmet>
         <Main>
           <Section
@@ -272,7 +272,7 @@ class ContactsPage extends React.Component {
                       Find more people to refer
                     </Heading>
                     <Para nonsensitive>
-                      Our discovery tools help your team dig a little deeper into their networks.
+                      Our discover tools help your team dig a little deeper into their networks.
                     </Para>
                     <Para nonsensitive>
                       The aided recall survey and LinkedIn contact filtering will help your team
@@ -294,10 +294,10 @@ class ContactsPage extends React.Component {
                 ) : (
                   <div>
                     <Heading style={mss.fgPrimary} nonsensitive>
-                      Discovery
+                      Discover
                     </Heading>
                     <Para nonsensitive>
-                      The nudj discovery tools help you dig a
+                      The nudj discover tools help you dig a
                       little deeper into your network. You’ll be surprised
                       how many people you actually know.
                     </Para>
@@ -358,4 +358,4 @@ class ContactsPage extends React.Component {
   }
 }
 
-module.exports = ContactsPage
+module.exports = DiscoverPage

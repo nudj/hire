@@ -149,7 +149,7 @@ class ListAllJobs extends React.Component {
 
     return merge(shareCopy, {
       nudj: {
-        to: `/contacts/job/${job.id}`
+        to: `/discover/job/${job.id}`
       },
       facebook: {
         url: referralUrl

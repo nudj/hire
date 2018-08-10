@@ -65,7 +65,7 @@ const MessagesPage = props => {
               <div className={css(mss.center, mss.plReg, mss.prReg)}>
                 <ButtonLink
                   nonsensitive
-                  href='/contacts'
+                  href='/discover'
                   style={mss.mtLgI}
                   name='emailProvider'
                   volume='cheer'
@@ -87,7 +87,7 @@ const MessagesPage = props => {
               <div className={css(mss.center)}>
                 <ButtonLink
                   nonsensitive
-                  href='/contacts'
+                  href='/discover'
                   style={mss.mtLgI}
                   name='emailProvider'
                   volume='cheer'
