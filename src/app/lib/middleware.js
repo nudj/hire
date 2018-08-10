@@ -108,6 +108,28 @@ async function ensureAdmin (req, res, next) {
   next(new NotFound({ log: ['Unauthorised access of admin-only page'] }))
 }
 
+async function ensureNotHirer (req, res, next) {
+  try {
+    const query = `
+      query {
+        user {
+          hirer {
+            id
+          }
+        }
+      }
+    `
+    const responseData = await request(req.session.userId, query)
+    if (!get(responseData, 'user.hirer.id')) {
+      return next()
+    }
+  } catch (error) {
+    logger.log('error', error)
+  }
+
+  next(new NotFound({ log: ['Hirer attempted to access pre-setup page'] }))
+}
+
 async function ensureNotOnboarded (req, res, next) {
   try {
     const query = `
@@ -141,5 +163,6 @@ module.exports = {
   ensureValidCompanyHash,
   ensureOnboarded,
   ensureAdmin,
-  ensureNoAccessRequestsPending
+  ensureNoAccessRequestsPending,
+  ensureNotHirer
 }
