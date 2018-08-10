@@ -1,4 +1,4 @@
-const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, sizes, typography } = require('@nudj/components/lib/css')
 const { modal } = require('../../lib/css/breakpoints')
 
 const breakpoint = '41.176470588rem'
@@ -75,6 +75,36 @@ const styleSheet = StyleSheet.create({
     paddingRight: 0,
     paddingLeft: 0,
     paddingBottom: 0
+  },
+  helpPanels: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: sizes.largeIv,
+    '@media(min-width: 38.75rem)': {
+      flexDirection: 'row',
+      marginLeft: `-${sizes.regular}`,
+      marginRight: `-${sizes.regular}`
+    }
+  },
+  helpPanel: {
+    flexGrow: 1,
+    textAlign: 'left',
+    ':nth-child(n + 2)': {
+      marginTop: sizes.largeIi
+    },
+    '@media(min-width: 38.75rem)': {
+      maxWidth: '33.33333%',
+      paddingLeft: sizes.regular,
+      paddingRight: sizes.regular,
+      ':nth-child(n + 2)': {
+        marginTop: 0
+      }
+    }
+  },
+  helpLink: {
+    ...typography.type.smallI,
+    fontWeight: typography.fontWeight.bold,
+    marginTop: sizes.regular
   }
 })
 

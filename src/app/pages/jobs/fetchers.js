@@ -5,9 +5,7 @@ const {
   startOfWeek,
   endOfWeek,
   startOfMonth,
-  endOfMonth,
-  addWeeks,
-  addMonths
+  endOfMonth
 } = require('date-fns')
 
 const formatServerDate = (date) => format(date, 'YYYY-MM-DD')
@@ -19,9 +17,7 @@ const get = ({ req, res, session, query }) => {
     mutation GetJobsStatistics(
       $userId: ID!,
       $dateFrom: DateTime,
-      $dateTo: DateTime,
-      $pastDateFrom: DateTime,
-      $pastDateTo: DateTime
+      $dateTo: DateTime
     ) {
       user {
         firstName
@@ -51,9 +47,6 @@ const get = ({ req, res, session, query }) => {
               applicationCount: applicationsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
               referralCount: referralsCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
               viewCount: viewCountByFilters(filters: { dateFrom: $dateFrom, dateTo: $dateTo})
-              pastApplicationCount: applicationsCountByFilters(filters: { dateFrom: $pastDateFrom, dateTo: $pastDateTo})
-              pastReferralCount: referralsCountByFilters(filters: { dateFrom: $pastDateFrom, dateTo: $pastDateTo})
-              pastViewCount: viewCountByFilters(filters: { dateFrom: $pastDateFrom, dateTo: $pastDateTo})
             }
           }
         }
@@ -75,23 +68,15 @@ const get = ({ req, res, session, query }) => {
   if (period === 'week') {
     const dateFrom = startOfWeek(now, { weekStartsOn: 1 })
     const dateTo = endOfWeek(now, { weekStartsOn: 1 })
-    const pastDateFrom = addWeeks(dateFrom, -1)
-    const pastDateTo = addWeeks(dateTo, -1)
 
     variables.dateFrom = formatServerDate(dateFrom)
     variables.dateTo = formatServerDate(dateTo)
-    variables.pastDateFrom = formatServerDate(pastDateFrom)
-    variables.pastDateTo = formatServerDate(pastDateTo)
   } else if (period === 'month') {
     const dateFrom = startOfMonth(now)
     const dateTo = endOfMonth(now)
-    const pastDateFrom = addMonths(dateFrom, -1)
-    const pastDateTo = addMonths(dateTo, -1)
 
     variables.dateFrom = formatServerDate(dateFrom)
     variables.dateTo = formatServerDate(dateTo)
-    variables.pastDateFrom = formatServerDate(pastDateFrom)
-    variables.pastDateTo = formatServerDate(pastDateTo)
   }
 
   const transformData = data => {
