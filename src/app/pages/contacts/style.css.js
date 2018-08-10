@@ -105,6 +105,10 @@ const rawStyleSheet = {
     marginTop: sizes.largeIi,
     paddingLeft: sizes.largeIi,
     paddingRight: sizes.largeIi
+  },
+  privacyNotice: {
+    marginTop: sizes.largeI,
+    maxWidth: '30rem'
   }
 }
 

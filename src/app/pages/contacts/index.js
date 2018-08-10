@@ -20,6 +20,7 @@ const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
+const Link = require('../../components/link/link')
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
@@ -28,6 +29,7 @@ const SearchResults = require('../../components/contacts-search-results')
 const ListContacts = require('../../components/list-contacts')
 const ContactsFilters = require('../../components/contacts-filters')
 const ButtonLink = require('../../components/button-link')
+const Small = require('../../components/small')
 const {
   updateSearchQuery,
   updateFavouritesFilter,
@@ -110,6 +112,7 @@ class ContactsPage extends React.Component {
   }
 
   render () {
+    const { hirerTypes } = this.props.enums
     const {
       user,
       contactsPage: state,
@@ -118,6 +121,8 @@ class ContactsPage extends React.Component {
       history,
       location
     } = this.props
+
+    const isAdmin = user.hirer.type === hirerTypes.ADMIN
     const { showModal, showFilters } = this.state
     const { newContact } = state
     const jobId = get(match, 'params.jobId')
@@ -261,29 +266,67 @@ class ContactsPage extends React.Component {
               </Card>
             ) : (
               <Section width='largeI' padding>
-                <Heading style={mss.fgPrimary} nonsensitive>
-                  You haven&apos;t added any contacts yet
-                </Heading>
-                <Para nonsensitive>
-                  To find more people worth referring, we recommend syncing your
-                  LinkedIn connections into nudj.
-                </Para>
-                <Para nonsensitive>
-                  Once synced, we&apos;ll help you find all the people you&apos;re
-                  connected to who suitable for an open role.
-                </Para>
-                <div className={css(mss.center)}>
-                  <ButtonLink
-                    href='/sync-contacts/linkedin'
-                    style={mss.mtLgI}
-                    name='emailProvider'
-                    volume='cheer'
-                    subtle
-                    nonsensitive
-                  >
-                    Upload contacts
-                  </ButtonLink>
-                </div>
+                {isAdmin ? (
+                  <div>
+                    <Heading style={mss.fgPrimary} nonsensitive>
+                      Find more people to refer
+                    </Heading>
+                    <Para nonsensitive>
+                      Our discovery tools help your team dig a little deeper into their networks.
+                    </Para>
+                    <Para nonsensitive>
+                      The aided recall survey and LinkedIn contact filtering will help your team
+                      make three times more referrals.
+                    </Para>
+                    <div className={css(mss.center)}>
+                      <ButtonLink
+                        href='/sync-contacts/linkedin'
+                        style={mss.mtLgI}
+                        name='emailProvider'
+                        volume='cheer'
+                        subtle
+                        nonsensitive
+                      >
+                        Try survey
+                      </ButtonLink>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <Heading style={mss.fgPrimary} nonsensitive>
+                      Discovery
+                    </Heading>
+                    <Para nonsensitive>
+                      The nudj discovery tools help you dig a
+                      little deeper into your network. You’ll be surprised
+                      how many people you actually know.
+                    </Para>
+                    <Para nonsensitive>
+                      A one-time survey and LinkedIn contact syncing will help you
+                      make more referrals and increase your chances of getting rewarded.
+                    </Para>
+                    <div className={css(mss.center)}>
+                      <ButtonLink
+                        href='/sync-contacts/linkedin'
+                        style={mss.mtLgI}
+                        name='emailProvider'
+                        volume='cheer'
+                        nonsensitive
+                      >
+                        Sync contacts
+                      </ButtonLink>
+                    </div>
+                    <Small style={style.privacyNotice}>
+                      Only you have access to your LinkedIn contacts and it isn’t
+                      visible to your employer or nudj.{' '}
+                      <Link
+                        to='https://help.nudj.co/pricing-privacy-and-terms/nudj-privacy-policy'
+                      >
+                        Find out more on our privacy policy.
+                      </Link>
+                    </Small>
+                  </div>
+                )}
               </Section>
             )}
           </Section>

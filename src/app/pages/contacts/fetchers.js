@@ -1,10 +1,19 @@
 const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
+const { createEnumMap } = require('../../lib')
 
 const getContacts = ({ query }) => {
   const gql = `
     query ContactsSearch($search: String!, $filters: ConnectionSearchFilters) {
+      hirerTypeEnum: __type(name: "HirerType") {
+        values: enumValues {
+          name
+        }
+      }
       user {
+        hirer {
+          type
+        }
         results: searchConnections(query: $search, filters: $filters) {
           connections {
             id
@@ -46,9 +55,20 @@ const getContacts = ({ query }) => {
     }
   }
 
+  const transformData = data => {
+    console.log('TRANSFORMUNG DDATA')
+    const hirerTypes = createEnumMap(data.hirerTypeEnum.values)
+
+    return {
+      ...data,
+      enums: { hirerTypes }
+    }
+  }
+
   return {
     gql,
-    variables
+    variables,
+    transformData
   }
 }
 
