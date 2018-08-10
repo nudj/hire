@@ -73,9 +73,9 @@ const ApplicationLayout = props => {
                   <NavLink
                     className={css(style.navigationLink)}
                     activeClassName={css(style.navigationLinkActive)}
-                    to='/contacts'
+                    to='/discover'
                   >
-                    Contacts
+                    Discover
                   </NavLink>
                 </li>
                 <li className={css(style.navigationListItem)}>

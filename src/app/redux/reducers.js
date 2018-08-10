@@ -1,7 +1,7 @@
 const surveyQuestionPage = require('../pages/survey-question/reducer')
 const uploadLinkedinConnectionsPage = require('../pages/setup-linkedin/reducer')
 const composeMessage = require('../pages/messages/new/reducer')
-const contactsPage = require('../pages/contacts/reducer')
+const discoverPage = require('../pages/discover/reducer')
 const invitePage = require('../pages/invite/reducer')
 const setupCompanyPage = require('../pages/setup-company/reducer')
 const addBonusPage = require('../pages/add-jobs/set-bonus/reducer')
@@ -12,7 +12,7 @@ const selections = require('./reducers/selections')
 module.exports = {
   surveyQuestionPage,
   uploadLinkedinConnectionsPage,
-  contactsPage,
+  discoverPage,
   invitePage,
   setupCompanyPage,
   addBonusPage,

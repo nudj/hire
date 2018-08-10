@@ -122,7 +122,7 @@ class JobsPage extends React.Component {
                       not just the obvious ones.
                     </Para>
                     <ButtonLink
-                      href='/contacts'
+                      href='/discover'
                       volume='cheer'
                       style={style.helpLink}
                       subtle

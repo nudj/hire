@@ -56,7 +56,6 @@ const getContacts = ({ query }) => {
   }
 
   const transformData = data => {
-    console.log('TRANSFORMUNG DDATA')
     const hirerTypes = createEnumMap(data.hirerTypeEnum.values)
 
     return {
