@@ -13,14 +13,14 @@ const {
   IconLink,
   Input,
   Modal,
-  Text
+  Text,
+  Link
 } = require('@nudj/components')
 
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
-const Link = require('../../components/link/link')
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
@@ -320,7 +320,11 @@ class DiscoverPage extends React.Component {
                       Only you have access to your LinkedIn contacts and it isn’t
                       visible to your employer or nudj.{' '}
                       <Link
-                        to='https://help.nudj.co/pricing-privacy-and-terms/nudj-privacy-policy'
+                        style={style.privacyLink}
+                        href='https://help.nudj.co/pricing-privacy-and-terms/nudj-privacy-policy'
+                        subtle
+                        inline
+                        volume='cheer'
                       >
                         Find out more on our privacy policy.
                       </Link>
