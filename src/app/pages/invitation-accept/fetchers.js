@@ -5,6 +5,33 @@ const { cookies } = require('@nudj/library')
 const { Global } = require('../../lib/graphql')
 const requestGql = require('../../lib/requestGql')
 
+async function onboardHirer ({ email }) {
+  try {
+    const gql = `
+      mutation OnboardHirer($email: String!) {
+        user: personByFilters(filters: { email: $email }) {
+          hirer {
+            id
+            setOnboarded
+          }
+        }
+      }
+    `
+
+    const variables = {
+      email
+    }
+
+    const data = await requestGql(null, gql, variables)
+    const onboarded = get(data, 'user.hirer.setOnboarded')
+    if (!onboarded) throw new Error(`Error setting hirer with ${email} as onboarded`)
+    return onboarded
+  } catch (error) {
+    logger.log('error', error.log || error)
+    throw error
+  }
+}
+
 async function createAndOnboardHirer ({ email, hash }) {
   try {
     const gql = `
@@ -74,16 +101,20 @@ const acceptInvite = ({ req, res, params }) => {
       const hirer = get(data, 'user.hirer')
       const { hash } = params
 
+      let newlyOnboarded = false
       if (!hirer) {
         await createAndOnboardHirer({ email, hash })
-        const newlyOnboarded = !get(data, 'user.hirer.onboarded', false)
+        newlyOnboarded = true
+      } else if (!hirer.onboarded) {
+        await onboardHirer({ email })
+        newlyOnboarded = true
+      }
 
-        if (newlyOnboarded) {
-          res.cookie(cookies.getSecureName('newlyOnboarded'), newlyOnboarded, {
-            httpOnly: true,
-            secure: true
-          })
-        }
+      if (newlyOnboarded) {
+        res.cookie(cookies.getSecureName('newlyOnboarded'), newlyOnboarded, {
+          httpOnly: true,
+          secure: true
+        })
       }
 
       throw new Redirect({
