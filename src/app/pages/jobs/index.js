@@ -192,6 +192,10 @@ class JobsPage extends React.Component {
                 alt=''
               />
               <Para nonsensitive>
+                We&apos;ve added an example job to get you started. Feel free to
+                update it and make it your own!
+              </Para>
+              <Para nonsensitive>
                 You can now explore nudj, add jobs and,
                 when you&apos;re ready, send out invites to your team so
                 they can start getting the word out.
