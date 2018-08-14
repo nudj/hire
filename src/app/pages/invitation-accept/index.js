@@ -18,7 +18,6 @@ const {
 
 const InvitationAcceptPage = (props) => {
   const { company, match } = props
-  const possessiveCompanyName = possessiveCase(company.name)
 
   return (
     <Layout {...props}>
@@ -28,10 +27,10 @@ const InvitationAcceptPage = (props) => {
       <Main>
         <Section padding>
           <Heading nonsensitive>
-            Welcome to {possessiveCompanyName} team on nudj!
+            Join {possessiveCase(company.name)} team on nudj!
           </Heading>
           <Para nonsensitive>
-            nudj is a referral plaform to help {company.name} source the best talent for the team.
+            nudj is a referral platform designed to reward you for helping {company.name} to hire the best talent.
           </Para>
         </Section>
         <Section>
@@ -44,10 +43,10 @@ const InvitationAcceptPage = (props) => {
                   alt=''
                 />
                 <Text nonsensitive element='div' style={style.listItemHeading} size='largeI'>
-                  Share {possessiveCompanyName} jobs
+                  Own your referrals
                 </Text>
                 <Text nonsensitive style={style.listItemBody} element='p'>
-                  Share a trackable link for each of {possessiveCompanyName} jobs, however you want.
+                  Ensure that you get rewarded with your own trackable links.
                 </Text>
               </Card>
             </li>
@@ -90,7 +89,7 @@ const InvitationAcceptPage = (props) => {
             href={`${match.url}/accept`}
             volume='cheer'
           >
-            Let&#39;s do this
+            Join team
           </ButtonLink>
         </Section>
       </Main>
