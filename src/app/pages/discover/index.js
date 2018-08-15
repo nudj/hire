@@ -282,13 +282,18 @@ class DiscoverPage extends React.Component {
                       <ButtonLink
                         href='/sync-contacts/linkedin'
                         style={mss.mtLgI}
-                        name='emailProvider'
-                        volume='cheer'
-                        subtle
                         nonsensitive
                       >
                         Try survey
                       </ButtonLink>
+                      <Link
+                        href='https://help.nudj.co/hiring-with-nudj/discover-with-nudj'
+                        target='_blank'
+                        style={[mss.mlReg, mss.mtLgI]}
+                        nonsensitive
+                      >
+                        Find out more
+                      </Link>
                     </div>
                   </div>
                 ) : (
@@ -323,8 +328,8 @@ class DiscoverPage extends React.Component {
                         style={style.privacyLink}
                         href='https://help.nudj.co/pricing-privacy-and-terms/nudj-privacy-policy'
                         subtle
-                        inline
                         volume='cheer'
+                        inline
                       >
                         Find out more on our privacy policy.
                       </Link>
