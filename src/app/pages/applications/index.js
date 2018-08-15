@@ -18,8 +18,6 @@ const { emailPreferences } = require('../../lib/constants')
 
 const style = require('./style.css')
 
-const getGmailUrl = (email) => `https://mail.google.com/mail/?view=cm&ui=2&tf=0&fs=1&to=${email.replace(/\+/g, '%2B')}`
-
 const ApplicationsPage = (props) => {
   const user = get(props, 'app.user')
   const jobs = get(props, 'app.user.hirer.company.jobs', []).sort((a, b) => {
@@ -70,16 +68,13 @@ const ApplicationsPage = (props) => {
               <Card style={[mss.pa0, mss.mtReg]}>
                 <ListApplications
                   applications={job.applications}
-                  onItemClick={({ value }) => {
-                    const email = value.person.email
-                    const url = gmailEmailPreference
-                      ? getGmailUrl(email)
-                      : `mailto:${email}`
-
-                    window.open(url, '_blank')
-                  }}
                   applicationChild={(props) => props.email && (
-                    <EmailButton to='' subject='' body='' />
+                    <EmailButton
+                      to={props.email}
+                      subject=''
+                      body=''
+                      gmail={gmailEmailPreference}
+                    />
                   )}
                 />
               </Card>
