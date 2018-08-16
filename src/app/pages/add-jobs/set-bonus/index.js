@@ -29,7 +29,7 @@ class SetBonusPage extends React.Component {
     e.preventDefault()
     const {
       dispatch,
-      setBonusPage: {
+      addBonusPage: {
         fieldValues: {
           currencyValue,
           inputValue
