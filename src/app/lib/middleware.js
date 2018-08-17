@@ -1,7 +1,7 @@
 const { Redirect, NotFound } = require('@nudj/library/errors')
 const logger = require('@nudj/framework/logger')
 const get = require('lodash/get')
-const { createNotification } = require('./')
+const { createNotification, createEnumMap } = require('./')
 const request = require('./requestGql')
 
 async function ensureNoAccessRequestsPending (req, res, next) {
@@ -57,12 +57,23 @@ async function ensureValidCompanyHash (req, res, next) {
 }
 
 async function ensureOnboarded (req, res, next) {
+  let responseData
   try {
     const query = `
       query {
+        hirerTypeEnums: __type(name: "HirerType") {
+          values: enumValues {
+            name
+          }
+        }
         user {
           hirer {
+            id
+            type
             onboarded
+            company {
+              hash
+            }
           }
         }
       }
@@ -75,9 +86,22 @@ async function ensureOnboarded (req, res, next) {
     logger.log('error', error)
   }
 
+  const hirer = get(responseData, 'user.hirer', {})
+  const hirerTypes = createEnumMap(responseData.hirerTypeEnums.values)
+
+  let url = '/setup-company' // URL for admin
+  if (!hirer.id) {
+    // hirer does not exist
+    url = '/welcome'
+  } else if (hirer.type === hirerTypes.MEMBER) {
+    // hirer is a team-mate and needs to see the invitation page
+    const companyHash = get(responseData, 'user.hirer.company.hash')
+    url = `/invitation-accept/${companyHash}`
+  }
+
   next(
     new Redirect({
-      url: '/setup-company',
+      url,
       notification: req.originalUrl !== '/' ? createNotification(
         'error',
         'Your account hasn\'t been fully set up just yet!'
