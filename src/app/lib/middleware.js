@@ -78,7 +78,7 @@ async function ensureOnboarded (req, res, next) {
         }
       }
     `
-    const responseData = await request(req.session.userId, query)
+    responseData = await request(req.session.userId, query)
     if (get(responseData, 'user.hirer.onboarded')) {
       return next()
     }
@@ -90,7 +90,7 @@ async function ensureOnboarded (req, res, next) {
   const hirerTypes = createEnumMap(responseData.hirerTypeEnums.values)
 
   let url = '/setup-company' // URL for admin
-  if (!hirer.id) {
+  if (!hirer || !hirer.id) {
     // hirer does not exist
     url = '/welcome'
   } else if (hirer.type === hirerTypes.MEMBER) {
