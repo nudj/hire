@@ -1,4 +1,6 @@
 const getPersonOrConnectionName = (person) => {
+  if (!person) return { firstName: '', lastName: '' }
+
   if (!person.firstName && !person.lastName && !person.asAConnection) {
     throw new Error(`${person.id} has no names or isn't a connection to someone else`)
   }
