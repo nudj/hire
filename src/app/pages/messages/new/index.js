@@ -17,7 +17,6 @@ const { Heading, Para } = require('../../../components/app')
 const getHandleSelectJob = dispatch => ({ value }) => dispatch(selectJob(value))
 
 const NewConversationPage = props => {
-  console.log('PROPS!', props)
   const { dispatch, recipient } = props
   const selectedJobId = get(props, 'composeMessage.jobId')
   const jobs = get(props, 'user.hirer.company.jobs', [])
