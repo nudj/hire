@@ -18,6 +18,8 @@ const { emailPreferences } = require('../../lib/constants')
 
 const style = require('./style.css')
 
+const getGmailFriendlyAddress = (email) => email.replace(/\+/g, '%2B')
+
 const ApplicationsPage = (props) => {
   const user = get(props, 'app.user')
   const jobs = get(props, 'app.user.hirer.company.jobs', []).sort((a, b) => {
@@ -25,7 +27,7 @@ const ApplicationsPage = (props) => {
     return 1
   })
 
-  const gmailEmailPreference = user.emailPreference === emailPreferences.GOOGLE
+  const isGmail = user.emailPreference === emailPreferences.GOOGLE
 
   const hasApplications = jobs
     .map(job => job.applications.length)
@@ -70,10 +72,11 @@ const ApplicationsPage = (props) => {
                   applications={job.applications}
                   applicationChild={(props) => props.email && (
                     <EmailButton
-                      to={props.email}
+                      to={isGmail ? getGmailFriendlyAddress(props.email) : props.email}
                       subject=''
                       body=''
-                      gmail={gmailEmailPreference}
+                      gmail={isGmail}
+                      target={isGmail ? '_blank' : '_self'}
                     />
                   )}
                 />
