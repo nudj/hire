@@ -25,7 +25,7 @@ const styleSheet = StyleSheet.create({
     zIndex: 10
   },
   info: {
-    backgroundColor: colors.blueDark
+    backgroundColor: colors.primary
   },
   warn: {
     backgroundColor: colors.warning
