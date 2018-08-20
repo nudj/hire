@@ -1,3 +1,4 @@
+const get = require('lodash/get')
 const { cookies } = require('@nudj/library')
 const { Redirect } = require('@nudj/library/errors')
 
@@ -189,6 +190,20 @@ const replyTo = props => {
   }
 }
 
+const hasActiveJobs = (data) => {
+  const jobs = get(data, 'user.hirer.company.jobs', [])
+
+  if (jobs.length) return data
+
+  throw new Redirect({
+    url: '/discover',
+    notification: createNotification(
+      'info',
+      'To message someone, please publish a job'
+    )
+  })
+}
+
 const getActiveJobs = props => {
   const { session, params } = props
   const gql = `
@@ -227,7 +242,11 @@ const getActiveJobs = props => {
     status: 'PUBLISHED'
   }
 
-  return { gql, variables }
+  return {
+    gql,
+    variables,
+    transformData: hasActiveJobs
+  }
 }
 
 const getMessageTemplate = props => {
