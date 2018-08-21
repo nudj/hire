@@ -105,7 +105,11 @@ const Router = ({
       try {
         const { email, firstName, lastName } = getUserInfo(req.user._json)
         let user = await getOrCreatePerson({ email, firstName, lastName })
-        intercom.user.logEvent({
+        await intercom.user.update({
+          user,
+          data: {}
+        })
+        await intercom.user.logEvent({
           user,
           event: {
             name: 'signed up',
