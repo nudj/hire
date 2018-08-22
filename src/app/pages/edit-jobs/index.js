@@ -6,6 +6,7 @@ const Main = require('../../components/main')
 const Section = require('../../components/section')
 const JobsForm = require('../../components/form-job')
 const { Heading } = require('../../components/wizard')
+const { createEnumMap } = require('../../lib')
 const {
   setFieldValue,
   submitJob,
@@ -46,6 +47,7 @@ class SetupJobsPage extends React.Component {
     const { job } = this.props.user.hirer.company
 
     const pageTitle = `Edit ${job.title}`
+    const jobStatusTypes = createEnumMap(this.props.jobStatusTypes.values)
 
     return (
       <Layout {...this.props}>
@@ -65,6 +67,7 @@ class SetupJobsPage extends React.Component {
               fieldValues={state.fieldValues}
               onFieldChange={this.handleChange}
               onSubmit={this.handleSubmit}
+              jobStatusTypes={jobStatusTypes}
             />
           </Section>
         </Main>

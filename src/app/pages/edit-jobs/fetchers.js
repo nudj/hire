@@ -20,6 +20,11 @@ const get = ({ params }) => {
           }
         }
       }
+      jobStatusTypes: __type(name: "JobStatus") {
+        values: enumValues {
+          name
+        }
+      }
       ${Global}
     }
   `
@@ -84,7 +89,7 @@ const post = ({ body, params, res }) => {
       url: '/',
       notification: {
         type: 'success',
-        message: `${updatedJob.title} published!${publishedMessage}`
+        message: `${updatedJob.title} updated!${publishedMessage}`
       }
     })
   }
@@ -93,7 +98,7 @@ const post = ({ body, params, res }) => {
       url: `/jobs/${params.jobSlug}/edit`,
       notification: {
         type: 'error',
-        message: 'Something went wrong while editing your job! Please try again.'
+        message: 'Something went wrong while updated your job! Please try again.'
       }
     })
   }
