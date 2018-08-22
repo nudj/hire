@@ -78,18 +78,23 @@ const post = ({ body, params, res }) => {
     const existingJob = data.job
     const updatedJob = data.user.hirer.company.job
     const jobStatusMap = createEnumMap(data.jobStatusTypes.values)
+    const statusHasChanged = existingJob.status !== updatedJob.status
+    const actionPerformed = statusHasChanged ? jobStatusMap[updatedJob.status].toLowerCase() : 'updated'
+
     let publishedMessage = ''
     if (
-      existingJob.status !== jobStatusMap.PUBLISHED &&
+      variables.notifyTeam &&
+      statusHasChanged &&
       updatedJob.status === jobStatusMap.PUBLISHED
     ) {
       publishedMessage = ' Your team have been notified.'
     }
+
     throw new Redirect({
       url: '/',
       notification: {
-        type: 'success',
-        message: `${updatedJob.title} updated!${publishedMessage}`
+        type: statusHasChanged && actionPerformed === jobStatusMap.PUBLISHED ? 'success' : 'info',
+        message: `${updatedJob.title} ${actionPerformed}!${publishedMessage}`
       }
     })
   }
@@ -98,7 +103,7 @@ const post = ({ body, params, res }) => {
       url: `/jobs/${params.jobSlug}/edit`,
       notification: {
         type: 'error',
-        message: 'Something went wrong while updated your job! Please try again.'
+        message: 'Something went wrong while updating your job! Please try again.'
       }
     })
   }

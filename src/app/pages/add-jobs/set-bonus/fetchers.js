@@ -77,6 +77,7 @@ const post = ({ body, params }) => {
     const jobStatusMap = createEnumMap(data.jobStatusTypes.values)
     let publishedMessage = ''
     if (
+      variables.notifyTeam &&
       existingJob.status !== jobStatusMap.PUBLISHED &&
       updatedJob.status === jobStatusMap.PUBLISHED
     ) {
