@@ -2,6 +2,7 @@ const React = require('react')
 const dedent = require('dedent')
 const values = require('lodash/values')
 const capitalize = require('lodash/capitalize')
+const omit = require('lodash/omit')
 
 const {
   Button,
@@ -14,7 +15,6 @@ const {
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const { jobStatuses } = require('../../lib/constants')
 const style = require('./style.css')
 
 const descriptionPlaceholder = dedent`
@@ -35,8 +35,14 @@ const JobForm = props => {
     fieldValues,
     onFieldChange,
     onSubmit,
-    csrfToken
+    csrfToken,
+    jobStatusTypes
   } = props
+  let allowedStatuses = jobStatusTypes
+
+  if (edit && fieldValues.status !== jobStatusTypes.DRAFT) {
+    allowedStatuses = omit(jobStatusTypes, [jobStatusTypes.DRAFT])
+  }
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
@@ -101,9 +107,9 @@ const JobForm = props => {
                 value={fieldValues.status}
                 onChange={onFieldChange}
               >
-                {values(jobStatuses).map(status => (
+                {values(allowedStatuses).map(status => (
                   <option key={status} value={status}>
-                    {capitalize(jobStatuses[status])}
+                    {capitalize(allowedStatuses[status])}
                   </option>
                 ))}
               </Select>
