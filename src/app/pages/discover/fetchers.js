@@ -1,8 +1,9 @@
 const { dataSources } = require('../../lib/constants')
 const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
+const { cookies } = require('@nudj/library')
 
-const getContacts = ({ query }) => {
+const getContacts = ({ req, res, query }) => {
   const gql = `
     query ContactsSearch($search: String!, $filters: ConnectionSearchFilters) {
       hirerTypeEnum: __type(name: "HirerType") {
@@ -57,9 +58,12 @@ const getContacts = ({ query }) => {
 
   const transformData = data => {
     const hirerTypes = createEnumMap(data.hirerTypeEnum.values)
+    const surveyRecentlyCompleted = cookies.get(req, 'surveyRecentlyCompleted')
+    cookies.set(res, 'surveyRecentlyCompleted', false)
 
     return {
       ...data,
+      surveyRecentlyCompleted: surveyRecentlyCompleted === 'true',
       enums: { hirerTypes }
     }
   }
