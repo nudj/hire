@@ -23,7 +23,8 @@ class JobsPage extends React.Component {
     super(props)
 
     this.state = {
-      showOnboardingSuccessModal: !!props.newlyOnboarded
+      showOnboardingSuccessModal: !!props.newlyOnboarded,
+      showSurveyRecentlyCompletedModal: !!props.surveyRecentlyCompleted
     }
   }
 
@@ -33,13 +34,22 @@ class JobsPage extends React.Component {
     })
   }
 
+  handleSurveyRecentlyCompletedModalClose = () => {
+    this.setState({
+      showSurveyRecentlyCompletedModal: false
+    })
+  }
+
   handleJobChange = ({ values }) => {
     const { dispatch } = this.props
     dispatch(updateJobSelection(values))
   }
 
   render () {
-    const { showOnboardingSuccessModal } = this.state
+    const {
+      showOnboardingSuccessModal,
+      showSurveyRecentlyCompletedModal
+    } = this.state
     const {
       user,
       web,
@@ -242,6 +252,46 @@ class JobsPage extends React.Component {
               </div>
             </div>
           ) }
+        </Modal>
+        <Modal
+          isOpen={showSurveyRecentlyCompletedModal}
+          shouldCloseOnOverlayClick
+          shouldCloseOnEsc
+          onRequestClose={this.handleSurveyRecentlyCompletedModalClose}
+          style={mss.center}
+        >
+          <div>
+            <Heading
+              nonsensitive
+              level={2}
+              size='largeIi'
+              style={mss.fgPrimary}
+            >
+              One more thing
+            </Heading>
+            <img
+              className={css(mss.mtLgIi)}
+              src='/assets/images/fist-bump.svg'
+              alt=''
+            />
+            <Para nonsensitive>
+              Before you can start reaching out to the contacts you&apos;ve just surfaced,
+              you need to publish a job.
+            </Para>
+            <Para nonsensitive>
+              How else will they know you&apos;re hiring?
+            </Para>
+            <div className={css(style.buttonGroup)}>
+              <Button
+                nonsensitive
+                style={style.button}
+                onClick={this.handleSurveyRecentlyCompletedModalClose}
+                volume='cheer'
+              >
+                Got it
+              </Button>
+            </div>
+          </div>
         </Modal>
       </Layout>
     )
