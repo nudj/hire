@@ -8,12 +8,14 @@ const { cookies } = require('@nudj/library')
 const { emailPreferences } = require('../../lib/constants')
 const intercom = require('../../lib/intercom')
 const { Global } = require('../../lib/graphql')
+const { jobStatuses, memberTypes } = require('../../lib/constants')
 
 const completeSurvey = ({ session, params, res }) => {
   const gql = `
     mutation SurveyPage (
       $userId: ID!,
-      $surveySlug: String
+      $surveySlug: String,
+      $jobStatus: JobStatus
     ) {
       surveyAnswers: surveyAnswersByFilters (filters: {
         person: $userId
@@ -46,9 +48,12 @@ const completeSurvey = ({ session, params, res }) => {
         email
         emailPreference
         hirer {
+          type
           onboarded
-          setOnboarded
           company {
+            publishedJobs: jobsByFilters(filters: { status: $jobStatus }) {
+              id
+            }
             survey: surveyByFiltersOrDefault (filters: {
               slug: $surveySlug
             }) {
@@ -72,7 +77,8 @@ const completeSurvey = ({ session, params, res }) => {
   `
   const variables = {
     userId: session.userId,
-    surveySlug: params.surveySlug
+    surveySlug: params.surveySlug,
+    JobStatus: jobStatuses.PUBLISHED
   }
 
   const transformData = data => {
@@ -96,6 +102,21 @@ const completeSurvey = ({ session, params, res }) => {
       })
     } catch (error) {
       logger.log('error', 'Intercom Error', data.user.email, error)
+    }
+
+    const { publishedJobs } = data.user.hirer.company
+    const answers = flatten(data.surveyAnswers.map(answer => {
+      return answer.connections
+    }))
+
+    // If a user has no published jobs, redirect them if they have actual survey answers
+    if (!publishedJobs.length && answers) {
+      cookies.set(res, 'surveyRecentlyCompleted', true)
+      const { hirer } = data.user
+
+      throw new Redirect({
+        url: hirer.type === memberTypes.ADMIN ? '/' : '/discover?favourites=true'
+      })
     }
 
     return data
