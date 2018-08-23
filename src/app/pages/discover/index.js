@@ -47,9 +47,14 @@ const {
 const featureTags = process.env.FEATURE_TAGS === 'true'
 
 class DiscoverPage extends React.Component {
-  state = {
-    showModal: false,
-    showFilters: false
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showModal: false,
+      showSurveyCompleteModal: !!props.surveyRecentlyCompleted,
+      showFilters: false
+    }
   }
 
   showModal = () => {
@@ -61,6 +66,12 @@ class DiscoverPage extends React.Component {
   hideModal = () => {
     this.setState({
       showModal: false
+    })
+  }
+
+  hideSurveyCompleteModal = () => {
+    this.setState({
+      showSurveyCompleteModal: false
     })
   }
 
@@ -123,7 +134,11 @@ class DiscoverPage extends React.Component {
     } = this.props
 
     const isAdmin = user.hirer.type === hirerTypes.ADMIN
-    const { showModal, showFilters } = this.state
+    const {
+      showModal,
+      showSurveyCompleteModal,
+      showFilters
+    } = this.state
     const { newContact } = state
     const jobId = get(match, 'params.jobId')
     const connections = get(user, 'results.connections', [])
@@ -361,6 +376,44 @@ class DiscoverPage extends React.Component {
             onSubmit={this.handleConnectionSubmit}
             connection={newContact}
           />
+        </Modal>
+        <Modal
+          isOpen={showSurveyCompleteModal}
+          shouldCloseOnOverlayClick
+          shouldCloseOnEsc
+          onRequestClose={this.hideSurveyCompleteModal}
+          style={mss.center}
+        >
+          <Heading
+            nonsensitive
+            level={2}
+            size='largeIi'
+            style={mss.fgPrimary}
+          >
+            Survey finished
+          </Heading>
+          <img
+            className={css(mss.mtLgIi)}
+            src='/assets/images/fist-bump.svg'
+            alt=''
+          />
+          <Para nonsensitive>
+            Great job completing the survey! You can find your answers under the favourites tab.
+          </Para>
+          <Para nonsensitive>
+            When your team has a live job, make sure you check
+            back here before you start sharing.
+          </Para>
+          <div className={css(style.modalBody)}>
+            <Button
+              nonsensitive
+              style={style.button}
+              onClick={this.hideSurveyCompleteModal}
+              volume='cheer'
+            >
+              Got it
+            </Button>
+          </div>
         </Modal>
       </Layout>
     )
