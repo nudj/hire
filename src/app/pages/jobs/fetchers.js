@@ -81,10 +81,13 @@ const get = ({ req, res, session, query }) => {
 
   const transformData = data => {
     const newlyOnboarded = cookies.get(req, 'newlyOnboarded')
+    const surveyRecentlyCompleted = cookies.get(req, 'surveyRecentlyCompleted')
     cookies.set(res, 'newlyOnboarded', false)
+    cookies.set(res, 'surveyRecentlyCompleted', false)
 
     return {
       ...data,
+      surveyRecentlyCompleted: surveyRecentlyCompleted === 'true',
       newlyOnboarded: newlyOnboarded === 'true'
     }
   }
