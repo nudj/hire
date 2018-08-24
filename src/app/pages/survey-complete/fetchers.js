@@ -96,7 +96,7 @@ const completeSurvey = async ({ session, params, res, requestGQL }) => {
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
-    JobStatus: jobStatusTypes.PUBLISHED
+    jobStatus: jobStatusTypes.PUBLISHED
   }
 
   const transformData = data => {
@@ -128,7 +128,7 @@ const completeSurvey = async ({ session, params, res, requestGQL }) => {
     }))
 
     // If a user has no published jobs, redirect them if they have actual survey answers
-    if (!publishedJobs.length && answers) {
+    if (!publishedJobs.length && answers.length) {
       cookies.set(res, 'surveyRecentlyCompleted', true)
       const { hirer } = data.user
 
