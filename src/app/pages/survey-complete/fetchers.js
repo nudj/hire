@@ -5,12 +5,30 @@ const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
 const { cookies } = require('@nudj/library')
 
-const { emailPreferences } = require('../../lib/constants')
 const intercom = require('../../lib/intercom')
 const { Global } = require('../../lib/graphql')
-const { jobStatuses, memberTypes } = require('../../lib/constants')
+const { createEnumMap } = require('../../lib')
 
-const completeSurvey = ({ session, params, res }) => {
+const completeSurvey = async ({ session, params, res, requestGQL }) => {
+  const enumTypes = await requestGQL({
+    gql: `
+      {
+        jobStatusTypes: __type(name: "JobStatus") {
+          values: enumValues {
+            name
+          }
+        }
+        hirerTypes: __type(name: "HirerType") {
+          values: enumValues {
+            name
+          }
+        }
+      }
+    `
+  })
+  const jobStatusTypes = createEnumMap(enumTypes.jobStatusTypes.values)
+  const hirerTypes = createEnumMap(enumTypes.hirerTypes.values)
+
   const gql = `
     mutation SurveyPage (
       $userId: ID!,
@@ -78,7 +96,7 @@ const completeSurvey = ({ session, params, res }) => {
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
-    JobStatus: jobStatuses.PUBLISHED
+    JobStatus: jobStatusTypes.PUBLISHED
   }
 
   const transformData = data => {
@@ -115,7 +133,7 @@ const completeSurvey = ({ session, params, res }) => {
       const { hirer } = data.user
 
       throw new Redirect({
-        url: hirer.type === memberTypes.ADMIN ? '/' : '/discover?favourites=true'
+        url: hirer.type === hirerTypes.ADMIN ? '/' : '/discover?favourites=true'
       })
     }
 
@@ -125,7 +143,20 @@ const completeSurvey = ({ session, params, res }) => {
   return { gql, variables, transformData }
 }
 
-const setEmailPreference = ({ body, params, query, session }) => {
+const setEmailPreference = async ({ body, params, query, session, requestGQL }) => {
+  const enumTypes = await requestGQL({
+    gql: `
+      {
+        emailPreferenceTypes: __type(name: "EmailPreference") {
+          values: enumValues {
+            name
+          }
+        }
+      }
+    `
+  })
+  const emailPreferenceTypes = createEnumMap(enumTypes.emailPreferenceTypes.values)
+
   const gql = `
     mutation SetEmailPreference(
       $userId: ID!,
@@ -195,7 +226,7 @@ const setEmailPreference = ({ body, params, query, session }) => {
     })
   }
 
-  if (body.emailProvider === emailPreferences.GOOGLE) {
+  if (body.emailProvider === emailPreferenceTypes.GOOGLE) {
     return { respond: respondGoogle }
   }
 
