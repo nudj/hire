@@ -2,6 +2,7 @@ const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
 const { cookies } = require('@nudj/library')
+const { intercom } = require('@nudj/library/analytics')
 const { Global } = require('../../lib/graphql')
 const requestGql = require('../../lib/requestGql')
 
@@ -37,6 +38,7 @@ async function createAndOnboardHirer ({ email, hash }) {
     const gql = `
       mutation CreateHirer($email: String!, $hash: String!, $type: HirerType!) {
         company: companyByFilters(filters: { hash: $hash }) {
+          name
           hirer: createHirerByEmail(hirer: { type: $type, email: $email }) {
             id
             setOnboarded
@@ -52,6 +54,22 @@ async function createAndOnboardHirer ({ email, hash }) {
     }
 
     const data = await requestGql(null, gql, variables)
+
+    const intercomCompany = await intercom.companies.getBy({ name: data.company.name })
+    await intercom.user.getOrCreate({ email })
+    await intercom.user.update({
+      user: {
+        email
+      },
+      data: {
+        companies: [{
+          name: intercomCompany.name,
+          company_id: intercomCompany.company_id
+        }],
+        tags: ['team-member']
+      }
+    })
+
     const hirer = get(data, 'company.hirer')
     if (!hirer) throw new Error(`Error creating hirer for ${email} at company: ${hash}`)
     return hirer
