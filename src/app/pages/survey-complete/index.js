@@ -131,6 +131,13 @@ const ViewRecommendationsPage = props => {
             >
               Take survey again
             </ButtonLink>
+            <ButtonLink
+              nonsensitive
+              style={wizardStyles.action}
+              href='/'
+            >
+              Try again later
+            </ButtonLink>
           </Section>
         </Main>
       )}
