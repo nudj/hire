@@ -105,12 +105,19 @@ const Router = ({
       try {
         const { email, firstName, lastName } = getUserInfo(req.user._json)
         let user = await getOrCreatePerson({ email, firstName, lastName })
-        await intercom.user.update({
-          user,
-          data: {}
-        })
+        let intercomUser = await intercom.user.getBy({ email })
+
+        if (!intercomUser) {
+          const intercomLead = await intercom.lead.getBy({ email })
+          if (intercomLead) {
+            intercomUser = await intercom.lead.convertToUser(intercomLead)
+          } else {
+            intercomUser = await intercom.user.create({ email })
+          }
+        }
+
         await intercom.user.logEvent({
-          user,
+          user: intercomUser,
           event: {
             name: 'signed up',
             unique: true
