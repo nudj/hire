@@ -80,6 +80,7 @@ const post = ({ body, params, res }) => {
     const jobStatusMap = createEnumMap(data.jobStatusTypes.values)
     const statusHasChanged = existingJob.status !== updatedJob.status
     const actionPerformed = statusHasChanged ? jobStatusMap[updatedJob.status].toLowerCase() : 'updated'
+    const hasBeenPublished = actionPerformed === jobStatusMap.PUBLISHED.toLowerCase()
 
     let publishedMessage = ''
     if (
@@ -93,7 +94,7 @@ const post = ({ body, params, res }) => {
     throw new Redirect({
       url: '/',
       notification: {
-        type: statusHasChanged && actionPerformed === jobStatusMap.PUBLISHED ? 'success' : 'info',
+        type: statusHasChanged && hasBeenPublished ? 'success' : 'info',
         message: `${updatedJob.title} ${actionPerformed}!${publishedMessage}`
       }
     })
