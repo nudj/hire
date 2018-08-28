@@ -18,7 +18,8 @@ const styleSheet = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    transition: 'transform 150ms ease-in-out',
+    visibility: 'hidden',
+    transition: 'visibility 150ms, transform 150ms ease-in-out',
     transform: 'translate3d(0, -100%, 0)',
     overflow: 'hidden',
     // TODO: Scalable zIndex implementation
@@ -76,6 +77,7 @@ const styleSheet = StyleSheet.create({
     display: 'block'
   },
   visible: {
+    visibility: 'visible',
     transform: 'translate3d(0, 0, 0)',
     boxShadow: utilities.boxShadow[10].narrow
   }
