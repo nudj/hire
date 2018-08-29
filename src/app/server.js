@@ -77,7 +77,8 @@ const helmetConfig = {
         'tagmanager.google.com',
         'www.googletagmanager.com',
         'www.google-analytics.com',
-        'js.intercomcdn.com'
+        'js.intercomcdn.com',
+        'www.fullstory.com'
       ],
       connectSrc: [
         "'self'",
@@ -86,7 +87,8 @@ const helmetConfig = {
         'nexus-websocket-a.intercom.io',
         'wss://nexus-websocket-a.intercom.io',
         'nexus-websocket-b.intercom.io',
-        'wss://nexus-websocket-b.intercom.io'
+        'wss://nexus-websocket-b.intercom.io',
+        'rs.fullstory.com'
       ],
       styleSrc: [
         "'self'",
