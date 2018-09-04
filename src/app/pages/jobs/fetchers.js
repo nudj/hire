@@ -20,13 +20,18 @@ const get = ({ req, res, session, query }) => {
       $dateTo: DateTime
     ) {
       user {
+        id
         firstName
         emailPreference
         connectionsCount
+        created
+        modified
         hirer {
           type
           id
           company {
+            created
+            modified
             hirers {
               id
               type
@@ -36,6 +41,7 @@ const get = ({ req, res, session, query }) => {
             jobs {
               id
               created
+              modified
               title
               slug
               status

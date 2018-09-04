@@ -2,6 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const isNil = require('lodash/isNil')
 const { HashLink } = require('react-router-hash-link')
+const { noop } = require('@nudj/library')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
@@ -32,7 +33,11 @@ class ShareableJob extends React.Component {
     jobUrl: PropTypes.string,
     applicantsUrl: PropTypes.string,
     title: PropTypes.string.isRequired,
-    shareProps: PropTypes.shape(ShareButtons.propTypes)
+    shareProps: PropTypes.shape(ShareButtons.propTypes).isRequired
+  }
+
+  static defaultProps = {
+    onCopy: noop
   }
 
   state = {
@@ -71,9 +76,13 @@ class ShareableJob extends React.Component {
   )
 
   handleCopy = () => {
+    const { shareProps } = this.props
+
     this.setState({
       hasCopied: true
     })
+
+    shareProps.onCopy && shareProps.onCopy()
   }
 
   handleCopyBlur = () => {
@@ -178,6 +187,8 @@ class ShareableJob extends React.Component {
             </ButtonContainer>
             <div className={css(style.linkContainer)}>
               <Input
+                onCopy={this.handleCopy}
+                onBlur={this.handleCopyBlur}
                 styleSheet={inputStyleSheet}
                 value={referralUrl}
                 tabIndex={showSharePanel ? 0 : -1}
