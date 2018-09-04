@@ -8,6 +8,7 @@ const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const { emailPreferences } = require('../../../../lib/constants')
 const compilePrismicTemplate = require('../../../../lib/compile-prismic-template')
+const analytics = require('../../../../lib/browser-analytics')
 const ShareableJob = require('../../../../components/shareable-job')
 const { Heading } = require('../../../../components/app')
 const ActionBar = require('../../../../components/action-bar')
@@ -148,28 +149,38 @@ class ListAllJobs extends React.Component {
     })
 
     return merge(shareCopy, {
+      onCopy: () => this.handleShareClick('link', job),
       nudj: {
-        to: `/discover/job/${job.id}`
+        to: `/discover/job/${job.id}`,
+        onClick: () => this.handleShareClick('nudj-button', job)
+      },
+      whatsapp: {
+        onClick: () => this.handleShareClick('whatsapp', job)
       },
       facebook: {
-        url: referralUrl
+        url: referralUrl,
+        onClick: () => this.handleShareClick('facebook', job)
       },
       messenger: {
         link: referralUrl,
         redirectUri: 'https://hire.nudj.co',
-        appId: '1945143509142278'
+        appId: '1945143509142278',
+        onClick: () => this.handleShareClick('messenger', job)
       },
       linkedin: {
-        url: referralUrl
+        url: referralUrl,
+        onClick: () => this.handleShareClick('linkedin', job)
       },
       twitter: {
         url: referralUrl,
-        via: 'nudj'
+        via: 'nudj',
+        onClick: () => this.handleShareClick('twitter', job)
       },
       email: {
         gmail: isGmail,
         to: '',
-        body: isGmail ? encodeURI(shareCopy.email.body) : shareCopy.email.body
+        body: isGmail ? encodeURI(shareCopy.email.body) : shareCopy.email.body,
+        onClick: () => isGmail ? this.handleShareClick('gmail', job) : this.handleShareClick('email', job)
       }
     })
   }
@@ -204,6 +215,22 @@ class ListAllJobs extends React.Component {
     } else {
       onChange({ values: [] })
     }
+  }
+
+  handleShareClick = (method, job) => {
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.referred,
+      properties: {
+        method,
+        jobCreated: job.created,
+        jobModified: job.modified,
+        jobTitle: job.title,
+        jobSlug: job.slug,
+        jobLocation: job.location,
+        jobBonus: job.bonus
+      }
+    })
   }
 
   render () {
