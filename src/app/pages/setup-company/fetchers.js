@@ -1,6 +1,6 @@
 const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
-const { intercom } = require('@nudj/library/analytics')
+const intercom = require('@nudj/library/lib/analytics/intercom')
 const { ALREADY_EXISTS } = require('@nudj/library/lib/errors/constants')
 const logger = require('@nudj/framework/logger')
 const { cookies } = require('@nudj/library')

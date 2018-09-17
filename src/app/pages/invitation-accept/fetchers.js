@@ -2,7 +2,7 @@ const get = require('lodash/get')
 const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
 const { cookies } = require('@nudj/library')
-const { intercom } = require('@nudj/library/analytics')
+const intercom = require('@nudj/library/lib/analytics/intercom')
 const { Global } = require('../../lib/graphql')
 const requestGql = require('../../lib/requestGql')
 

@@ -1,9 +1,10 @@
 const express = require('express')
 const passport = require('passport')
 const request = require('@nudj/library/request')
-const { intercom } = require('@nudj/library/analytics')
 const logger = require('@nudj/framework/logger')
-const { cacheReturnTo } = require('@nudj/library/server')
+const { omitUndefined } = require('@nudj/library')
+const { cacheReturnTo, Analytics } = require('@nudj/library/server')
+const intercom = require('@nudj/library/lib/analytics/intercom')
 const { cookies } = require('@nudj/library')
 
 const requestGql = require('../../lib/requestGql')
