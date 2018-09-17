@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const request = require('@nudj/library/request')
+const get = require('lodash/get')
 const logger = require('@nudj/framework/logger')
 const { omitUndefined } = require('@nudj/library')
 const { cacheReturnTo, Analytics } = require('@nudj/library/server')
@@ -9,45 +9,88 @@ const { cookies } = require('@nudj/library')
 
 const requestGql = require('../../lib/requestGql')
 
-async function getOrCreatePerson ({ email, firstName, lastName }) {
+async function getPerson (email) {
   try {
     const gql = `
-      mutation getOrCreatePerson ($person: PersonCreateInput!) {
-        person: getOrCreatePerson(person: $person) {
+      query GetPerson ($email: String!) {
+        person: personByFilters(filters:{ email: $email }) {
           id
-          email
           firstName
           lastName
+          email
+          signedUp
+          hirer {
+            company {
+              name
+            }
+          }
         }
       }
     `
-    const variables = {
-      person: {
-        email,
-        firstName,
-        lastName
-      }
-    }
 
-    const { person } = await requestGql(null, gql, variables)
-    if (!person) throw new Error('Error fetching or creating person')
-    return person
+    const variables = { email }
+
+    return requestGql(null, gql, variables)
   } catch (error) {
     logger.log('error', error.log || error)
     throw error
   }
 }
 
-async function updatePerson (id, patch) {
+async function createPerson (input) {
   try {
-    const person = await request(`people/${id}`, {
-      baseURL: `http://${process.env.API_HOST}:81`,
-      method: 'patch',
-      data: patch
-    })
-    if (!person) throw new Error('Person not found')
-    if (person.error) throw new Error('Unable to update person')
-    return person
+    const gql = `
+      mutation createPerson ($input: PersonCreateInput!) {
+        person: createPerson(input: $input) {
+          id
+          firstName
+          lastName
+          email
+          signedUp
+          hirer {
+            company {
+              name
+            }
+          }
+        }
+      }
+    `
+
+    const variables = { input }
+
+    const data = await requestGql(null, gql, variables)
+    if (!data.person) throw new Error('Error creating person', input.email)
+    return data
+  } catch (error) {
+    logger.log('error', error.log || error)
+    throw error
+  }
+}
+
+async function updatePerson (id, data) {
+  try {
+    const gql = `
+      mutation updatePerson ($id: ID!, $data: PersonUpdateInput!) {
+        person: updatePerson(id: $id, data: $data) {
+          id
+          firstName
+          lastName
+          email
+          signedUp
+          hirer {
+            company {
+              name
+            }
+          }
+        }
+      }
+    `
+
+    const variables = { id, data }
+
+    const response = await requestGql(null, gql, variables)
+    if (!response.person) throw new Error('Error updating person', data.email)
+    return response
   } catch (error) {
     logger.log('error', error.log || error)
     throw error
@@ -84,6 +127,8 @@ const Router = ({
   router.get('/logout', (req, res, next) => {
     req.logOut()
     delete req.session.data
+    delete req.session.userId
+    delete req.session.analyticsEventProperties
     req.session.logout = true
     req.session.returnTo = req.query.returnTo
     cookies.clear(res, 'session')
@@ -103,9 +148,32 @@ const Router = ({
         return next('Unable to login')
       }
 
+      const analytics = new Analytics({ app: 'hire', distinctId: req.cookies.mixpanelDistinctId })
+
       try {
         const { email, firstName, lastName } = getUserInfo(req.user._json)
-        let user = await getOrCreatePerson({ email, firstName, lastName })
+        const data = await getPerson(email)
+        let response
+
+        if (!data.person) {
+          response = await createPerson({
+            email,
+            firstName,
+            lastName,
+            signedUp: true
+          })
+        } else if (!data.person.signedUp) {
+          response = await updatePerson(
+            data.person.id,
+            {
+              email,
+              firstName,
+              lastName,
+              signedUp: true
+            }
+          )
+        }
+
         let intercomUser = await intercom.user.getBy({ email })
 
         if (!intercomUser) {
@@ -117,17 +185,52 @@ const Router = ({
           }
         }
 
-        await intercom.user.logEvent({
-          user: intercomUser,
-          event: {
-            name: 'signed up',
-            unique: true
-          }
-        })
-        if (!user.firstName || !user.lastName) {
-          user = await updatePerson(user.id, { firstName, lastName })
+        if (response) {
+          const firstName = get(response, 'person.firstName')
+          const lastName = get(response, 'person.lastName')
+          const name = firstName && lastName ? `${firstName} ${lastName}` : undefined
+
+          req.session.userId = response.person.id
+          req.session.analyticsEventProperties = omitUndefined({
+            name,
+            $email: get(response, 'person.email'),
+            companyName: get(response, 'person.hirer.company.name')
+          })
+
+          await analytics.alias({ alias: response.person.id }, req.session.analyticsEventProperties)
+          analytics.track({
+            object: analytics.objects.user,
+            action: analytics.actions.user.signedUp
+          })
+
+          await intercom.user.logEvent({
+            user: intercomUser,
+            event: {
+              name: 'signed up',
+              unique: true
+            }
+          })
+        } else {
+          const firstName = get(data, 'person.firstName')
+          const lastName = get(data, 'person.lastName')
+          const name = firstName && lastName ? `${firstName} ${lastName}` : undefined
+
+          req.session.userId = data.person.id
+          req.session.analyticsEventProperties = omitUndefined({
+            name,
+            $email: get(data, 'person.email'),
+            companyName: get(data, 'person.hirer.company.name')
+          })
+
+          await analytics.identify({ id: data.person.id }, req.session.analyticsEventProperties, {
+            preserveTraits: true
+          })
+          analytics.track({
+            object: analytics.objects.user,
+            action: analytics.actions.user.loggedIn
+          })
         }
-        req.session.userId = user.id
+
         res.redirect(req.session.returnTo || '/')
       } catch (error) {
         logger.log('error', error)

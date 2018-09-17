@@ -20,6 +20,7 @@ const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingPage = require('./pages/loading')
+const getAnalytics = require('./server/lib/getAnalytics')
 
 const expressRouters = {
   insecure: [
@@ -126,7 +127,8 @@ let app = createNudjApps({
   errorHandlers,
   gqlFragments,
   LoadingComponent: LoadingPage,
-  helmetConfig
+  helmetConfig,
+  getAnalytics
 })
 
 const server = http.createServer(app)
@@ -164,12 +166,14 @@ if (module.hot) {
     './pages/edit-jobs/router',
     './pages/request-access/router',
     './pages/invitation-accept/router',
-    './server/routers/catch-all'
+    './server/routers/catch-all',
+    './server/lib/getAnalytics'
   ], () => {
     const updatedReactApp = require('./redux')
     const updatedReduxRoutes = require('./redux/routes')
     const updatedReduxReducers = require('./redux/reducers')
     const updatedLoadingPage = require('./pages/loading')
+    const updatedGetAnalytics = require('./server/lib/getAnalytics')
     const updatedExpressRouters = {
       insecure: [],
       secure: [
@@ -211,7 +215,8 @@ if (module.hot) {
       errorHandlers,
       gqlFragments,
       LoadingComponent: updatedLoadingPage,
-      helmetConfig
+      helmetConfig,
+      getAnalytics: updatedGetAnalytics
     })
 
     server.on('request', newApp)
