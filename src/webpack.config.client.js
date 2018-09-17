@@ -16,7 +16,9 @@ const plugins = [
     'NODE_ENV',
     'USE_DEV_SERVER',
     'DEV_SERVER_PATH',
-    'FEATURE_TAGS'
+    'FEATURE_TAGS',
+    'ANALYTICS_ENABLED',
+    'MIXPANEL_API_TOKEN'
   ]),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),

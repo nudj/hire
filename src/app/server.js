@@ -88,7 +88,8 @@ const helmetConfig = {
         'wss://nexus-websocket-a.intercom.io',
         'nexus-websocket-b.intercom.io',
         'wss://nexus-websocket-b.intercom.io',
-        'rs.fullstory.com'
+        'rs.fullstory.com',
+        'api.mixpanel.com'
       ],
       styleSrc: [
         "'self'",
