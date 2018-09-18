@@ -78,7 +78,7 @@ const getEnrichmentData = () => {
   return { gql }
 }
 
-const post = ({ res, body }) => {
+const post = ({ res, body, analytics }) => {
   const gql = `
     mutation setupCompany ($company: CompanyCreateInput!) {
       user {
@@ -86,6 +86,9 @@ const post = ({ res, body }) => {
         addCompanyAndAssignUserAsHirer(company: $company) {
           setOnboarded
           id
+          company {
+            name
+          }
         }
       }
       ${Global}
@@ -97,12 +100,23 @@ const post = ({ res, body }) => {
       client: true
     }
   }
-  const respond = data => {
+
+  const respond = async data => {
     triggerIntercomTracking(data, body)
     cookies.set(res, 'newlyOnboarded', true)
 
+    await analytics.updateIdentity({
+      companyName: data.user.addCompanyAndAssignUserAsHirer.company.name
+    })
+
+    analytics.track({
+      object: analytics.objects.company,
+      action: analytics.actions.company.created
+    })
+
     throw new Redirect({ url: '/' })
   }
+
   const catcher = async error => {
     // Check to ensure error type and that request access flow is enabled
     if (get(error, 'errors[0].type') === ALREADY_EXISTS && process.env.FEATURE_REQUEST_ACCESS === 'true') {
