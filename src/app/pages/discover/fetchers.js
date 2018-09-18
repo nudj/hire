@@ -75,12 +75,21 @@ const getContacts = ({ req, res, query }) => {
   }
 }
 
-const postContact = ({ params, body }) => {
+const postContact = ({ params, body, analytics }) => {
+  /**
+   * While this should be a mutation, the page's dependency on `hirerTypeEnum`
+   * prevents us from using it
+   */
   const gql = `
-    mutation addNewContact (
+    query addNewContact (
       $to: ConnectionCreateInput!
       $source: DataSource!
     ) {
+      hirerTypeEnum: __type(name: "HirerType") {
+        values: enumValues {
+          name
+        }
+      }
       user {
         newContact: getOrCreateConnection (
           to: $to
@@ -92,6 +101,7 @@ const postContact = ({ params, body }) => {
       ${Global}
     }
   `
+
   const variables = {
     to: {
       firstName: body.firstName,
@@ -102,7 +112,25 @@ const postContact = ({ params, body }) => {
     },
     source: dataSources.MANUAL
   }
-  return { gql, variables }
+
+  const transformData = data => {
+    const hirerTypes = createEnumMap(data.hirerTypeEnum.values)
+
+    analytics.track({
+      object: analytics.objects.connection,
+      action: analytics.actions.connection.created,
+      properties: {
+        source: dataSources.MANUAL
+      }
+    })
+
+    return {
+      ...data,
+      enums: { hirerTypes }
+    }
+  }
+
+  return { gql, variables, transformData }
 }
 
 module.exports = {
