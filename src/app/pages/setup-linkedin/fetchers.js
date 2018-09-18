@@ -22,7 +22,7 @@ const fetchPageData = ({ session }) => {
   return { gql }
 }
 
-const uploadConnections = ({ body, files }) => {
+const uploadConnections = ({ body, files, analytics }) => {
   const gql = `
     mutation ImportPage ($connections: [Data!]!) {
       user {
@@ -84,6 +84,14 @@ const uploadConnections = ({ body, files }) => {
       } catch (error) {
         logger.log('error', 'Intercom Error', error)
       }
+
+      analytics.track({
+        object: analytics.objects.connections,
+        action: analytics.actions.connections.uploaded,
+        properties: {
+          connectionsCount: body.connections.length
+        }
+      })
 
       const message = `You just added ${body.connections.length} connections 🙌`
 

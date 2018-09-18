@@ -9,12 +9,20 @@ const ButtonLink = require('../../../components/button-link')
 const Layout = require('../../../components/app-layout')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
+const analytics = require('../../../lib/browser-analytics')
 const {
   Heading,
   Para,
   styleSheet: wizardStyles
 } = require('../../../components/wizard')
 const style = require('../style.css')
+
+const trackLinkedInDownloaded = () => {
+  analytics.track({
+    object: analytics.objects.linkedIn,
+    action: analytics.actions.linkedIn.downloaded
+  })
+}
 
 class LinkedinRequestGuidePage extends React.Component {
   state = {
@@ -30,7 +38,21 @@ class LinkedinRequestGuidePage extends React.Component {
   incrementStage = () => {
     this.setState((state) => ({
       stage: state.stage + 1
-    }))
+    }), () => {
+      const { stage } = this.state
+
+      if (stage === 1) {
+        analytics.track({
+          object: analytics.objects.linkedIn,
+          action: analytics.actions.linkedIn.opened
+        })
+      } else if (stage === 2) {
+        analytics.track({
+          object: analytics.objects.linkedIn,
+          action: analytics.actions.linkedIn.refreshed
+        })
+      }
+    })
   }
 
   render () {
@@ -56,6 +78,7 @@ class LinkedinRequestGuidePage extends React.Component {
         volume='shout'
         href='/sync-contacts/linkedin/upload'
         style={wizardStyles.action}
+        onClick={trackLinkedInDownloaded}
       >
         I&apos;ve downloaded my connections
       </ButtonLink>
