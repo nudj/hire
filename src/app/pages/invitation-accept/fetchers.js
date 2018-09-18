@@ -14,6 +14,9 @@ async function onboardHirer ({ email }) {
           hirer {
             id
             setOnboarded
+            company {
+              name
+            }
           }
         }
       }
@@ -26,7 +29,7 @@ async function onboardHirer ({ email }) {
     const data = await requestGql(null, gql, variables)
     const onboarded = get(data, 'user.hirer.setOnboarded')
     if (!onboarded) throw new Error(`Error setting hirer with ${email} as onboarded`)
-    return onboarded
+    return data
   } catch (error) {
     logger.log('error', error.log || error)
     throw error
@@ -74,7 +77,7 @@ async function createAndOnboardHirer ({ email, hash }) {
 
     const hirer = get(data, 'company.hirer')
     if (!hirer) throw new Error(`Error creating hirer for ${email} at company: ${hash}`)
-    return hirer
+    return data
   } catch (error) {
     logger.log('error', error.log || error)
     throw error
@@ -99,7 +102,7 @@ const getCompany = ({ params }) => {
   }
 }
 
-const acceptInvite = ({ req, res, params }) => {
+const acceptInvite = ({ req, res, params, analytics }) => {
   const { email } = req.user._json
   const gql = `
     query GetHirer ($email: String!) {
@@ -107,6 +110,9 @@ const acceptInvite = ({ req, res, params }) => {
         hirer {
           id
           onboarded
+          company {
+            name
+          }
         }
       }
     }
@@ -120,17 +126,28 @@ const acceptInvite = ({ req, res, params }) => {
     respond: async (data) => {
       const hirer = get(data, 'user.hirer')
       const { hash } = params
-
       let newlyOnboarded = false
+      let companyName
+
       if (!hirer) {
-        await createAndOnboardHirer({ email, hash })
+        const response = await createAndOnboardHirer({ email, hash })
+        companyName = response.company.name
+
         newlyOnboarded = true
       } else if (!hirer.onboarded) {
-        await onboardHirer({ email })
+        const response = await onboardHirer({ email })
+        companyName = response.user.hirer.company.name
+
         newlyOnboarded = true
       }
 
       if (newlyOnboarded) {
+        await analytics.updateIdentity({ companyName })
+        analytics.track({
+          object: analytics.objects.invite,
+          action: analytics.actions.invite.accepted
+        })
+
         res.cookie(cookies.getSecureName('newlyOnboarded'), newlyOnboarded, {
           httpOnly: true,
           secure: true
