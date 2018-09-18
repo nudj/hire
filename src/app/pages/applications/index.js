@@ -15,6 +15,7 @@ const ListApplications = require('../../components/list-applications')
 const { Heading, Para } = require('../../components/app')
 const ButtonLink = require('../../components/button-link')
 const { emailPreferences } = require('../../lib/constants')
+const analytics = require('../../lib/browser-analytics')
 
 const style = require('./style.css')
 
@@ -77,6 +78,16 @@ const ApplicationsPage = (props) => {
                       body=''
                       gmail={isGmail}
                       target={isGmail ? '_blank' : '_self'}
+                      onClick={() => {
+                        analytics.track({
+                          object: analytics.objects.applicant,
+                          action: analytics.actions.applicant.messaged,
+                          properties: {
+                            applicantId: props.id,
+                            method: isGmail ? 'gmail' : 'email'
+                          }
+                        })
+                      }}
                     />
                   )}
                 />
