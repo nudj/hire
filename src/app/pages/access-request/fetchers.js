@@ -34,6 +34,7 @@ const get = ({ params }) => {
       ${Global}
     }
   `
+
   const variables = {
     accessRequestSlug: params.accessRequestSlug
   }
@@ -50,7 +51,7 @@ const get = ({ params }) => {
   }
 }
 
-const post = ({ params }) => {
+const post = ({ params, analytics }) => {
   const { accessRequestSlug } = params
   const gql = `
     mutation accessRequestPage (
@@ -65,6 +66,7 @@ const post = ({ params }) => {
         }
       ) {
         person {
+          id
           firstName
           lastName
           email
@@ -87,10 +89,23 @@ const post = ({ params }) => {
   const variables = {
     accessRequestSlug
   }
+
   const transformData = data => {
     if (!data.accessRequest) throw new NotFound()
+
+    analytics.track({
+      object: analytics.objects.accessRequest,
+      action: analytics.actions.accessRequest.accepted,
+      properties: {
+        slug: data.accessRequest.slug,
+        acceptedBy: data.user.id,
+        requestedBy: data.accessRequest.person.id
+      }
+    })
+
     return data
   }
+
   const catcher = error => {
     if (error.message === 'Request has already been accepted') {
       throw new Redirect({
