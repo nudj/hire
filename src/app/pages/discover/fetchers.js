@@ -3,7 +3,11 @@ const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
 const { cookies } = require('@nudj/library')
 
-const getContacts = ({ req, res, query }) => {
+/**
+ * TODO:
+ * Fix double firing when the user filters their results
+ */
+const getContacts = ({ req, res, query, analytics }) => {
   const gql = `
     query ContactsSearch($search: String!, $filters: ConnectionSearchFilters) {
       hirerTypeEnum: __type(name: "HirerType") {
@@ -61,6 +65,18 @@ const getContacts = ({ req, res, query }) => {
     const surveyRecentlyCompleted = cookies.get(req, 'surveyRecentlyCompleted')
     cookies.set(res, 'surveyRecentlyCompleted', false)
 
+    if (query.search || query.favourites || query.expertiseTags) {
+      analytics.track({
+        object: analytics.objects.connections,
+        action: analytics.actions.connections.filtered,
+        properties: {
+          searchQuery: query.search,
+          favouritesFilter: query.favourites,
+          expertiseTagsFilter: query.expertiseTags
+        }
+      })
+    }
+
     return {
       ...data,
       surveyRecentlyCompleted: surveyRecentlyCompleted === 'true',
@@ -97,6 +113,7 @@ const postContact = ({ params, body, analytics }) => {
         ) {
           id
         }
+        connectionsCount
       }
       ${Global}
     }
