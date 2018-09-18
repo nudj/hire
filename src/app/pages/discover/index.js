@@ -142,6 +142,7 @@ class DiscoverPage extends React.Component {
     const { newContact } = state
     const jobId = get(match, 'params.jobId')
     const connections = get(user, 'results.connections', [])
+    const totalConnectionsCount = get(user, 'connectionsCount', 0)
     const expertiseTags = get(user, 'results.tags', [])
       .filter(tag => tag.type === 'EXPERTISE')
 
@@ -176,7 +177,7 @@ class DiscoverPage extends React.Component {
             style={style.mainSection}
             width={!featureTags ? 'largeI' : undefined}
           >
-            {searchInput || connections.length > 0 ? (
+            {totalConnectionsCount > 0 ? (
               <Card style={[mss.pa0, style.card]}>
                 <form
                   className={css(

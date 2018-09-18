@@ -47,6 +47,7 @@ const getContacts = ({ req, res, query, analytics }) => {
             name
           }
         }
+        connectionsCount
       }
       ${Global}
     }
@@ -112,6 +113,7 @@ const postContact = ({ params, body, analytics }) => {
           source: $source
         ) {
           id
+          connectionsCount
         }
         connectionsCount
       }
