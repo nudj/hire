@@ -16,7 +16,7 @@ const get = () => {
   return { gql }
 }
 
-const post = ({ body }) => {
+const post = ({ body, analytics }) => {
   const gql = `
     mutation CreateJob ($job: JobCreateInput!) {
       user {
@@ -25,7 +25,13 @@ const post = ({ body }) => {
           company {
             createJob(data: $job) {
               id
+              title
               slug
+              created
+              modified
+              status
+              location
+              bonus
             }
           }
         }
@@ -33,6 +39,7 @@ const post = ({ body }) => {
       ${Global}
     }
   `
+
   const variables = {
     job: {
       ...body,
@@ -43,14 +50,38 @@ const post = ({ body }) => {
       type: 'PERMANENT'
     }
   }
+
   const respond = data => {
     logNewJobToIntercom(data, body)
-    const { slug } = data.user.hirer.company.createJob
+    const {
+      title,
+      slug,
+      created,
+      modified,
+      status,
+      location,
+      bonus
+    } = data.user.hirer.company.createJob
+
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.created,
+      properties: {
+        jobTitle: title,
+        jobSlug: slug,
+        jobStatus: status,
+        jobLocation: location,
+        jobBonus: bonus,
+        jobCreated: created,
+        jobModified: modified
+      }
+    })
 
     throw new Redirect({
       url: `/jobs/${slug}/bonus`
     })
   }
+
   const catcher = () => {
     throw new Redirect({
       url: '/jobs/new',
