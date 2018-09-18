@@ -28,6 +28,7 @@ const get = ({ params }) => {
       ${Global}
     }
   `
+
   const variables = {
     jobSlug: params.jobSlug
   }
@@ -35,7 +36,7 @@ const get = ({ params }) => {
   return { gql, variables }
 }
 
-const post = ({ body, params, res }) => {
+const post = ({ body, params, res, analytics }) => {
   const { id, ...data } = body
   const gql = `
     query updateJob (
@@ -51,13 +52,15 @@ const post = ({ body, params, res }) => {
               data: $data
               notifyTeam: $notifyTeam
             ) {
-              title
               id
+              title
               slug
+              created
+              modified
               status
               location
-              description
               bonus
+              description
             }
           }
         }
@@ -73,7 +76,9 @@ const post = ({ body, params, res }) => {
       ${Global}
     }
   `
+
   const variables = { id, data, notifyTeam: true }
+
   const respond = data => {
     const existingJob = data.job
     const updatedJob = data.user.hirer.company.job
@@ -81,24 +86,39 @@ const post = ({ body, params, res }) => {
     const statusHasChanged = existingJob.status !== updatedJob.status
     const actionPerformed = statusHasChanged ? jobStatusMap[updatedJob.status].toLowerCase() : 'updated'
     const hasBeenPublished = actionPerformed === jobStatusMap.PUBLISHED.toLowerCase()
-
-    let publishedMessage = ''
-    if (
+    const notifyTeam = (
       variables.notifyTeam &&
       statusHasChanged &&
       updatedJob.status === jobStatusMap.PUBLISHED
-    ) {
-      publishedMessage = ' Your team have been notified.'
-    }
+    )
+
+    const notification = notifyTeam
+      ? `${updatedJob.title} ${actionPerformed}! Your team have been notified.`
+      : `${updatedJob.title} ${actionPerformed}!`
+
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.edited,
+      properties: {
+        jobTitle: updatedJob.title,
+        jobSlug: updatedJob.slug,
+        jobStatus: updatedJob.status,
+        jobLocation: updatedJob.location,
+        jobBonus: updatedJob.bonus,
+        jobCreated: updatedJob.created,
+        jobModified: updatedJob.modified
+      }
+    })
 
     throw new Redirect({
       url: '/',
       notification: {
         type: statusHasChanged && hasBeenPublished ? 'success' : 'info',
-        message: `${updatedJob.title} ${actionPerformed}!${publishedMessage}`
+        message: notification
       }
     })
   }
+
   const catcher = () => {
     throw new Redirect({
       url: `/jobs/${params.jobSlug}/edit`,

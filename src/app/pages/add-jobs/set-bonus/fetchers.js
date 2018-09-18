@@ -30,7 +30,7 @@ const get = ({ params }) => {
   }
 }
 
-const post = ({ body, params }) => {
+const post = ({ body, params, analytics }) => {
   const { id, bonus, status } = body
 
   const gql = `
@@ -49,7 +49,12 @@ const post = ({ body, params }) => {
             ) {
               id
               title
+              slug
+              created
+              modified
               status
+              location
+              bonus
             }
           }
         }
@@ -75,19 +80,35 @@ const post = ({ body, params }) => {
     const existingJob = data.job
     const updatedJob = data.user.hirer.company.updateJob
     const jobStatusMap = createEnumMap(data.jobStatusTypes.values)
-    let publishedMessage = ''
-    if (
+    const notifyTeam = (
       variables.notifyTeam &&
       existingJob.status !== jobStatusMap.PUBLISHED &&
       updatedJob.status === jobStatusMap.PUBLISHED
-    ) {
-      publishedMessage = ' Your team have been notified.'
-    }
+    )
+
+    const notification = notifyTeam
+      ? `${updatedJob.title} published! Your team have been notified.`
+      : `${updatedJob.title} published!`
+
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.edited,
+      properties: {
+        jobTitle: updatedJob.title,
+        jobSlug: updatedJob.slug,
+        jobStatus: updatedJob.status,
+        jobLocation: updatedJob.location,
+        jobBonus: updatedJob.bonus,
+        jobCreated: updatedJob.created,
+        jobModified: updatedJob.modified
+      }
+    })
+
     throw new Redirect({
       url: '/',
       notification: {
         type: 'success',
-        message: `${updatedJob.title} published!${publishedMessage}`
+        message: notification
       }
     })
   }
