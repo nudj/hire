@@ -1,4 +1,5 @@
 const { Redirect } = require('@nudj/library/errors')
+const uniqBy = require('lodash/uniqBy')
 const { Global } = require('../../lib/graphql')
 
 const get = () => {
@@ -18,8 +19,9 @@ const get = () => {
   return { gql }
 }
 
-const post = ({ body }) => {
-  const { members } = body
+const post = ({ body, analytics }) => {
+  const members = uniqBy(body.members, 'email')
+
   const gql = `
     mutation sendInvitations ($members: [InviteMemberPersonInput!]!) {
       user {
@@ -39,9 +41,23 @@ const post = ({ body }) => {
       ${Global}
     }
   `
+
   const variables = {
     members
   }
+
+  const transformData = data => {
+    analytics.track({
+      object: analytics.objects.invites,
+      action: analytics.actions.invites.sent,
+      properties: {
+        inviteCount: members.length
+      }
+    })
+
+    return data
+  }
+
   const catcher = (e) => {
     throw new Redirect({
       url: '/invite',
@@ -52,7 +68,7 @@ const post = ({ body }) => {
     })
   }
 
-  return { gql, variables, catcher }
+  return { gql, variables, catcher, transformData }
 }
 
 module.exports = {
