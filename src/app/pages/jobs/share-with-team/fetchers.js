@@ -1,4 +1,5 @@
 const { Redirect } = require('@nudj/library/errors')
+const _get = require('lodash/get')
 
 const get = () => {
   const gql = `
@@ -41,18 +42,16 @@ const getSuccessNotificationCopy = (recipients) => {
   return 'Messages sent'
 }
 
-const post = ({ body }) => {
+const post = ({ body, analytics }) => {
   const gql = `
     mutation SendJobEmails ($jobs: [ID!]!, $recipients: [ID!]!) {
       user {
         id
-        company {
-          sendJobEmails(jobs: $jobs, recipients: $recipients) {
-            success
-          }
-        }
         hirer {
           company {
+            sendJobEmails(jobs: $jobs, recipients: $recipients) {
+              success
+            }
             jobs {
               id
               title
@@ -75,13 +74,25 @@ const post = ({ body }) => {
       }
     }
   `
+
   const variables = {
     jobs: body.jobs,
     recipients: body.recipients
   }
 
   const transformData = data => {
-    if (data.user.company.sendJobEmails.success) {
+    if (_get(data, 'user.hirer.company.sendJobEmails.success')) {
+      analytics.track({
+        object: analytics.objects.job,
+        action: analytics.actions.job.sharedInternally,
+        properties: {
+          jobCount: variables.jobs.length,
+          receipientCount: variables.recipients.length,
+          jobIds: variables.jobs,
+          receipientIds: variables.recipients
+        }
+      })
+
       throw new Redirect({
         url: '/',
         notification: {
