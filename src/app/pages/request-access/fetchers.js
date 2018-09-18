@@ -38,7 +38,7 @@ const getPage = ({ query, params, session }) => {
   }
 }
 
-const post = ({ params, session }) => {
+const post = ({ params, session, analytics }) => {
   const gql = `
     mutation requestAccess ($slug: String!, $personId: ID!) {
       company: companyByFilters(filters: { slug: $slug }) {
@@ -46,17 +46,32 @@ const post = ({ params, session }) => {
         slug
         accessRequest: createAccessRequest(person: $personId) {
           id
+          slug
         }
       }
       ${Global}
     }
   `
+
   const variables = {
     personId: session.userId,
     slug: params.companySlug
   }
 
-  return { gql, variables }
+  const transformData = data => {
+    analytics.track({
+      object: analytics.objects.accessRequest,
+      action: analytics.actions.accessRequest.created,
+      properties: {
+        slug: data.company.accessRequest.slug,
+        companyName: data.company.name
+      }
+    })
+
+    return data
+  }
+
+  return { gql, variables, transformData }
 }
 
 module.exports = {
