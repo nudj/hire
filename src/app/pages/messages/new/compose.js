@@ -30,6 +30,15 @@ class ComposeMessagePage extends React.Component {
     dispatch(updateMessage(value))
   }
 
+  handleSubmit = () => {
+    const { user, dispatch } = this.props
+    const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
+
+    if (emailPreference === emailPreferences.GOOGLE) {
+      dispatch(sendMessage())
+    }
+  }
+
   render () {
     const {
       composeMessage,
