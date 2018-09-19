@@ -13,7 +13,7 @@ const { getJobUrl } = require('@nudj/library')
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const compilePrismicTemplate = require('../../../lib/compile-prismic-template')
 const Layout = require('../../../components/app-layout')
-const { updateSubject, updateMessage } = require('./actions')
+const { updateSubject, updateMessage, sendMessage } = require('./actions')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
 const { Heading, Para } = require('../../../components/app')
@@ -127,6 +127,7 @@ class ComposeMessagePage extends React.Component {
                 mailto={mailto}
                 onSubjectChange={this.handleSubjectChange}
                 onMessageChange={this.handleMessageChange}
+                onSubmit={this.handleSubmit}
               />
             </Card>
           </Section>
