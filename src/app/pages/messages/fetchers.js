@@ -16,6 +16,7 @@ const getMessages = ({ session }) => {
           type
           subject
           recipient {
+            id
             email
             firstName
             lastName
@@ -179,12 +180,12 @@ const replyTo = props => {
       gql,
       variables,
       respond: data => {
-        // prevents multiple submissions on refresh
         trackSentMessageEvent(analytics, {
           conversation: params.conversationId,
           from: session.userId,
           to: get(data, 'user.conversation.recipient.id')
         })
+        // prevents multiple submissions on refresh
         throw new Redirect({ url: `/messages/${params.conversationId}` })
       }
     }
