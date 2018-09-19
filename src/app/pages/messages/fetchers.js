@@ -106,8 +106,16 @@ const getThread = props => {
   return { gql, variables, transformData }
 }
 
+const trackSentMessageEvent = (analytics, properties = {}) => {
+  analytics.track({
+    object: analytics.objects.message,
+    action: analytics.actions.message.sent,
+    properties
+  })
+}
+
 const replyTo = props => {
-  const { session, params, body } = props
+  const { session, params, body, analytics } = props
 
   // TODO: API side validation
   if (body.body.length > 0) {
@@ -136,6 +144,7 @@ const replyTo = props => {
             subject
             type
             recipient {
+              id
               firstName
               lastName
               email
@@ -169,8 +178,13 @@ const replyTo = props => {
     return {
       gql,
       variables,
-      respond: () => {
+      respond: data => {
         // prevents multiple submissions on refresh
+        trackSentMessageEvent(analytics, {
+          conversation: params.conversationId,
+          from: session.userId,
+          to: get(data, 'user.conversation.recipient.id')
+        })
         throw new Redirect({ url: `/messages/${params.conversationId}` })
       }
     }
@@ -313,7 +327,7 @@ const getMessageTemplate = props => {
   return { gql, variables }
 }
 
-const sendNewMessage = ({ session, params, body, req }) => {
+const sendNewMessage = ({ session, params, body, req, analytics }) => {
   const gql = `
     mutation SendNewMessage($recipientId: ID!, $subject: String!, $body: String!) {
       user {
@@ -336,6 +350,12 @@ const sendNewMessage = ({ session, params, body, req }) => {
     variables,
     respond: (pageData) => {
       const newlyOnboarded = cookies.get(req, 'newlyOnboarded')
+
+      trackSentMessageEvent(analytics, {
+        conversation: pageData.user.conversation.id,
+        from: session.userId,
+        to: params.recipientId
+      })
 
       // prevents multiple submissions on refresh
       throw new Redirect({
