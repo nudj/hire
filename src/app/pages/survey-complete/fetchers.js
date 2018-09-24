@@ -9,7 +9,7 @@ const intercom = require('../../lib/intercom')
 const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
 
-const completeSurvey = async ({ session, params, res, requestGQL }) => {
+const completeSurvey = async ({ session, params, res, analytics, requestGQL }) => {
   const enumTypes = await requestGQL({
     gql: `
       {
@@ -126,6 +126,14 @@ const completeSurvey = async ({ session, params, res, requestGQL }) => {
     const answers = flatten(data.surveyAnswers.map(answer => {
       return answer.connections
     }))
+
+    analytics.track({
+      object: analytics.objects.survey,
+      action: analytics.actions.survey.completed,
+      properties: {
+        survey: get(data, 'user.hirer.company.survey.id')
+      }
+    })
 
     // If a user has no published jobs, redirect them if they have actual survey answers
     if (!publishedJobs.length && answers.length) {
