@@ -30,7 +30,7 @@ const get = ({ params }) => {
   }
 }
 
-const post = ({ body, params, analytics }) => {
+const post = ({ body, params, analytics, requestGQL }) => {
   const { id, bonus, status } = body
 
   const gql = `
@@ -113,9 +113,19 @@ const post = ({ body, params, analytics }) => {
     })
   }
 
-  const catcher = () => {
+  const catcher = async () => {
+    const { job } = await requestGQL({
+      gql: `
+        query fetchJob ($jobId: ID!) {
+          job(id: $jobId) {
+            slug
+          }
+        }
+      `,
+      variables: { jobId: id }
+    })
     throw new Redirect({
-      url: `/jobs/${params.jobSlug}/bonus`,
+      url: `/jobs/${job.slug}/bonus`,
       notification: {
         type: 'error',
         message: 'Something went wrong setting the bonus! Please try again.'
