@@ -6,9 +6,9 @@ const toLower = require('lodash/toLower')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
+const analytics = require('../../lib/browser-analytics')
 const ButtonLink = require('../../components/button-link')
 const Layout = require('../../components/app-layout')
-
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const {
@@ -23,6 +23,16 @@ const SurveyPage = props => {
   const survey = get(company, 'survey')
   const initialSection = get(survey, 'sections[0]', {})
   const initialQuestion = get(initialSection, 'questions[0]', {})
+
+  const trackSurveyStart = () => {
+    analytics.track({
+      object: analytics.objects.survey,
+      action: analytics.actions.survey.started,
+      properties: {
+        survey: survey.id
+      }
+    })
+  }
 
   return (
     <Layout {...props}>
@@ -54,6 +64,7 @@ const SurveyPage = props => {
             href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
               toLower(initialQuestion.type)
             }/${initialQuestion.id}`}
+            onClick={trackSurveyStart}
           >
             Start
           </ButtonLink>
