@@ -151,7 +151,10 @@ async function ensureNotHirer (req, res, next) {
     logger.log('error', error)
   }
 
-  next(new NotFound({ log: ['Hirer attempted to access pre-setup page'] }))
+  next(new Redirect({
+    url: '/',
+    log: ['Hirer attempted to access pre-setup page']
+  }))
 }
 
 async function ensureNotOnboarded (req, res, next) {
