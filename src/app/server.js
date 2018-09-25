@@ -1,5 +1,6 @@
 require('envkey')
 require('babel-register')({
+  presets: ['react'],
   ignore: function (filename) {
     if (
       filename.match(
