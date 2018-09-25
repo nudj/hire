@@ -113,7 +113,6 @@ const postContact = ({ params, body, analytics }) => {
           source: $source
         ) {
           id
-          connectionsCount
         }
         connectionsCount
       }
