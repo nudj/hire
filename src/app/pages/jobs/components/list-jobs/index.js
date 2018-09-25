@@ -220,7 +220,7 @@ class ListAllJobs extends React.Component {
   handleShareClick = (method, job) => {
     analytics.track({
       object: analytics.objects.job,
-      action: analytics.actions.job.referred,
+      action: analytics.actions.job.socialShareClicked,
       properties: {
         method,
         jobCreated: job.created,
