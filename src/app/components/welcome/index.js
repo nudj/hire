@@ -6,14 +6,13 @@ const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const style = require('./style.css')
-const Layout = require('../../components/app-layout')
-const ButtonLink = require('../../components/button-link')
-const Main = require('../../components/main')
-const Section = require('../../components/section')
-const { Heading, Para } = require('../../components/wizard')
+const ButtonLink = require('../button-link')
+const Main = require('../main')
+const Section = require('../section')
+const { Heading, Para } = require('../wizard')
 
-const WelcomeAdmin = props => (
-  <Layout {...props}>
+const Welcome = () => (
+  <div>
     <Helmet>
       <title>Welcome to nudj</title>
     </Helmet>
@@ -96,7 +95,7 @@ const WelcomeAdmin = props => (
         </div>
       </Section>
     </Main>
-  </Layout>
+  </div>
 )
 
-module.exports = WelcomeAdmin
+module.exports = Welcome

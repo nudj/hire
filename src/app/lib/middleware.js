@@ -92,7 +92,7 @@ async function ensureOnboarded (req, res, next) {
   let url = '/setup-company' // URL for admin
   if (!hirer || !hirer.id) {
     // hirer does not exist
-    url = '/welcome'
+    url = '/'
   } else if (hirer.type === hirerTypes.MEMBER) {
     // hirer is a team-mate and needs to see the invitation page
     const companyHash = get(responseData, 'user.hirer.company.hash')

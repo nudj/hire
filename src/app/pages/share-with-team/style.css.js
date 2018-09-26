@@ -1,5 +1,5 @@
 const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
-const { modal } = require('../../../lib/css/breakpoints')
+const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   selectAllCheckboxWrapper: {

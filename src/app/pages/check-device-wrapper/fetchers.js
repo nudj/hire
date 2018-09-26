@@ -29,7 +29,7 @@ const sendMagicLink = () => {
       })
     } else {
       throw new Redirect({
-        url: `/welcome`,
+        url: `/`,
         notification: createNotification(
           'error',
           'Unable to send email'

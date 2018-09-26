@@ -7,7 +7,6 @@ const { Button, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const { Heading, Para } = require('../../components/app')
@@ -18,7 +17,7 @@ const style = require('./style.css')
 
 const { updateJobSelection } = require('../../redux/actions/selections')
 
-class JobsPage extends React.Component {
+class JobList extends React.Component {
   constructor (props) {
     super(props)
 
@@ -69,7 +68,7 @@ class JobsPage extends React.Component {
     const hasTeam = company.hirers.length > 1
 
     return (
-      <Layout {...this.props}>
+      <div>
         <Helmet>
           <title>Jobs</title>
         </Helmet>
@@ -293,9 +292,9 @@ class JobsPage extends React.Component {
             </div>
           </div>
         </Modal>
-      </Layout>
+      </div>
     )
   }
 }
 
-module.exports = JobsPage
+module.exports = JobList
