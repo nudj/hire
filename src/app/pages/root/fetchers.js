@@ -14,7 +14,7 @@ const get = ({ req, res, session, query }) => {
   const { period } = query
 
   const gql = `
-    mutation GetJobsStatistics(
+    mutation GetJobsStatistics (
       $userId: ID!,
       $dateFrom: DateTime,
       $dateTo: DateTime
@@ -65,8 +65,11 @@ const get = ({ req, res, session, query }) => {
     }
   `
 
+  // When not logged in variables fall back to a userId of 0 so that the above
+  // fetcher does not 400 due to missing userId. There should never be a user
+  // with id 0
   const variables = {
-    userId: session.userId
+    userId: session.userId || 0
   }
 
   const now = new Date()

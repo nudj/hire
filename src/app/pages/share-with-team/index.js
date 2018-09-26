@@ -7,14 +7,14 @@ const { Button, Checkbox, ListMultiSelect, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
-const Layout = require('../../../components/app-layout')
-const Contact = require('../../../components/contact')
-const Job = require('../../../components/job')
-const Main = require('../../../components/main')
-const Section = require('../../../components/section')
-const ActionBar = require('../../../components/action-bar')
-const { Heading, Para } = require('../../../components/app')
-const { updateTeamSelection } = require('../../../redux/actions/selections')
+const Layout = require('../../components/app-layout')
+const Contact = require('../../components/contact')
+const Job = require('../../components/job')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const ActionBar = require('../../components/action-bar')
+const { Heading, Para } = require('../../components/app')
+const { updateTeamSelection } = require('../../redux/actions/selections')
 const { sendEmails } = require('./actions')
 const styleSheet = require('./style.css')
 
@@ -120,8 +120,8 @@ class ShareWithTeamPage extends React.Component {
     const { user, selections } = this.props
 
     const onboardedTeam = get(user, 'hirer.company.hirers', [])
-    .filter(team => team.onboarded && team.person.id !== user.id)
-    .map(team => team.person)
+      .filter(team => team.onboarded && team.person.id !== user.id)
+      .map(team => team.person)
 
     const selectedJobs = get(user, 'hirer.company.jobs', []).filter(
       job => selections.jobs.includes(job.id)
