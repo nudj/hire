@@ -34,7 +34,7 @@
   "dependencies": {
     "@nudj/api": "19.0.0",
     "@nudj/components": "2.16.1",
-    "@nudj/framework": "17.9.0",
+    "@nudj/framework": "17.10.0",
     "@nudj/library": "7.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.23.0",
