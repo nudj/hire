@@ -19,6 +19,7 @@ const ApplicationLayout = props => {
   const type = get(props, 'user.hirer.type', memberTypes.MEMBER)
   const showNavigation = onboarded && isNil(title)
   const isAdmin = type === memberTypes.ADMIN
+  const isLoggedIn = !!props.user // If `user` object exists, user is logged in
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
 
@@ -111,6 +112,16 @@ const ApplicationLayout = props => {
             >
               Help
             </Link>
+            {isLoggedIn && (
+              <Link
+                nonsensitive
+                href='/logout'
+                subtle
+                style={style.helpLink}
+              >
+                Log out
+              </Link>
+            )}
           </div>
         </div>
         {children}

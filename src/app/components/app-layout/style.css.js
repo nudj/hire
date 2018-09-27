@@ -22,18 +22,18 @@ const styleSheet = StyleSheet.create({
     alignItems: 'stretch',
     width: '100%',
     flexWrap: 'wrap',
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       flexWrap: 'nowrap'
     }
   },
   logoContainer: {
-    flexBasis: '50%',
+    flexBasis: '40%',
     alignSelf: 'center',
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
     paddingTop: sizes.smallIi,
     paddingBottom: sizes.smallIi,
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       flexBasis: 'auto',
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
@@ -44,7 +44,7 @@ const styleSheet = StyleSheet.create({
   bodyContainer: {
     order: '3',
     width: '100%',
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       order: 'initial',
       width: 'auto',
       flexGrow: 1
@@ -57,9 +57,9 @@ const styleSheet = StyleSheet.create({
     color: colors.royalBlue
   },
   helpContainer: {
-    flexBasis: '50%',
+    flexBasis: '60%',
     textAlign: 'right',
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       flexBasis: 'auto'
     }
   },
@@ -77,7 +77,7 @@ const styleSheet = StyleSheet.create({
     display: 'flex',
     overflowX: 'scroll',
     overflowScrolling: 'touch',
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       display: 'block',
       overflow: 'visible'
     }
@@ -92,7 +92,7 @@ const styleSheet = StyleSheet.create({
     ':last-child': {
       paddingRight: sizes.smallIi
     },
-    '@media(min-width: 34.25rem)': {
+    '@media(min-width: 42.25rem)': {
       ':first-child': {
         paddingLeft: 0
       },
@@ -132,7 +132,7 @@ const styleSheet = StyleSheet.create({
       height: '100%',
       verticalAlign: 'middle'
     },
-    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
+    '@media(min-width: 42.25rem)': merge(typography.type.smallI, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
       fontWeight: typography.fontWeight.bold,
@@ -155,7 +155,7 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.smallI,
     paddingRight: sizes.smallI,
     fontWeight: typography.fontWeight.bold,
-    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
+    '@media(min-width: 42.25rem)': merge(typography.type.smallI, {
       paddingLeft: sizes.regular,
       paddingRight: sizes.regular,
       fontWeight: typography.fontWeight.bold
@@ -176,7 +176,7 @@ const styleSheet = StyleSheet.create({
       height: '100%',
       verticalAlign: 'middle'
     },
-    '@media(min-width: 34.25rem)': merge(typography.type.smallI, {
+    '@media(min-width: 42.25rem)': merge(typography.type.smallI, {
       fontWeight: typography.fontWeight.bold
     })
   })
