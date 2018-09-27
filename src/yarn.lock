@@ -173,14 +173,14 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.9.0":
-  version "17.9.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.9.0.tgz#f3057456d4b29d7411b1033d59daeb03202c269c"
+"@nudj/framework@17.10.0":
+  version "17.10.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.10.0.tgz#31cf273b851500d6739dbfc6a1ad45b8d75cebcd"
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
     "@nudj/library" "6.3.0"
-    "@nudj/passport-auth0" "0.1.0"
+    "@nudj/passport-auth0" "0.2.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
     aphrodite "^1.2.0"
     axios "^0.16.1"
@@ -277,9 +277,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/passport-auth0@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@nudj/passport-auth0/-/passport-auth0-0.1.0.tgz#698349f8a1f0cd14a78d50edeb8204566bf39faa"
+"@nudj/passport-auth0@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/passport-auth0/-/passport-auth0-0.2.0.tgz#6d05ef0f59e5836b918e638f560107a7737e881a"
   dependencies:
     passport-oauth "^1.0.0"
     request "^2.61.0"
