@@ -112,9 +112,14 @@ function getUserInfo (user) {
   return {email, firstName, lastName, url}
 }
 
-function passportAuthentication (req, res, next) {
-  const hint = req.query && req.query.email
-  passport.authenticate('auth0', { login_hint: hint })(req, res, next)
+function passportAuthentication (mode) {
+  return (req, res, next) => {
+    const hint = req.query && req.query.email
+    passport.authenticate('auth0', {
+      login_hint: hint,
+      mode
+    })(req, res, next)
+  }
 }
 
 const Router = ({
@@ -230,8 +235,8 @@ const Router = ({
             action: analytics.actions.user.loggedIn
           })
         }
-
-        res.redirect(req.session.returnTo || '/')
+        const returnTo = (req.session.returnTo && !req.session.returnTo.includes('/login') && req.session.returnTo) || '/'
+        res.redirect(returnTo)
       } catch (error) {
         logger.log('error', error)
         next('Unable to login')
@@ -239,7 +244,7 @@ const Router = ({
     }
   )
 
-  router.get('/login', cacheReturnTo, passportAuthentication, (req, res, next) => {
+  router.get('/login', cacheReturnTo, passportAuthentication('login'), (req, res) => {
     res.redirect(req.session.returnTo || '/')
   })
 

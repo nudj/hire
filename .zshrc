@@ -16,7 +16,7 @@ alias standardFix='./node_modules/.bin/standard --fix'
 
 yank () {
   for package in "$@"; do
-    cd ./@nudj/$package && yarn link && cd ../.. && yarn link @nudj/$package
+    cd /usr/src/yank/$package && yarn link && cd /usr/src && yarn link $package
   done
 }
 
