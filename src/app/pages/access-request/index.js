@@ -3,6 +3,7 @@ const { Helmet } = require('react-helmet')
 
 const mss = require('@nudj/components/lib/css/modifiers.css')
 const { Button, Link, Text } = require('@nudj/components')
+const { possessiveCase } = require('@nudj/library')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
@@ -12,8 +13,6 @@ const {
   Para
 } = require('../../components/wizard')
 const { accept } = require('./actions')
-
-const posessiveCase = name => name.endsWith('s') ? `${name}'` : `${name}'s`
 
 const getPersonLabel = person => {
   let personLabel = 'Someone'
@@ -58,6 +57,9 @@ const AccessRequestPage = props => {
           <Para nonsensitive>
             {personLabel} ({person.email}) has been granted access to help hire for {company.name} by {acceptedByPersonLabel}.
           </Para>
+          <Link style={mss.mtReg} href='/' volume='cheer' nonsensitive>
+            Go to app
+          </Link>
         </Section>
         <Section padding>
           <Text element='div' style={mss.mtReg} nonsensitive>
@@ -83,7 +85,7 @@ const AccessRequestPage = props => {
             {personLabel} wants to help you hire
           </Heading>
           <Para nonsensitive>
-            {personLabel} ({person.email}) has requested access to {posessiveCase(company.name)} team on nudj. If you recognise them and want the helping hand, accept their request and we&apos;ll grant them access.
+            {personLabel} ({person.email}) has requested access to {possessiveCase(company.name)} team on nudj. If you recognise them and want the helping hand, accept their request and we&apos;ll grant them access.
           </Para>
         </Section>
         <Section padding>
