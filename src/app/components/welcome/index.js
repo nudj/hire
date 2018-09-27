@@ -46,20 +46,50 @@ const Welcome = () => (
           <Text nonsensitive style={mss.mtReg} element='p'>
             Track performance, manage applicants and make more referrals happen all from within the app.
           </Text>
-          <ButtonLink
-            href='/signup'
-            style={mss.mtLgIi}
-            volume='cheer'
-          >
-            Sign up
-          </ButtonLink>
-          <ButtonLink
-            href='/login'
-            style={mss.mtLgIi}
-            volume='cheer'
-          >
-            Log in
-          </ButtonLink>
+          <div className={css(style.options)}>
+            <div className={css(mss.prLgIi)}>
+              <Text
+                nonsensitive
+                element='h2'
+                size='regular'
+                style={[
+                  mss.mtLgIi,
+                  mss.bold,
+                  mss.fgPrimary,
+                  style.optionTitle
+                ]}
+              >
+                New to nudj?
+              </Text>
+              <ButtonLink
+                href='/signup'
+                style={mss.mtReg}
+              >
+                Sign up
+              </ButtonLink>
+            </div>
+            <div>
+              <Text
+                nonsensitive
+                element='h2'
+                size='regular'
+                style={[
+                  mss.mtLgIi,
+                  mss.bold,
+                  mss.fgPrimary,
+                  style.optionTitle
+                ]}
+              >
+                Already have an account?
+              </Text>
+              <ButtonLink
+                href='/login'
+                style={mss.mtReg}
+              >
+                Log in
+              </ButtonLink>
+            </div>
+          </div>
         </Card>
       </Section>
       <Section style={style.footer} padding>

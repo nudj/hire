@@ -55,6 +55,15 @@ const styleSheet = StyleSheet.create({
   questionsListItem: {
     display: 'inline',
     marginRight: sizes.regular
+  },
+  options: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-left'
+  },
+  optionTitle: {
+    whiteSpace: 'nowrap'
   }
 })
 
