@@ -26,7 +26,7 @@ const Welcome = () => (
         </Para>
       </Section>
       <Section style={style.body} padding>
-        <img className={css(style.image)} src='/assets/images/review-the-best.svg' presentation />
+        <img className={css(style.image)} src='/assets/images/review-the-best.svg' role='presentation' />
         <Card style={style.card}>
           <Text nonsensitive element='h2' size='largeI' style={style.subheading}>
             Build a best-in-class referral program
