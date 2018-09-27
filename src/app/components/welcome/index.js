@@ -47,11 +47,18 @@ const Welcome = () => (
             Track performance, manage applicants and make more referrals happen all from within the app.
           </Text>
           <ButtonLink
-            href='/setup-company'
+            href='/signup'
             style={mss.mtLgIi}
             volume='cheer'
           >
-            Explore nudj
+            Sign up
+          </ButtonLink>
+          <ButtonLink
+            href='/login'
+            style={mss.mtLgIi}
+            volume='cheer'
+          >
+            Log in
           </ButtonLink>
         </Card>
       </Section>
