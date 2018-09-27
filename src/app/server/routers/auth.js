@@ -248,6 +248,10 @@ const Router = ({
     res.redirect(req.session.returnTo || '/')
   })
 
+  router.get('/signup', cacheReturnTo, passportAuthentication('signup'), (req, res) => {
+    res.redirect('/setup-company')
+  })
+
   return router
 }
 module.exports = Router
