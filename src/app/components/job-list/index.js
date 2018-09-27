@@ -11,7 +11,7 @@ const Main = require('../../components/main')
 const Section = require('../../components/section')
 const { Heading, Para } = require('../../components/app')
 const ButtonLink = require('../../components/button-link')
-const { memberTypes } = require('../../lib/constants')
+const { memberTypes, jobStatuses } = require('../../lib/constants')
 const ListJobs = require('./components/list-jobs')
 const style = require('./style.css')
 
@@ -63,6 +63,9 @@ class JobList extends React.Component {
     const company = get(user, 'hirer.company', {})
     const jobs = get(company, 'jobs', [])
     const memberType = get(user, 'hirer.type', memberTypes.MEMBER)
+    const publishedJobs = jobs.filter(job => {
+      return job.status === jobStatuses.PUBLISHED
+    })
 
     const isAdmin = memberType === memberTypes.ADMIN
     const hasTeam = company.hirers.length > 1
@@ -93,15 +96,36 @@ class JobList extends React.Component {
           {isAdmin ? (
             <Section padding>
               <div className={css(style.helpPanels)}>
-                <div className={css(style.helpPanel)}>
-                  <Heading level={2} style={mss.fgPrimary}>
-                    Spread the word
-                  </Heading>
-                  <Para size='smallI'>
-                    Your network holds the key to finding top candidates. Be sure
-                    to get the word out and start sharing.
-                  </Para>
-                </div>
+                {publishedJobs.length ? (
+                  <div className={css(style.helpPanel)}>
+                    <Heading level={2} style={mss.fgPrimary}>
+                      Spread the word
+                    </Heading>
+                    <Para size='smallI'>
+                      Your network holds the key to finding top candidates. Be sure
+                      to get the word out and start sharing.
+                    </Para>
+                  </div>
+                ) : (
+                  <div className={css(style.helpPanel)}>
+                    <Heading level={2} style={mss.fgPrimary}>
+                      Publish a job
+                    </Heading>
+                    <Para size='smallI'>
+                      The first step towards hiring new teammates is
+                      publishing a job on nudj.
+                    </Para>
+                    <ButtonLink
+                      href='/jobs/new'
+                      volume='cheer'
+                      style={style.helpLink}
+                      subtle
+                      inline
+                    >
+                      Add new job
+                    </ButtonLink>
+                  </div>
+                )}
                 <div className={css(style.helpPanel)}>
                   <Heading level={2} style={mss.fgPrimary}>
                     Onboard your team
