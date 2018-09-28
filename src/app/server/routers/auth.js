@@ -235,7 +235,10 @@ const Router = ({
             action: analytics.actions.user.loggedIn
           })
         }
-        const returnTo = (req.session.returnTo && !req.session.returnTo.includes('/login') && req.session.returnTo) || '/'
+        let returnTo = req.session.returnTo || '/'
+        if (req.session.returnTo.includes('/login') || req.session.returnTo.includes('/signup')) {
+          returnTo = '/'
+        }
         res.redirect(returnTo)
       } catch (error) {
         logger.log('error', error)
@@ -249,7 +252,7 @@ const Router = ({
   })
 
   router.get('/signup', cacheReturnTo, passportAuthentication('signup'), (req, res) => {
-    res.redirect('/setup-company')
+    res.redirect('/')
   })
 
   return router
