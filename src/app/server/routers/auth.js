@@ -236,7 +236,11 @@ const Router = ({
           })
         }
         let returnTo = req.session.returnTo || '/'
-        if (req.session.returnTo.includes('/login') || req.session.returnTo.includes('/signup')) {
+        if (
+          req.session.returnTo.includes('/login') ||
+          req.session.returnTo.includes('/signup') ||
+          req.session.returnTo.includes('/auth')
+        ) {
           returnTo = '/'
         }
         res.redirect(returnTo)
@@ -253,6 +257,10 @@ const Router = ({
 
   router.get('/signup', cacheReturnTo, passportAuthentication('signup'), (req, res) => {
     res.redirect('/')
+  })
+
+  router.get('/auth', cacheReturnTo, passportAuthentication(), (req, res) => {
+    res.redirect(req.session.returnTo || '/')
   })
 
   return router

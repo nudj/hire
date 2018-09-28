@@ -7,7 +7,7 @@ const {
 } = require('../../lib/middleware')
 const fetchers = require('./fetchers')
 
-const Router = ({ respondWithGql, ensureLoggedIn }) => {
+const Router = ({ respondWithGql, ensureAuthorised }) => {
   const router = createRouter()
   router.use(
     '/invitation-accept/:hash',
@@ -23,7 +23,7 @@ const Router = ({ respondWithGql, ensureLoggedIn }) => {
 
   router.getHandlers(
     '/invitation-accept/:hash/accept',
-    ensureLoggedIn,
+    ensureAuthorised(),
     respondWithGql(fetchers.acceptInvite)
   )
 
