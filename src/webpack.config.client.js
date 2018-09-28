@@ -49,7 +49,7 @@ const config = {
         test: /\.js$/,
         include: [
           path.join(__dirname, 'app'),
-          path.join(__dirname, '@nudj'),
+          path.join(__dirname, 'yank', '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
         exclude: /node_modules\/(?!@nudj)/,
