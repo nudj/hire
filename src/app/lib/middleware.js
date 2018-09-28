@@ -185,11 +185,35 @@ async function ensureNotOnboarded (req, res, next) {
   )
 }
 
+async function ensureNotNewSignup (req, res, next) {
+  let responseData
+  try {
+    const query = `
+      query {
+        user {
+          hirer {
+            id
+          }
+        }
+      }
+    `
+    responseData = await request(req.session.userId, query)
+    if (!responseData.user || get(responseData, 'user.hirer')) {
+      next()
+    } else {
+      res.redirect('/setup-company')
+    }
+  } catch (error) {
+    logger.log('error', error)
+  }
+}
+
 module.exports = {
   ensureNotOnboarded,
   ensureValidCompanyHash,
   ensureOnboarded,
   ensureAdmin,
   ensureNoAccessRequestsPending,
-  ensureNotHirer
+  ensureNotHirer,
+  ensureNotNewSignup
 }
