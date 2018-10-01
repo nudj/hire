@@ -82,32 +82,28 @@ async function ensureOnboarded (req, res, next) {
     if (get(responseData, 'user.hirer.onboarded')) {
       return next()
     }
+
+    const hirer = get(responseData, 'user.hirer')
+    const hirerTypes = createEnumMap(responseData.hirerTypeEnums.values)
+    let url = '/setup-company' // URL for admin
+    if (hirer && hirer.type === hirerTypes.MEMBER) {
+      // hirer is a team-mate and needs to see the invitation page
+      const companyHash = get(responseData, 'user.hirer.company.hash')
+      url = `/invitation-accept/${companyHash}`
+    }
+
+    next(
+      new Redirect({
+        url,
+        notification: req.originalUrl !== '/' ? createNotification(
+          'error',
+          'Your account hasn\'t been fully set up just yet!'
+        ) : null
+      })
+    )
   } catch (error) {
     logger.log('error', error)
   }
-
-  const hirer = get(responseData, 'user.hirer', {})
-  const hirerTypes = createEnumMap(responseData.hirerTypeEnums.values)
-
-  let url = '/setup-company' // URL for admin
-  if (!hirer || !hirer.id) {
-    // hirer does not exist
-    url = '/'
-  } else if (hirer.type === hirerTypes.MEMBER) {
-    // hirer is a team-mate and needs to see the invitation page
-    const companyHash = get(responseData, 'user.hirer.company.hash')
-    url = `/invitation-accept/${companyHash}`
-  }
-
-  next(
-    new Redirect({
-      url,
-      notification: req.originalUrl !== '/' ? createNotification(
-        'error',
-        'Your account hasn\'t been fully set up just yet!'
-      ) : null
-    })
-  )
 }
 
 async function ensureAdmin (req, res, next) {
@@ -185,23 +181,21 @@ async function ensureNotOnboarded (req, res, next) {
   )
 }
 
-async function ensureNotNewSignup (req, res, next) {
+async function ensureLoggedOutOrOnboarded (req, res, next) {
   let responseData
   try {
     const query = `
       query {
         user {
-          hirer {
-            id
-          }
+          id
         }
       }
     `
     responseData = await request(req.session.userId, query)
-    if (!responseData.user || get(responseData, 'user.hirer')) {
+    if (!responseData.user) {
       next()
     } else {
-      res.redirect('/setup-company')
+      ensureOnboarded(req, res, next)
     }
   } catch (error) {
     logger.log('error', error)
@@ -215,5 +209,5 @@ module.exports = {
   ensureAdmin,
   ensureNoAccessRequestsPending,
   ensureNotHirer,
-  ensureNotNewSignup
+  ensureLoggedOutOrOnboarded
 }
