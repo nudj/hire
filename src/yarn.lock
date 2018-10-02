@@ -173,9 +173,9 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.11.0":
-  version "17.11.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.11.0.tgz#81d62eade80385aaa5a4b15eae1696142e12b740"
+"@nudj/framework@17.11.1":
+  version "17.11.1"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.11.1.tgz#d26485301b201bbf66ac3a0ea56c197c208a94f1"
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
@@ -261,9 +261,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.1.0.tgz#bc29cdb6b7df97b42040462dcc6d26e8168087e0"
+"@nudj/library@7.1.1":
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.1.1.tgz#f6751b2b3367f4d25c09292f9c2d6252fbe84282"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
