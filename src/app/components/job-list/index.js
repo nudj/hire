@@ -76,9 +76,8 @@ class JobList extends React.Component {
           <title>Jobs</title>
         </Helmet>
         <Main>
-          <Section padding>
+          <Section>
             <ListJobs
-              style={mss.mtReg}
               user={user}
               jobs={jobs}
               web={web}
@@ -94,7 +93,7 @@ class JobList extends React.Component {
             />
           </Section>
           {isAdmin ? (
-            <Section padding>
+            <Section>
               <div className={css(style.helpPanels)}>
                 {publishedJobs.length ? (
                   <div className={css(style.helpPanel)}>
@@ -168,7 +167,7 @@ class JobList extends React.Component {
               </div>
             </Section>
           ) : (
-            <Section padding>
+            <Section>
               <div className={css(style.helpPanels)}>
                 <div className={css(style.helpPanel)}>
                   <Heading level={2} style={mss.fgPrimary}>
