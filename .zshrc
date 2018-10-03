@@ -20,7 +20,7 @@ yank () {
   done
 }
 
-alias idev="yank framework && yank components && yank api && yank library && dev"
+alias idev="yank @nudj/framework @nudj/components @nudj/api @nudj/library && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"

@@ -25,4 +25,4 @@ services:
     stdin_open: true
     command: /bin/zsh
     ports:
-      - "83:83"
+      - "81:81"
