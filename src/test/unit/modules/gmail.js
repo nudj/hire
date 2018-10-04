@@ -5,7 +5,7 @@ const { Unauthorized } = require('@nudj/library/errors')
 
 const gmail = require('../../../app/server/modules/gmail')
 
-const api = nock('http://localhost')
+const api = nock(`http://${process.env.API_HOST}:${process.env.API_PORT}`)
 const googleAccounts = nock('https://accounts.google.com')
 const validTokenGoogle = nock('https://www.googleapis.com/gmail/v1/users/me', {
   reqheaders: {

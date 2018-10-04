@@ -135,7 +135,7 @@ let app = createNudjApps({
 
 const server = http.createServer(app)
 
-server.listen(80, () => {
+server.listen(process.env.API_PORT, () => {
   logger.log('info', 'Application running')
 })
 
