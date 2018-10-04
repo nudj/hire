@@ -338,8 +338,8 @@ class DiscoverPage extends React.Component {
                       </ButtonLink>
                     </div>
                     <Small style={style.privacyNotice}>
-                      Only you have access to your LinkedIn contacts and it isn’t
-                      visible to your employer or nudj.{' '}
+                      Only you have access to your LinkedIn contacts and they aren’t
+                      visible to your employer.{' '}
                       <Link
                         style={style.privacyLink}
                         href='https://help.nudj.co/pricing-privacy-and-terms/nudj-privacy-policy'
