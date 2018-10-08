@@ -6,12 +6,13 @@ const omit = require('lodash/omit')
 
 const {
   Button,
-  Card,
+  Text,
   Input,
   InputField,
   Textarea,
   Select
 } = require('@nudj/components')
+const TitleCard = require('../title-card')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -32,6 +33,8 @@ const textareaStylesheet = { input: style.textarea }
 const JobForm = props => {
   const {
     edit,
+    title,
+    description,
     fieldValues,
     onFieldChange,
     onSubmit,
@@ -46,7 +49,10 @@ const JobForm = props => {
 
   return (
     <form className={css(style.form)} onSubmit={onSubmit}>
-      <Card style={style.card}>
+      <TitleCard title={title}>
+        {description && (
+          <Text>{description}</Text>
+        )}
         <InputField
           styleSheet={inputFieldStylesheet}
           htmlFor='title'
@@ -132,14 +138,14 @@ const JobForm = props => {
           </div>
         )}
         <input name='_csrf' value={csrfToken} type='hidden' />
-      </Card>
-      <Button
-        style={mss.mtLgIi}
-        type='submit'
-        volume='cheer'
-      >
-        {edit ? 'Save changes' : 'Save draft'}
-      </Button>
+        <Button
+          style={mss.mtLgIi}
+          type='submit'
+          volume='cheer'
+        >
+          {edit ? 'Save changes' : 'Save draft'}
+        </Button>
+      </TitleCard>
     </form>
   )
 }

@@ -43,7 +43,7 @@ const ApplicationsPage = (props) => {
       <Main>
         {hasApplications ? (
           jobs.filter(job => job.applications.length > 0).map(job => (
-            <Section key={job.id} width='largeI'>
+            <Section key={job.id}>
               <Align
                 styleSheet={{
                   root: style.listHeading,
@@ -95,7 +95,7 @@ const ApplicationsPage = (props) => {
             </Section>
           ))
         ) : (
-          <Section padding>
+          <Section>
             <Heading nonsensitive level={1} style={mss.fgPrimary}>
               You haven&apos;t received any applications yet
             </Heading>
