@@ -38,6 +38,7 @@ const locations = {
      { path: new Route('/messages/:conversationId') }
   ],
   manage: [
+     { path: new Route('/company-settings'), title: 'Company settings', isSubNavLink: true },
      { path: new Route('/invite'), title: 'Invite', isSubNavLink: true }
   ]
 }
@@ -158,7 +159,7 @@ const ApplicationLayout = props => {
                         isActive={isEqual(locationRoutes, locations.manage)}
                         style={style.navigationLink}
                         activeStyle={style.navigationLinkActive}
-                        to='/invite'
+                        to='/company-settings'
                       >
                         Manage
                       </NavLink>

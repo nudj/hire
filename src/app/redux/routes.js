@@ -4,6 +4,7 @@ module.exports = {
   '/': require('../pages/root'),
   '/share-jobs': require('../pages/share-jobs'),
   '/setup-company': require('../pages/setup-company'),
+  '/company-settings': require('../pages/company-settings'),
   '/jobs/new': require('../pages/add-jobs'),
   '/jobs/share-with-team': require('../pages/share-with-team'),
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),
