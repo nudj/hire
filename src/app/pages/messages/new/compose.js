@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Card } = require('@nudj/components')
+const { Text } = require('@nudj/components')
 const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
@@ -16,8 +16,8 @@ const Layout = require('../../../components/app-layout')
 const { updateSubject, updateMessage, sendMessage } = require('./actions')
 const Main = require('../../../components/main')
 const Section = require('../../../components/section')
-const { Heading, Para } = require('../../../components/app')
 const ComposeMessageForm = require('../../../components/form-compose-message')
+const TitleCard = require('../../../components/title-card')
 
 class ComposeMessagePage extends React.Component {
   handleSubjectChange = ({ value }) => {
@@ -108,16 +108,11 @@ class ComposeMessagePage extends React.Component {
           <title>Tweak the message</title>
         </Helmet>
         <Main>
-          <Section padding>
-            <Heading level={1} style={mss.fgPrimary}>
-              Tweak the message
-            </Heading>
-            <Para>
-              Take a bit of time to personalise the template. You&apos;ll get a better response if you add a little personality
-            </Para>
-          </Section>
-          <Section width='largeI'>
-            <Card>
+          <Section>
+            <TitleCard title='Tweak the message'>
+              <Text element='p' style={mss.mbReg}>
+                Take a bit of time to personalise the template. You&apos;ll get a better response if you add a little personality.
+              </Text>
               <ComposeMessageForm
                 csrfToken={csrfToken}
                 loading={composeMessage.loading}
@@ -129,7 +124,7 @@ class ComposeMessagePage extends React.Component {
                 onMessageChange={this.handleMessageChange}
                 onSubmit={this.handleSubmit}
               />
-            </Card>
+            </TitleCard>
           </Section>
         </Main>
       </Layout>

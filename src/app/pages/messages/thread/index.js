@@ -69,7 +69,7 @@ class MessageThreadPage extends React.Component {
           <title>{subject}</title>
         </Helmet>
         <Main>
-          <Section width='largeI'>
+          <Section>
             <Card style={mss.pa0}>
               <div className={css(style.threadSection)}>
                 <Text style={style.threadSubject} element='div' size='largeI'>

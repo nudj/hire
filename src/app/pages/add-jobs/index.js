@@ -6,10 +6,6 @@ const Main = require('../../components/main')
 const Section = require('../../components/section')
 const JobsForm = require('../../components/form-job')
 const {
-  Heading,
-  Para
-} = require('../../components/wizard')
-const {
   setFieldValue,
   submitJob
 } = require('./actions')
@@ -28,24 +24,19 @@ class SetupJobsPage extends React.Component {
 
   render () {
     const { addJobPage: state, csrfToken } = this.props
+    const title = 'Add a job'
+    const description = 'Add a few details about the role you\'re hiring for, and we\'ll add it to our platform.'
 
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Add a job</title>
+          <title>{title}</title>
         </Helmet>
         <Main>
-          <Section padding>
-            <Heading nonsensitive>
-            Add a job
-            </Heading>
-            <Para nonsensitive>
-              Add a few details about the role you&apos;re hiring for, and
-              we&apos;ll add it to our platform.
-            </Para>
-          </Section>
-          <Section padding width='largeI'>
+          <Section>
             <JobsForm
+              title={title}
+              description={description}
               csrfToken={csrfToken}
               fieldValues={state.fieldValues}
               onFieldChange={this.handleChange}

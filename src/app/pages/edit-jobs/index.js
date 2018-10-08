@@ -5,7 +5,6 @@ const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const JobsForm = require('../../components/form-job')
-const { Heading } = require('../../components/wizard')
 const { createEnumMap } = require('../../lib')
 const {
   setFieldValue,
@@ -55,14 +54,10 @@ class SetupJobsPage extends React.Component {
           <title>{pageTitle}</title>
         </Helmet>
         <Main>
-          <Section padding>
-            <Heading nonsensitive>
-              {pageTitle}
-            </Heading>
-          </Section>
-          <Section padding width='largeI'>
+          <Section>
             <JobsForm
               edit
+              title={pageTitle}
               csrfToken={csrfToken}
               fieldValues={state.fieldValues}
               onFieldChange={this.handleChange}

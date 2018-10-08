@@ -1,17 +1,15 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Button, Card } = require('@nudj/components')
+const { Button, Text } = require('@nudj/components')
+const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const InviteForm = require('../../components/form-invite')
+const TitleCard = require('../../components/title-card')
 const style = require('./style.css')
-const {
-  Heading,
-  Para
-} = require('../../components/wizard')
 const {
   setNestedFieldValue,
   addAdditionalField,
@@ -46,16 +44,11 @@ class InviteTeamPage extends React.Component {
           <title>Invite team</title>
         </Helmet>
         <Main>
-          <Section padding>
-            <Heading nonsensitive>
-              Get your team on nudj
-            </Heading>
-            <Para nonsensitive>
-              With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
-            </Para>
-          </Section>
-          <Section padding width='largeI'>
-            <Card>
+          <Section>
+            <TitleCard title='Get your team on nudj'>
+              <Text element='p' style={mss.mbReg}>
+                With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
+              </Text>
               <InviteForm
                 fieldCount={fieldCount}
                 values={fieldValues}
@@ -63,17 +56,15 @@ class InviteTeamPage extends React.Component {
                 onAddField={this.handleAddField}
                 onSubmit={this.handleSubmit}
               />
-            </Card>
-          </Section>
-          <Section padding>
-            <Button
-              nonsensitive
-              onClick={this.handleSubmit}
-              volume='cheer'
-              style={style.sendInvitesButton}
-            >
-              Send invites
-            </Button>
+              <Button
+                nonsensitive
+                onClick={this.handleSubmit}
+                volume='cheer'
+                style={style.sendInvitesButton}
+              >
+                Send invites
+              </Button>
+            </TitleCard>
           </Section>
         </Main>
       </Layout>

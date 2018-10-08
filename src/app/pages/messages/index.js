@@ -37,8 +37,8 @@ const MessagesPage = props => {
       <Main>
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
           ? syncedConversations.length > 0 ? (
-            <Section width='largeI'>
-              <Card style={[mss.pa0, mss.mtReg, mss.ofHide]}>
+            <Section>
+              <Card style={[mss.pa0, mss.ofHide]}>
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation

@@ -140,7 +140,7 @@ class ShareWithTeamPage extends React.Component {
           <title>Share with your team</title>
         </Helmet>
         <Main>
-          <Section padding width='regular'>
+          <Section>
             <ActionBar>
               {actionStyle => [
                 <Checkbox
