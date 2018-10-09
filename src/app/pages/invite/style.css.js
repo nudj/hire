@@ -1,4 +1,4 @@
-const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, sizes } = require('@nudj/components/lib/css')
 const { wizardAction } = require('../../lib/css/breakpoints')
 
 const stylesheet = StyleSheet.create({
@@ -8,6 +8,19 @@ const stylesheet = StyleSheet.create({
     [`@media(${wizardAction.center})`]: {
       width: 'auto'
     }
+  },
+  card: {
+    marginBottom: sizes.regular
+  },
+  body: {
+    display: 'flex'
+  },
+  invitationLink: {
+    width: '100%',
+    marginRight: sizes.regular
+  },
+  invitationInput: {
+    backgroundColor: colors.greyLightest
   }
 })
 

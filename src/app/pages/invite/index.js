@@ -1,7 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const { Button, Text } = require('@nudj/components')
+const { Button, Text, Input, CopyString } = require('@nudj/components')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const Layout = require('../../components/app-layout')
@@ -12,6 +12,7 @@ const TitleCard = require('../../components/title-card')
 const style = require('./style.css')
 const {
   setNestedFieldValue,
+  setValue,
   addAdditionalField,
   submitInvitations
 } = require('./actions')
@@ -34,9 +35,23 @@ class InviteTeamPage extends React.Component {
     dispatch(submitInvitations())
   }
 
+  handleCopy = () => {
+    const { dispatch } = this.props
+    dispatch(setValue('hasCopied', true))
+  }
+
+  handleCopyBlur = () => {
+    const { dispatch } = this.props
+    dispatch(setValue('hasCopied', false))
+  }
+
   render () {
     const { invitePage: state } = this.props
-    const { fieldValues, fieldCount } = state
+    const { fieldValues, fieldCount, hasCopied } = state
+    const { company } = this.props.user.hirer
+    const { url } = this.props.app
+
+    const invitationLink = `${url.protocol}://${url.hostname}/invitation-accept/${company.hash}`
 
     return (
       <Layout {...this.props}>
@@ -45,7 +60,7 @@ class InviteTeamPage extends React.Component {
         </Helmet>
         <Main>
           <Section>
-            <TitleCard title='Get your team on nudj'>
+            <TitleCard styleSheet={{ card: style.card }} title='Invite your team to nudj'>
               <Text element='p' style={mss.mbReg}>
                 With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
               </Text>
@@ -64,6 +79,25 @@ class InviteTeamPage extends React.Component {
               >
                 Send invites
               </Button>
+            </TitleCard>
+            <TitleCard styleSheet={{ body: style.body }} title='Share link'>
+              <Input
+                id='invitation-link'
+                value={invitationLink}
+                name='invitation-link'
+                styleSheet={{ root: style.invitationLink, input: style.invitationInput }}
+                readOnly
+                nonsensitive
+              />
+              <CopyString
+                onCopy={this.handleCopy}
+                onBlur={this.handleCopyBlur}
+                volume={hasCopied ? 'murmur' : 'cheer'}
+                string={invitationLink}
+                subtle
+                >
+                { hasCopied ? 'Copied!' : 'Copy' }
+              </CopyString>
             </TitleCard>
           </Section>
         </Main>

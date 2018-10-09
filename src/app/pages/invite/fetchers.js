@@ -9,6 +9,7 @@ const get = () => {
         hirer {
           company {
             id
+            hash
           }
         }
       }
@@ -28,6 +29,7 @@ const post = ({ body, analytics }) => {
         hirer {
           company {
             id
+            hash
             inviteMembers(members: $members) {
               success
             }
