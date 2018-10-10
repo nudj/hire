@@ -14,11 +14,8 @@
   },
   "homepage": "https://github.com/nudj/web#readme",
   "scripts": {
-    "start": "yarn run build:dlls && yarn run build:client && node .",
-    "dev": "yarn run build:dlls && USE_DEV_SERVER=true DEV_SERVER_PATH=https://hire-wds.local.nudj.co yarn run watch:all",
     "build:client": "webpack --config ./webpack.config.client.js --bail --hide-modules",
-    "build:dlls": "webpack --config ./webpack.config.dll.js --bail --hide-modules",
-    "watch:all": "webpack-dev-server --config ./webpack.config.client.js & webpack --config ./webpack.config.server.js"
+    "build:dlls": "webpack --config ./webpack.config.dll.js --bail --hide-modules"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -27,8 +24,7 @@
       "app/server/build*",
       "app/node_modules",
       "webpack*",
-      "@nudj",
-      "app/server/hot*"
+      "@nudj"
     ]
   },
   "dependencies": {
@@ -80,21 +76,16 @@
     "babel-preset-env": "~1.6.1",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
-    "clean-webpack-plugin": "^0.1.19",
     "dirty-chai": "^1.2.2",
     "mocha": "^3.2.0",
     "nock": "^9.0.25",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.18.4",
     "proxyquire": "^1.8.0",
-    "react-hot-loader": "^4.0.0",
     "redux-mock-store": "^1.3.0",
     "sinon": "4.0.1",
     "sinon-chai": "2.14.0",
     "standard": "^10.0.3",
-    "start-server-webpack-plugin": "^2.2.1",
     "uglifyjs-webpack-plugin": "^1.1.6",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack": "^3.10.0"
   }
 }

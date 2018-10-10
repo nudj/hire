@@ -3,9 +3,9 @@ export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='hire» '
 
-alias run="yarn start"
-alias dev="yarn run dev"
-alias test="standard && mocha  --compilers js:babel-core/register --recursive test/unit"
+alias run="yarn run build:dlls && yarn run build:client && node ."
+alias dev='yarn run build:dlls && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "yarn run build:client && node ."'
+alias test="standard && mocha --compilers js:babel-core/register --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
