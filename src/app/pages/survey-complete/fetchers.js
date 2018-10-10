@@ -141,7 +141,7 @@ const completeSurvey = async ({ session, params, res, analytics, requestGQL }) =
       const { hirer } = data.user
 
       throw new Redirect({
-        url: hirer.type === hirerTypes.ADMIN ? '/' : '/discover?favourites=true'
+        url: hirer.type === hirerTypes.ADMIN ? '/' : '/contacts?favourites=true'
       })
     }
 

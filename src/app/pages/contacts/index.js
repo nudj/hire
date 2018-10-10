@@ -126,11 +126,11 @@ class DiscoverPage extends React.Component {
     const { hirerTypes } = this.props.enums
     const {
       user,
-      discoverPage: state,
+      contactsPage: state,
       csrfToken,
-      match,
       history,
-      location
+      location,
+      url
     } = this.props
 
     const isAdmin = user.hirer.type === hirerTypes.ADMIN
@@ -140,7 +140,7 @@ class DiscoverPage extends React.Component {
       showFilters
     } = this.state
     const { newContact } = state
-    const jobId = get(match, 'params.jobId')
+    const jobId = get(url, 'query.job')
     const connections = get(user, 'results.connections', [])
     const totalConnectionsCount = get(user, 'connectionsCount', 0)
     const expertiseTags = get(user, 'results.tags', [])
