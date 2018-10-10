@@ -12,7 +12,6 @@ services:
       - ../hire/src/.npmrc:/usr/src/.npmrc
       - ../hire/src/nodemon.json:/usr/src/nodemon.json
       - ../hire/src/package.json:/usr/src/package.json
-      - ../hire/src/webpack.config.server.js:/usr/src/webpack.config.server.js
       - ../hire/src/webpack.config.client.js:/usr/src/webpack.config.client.js
       - ../hire/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       - ../hire/src/yarn.lock:/usr/src/yarn.lock
@@ -24,5 +23,3 @@ services:
       - ../passport-auth0:/usr/src/yank/@nudj/passport-auth0
     stdin_open: true
     command: /bin/zsh
-    ports:
-      - "81:81"
