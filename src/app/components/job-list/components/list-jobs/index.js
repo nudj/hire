@@ -151,7 +151,7 @@ class ListAllJobs extends React.Component {
     return merge(shareCopy, {
       onCopy: () => this.handleShareClick('link', job),
       nudj: {
-        to: `/discover/job/${job.id}`,
+        to: `/contacts?job=${job.id}`,
         onClick: () => this.handleShareClick('nudj-button', job)
       },
       whatsapp: {
@@ -303,7 +303,6 @@ class ListAllJobs extends React.Component {
             isAdmin={isAdmin}
             onChange={onChange}
             values={values}
-            style={mss.mtReg}
           />
         )}
         {draft && draft.length > 0 && (

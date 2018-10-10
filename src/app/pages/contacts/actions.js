@@ -52,11 +52,11 @@ const setNewItemValue = (name, key, value) => ({
 
 const submitNewConnection = () => (dispatch, getState) => {
   const state = getState()
-  const data = get(state, 'discoverPage.newContact')
+  const data = get(state, 'contactsPage.newContact')
   const csrfToken = get(state, 'app.csrfToken')
 
   return axios({
-    url: '/discover',
+    url: '/contacts',
     method: 'post',
     headers: {
       Accept: 'application/json',
@@ -82,7 +82,7 @@ const submitNewConnection = () => (dispatch, getState) => {
 }
 
 const search = (data) => actions.app.postData({
-  url: '/discover',
+  url: '/contacts',
   method: 'get',
   params: data,
   showLoadingState: false
@@ -90,7 +90,7 @@ const search = (data) => actions.app.postData({
 
 const submitQuery = () => async (dispatch, getState) => {
   const state = getState()
-  const { searchQuery, favouritesFilter } = state.discoverPage
+  const { searchQuery, favouritesFilter } = state.contactsPage
 
   dispatch(startSearchAndClearTagFilters())
 
@@ -104,7 +104,7 @@ const submitQuery = () => async (dispatch, getState) => {
 
 const submitSearch = () => async (dispatch, getState) => {
   const state = getState()
-  const { searchQuery, favouritesFilter, expertiseTagFilter } = state.discoverPage
+  const { searchQuery, favouritesFilter, expertiseTagFilter } = state.contactsPage
 
   dispatch(startSearch())
 

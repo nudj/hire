@@ -32,7 +32,7 @@ const expressRouters = {
     require('./server/routers/google-oauth'),
     require('./pages/check-device-wrapper/router'),
     require('./pages/root/router'),
-    require('./pages/discover/router'),
+    require('./pages/contacts/router'),
     require('./pages/messages/router'),
     require('./pages/favourites/router'),
     require('./pages/setup-linkedin/router'),

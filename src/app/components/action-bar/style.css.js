@@ -6,6 +6,7 @@ const styleSheet = StyleSheet.create({
     paddingRight: 0,
     paddingBottom: 0,
     paddingLeft: 0,
+    marginBottom: sizes.regular,
     display: 'flex',
     alignItems: 'stretch',
     justifyContent: 'flex-end'

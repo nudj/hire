@@ -8,17 +8,17 @@ const Router = ({
   respondWithGql
 }) => {
   const router = createRouter()
-  router.use('/discover', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
+  router.use('/contacts', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
 
-  router.getHandlers('/discover', respondWithGql(fetchers.getContacts))
-  router.postHandlers('/discover', respondWithGql(fetchers.postContact))
+  router.getHandlers('/contacts', respondWithGql(fetchers.getContacts))
+  router.postHandlers('/contacts', respondWithGql(fetchers.postContact))
 
   router.getHandlers('/discover/job/:jobId', respondWithGql(fetchers.getContacts))
   router.postHandlers('/discover/job/:jobId', respondWithGql(fetchers.postContact))
 
   // Legacy URLs
-  router.getHandlers('/contacts', (req, res) => {
-    res.redirect('/discover')
+  router.getHandlers('/discover', (req, res) => {
+    res.redirect('/contacts')
   })
 
   return router

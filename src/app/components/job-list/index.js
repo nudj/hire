@@ -154,7 +154,7 @@ class JobList extends React.Component {
                       not just the obvious ones.
                     </Para>
                     <ButtonLink
-                      href='/discover'
+                      href='/contacts'
                       volume='cheer'
                       style={style.helpLink}
                       subtle

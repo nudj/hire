@@ -211,7 +211,7 @@ const hasActiveJobs = (data) => {
   if (jobs.length) return data
 
   throw new Redirect({
-    url: '/discover',
+    url: '/contacts',
     notification: createNotification(
       'info',
       'To message someone, please publish a job'
