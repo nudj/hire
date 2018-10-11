@@ -304,6 +304,7 @@ const styleSheet = StyleSheet.create({
   },
   main: {
     width: '100%',
+    overflow: 'hidden',
     '@media(min-width: 48rem)': {
       marginLeft: sizes.largeIi
     }
