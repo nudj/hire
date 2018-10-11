@@ -1,5 +1,6 @@
 const { Redirect, NotFound } = require('@nudj/library/errors')
 const { createEnumMap } = require('../../../lib')
+const { Global } = require('../../../lib/graphql')
 
 const get = ({ params }) => {
   const gql = `
@@ -14,6 +15,7 @@ const get = ({ params }) => {
           }
         }
       }
+      ${Global}
     }
   `
   const variables = {
