@@ -2,6 +2,7 @@ require('envkey')
 var path = require('path')
 var webpack = require('webpack')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 process.noDeprecation = true
 
@@ -21,7 +22,11 @@ const plugins = [
     'MIXPANEL_API_TOKEN'
   ]),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
-  process.env.DEBUG !== 'true' && new UglifyJSPlugin()
+  process.env.DEBUG !== 'true' && new UglifyJSPlugin(),
+  new ProgressBarPlugin({
+    format: `\x1b[36mBuild\x1b[0m [:bar] \x1b[32m:percent\x1b[0m`,
+    clear: false
+  })
 ].filter(plugin => plugin)
 
 const config = {
