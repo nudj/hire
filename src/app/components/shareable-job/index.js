@@ -7,7 +7,7 @@ let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
-const { StylePropType } = require('@nudj/components/lib/helpers/prop-types')
+const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 const CardStyleSheet = require('@nudj/components/lib/components/card/style.css')
 
@@ -28,7 +28,7 @@ const { styleSheet: defaultStyleSheet, inputStyleSheet } = require('./style.css'
 
 class ShareableJob extends React.Component {
   static propTypes = {
-    styleSheet: StylePropType,
+    styleSheet: CustomPropTypes.style,
     referralUrl: PropTypes.string,
     jobUrl: PropTypes.string,
     applicantsUrl: PropTypes.string,

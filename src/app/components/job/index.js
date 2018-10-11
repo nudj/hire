@@ -7,7 +7,7 @@ memoize = memoize.default || memoize
 
 const { PillGroup, Text, Icon } = require('@nudj/components')
 const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
-const { StylePropType } = require('@nudj/components/lib/helpers/prop-types')
+const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
 
 const formatExpertiseTag = require('../../lib/format-expertise-tag')
 const defaultStyleSheet = require('./style.css')
@@ -26,7 +26,7 @@ class Job extends React.Component {
     bonus: PropTypes.string,
     children: PropTypes.node,
     expertiseTags: PropTypes.array,
-    styleSheet: StylePropType
+    styleSheet: CustomPropTypes.style
   }
 
   getStyle = memoize(

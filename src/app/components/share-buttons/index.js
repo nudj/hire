@@ -11,13 +11,13 @@ const {
   WhatsappButton,
   EmailButton
 } = require('@nudj/components')
-const { ComponentPropType, StylePropType } = require('@nudj/components/lib/helpers/prop-types')
+const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
 
 class ShareButtons extends React.Component {
   static propTypes = {
     nudj: PropTypes.shape({
       to: PropTypes.string.isRequired,
-      Component: ComponentPropType
+      Component: CustomPropTypes.component
     }),
     whatsapp: PropTypes.shape({
       text: PropTypes.string.isRequired
@@ -46,7 +46,7 @@ class ShareButtons extends React.Component {
       gmail: PropTypes.bool
     }),
     tabIndex: PropTypes.number,
-    style: StylePropType
+    style: CustomPropTypes.style
   }
 
   render () {
