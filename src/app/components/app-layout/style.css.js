@@ -54,7 +54,7 @@ const styleSheet = StyleSheet.create({
   root: {
     backgroundColor: colors.greyLightest,
     marginBottom: sizes.largeIi,
-    minHeight: '100%'
+    minHeight: `calc(100% - ${sizes.largeIi})`
   },
   pageHeader: {
     display: 'flex',
