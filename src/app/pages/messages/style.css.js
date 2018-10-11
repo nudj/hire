@@ -38,7 +38,7 @@ const styleSheet = StyleSheet.create({
   },
   betaFeature: {
     marginTop: '0',
-    marginBottom: '2rem'
+    marginBottom: '1rem'
   },
   betaTag: {
     ...typography.type.smallIi,
@@ -49,7 +49,8 @@ const styleSheet = StyleSheet.create({
     paddingLeft: sizes.smallIi,
     paddingBottom: sizes.smallIi,
     paddingRight: sizes.smallIi,
-    borderRadius: '0.25rem'
+    borderRadius: '0.25rem',
+    display: 'inline-block'
   }
 })
 
