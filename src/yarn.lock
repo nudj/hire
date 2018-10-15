@@ -258,9 +258,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.1.1.tgz#f6751b2b3367f4d25c09292f9c2d6252fbe84282"
+"@nudj/library@7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.2.0.tgz#a5d4876af8a2b487bfbaec352035e4c7fa546bc6"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
@@ -274,9 +274,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.2.0.tgz#a5d4876af8a2b487bfbaec352035e4c7fa546bc6"
+"@nudj/library@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.3.0.tgz#975cc0236ff5cfe25456bd71303b98be6146a7b1"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
