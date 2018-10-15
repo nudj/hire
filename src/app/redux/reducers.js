@@ -8,6 +8,7 @@ const companySettingsPage = require('../pages/company-settings/reducer')
 const addBonusPage = require('../pages/add-jobs/set-bonus/reducer')
 const addJobPage = require('../pages/add-jobs/reducer')
 const editJobPage = require('../pages/edit-jobs/reducer')
+const editIntroPage = require('../pages/edit-intro/reducer')
 const selections = require('./reducers/selections')
 
 module.exports = {
@@ -20,6 +21,7 @@ module.exports = {
   addBonusPage,
   addJobPage,
   editJobPage,
+  editIntroPage,
   composeMessage,
   /** global */
   selections
