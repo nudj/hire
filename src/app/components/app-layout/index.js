@@ -55,6 +55,9 @@ const locations = [
         locations: [
           {
             path: '/intros/new'
+          },
+          {
+            path: '/intros/:introId'
           }
         ]
       },
