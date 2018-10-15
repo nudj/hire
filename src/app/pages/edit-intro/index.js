@@ -117,7 +117,6 @@ class EditIntroPage extends React.Component {
                   styleSheet={inputFieldStylesheet}
                   htmlFor='notes'
                   label='Notes'
-                  required
                 >
                   <Textarea
                     id='notes'
@@ -125,7 +124,6 @@ class EditIntroPage extends React.Component {
                     value={state.fieldValues.notes}
                     onChange={this.handleChange}
                     styleSheet={textareaStylesheet}
-                    required
                   />
                 </InputField>
                 <input name='_csrf' value={csrfToken} type='hidden' />

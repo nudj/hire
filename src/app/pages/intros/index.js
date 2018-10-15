@@ -78,7 +78,7 @@ const IntrosPage = props => {
                         Component='a'
                         href={`/intros/${intro.id}`}
                       >
-                        View notes
+                        View details
                       </Action>
                     ]
                     }

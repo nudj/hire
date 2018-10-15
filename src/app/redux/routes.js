@@ -8,6 +8,7 @@ module.exports = {
   '/contacts': require('../pages/contacts'),
   '/intros': require('../pages/intros'),
   '/intros/new': require('../pages/edit-intro'),
+  '/intros/:introId': require('../pages/intro'),
   '/invitation-accept/:hash': require('../pages/invitation-accept'),
   '/invite': require('../pages/invite'),
   '/jobs/new': require('../pages/add-jobs'),
