@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const actions = require('@nudj/framework/actions')
-const { Button, Checkbox, ListMultiSelect, Modal } = require('@nudj/components')
+const { Button, Checkbox, CheckboxList, Modal } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -167,7 +167,7 @@ class ShareWithTeamPage extends React.Component {
                 </Button>
               ]}
             </ActionBar>
-            <ListMultiSelect
+            <CheckboxList
               style={mss.mtReg}
               name='team-list'
               onChange={this.handleTeamChange}
@@ -190,7 +190,7 @@ class ShareWithTeamPage extends React.Component {
                   />
                 )
               }))}
-            </ListMultiSelect>
+            </CheckboxList>
           </Section>
         </Main>
         <Modal
