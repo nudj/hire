@@ -23,6 +23,7 @@ module.exports = {
   '/contacts': require('../pages/contacts'),
   '/applications': require('../pages/applications'),
   '/notification-sent': require('../pages/notification-sent'),
+  '/intros': require('../pages/intros'),
   '/invite': require('../pages/invite'),
   '/request-access/:companySlug': require('../pages/request-access'),
   '/access-requests/:accessRequestSlug': require('../pages/access-request'),

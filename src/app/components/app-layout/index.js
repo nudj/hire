@@ -50,6 +50,10 @@ const locations = [
         ]
       },
       {
+        path: '/intros',
+        title: 'Intros'
+      },
+      {
         path: '/applications',
         adminOnly: true,
         title: 'Applications'
