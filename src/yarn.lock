@@ -146,9 +146,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-3.0.0.tgz#ebb63aef903c9cffaff6d37da6aec121fd990326"
+"@nudj/components@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-4.0.0.tgz#620452f64bb7c241a85147c1facbebd68fa371b8"
   dependencies:
     "@nudj/library" "7.2.0"
     aphrodite "^1.2.0"

@@ -51,7 +51,12 @@ const locations = [
       },
       {
         path: '/intros',
-        title: 'Intros'
+        title: 'Intros',
+        locations: [
+          {
+            path: '/intros/new'
+          }
+        ]
       },
       {
         path: '/applications',
