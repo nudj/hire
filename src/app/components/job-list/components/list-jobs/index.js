@@ -2,7 +2,7 @@ const React = require('react')
 const groupBy = require('lodash/groupBy')
 
 const { getJobUrl, getReferralUrl, merge } = require('@nudj/library')
-const { Card, Checkbox, ListMultiSelect } = require('@nudj/components')
+const { Card, Checkbox, CheckboxList } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 const mss = require('@nudj/components/lib/css/modifiers.css')
 
@@ -45,7 +45,7 @@ const ListSelectableJobs = (props) => {
   } = props
 
   return (
-    <ListMultiSelect
+    <CheckboxList
       name={name}
       onChange={onChange}
       values={values}
@@ -65,7 +65,7 @@ const ListSelectableJobs = (props) => {
           />
         )
       }))}
-    </ListMultiSelect>
+    </CheckboxList>
   )
 }
 
