@@ -21,7 +21,7 @@ const IntrosPage = props => {
 
   return (
     <Layout {...props}>
-      {!jobsWithIntros.length ? (
+      {jobsWithIntros.length ? (
         <div>
           <ActionBar>
             {actionStyle => [
@@ -83,10 +83,9 @@ const IntrosPage = props => {
                             Component='a'
                             href={`/intros/${intro.id}`}
                           >
-                            View notes
+                            View details
                           </Action>
-                        ]
-                        }
+                        ]}
                       </ActionableListContents>
                     </ListItem>
                   ))}
