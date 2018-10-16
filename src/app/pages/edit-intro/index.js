@@ -59,8 +59,9 @@ class EditIntroPage extends React.Component {
                     name='job'
                     value={state.fieldValues.job}
                     onChange={this.handleChange}
+                    required
                   >
-                    <option value='' disabled hidden>Choose a job</option>
+                    <option value='' disabled>Choose a job</option>
                     {jobs.map(job => (
                       <option key={job.id} value={job.id}>
                         {job.title}

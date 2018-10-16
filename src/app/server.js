@@ -23,6 +23,7 @@ const reduxReducers = require('./redux/reducers')
 const LoadingPage = require('./pages/loading')
 const getAnalytics = require('./server/lib/getAnalytics')
 
+// The order of the routes is significant
 const expressRouters = {
   insecure: [
     require('./server/routers/health-check')
@@ -43,8 +44,8 @@ const expressRouters = {
     require('./pages/applications/router'),
     require('./pages/invite/router'),
     require('./pages/intros/router'),
-    require('./pages/intro/router'),
     require('./pages/edit-intro/router'),
+    require('./pages/intro/router'),
     require('./pages/welcome/router'),
     require('./pages/share-jobs/router'),
     require('./pages/share-with-team/router'),
