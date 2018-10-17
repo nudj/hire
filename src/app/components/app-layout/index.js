@@ -13,6 +13,7 @@ const NavLink = require('../navigation-link')
 const Notification = require('../notification')
 const ScrollTop = require('../scroll-top')
 const { memberTypes } = require('../../lib/constants')
+const { closeDropdown } = require('../../redux/actions/dropdowns')
 
 const defaultStyleSheet = require('./style.css')
 
@@ -106,12 +107,22 @@ const locations = [
           {
             path: '/team/invite',
             adminOnly: true
+          },
+          {
+            path: '/team/:hirerId',
+            adminOnly: true
+          },
+          {
+            path: '/team/:hirerId/edit',
+            adminOnly: true
           }
         ]
       }
     ]
   }
 ]
+
+const onClick = dispatch => () => dispatch(closeDropdown())
 
 const ApplicationLayout = props => {
   const {
@@ -135,7 +146,7 @@ const ApplicationLayout = props => {
 
   return (
     <ScrollTop ignore={history.action === 'REPLACE'}>
-      <div className={css(style.root)}>
+      <div className={css(style.root)} onClick={onClick(props.dispatch)}>
         <Helmet>
           <body className={css(style.htmlBody)} />
         </Helmet>

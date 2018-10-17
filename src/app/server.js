@@ -58,6 +58,8 @@ const expressRouters = {
     require('./pages/request-access/router'),
     require('./pages/access-request/router'),
     require('./pages/invitation-accept/router'),
+    require('./pages/hirer/router'),
+    require('./pages/hirer-edit/router'),
     require('./server/routers/catch-all')
   ]
 }

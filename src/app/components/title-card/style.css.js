@@ -10,8 +10,9 @@ const styleSheet = StyleSheet.create({
     color: colors.greyDarker,
     borderBottom: `1px solid ${colors.greyLight}`,
     paddingTop: sizes.regular,
-    paddingLeft: sizes.largeI,
-    paddingBottom: sizes.regular
+    paddingRight: sizes.largeI,
+    paddingBottom: sizes.regular,
+    paddingLeft: sizes.largeI
   },
   body: {
     textAlign: 'left',

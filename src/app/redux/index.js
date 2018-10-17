@@ -3,10 +3,9 @@ const { Helmet } = require('react-helmet')
 const isEqual = require('lodash/isEqual')
 const cookies = require('js-cookie')
 const classnames = require('classnames')
-
 const { css } = require('@nudj/components/lib/css')
-const style = require('./style.css')
 
+const style = require('./style.css')
 const analytics = require('../lib/browser-analytics')
 
 class ReduxRoot extends React.Component {
@@ -50,7 +49,10 @@ class ReduxRoot extends React.Component {
 
   render () {
     return (
-      <div className={classnames(this.props.className, css(style.root))}>
+      <div
+        className={classnames(this.props.className, css(style.root))}
+        onClick={this.onClick}
+      >
         <Helmet titleTemplate='%s | nudj' defaultTitle='nudj'>
           <meta charSet='utf-8' />
           <meta name='viewport' content='width=device-width, initial-scale=1' />

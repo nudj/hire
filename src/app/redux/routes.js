@@ -30,5 +30,7 @@ module.exports = {
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/sync-contacts/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
   '/sync-contacts/linkedin/upload': checkMobileDevice(require('../pages/setup-linkedin/upload-connections')),
-  '/team': require('../pages/team')
+  '/team': require('../pages/team'),
+  '/team/:hirerId': require('../pages/hirer'),
+  '/team/:hirerId/edit': require('../pages/hirer-edit')
 }

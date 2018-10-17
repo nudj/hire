@@ -12,6 +12,7 @@ const { toggleDropdown } = require('../../redux/actions/dropdowns')
 function handleDropdownClick (dispatch, id) {
   dispatch(toggleDropdown(id))
 }
+const stopPropagation = event => event.stopPropagation()
 
 const Dropdown = props => {
   const {
@@ -28,7 +29,7 @@ const Dropdown = props => {
   const handleClick = () => handleDropdownClick(dispatch, id)
 
   return (
-    <div className={css(style.dropdown)}>
+    <div className={css(style.dropdown)} onClick={stopPropagation}>
       <div onClick={handleClick} className={css(style.header)}>
         {header}
         {chevron && <Icon name='chevron' style={style.chevron} />}
@@ -36,7 +37,7 @@ const Dropdown = props => {
       {dropdowns.activeDropdown === id && (
         <div className={css(style.dropdownContent)}>
           <ul className={css(style.list)}>
-            {children && children.map((child, i) => (
+            {children && [].concat(children).map((child, i) => (
               <li className={css(style.listItem)} key={i}>
                 {child}
               </li>

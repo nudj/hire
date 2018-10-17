@@ -9,6 +9,8 @@ const addBonusPage = require('../pages/add-jobs/set-bonus/reducer')
 const addJobPage = require('../pages/add-jobs/reducer')
 const editJobPage = require('../pages/edit-jobs/reducer')
 const editIntroPage = require('../pages/edit-intro/reducer')
+const hirerPage = require('../pages/hirer/reducer')
+const hirerEditPage = require('../pages/hirer-edit/reducer')
 const selections = require('./reducers/selections')
 const dropdowns = require('./reducers/dropdowns')
 
@@ -23,6 +25,8 @@ module.exports = {
   addJobPage,
   editJobPage,
   editIntroPage,
+  hirerPage,
+  hirerEditPage,
   composeMessage,
   /** global **/
   selections,
