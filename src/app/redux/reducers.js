@@ -10,6 +10,7 @@ const addJobPage = require('../pages/add-jobs/reducer')
 const editJobPage = require('../pages/edit-jobs/reducer')
 const editIntroPage = require('../pages/edit-intro/reducer')
 const selections = require('./reducers/selections')
+const dropdowns = require('./reducers/dropdowns')
 
 module.exports = {
   surveyQuestionPage,
@@ -23,6 +24,7 @@ module.exports = {
   editJobPage,
   editIntroPage,
   composeMessage,
-  /** global */
-  selections
+  /** global **/
+  selections,
+  dropdowns
 }
