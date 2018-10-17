@@ -3,7 +3,7 @@ const PropTypes = require('prop-types')
 const { connect } = require('react-redux')
 
 const { merge } = require('@nudj/library')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 const { Icon } = require('@nudj/components')
 
 const defaultStyles = require('./style.css')
