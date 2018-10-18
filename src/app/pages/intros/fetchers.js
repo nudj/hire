@@ -25,7 +25,7 @@ const get = async ({ requestGQL }) => {
               created
               status
               slug
-              intros {
+              intros: introsForHirer {
                 id
                 created
                 notes
