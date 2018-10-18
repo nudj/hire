@@ -45,7 +45,7 @@ const TeamPage = props => {
                 if (!hirers.length) return null
 
                 return (
-                  <div>
+                  <div key={hirerType}>
                     <Heading level={2} size='smallIi' nonsensitive style={style.listDivider}>
                       {`${startCase(hirerType.toLowerCase())}s`}
                     </Heading>
