@@ -8,6 +8,7 @@ const get = ({ params }) => {
     ) {
       user {
         hirer {
+          id
           company {
             hirer (
               id: $hirerId
