@@ -10,7 +10,7 @@ module.exports = {
   '/intros/new': require('../pages/edit-intro'),
   '/intros/:introId': require('../pages/intro'),
   '/invitation-accept/:hash': require('../pages/invitation-accept'),
-  '/invite': require('../pages/invite'),
+  '/team/invite': require('../pages/invite'),
   '/jobs/new': require('../pages/add-jobs'),
   '/jobs/share-with-team': require('../pages/share-with-team'),
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),

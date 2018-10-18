@@ -48,7 +48,7 @@ const submitInvitations = () => async (dispatch, getState) => {
   dispatch(resetForm())
   await dispatch(
     actions.app.postData({
-      url: '/invite',
+      url: '/team/invite',
       method: 'post',
       data: { members }
     })

@@ -10,15 +10,20 @@ const {
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
   router.use(
-    '/invite',
+    '/team/invite',
     ensureLoggedIn,
     ensureNoAccessRequestsPending,
     ensureOnboarded,
     ensureAdmin
   )
 
-  router.getHandlers('/invite', respondWithGql(fetchers.get))
-  router.postHandlers('/invite', respondWithGql(fetchers.post))
+  router.getHandlers('/team/invite', respondWithGql(fetchers.get))
+  router.postHandlers('/team/invite', respondWithGql(fetchers.post))
+
+  // Legacy URL
+  router.getHandlers('/invite', (req, res) => {
+    res.redirect('/team/invite')
+  })
 
   return router
 }

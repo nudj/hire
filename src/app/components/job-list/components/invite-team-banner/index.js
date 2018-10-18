@@ -27,7 +27,7 @@ const InviteTeamBanner = OncePerSession('invite-team-banner', ({ close }) => (
     <ButtonLink
       style={style.action}
       volume='cheer'
-      href='/invite'
+      href='/team/invite'
       onClick={close}
     >
       Invite team
