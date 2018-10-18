@@ -288,7 +288,7 @@ class ListAllJobs extends React.Component {
                   key='share-jobs-button'
                   style={actionStyle}
                   volume='cheer'
-                  to={hasTeam ? '/jobs/share-with-team' : '/invite'}
+                  to={hasTeam ? '/jobs/share-with-team' : '/team/invite'}
                   subtle
                 >
                   {getShareButtonCopy(values.length, published.length)}

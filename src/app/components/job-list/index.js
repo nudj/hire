@@ -134,7 +134,7 @@ class JobList extends React.Component {
                     hands make light work (and more referrals).
                   </Para>
                   <ButtonLink
-                    href='/invite'
+                    href='/team/invite'
                     volume='cheer'
                     style={style.helpLink}
                     subtle

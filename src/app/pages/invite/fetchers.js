@@ -62,7 +62,7 @@ const post = ({ body, analytics }) => {
 
   const catcher = (e) => {
     throw new Redirect({
-      url: '/invite',
+      url: '/team/invite',
       notification: {
         type: 'error',
         message: 'Something went wrong while sending your invitations! Please try again.'

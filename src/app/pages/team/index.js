@@ -30,7 +30,7 @@ const TeamPage = props => {
                 key='invite-button'
                 style={actionStyle}
                 volume='cheer'
-                to='/invite'
+                to='/team/invite'
                 subtle
               >
                 Invite teammates
@@ -89,7 +89,7 @@ const TeamPage = props => {
           </Para>
           <ButtonLink
             nonsensitive
-            href='/invite'
+            href='/team/invite'
             style={mss.mtLgI}
             volume='cheer'
             subtle
