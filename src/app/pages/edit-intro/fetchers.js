@@ -1,13 +1,22 @@
 const { Redirect } = require('@nudj/framework/errors')
 const { Global } = require('../../lib/graphql')
+const fetchEnums = require('../../lib/fetch-enums')
 
-const get = () => {
+const get = async () => {
+  const JobStatuses = await fetchEnums('JobStatus')
+
   const gql = `
-    query {
+    query (
+      $status: JobStatus
+    ) {
       user {
         hirer {
           company {
-            jobs {
+            jobs: jobsByFilters (
+              filters: {
+                status: $status
+              }
+            ) {
               id
               title
             }
@@ -18,18 +27,33 @@ const get = () => {
     }
   `
 
-  return { gql }
+  const variables = {
+    status: JobStatuses.PUBLISHED
+  }
+
+  return { gql, variables }
 }
 
-const post = ({ body, analytics }) => {
+const post = async ({ body, analytics }) => {
   const { job, firstName, lastName, email, notes } = body
+  const JobStatuses = await fetchEnums('JobStatus')
+
   const gql = `
-    mutation CreateIntro ($jobId: ID!, $candidate: PersonCreateInput!, $notes: String) {
+    mutation CreateIntro (
+      $jobId: ID!,
+      $candidate: PersonCreateInput!,
+      $notes: String,
+      $status: JobStatus
+    ) {
       user {
         hirer {
           company {
             name
-            jobs {
+            jobs: jobsByFilters (
+              filters: {
+                status: $status
+              }
+            ) {
               id
               title
             }
@@ -48,10 +72,6 @@ const post = ({ body, analytics }) => {
           }
         }
       }
-      notification: setNotification(type: "success", message: "Intro created!") {
-        type
-        message
-      }
       ${Global}
     }
   `
@@ -63,7 +83,8 @@ const post = ({ body, analytics }) => {
       firstName,
       lastName,
       email
-    }
+    },
+    status: JobStatuses.PUBLISHED
   }
 
   const transformData = data => {
@@ -80,6 +101,11 @@ const post = ({ body, analytics }) => {
         candidateName: `${firstName} ${lastName}`
       }
     })
+
+    data.notification = {
+      type: 'success',
+      message: 'Intro created!'
+    }
 
     return data
   }
