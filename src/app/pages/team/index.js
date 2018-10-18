@@ -17,8 +17,8 @@ const TeamPage = props => {
   const { hirers } = props.user.hirer.company
 
   const hirersExcludingUser = hirers.filter(hirer => hirer.id !== userHirer.id)
-  const hirersExcludingUserGroupedByType = groupBy(hirersExcludingUser, 'type')
-  const hirerTypes = Object.keys(hirersExcludingUserGroupedByType).sort()
+  const hirersGroupedByType = groupBy(hirers, 'type')
+  const hirerTypes = Object.keys(hirersGroupedByType).sort()
 
   return (
     <Layout {...props}>
@@ -40,7 +40,7 @@ const TeamPage = props => {
           <div className={css(style.listContainer)}>
             <List style={mss.mtReg}>
               {ListItem => hirerTypes.map(hirerType => {
-                const hirers = hirersExcludingUserGroupedByType[hirerType]
+                const hirers = hirersGroupedByType[hirerType]
 
                 if (!hirers.length) return null
 
