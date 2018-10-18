@@ -102,12 +102,13 @@ const post = async ({ body, analytics }) => {
       }
     })
 
-    data.notification = {
-      type: 'success',
-      message: 'Intro created!'
-    }
-
-    return data
+    throw new Redirect({
+      url: '/intros',
+      notification: {
+        type: 'success',
+        message: 'New intro added 🎉'
+      }
+    })
   }
 
   const catcher = () => {
