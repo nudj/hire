@@ -99,6 +99,11 @@ const locations = [
         adminOnly: true
       },
       {
+        path: '/team',
+        title: 'Team',
+        adminOnly: true
+      },
+      {
         path: '/invite',
         title: 'Invite',
         adminOnly: true
