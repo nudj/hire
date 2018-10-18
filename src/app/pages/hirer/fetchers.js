@@ -62,21 +62,19 @@ const deleteFetcher = ({ params, analytics }) => {
   }
 
   const respond = data => {
-    const { company } = data.user.hirer
-    const hirerPerson = company.hirer.person
+    const company = data.user.hirer.company
+    const hirer = company.hirer
+    const hirerPerson = hirer.person
 
-    // analytics.track({
-    //   object: analytics.objects.hirer,
-    //   action: analytics.actions.hirer.typeUpdated,
-    //   properties: {
-    //     newType: hirer.type,
-    //     companyName: company.name,
-    //     hirerEmail: hirerEmail,
-    //     hirerName: `${hirerFirstName} ${hirerLastName}`,
-    //     updatedByName: `${userFirstName} ${userLastName}`,
-    //     updatedByEmail: userEmail
-    //   }
-    // })
+    analytics.track({
+      object: analytics.objects.hirer,
+      action: analytics.actions.hirer.removed,
+      properties: {
+        companyName: company.name,
+        hirerEmail: hirerPerson.email,
+        hirerName: `${hirerPerson.firstName} ${hirerPerson.lastName}`
+      }
+    })
 
     throw new Redirect({
       url: `/team`,
