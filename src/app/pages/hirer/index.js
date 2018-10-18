@@ -52,8 +52,10 @@ class HirerPage extends React.Component {
 
   render () {
     const { hirerPage: state, user } = this.props
-    const hirer = get(user, 'hirer.company.hirer', {})
+    const userHirer = get(user, 'hirer', {})
+    const hirer = get(userHirer, 'company.hirer', {})
     const title = 'Teammate details'
+    const showActions = hirer.id !== userHirer.id
 
     return (
       <Layout {...this.props}>
@@ -64,7 +66,7 @@ class HirerPage extends React.Component {
           <Section>
             <TitleCard
               title={title}
-              titleRight={(
+              titleRight={showActions && (
                 <Dropdown
                   id='teammate'
                   header='Actions'

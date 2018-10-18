@@ -8,6 +8,7 @@ const get = ({ params }) => {
     ) {
       user {
         hirer {
+          id
           company {
             hirer (
               id: $hirerId
@@ -31,10 +32,29 @@ const get = ({ params }) => {
       ${Global}
     }
   `
+
   const variables = {
     hirerId: params.hirerId
   }
-  return { gql, variables }
+
+  const transformData = data => {
+    const userHirer = data.user.hirer
+    const hirerToEdit = userHirer.company.hirer
+
+    if (hirerToEdit.id === userHirer.id) {
+      throw new Redirect({
+        url: `/team/${hirerToEdit.id}`,
+        notification: {
+          type: 'error',
+          message: 'You cannot edit your own hirer status. Please ask another admin-level teammate to make the change instead.'
+        }
+      })
+    }
+
+    return data
+  }
+
+  return { gql, variables, transformData }
 }
 
 const patch = ({ params, body, analytics }) => {
