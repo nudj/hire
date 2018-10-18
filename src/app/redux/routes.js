@@ -29,5 +29,6 @@ module.exports = {
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/sync-contacts/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),
-  '/sync-contacts/linkedin/upload': checkMobileDevice(require('../pages/setup-linkedin/upload-connections'))
+  '/sync-contacts/linkedin/upload': checkMobileDevice(require('../pages/setup-linkedin/upload-connections')),
+  '/team': require('../pages/team')
 }

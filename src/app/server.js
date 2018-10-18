@@ -46,6 +46,7 @@ const expressRouters = {
     require('./pages/intros/router'),
     require('./pages/edit-intro/router'),
     require('./pages/intro/router'),
+    require('./pages/team/router'),
     require('./pages/welcome/router'),
     require('./pages/share-jobs/router'),
     require('./pages/share-with-team/router'),
