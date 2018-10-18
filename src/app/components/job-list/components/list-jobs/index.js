@@ -297,15 +297,20 @@ class ListAllJobs extends React.Component {
             ]}
           </ActionBar>
         ) }
-        { published.length > 0 && (
-          <ListComponent
-            jobs={published}
-            isAdmin={isAdmin}
-            onChange={onChange}
-            values={values}
-          />
+        {published && published.length && (
+          <div className={css(styleSheet.list)}>
+            <Heading level={2} size='smallIi' nonsensitive style={[mss.mbReg, styleSheet.listTitle]}>
+              Published
+            </Heading>
+            <ListComponent
+              jobs={published}
+              isAdmin={isAdmin}
+              onChange={onChange}
+              values={values}
+            />
+          </div>
         )}
-        {draft && draft.length > 0 && (
+        {draft && draft.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Drafts
@@ -320,7 +325,7 @@ class ListAllJobs extends React.Component {
             />
           </div>
         )}
-        {archived && archived.length > 0 && (
+        {archived && archived.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Archived
