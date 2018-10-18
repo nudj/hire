@@ -44,11 +44,9 @@ const patch = ({ params, body, analytics }) => {
       $newType: HirerType!
     ) {
       user {
-        firstName
-        lastName
-        email
         hirer {
           company {
+            name
             hirer (
               id: $hirerId
             ) {
@@ -79,24 +77,20 @@ const patch = ({ params, body, analytics }) => {
   }
 
   const transformData = data => {
-    // const { user } = data
-    // const { company } = user.hirer
-    // const { hirer } = company
-    // const { userEmail, userFirstName, userLastName } = user
-    // const { hirerEmail, hirerFirstName, hirerLastName } = hirer.person
+    const company = data.user.hirer.company
+    const hirer = company.hirer
+    const hirerPerson = hirer.person
 
-    // analytics.track({
-    //   object: analytics.objects.hirer,
-    //   action: analytics.actions.hirer.typeUpdated,
-    //   properties: {
-    //     newType: hirer.type,
-    //     companyName: company.name,
-    //     hirerEmail: hirerEmail,
-    //     hirerName: `${hirerFirstName} ${hirerLastName}`,
-    //     updatedByName: `${userFirstName} ${userLastName}`,
-    //     updatedByEmail: userEmail
-    //   }
-    // })
+    analytics.track({
+      object: analytics.objects.hirer,
+      action: analytics.actions.hirer.updated,
+      properties: {
+        newType: hirer.type,
+        companyName: company.name,
+        hirerEmail: hirerPerson.email,
+        hirerName: `${hirerPerson.firstName} ${hirerPerson.lastName}`
+      }
+    })
 
     throw new Redirect({
       url: `/team/${params.hirerId}`,
