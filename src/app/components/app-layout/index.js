@@ -101,12 +101,13 @@ const locations = [
       {
         path: '/team',
         title: 'Team',
-        adminOnly: true
-      },
-      {
-        path: '/invite',
-        title: 'Invite',
-        adminOnly: true
+        adminOnly: true,
+        locations: [
+          {
+            path: '/team/invite',
+            adminOnly: true
+          }
+        ]
       }
     ]
   }
