@@ -124,7 +124,7 @@ class HirerPage extends React.Component {
                   volume='scream'
                   onClick={this.handleConfirmDelete}
                 >
-                  Delete
+                  Remove
                 </Button>
               </div>
             </TitleCard>
