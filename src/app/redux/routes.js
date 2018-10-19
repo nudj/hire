@@ -4,6 +4,7 @@ module.exports = {
   '/': require('../pages/root'),
   '/access-requests/:accessRequestSlug': require('../pages/access-request'),
   '/applications': require('../pages/applications'),
+  '/applications/:applicationId': require('../pages/application'),
   '/company-settings': require('../pages/company-settings'),
   '/contacts': require('../pages/contacts'),
   '/intros': require('../pages/intros'),

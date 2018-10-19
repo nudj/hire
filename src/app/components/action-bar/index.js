@@ -6,12 +6,12 @@ const style = require('./style.css')
 
 const ActionBar = ({ children }) => (
   <Card style={style.root}>
-    {children(style.action)}
+    {children && children(style.action)}
   </Card>
 )
 
 ActionBar.propTypes = {
-  children: PropTypes.func.isRequired
+  children: PropTypes.func
 }
 
 module.exports = ActionBar

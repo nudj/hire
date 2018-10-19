@@ -1,128 +1,105 @@
 const React = require('react')
-const { Helmet } = require('react-helmet')
-const get = require('lodash/get')
-const { format } = require('date-fns')
-const startCase = require('lodash/startCase')
-
-const mss = require('@nudj/components/lib/css/modifiers.css')
-const { css } = require('@nudj/components/lib/css')
-const { Align, Card, EmailButton, Text } = require('@nudj/components')
+const format = require('date-fns/format')
+const { List } = require('@nudj/components')
+const { css, mss } = require('@nudj/components/styles')
+const { Link } = require('react-router-dom')
 
 const Layout = require('../../components/app-layout')
-const Main = require('../../components/main')
-const Section = require('../../components/section')
-const ListApplications = require('../../components/list-applications')
-const { Heading, Para } = require('../../components/app')
+const ActionableListContents = require('../../components/actionable-list-contents')
 const ButtonLink = require('../../components/button-link')
-const { emailPreferences } = require('../../lib/constants')
-const analytics = require('../../lib/browser-analytics')
+const ActionBar = require('../../components/action-bar')
+const Section = require('../../components/section')
+const { Heading, Para } = require('../../components/app')
+const { fetchName } = require('../../lib')
 
 const style = require('./style.css')
 
-const getGmailFriendlyAddress = (email) => email.replace(/\+/g, '%2B')
-
-const ApplicationsPage = (props) => {
-  const user = get(props, 'app.user')
-  const jobs = get(props, 'app.user.hirer.company.jobs', []).sort((a, b) => {
-    if (a.status === 'PUBLISHED') return -1
-    return 1
-  })
-
-  const isGmail = user.emailPreference === emailPreferences.GOOGLE
-
-  const hasApplications = jobs
-    .map(job => job.applications.length)
-    .filter(applicationsCount => applicationsCount > 0)
-    .length > 0
+const ApplicationsPage = props => {
+  const { jobs } = props.user.hirer.company
+  const jobsWithApplications = jobs.filter(job => job.applications.length)
 
   return (
     <Layout {...props}>
-      <Helmet>
-        <title>Applications</title>
-      </Helmet>
-      <Main>
-        {hasApplications ? (
-          jobs.filter(job => job.applications.length > 0).map(job => (
-            <Section key={job.id}>
-              <Align
-                styleSheet={{
-                  root: style.listHeading,
-                  left: style.listTitle,
-                  right: style.listMeta
-                }}
-                leftChildren={(
-                  <Heading
-                    id={job.slug}
-                    level={2}
-                    style={mss.left}
-                    nonsensitive
-                  >
-                    {job.title}
-                  </Heading>
-                )}
-                rightChildren={(
-                  <Text nonsensitive element='div' size='smallIi'>
-                    Status: <strong className={css(mss.bold)}>{startCase(job.status.toLowerCase())}</strong>
-                    {' - '}
-                    Created: <strong className={css(mss.bold)}>{format(job.created, 'DD/MM/YYYY')}</strong>
-                  </Text>
-                )}
-              />
-              <Card style={[mss.pa0, mss.mtReg]}>
-                <ListApplications
-                  applications={job.applications}
-                  applicationChild={(props) => props.email && (
-                    <EmailButton
-                      to={isGmail ? getGmailFriendlyAddress(props.email) : props.email}
-                      subject=''
-                      body=''
-                      gmail={isGmail}
-                      target={isGmail ? '_blank' : '_self'}
-                      onClick={() => {
-                        analytics.track({
-                          object: analytics.objects.applicant,
-                          action: analytics.actions.applicant.messaged,
-                          properties: {
-                            applicantId: props.id,
-                            method: isGmail ? 'gmail' : 'email'
+      {jobsWithApplications.length ? (
+        <div>
+          <ActionBar />
+          {jobsWithApplications.map(job => {
+            return (
+              <div key={job.slug} className={css(style.listHeading)}>
+                <Heading
+                  id={job.slug}
+                  level={2}
+                  style={mss.left}
+                  nonsensitive
+                >
+                  {job.title}
+                </Heading>
+                <List style={mss.mtReg}>
+                  {ListItem => job.applications.map(application => (
+                    <ListItem key={application.id} joined={false}>
+                      <ActionableListContents
+                        title={fetchName(application.person)}
+                        subtitle={application.person.email}
+                        styleSheet={{ root: style.listItem }}
+                        dataPoints={[
+                          {
+                            key: 'Applied on',
+                            value: format(application.created, 'DD-MM-YYYY')
+                          },
+                          {
+                            key: 'Referred by',
+                            value: application.referral ? fetchName(application.referral.person) : 'nudj'
                           }
-                        })
-                      }}
-                    />
-                  )}
-                />
-              </Card>
-            </Section>
-          ))
-        ) : (
-          <Section>
-            <Heading nonsensitive level={1} style={mss.fgPrimary}>
-              You haven&apos;t received any applications yet
-            </Heading>
-            <Para nonsensitive>
-              To get people to apply, you&apos;ll need to share your jobs far and wide.
-            </Para>
-            <div className={css(mss.center)}>
-              <ButtonLink
-                nonsensitive
-                href='/share-jobs'
-                style={mss.mtLgI}
-                name='emailProvider'
-                volume='cheer'
-                subtle
-              >
-                Share a job
-              </ButtonLink>
-            </div>
-          </Section>
-        )}
-      </Main>
+                        ]}
+                      >
+                        {Action => [
+                          <Action
+                            key='email'
+                            Component='a'
+                            href={`mailto:${application.person.email}`}
+                          >
+                            Email applicant
+                          </Action>,
+                          <Action
+                            key='details'
+                            Component={Link}
+                            to={`/applications/${application.id}`}
+                          >
+                            View details
+                          </Action>
+                        ]}
+                      </ActionableListContents>
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        <Section>
+          <Heading nonsensitive level={1} style={mss.fgPrimary}>
+            You haven&apos;t received any applications yet
+          </Heading>
+          <Para nonsensitive>
+            To get people to apply, you&apos;ll need to share your jobs far and wide.
+          </Para>
+          <div className={css(mss.center)}>
+            <ButtonLink
+              nonsensitive
+              href='/share-jobs'
+              style={mss.mtLgI}
+              name='emailProvider'
+              volume='cheer'
+              subtle
+            >
+              Share a job
+            </ButtonLink>
+          </div>
+        </Section>
+      )}
     </Layout>
   )
-}
-
-ApplicationsPage.defaultProps = {
-  jobs: []
 }
 
 module.exports = ApplicationsPage

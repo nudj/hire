@@ -50,11 +50,20 @@ const createEnumMap = (enumTypes) => {
   }, {})
 }
 
+function fetchName ({ firstName, lastName }) {
+  if (firstName && lastName) {
+    return `${firstName} ${lastName}`
+  } else {
+    return firstName || lastName
+  }
+}
+
 module.exports = {
   stripDelims,
   getActiveStep,
   createNotification,
   formattedModifiedDate,
   createReducer,
-  createEnumMap
+  createEnumMap,
+  fetchName
 }

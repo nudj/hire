@@ -7,6 +7,7 @@ const styleSheet = StyleSheet.create({
     paddingBottom: 0,
     paddingLeft: 0,
     marginBottom: sizes.regular,
+    minHeight: sizes.largeIii,
     display: 'flex',
     alignItems: 'stretch',
     justifyContent: 'flex-end'
@@ -18,6 +19,7 @@ const styleSheet = StyleSheet.create({
     borderLeftStyle: 'solid',
     borderLeftColor: colors.greyLight,
     textDecoration: 'none',
+    lineHeight: sizes.largeI,
     ':last-child': {
       borderTopRightRadius: '4px',
       borderBottomRightRadius: '4px'

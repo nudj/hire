@@ -1,10 +1,7 @@
 const React = require('react')
-const startCase = require('lodash/startCase')
-const format = require('date-fns/format')
+const { List } = require('@nudj/components')
+const { css, mss } = require('@nudj/components/styles')
 
-const { css } = require('@nudj/components/lib/css')
-const { List, Align, Text } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
 const Layout = require('../../components/app-layout')
 const ActionableListContents = require('../../components/actionable-list-contents')
 const ButtonLink = require('../../components/button-link')
@@ -40,25 +37,14 @@ const IntrosPage = props => {
           {jobsWithIntros.map(job => {
             return (
               <div key={job.slug} className={css(style.listHeading)}>
-                <Align
-                  leftChildren={(
-                    <Heading
-                      id={job.slug}
-                      level={2}
-                      style={mss.left}
-                      nonsensitive
-                    >
-                      {job.title}
-                    </Heading>
-                  )}
-                  rightChildren={(
-                    <Text nonsensitive element='div' size='smallIi'>
-                      Status: <strong className={css(mss.bold)}>{startCase(job.status.toLowerCase())}</strong>
-                      {' - '}
-                      Created: <strong className={css(mss.bold)}>{format(job.created, 'DD/MM/YYYY')}</strong>
-                    </Text>
-                  )}
-                />
+                <Heading
+                  id={job.slug}
+                  level={2}
+                  style={mss.left}
+                  nonsensitive
+                >
+                  {job.title}
+                </Heading>
                 <List style={mss.mtReg}>
                   {ListItem => job.intros.map(intro => (
                     <ListItem key={intro.id} joined={false}>
