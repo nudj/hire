@@ -15,18 +15,11 @@ const {
   setFieldValue,
   submitHirer
 } = require('./actions')
+const { fetchName } = require('../../lib')
 
 const inputFieldStylesheet = {
   root: style.field,
   label: style.fieldLabel
-}
-
-function fetchName ({ firstName, lastName }) {
-  if (firstName && lastName) {
-    return `${firstName} ${lastName}`
-  } else {
-    return firstName || lastName
-  }
 }
 
 class HirerEditPage extends React.Component {

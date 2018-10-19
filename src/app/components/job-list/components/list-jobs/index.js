@@ -297,7 +297,7 @@ class ListAllJobs extends React.Component {
             ]}
           </ActionBar>
         ) }
-        {published && published.length && (
+        {published && !!published.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={[mss.mbReg, styleSheet.listTitle]}>
               Published
@@ -310,7 +310,7 @@ class ListAllJobs extends React.Component {
             />
           </div>
         )}
-        {draft && draft.length && (
+        {draft && !!draft.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Drafts
@@ -325,7 +325,7 @@ class ListAllJobs extends React.Component {
             />
           </div>
         )}
-        {archived && archived.length && (
+        {archived && !!archived.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Archived

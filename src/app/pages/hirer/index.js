@@ -16,18 +16,11 @@ const {
   deleteHirer
 } = require('./actions')
 const { closeDropdown } = require('../../redux/actions/dropdowns')
+const { fetchName } = require('../../lib')
 
 const inputFieldStylesheet = {
   root: style.field,
   label: style.fieldLabel
-}
-
-function fetchName ({ firstName, lastName }) {
-  if (firstName && lastName) {
-    return `${firstName} ${lastName}`
-  } else {
-    return firstName || lastName
-  }
 }
 
 class HirerPage extends React.Component {

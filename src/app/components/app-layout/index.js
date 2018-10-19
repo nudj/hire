@@ -65,7 +65,12 @@ const locations = [
       {
         path: '/applications',
         adminOnly: true,
-        title: 'Applications'
+        title: 'Applications',
+        locations: [
+          {
+            path: '/applications/:introId'
+          }
+        ]
       }
     ]
   },

@@ -35,7 +35,8 @@ const styleSheet = StyleSheet.create({
   header: {
     ...typography.type.smallI,
     fontWeight: typography.fontWeight.bold,
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    cursor: 'pointer'
   },
   chevron: {
     transform: 'rotate(180deg)'
