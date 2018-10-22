@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Button, Text, Input, CopyString } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
@@ -60,10 +60,15 @@ class InviteTeamPage extends React.Component {
         </Helmet>
         <Main>
           <Section>
-            <TitleCard styleSheet={{ card: style.card }} title='Invite your team to nudj'>
-              <Text element='p' style={mss.mbReg}>
-                With more people at your company on nudj, you have a greater chance of finding someone awesome to hire.
+            <TitleCard styleSheet={{ card: mss.mbReg }} title='Invite your team to nudj'>
+              <Text element='p' style={style.descriptionParagraph}>
+                You have a greater chance of finding someone awesome to hire if you get your team involved.
               </Text>
+              <Text element='p' style={[style.descriptionParagraph, mss.mb0]}>
+                There are two ways to invite them; either add in their email addresses or copy and share the link below however you&apos;d like.
+              </Text>
+            </TitleCard>
+            <TitleCard styleSheet={{ card: mss.mbReg }} title='Email your team'>
               <InviteForm
                 fieldCount={fieldCount}
                 values={fieldValues}
