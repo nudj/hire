@@ -9,9 +9,6 @@ const stylesheet = StyleSheet.create({
       width: 'auto'
     }
   },
-  card: {
-    marginBottom: sizes.regular
-  },
   body: {
     display: 'flex'
   },
@@ -21,6 +18,10 @@ const stylesheet = StyleSheet.create({
   },
   invitationInput: {
     backgroundColor: colors.greyLightest
+  },
+  descriptionParagraph: {
+    marginBottom: sizes.regular,
+    maxWidth: '32rem'
   }
 })
 
