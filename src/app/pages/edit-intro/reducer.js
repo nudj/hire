@@ -21,7 +21,8 @@ const reducers = {
 
 const initialState = {
   fieldValues: {
-    job: ''
+    job: '',
+    consent: false
   }
 }
 

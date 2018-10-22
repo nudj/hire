@@ -21,6 +21,10 @@ const stylesheet = StyleSheet.create({
     minHeight: '12rem',
     width: '100%',
     height: '100%'
+  },
+  descriptionParagraph: {
+    marginBottom: sizes.regular,
+    maxWidth: '32rem'
   }
 })
 
