@@ -35,7 +35,7 @@ const get = async () => {
 }
 
 const post = async ({ body, analytics }) => {
-  const { job, firstName, lastName, email, notes } = body
+  const { job, firstName, lastName, email, consent, notes } = body
   const JobStatuses = await fetchEnums('JobStatus')
 
   const gql = `
@@ -43,7 +43,8 @@ const post = async ({ body, analytics }) => {
       $jobId: ID!,
       $candidate: PersonCreateInput!,
       $notes: String,
-      $status: JobStatus
+      $status: JobStatus,
+      $consent: Boolean!
     ) {
       user {
         hirer {
@@ -60,7 +61,7 @@ const post = async ({ body, analytics }) => {
             job: jobByFilters(filters: { id: $jobId }) {
               id
               title
-              intro: createIntro(candidate: $candidate, notes: $notes) {
+              intro: createIntro(candidate: $candidate, notes: $notes, consent: $consent) {
                 id
                 candidate {
                   firstName
@@ -79,6 +80,7 @@ const post = async ({ body, analytics }) => {
   const variables = {
     jobId: job,
     notes,
+    consent,
     candidate: {
       firstName,
       lastName,
