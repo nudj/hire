@@ -116,7 +116,7 @@ const patch = ({ params, body, analytics }) => {
       url: `/team/${params.hirerId}`,
       notification: {
         type: 'success',
-        message: 'Hirer updated!'
+        message: 'Teammate updated!'
       }
     })
   }
@@ -126,7 +126,7 @@ const patch = ({ params, body, analytics }) => {
       url: `/team/${params.hirerId}/edit`,
       notification: {
         type: 'error',
-        message: 'Something went wrong while updating the hirer! Please try again.'
+        message: 'Something went wrong while updating your teammate! Please try again.'
       }
     })
   }
