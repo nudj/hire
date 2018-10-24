@@ -47,6 +47,7 @@ async function createPerson (input) {
           lastName
           email
           signedUp
+          acceptedTerms
           hirer {
             company {
               name
@@ -165,7 +166,8 @@ const Router = ({
             email,
             firstName,
             lastName,
-            signedUp: true
+            signedUp: true,
+            acceptedTerms: true
           })
         } else if (!data.person.signedUp) {
           response = await updatePerson(
