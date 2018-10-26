@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { Card } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
 const ListJobs = require('../../../components/job-radio-group')

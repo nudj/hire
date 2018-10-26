@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors } = require('@nudj/components/styles')
 const { modal } = require('../../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({

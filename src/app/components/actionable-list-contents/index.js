@@ -4,7 +4,7 @@ let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
 const { Text } = require('@nudj/components')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
 
 const defaultStyleSheet = require('./style.css')
@@ -46,50 +46,55 @@ class ActionableListContents extends React.Component {
     } = this.props
 
     const style = this.getStyle(defaultStyleSheet, styleSheet)
+    const actions = children && children(ListAction)
 
     return (
       <div className={css(style.root)}>
         <div className={css(style.body)}>
           <div className={css(style.details)}>
-            <div className={css(style.titleContainer)}>
-              <Text element='div' size='largeI' style={style.title} nonsensitive>
-                {title}
-              </Text>
-            </div>
+            {title && (
+              <div className={css(style.titleContainer)}>
+                <Text element='div' size='largeI' style={style.title} nonsensitive>
+                  {title}
+                </Text>
+              </div>
+            )}
             {subtitle && (
               <Text element='span' size='smallI' style={style.location} nonsensitive>
                 {subtitle}
               </Text>
             )}
           </div>
-          <dl className={css(style.statisticsList)}>
-            {dataPoints.map((data, i) => (
-              // Valid markup to have div inside dl
-              // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl#Wrapping_name-value_groups_in_%3Cdiv%3E_elements
-              <div key={i} className={css(style.statisticItem)}>
-                <Text
-                  size='smallI'
-                  element='dt'
-                  style={style.statisticValue}
-                  nonsensitive
-                >
-                  {data.value}
-                </Text>
-                <Text
-                  size='smallI'
-                  element='dd'
-                  style={style.statisticLabel}
-                  nonsensitive
-                >
-                  {data.key}
-                </Text>
-              </div>
-            ))}
-          </dl>
+          {dataPoints && (
+            <dl className={css(style.statisticsList)}>
+              {dataPoints.map((data, i) => (
+                // Valid markup to have div inside dl
+                // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl#Wrapping_name-value_groups_in_%3Cdiv%3E_elements
+                <div key={i} className={css(style.statisticItem)}>
+                  <Text
+                    size='smallI'
+                    element='dt'
+                    style={style.statisticValue}
+                    nonsensitive
+                  >
+                    {data.value}
+                  </Text>
+                  <Text
+                    size='smallI'
+                    element='dd'
+                    style={style.statisticLabel}
+                    nonsensitive
+                  >
+                    {data.key}
+                  </Text>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
-        {children && (
+        {actions && actions.length && (
           <div className={css(style.actions)}>
-            {children(ListAction)}
+            {actions}
           </div>
         )}
       </div>

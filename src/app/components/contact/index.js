@@ -1,9 +1,8 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets, mss } = require('@nudj/components/styles')
 const { PillGroup, Link, Text } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
 
 const defaultStyleSheet = require('./style.css')
 

@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/styles')
 const breakpoints = require('../../lib/css/breakpoints')
 
 const featureTags = process.env.FEATURE_TAGS === 'true'

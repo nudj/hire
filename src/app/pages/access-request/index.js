@@ -1,7 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 const { Button, Link, Text } = require('@nudj/components')
 const { possessiveCase } = require('@nudj/library')
 

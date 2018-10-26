@@ -1,5 +1,5 @@
 const React = require('react')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 const { Dropzone, Text, Loader } = require('@nudj/components')
 
 const style = require('./style.css')

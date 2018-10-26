@@ -1,6 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const Item = require('../recommendation')
 const style = require('./style.css')

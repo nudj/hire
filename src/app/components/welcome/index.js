@@ -2,8 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Link, Text, Card } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 const ButtonLink = require('../button-link')

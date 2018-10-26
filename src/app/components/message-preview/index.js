@@ -1,7 +1,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const { Icon, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 

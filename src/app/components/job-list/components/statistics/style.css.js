@@ -1,4 +1,4 @@
-const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/styles')
 
 const breakpoint = '41.176470588rem'
 

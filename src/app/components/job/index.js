@@ -6,7 +6,7 @@ let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
 const { PillGroup, Text, Icon } = require('@nudj/components')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
 
 const formatExpertiseTag = require('../../lib/format-expertise-tag')

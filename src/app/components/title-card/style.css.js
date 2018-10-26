@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, colors, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors, typography } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   card: {
@@ -20,6 +20,12 @@ const styleSheet = StyleSheet.create({
     paddingRight: sizes.largeI,
     paddingBottom: sizes.largeI,
     paddingLeft: sizes.largeI
+  },
+  actionList: {
+    paddingTop: 0
+  },
+  actionListActions: {
+    marginTop: 0
   }
 })
 

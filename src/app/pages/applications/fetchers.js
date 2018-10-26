@@ -1,6 +1,6 @@
 const { Global } = require('../../lib/graphql')
 
-const getApplications = ({ session }) => {
+const get = ({ session }) => {
   const gql = `
     query GetApplications {
       user {
@@ -48,5 +48,5 @@ const getApplications = ({ session }) => {
 }
 
 module.exports = {
-  getApplications
+  get
 }

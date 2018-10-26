@@ -2,7 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const sortBy = require('lodash/sortBy')
 
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 const { InputField, SegmentedControl, SelectablePillGroup } = require('@nudj/components')
 
 const formatExpertiseTag = require('../../lib/format-expertise-tag')

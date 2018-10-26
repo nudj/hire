@@ -1,4 +1,4 @@
-const { StyleSheet, typography, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, typography, sizes } = require('@nudj/components/styles')
 
 const stylesheet = StyleSheet.create({
   cardInput: {

@@ -1,4 +1,4 @@
-const { StyleSheet, colors, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, sizes, typography } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   selectAllCheckboxWrapper: {

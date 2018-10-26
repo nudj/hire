@@ -6,9 +6,8 @@ const { noop } = require('@nudj/library')
 let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets, mss } = require('@nudj/components/styles')
 const CustomPropTypes = require('@nudj/components/lib/helpers/prop-types')
-const mss = require('@nudj/components/lib/css/modifiers.css')
 const CardStyleSheet = require('@nudj/components/lib/components/card/style.css')
 
 const {

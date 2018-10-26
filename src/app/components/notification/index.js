@@ -1,7 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 

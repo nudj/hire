@@ -1,4 +1,4 @@
-const { StyleSheet, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes } = require('@nudj/components/styles')
 
 const ellipsisMovement = {
   '0%': {

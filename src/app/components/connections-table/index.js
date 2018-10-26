@@ -1,7 +1,7 @@
 const React = require('react')
 const { Table, Checkbox, RadioButton } = require('@nudj/components')
 const { merge } = require('@nudj/library')
-const { mergeStyleSheets } = require('@nudj/components/lib/css')
+const { mergeStyleSheets } = require('@nudj/components/styles')
 const isEqual = require('lodash/isEqual')
 
 const style = require('./style.css')

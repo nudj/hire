@@ -1,7 +1,7 @@
 const React = require('react')
 
 const { Align, Pill, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const ButtonLink = require('../button-link')
 const style = require('./style.css')
