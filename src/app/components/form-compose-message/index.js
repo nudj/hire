@@ -7,8 +7,7 @@ const {
   Button,
   Link
 } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
-const { css } = require('@nudj/components/lib/css')
+const { css, mss } = require('@nudj/components/styles')
 const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')

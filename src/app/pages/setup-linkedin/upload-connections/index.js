@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Card } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const {
   parseLinkedinConnections,

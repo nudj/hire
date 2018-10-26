@@ -5,6 +5,8 @@ module.exports = {
   '/access-requests/:accessRequestSlug': require('../pages/access-request'),
   '/applications': require('../pages/applications'),
   '/applications/:applicationId': require('../pages/application'),
+  '/referrals': require('../pages/referrals'),
+  '/referrals/:referralId': require('../pages/referral'),
   '/company-settings': require('../pages/company-settings'),
   '/contacts': require('../pages/contacts'),
   '/intros': require('../pages/intros'),

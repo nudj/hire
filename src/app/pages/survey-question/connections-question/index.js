@@ -9,8 +9,7 @@ const {
   Modal,
   Text
 } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const {
   setNewItemValue,

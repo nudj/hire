@@ -4,7 +4,7 @@ const {
   sizes,
   typography,
   animations
-} = require('@nudj/components/lib/css')
+} = require('@nudj/components/styles')
 
 const translateY = val => `translate3d(0, ${val}%, 0)`
 const scale = val => `scale(${val})`

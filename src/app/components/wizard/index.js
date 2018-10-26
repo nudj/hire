@@ -1,6 +1,6 @@
 const React = require('react')
 const { Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const styleSheet = require('./style.css')
 

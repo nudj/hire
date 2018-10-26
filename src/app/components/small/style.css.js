@@ -1,4 +1,4 @@
-const { StyleSheet, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, colors } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   root: {

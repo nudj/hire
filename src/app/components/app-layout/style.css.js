@@ -1,5 +1,5 @@
 const { merge } = require('@nudj/library')
-const { StyleSheet, typography, sizes, colors, utilities } = require('@nudj/components/lib/css')
+const { StyleSheet, typography, sizes, colors, utilities } = require('@nudj/components/styles')
 
 const navLinkStyle = merge(typography.type.smallIi, {
   backgroundColor: 'transparent',
@@ -236,19 +236,16 @@ const styleSheet = StyleSheet.create({
       overflow: 'hidden'
     },
     '@media(min-width: 48rem)': {
-      ':first-child': {
-        paddingLeft: sizes.largeIi
-      },
       ':last-child': {
         paddingRight: 0
       },
       textAlign: 'left',
       display: 'block',
       height: '100%',
-      paddingTop: sizes.regular,
-      paddingBottom: sizes.regular,
-      paddingLeft: sizes.largeIi,
-      paddingRight: '0'
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      paddingRight: 0
     }
   },
   subNavLink: {
@@ -259,10 +256,10 @@ const styleSheet = StyleSheet.create({
     display: 'block',
     width: '100%',
     height: '100%',
-    paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
-    paddingTop: '0.5rem',
-    paddingBottom: '0.5rem',
+    paddingTop: sizes.largeI,
+    paddingBottom: sizes.largeI,
+    paddingLeft: sizes.largeIi,
+    paddingRight: 0,
     '@media(min-width: 48rem)': {
     }
   },

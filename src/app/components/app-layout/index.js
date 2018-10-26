@@ -7,7 +7,7 @@ const curry = require('lodash/curry')
 const Route = require('route-parser')
 
 const { Link, Card } = require('@nudj/components')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 
 const NavLink = require('../navigation-link')
 const Notification = require('../notification')
@@ -47,6 +47,15 @@ const locations = [
           },
           {
             path: '/jobs/:jobSlug/select-contacts'
+          }
+        ]
+      },
+      {
+        path: '/referrals',
+        title: 'Referral links',
+        locations: [
+          {
+            path: '/referrals/:referralId'
           }
         ]
       },

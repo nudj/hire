@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const isEqual = require('lodash/isEqual')
 const cookies = require('js-cookie')
 const classnames = require('classnames')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 const analytics = require('../lib/browser-analytics')

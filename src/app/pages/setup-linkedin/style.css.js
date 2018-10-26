@@ -3,7 +3,7 @@ const {
   sizes,
   colors,
   utilities
-} = require('@nudj/components/lib/css')
+} = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   list: {

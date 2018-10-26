@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 
 const { Text, InputField } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')

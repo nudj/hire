@@ -6,8 +6,7 @@ const {
   Icon,
   ScreenReadable
 } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const { Heading, Para } = require('../../../../components/app')
 const OncePerSession = require('../../../../components/once-per-session')

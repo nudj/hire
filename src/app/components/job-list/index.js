@@ -4,8 +4,7 @@ const get = require('lodash/get')
 
 const { possessiveCase } = require('@nudj/library')
 const { Button, Modal } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const Main = require('../../components/main')
 const Section = require('../../components/section')

@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { Button, Text, Textarea, InputField } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')

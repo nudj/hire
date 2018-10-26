@@ -4,8 +4,7 @@ const get = require('lodash/get')
 
 const actions = require('@nudj/framework/actions')
 const { Button, Checkbox, CheckboxList, Modal } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
 const Contact = require('../../components/contact')

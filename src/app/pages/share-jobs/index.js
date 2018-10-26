@@ -7,8 +7,7 @@ let memoize = require('memoize-one')
 memoize = memoize.default || memoize
 
 const { Button, Card } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
-const { css } = require('@nudj/components/lib/css')
+const { mss, css } = require('@nudj/components/styles')
 const { getJobUrl, getReferralUrl } = require('@nudj/library')
 
 const compilePrismicTemplate = require('../../lib/compile-prismic-template')

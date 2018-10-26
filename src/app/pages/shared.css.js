@@ -4,7 +4,7 @@ const {
   colors,
   utilities,
   typography
-} = require('@nudj/components/lib/css')
+} = require('@nudj/components/styles')
 
 const { wizardAction } = require('../lib/css/breakpoints')
 

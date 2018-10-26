@@ -7,7 +7,7 @@ const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
 const { getFirstNonNil } = require('@nudj/library')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 const { getJobUrl } = require('@nudj/library')
 
 const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')

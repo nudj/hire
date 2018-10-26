@@ -3,8 +3,7 @@ const PropTypes = require('prop-types')
 const isNil = require('lodash/isNil')
 
 const { Button, Text } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const ContactsSearchResults = (props) => {
   const {

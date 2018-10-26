@@ -8,7 +8,7 @@ const AutoSizer = require('react-virtualized/dist/commonjs/AutoSizer').AutoSizer
 const CellMeasurer = require('react-virtualized/dist/commonjs/CellMeasurer').CellMeasurer
 const CellMeasurerCache = require('react-virtualized/dist/commonjs/CellMeasurer').CellMeasurerCache
 
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 const { ButtonContainer } = require('@nudj/components')
 
 const formatExpertiseTag = require('../../lib/format-expertise-tag')

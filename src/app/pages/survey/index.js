@@ -3,8 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const toLower = require('lodash/toLower')
 
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const analytics = require('../../lib/browser-analytics')
 const ButtonLink = require('../../components/button-link')

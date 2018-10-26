@@ -1,7 +1,7 @@
 const React = require('react')
 
 const { Card, Statistic } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 const Section = require('../../../../components/section')

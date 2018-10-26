@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const { app: appActions } = require('@nudj/framework/actions')
 
 const { Button } = require('@nudj/components')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { mss } = require('@nudj/components/styles')
 
 const { currencies, currencyKeys } = require('../../../lib/constants')
 const Layout = require('../../../components/app-layout')

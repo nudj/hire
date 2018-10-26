@@ -20,7 +20,7 @@ const Router = ({
     ensureAdmin
   )
 
-  router.getHandlers('/applications', respondWithGql(fetchers.getApplications))
+  router.getHandlers('/applications', respondWithGql(fetchers.get))
 
   return router
 }

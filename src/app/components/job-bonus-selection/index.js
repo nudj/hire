@@ -8,7 +8,7 @@ const {
   RadioBlockGroup
 } = require('@nudj/components')
 const CardStyleSheet = require('@nudj/components/lib/components/card/style.css')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const { currencies, currencyKeys } = require('../../lib/constants')
 const style = require('./style.css')

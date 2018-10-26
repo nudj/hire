@@ -1,4 +1,4 @@
-const { StyleSheet, colors, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, sizes, typography } = require('@nudj/components/styles')
 const { modal } = require('../../lib/css/breakpoints')
 
 const breakpoint = '41.176470588rem'

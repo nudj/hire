@@ -43,6 +43,8 @@ const expressRouters = {
     require('./pages/notification-sent/router'),
     require('./pages/applications/router'),
     require('./pages/application/router'),
+    require('./pages/referrals/router'),
+    require('./pages/referral/router'),
     require('./pages/invite/router'),
     require('./pages/intros/router'),
     require('./pages/edit-intro/router'),

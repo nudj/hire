@@ -1,4 +1,4 @@
-const { StyleSheet } = require('@nudj/components/lib/css')
+const { StyleSheet } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   list: {

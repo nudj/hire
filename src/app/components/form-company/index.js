@@ -3,7 +3,7 @@ const get = require('lodash/get')
 
 const { Input, Button } = require('@nudj/components')
 const style = require('./style.css')
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 
 const AddCompanyForm = props => {
   const { onChange, company, onSubmit } = props

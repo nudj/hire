@@ -4,8 +4,7 @@ const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
 const { Button, Card } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../lib/constants')
 const getPersonOrConnectionName = require('../../lib/get-person-or-connection-names')

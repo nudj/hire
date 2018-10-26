@@ -17,8 +17,7 @@ const {
   Link
 } = require('@nudj/components')
 
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const style = require('./style.css')
 const Layout = require('../../components/app-layout')

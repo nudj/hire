@@ -3,8 +3,7 @@ const groupBy = require('lodash/groupBy')
 
 const { getJobUrl, getReferralUrl, merge } = require('@nudj/library')
 const { Card, Checkbox, CheckboxList } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
-const mss = require('@nudj/components/lib/css/modifiers.css')
+const { css, mss } = require('@nudj/components/styles')
 
 const { emailPreferences } = require('../../../../lib/constants')
 const compilePrismicTemplate = require('../../../../lib/compile-prismic-template')

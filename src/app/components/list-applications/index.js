@@ -3,7 +3,7 @@ const PropTypes = require('prop-types')
 const get = require('lodash/get')
 const { format } = require('date-fns')
 
-const { css } = require('@nudj/components/lib/css')
+const { css } = require('@nudj/components/styles')
 const { ButtonContainer } = require('@nudj/components')
 
 const Item = require('../contact')

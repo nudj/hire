@@ -1,4 +1,4 @@
-const { StyleSheet, colors, typography, sizes } = require('@nudj/components/lib/css')
+const { StyleSheet, colors, typography, sizes } = require('@nudj/components/styles')
 
 const { merge } = require('@nudj/library')
 

@@ -1,4 +1,4 @@
-const { StyleSheet, sizes, typography } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, typography } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
   basketContainer: {

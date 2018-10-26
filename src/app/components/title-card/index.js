@@ -1,10 +1,18 @@
 const React = require('react')
-const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
+const { css, mergeStyleSheets } = require('@nudj/components/styles')
 const { Card, Text, Align } = require('@nudj/components')
 
+const ActionableListContents = require('../actionable-list-contents')
 const style = require('./style.css')
 
-const TitleCard = ({ children, title, titleRight, styleSheet = {}, ...props }) => {
+const TitleCard = ({
+  children,
+  title,
+  titleRight,
+  styleSheet = {},
+  actions,
+  ...props
+}) => {
   const styles = mergeStyleSheets(style, styleSheet)
 
   return (
@@ -24,6 +32,16 @@ const TitleCard = ({ children, title, titleRight, styleSheet = {}, ...props }) =
       <div className={css(styles.body)}>
         {children}
       </div>
+      {actions && (
+        <ActionableListContents
+          styleSheet={{
+            root: style.actionList,
+            actions: style.actionListActions
+          }}
+        >
+          {actions}
+        </ActionableListContents>
+      )}
     </Card>
   )
 }
