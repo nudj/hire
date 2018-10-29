@@ -29,7 +29,18 @@ const ApplicationPage = props => {
       <Main>
         <Section>
           <div className={css(style.applicationDetails)}>
-            <TitleCard title={title}>
+            <TitleCard
+              title={title}
+              actions={Action => [
+                <Action
+                  key='notes'
+                  Component='a'
+                  href={`mailto:${application.person.email}`}
+                >
+                  Email applicant
+                </Action>
+              ]}
+            >
               <InputField
                 styleSheet={inputFieldStylesheet}
                 htmlFor='applicant'

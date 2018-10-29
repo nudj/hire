@@ -12,7 +12,7 @@ const styleSheet = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     paddingTop: sizes.regular,
-    paddingLeft: sizes.regular,
+    paddingLeft: sizes.largeI,
     paddingRight: sizes.regular,
     paddingBottom: sizes.regular,
     display: 'block',
@@ -42,6 +42,37 @@ const styleSheet = StyleSheet.create({
     color: colors.midRed,
     marginRight: sizes.regular,
     marginTop: sizes.smallIii
+  },
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
+  },
+  heading: {
+    display: 'flex',
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    alignItems: 'center',
+    ':before': {
+      width: sizes.regular,
+      content: '""',
+      height: '1px',
+      flexGrow: 1,
+      display: 'block',
+      backgroundColor: colors.greyLight,
+      marginRight: sizes.smallIi
+    },
+    ':after': {
+      content: '""',
+      height: '1px',
+      width: '100%',
+      flexGrow: 1,
+      display: 'block',
+      backgroundColor: colors.greyLight,
+      marginLeft: sizes.smallIi
+    }
   }
 })
 

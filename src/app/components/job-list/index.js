@@ -3,15 +3,16 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const { possessiveCase } = require('@nudj/library')
-const { Button, Modal } = require('@nudj/components')
+const { Button, Modal, Text } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
-const Main = require('../../components/main')
-const Section = require('../../components/section')
-const { Heading, Para } = require('../../components/app')
-const ButtonLink = require('../../components/button-link')
+const Main = require('../main')
+const Section = require('../section')
+const { Heading, Para } = require('../app')
+const ButtonLink = require('../button-link')
 const { memberTypes, jobStatuses } = require('../../lib/constants')
 const ListJobs = require('./components/list-jobs')
+const TitleCard = require('../title-card')
 const style = require('./style.css')
 
 const { updateJobSelection } = require('../../redux/actions/selections')
@@ -68,14 +69,22 @@ class JobList extends React.Component {
 
     const isAdmin = memberType === memberTypes.ADMIN
     const hasTeam = company.hirers.length > 1
+    const title = 'Jobs'
 
     return (
       <div>
         <Helmet>
-          <title>Jobs</title>
+          <title>{title}</title>
         </Helmet>
         <Main>
           <Section>
+            <TitleCard
+              title={title}
+            >
+              <Text element='p' style={style.descriptionParagraph}>
+                Create, edit and manage your live job postings. To promote your jobs make sure you share with team members and network to maximise their reach.
+              </Text>
+            </TitleCard>
             <ListJobs
               user={user}
               jobs={jobs}
@@ -89,6 +98,7 @@ class JobList extends React.Component {
               emailTemplate={emailTemplate}
               values={selections.jobs}
               onChange={this.handleJobChange}
+              style={mss.mtReg}
             />
           </Section>
           {isAdmin ? (

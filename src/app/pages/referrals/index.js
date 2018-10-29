@@ -1,11 +1,12 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const { List, Align, Text, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
-const ActionBar = require('../../components/action-bar')
 const Section = require('../../components/section')
+const TitleCard = require('../../components/title-card')
 const { Heading, Para } = require('../../components/app')
 const { fetchName } = require('../../lib')
 
@@ -13,20 +14,30 @@ const style = require('./style.css')
 
 const ReferralsPage = props => {
   const { jobs } = props.user.hirer.company
+  const title = 'Referral links'
   const jobsWithReferrals = jobs.filter(job => job.referrals.length)
 
   return (
     <Layout {...props}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {jobsWithReferrals.length ? (
         <div>
-          <ActionBar />
+          <TitleCard
+            title={title}
+          >
+            <Text element='p' style={style.descriptionParagraph}>
+              See how many unique referral links have been created for each job. Make sure you send out more referral requests if activity on any of the jobs is low.
+            </Text>
+          </TitleCard>
           {jobsWithReferrals.map(job => {
             return (
               <div key={job.slug} className={css(style.listHeading)}>
                 <Heading
                   id={job.slug}
                   level={2}
-                  style={mss.left}
+                  style={style.heading}
                   nonsensitive
                 >
                   {job.title}

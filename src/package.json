@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@nudj/api": "19.0.0",
-    "@nudj/components": "4.1.0",
+    "@nudj/components": "4.3.0",
     "@nudj/framework": "17.11.2",
     "@nudj/library": "7.4.0",
     "babel-polyfill": "^6.26.0",

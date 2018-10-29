@@ -1,14 +1,12 @@
 const React = require('react')
-const format = require('date-fns/format')
-const { List } = require('@nudj/components')
+const { Helmet } = require('react-helmet')
+const { List, Align, Text, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
-const { Link } = require('react-router-dom')
 
 const Layout = require('../../components/app-layout')
-const ActionableListContents = require('../../components/actionable-list-contents')
 const ButtonLink = require('../../components/button-link')
-const ActionBar = require('../../components/action-bar')
 const Section = require('../../components/section')
+const TitleCard = require('../../components/title-card')
 const { Heading, Para } = require('../../components/app')
 const { fetchName } = require('../../lib')
 
@@ -16,59 +14,56 @@ const style = require('./style.css')
 
 const ApplicationsPage = props => {
   const { jobs } = props.user.hirer.company
+  const title = 'Applications'
   const jobsWithApplications = jobs.filter(job => job.applications.length)
 
   return (
     <Layout {...props}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {jobsWithApplications.length ? (
         <div>
-          <ActionBar />
+          <TitleCard
+            title={title}
+          >
+            <Text element='p' style={style.descriptionParagraph}>
+              See who&apos;s applied for your open jobs, check out their profiles and message them from within the app. Make sure you follow up quickly, these candidates won&apos;t hang around for long!
+            </Text>
+          </TitleCard>
           {jobsWithApplications.map(job => {
             return (
               <div key={job.slug} className={css(style.listHeading)}>
                 <Heading
                   id={job.slug}
                   level={2}
-                  style={mss.left}
+                  style={style.heading}
                   nonsensitive
                 >
                   {job.title}
                 </Heading>
                 <List style={mss.mtReg}>
                   {ListItem => job.applications.map(application => (
-                    <ListItem key={application.id} joined={false}>
-                      <ActionableListContents
-                        title={fetchName(application.person)}
-                        subtitle={application.person.email}
-                        styleSheet={{ root: style.listItem }}
-                        dataPoints={[
-                          {
-                            key: 'Applied on',
-                            value: format(application.created, 'DD-MM-YYYY')
-                          },
-                          {
-                            key: 'Referred by',
-                            value: application.referral ? fetchName(application.referral.person) : 'nudj'
-                          }
-                        ]}
-                      >
-                        {Action => [
-                          <Action
-                            key='email'
-                            Component='a'
-                            href={`mailto:${application.person.email}`}
-                          >
-                            Email applicant
-                          </Action>,
-                          <Action
-                            key='details'
-                            Component={Link}
-                            to={`/applications/${application.id}`}
-                          >
-                            View details
-                          </Action>
-                        ]}
-                      </ActionableListContents>
+                    <ListItem key={application.id} joined>
+                      <a className={css(style.card)} href={`/applications/${application.id}`}>
+                        <Align
+                          leftChildren={(
+                            <div>
+                              <div className={css(style.titleContainer)}>
+                                <Text element='div' size='largeI' style={style.title} nonsensitive>
+                                  {fetchName(application.person)}
+                                </Text>
+                              </div>
+                              <Text element='span' size='smallI' style={style.subtitle} nonsensitive>
+                                {application.person.email}
+                              </Text>
+                            </div>
+                          )}
+                          rightChildren={(
+                            <Icon style={style.chevron} name='chevron' />
+                          )}
+                        />
+                      </a>
                     </ListItem>
                   ))}
                 </List>

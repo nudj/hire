@@ -105,6 +105,13 @@ const styleSheet = StyleSheet.create({
     ...typography.type.smallI,
     fontWeight: typography.fontWeight.bold,
     marginTop: sizes.regular
+  },
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
   }
 })
 
