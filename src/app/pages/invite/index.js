@@ -64,7 +64,7 @@ class InviteTeamPage extends React.Component {
               <Text element='p' style={style.descriptionParagraph}>
                 You have a greater chance of finding someone awesome to hire if you get your team involved.
               </Text>
-              <Text element='p' style={[style.descriptionParagraph, mss.mb0]}>
+              <Text element='p' style={style.descriptionParagraph}>
                 There are two ways to invite them; either add in their email addresses or copy and share the link below however you&apos;d like.
               </Text>
             </TitleCard>
@@ -100,7 +100,7 @@ class InviteTeamPage extends React.Component {
                 volume={hasCopied ? 'murmur' : 'cheer'}
                 string={invitationLink}
                 subtle
-                >
+              >
                 { hasCopied ? 'Copied!' : 'Copy' }
               </CopyString>
             </TitleCard>

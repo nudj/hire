@@ -1,26 +1,41 @@
 const React = require('react')
-const { List } = require('@nudj/components')
+const { Helmet } = require('react-helmet')
+const { List, Text, Align, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
-const ActionableListContents = require('../../components/actionable-list-contents')
 const ButtonLink = require('../../components/button-link')
 const ActionBar = require('../../components/action-bar')
 const Section = require('../../components/section')
+const TitleCard = require('../../components/title-card')
 const { Heading, Para } = require('../../components/app')
+const { fetchName } = require('../../lib')
 
 const style = require('./style.css')
 
 const IntrosPage = props => {
   const { jobs } = props.user.hirer.company
+  const title = 'Intros'
 
   const jobsWithIntros = jobs.filter(job => job.intros.length)
 
   return (
     <Layout {...props}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {jobsWithIntros.length ? (
         <div>
-          <ActionBar>
+          <TitleCard
+            title={title}
+          >
+            <Text element='p' style={style.descriptionParagraph}>
+              Intros are candidate leads from your team. Vouched for and peer-vetted, these candidates are keen for a chat. They may need nurturing through the process, so make a good first impression and make contact quickly.
+            </Text>
+          </TitleCard>
+          <ActionBar style={{
+            root: mss.mtReg
+          }}>
             {actionStyle => [
               <ButtonLink
                 key='add-intro-button'
@@ -40,39 +55,33 @@ const IntrosPage = props => {
                 <Heading
                   id={job.slug}
                   level={2}
-                  style={mss.left}
+                  style={style.heading}
                   nonsensitive
                 >
                   {job.title}
                 </Heading>
                 <List style={mss.mtReg}>
                   {ListItem => job.intros.map(intro => (
-                    <ListItem key={intro.id} joined={false}>
-                      <ActionableListContents
-                        title={`${intro.candidate.firstName} ${intro.candidate.lastName}`}
-                        subtitle={intro.candidate.email}
-                        styleSheet={{ root: style.listItem }}
-                        dataPoints={[
-                          { key: 'Introduced by', value: `${intro.person.firstName} ${intro.person.lastName}` }
-                        ]}
-                      >
-                        {(Action) => [
-                          <Action
-                            key='email'
-                            Component='a'
-                            href={`mailto:${intro.candidate.email}`}
-                          >
-                            Email candidate
-                          </Action>,
-                          <Action
-                            key='notes'
-                            Component='a'
-                            href={`/intros/${intro.id}`}
-                          >
-                            View details
-                          </Action>
-                        ]}
-                      </ActionableListContents>
+                    <ListItem key={intro.id} joined>
+                      <a className={css(style.card)} href={`/intros/${intro.id}`}>
+                        <Align
+                          leftChildren={(
+                            <div>
+                              <div className={css(style.titleContainer)}>
+                                <Text element='div' size='largeI' style={style.title} nonsensitive>
+                                  {fetchName(intro.person)}
+                                </Text>
+                              </div>
+                              <Text element='span' size='smallI' style={style.subtitle} nonsensitive>
+                                {intro.person.email}
+                              </Text>
+                            </div>
+                          )}
+                          rightChildren={(
+                            <Icon style={style.chevron} name='chevron' />
+                          )}
+                        />
+                      </a>
                     </ListItem>
                   ))}
                 </List>

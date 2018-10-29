@@ -256,11 +256,14 @@ const styleSheet = StyleSheet.create({
     display: 'block',
     width: '100%',
     height: '100%',
-    paddingTop: sizes.largeI,
-    paddingBottom: sizes.largeI,
-    paddingLeft: sizes.largeIi,
+    paddingTop: sizes.smallIi,
+    paddingBottom: sizes.smallIi,
+    paddingLeft: 0,
     paddingRight: 0,
     '@media(min-width: 48rem)': {
+      paddingTop: sizes.largeI,
+      paddingBottom: sizes.largeI,
+      paddingLeft: sizes.largeIi
     }
   },
   activeSubNavLink: {

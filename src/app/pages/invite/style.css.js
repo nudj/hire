@@ -20,8 +20,11 @@ const stylesheet = StyleSheet.create({
     backgroundColor: colors.greyLightest
   },
   descriptionParagraph: {
-    marginBottom: sizes.regular,
-    maxWidth: '32rem'
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
   }
 })
 

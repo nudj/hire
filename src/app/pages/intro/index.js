@@ -35,7 +35,18 @@ const IntroPage = props => {
       <Main>
         <Section>
           <div className={css(style.introDetails)}>
-            <TitleCard title={title}>
+            <TitleCard
+              title={title}
+              actions={Action => [
+                <Action
+                  key='notes'
+                  Component='a'
+                  href={`mailto:${intro.candidate.email}`}
+                >
+                  Email candidate
+                </Action>
+              ]}
+            >
               <InputField
                 styleSheet={inputFieldStylesheet}
                 htmlFor='candidate'
