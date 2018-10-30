@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const { format } = require('date-fns')
 const { Link: RRLink } = require('react-router-dom')
+const { possessiveCase } = require('@nudj/library')
 
 const { Text, InputField, Link } = require('@nudj/components')
 const { css } = require('@nudj/components/styles')
@@ -25,7 +26,7 @@ const ReferralPage = props => {
   const { company } = props.user.hirer
   const { referral } = company
   const { job } = referral
-  const title = 'Referral details'
+  const title = `${possessiveCase(fetchName(referral.person))} referral link`
   const referralUrl = getJobUrl({
     protocol: web.protocol,
     hostname: web.hostname,
