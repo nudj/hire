@@ -5,6 +5,7 @@ const get = ({ session, query }) => {
   const gql = `
     query (
       $parent: ID
+      $withParent: Boolean!
     ) {
       user {
         emailPreference
@@ -27,10 +28,25 @@ const get = ({ session, query }) => {
           }
         }
       }
+      parent: referral (
+        id: $parent
+      ) @include(if: $withParent) {
+        job {
+          title
+        }
+        person {
+          firstName
+          lastName
+          email
+        }
+      }
       ${Global}
     }
   `
-  const variables = { parent }
+  const variables = {
+    parent,
+    withParent: !!parent
+  }
   return { gql, variables }
 }
 

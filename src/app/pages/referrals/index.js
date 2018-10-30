@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const { List, Align, Text, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
+const { possessiveCase } = require('@nudj/library')
 
 const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
@@ -13,8 +14,18 @@ const { fetchName } = require('../../lib')
 const style = require('./style.css')
 
 const ReferralsPage = props => {
+  const { parent } = props
   const { jobs } = props.user.hirer.company
-  const title = 'Referral links'
+  const title = parent
+    ? `${possessiveCase(fetchName(parent.person))} referrals`
+    : 'Referral links'
+  const intro = parent
+    ? <Text element='p' style={style.descriptionParagraph}>
+      These links came from <span className={css(mss.bold)}>{possessiveCase(fetchName(parent.person))} ({parent.person.email})</span> referral for the <span className={css(mss.bold)}>{parent.job.title}</span> role.
+    </Text>
+    : <Text element='p' style={style.descriptionParagraph}>
+      See how many unique referral links have been created for each job. Make sure you send out more referral requests if activity on any of the jobs is low.
+    </Text>
   const jobsWithReferrals = jobs.filter(job => job.referrals.length)
 
   return (
@@ -24,24 +35,20 @@ const ReferralsPage = props => {
       </Helmet>
       {jobsWithReferrals.length ? (
         <div>
-          <TitleCard
-            title={title}
-          >
-            <Text element='p' style={style.descriptionParagraph}>
-              See how many unique referral links have been created for each job. Make sure you send out more referral requests if activity on any of the jobs is low.
-            </Text>
+          <TitleCard title={title}>
+            {intro}
           </TitleCard>
           {jobsWithReferrals.map(job => {
             return (
               <div key={job.slug} className={css(style.listHeading)}>
-                <Heading
+                {!parent && <Heading
                   id={job.slug}
                   level={2}
                   style={style.heading}
                   nonsensitive
                 >
                   {job.title}
-                </Heading>
+                </Heading>}
                 <List style={mss.mtReg}>
                   {ListItem => job.referrals.map(referral => (
                     <ListItem key={referral.id} joined>
