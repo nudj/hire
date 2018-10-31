@@ -23,10 +23,13 @@ const fetchCompanySlug = async companyId => {
   return company.slug
 }
 
-const triggerIntercomTracking = async (data, body) => {
+const triggerIntercomTracking = async data => {
   try {
-    const { email } = data.user
-    const companyName = body.name
+    const { email, newHirer } = data.user
+    const {
+      name: companyName,
+      location: companyLocation
+    } = newHirer.company
 
     // Create company and fetch user
     const [ company, user ] = await Promise.all([
@@ -34,7 +37,7 @@ const triggerIntercomTracking = async (data, body) => {
         name: companyName,
         company_id: companyName,
         custom_attributes: {
-          location: body.location
+          location: companyLocation
         }
       }),
       intercom.user.getBy({ email })
@@ -83,11 +86,12 @@ const post = ({ res, body, analytics }) => {
     mutation setupCompany ($company: CompanyCreateInput!) {
       user {
         email
-        addCompanyAndAssignUserAsHirer(company: $company) {
+        newHirer: addCompanyAndAssignUserAsHirer(company: $company) {
           setOnboarded
           id
           company {
             name
+            location
           }
         }
       }
@@ -102,11 +106,11 @@ const post = ({ res, body, analytics }) => {
   }
 
   const respond = async data => {
-    triggerIntercomTracking(data, body)
+    triggerIntercomTracking(data)
     cookies.set(res, 'newlyOnboarded', true)
 
     await analytics.updateIdentity({
-      companyName: data.user.addCompanyAndAssignUserAsHirer.company.name
+      companyName: data.user.newHirer.company.name
     })
 
     analytics.track({
