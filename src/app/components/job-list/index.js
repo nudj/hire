@@ -70,6 +70,9 @@ class JobList extends React.Component {
     const isAdmin = memberType === memberTypes.ADMIN
     const hasTeam = company.hirers.length > 1
     const title = 'Jobs'
+    const intro = isAdmin
+      ? 'Create, edit and manage your live job postings. To promote your jobs make sure you share with team members and network to maximise their reach.'
+      : 'View all the roles your company is currently looking to recruit for. If you know someone great, share the job with them for the opportunity to get the referral reward.'
 
     return (
       <div>
@@ -82,7 +85,7 @@ class JobList extends React.Component {
               title={title}
             >
               <Text element='p' style={style.descriptionParagraph}>
-                Create, edit and manage your live job postings. To promote your jobs make sure you share with team members and network to maximise their reach.
+                {intro}
               </Text>
             </TitleCard>
             <ListJobs
