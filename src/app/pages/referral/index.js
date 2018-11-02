@@ -22,11 +22,18 @@ const inputFieldStylesheet = {
 const stopPropagation = event => event.stopPropagation()
 
 const ReferralPage = props => {
-  const { web } = props
+  const { web, user } = props
   const { company } = props.user.hirer
   const { referral } = company
   const { job } = referral
-  const title = `${possessiveCase(fetchName(referral.person))} referral link`
+  const userOwnsReferral = referral.person.id === user.id
+  const title = userOwnsReferral ? 'Your referral link' : `${possessiveCase(fetchName(referral.person))} referral link`
+  let referredBy = 'nudj'
+  if (referral.parent) {
+    referredBy = referral.parent.person.id === user.id
+      ? 'You'
+      : `${fetchName(referral.parent.person)} (${referral.parent.person.email})`
+  }
   const referralUrl = getJobUrl({
     protocol: web.protocol,
     hostname: web.hostname,
@@ -120,7 +127,7 @@ const ReferralPage = props => {
                 htmlFor='referredBy'
                 label='Referred by'
               >
-                <Text>{referral.parent ? `${fetchName(referral.parent.person)} (${referral.parent.person.email})` : 'nudj'}</Text>
+                <Text>{referredBy}</Text>
               </InputField>
               <InputField
                 styleSheet={inputFieldStylesheet}

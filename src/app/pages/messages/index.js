@@ -3,7 +3,7 @@ const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 const isNil = require('lodash/isNil')
 
-const { Button, Card } = require('@nudj/components')
+const { Button, Card, Text } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
 const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../lib/constants')
@@ -15,6 +15,7 @@ const ButtonLink = require('../../components/button-link')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const Small = require('../../components/small')
+const TitleCard = require('../../components/title-card')
 const { Heading, Para } = require('../../components/app')
 
 const style = require('./style.css')
@@ -37,7 +38,14 @@ const MessagesPage = props => {
         { emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
           ? syncedConversations.length > 0 ? (
             <Section>
-              <Card style={[mss.pa0, mss.ofHide]}>
+              <TitleCard
+                title='Messages'
+              >
+                <Text element='p' style={style.descriptionParagraph}>
+                  Keep track and respond to any messages from referrers or candidates in one place without them getting lost in your inbox.
+                </Text>
+              </TitleCard>
+              <Card style={[mss.pa0, mss.ofHide, mss.mtReg]}>
                 <ol className={css(style.list)}>
                   {syncedConversations.map(conversation => {
                     const { id, message, subject, recipient } = conversation

@@ -2,7 +2,7 @@ const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
 
 const get = async ({ requestGQL }) => {
-  const enumTypes = await requestGQL({
+  const enumValues = await requestGQL({
     gql: `
       {
         jobStatusTypes: __type(name: "JobStatus") {
@@ -10,10 +10,16 @@ const get = async ({ requestGQL }) => {
             name
           }
         }
+        hirerTypes: __type(name: "HirerType") {
+          values: enumValues {
+            name
+          }
+        }
       }
     `
   })
-  const jobStatusTypes = createEnumMap(enumTypes.jobStatusTypes.values)
+  const jobStatusTypes = createEnumMap(enumValues.jobStatusTypes.values)
+  const hirerTypes = createEnumMap(enumValues.hirerTypes.values)
 
   const gql = `
     query fetchIntros ($status: JobStatus!) {
@@ -52,9 +58,17 @@ const get = async ({ requestGQL }) => {
     status: jobStatusTypes.PUBLISHED
   }
 
+  const transformData = data => {
+    return {
+      ...data,
+      hirerTypes
+    }
+  }
+
   return {
     gql,
-    variables
+    variables,
+    transformData
   }
 }
 

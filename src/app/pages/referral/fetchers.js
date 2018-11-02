@@ -7,6 +7,7 @@ const get = ({ params }) => {
       $referralId: ID!
     ) {
       user {
+        id
         hirer {
           company {
             slug
@@ -16,6 +17,7 @@ const get = ({ params }) => {
               id
               created
               person {
+                id
                 firstName
                 lastName
                 email
@@ -24,6 +26,7 @@ const get = ({ params }) => {
               parent {
                 id
                 person {
+                  id
                   firstName
                   lastName
                   email

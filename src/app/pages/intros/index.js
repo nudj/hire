@@ -14,10 +14,18 @@ const { fetchName } = require('../../lib')
 const style = require('./style.css')
 
 const IntrosPage = props => {
-  const { jobs } = props.user.hirer.company
+  const { hirerTypes } = props
+  const { hirer } = props.user
+  const { jobs } = hirer.company
   const title = 'Intros'
 
   const jobsWithIntros = jobs.filter(job => job.intros.length)
+  const isAdmin = hirer.type === hirerTypes.ADMIN
+  const intro = isAdmin ? (
+    'Intros are candidate leads from your team. Vouched for and peer-vetted, these candidates are keen for a chat. They may need nurturing through the process, so make a good first impression and make contact quickly.'
+  ) : (
+    "Intro those in your network who would be perfect for the job but won't apply for themselves. The hiring team will then follow up directly with the candidate. Make sure you have the candidates' permission first."
+  )
 
   return (
     <Layout {...props}>
@@ -30,7 +38,7 @@ const IntrosPage = props => {
             title={title}
           >
             <Text element='p' style={style.descriptionParagraph}>
-              Intros are candidate leads from your team. Vouched for and peer-vetted, these candidates are keen for a chat. They may need nurturing through the process, so make a good first impression and make contact quickly.
+              {intro}
             </Text>
           </TitleCard>
           <ActionBar style={{

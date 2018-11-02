@@ -1,4 +1,5 @@
 const React = require('react')
+const { Helmet } = require('react-helmet')
 const groupBy = require('lodash/groupBy')
 const startCase = require('lodash/startCase')
 
@@ -8,20 +9,30 @@ const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
 const ActionBar = require('../../components/action-bar')
 const Section = require('../../components/section')
+const TitleCard = require('../../components/title-card')
 const { Heading, Para } = require('../../components/app')
 
 const style = require('./style.css')
 
 const TeamPage = props => {
   const { hirers } = props.user.hirer.company
+  const title = 'Team'
 
   const hirersGroupedByType = groupBy(hirers, 'type')
   const hirerTypes = Object.keys(hirersGroupedByType).sort()
 
   return (
     <Layout {...props}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <div>
-        <ActionBar>
+        <TitleCard title={title}>
+          <Text element='p' style={style.descriptionParagraph}>
+            Manage your team, invite new hires to join nudj and set permission levels.
+          </Text>
+        </TitleCard>
+        <ActionBar style={{ root: mss.mtReg }}>
           {actionStyle => [
             <ButtonLink
               key='invite-button'

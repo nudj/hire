@@ -14,18 +14,41 @@ const { fetchName } = require('../../lib')
 const style = require('./style.css')
 
 const ReferralsPage = props => {
-  const { parent } = props
-  const { jobs } = props.user.hirer.company
-  const title = parent
-    ? `${possessiveCase(fetchName(parent.person))} referrals`
-    : 'Referral links'
-  const intro = parent
-    ? <Text element='p' style={style.descriptionParagraph}>
-      These links came from <span className={css(mss.bold)}>{possessiveCase(fetchName(parent.person))} ({parent.person.email})</span> referral for the <span className={css(mss.bold)}>{parent.job.title}</span> role.
-    </Text>
-    : <Text element='p' style={style.descriptionParagraph}>
-      See how many unique referral links have been created for each job. Make sure you send out more referral requests if activity on any of the jobs is low.
-    </Text>
+  const { user, parent, hirerTypes } = props
+  const { hirer } = props.user
+  const { jobs } = hirer.company
+  const isAdmin = hirer.type === hirerTypes.ADMIN
+  const isChildReferralList = !!parent
+  const parentBelongsToHirer = parent && parent.person.id === user.id
+
+  let title
+  let intro
+  switch (true) {
+    case parentBelongsToHirer:
+      title = 'Links generated'
+      intro = <Text element='p' style={style.descriptionParagraph}>
+        These links were generated from <span className={css(mss.bold)}>your</span> referral for the role <span className={css(mss.bold)}>{parent.job.title}</span>.
+      </Text>
+      break
+    case isChildReferralList:
+      title = `${possessiveCase(fetchName(parent.person))} referrals`
+      intro = <Text element='p' style={style.descriptionParagraph}>
+        These links were generated from <span className={css(mss.bold)}>{possessiveCase(fetchName(parent.person))} ({parent.person.email})</span> referral for the role <span className={css(mss.bold)}>{parent.job.title}</span>.
+      </Text>
+      break
+    case isAdmin:
+      title = 'All referral links'
+      intro = <Text element='p' style={style.descriptionParagraph}>
+        See how many unique referral links have been created for each job. Make sure you send out more referral requests if activity on any of the jobs is low.
+      </Text>
+      break
+    default:
+      title = 'Your referral links'
+      intro = <Text element='p' style={style.descriptionParagraph}>
+        These are your referral links to share with your network.
+      </Text>
+  }
+
   const jobsWithReferrals = jobs.filter(job => job.referrals.length)
 
   return (
@@ -38,45 +61,75 @@ const ReferralsPage = props => {
           <TitleCard title={title}>
             {intro}
           </TitleCard>
-          {jobsWithReferrals.map(job => {
-            return (
-              <div key={job.slug} className={css(style.listHeading)}>
-                {!parent && <Heading
-                  id={job.slug}
-                  level={2}
-                  style={style.heading}
-                  nonsensitive
-                >
-                  {job.title}
-                </Heading>}
-                <List style={mss.mtReg}>
-                  {ListItem => job.referrals.map(referral => (
-                    <ListItem key={referral.id} joined>
-                      <a className={css(style.card)} href={`/referrals/${referral.id}`}>
-                        <Align
-                          leftChildren={(
-                            <div>
-                              <div className={css(style.titleContainer)}>
-                                <Text element='div' size='largeI' style={style.title} nonsensitive>
-                                  {fetchName(referral.person)}
+          {isAdmin || parent ? (
+            // user is admin or showing child referrals list
+            jobsWithReferrals.map(job => {
+              return (
+                <div key={job.slug} className={css(style.listHeading)}>
+                  {!parent && <Heading
+                    id={job.slug}
+                    level={2}
+                    style={style.heading}
+                    nonsensitive
+                  >
+                    {job.title}
+                  </Heading>}
+                  <List style={mss.mtReg}>
+                    {ListItem => job.referrals.map(referral => (
+                      <ListItem key={referral.id} joined>
+                        <a className={css(style.card)} href={`/referrals/${referral.id}`}>
+                          <Align
+                            leftChildren={(
+                              <div>
+                                <div className={css(style.titleContainer)}>
+                                  <Text element='div' size='largeI' style={style.title} nonsensitive>
+                                    {fetchName(referral.person)}
+                                  </Text>
+                                </div>
+                                <Text element='span' size='smallI' style={style.subtitle} nonsensitive>
+                                  {referral.person.email}
                                 </Text>
                               </div>
-                              <Text element='span' size='smallI' style={style.subtitle} nonsensitive>
-                                {referral.person.email}
+                            )}
+                            rightChildren={(
+                              <Icon style={style.chevron} name='chevron' />
+                            )}
+                          />
+                        </a>
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
+              )
+            })
+          ) : (
+            // non admin top level referrals
+            <List style={mss.mtReg}>
+              {ListItem => jobsWithReferrals.map(job => {
+                const referral = job.referrals[0]
+                return (
+                  <ListItem key={referral.id} joined>
+                    <a className={css(style.card)} href={`/referrals/${referral.id}`}>
+                      <Align
+                        leftChildren={(
+                          <div>
+                            <div className={css(style.titleContainer)}>
+                              <Text element='div' size='largeI' style={style.title} nonsensitive>
+                                {job.title}
                               </Text>
                             </div>
-                          )}
-                          rightChildren={(
-                            <Icon style={style.chevron} name='chevron' />
-                          )}
-                        />
-                      </a>
-                    </ListItem>
-                  ))}
-                </List>
-              </div>
-            )
-          })}
+                          </div>
+                        )}
+                        rightChildren={(
+                          <Icon style={style.chevron} name='chevron' />
+                        )}
+                      />
+                    </a>
+                  </ListItem>
+                )
+              })}
+            </List>
+          )}
         </div>
       ) : (
         <Section>
