@@ -29,6 +29,7 @@ const ListContacts = require('../../components/list-contacts')
 const ContactsFilters = require('../../components/contacts-filters')
 const ButtonLink = require('../../components/button-link')
 const Small = require('../../components/small')
+const TitleCard = require('../../components/title-card')
 const {
   updateSearchQuery,
   updateFavouritesFilter,
@@ -177,108 +178,117 @@ class DiscoverPage extends React.Component {
             width={!featureTags ? 'largeI' : undefined}
           >
             {totalConnectionsCount > 0 ? (
-              <Card style={[mss.pa0, style.card]}>
-                <form
-                  className={css(
-                    featureTags && style.form
-                  )}
-                  onSubmit={this.handleSubmit}
-                  autoComplete='off'
+              <Section>
+                <TitleCard
+                  title='Contacts'
                 >
-                  <div className={css(style.searchForm)}>
-                    <Input
-                      name='search'
-                      label='search'
-                      type='search'
-                      value={searchInput}
-                      placeholder='e.g., Jonny Ive'
-                      onChange={this.handleQueryChange}
-                      onClear={this.handleQueryClear}
-                      styleSheet={{ root: style.searchInput }}
-                    />
-                    <Button
-                      nonsensitive
-                      style={style.searchButton}
-                      type='submit'
-                      volume='cheer'
-                      disabled={state.loading}
-                      subtle
-                    >
-                      Search
-                    </Button>
-                  </div>
-                  {featureTags && (
-                    <div className={css(style.filterContainer)}>
-                      <div className={css(style.filterBar)}>
-                        <Text nonsensitive size='regular' style={style.resultCount}>
-                          Showing{' '}
-                          <span className={css(mss.bold)}>
-                            {connections.length}
-                          </span>{' '}
-                          contacts
-                        </Text>
-                        <Button
-                          nonsensitive
-                          onClick={this.toggleFilters}
-                          style={style.filterButton}
-                          subtle
-                        >
-                          Filters{' '}
-                          <span
-                            className={css(
-                              style.filterIcon,
-                              !showFilters && mss.rotate180
-                            )}
-                          >
-                            <Icon name='chevron' />
-                          </span>
-                        </Button>
-                      </div>
-                      <AnimateHeight
-                        height={showFilters ? 'auto' : 0}
-                        className={css(style.animatedFilterPanel)}
-                        contentClassName={css(style.animatedFilterPanelInner)}
+                  <Text element='p' style={style.descriptionParagraph}>
+                    Looking for someone specific? Use the search box to explore your contacts. Search by name, skill, company and see how many more people you could recommend for the job.
+                  </Text>
+                </TitleCard>
+                <Card style={[mss.pa0, style.card, mss.mtReg]}>
+                  <form
+                    className={css(
+                      featureTags && style.form
+                    )}
+                    onSubmit={this.handleSubmit}
+                    autoComplete='off'
+                  >
+                    <div className={css(style.searchForm)}>
+                      <Input
+                        name='search'
+                        label='search'
+                        type='search'
+                        value={searchInput}
+                        placeholder='e.g., Jonny Ive'
+                        onChange={this.handleQueryChange}
+                        onClear={this.handleQueryClear}
+                        styleSheet={{ root: style.searchInput }}
+                      />
+                      <Button
+                        nonsensitive
+                        style={style.searchButton}
+                        type='submit'
+                        volume='cheer'
+                        disabled={state.loading}
+                        subtle
                       >
-                        <div className={css(style.filters)}>
-                          <ContactsFilters
-                            toggleFavourites={favouritesFilter.toString()}
-                            expertiseTagsValues={expertiseTagFilter}
-                            expertiseTags={expertiseTags}
-                            onToggleFavourites={this.handleToggleFavourites}
-                            onExpertiseChange={this.handleExpertiseTagChange}
-                          />
-                        </div>
-                      </AnimateHeight>
+                        Search
+                      </Button>
                     </div>
-                  )}
-                </form>
-                <div className={css(style.resultsContainer)}>
-                  <SearchResults
-                    contacts={connections}
-                    onAddIndividualClick={this.showModal}
-                    query={searchQuery}
-                    ListComponent={ListContacts}
-                    listProps={{
-                      onItemClick: ({ name }) => {
-                        const personId = find(connections, { id: name }).person.id
+                    {featureTags && (
+                      <div className={css(style.filterContainer)}>
+                        <div className={css(style.filterBar)}>
+                          <Text nonsensitive size='regular' style={style.resultCount}>
+                            Showing{' '}
+                            <span className={css(mss.bold)}>
+                              {connections.length}
+                            </span>{' '}
+                            contacts
+                          </Text>
+                          <Button
+                            nonsensitive
+                            onClick={this.toggleFilters}
+                            style={style.filterButton}
+                            subtle
+                          >
+                            Filters{' '}
+                            <span
+                              className={css(
+                                style.filterIcon,
+                                !showFilters && mss.rotate180
+                              )}
+                            >
+                              <Icon name='chevron' />
+                            </span>
+                          </Button>
+                        </div>
+                        <AnimateHeight
+                          height={showFilters ? 'auto' : 0}
+                          className={css(style.animatedFilterPanel)}
+                          contentClassName={css(style.animatedFilterPanelInner)}
+                        >
+                          <div className={css(style.filters)}>
+                            <ContactsFilters
+                              toggleFavourites={favouritesFilter.toString()}
+                              expertiseTagsValues={expertiseTagFilter}
+                              expertiseTags={expertiseTags}
+                              onToggleFavourites={this.handleToggleFavourites}
+                              onExpertiseChange={this.handleExpertiseTagChange}
+                            />
+                          </div>
+                        </AnimateHeight>
+                      </div>
+                    )}
+                  </form>
+                  <div className={css(style.resultsContainer)}>
+                    <SearchResults
+                      contacts={connections}
+                      onAddIndividualClick={this.showModal}
+                      query={searchQuery}
+                      ListComponent={ListContacts}
+                      listProps={{
+                        onItemClick: ({ name }) => {
+                          const personId = find(connections, { id: name }).person.id
 
-                        const url = jobId
-                          ? `/messages/new/${personId}/${jobId}`
-                          : `/messages/new/${personId}`
+                          const url = jobId
+                            ? `/messages/new/${personId}/${jobId}`
+                            : `/messages/new/${personId}`
 
-                        history.push(url)
-                      },
-                      contactChild: () => (
-                        <IconLink iconName='email' />
-                      ),
-                      query: searchInput,
-                      showFilters,
-                      favouritesFilter,
-                      expertiseTags
-                    }}
-                  />
-                </div>
-              </Card>
+                          history.push(url)
+                        },
+                        contactChild: () => (
+                          <IconLink iconName='email' />
+                        ),
+                        query: searchInput,
+                        showFilters,
+                        favouritesFilter,
+                        expertiseTags
+                      }}
+                    />
+                  </div>
+                </Card>
+              </Section>
             ) : (
               <Section width='largeI' padding>
                 {isAdmin ? (

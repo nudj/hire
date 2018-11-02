@@ -41,15 +41,21 @@ class CompanySettingsPage extends React.Component {
   render () {
     const { companySettingsPage: state } = this.props
     const company = get(this.props, 'user.hirer.company', {})
+    const title = 'Company settings'
 
     return (
       <Layout {...this.props}>
         <Helmet>
-          <title>Company settings</title>
+          <title>{title}</title>
         </Helmet>
         <Main>
           <Section>
-            <TitleCard title='Company details'>
+            <TitleCard title={title}>
+              <Text element='p' style={style.descriptionParagraph}>
+                Keep your company details up to date. Make sure you include any funding news, awards, notable clients and any other milestones.
+              </Text>
+            </TitleCard>
+            <TitleCard title='Details' styleSheet={{ card: mss.mtReg }}>
               <InputField
                 styleSheet={{ root: style.field, label: style.fieldLabel }}
                 htmlFor='name'
