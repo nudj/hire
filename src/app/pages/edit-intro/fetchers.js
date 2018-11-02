@@ -3,7 +3,7 @@ const { Global } = require('../../lib/graphql')
 const fetchEnums = require('../../lib/fetch-enums')
 
 const get = async () => {
-  const JobStatuses = await fetchEnums('JobStatus')
+  const { jobStatuses } = await fetchEnums({ jobStatuses: 'JobStatus' })
 
   const gql = `
     query (
@@ -28,7 +28,7 @@ const get = async () => {
   `
 
   const variables = {
-    status: JobStatuses.PUBLISHED
+    status: jobStatuses.PUBLISHED
   }
 
   return { gql, variables }
@@ -36,7 +36,7 @@ const get = async () => {
 
 const post = async ({ body, analytics }) => {
   const { job, firstName, lastName, email, consent, notes } = body
-  const JobStatuses = await fetchEnums('JobStatus')
+  const { jobStatuses } = await fetchEnums({ jobStatuses: 'JobStatus' })
 
   const gql = `
     mutation CreateIntro (
@@ -86,7 +86,7 @@ const post = async ({ body, analytics }) => {
       lastName,
       email
     },
-    status: JobStatuses.PUBLISHED
+    status: jobStatuses.PUBLISHED
   }
 
   const transformData = data => {
