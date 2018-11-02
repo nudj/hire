@@ -68,7 +68,7 @@ const ListSelectableJobs = (props) => {
   )
 }
 
-const ListJobs = (props) => {
+const ListJobs = props => {
   const {
     jobs,
     isAdmin,
@@ -309,7 +309,7 @@ class ListAllJobs extends React.Component {
             />
           </div>
         )}
-        {draft && !!draft.length && (
+        {isAdmin && draft && !!draft.length && (
           <div className={css(styleSheet.list)}>
             <Heading level={2} size='smallIi' nonsensitive style={styleSheet.listTitle}>
               Drafts
