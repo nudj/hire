@@ -1,13 +1,30 @@
 const toUpper = require('lodash/toUpper')
-const get = require('lodash/get')
+const _get = require('lodash/get')
 const { Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
 const { dataSources, questionTypes } = require('../../lib/constants')
-const getNextSurveyUri = require('./getNextSurveyUri')
+const { getNextSurveyUri } = require('./helpers')
 
-const getQuestion = data => {
-  switch (toUpper(data.params.questionType)) {
+async function fetchQuestionType ({ requestGQL, params }) {
+  const { question } = await requestGQL({
+    gql: `
+      query getQuestion ($id: ID!) {
+        question: surveyQuestion (id: $id) {
+          type
+        }
+      }
+    `,
+    variables: { id: params.questionId }
+  })
+
+  return question.type
+}
+
+const get = async data => {
+  const questionType = await fetchQuestionType(data)
+
+  switch (toUpper(questionType)) {
     case questionTypes.COMPANIES:
       return getCompaniesQuestion(data)
     case questionTypes.CONNECTIONS:
@@ -15,11 +32,21 @@ const getQuestion = data => {
   }
 }
 
+const post = async data => {
+  const questionType = await fetchQuestionType(data)
+
+  switch (toUpper(questionType)) {
+    case questionTypes.COMPANIES:
+      return postEmployment(data)
+    case questionTypes.CONNECTIONS:
+      return postConnectionAnswer(data)
+  }
+}
+
 const getCompaniesQuestion = ({ params, query }) => {
   const gql = `
     query CompaniesQuestionPage (
       $surveySlug: String!,
-      $sectionId: ID!,
       $questionId: ID!
     ) {
       user {
@@ -38,35 +65,19 @@ const getCompaniesQuestion = ({ params, query }) => {
             }) {
               id
               slug
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
-              section: surveySectionByFilters (
-                filters: {
-                  id: $sectionId
-                }
-              ) {
+              question: surveyQuestionByFilters (filters: {
+                id: $questionId
+              }) {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionByFilters (
-                  filters: {
-                    id: $questionId
-                  }
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                }
+                title
+                description
+                name
+                type
+                required
               }
             }
           }
@@ -77,7 +88,6 @@ const getCompaniesQuestion = ({ params, query }) => {
   `
   const variables = {
     surveySlug: params.surveySlug,
-    sectionId: params.sectionId,
     questionId: params.questionId
   }
   return { gql, variables }
@@ -89,7 +99,6 @@ const getConnectionsQuestion = ({ session, params, query }) => {
       $userId: ID!,
       $search: String!
       $surveySlug: String!,
-      $sectionId: ID!,
       $questionId: ID!
     ) {
       user {
@@ -101,35 +110,19 @@ const getConnectionsQuestion = ({ session, params, query }) => {
             }) {
               id
               slug
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
-              section: surveySectionByFilters (
-                filters: {
-                  id: $sectionId
-                }
-              ) {
+              question: surveyQuestionByFilters (filters: {
+                id: $questionId
+              }) {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionByFilters (
-                  filters: {
-                    id: $questionId
-                  }
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                }
+                title
+                description
+                name
+                type
+                required
               }
             }
           }
@@ -175,7 +168,6 @@ const getConnectionsQuestion = ({ session, params, query }) => {
   const variables = {
     userId: session.userId,
     surveySlug: params.surveySlug,
-    sectionId: params.sectionId,
     questionId: params.questionId,
     search: query.search || ''
   }
@@ -187,7 +179,6 @@ const postEmployment = ({ params, body }) => {
   const gql = `
     mutation AddEmployment (
       $surveySlug: String,
-      $sectionId: ID!,
       $questionId: ID!,
       $company: String!,
       $current: Boolean!,
@@ -225,35 +216,19 @@ const postEmployment = ({ params, body }) => {
             }) {
               id
               slug
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
-              section: surveySectionByFilters (
-                filters: {
-                  id: $sectionId
-                }
-              ) {
+              question: surveyQuestionByFilters (filters: {
+                id: $questionId
+              }) {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionByFilters (
-                  filters: {
-                    id: $questionId
-                  }
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                }
+                title
+                description
+                name
+                type
+                required
               }
             }
           }
@@ -264,7 +239,6 @@ const postEmployment = ({ params, body }) => {
   `
   const variables = {
     surveySlug: params.surveySlug,
-    sectionId: params.sectionId,
     questionId: params.questionId,
     company: body.employment,
     source: body.source,
@@ -279,7 +253,6 @@ const postConnectionAnswer = ({ session, params, body }) => {
       $connections: [ID!]!
       $userId: ID!
       $questionId: ID!,
-      $sectionId: ID!,
       $surveySlug: String!,
     ) {
       storeSurveyAnswer (
@@ -297,35 +270,19 @@ const postConnectionAnswer = ({ session, params, body }) => {
             }) {
               id
               slug
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
-              section: surveySectionByFilters (
-                filters: {
-                  id: $sectionId
-                }
-              ) {
+              question: surveyQuestionByFilters (filters: {
+                id: $questionId
+              }) {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
-                question: surveyQuestionByFilters (
-                  filters: {
-                    id: $questionId
-                  }
-                ) {
-                  id
-                  title
-                  description
-                  name
-                  type
-                  required
-                }
+                title
+                description
+                name
+                type
+                required
               }
             }
           }
@@ -337,14 +294,13 @@ const postConnectionAnswer = ({ session, params, body }) => {
 
   const variables = {
     userId: session.userId,
-    sectionId: params.sectionId,
     questionId: params.questionId,
     surveySlug: params.surveySlug,
     connections: body.connections
   }
 
   const respond = (data) => {
-    const redirectUrl = getNextSurveyUri(get(data, 'user.hirer.company.survey', {}))
+    const redirectUrl = getNextSurveyUri(_get(data, 'user.hirer.company.survey', {}))
 
     throw new Redirect({
       url: redirectUrl
@@ -395,8 +351,7 @@ const postNewConnection = ({ params, body }) => {
 }
 
 module.exports = {
-  getQuestion,
-  postEmployment,
-  postConnectionAnswer,
+  get,
+  post,
   postNewConnection
 }

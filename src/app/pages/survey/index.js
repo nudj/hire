@@ -1,7 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
-const toLower = require('lodash/toLower')
 
 const { css, mss } = require('@nudj/components/styles')
 
@@ -20,8 +19,7 @@ const SurveyPage = props => {
   const { user } = props
   const company = get(user, 'hirer.company')
   const survey = get(company, 'survey')
-  const initialSection = get(survey, 'sections[0]', {})
-  const initialQuestion = get(initialSection, 'questions[0]', {})
+  const initialQuestion = get(survey, 'questions[0]', {})
 
   const trackSurveyStart = () => {
     analytics.track({
@@ -60,9 +58,7 @@ const SurveyPage = props => {
             nonsensitive
             style={wizardStyles.action}
             volume='cheer'
-            href={`/surveys/${survey.slug}/sections/${initialSection.id}/${
-              toLower(initialQuestion.type)
-            }/${initialQuestion.id}`}
+            href={`/surveys/${survey.slug}/questions/${initialQuestion.id}`}
             onClick={trackSurveyStart}
           >
             Start

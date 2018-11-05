@@ -4,7 +4,7 @@ const uniq = require('lodash/uniq')
 const actions = require('@nudj/framework/actions')
 
 const { dataSources } = require('../../lib/constants')
-const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
+const { getSavedSurveyQuestionConnections } = require('./helpers')
 
 const ADD_CONNECTION = 'SURVEY_ADD_CONNECTION'
 const SET_NEW_ITEM_VALUE = 'SURVEY_SET_NEW_ITEM_VALUE'
@@ -36,15 +36,12 @@ function addNewConnection (questionId, newItem) {
 const addConnection = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
+  const question = get(survey, 'question')
   const connection = get(state, 'surveyQuestionPage.newConnection')
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
-          question.id
-        }`,
+        url: `/surveys/${survey.slug}/questions/${question.id}`,
         method: 'post',
         data: {
           connection,
@@ -70,15 +67,12 @@ const addNewEmployment = (questionId, newItem) => {
 const addEmployment = questionId => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
+  const question = get(survey, 'question')
   const employment = get(state, 'surveyQuestionPage.newEmployment')
   return dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/companies/${
-          question.id
-        }`,
+        url: `/surveys/${survey.slug}/questions/${question.id}`,
         method: 'post',
         data: {
           employment: employment.name,
@@ -108,8 +102,7 @@ const updateConnectionsSearchQuery = query => ({
 const saveSurveyAnswers = questionId => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
+  const question = get(survey, 'question')
   const { connectionsChanged } = state.surveyQuestionPage
 
   let newSelectedConnections = get(state, `surveyQuestionPage.selectedConnections[${questionId}]`, [])
@@ -132,9 +125,7 @@ const saveSurveyAnswers = questionId => async (dispatch, getState) => {
     await dispatch(
       actions.app.postData(
         {
-          url: `/surveys/${survey.slug}/sections/${section.id}/connections/${
-            question.id
-          }`,
+          url: `/surveys/${survey.slug}/questions/${question.id}`,
           method: 'post',
           data: {
             surveyQuestion: questionId,
@@ -161,14 +152,13 @@ const stopLoading = () => ({
 const search = (search = '') => async (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
+  const question = get(survey, 'question')
 
   dispatch(startLoading())
   await dispatch(
     actions.app.postData(
       {
-        url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}`,
+        url: `/surveys/${survey.slug}/questions/${question.id}`,
         method: 'get',
         params: { search },
         showLoadingState: false
@@ -193,8 +183,7 @@ const clearAddForm = () => ({
 const submitNewConnection = () => (dispatch, getState) => {
   const state = getState()
   const survey = get(state, 'app.user.hirer.company.survey', {})
-  const section = get(survey, 'section')
-  const question = get(section, 'question')
+  const question = get(survey, 'question')
   const data = get(state, 'surveyQuestionPage.newConnection')
   const connectionsAlreadyChanged = get(state, 'surveyQuestionPage.connectionsChanged')
   const csrfToken = get(state, 'app.csrfToken')
@@ -211,7 +200,7 @@ const submitNewConnection = () => (dispatch, getState) => {
   }
 
   return axios({
-    url: `/surveys/${survey.slug}/sections/${section.id}/connections/${question.id}/newConnection/json`,
+    url: `/surveys/${survey.slug}/questions/${question.id}/newConnection/json`,
     method: 'post',
     headers: {
       Accept: 'application/json',

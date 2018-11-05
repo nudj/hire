@@ -28,7 +28,7 @@ module.exports = {
   '/share-jobs': require('../pages/share-jobs'),
   '/surveys/:surveySlug': checkMobileDevice(require('../pages/survey')),
   '/surveys/:surveySlug/complete': checkMobileDevice(require('../pages/survey-complete')),
-  '/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId': checkMobileDevice(require('../pages/survey-question')),
+  '/surveys/:surveySlug/questions/:questionId': checkMobileDevice(require('../pages/survey-question')),
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
   '/sync-contacts/linkedin/download-data': checkMobileDevice(require('../pages/setup-linkedin/download-data-guide')),

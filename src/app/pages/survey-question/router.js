@@ -5,14 +5,13 @@ const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/surveys/:surveySlug/sections', ensureLoggedIn, ensureNoAccessRequestsPending)
+  router.use('/surveys/:surveySlug', ensureLoggedIn, ensureNoAccessRequestsPending)
 
-  router.getHandlers('/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId', respondWithGql(fetchers.getQuestion))
-  router.postHandlers('/surveys/:surveySlug/sections/:sectionId/companies/:questionId', respondWithGql(fetchers.postEmployment))
-  router.postHandlers('/surveys/:surveySlug/sections/:sectionId/connections/:questionId', respondWithGql(fetchers.postConnectionAnswer))
+  router.getHandlers('/surveys/:surveySlug/questions/:questionId', respondWithGql(fetchers.get))
+  router.postHandlers('/surveys/:surveySlug/questions/:questionId', respondWithGql(fetchers.post))
 
   // ajax call to support new connection modal during survey
-  router.postHandlers('/surveys/:surveySlug/sections/:sectionId/connections/:questionId/newConnection', respondWithGql(fetchers.postNewConnection))
+  router.postHandlers('/surveys/:surveySlug/questions/:questionId/newConnection', respondWithGql(fetchers.postNewConnection))
 
   return router
 }

@@ -1,14 +1,12 @@
 const React = require('react')
 const get = require('lodash/get')
 const findIndex = require('lodash/findIndex')
-const flatten = require('lodash/flatten')
 const uniqBy = require('lodash/uniqBy')
 const uniq = require('lodash/uniq')
 const URLSearchParams = require('url-search-params')
 const { getFirstNonNil } = require('@nudj/library')
 
-const getNextSurveyUri = require('./getNextSurveyUri')
-const getSavedSurveyQuestionConnections = require('./getSavedSurveyQuestionConnections')
+const { getNextSurveyUri, getSavedSurveyQuestionConnections } = require('./helpers')
 const CompanyQuestionPage = require('./company-question')
 const ConnectionsQuestionPage = require('./connections-question')
 const { questionTypes } = require('../../lib/constants')
@@ -23,10 +21,7 @@ const SurveyQuestionPage = props => {
   } = props
   const survey = get(user, 'hirer.company.survey')
   const nextUri = getNextSurveyUri(survey)
-  const section = get(survey, 'section')
-  const allSections = get(survey, 'sections', [])
-  const question = get(section, 'question', {})
-  const questions = flatten(allSections.map(section => get(section, 'questions')))
+  const { question, questions } = survey
   const questionId = get(question, 'id')
   const questionIndex = findIndex(questions, { id: questionId })
   const employments = get(user, 'employments', [])

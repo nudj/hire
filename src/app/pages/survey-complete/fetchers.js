@@ -8,26 +8,13 @@ const { cookies } = require('@nudj/library')
 const intercom = require('../../lib/intercom')
 const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
+const fetchEnums = require('../../lib/fetch-enums')
 
 const completeSurvey = async ({ session, params, res, analytics, requestGQL }) => {
-  const enumTypes = await requestGQL({
-    gql: `
-      {
-        jobStatusTypes: __type(name: "JobStatus") {
-          values: enumValues {
-            name
-          }
-        }
-        hirerTypes: __type(name: "HirerType") {
-          values: enumValues {
-            name
-          }
-        }
-      }
-    `
+  const { jobStatusTypes, hirerTypes } = await fetchEnums({
+    jobStatusTypes: 'JobStatus',
+    hirerTypes: 'HirerType'
   })
-  const jobStatusTypes = createEnumMap(enumTypes.jobStatusTypes.values)
-  const hirerTypes = createEnumMap(enumTypes.hirerTypes.values)
 
   const gql = `
     mutation SurveyPage (
@@ -79,12 +66,9 @@ const completeSurvey = async ({ session, params, res, analytics, requestGQL }) =
               slug
               outroTitle
               outroDescription
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
             }
           }
@@ -183,12 +167,9 @@ const setEmailPreference = async ({ body, params, query, session, requestGQL }) 
               slug
               outroTitle
               outroDescription
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
             }
           }
