@@ -17,7 +17,7 @@ const {
 } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
-const surveyRoute = new RouteParser('/surveys/:surveySlug/sections/:sectionId/:questionType/:questionId')
+const surveyRoute = new RouteParser('/surveys/:surveySlug/questions/:questionType/:questionId')
 
 const setNewItemValue = (state, action) => {
   return merge(state, {

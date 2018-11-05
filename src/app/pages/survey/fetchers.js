@@ -14,12 +14,9 @@ const get = ({ params }) => {
               slug
               introTitle
               introDescription
-              sections: surveySections {
+              questions: surveyQuestions {
                 id
-                questions: surveyQuestions {
-                  id
-                  type
-                }
+                type
               }
             }
           }
