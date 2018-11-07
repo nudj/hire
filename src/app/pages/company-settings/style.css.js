@@ -1,6 +1,13 @@
 const { StyleSheet, colors, typography, sizes } = require('@nudj/components/styles')
 
 const stylesheet = StyleSheet.create({
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
+  },
   fieldLabel: {
     ...typography.type.largeI,
     color: colors.primary

@@ -5,6 +5,13 @@ const featureTags = process.env.FEATURE_TAGS === 'true'
 
 // TODO: Merge with survey-question/style.css.js
 const rawStyleSheet = {
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
+  },
   resultsContainer: {
     marginTop: featureTags ? sizes.regular : sizes.smallIi,
     borderTopColor: colors.greyLight,

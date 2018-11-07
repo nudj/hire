@@ -1,6 +1,13 @@
 const { StyleSheet, typography, sizes, colors } = require('@nudj/components/styles')
 
 const styleSheet = StyleSheet.create({
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
+  },
   listDivider: {
     textAlign: 'center',
     fontWeight: typography.fontWeight.bold,

@@ -2,6 +2,13 @@ const { StyleSheet, typography, sizes, colors } = require('@nudj/components/styl
 const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
+  descriptionParagraph: {
+    marginTop: sizes.regular,
+    maxWidth: '32rem',
+    ':first-child': {
+      marginTop: 0
+    }
+  },
   list: {
     listStyleType: 'none',
     marginTop: 0,
