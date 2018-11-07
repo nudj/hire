@@ -9,6 +9,7 @@ module.exports = {
   '/referrals/:referralId': require('../pages/referral'),
   '/company-settings': require('../pages/company-settings'),
   '/integrations': require('../pages/company-integrations'),
+  '/integrations/:type': require('../pages/company-integration'),
   '/contacts': require('../pages/contacts'),
   '/intros': require('../pages/intros'),
   '/intros/new': require('../pages/edit-intro'),

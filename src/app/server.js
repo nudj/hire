@@ -56,6 +56,7 @@ const expressRouters = {
     require('./pages/setup-company/router'),
     require('./pages/company-settings/router'),
     require('./pages/company-integrations/router'),
+    require('./pages/company-integration/router'),
     require('./pages/add-jobs/router'),
     require('./pages/add-jobs/set-bonus/router'),
     require('./pages/edit-jobs/router'),

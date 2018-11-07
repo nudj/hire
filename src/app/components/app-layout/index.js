@@ -116,7 +116,13 @@ const locations = [
       {
         path: '/integrations',
         title: 'Integrations',
-        adminOnly: true
+        adminOnly: true,
+        locations: [
+          {
+            path: '/integrations/:type',
+            adminOnly: true
+          }
+        ]
       },
       {
         path: '/team',
