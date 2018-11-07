@@ -110,7 +110,12 @@ const locations = [
     locations: [
       {
         path: '/company-settings',
-        title: 'Company settings',
+        title: 'Settings',
+        adminOnly: true
+      },
+      {
+        path: '/integrations',
+        title: 'Integrations',
         adminOnly: true
       },
       {

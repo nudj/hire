@@ -1,0 +1,25 @@
+const createRouter = require('@nudj/framework/router')
+
+const fetchers = require('./fetchers')
+const {
+  ensureOnboarded,
+  ensureAdmin,
+  ensureNoAccessRequestsPending
+} = require('../../lib/middleware')
+
+const Router = ({ ensureLoggedIn, respondWithGql }) => {
+  const router = createRouter()
+  router.use(
+    '/integrations',
+    ensureLoggedIn,
+    ensureNoAccessRequestsPending,
+    ensureOnboarded,
+    ensureAdmin
+  )
+
+  router.getHandlers('/integrations', respondWithGql(fetchers.get))
+
+  return router
+}
+
+module.exports = Router
