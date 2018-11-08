@@ -17,6 +17,8 @@ const { closeDropdown } = require('../../redux/actions/dropdowns')
 
 const defaultStyleSheet = require('./style.css')
 
+const integrationsEnabled = process.env.FEATURE_INTEGRATIONS === 'true'
+
 const isActive = curry((path, location) => {
   const result = !!location.path && new Route(location.path).match(path)
   return result || (!!location.locations && location.locations.some(isActive(path)))
@@ -113,7 +115,7 @@ const locations = [
         title: 'Settings',
         adminOnly: true
       },
-      {
+      integrationsEnabled && {
         path: '/integrations',
         title: 'Integrations',
         adminOnly: true,
@@ -143,7 +145,7 @@ const locations = [
           }
         ]
       }
-    ]
+    ].filter(Boolean)
   }
 ]
 

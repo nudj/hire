@@ -18,6 +18,7 @@ const plugins = [
     'USE_DEV_SERVER',
     'DEV_SERVER_PATH',
     'FEATURE_TAGS',
+    'FEATURE_INTEGRATIONS',
     'ANALYTICS_ENABLED',
     'MIXPANEL_API_TOKEN'
   ]),
