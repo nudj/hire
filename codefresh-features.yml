@@ -18,3 +18,12 @@ steps:
     commands:
       - ./node_modules/.bin/standard
       - ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit
+
+  push:
+    title: Push
+    type: push
+    candidate: '${{build}}'
+    tag: latest
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
