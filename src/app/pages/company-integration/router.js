@@ -7,6 +7,7 @@ const Router = ({ ensureLoggedIn, respondWithGql }) => {
 
   router.getHandlers('/integrations/:type', respondWithGql(fetchers.get))
   router.postHandlers('/integrations/:type', respondWithGql(fetchers.post))
+  router.postHandlers('/integrations/:type/sync', respondWithGql(fetchers.syncIntegration))
   router.postHandlers('/integrations/:type/verify', respondWithGql(fetchers.verifyIntegration))
   router.patchHandlers('/integrations/:type', respondWithGql(fetchers.patch))
 

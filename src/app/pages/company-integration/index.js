@@ -2,15 +2,16 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const startCase = require('lodash/startCase')
 
-const { Text, Link } = require('@nudj/components')
+const { Text, Link, Button } = require('@nudj/components')
 
 const Layout = require('../../components/app-layout')
 const Main = require('../../components/main')
 const Section = require('../../components/section')
 const TitleCard = require('../../components/title-card')
+const Loader = require('../../components/staged-loader')
 const forms = require('./forms')
 const style = require('./style.css')
-const { initialiseValues } = require('./actions')
+const { initialiseValues, syncIntegration } = require('./actions')
 
 const descriptions = {
   Greenhouse: (
@@ -41,7 +42,13 @@ class CompanyIntegration extends React.Component {
     }
   }
 
+  onSync = type => event => {
+    event.preventDefault()
+    this.props.dispatch(syncIntegration(type))
+  }
+
   render () {
+    const { companyIntegrationPage: state } = this.props
     const { type } = this.props.match.params
     const integrationName = startCase(type)
 
@@ -55,7 +62,19 @@ class CompanyIntegration extends React.Component {
         </Helmet>
         <Main>
           <Section>
-            <TitleCard title={title}>
+            <TitleCard
+              title={title}
+              titleRight={(
+                <Button
+                  nonsensitive
+                  onClick={this.onSync(type)}
+                  context='secondary'
+                  disabled={state.syncing || state.verifying}
+                >
+                  {state.syncing ? <Loader messages={['Syncing']} ellipsis /> : 'Sync'}
+                </Button>
+              )}
+            >
               {descriptions[integrationName]}
             </TitleCard>
             <IntegrationForm {...this.props} />

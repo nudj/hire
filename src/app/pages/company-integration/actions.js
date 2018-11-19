@@ -7,8 +7,10 @@ const SET_FIELD_VALUE = 'INTEGRATION_SET_FIELD_VALUE'
 const SET_ERRORED_FIELD = 'INTEGRATION_SET_ERRORED_FIELD'
 const SUBMIT_JOB = 'INTEGRATION_SUBMIT_JOB'
 const INITIALISE_VALUES = 'INTEGRATION_INITIALISE_VALUES'
-const START_LOADING = 'INTEGRATION_START_LOADING'
-const STOP_LOADING = 'INTEGRATION_STOP_LOADING'
+const START_VERIFYING = 'INTEGRATION_START_VERIFYING'
+const STOP_VERIFYING = 'INTEGRATION_STOP_VERIFYING'
+const START_SYNCING = 'INTEGRATION_START_SYNCING'
+const STOP_SYNCING = 'INTEGRATION_STOP_SYNCING'
 
 const setFieldValue = (key, value) => ({
   type: SET_FIELD_VALUE,
@@ -22,12 +24,20 @@ const setErroredField = (key, value) => ({
   value
 })
 
-const startLoading = () => ({
-  type: START_LOADING
+const startVerifying = () => ({
+  type: START_VERIFYING
 })
 
-const stopLoading = () => ({
-  type: STOP_LOADING
+const stopVerifying = () => ({
+  type: STOP_VERIFYING
+})
+
+const startSyncing = () => ({
+  type: START_SYNCING
+})
+
+const stopSyncing = () => ({
+  type: STOP_SYNCING
 })
 
 const resetForm = () => ({
@@ -60,15 +70,14 @@ const submit = (integrationType, method) => async (dispatch, getState) => {
 
 function verifyIntegration (integrationType) {
   return async (dispatch, getState) => {
-    dispatch(startLoading())
+    dispatch(startVerifying())
 
     const { app: result } = await dispatch(
       actions.app.postData({
         url: `/integrations/${integrationType}/verify`,
         method: 'post',
         showLoadingState: false,
-        jsonOnly: true,
-        data: {}
+        jsonOnly: true
       })
     )
 
@@ -90,11 +99,33 @@ function verifyIntegration (integrationType) {
     } else {
       dispatch(actions.app.showNotification({
         type: 'success',
-        message: 'Greenhouse integration is working'
+        message: 'Integration credentials are correct'
       }))
     }
 
-    dispatch(stopLoading())
+    dispatch(stopVerifying())
+  }
+}
+
+function syncIntegration (integrationType) {
+  return async (dispatch, getState) => {
+    dispatch(startSyncing())
+
+    const { app: result } = await dispatch(
+      actions.app.postData({
+        url: `/integrations/${integrationType}/sync`,
+        method: 'post',
+        showLoadingState: false,
+        jsonOnly: true
+      })
+    )
+
+    dispatch(actions.app.showNotification({
+      type: result.error ? 'error' : 'success',
+      message: result.error ? 'Syncing has failed. Please verify your credentials' : 'Integration synced!'
+    }))
+
+    dispatch(stopSyncing())
   }
 }
 
@@ -105,13 +136,18 @@ module.exports = {
   resetForm,
   initialiseValues,
   verifyIntegration,
+  syncIntegration,
   setErroredField,
   removeErrors,
-  startLoading,
-  stopLoading,
+  startVerifying,
+  stopVerifying,
+  startSyncing,
+  stopSyncing,
   // constants
-  START_LOADING,
-  STOP_LOADING,
+  START_VERIFYING,
+  STOP_VERIFYING,
+  START_SYNCING,
+  STOP_SYNCING,
   RESET_FORM,
   REMOVE_ERRORS,
   SUBMIT_JOB,

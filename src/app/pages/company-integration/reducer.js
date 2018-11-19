@@ -5,8 +5,10 @@ const {
   REMOVE_ERRORS,
   INITIALISE_VALUES,
   SET_ERRORED_FIELD,
-  START_LOADING,
-  STOP_LOADING
+  START_VERIFYING,
+  STOP_VERIFYING,
+  START_SYNCING,
+  STOP_SYNCING
 } = require('./actions')
 
 const setFieldValue = (state, action) => ({
@@ -27,14 +29,24 @@ const setErroredField = (state, action) => ({
 
 const resetForm = () => initialState
 
-const startLoading = (state, action) => ({
+const startVerifying = (state, action) => ({
   ...state,
-  loading: true
+  verifying: true
 })
 
-const stopLoading = (state, action) => ({
+const stopVerifying = (state, action) => ({
   ...state,
-  loading: false
+  verifying: false
+})
+
+const startSyncing = (state, action) => ({
+  ...state,
+  syncing: true
+})
+
+const stopSyncing = (state, action) => ({
+  ...state,
+  syncing: false
 })
 
 const removeErrors = (state, action) => ({
@@ -56,14 +68,17 @@ const reducers = {
   [RESET_FORM]: resetForm,
   [REMOVE_ERRORS]: removeErrors,
   [INITIALISE_VALUES]: initialiseValues,
-  [START_LOADING]: startLoading,
-  [STOP_LOADING]: stopLoading
+  [START_VERIFYING]: startVerifying,
+  [STOP_VERIFYING]: stopVerifying,
+  [START_SYNCING]: startSyncing,
+  [STOP_SYNCING]: stopSyncing
 }
 
 const initialState = {
   fieldValues: {},
   errors: {},
-  loading: false
+  verifying: false,
+  syncing: false
 }
 
 module.exports = createReducer(initialState, reducers)
