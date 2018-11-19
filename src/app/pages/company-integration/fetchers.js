@@ -132,7 +132,7 @@ const patch = async ({ body, params, requestGQL }) => {
   return { gql, variables, transformData }
 }
 
-const verifyIntegration = ({ body, params }) => {
+const verifyIntegration = ({ params }) => {
   const gql = `
     mutation verifyIntegration ($type: CompanyIntegrationType!) {
       user {
@@ -157,9 +157,35 @@ const verifyIntegration = ({ body, params }) => {
   return { gql, variables, catcher }
 }
 
+const syncIntegration = ({ params }) => {
+  const gql = `
+    mutation verifyIntegration ($type: CompanyIntegrationType!) {
+      user {
+        id
+        hirer {
+          company {
+            integration: integrationByFilters(filters: { type: $type }) {
+              sync
+            }
+          }
+        }
+      }
+      ${Global}
+    }
+  `
+  const variables = {
+    type: params.type.toUpperCase()
+  }
+  // Return an object with the error on it
+  const catcher = error => ({ error })
+
+  return { gql, variables, catcher }
+}
+
 module.exports = {
   get,
   post,
   patch,
+  syncIntegration,
   verifyIntegration
 }

@@ -42,7 +42,20 @@ const Greenhouse = props => {
   const onVerifyIntegration = onVerificationHandler(dispatch, type)
 
   return (
-    <TitleCard styleSheet={{ card: mss.mtReg }} title='Greenhouse credentials'>
+    <TitleCard
+      styleSheet={{ card: mss.mtReg }}
+      title='Greenhouse credentials'
+      titleRight={(
+        <Button
+          nonsensitive
+          onClick={onVerifyIntegration}
+          context='secondary'
+          disabled={state.syncing || state.verifying}
+        >
+          {state.verifying ? <Loader messages={['Verifying']} ellipsis /> : 'Verify credentials'}
+        </Button>
+      )}
+    >
       <InputField
         styleSheet={inputFieldStylesheet}
         htmlFor='user'
@@ -97,16 +110,9 @@ const Greenhouse = props => {
         onClick={onSubmit}
         volume='cheer'
         style={mss.mtReg}
+        disabled={state.syncing || state.verifying}
       >
         {existingIntegration ? 'Update' : 'Connect'}
-      </Button>
-      <Button
-        nonsensitive
-        onClick={onVerifyIntegration}
-        volume='scream'
-        style={mss.mtReg}
-      >
-        {state.loading ? <Loader messages={['Verifying']} ellipsis /> : 'Verify'}
       </Button>
     </TitleCard>
   )

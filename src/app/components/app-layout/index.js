@@ -9,6 +9,7 @@ const Route = require('route-parser')
 const { Link, Card } = require('@nudj/components')
 const { css, mergeStyleSheets } = require('@nudj/components/styles')
 
+const SyncingPage = require('../../pages/syncing')
 const NavLink = require('../navigation-link')
 const Notification = require('../notification')
 const ScrollTop = require('../scroll-top')
@@ -168,6 +169,7 @@ const ApplicationLayout = props => {
   const showNavigation = onboarded && isNil(title)
   const isAdmin = type === memberTypes.ADMIN
   const isLoggedIn = !!props.user // If `user` object exists, user is logged in
+  const syncingInProgress = get(props, 'user.hirer.company.syncing', false)
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
 
@@ -270,7 +272,7 @@ const ApplicationLayout = props => {
             return Subnav
           }, null)}
           <div className={css(style.main)}>
-            {children}
+            {syncingInProgress ? (<SyncingPage {...props} />) : children}
           </div>
         </div>
       </div>
