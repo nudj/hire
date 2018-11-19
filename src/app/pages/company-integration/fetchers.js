@@ -7,8 +7,9 @@ const get = async ({ params }) => {
   const type = params.type.toUpperCase()
 
   const gql = `
-    query getIntegrationPage ($type: String!) {
+    query getIntegrationPage ($type: CompanyIntegrationType!) {
       user {
+        id
         email
         hirer {
           company {
@@ -25,24 +26,16 @@ const get = async ({ params }) => {
       ${Global}
     }
   `
-  const variables = {
-    type
-  }
-  const transformData = data => {
-    if (!_get(data, 'user.hirer.company.integration')) {
-      throw new NotFound({ log: [`User attempted to access integration of type "${type}"`] })
-    }
+  const variables = { type }
 
-    return data
-  }
-
-  return { gql, variables, transformData }
+  return { gql, variables }
 }
 
 const post = ({ body, params }) => {
   const gql = `
     mutation createIntegration ($type: CompanyIntegrationType!, $data: Data!) {
       user {
+        id
         email
         hirer {
           company {
@@ -76,8 +69,9 @@ const patch = async ({ body, params, requestGQL }) => {
   const type = params.type.toUpperCase()
   const { user } = await requestGQL({
     gql: `
-      query getIntegration ($type: String!) {
+      query getIntegration ($type: CompanyIntegrationType!) {
         user {
+          id
           hirer {
             company {
               integration: integrationByFilters(filters: { type: $type }) {
@@ -100,6 +94,7 @@ const patch = async ({ body, params, requestGQL }) => {
   const gql = `
     mutation updateIntegration ($integrationId: ID!, $data: Data!) {
       user {
+        id
         email
         hirer {
           company {
@@ -137,8 +132,34 @@ const patch = async ({ body, params, requestGQL }) => {
   return { gql, variables, transformData }
 }
 
+const verifyIntegration = ({ body, params }) => {
+  const gql = `
+    mutation verifyIntegration ($type: CompanyIntegrationType!) {
+      user {
+        id
+        hirer {
+          company {
+            integration: integrationByFilters(filters: { type: $type }) {
+              verify
+            }
+          }
+        }
+      }
+      ${Global}
+    }
+  `
+  const variables = {
+    type: params.type.toUpperCase()
+  }
+  // Return an object with the error on it
+  const catcher = error => ({ error })
+
+  return { gql, variables, catcher }
+}
+
 module.exports = {
   get,
   post,
-  patch
+  patch,
+  verifyIntegration
 }
