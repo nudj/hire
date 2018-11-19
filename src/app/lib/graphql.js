@@ -3,6 +3,10 @@ const Global = `
     hirer {
       onboarded
       type
+      company {
+        syncing
+        ats
+      }
     }
   }
 `
