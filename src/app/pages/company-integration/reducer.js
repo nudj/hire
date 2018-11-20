@@ -8,7 +8,9 @@ const {
   START_VERIFYING,
   STOP_VERIFYING,
   START_SYNCING,
-  STOP_SYNCING
+  STOP_SYNCING,
+  SHOW_MODAL,
+  HIDE_MODAL
 } = require('./actions')
 
 const setFieldValue = (state, action) => ({
@@ -28,6 +30,16 @@ const setErroredField = (state, action) => ({
 })
 
 const resetForm = () => initialState
+
+const showModal = state => ({
+  ...state,
+  showModal: true
+})
+
+const hideModal = state => ({
+  ...state,
+  showModal: false
+})
 
 const startVerifying = (state, action) => ({
   ...state,
@@ -71,14 +83,17 @@ const reducers = {
   [START_VERIFYING]: startVerifying,
   [STOP_VERIFYING]: stopVerifying,
   [START_SYNCING]: startSyncing,
-  [STOP_SYNCING]: stopSyncing
+  [STOP_SYNCING]: stopSyncing,
+  [SHOW_MODAL]: showModal,
+  [HIDE_MODAL]: hideModal
 }
 
 const initialState = {
   fieldValues: {},
   errors: {},
   verifying: false,
-  syncing: false
+  syncing: false,
+  showModal: false
 }
 
 module.exports = createReducer(initialState, reducers)

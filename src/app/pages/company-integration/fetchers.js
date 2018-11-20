@@ -2,36 +2,38 @@ const _get = require('lodash/get')
 const startCase = require('lodash/startCase')
 const { Redirect, NotFound } = require('@nudj/library/errors')
 const { Global } = require('../../lib/graphql')
+const { convertErrorToErroredField } = require('./helpers')
 
-const get = async ({ params }) => {
-  const type = params.type.toUpperCase()
-
-  const gql = `
-    query getIntegrationPage ($type: CompanyIntegrationType!) {
-      user {
-        id
-        email
-        hirer {
-          company {
+const integrationPageQuery = `
+  query getIntegrationPage ($type: CompanyIntegrationType!) {
+    user {
+      id
+      email
+      hirer {
+        company {
+          id
+          name
+          integration: integrationByFilters(filters: { type: $type }) {
             id
-            name
-            integration: integrationByFilters(filters: { type: $type }) {
-              id
-              type
-              data
-            }
+            type
+            data
           }
         }
       }
-      ${Global}
     }
-  `
+    ${Global}
+  }
+`
+
+const get = async ({ params }) => {
+  const type = params.type.toUpperCase()
+  const gql = integrationPageQuery
   const variables = { type }
 
   return { gql, variables }
 }
 
-const post = ({ body, params }) => {
+const post = ({ body, params, requestGQL }) => {
   const gql = `
     mutation createIntegration ($type: CompanyIntegrationType!, $data: Data!) {
       user {
@@ -52,6 +54,17 @@ const post = ({ body, params }) => {
     type: params.type.toUpperCase(),
     data: body.data
   }
+  const catcher = async error => {
+    const data = await requestGQL({
+      gql: integrationPageQuery,
+      variables: {
+        type: params.type.toUpperCase()
+      }
+    })
+    const verificationError = convertErrorToErroredField(error)
+
+    return { ...data, verificationError }
+  }
   const respond = data => {
     throw new Redirect({
       url: '/integrations',
@@ -62,7 +75,7 @@ const post = ({ body, params }) => {
     })
   }
 
-  return { gql, variables, respond }
+  return { gql, variables, respond, catcher }
 }
 
 const patch = async ({ body, params, requestGQL }) => {
