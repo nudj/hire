@@ -1,10 +1,10 @@
 const actions = require('@nudj/framework/actions')
-const { convertErrorToErroredField } = require('./helpers')
+const { convertErrorToErroredFields } = require('./helpers')
 
 const RESET_FORM = 'INTEGRATION_RESET_FORM'
 const REMOVE_ERRORS = 'INTEGRATION_REMOVE_ERRORS'
 const SET_FIELD_VALUE = 'INTEGRATION_SET_FIELD_VALUE'
-const SET_ERRORED_FIELD = 'INTEGRATION_SET_ERRORED_FIELD'
+const SET_ERRORED_FIELDS = 'INTEGRATION_SET_ERRORED_FIELDS'
 const SUBMIT_JOB = 'INTEGRATION_SUBMIT_JOB'
 const INITIALISE_VALUES = 'INTEGRATION_INITIALISE_VALUES'
 const START_VERIFYING = 'INTEGRATION_START_VERIFYING'
@@ -20,10 +20,9 @@ const setFieldValue = (key, value) => ({
   value
 })
 
-const setErroredField = (key, value) => ({
-  type: SET_ERRORED_FIELD,
-  key,
-  value
+const setErroredFields = fields => ({
+  type: SET_ERRORED_FIELDS,
+  fields
 })
 
 const startVerifying = () => ({
@@ -90,8 +89,8 @@ function verifyIntegration (integrationType) {
     )
 
     if (result.error) {
-      const error = convertErrorToErroredField(result.error)
-      dispatch(setErroredField(error.field, error.message))
+      const erroredFields = convertErrorToErroredFields(result.error)
+      dispatch(setErroredFields(erroredFields))
     } else {
       dispatch(actions.app.showNotification({
         type: 'success',
@@ -133,7 +132,7 @@ module.exports = {
   initialiseValues,
   verifyIntegration,
   syncIntegration,
-  setErroredField,
+  setErroredFields,
   removeErrors,
   startVerifying,
   stopVerifying,
@@ -150,7 +149,7 @@ module.exports = {
   REMOVE_ERRORS,
   SUBMIT_JOB,
   SET_FIELD_VALUE,
-  SET_ERRORED_FIELD,
+  SET_ERRORED_FIELDS,
   INITIALISE_VALUES,
   SHOW_MODAL,
   HIDE_MODAL

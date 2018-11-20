@@ -2,7 +2,7 @@ const _get = require('lodash/get')
 const startCase = require('lodash/startCase')
 const { Redirect, NotFound } = require('@nudj/library/errors')
 const { Global } = require('../../lib/graphql')
-const { convertErrorToErroredField } = require('./helpers')
+const { convertErrorToErroredFields } = require('./helpers')
 
 const integrationPageQuery = `
   query getIntegrationPage ($type: CompanyIntegrationType!) {
@@ -61,9 +61,9 @@ const post = ({ body, params, requestGQL }) => {
         type: params.type.toUpperCase()
       }
     })
-    const verificationError = convertErrorToErroredField(error)
+    const verificationErrors = convertErrorToErroredFields(error)
 
-    return { ...data, verificationError }
+    return { ...data, verificationErrors }
   }
   const respond = data => {
     throw new Redirect({
