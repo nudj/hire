@@ -7,8 +7,7 @@ const style = require('./style.css')
 const {
   verifyIntegration,
   setFieldValue,
-  removeErrors,
-  submit
+  removeErrors
 } = require('./actions')
 
 const inputFieldStylesheet = {
@@ -21,11 +20,6 @@ const onChangeHandler = dispatch => ({ name, value }) => {
   dispatch(setFieldValue(name, value))
 }
 
-const onSubmitHandler = (dispatch, type, method) => event => {
-  event.preventDefault()
-  dispatch(submit(type, method))
-}
-
 const onVerificationHandler = (dispatch, type) => event => {
   event.preventDefault()
   dispatch(verifyIntegration(type))
@@ -33,19 +27,17 @@ const onVerificationHandler = (dispatch, type) => event => {
 
 const Greenhouse = props => {
   const { type } = props.match.params
-  const { dispatch, companyIntegrationPage: state } = props
+  const { dispatch, openModal, onSubmit, companyIntegrationPage: state } = props
   const { integration: existingIntegration } = props.user.hirer.company
 
-  const method = existingIntegration ? 'patch' : 'post'
   const onChange = onChangeHandler(dispatch)
-  const onSubmit = onSubmitHandler(dispatch, type, method)
   const onVerifyIntegration = onVerificationHandler(dispatch, type)
 
   return (
     <TitleCard
       styleSheet={{ card: mss.mtReg }}
       title='Greenhouse credentials'
-      titleRight={(
+      titleRight={existingIntegration && (
         <Button
           nonsensitive
           onClick={onVerifyIntegration}
@@ -107,7 +99,7 @@ const Greenhouse = props => {
       </InputField>
       <Button
         nonsensitive
-        onClick={onSubmit}
+        onClick={existingIntegration ? onSubmit : openModal}
         volume='cheer'
         style={mss.mtReg}
         disabled={state.syncing || state.verifying}

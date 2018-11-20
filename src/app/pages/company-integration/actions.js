@@ -1,5 +1,5 @@
-const startCase = require('lodash/startCase')
 const actions = require('@nudj/framework/actions')
+const { convertErrorToErroredField } = require('./helpers')
 
 const RESET_FORM = 'INTEGRATION_RESET_FORM'
 const REMOVE_ERRORS = 'INTEGRATION_REMOVE_ERRORS'
@@ -11,6 +11,8 @@ const START_VERIFYING = 'INTEGRATION_START_VERIFYING'
 const STOP_VERIFYING = 'INTEGRATION_STOP_VERIFYING'
 const START_SYNCING = 'INTEGRATION_START_SYNCING'
 const STOP_SYNCING = 'INTEGRATION_STOP_SYNCING'
+const SHOW_MODAL = 'INTEGRATION_SHOW_MODAL'
+const HIDE_MODAL = 'INTEGRATION_HIDE_MODAL'
 
 const setFieldValue = (key, value) => ({
   type: SET_FIELD_VALUE,
@@ -48,6 +50,14 @@ const removeErrors = () => ({
   type: REMOVE_ERRORS
 })
 
+const showModal = () => ({
+  type: SHOW_MODAL
+})
+
+const hideModal = () => ({
+  type: HIDE_MODAL
+})
+
 const initialiseValues = values => ({
   type: INITIALISE_VALUES,
   values
@@ -56,8 +66,6 @@ const initialiseValues = values => ({
 const submit = (integrationType, method) => async (dispatch, getState) => {
   const state = getState()
   const { fieldValues: data } = state.companyIntegrationPage
-
-  dispatch(resetForm())
 
   await dispatch(
     actions.app.postData({
@@ -82,20 +90,8 @@ function verifyIntegration (integrationType) {
     )
 
     if (result.error) {
-      const errorMessageConversion = {
-        harvestKey: {
-          401: () => 'Invalid key',
-          403: (key) => `"${startCase(key)}" permissions have not been set correctly`
-        },
-        partnerKey: {
-          401: () => 'Invalid key or user'
-        }
-      }
-
-      const [ error ] = result.error.fields
-      const message = errorMessageConversion[error.field][error.code](error.endpoint)
-
-      dispatch(setErroredField(error.field, message))
+      const error = convertErrorToErroredField(result.error)
+      dispatch(setErroredField(error.field, error.message))
     } else {
       dispatch(actions.app.showNotification({
         type: 'success',
@@ -143,6 +139,8 @@ module.exports = {
   stopVerifying,
   startSyncing,
   stopSyncing,
+  showModal,
+  hideModal,
   // constants
   START_VERIFYING,
   STOP_VERIFYING,
@@ -153,5 +151,7 @@ module.exports = {
   SUBMIT_JOB,
   SET_FIELD_VALUE,
   SET_ERRORED_FIELD,
-  INITIALISE_VALUES
+  INITIALISE_VALUES,
+  SHOW_MODAL,
+  HIDE_MODAL
 }
