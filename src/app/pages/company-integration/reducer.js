@@ -4,7 +4,7 @@ const {
   RESET_FORM,
   REMOVE_ERRORS,
   INITIALISE_VALUES,
-  SET_ERRORED_FIELD,
+  SET_ERRORED_FIELDS,
   START_VERIFYING,
   STOP_VERIFYING,
   START_SYNCING,
@@ -21,11 +21,11 @@ const setFieldValue = (state, action) => ({
   }
 })
 
-const setErroredField = (state, action) => ({
+const setErroredFields = (state, action) => ({
   ...state,
   errors: {
     ...state.errors,
-    [action.key]: action.value
+    ...action.fields
   }
 })
 
@@ -76,7 +76,7 @@ const initialiseValues = (state, action) => ({
 
 const reducers = {
   [SET_FIELD_VALUE]: setFieldValue,
-  [SET_ERRORED_FIELD]: setErroredField,
+  [SET_ERRORED_FIELDS]: setErroredFields,
   [RESET_FORM]: resetForm,
   [REMOVE_ERRORS]: removeErrors,
   [INITIALISE_VALUES]: initialiseValues,

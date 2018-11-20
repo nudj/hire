@@ -19,7 +19,7 @@ const {
   hideModal,
   showModal,
   submit,
-  setErroredField
+  setErroredFields
 } = require('./actions')
 
 const descriptions = {
@@ -45,15 +45,15 @@ const descriptions = {
 class CompanyIntegration extends React.Component {
   componentDidMount () {
     const { integration } = this.props.user.hirer.company
-    const { verificationError } = this.props
+    const { verificationErrors } = this.props
 
     if (integration) {
       this.props.dispatch(initialiseValues(integration.data))
     }
 
-    if (verificationError) {
+    if (verificationErrors) {
       // An error has occured and has been returned whilst attempting to sync for the first time
-      this.props.dispatch(setErroredField(verificationError.field, verificationError.message))
+      this.props.dispatch(setErroredFields(verificationErrors))
     }
   }
 
