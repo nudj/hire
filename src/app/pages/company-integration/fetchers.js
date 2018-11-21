@@ -141,33 +141,17 @@ const patch = async ({ body, params, requestGQL }) => {
 
     return data
   }
+  const catcher = async error => {
+    const data = await requestGQL({
+      gql: integrationPageQuery,
+      variables: { type }
+    })
+    const verificationErrors = convertErrorToErroredFields(error)
 
-  return { gql, variables, transformData }
-}
-
-const verifyIntegration = ({ params }) => {
-  const gql = `
-    mutation verifyIntegration ($type: CompanyIntegrationType!) {
-      user {
-        id
-        hirer {
-          company {
-            integration: integrationByFilters(filters: { type: $type }) {
-              verify
-            }
-          }
-        }
-      }
-      ${Global}
-    }
-  `
-  const variables = {
-    type: params.type.toUpperCase()
+    return { ...data, verificationErrors }
   }
-  // Return an object with the error on it
-  const catcher = error => ({ error })
 
-  return { gql, variables, catcher }
+  return { gql, variables, transformData, catcher }
 }
 
 const syncIntegration = ({ params }) => {
@@ -189,16 +173,33 @@ const syncIntegration = ({ params }) => {
   const variables = {
     type: params.type.toUpperCase()
   }
-  // Return an object with the error on it
-  const catcher = error => ({ error })
 
-  return { gql, variables, catcher }
+  const catcher = () => {
+    throw new Redirect({
+      url: `/integrations/${params.type}`,
+      notification: {
+        type: 'error',
+        message: `${startCase(params.type)} syncing failed. Please check your credentials.`
+      }
+    })
+  }
+
+  const respond = data => {
+    throw new Redirect({
+      url: `/integrations/${params.type}`,
+      notification: {
+        type: 'success',
+        message: `${startCase(params.type)} synced successfully`
+      }
+    })
+  }
+
+  return { gql, variables, respond, catcher }
 }
 
 module.exports = {
   get,
   post,
   patch,
-  syncIntegration,
-  verifyIntegration
+  syncIntegration
 }

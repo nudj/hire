@@ -2,13 +2,8 @@ const React = require('react')
 const { InputField, Input, Button } = require('@nudj/components')
 const { mss } = require('@nudj/components/styles')
 const TitleCard = require('../../components/title-card')
-const Loader = require('../../components/staged-loader')
 const style = require('./style.css')
-const {
-  verifyIntegration,
-  setFieldValue,
-  removeErrors
-} = require('./actions')
+const { setFieldValue, removeErrors } = require('./actions')
 
 const inputFieldStylesheet = {
   root: style.field,
@@ -20,34 +15,20 @@ const onChangeHandler = dispatch => ({ name, value }) => {
   dispatch(setFieldValue(name, value))
 }
 
-const onVerificationHandler = (dispatch, type) => event => {
-  event.preventDefault()
-  dispatch(verifyIntegration(type))
-}
-
 const Greenhouse = props => {
-  const { type } = props.match.params
-  const { dispatch, openModal, onSubmit, companyIntegrationPage: state } = props
+  const {
+    dispatch,
+    openModal,
+    onSubmit,
+    verificationErrors = {},
+    companyIntegrationPage: state
+  } = props
   const { integration: existingIntegration } = props.user.hirer.company
 
   const onChange = onChangeHandler(dispatch)
-  const onVerifyIntegration = onVerificationHandler(dispatch, type)
 
   return (
-    <TitleCard
-      styleSheet={{ card: mss.mtReg }}
-      title='Greenhouse credentials'
-      titleRight={existingIntegration && (
-        <Button
-          nonsensitive
-          onClick={onVerifyIntegration}
-          context='secondary'
-          disabled={state.syncing || state.verifying}
-        >
-          {state.verifying ? <Loader messages={['Verifying']} ellipsis /> : 'Verify credentials'}
-        </Button>
-      )}
-    >
+    <TitleCard styleSheet={{ card: mss.mtReg }} title='Greenhouse credentials'>
       <InputField
         styleSheet={inputFieldStylesheet}
         htmlFor='user'
@@ -61,7 +42,7 @@ const Greenhouse = props => {
           placeholder='greenhouse-admin@example.com'
           onChange={onChange}
           value={state.fieldValues.user}
-          error={state.errors.user}
+          error={verificationErrors.user}
           required
         />
       </InputField>
@@ -77,7 +58,7 @@ const Greenhouse = props => {
           placeholder='Paste your Harvest API key here'
           onChange={onChange}
           value={state.fieldValues.harvestKey}
-          error={state.errors.harvestKey}
+          error={verificationErrors.harvestKey}
           required
         />
       </InputField>
@@ -93,7 +74,7 @@ const Greenhouse = props => {
           placeholder='Paste your Partner API key here'
           onChange={onChange}
           value={state.fieldValues.partnerKey}
-          error={state.errors.partnerKey}
+          error={verificationErrors.partnerKey}
           required
         />
       </InputField>
