@@ -18,8 +18,7 @@ const {
   syncIntegration,
   hideModal,
   showModal,
-  submit,
-  setErroredFields
+  submit
 } = require('./actions')
 
 const descriptions = {
@@ -47,13 +46,10 @@ class CompanyIntegration extends React.Component {
     const { integration } = this.props.user.hirer.company
     const { verificationErrors } = this.props
 
-    if (integration) {
+    // If an integration exists and there are no errors (ie. a user has not input something
+    // that needs to persist without being saved), then use fetched data.
+    if (integration && !verificationErrors) {
       this.props.dispatch(initialiseValues(integration.data))
-    }
-
-    if (verificationErrors) {
-      // An error has occured and has been returned whilst attempting to sync for the first time
-      this.props.dispatch(setErroredFields(verificationErrors))
     }
   }
 
@@ -84,7 +80,7 @@ class CompanyIntegration extends React.Component {
   }
 
   render () {
-    const { companyIntegrationPage: state } = this.props
+    const { verificationErrors, companyIntegrationPage: state } = this.props
     const { integration: existingIntegration } = this.props.user.hirer.company
     const { type } = this.props.match.params
     const integrationName = startCase(type)
@@ -160,7 +156,12 @@ class CompanyIntegration extends React.Component {
                 </div>
               </Modal>
             </TitleCard>
-            <IntegrationForm {...this.props} onSubmit={this.onSubmit} openModal={this.onModalOpen} />
+            <IntegrationForm
+              {...this.props}
+              onSubmit={this.onSubmit}
+              openModal={this.onModalOpen}
+              verificationErrors={verificationErrors}
+            />
           </Section>
         </Main>
       </Layout>
