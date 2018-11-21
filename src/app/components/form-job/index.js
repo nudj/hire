@@ -2,7 +2,7 @@ const React = require('react')
 const dedent = require('dedent')
 const values = require('lodash/values')
 const capitalize = require('lodash/capitalize')
-const omit = require('lodash/omit')
+const pick = require('lodash/pick')
 
 const {
   Button,
@@ -40,10 +40,12 @@ const JobForm = props => {
     csrfToken,
     jobStatusTypes
   } = props
-  let allowedStatuses = jobStatusTypes
+  let allowedStatuses = pick(jobStatusTypes, [
+    jobStatusTypes.PUBLISHED, jobStatusTypes.ARCHIVED, jobStatusTypes.DRAFT
+  ])
 
   if (edit && fieldValues.status !== jobStatusTypes.DRAFT) {
-    allowedStatuses = omit(jobStatusTypes, [jobStatusTypes.DRAFT])
+    allowedStatuses = pick(jobStatusTypes, [jobStatusTypes.PUBLISHED, jobStatusTypes.ARCHIVED])
   }
 
   return (
