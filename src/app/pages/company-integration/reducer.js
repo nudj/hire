@@ -2,9 +2,9 @@ const { createReducer } = require('../../lib')
 const {
   SET_FIELD_VALUE,
   RESET_FORM,
-  REMOVE_ERRORS,
+  HIDE_ERROR,
+  RESET_ERRORS,
   INITIALISE_VALUES,
-  SET_ERRORED_FIELDS,
   START_SYNCING,
   STOP_SYNCING,
   SHOW_MODAL,
@@ -16,14 +16,6 @@ const setFieldValue = (state, action) => ({
   fieldValues: {
     ...state.fieldValues,
     [action.key]: action.value
-  }
-})
-
-const setErroredFields = (state, action) => ({
-  ...state,
-  errors: {
-    ...state.errors,
-    ...action.fields
   }
 })
 
@@ -49,9 +41,14 @@ const stopSyncing = (state, action) => ({
   syncing: false
 })
 
-const removeErrors = (state, action) => ({
+const removeError = (state, action) => ({
   ...state,
-  errors: initialState.errors
+  hiddenErrorFields: state.hiddenErrorFields.concat(action.field)
+})
+
+const resetErrors = (state, action) => ({
+  ...state,
+  hiddenErrorFields: initialState.hiddenErrorFields
 })
 
 const initialiseValues = (state, action) => ({
@@ -59,14 +56,14 @@ const initialiseValues = (state, action) => ({
   fieldValues: {
     ...action.values
   },
-  errors: {}
+  hiddenErrorFields: []
 })
 
 const reducers = {
   [SET_FIELD_VALUE]: setFieldValue,
-  [SET_ERRORED_FIELDS]: setErroredFields,
   [RESET_FORM]: resetForm,
-  [REMOVE_ERRORS]: removeErrors,
+  [HIDE_ERROR]: removeError,
+  [RESET_ERRORS]: resetErrors,
   [INITIALISE_VALUES]: initialiseValues,
   [START_SYNCING]: startSyncing,
   [STOP_SYNCING]: stopSyncing,
@@ -76,7 +73,7 @@ const reducers = {
 
 const initialState = {
   fieldValues: {},
-  errors: {},
+  hiddenErrorFields: [],
   verifying: false,
   syncing: false,
   showModal: false

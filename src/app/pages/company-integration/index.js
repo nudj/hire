@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const startCase = require('lodash/startCase')
+const omit = require('lodash/omit')
 
 const { Text, Link, Button, Modal } = require('@nudj/components')
 const { mss, css } = require('@nudj/components/styles')
@@ -160,7 +161,7 @@ class CompanyIntegration extends React.Component {
               {...this.props}
               onSubmit={this.onSubmit}
               openModal={this.onModalOpen}
-              verificationErrors={verificationErrors}
+              verificationErrors={omit(verificationErrors, state.hiddenErrorFields)}
             />
           </Section>
         </Main>

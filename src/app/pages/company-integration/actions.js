@@ -1,9 +1,9 @@
 const actions = require('@nudj/framework/actions')
 
 const RESET_FORM = 'INTEGRATION_RESET_FORM'
-const REMOVE_ERRORS = 'INTEGRATION_REMOVE_ERRORS'
+const HIDE_ERROR = 'INTEGRATION_HIDE_ERROR'
+const RESET_ERRORS = 'INTEGRATION_RESET_ERRORS'
 const SET_FIELD_VALUE = 'INTEGRATION_SET_FIELD_VALUE'
-const SET_ERRORED_FIELDS = 'INTEGRATION_SET_ERRORED_FIELDS'
 const SUBMIT_JOB = 'INTEGRATION_SUBMIT_JOB'
 const INITIALISE_VALUES = 'INTEGRATION_INITIALISE_VALUES'
 const START_SYNCING = 'INTEGRATION_START_SYNCING'
@@ -15,11 +15,6 @@ const setFieldValue = (key, value) => ({
   type: SET_FIELD_VALUE,
   key,
   value
-})
-
-const setErroredFields = fields => ({
-  type: SET_ERRORED_FIELDS,
-  fields
 })
 
 const startSyncing = () => ({
@@ -34,8 +29,13 @@ const resetForm = () => ({
   type: RESET_FORM
 })
 
-const removeErrors = () => ({
-  type: REMOVE_ERRORS
+const resetErrors = () => ({
+  type: RESET_ERRORS
+})
+
+const hideError = field => ({
+  type: HIDE_ERROR,
+  field
 })
 
 const showModal = () => ({
@@ -54,6 +54,8 @@ const initialiseValues = values => ({
 const submit = (integrationType, method) => async (dispatch, getState) => {
   const state = getState()
   const { fieldValues: data } = state.companyIntegrationPage
+
+  dispatch(resetErrors())
 
   await dispatch(
     actions.app.postData({
@@ -87,8 +89,8 @@ module.exports = {
   resetForm,
   initialiseValues,
   syncIntegration,
-  setErroredFields,
-  removeErrors,
+  hideError,
+  resetErrors,
   startSyncing,
   stopSyncing,
   showModal,
@@ -97,10 +99,10 @@ module.exports = {
   START_SYNCING,
   STOP_SYNCING,
   RESET_FORM,
-  REMOVE_ERRORS,
+  HIDE_ERROR,
+  RESET_ERRORS,
   SUBMIT_JOB,
   SET_FIELD_VALUE,
-  SET_ERRORED_FIELDS,
   INITIALISE_VALUES,
   SHOW_MODAL,
   HIDE_MODAL
