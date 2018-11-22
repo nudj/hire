@@ -1,6 +1,8 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const capitalise = require('lodash/capitalize')
+const { Link: RRLink } = require('react-router-dom')
 
 const { possessiveCase } = require('@nudj/library')
 const { Button, Modal, Text } = require('@nudj/components')
@@ -16,6 +18,18 @@ const TitleCard = require('../title-card')
 const style = require('./style.css')
 
 const { updateJobSelection } = require('../../redux/actions/selections')
+
+function fetchIntro (isAdmin, ats) {
+  if (ats) {
+    return `View all the roles your company is hiring for on ${capitalise(ats)}. If you know someone great, share the job with them for the opportunity to get the referral reward.`
+  }
+
+  return isAdmin ? (
+    'Create, edit and manage your live job postings. To promote your jobs make sure you share with team members and network to maximise their reach.'
+  ) : (
+    'View all the roles your company is currently looking to recruit for. If you know someone great, share the job with them for the opportunity to get the referral reward.'
+  )
+}
 
 class JobList extends React.Component {
   constructor (props) {
@@ -67,12 +81,11 @@ class JobList extends React.Component {
       return job.status === jobStatuses.PUBLISHED
     })
 
+    const isIntegratedWithATS = !!company.ats
     const isAdmin = memberType === memberTypes.ADMIN
     const hasTeam = company.hirers.length > 1
     const title = 'Jobs'
-    const intro = isAdmin
-      ? 'Create, edit and manage your live job postings. To promote your jobs make sure you share with team members and network to maximise their reach.'
-      : 'View all the roles your company is currently looking to recruit for. If you know someone great, share the job with them for the opportunity to get the referral reward.'
+    const intro = fetchIntro(isAdmin, company.ats)
 
     return (
       <div>
@@ -83,6 +96,14 @@ class JobList extends React.Component {
           <Section>
             <TitleCard
               title={title}
+              titleRight={isIntegratedWithATS && (
+                <RRLink to={`/integrations/${company.ats.toLowerCase()}`}>
+                  <img
+                    className={css(style.atsLogo)}
+                    src={`/assets/images/${company.ats.toLowerCase()}.svg`}
+                  />
+                </RRLink>
+              )}
             >
               <Text element='p' style={style.descriptionParagraph}>
                 {intro}
@@ -118,24 +139,26 @@ class JobList extends React.Component {
                     </Para>
                   </div>
                 ) : (
-                  <div className={css(style.helpPanel)}>
-                    <Heading level={2} style={mss.fgPrimary}>
-                      Publish a job
-                    </Heading>
-                    <Para size='smallI'>
-                      The first step towards hiring new teammates is
-                      publishing a job on nudj.
-                    </Para>
-                    <ButtonLink
-                      href='/jobs/new'
-                      volume='cheer'
-                      style={style.helpLink}
-                      subtle
-                      inline
-                    >
-                      Add new job
-                    </ButtonLink>
-                  </div>
+                  !isIntegratedWithATS && (
+                    <div className={css(style.helpPanel)}>
+                      <Heading level={2} style={mss.fgPrimary}>
+                        Publish a job
+                      </Heading>
+                      <Para size='smallI'>
+                        The first step towards hiring new teammates is
+                        publishing a job on nudj.
+                      </Para>
+                      <ButtonLink
+                        href='/jobs/new'
+                        volume='cheer'
+                        style={style.helpLink}
+                        subtle
+                        inline
+                      >
+                        Add new job
+                      </ButtonLink>
+                    </div>
+                  )
                 )}
                 <div className={css(style.helpPanel)}>
                   <Heading level={2} style={mss.fgPrimary}>
