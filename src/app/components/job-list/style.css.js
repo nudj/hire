@@ -4,6 +4,12 @@ const { modal } = require('../../lib/css/breakpoints')
 const breakpoint = '41.176470588rem'
 
 const styleSheet = StyleSheet.create({
+  atsLogo: {
+    maxWidth: sizes.largeIi,
+    width: '100%',
+    height: '100%',
+    alignContent: 'center'
+  },
   durationButtonGroup: {
     display: 'flex',
     justifyContent: 'center',

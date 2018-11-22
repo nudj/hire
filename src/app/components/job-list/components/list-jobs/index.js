@@ -34,6 +34,7 @@ const getShareButtonCopy = (selected, total) => {
 
 const ListSelectableJobs = (props) => {
   const {
+    company,
     jobs,
     name,
     onChange,
@@ -42,6 +43,8 @@ const ListSelectableJobs = (props) => {
     disabled,
     style
   } = props
+
+  const isIntegratedWithATS = !!(company && company.ats)
 
   return (
     <CheckboxList
@@ -60,7 +63,7 @@ const ListSelectableJobs = (props) => {
           <ShareableJob
             {...job}
             styleSheet={selectableJobStyleSheet}
-            showEdit={isAdmin}
+            showEdit={isAdmin && !isIntegratedWithATS}
           />
         )
       }))}
@@ -238,10 +241,12 @@ class ListAllJobs extends React.Component {
       hasTeam,
       style,
       values,
-      onChange
+      onChange,
+      company
     } = this.props
 
     const jobs = this.formatJobs(this.props.jobs)
+    const isIntegratedWithATS = !!company.ats
 
     const {
       PUBLISHED: published = defaultJobGroup,
@@ -257,7 +262,7 @@ class ListAllJobs extends React.Component {
 
     return (
       <div className={css(style)}>
-        {isAdmin && (
+        {isAdmin && !isIntegratedWithATS && (
           <ActionBar>
             {actionStyle => [
               <Checkbox
@@ -306,6 +311,7 @@ class ListAllJobs extends React.Component {
               isAdmin={isAdmin}
               onChange={onChange}
               values={values}
+              company={company}
             />
           </div>
         )}
@@ -320,6 +326,7 @@ class ListAllJobs extends React.Component {
               style={mss.mtReg}
               onChange={onChange}
               values={values}
+              company={company}
               disabled
             />
           </div>
