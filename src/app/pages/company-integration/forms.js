@@ -3,15 +3,15 @@ const { InputField, Input, Button } = require('@nudj/components')
 const { mss } = require('@nudj/components/styles')
 const TitleCard = require('../../components/title-card')
 const style = require('./style.css')
-const { setFieldValue, removeErrors } = require('./actions')
+const { setFieldValue, hideError } = require('./actions')
 
 const inputFieldStylesheet = {
   root: style.field,
   label: style.fieldLabel
 }
 
-const onChangeHandler = dispatch => ({ name, value }) => {
-  dispatch(removeErrors())
+const onChangeHandler = ({ dispatch, verificationErrors }) => ({ name, value }) => {
+  if (verificationErrors[name]) dispatch(hideError(name))
   dispatch(setFieldValue(name, value))
 }
 
@@ -25,7 +25,7 @@ const Greenhouse = props => {
   } = props
   const { integration: existingIntegration } = props.user.hirer.company
 
-  const onChange = onChangeHandler(dispatch)
+  const onChange = onChangeHandler({ dispatch, verificationErrors })
 
   return (
     <TitleCard styleSheet={{ card: mss.mtReg }} title='Greenhouse credentials'>
