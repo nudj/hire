@@ -12,6 +12,9 @@ const get = ({ params, session }) => {
               introTitle
               introDescription
               status
+              questions: surveyQuestions {
+                id
+              }
             }
           }
         }
