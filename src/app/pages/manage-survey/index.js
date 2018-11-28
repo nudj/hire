@@ -1,6 +1,8 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const capitalise = require('lodash/capitalize')
+const { Link: RRLink } = require('react-router-dom')
 
 const { Text, InputField, Link } = require('@nudj/components')
 
@@ -29,6 +31,15 @@ const ManageSurveyPage = props => {
         <Section>
           <TitleCard
             title={title}
+            actions={Action => [
+              <Action
+                key='questions'
+                Component={RRLink}
+                to={`/manage/surveys/${survey.slug}/questions`}
+              >
+                View questions ({survey.questions.length})
+              </Action>
+            ]}
             titleRight={(
               <Dropdown
                 id='teammate'
@@ -70,7 +81,7 @@ const ManageSurveyPage = props => {
               htmlFor='status'
               label='Status'
             >
-              <Text id='status'>{survey.status}</Text>
+              <Text id='status'>{capitalise(survey.status)}</Text>
             </InputField>
           </TitleCard>
         </Section>
