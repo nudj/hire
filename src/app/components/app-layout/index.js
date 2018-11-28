@@ -128,6 +128,17 @@ const locations = [
         ]
       },
       {
+        path: '/manage/surveys',
+        title: 'Surveys',
+        adminOnly: true,
+        locations: [
+          {
+            path: '/manage/surveys/:id',
+            adminOnly: true
+          }
+        ]
+      },
+      {
         path: '/team',
         title: 'Team',
         adminOnly: true,
