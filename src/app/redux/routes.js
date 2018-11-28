@@ -21,6 +21,7 @@ module.exports = {
   '/jobs/:jobSlug/bonus': require('../pages/add-jobs/set-bonus'),
   '/jobs/:jobSlug/edit': require('../pages/edit-jobs'),
   '/manage/surveys': require('../pages/manage-surveys'),
+  '/manage/surveys/:surveySlug': require('../pages/manage-survey'),
   '/messages': require('../pages/messages'),
   '/messages/new/:recipientId': require('../pages/messages/new'),
   '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),
