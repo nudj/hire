@@ -73,9 +73,9 @@ const getCompaniesQuestion = ({ params, query }) => {
                 id: $questionId
               }) {
                 id
+                slug
                 title
                 description
-                name
                 type
                 required
               }
@@ -118,9 +118,9 @@ const getConnectionsQuestion = ({ session, params, query }) => {
                 id: $questionId
               }) {
                 id
+                slug
                 title
                 description
-                name
                 type
                 required
               }
@@ -224,9 +224,9 @@ const postEmployment = ({ params, body }) => {
                 id: $questionId
               }) {
                 id
+                slug
                 title
                 description
-                name
                 type
                 required
               }
@@ -278,9 +278,9 @@ const postConnectionAnswer = ({ session, params, body }) => {
                 id: $questionId
               }) {
                 id
+                slug
                 title
                 description
-                name
                 type
                 required
               }

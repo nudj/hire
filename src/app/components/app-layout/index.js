@@ -104,6 +104,15 @@ const locations = [
             path: '/messages/new/:personId/:jobId'
           }
         ]
+      },
+      {
+        path: '/surveys',
+        title: 'Surveys',
+        locations: [
+          {
+            path: '/surveys/:surveyId'
+          }
+        ]
       }
     ]
   },
