@@ -90,4 +90,8 @@ const ManageSurveyPage = props => {
   )
 }
 
+ManageSurveyPage.defaultProps = {
+  survey: {}
+}
+
 module.exports = ManageSurveyPage
