@@ -10,8 +10,7 @@ function fetchFormValues ({ savedState, localState, fields, defaultValue = '' })
   // If that value doesn't exist in the local, but does exist in a stored version (i.e. fetched from db) use that.
   // Otherwise, fall back on a default value (which defaults to an empty string)
   return fields.reduce((fieldValues, field) => {
-    const value = getFirstNonNil(localFormValues[field], stateFormValues[field], defaultValue)
-    fieldValues[field] = value
+    fieldValues[field] = getFirstNonNil(localFormValues[field], stateFormValues[field], defaultValue)
 
     return fieldValues
   }, {})

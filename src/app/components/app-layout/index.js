@@ -135,6 +135,14 @@ const locations = [
           {
             path: '/manage/surveys/:id',
             adminOnly: true
+          },
+          {
+            path: '/manage/surveys/:id/edit',
+            adminOnly: true
+          },
+          {
+            path: '/manage/surveys/new',
+            adminOnly: true
           }
         ]
       },
