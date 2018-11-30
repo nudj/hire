@@ -57,6 +57,7 @@
     "prop-types": "^15.6.0",
     "react": "^15.4.2",
     "react-animate-height": "^0.10.10",
+    "react-beautiful-dnd": "^6.0.2",
     "react-dom": "^15.4.2",
     "react-dropzone": "^4.0.0",
     "react-helmet": "^5.0.3",
