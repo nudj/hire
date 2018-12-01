@@ -10,6 +10,7 @@ const addJobPage = require('../pages/add-jobs/reducer')
 const editJobPage = require('../pages/edit-jobs/reducer')
 const editIntroPage = require('../pages/edit-intro/reducer')
 const editSurveyPage = require('../pages/edit-survey/reducer')
+const editSurveyQuestionPage = require('../pages/edit-survey/reducer')
 const hirerPage = require('../pages/hirer/reducer')
 const hirerEditPage = require('../pages/hirer-edit/reducer')
 const companyIntegrationPage = require('../pages/company-integration/reducer')
@@ -34,6 +35,7 @@ module.exports = {
   hirerEditPage,
   composeMessage,
   companyIntegrationPage,
+  editSurveyQuestionPage,
   /** global **/
   selections,
   dropdowns
