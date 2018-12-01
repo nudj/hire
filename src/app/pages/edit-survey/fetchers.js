@@ -97,7 +97,7 @@ const post = async ({ body }) => {
       url: '/manage/surveys/new',
       notification: {
         type: 'error',
-        message: 'Something went wrong while adding your intro! Please try again.'
+        message: 'Something went wrong while adding your survey! Please try again.'
       }
     })
   }
