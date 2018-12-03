@@ -8,16 +8,18 @@ const setListOrder = reorderedList => ({
   reorderedList
 })
 
-const submitQuestionOrder = () => async (dispatch, getState) => {
+const submitQuestionOrder = reorderedList => async (dispatch, getState) => {
   const state = getState()
   const surveySlug = get(state, 'app.user.hirer.company.survey.slug')
-  const { reorderedList } = state.manageSurveyQuestionsPage
   const surveyQuestions = reorderedList.map(item => item.props.id)
+
+  dispatch(setListOrder(reorderedList))
 
   await dispatch(
     actions.app.postData({
       url: `/manage/surveys/${surveySlug}/questions`,
       method: 'patch',
+      showLoadingState: false,
       data: { surveyQuestions }
     })
   )

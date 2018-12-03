@@ -53,16 +53,8 @@ const patch = async ({ body: { surveyQuestions }, params: { surveySlug } }) => {
     surveySlug,
     surveyQuestions
   }
-  const transformData = data => {
-    data.notification = {
-      type: 'info',
-      message: 'Questions reordered'
-    }
 
-    return data
-  }
-
-  return { gql, variables, transformData }
+  return { gql, variables }
 }
 
 module.exports = {
