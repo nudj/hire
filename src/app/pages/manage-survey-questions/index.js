@@ -62,7 +62,7 @@ const SurveysQuestionsPage = props => {
           >
             {survey.questions.map(question => (
               <div id={question.id} key={question.id} className={css(style.listItem)}>
-                <Link className={css(style.card)} to={`${baseUrl}/${question.id}`}>
+                <Link className={css(style.card)} to={`${baseUrl}/${question.slug}`}>
                   <Align
                     leftChildren={(
                       <div className={css(style.titleContainer)}>

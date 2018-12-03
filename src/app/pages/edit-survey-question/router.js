@@ -11,8 +11,8 @@ const Router = ({ respondWithGql, ensureLoggedIn }) => {
   router.getHandlers('/manage/surveys/:surveySlug/questions/new', respondWithGql(fetchers.getNew))
   router.postHandlers('/manage/surveys/:surveySlug/questions/new', respondWithGql(fetchers.post))
 
-  router.getHandlers('/manage/surveys/:surveySlug/questions/:questionId/edit', respondWithGql(fetchers.get))
-  router.patchHandlers('/manage/surveys/:surveySlug/questions/:questionId/edit', respondWithGql(fetchers.patch))
+  router.getHandlers('/manage/surveys/:surveySlug/questions/:questionSlug/edit', respondWithGql(fetchers.get))
+  router.patchHandlers('/manage/surveys/:surveySlug/questions/:questionSlug/edit', respondWithGql(fetchers.patch))
 
   return router
 }

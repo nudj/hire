@@ -12,6 +12,7 @@ const get = async ({ params: { surveySlug } }) => {
               introTitle
               questions: surveyQuestions {
                 id
+                slug
                 description
                 title
               }
@@ -39,6 +40,7 @@ const patch = async ({ body: { surveyQuestions }, params: { surveySlug } }) => {
               introTitle
               questions: surveyQuestions {
                 id
+                slug
                 description
                 title
               }
