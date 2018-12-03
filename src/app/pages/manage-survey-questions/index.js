@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
-const { Text, Align, Icon, Button } = require('@nudj/components')
+const { Text, Align, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
 const Layout = require('../../components/app-layout')
@@ -12,17 +12,12 @@ const Section = require('../../components/section')
 const TitleCard = require('../../components/title-card')
 const DraggableList = require('../../components/draggable-list')
 const { Heading, Para } = require('../../components/app')
-const { setListOrder, submitQuestionOrder } = require('./actions')
+const { submitQuestionOrder } = require('./actions')
 const style = require('./style.css')
 
 function onDragEndHandler (dispatch) {
-  return reorderedList => dispatch(setListOrder(reorderedList))
-}
-
-function reorderQuestionsHandler (dispatch, list) {
-  return event => {
-    event.preventDefault()
-    dispatch(submitQuestionOrder())
+  return reorderedList => {
+    dispatch(submitQuestionOrder(reorderedList))
   }
 }
 
@@ -32,7 +27,6 @@ const SurveysQuestionsPage = props => {
   const baseUrl = `/manage/surveys/${survey.slug}/questions`
   const title = 'Surveys'
   const onDragEnd = onDragEndHandler(dispatch)
-  const reorderQuestions = reorderQuestionsHandler(dispatch, state.reorderedList)
 
   return (
     <Layout {...props}>
@@ -51,27 +45,15 @@ const SurveysQuestionsPage = props => {
           </TitleCard>
           <ActionBar style={{ root: mss.mtReg }}>
             {actionStyle => [
-              state.reorderedList ? (
-                <Button
-                  key='reorder-questions-button'
-                  style={actionStyle}
-                  context='success'
-                  onClick={reorderQuestions}
-                  subtle
-                >
-                  Reorder questions
-                </Button>
-              ) : (
-                <ButtonLink
-                  key='add-survey-button'
-                  style={actionStyle}
-                  context='primary'
-                  to={`/manage/surveys/${survey.slug}/questions/new`}
-                  subtle
-                >
-                  Add new question
-                </ButtonLink>
-              )
+              <ButtonLink
+                key='add-survey-button'
+                style={actionStyle}
+                context='primary'
+                to={`/manage/surveys/${survey.slug}/questions/new`}
+                subtle
+              >
+                Add new question
+              </ButtonLink>
             ]}
           </ActionBar>
           <DraggableList
