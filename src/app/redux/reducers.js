@@ -13,10 +13,12 @@ const editSurveyPage = require('../pages/edit-survey/reducer')
 const hirerPage = require('../pages/hirer/reducer')
 const hirerEditPage = require('../pages/hirer-edit/reducer')
 const companyIntegrationPage = require('../pages/company-integration/reducer')
+const manageSurveyQuestionsPage = require('../pages/manage-survey-questions/reducer')
 const selections = require('./reducers/selections')
 const dropdowns = require('./reducers/dropdowns')
 
 module.exports = {
+  manageSurveyQuestionsPage,
   surveyQuestionPage,
   uploadLinkedinConnectionsPage,
   contactsPage,

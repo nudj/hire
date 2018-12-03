@@ -24,6 +24,7 @@ module.exports = {
   '/manage/surveys/new': require('../pages/edit-survey'),
   '/manage/surveys/:surveySlug': require('../pages/manage-survey'),
   '/manage/surveys/:surveySlug/edit': require('../pages/edit-survey'),
+  '/manage/surveys/:surveySlug/questions': require('../pages/manage-survey-questions'),
   '/messages': require('../pages/messages'),
   '/messages/new/:recipientId': require('../pages/messages/new'),
   '/messages/new/:recipientId/:jobId': require('../pages/messages/new/compose'),

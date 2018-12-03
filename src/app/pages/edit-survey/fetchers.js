@@ -1,6 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 const { Global } = require('../../lib/graphql')
-const { createEnumMap } = require('../../../lib')
+const { createEnumMap } = require('../../lib')
 
 const get = async ({ params }) => {
   const gql = `
