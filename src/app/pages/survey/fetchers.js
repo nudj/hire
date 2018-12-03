@@ -7,11 +7,14 @@ const get = ({ params }) => {
   const gql = `
     query SurveyPage ($surveySlug: String) {
       user {
+        id
         emailPreference
         hirer {
+          id
           company {
+            id
             name
-            survey: surveyByFiltersOrDefault (filters: {
+            survey: surveyByFilters (filters: {
               slug: $surveySlug
             }) {
               id

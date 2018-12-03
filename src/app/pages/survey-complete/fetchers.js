@@ -59,7 +59,7 @@ const completeSurvey = async ({ session, params, res, analytics, requestGQL }) =
             publishedJobs: jobsByFilters(filters: { status: $jobStatus }) {
               id
             }
-            survey: surveyByFiltersOrDefault (filters: {
+            survey: surveyByFilters (filters: {
               slug: $surveySlug
             }) {
               id
