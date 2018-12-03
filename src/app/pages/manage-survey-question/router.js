@@ -8,7 +8,7 @@ const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()
 
   router.use('/manage/surveys/:surveySlug/questions', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
-  router.getHandlers('/manage/surveys/:surveySlug/questions/:questionId', respondWithGql(fetchers.get))
+  router.getHandlers('/manage/surveys/:surveySlug/questions/:questionSlug', respondWithGql(fetchers.get))
 
   return router
 }

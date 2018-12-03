@@ -1,17 +1,19 @@
 const { Redirect } = require('@nudj/framework/errors')
 const { Global } = require('../../lib/graphql')
+const fetchEnums = require('../../lib/fetch-enums')
 
 const get = async ({ params }) => {
   const gql = `
-    query getSurvey ($surveySlug: String!, $questionId: ID!) {
+    query getSurvey ($surveySlug: String!, $questionSlug: String!) {
       user {
         hirer {
           company {
             survey: surveyByFilters(filters: { slug: $surveySlug }) {
               id
               slug
-              question: surveyQuestionByFilters(filters: { id: $questionId }) {
+              question: surveyQuestionByFilters(filters: { slug: $questionSlug }) {
                 id
+                slug
                 title
                 description
               }
@@ -24,30 +26,40 @@ const get = async ({ params }) => {
   `
   const variables = {
     surveySlug: params.surveySlug,
-    questionId: params.questionId
+    questionSlug: params.questionSlug
   }
 
   return { gql, variables }
 }
 
-const getNew = async () => {
+const getNew = async ({ params }) => {
   const gql = `
-    query {
+    query getNewSurveyQuestionPage ($surveySlug: String!) {
       user {
         hirer {
           company {
             id
+            survey: surveyByFilters(filters: { slug: $surveySlug }) {
+              id
+              slug
+            }
           }
         }
       }
       ${Global}
     }
   `
+  const variables = {
+    surveySlug: params.surveySlug
+  }
 
-  return { gql }
+  return { gql, variables }
 }
 
 const post = async ({ body, params }) => {
+  const { surveyQuestionTypes } = await fetchEnums({
+    surveyQuestionTypes: 'SurveyQuestionType'
+  })
   const gql = `
     mutation createSurvey ($surveySlug: String!, $data: SurveyQuestionCreateInput!) {
       user {
@@ -57,6 +69,7 @@ const post = async ({ body, params }) => {
               slug
               question: createSurveyQuestion(data: $data) {
                 id
+                slug
               }
             }
           }
@@ -67,12 +80,16 @@ const post = async ({ body, params }) => {
 
   const variables = {
     surveySlug: params.surveySlug,
-    data: body
+    data: {
+      ...body,
+      required: false,
+      type: surveyQuestionTypes.CONNECTIONS
+    }
   }
 
   const transformData = () => {
     throw new Redirect({
-      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionId}`,
+      url: `/manage/surveys/${params.surveySlug}/questions`,
       notification: {
         type: 'success',
         message: 'New question created!'
@@ -103,6 +120,7 @@ const patch = async ({ body, params }) => {
               id
               question: updateSurveyQuestionByFilters(filters: $surveyQuestionFilters, data: $data) {
                 id
+                slug
               }
             }
           }
@@ -113,13 +131,13 @@ const patch = async ({ body, params }) => {
   `
   const variables = {
     surveyFilters: { slug: params.surveySlug },
-    surveyQuestionFilters: { id: params.questionId },
+    surveyQuestionFilters: { slug: params.questionSlug },
     data: body
   }
 
   const transformData = () => {
     throw new Redirect({
-      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionId}`,
+      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionSlug}`,
       notification: {
         type: 'info',
         message: 'Question updated'
@@ -129,7 +147,7 @@ const patch = async ({ body, params }) => {
 
   const catcher = () => {
     throw new Redirect({
-      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionId}`,
+      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionSlug}`,
       notification: {
         type: 'error',
         message: 'Something went wrong while updating the question! Please try again.'

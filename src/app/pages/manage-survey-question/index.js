@@ -21,6 +21,8 @@ const ManageSurveyQuestionPage = props => {
   const question = get(survey, 'question', {})
   const title = 'Question details'
 
+  console.log(props, { survey, question })
+
   return (
     <Layout {...props}>
       <Helmet>
@@ -37,7 +39,7 @@ const ManageSurveyQuestionPage = props => {
                 chevron
               >
                 <Link
-                  href={`/manage/surveys/${survey.slug}/questions/${question.id}/edit`}
+                  href={`/manage/surveys/${survey.slug}/questions/${question.slug}/edit`}
                   subtle
                 >
                   Edit

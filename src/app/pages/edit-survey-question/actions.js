@@ -27,7 +27,7 @@ const submitQuestion = () => async (dispatch, getState) => {
   let method = 'post'
   if (existingSurveyQuestion) {
     method = 'patch'
-    url = `/manage/surveys/${surveySlug}/questions/${existingSurveyQuestion.id}/edit`
+    url = `/manage/surveys/${surveySlug}/questions/${existingSurveyQuestion.slug}/edit`
   }
 
   await dispatch(

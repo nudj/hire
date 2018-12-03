@@ -162,11 +162,11 @@ const locations = [
             adminOnly: true
           },
           {
-            path: '/manage/surveys/:surveySlug/questions/:questionId',
+            path: '/manage/surveys/:surveySlug/questions/:questionSlug',
             adminOnly: true
           },
           {
-            path: '/manage/surveys/:surveySlug/questions/:questionId/edit',
+            path: '/manage/surveys/:surveySlug/questions/:questionSlug/edit',
             adminOnly: true
           }
         ]
