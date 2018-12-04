@@ -21,8 +21,6 @@ const ManageSurveyQuestionPage = props => {
   const question = get(survey, 'question', {})
   const title = 'Question details'
 
-  console.log(props, { survey, question })
-
   return (
     <Layout {...props}>
       <Helmet>

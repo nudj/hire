@@ -25,7 +25,7 @@ const SurveysQuestionsPage = props => {
   const { manageSurveyQuestionsPage: state, dispatch } = props
   const survey = get(props, 'user.hirer.company.survey')
   const baseUrl = `/manage/surveys/${survey.slug}/questions`
-  const title = 'Surveys'
+  const title = `${survey.introTitle} - Questions`
   const onDragEnd = onDragEndHandler(dispatch)
 
   return (

@@ -42,7 +42,7 @@ class EditSurveyQuestionPage extends React.Component {
   render () {
     const { editSurveyQuestionPage: state, csrfToken } = this.props
     const existingSurveyQuestion = get(this.props, 'user.hirer.company.survey.question')
-    const title = existingSurveyQuestion ? `Edit ${existingSurveyQuestion.title}` : 'Create a survey'
+    const title = existingSurveyQuestion ? `Edit ${existingSurveyQuestion.title}` : 'Add a survey question'
 
     const fieldValues = fetchFormValues({
       savedState: existingSurveyQuestion,
