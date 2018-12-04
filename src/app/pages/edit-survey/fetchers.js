@@ -71,6 +71,7 @@ const post = async ({ body }) => {
           company {
             survey: createSurvey(data: $data) {
               id
+              slug
             }
           }
         }
@@ -82,9 +83,10 @@ const post = async ({ body }) => {
     data: body
   }
 
-  const transformData = () => {
+  const transformData = data => {
+    const { slug } = data.user.hirer.company.survey
     throw new Redirect({
-      url: '/manage/surveys',
+      url: `/manage/surveys/${slug}/questions/new`,
       notification: {
         type: 'success',
         message: 'New survey created!'
