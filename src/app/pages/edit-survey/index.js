@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
+const omit = require('lodash/omit')
 const capitalise = require('lodash/capitalize')
 
 const {
@@ -45,6 +46,8 @@ class EditSurveyPage extends React.Component {
     const { editSurveyPage: state, csrfToken, surveyStatuses } = this.props
     const existingSurvey = get(this.props, 'user.hirer.company.survey')
     const title = existingSurvey ? `Edit ${existingSurvey.introTitle}` : 'Create a survey'
+    // Prevent users from being able to a create a new survey set as "ARCHIVED"
+    const availableStatuses = existingSurvey ? surveyStatuses : omit(surveyStatuses, surveyStatuses.ARCHIVED)
 
     const fieldValues = fetchFormValues({
       savedState: existingSurvey,
@@ -107,7 +110,7 @@ class EditSurveyPage extends React.Component {
                     required
                   >
                     <option value='' disabled>Choose a status</option>
-                    {Object.keys(surveyStatuses).map(status => (
+                    {Object.keys(availableStatuses).map(status => (
                       <option key={status} value={status}>
                         {capitalise(status)}
                       </option>
