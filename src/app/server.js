@@ -43,6 +43,7 @@ const expressRouters = {
     require('./pages/manage-survey-question/router'),
     require('./pages/favourites/router'),
     require('./pages/setup-linkedin/router'),
+    require('./pages/surveys/router'),
     require('./pages/survey-complete/router'),
     require('./pages/survey-question/router'),
     require('./pages/survey/router'),
