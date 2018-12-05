@@ -1,22 +1,36 @@
 const toUpper = require('lodash/toUpper')
 const _get = require('lodash/get')
-const { Redirect } = require('@nudj/library/errors')
+const { Redirect, NotFound } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
 const { dataSources, questionTypes } = require('../../lib/constants')
+const { createEnumMap } = require('../../lib')
 const { getNextSurveyUri } = require('./helpers')
 
 async function fetchQuestionType ({ requestGQL, params }) {
-  const { question } = await requestGQL({
+  const { question, surveyStatusTypes } = await requestGQL({
     gql: `
       query getQuestion ($id: ID!) {
+        surveyStatusTypes: __type(name: "SurveyStatus") {
+          values: enumValues {
+            name
+          }
+        }
         question: surveyQuestion (id: $id) {
           type
+          survey {
+            status
+          }
         }
       }
     `,
     variables: { id: params.questionId }
   })
+
+  const surveyStatuses = createEnumMap(surveyStatusTypes.values)
+  if (question.survey.status !== surveyStatuses.PUBLISHED) {
+    throw new NotFound({ log: [`User attempted to access a survey of status "${question.survey.status}"`] })
+  }
 
   return question.type
 }

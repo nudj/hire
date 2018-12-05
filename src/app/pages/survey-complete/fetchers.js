@@ -1,8 +1,9 @@
 const get = require('lodash/get')
 const uniqBy = require('lodash/uniqBy')
 const flatten = require('lodash/flatten')
-const { Redirect } = require('@nudj/framework/errors')
+
 const logger = require('@nudj/framework/logger')
+const { Redirect, NotFound } = require('@nudj/library/errors')
 const { cookies } = require('@nudj/library')
 
 const intercom = require('../../lib/intercom')
@@ -11,7 +12,8 @@ const { createEnumMap } = require('../../lib')
 const fetchEnums = require('../../lib/fetch-enums')
 
 const completeSurvey = async ({ session, params, res, analytics, requestGQL }) => {
-  const { jobStatusTypes, hirerTypes } = await fetchEnums({
+  const { jobStatusTypes, hirerTypes, surveyStatuses } = await fetchEnums({
+    surveyStatuses: 'SurveyStatus',
     jobStatusTypes: 'JobStatus',
     hirerTypes: 'HirerType'
   })
@@ -64,6 +66,7 @@ const completeSurvey = async ({ session, params, res, analytics, requestGQL }) =
             }) {
               id
               slug
+              status
               outroTitle
               outroDescription
               questions: surveyQuestions {
@@ -84,6 +87,11 @@ const completeSurvey = async ({ session, params, res, analytics, requestGQL }) =
   }
 
   const transformData = data => {
+    const surveyStatus = get(data, 'user.hirer.company.survey.status')
+    if (surveyStatus !== surveyStatuses.PUBLISHED) {
+      throw new NotFound({ log: [`User attempted to access a survey of status "${surveyStatus}"`] })
+    }
+
     const newlyOnboarded = !get(data, 'user.hirer.onboarded', false) && get(data, 'user.hirer.setOnboarded', false)
     if (newlyOnboarded) cookies.set(res, 'newlyOnboarded', true)
 

@@ -1,4 +1,4 @@
-const { Redirect } = require('@nudj/framework/errors')
+const { NotFound, Redirect } = require('@nudj/library/errors')
 
 const { Global } = require('../../lib/graphql')
 const { createEnumMap } = require('../../lib')
@@ -19,6 +19,7 @@ const get = ({ params }) => {
             }) {
               id
               slug
+              status
               introTitle
               introDescription
               questions: surveyQuestions {
@@ -47,6 +48,11 @@ const get = ({ params }) => {
           name
         }
       }
+      surveyStatuses: __type(name: "SurveyStatus") {
+        values: enumValues {
+          name
+        }
+      }
       ${Global}
     }
   `
@@ -54,7 +60,13 @@ const get = ({ params }) => {
     surveySlug: params.surveySlug
   }
   const transformData = data => {
+    const surveyStatuses = createEnumMap(data.surveyStatuses.values)
     const survey = data.user.hirer.company.survey
+
+    if (survey.status !== surveyStatuses.PUBLISHED) {
+      throw new NotFound({ log: [`User attempted to access a survey of status "${survey.status}"`] })
+    }
+
     const unansweredQuestions = survey.questions.reduce((unansweredQuestions, question) => {
       if (!question.answer) {
         unansweredQuestions.push(question)
