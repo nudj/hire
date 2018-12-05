@@ -93,11 +93,12 @@ const uploadConnections = ({ body, files, analytics }) => {
         }
       })
 
-      const message = `You just added ${body.connections.length} connections 🙌`
-
       throw new Redirect({
-        url: `/surveys/${get(data, 'user.hirer.company.survey.slug', '')}`,
-        notification: createNotification('success', message)
+        url: '/contacts',
+        notification: createNotification(
+          'success',
+          `You just added ${body.connections.length} connections 🙌`
+        )
       })
     }
   }
