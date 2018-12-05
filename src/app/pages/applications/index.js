@@ -72,7 +72,7 @@ const ApplicationsPage = props => {
           })}
         </div>
       ) : (
-        <Section>
+        <Section style={[mss.center, mss.mtReg]}>
           <Heading nonsensitive level={1} style={mss.fgPrimary}>
             You haven&apos;t received any applications yet
           </Heading>
