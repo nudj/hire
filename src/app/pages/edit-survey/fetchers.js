@@ -116,6 +116,7 @@ const patch = async ({ body, params }) => {
           company {
             survey: updateSurveyByFilters(filters: $filters, data: $data) {
               id
+              slug
             }
           }
         }
@@ -128,9 +129,9 @@ const patch = async ({ body, params }) => {
     data: body
   }
 
-  const transformData = () => {
+  const transformData = ({ user }) => {
     throw new Redirect({
-      url: `/manage/surveys/${slug}`,
+      url: `/manage/surveys/${user.hirer.company.survey.slug}`,
       notification: {
         type: 'info',
         message: 'Survey updated'

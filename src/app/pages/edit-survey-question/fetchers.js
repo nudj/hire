@@ -135,9 +135,9 @@ const patch = async ({ body, params }) => {
     data: body
   }
 
-  const transformData = () => {
+  const transformData = ({ user }) => {
     throw new Redirect({
-      url: `/manage/surveys/${params.surveySlug}/questions/${params.questionSlug}`,
+      url: `/manage/surveys/${params.surveySlug}/questions/${user.hirer.company.survey.question.slug}`,
       notification: {
         type: 'info',
         message: 'Question updated'
