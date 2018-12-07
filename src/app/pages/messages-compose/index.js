@@ -2,7 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
-const { Text } = require('@nudj/components')
+const { Text, Modal } = require('@nudj/components')
 const {
   values: emailPreferences
 } = require('@nudj/api/gql/schema/enums/email-preference-types')
@@ -10,14 +10,16 @@ const { getFirstNonNil } = require('@nudj/library')
 const { mss } = require('@nudj/components/styles')
 const { getJobUrl } = require('@nudj/library')
 
-const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
-const compilePrismicTemplate = require('../../../lib/compile-prismic-template')
-const Layout = require('../../../components/app-layout')
+const getPersonOrConnectionName = require('../../lib/get-person-or-connection-names')
+const compilePrismicTemplate = require('../../lib/compile-prismic-template')
+const Layout = require('../../components/app-layout')
 const { updateSubject, updateMessage, sendMessage } = require('./actions')
-const Main = require('../../../components/main')
-const Section = require('../../../components/section')
-const ComposeMessageForm = require('../../../components/form-compose-message')
-const TitleCard = require('../../../components/title-card')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const ComposeMessageForm = require('../../components/form-compose-message')
+const TitleCard = require('../../components/title-card')
+const EmailAuthForm = require('../../components/email-authentication-form')
+const style = require('./style.css')
 
 class ComposeMessagePage extends React.Component {
   handleSubjectChange = ({ value }) => {
@@ -51,7 +53,7 @@ class ComposeMessagePage extends React.Component {
 
     const toEmail = get(recipient, 'email', '')
     const job = get(user, 'hirer.company.job', {})
-    const emailPreference = get(user, 'emailPreference', emailPreferences.OTHER)
+    const emailPreference = get(user, 'emailPreference')
     const companySlug = get(user, 'hirer.company.slug', '')
     const jobSlug = get(job, 'slug', '')
     const referralId = get(job, 'referral.id', '')
@@ -127,6 +129,12 @@ class ComposeMessagePage extends React.Component {
             </TitleCard>
           </Section>
         </Main>
+        <Modal isOpen={!emailPreference} style={style.modalWindow}>
+          <EmailAuthForm
+            csrfToken={csrfToken}
+            redirectTo={`/messages/new/${recipient.id}/${job.id}`}
+          />
+        </Modal>
       </Layout>
     )
   }

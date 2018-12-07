@@ -7,12 +7,14 @@ const { emailPreferences } = require('../../lib/constants')
 const style = require('./style.css')
 
 const EmailAuthenticationForm = props => {
-  const { action, method, onSubmit, csrfToken } = props
+  const { onSubmit, csrfToken, redirectTo } = props
+
+  if (!redirectTo) throw new Error('Must supply a redirectTo')
 
   return (
     <form
-      action={action}
-      method={method}
+      action='/user-settings'
+      method='post'
       onSubmit={onSubmit}
       className={css(style.root)}
     >
@@ -30,12 +32,13 @@ const EmailAuthenticationForm = props => {
           your personal email address instantly.
         </Text>
         <input name='_csrf' value={csrfToken} type='hidden' />
+        <input name='_redirectTo' value={redirectTo} type='hidden' />
       </div>
       <div className={css(style.buttonGroup)}>
         <Button
           nonsensitive
           style={style.button}
-          name='emailProvider'
+          name='emailPreference'
           type='submit'
           value={emailPreferences.OTHER}
         >
@@ -44,7 +47,7 @@ const EmailAuthenticationForm = props => {
         <Button
           nonsensitive
           style={style.button}
-          name='emailProvider'
+          name='emailPreference'
           type='submit'
           value={emailPreferences.GOOGLE}
           volume='cheer'

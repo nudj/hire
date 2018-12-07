@@ -2,7 +2,6 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const { List, Text, Align, Link, Icon } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
-const isNil = require('lodash/isNil')
 
 const Layout = require('../../components/app-layout')
 const ButtonLink = require('../../components/button-link')
@@ -26,8 +25,6 @@ const SurveyPage = props => {
   const questions = survey.questions
   const title = survey.introTitle || 'Survey'
   const intro = survey.introDescription || 'Intro text'
-  const emailPreferences = props.emailPreferences
-  const emailPreference = props.user.emailPreference || null
 
   const trackSurveyStart = () => {
     analytics.track({
@@ -41,12 +38,6 @@ const SurveyPage = props => {
 
   // if any question is answered then they are all answered as there is a redirect in the fetcher when the survey is only partially complete
   const isComplete = questions && questions[0] && questions[0].answer
-
-  const getRecommendationHref = ({ personId }) => {
-    return emailPreference !== emailPreferences.OTHER && !isNil(emailPreference)
-      ? `/messages/new/${personId}`
-      : `?id=${personId}`
-  }
 
   return (
     <Layout {...props}>
@@ -99,7 +90,7 @@ const SurveyPage = props => {
 
                       return (
                         <ListItem key={connection.id} joined>
-                          <a className={css(style.card)} href={getRecommendationHref({ personId })}>
+                          <a className={css(style.card)} href={`/messages/new/${personId}`}>
                             <Align
                               leftChildren={(
                                 <div>

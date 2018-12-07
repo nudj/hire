@@ -1,5 +1,5 @@
 const { StyleSheet, sizes, colors } = require('@nudj/components/styles')
-const { modal } = require('../../../lib/css/breakpoints')
+const { modal } = require('../../lib/css/breakpoints')
 
 const styleSheet = StyleSheet.create({
   threadSubject: {
@@ -47,6 +47,9 @@ const styleSheet = StyleSheet.create({
         marginTop: 0
       }
     }
+  },
+  modalWindow: {
+    height: 'auto'
   }
 })
 

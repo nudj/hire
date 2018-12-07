@@ -5,15 +5,9 @@ const { ensureOnboarded, ensureNoAccessRequestsPending } = require('../../lib/mi
 
 const Router = ({ ensureLoggedIn, respondWithGql }) => {
   const router = createRouter()
-  router.use('/messages', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
+  router.use('/messages/new/:recipientId', ensureLoggedIn, ensureNoAccessRequestsPending, ensureOnboarded)
 
-  router.getHandlers('/messages', respondWithGql(fetchers.getMessages))
-  router.postHandlers(
-    '/sync-google',
-    ensureLoggedIn,
-    ensureOnboarded,
-    respondWithGql(fetchers.redirectToGoogleAuth)
-  )
+  router.getHandlers('/messages/new/:recipientId', respondWithGql(fetchers.get))
 
   return router
 }

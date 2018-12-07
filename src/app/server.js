@@ -35,6 +35,9 @@ const expressRouters = {
     require('./pages/root/router'),
     require('./pages/contacts/router'),
     require('./pages/messages/router'),
+    require('./pages/messages-pick-job/router'),
+    require('./pages/messages-compose/router'),
+    require('./pages/messages-thread/router'),
     require('./pages/edit-survey/router'),
     require('./pages/edit-survey-question/router'),
     require('./pages/manage-surveys/router'),
@@ -72,6 +75,7 @@ const expressRouters = {
     require('./pages/invitation-accept/router'),
     require('./pages/hirer/router'),
     require('./pages/hirer-edit/router'),
+    require('./pages/user-settings/router'),
     require('./server/routers/catch-all')
   ]
 }

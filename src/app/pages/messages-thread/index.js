@@ -7,15 +7,15 @@ const isNil = require('lodash/isNil')
 const { Button, Card, Modal, Text, Textarea } = require('@nudj/components')
 const { css, mss } = require('@nudj/components/styles')
 
-const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../../lib/constants')
-const getPersonOrConnectionName = require('../../../lib/get-person-or-connection-names')
-const Layout = require('../../../components/app-layout')
-const ThreadItem = require('../../../components/email')
-const Main = require('../../../components/main')
-const Section = require('../../../components/section')
-const { Heading, Para } = require('../../../components/app')
-const ButtonLink = require('../../../components/button-link')
-const Loader = require('../../../components/staged-loader')
+const { emailPreferences, GOOGLE_MAILER_DAEMON_ADDRESS } = require('../../lib/constants')
+const getPersonOrConnectionName = require('../../lib/get-person-or-connection-names')
+const Layout = require('../../components/app-layout')
+const ThreadItem = require('../../components/email')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
+const { Heading, Para } = require('../../components/app')
+const ButtonLink = require('../../components/button-link')
+const Loader = require('../../components/staged-loader')
 const style = require('./style.css')
 
 class MessageThreadPage extends React.Component {
@@ -44,14 +44,13 @@ class MessageThreadPage extends React.Component {
 
   render () {
     const { showOnboardingSuccessModal, loading } = this.state
-    const { user } = this.props
+    const { user, csrfToken } = this.props
     const { conversation } = user
     const { recipient, newMessage } = conversation
 
     const { firstName, lastName } = getPersonOrConnectionName(recipient)
 
     const messages = get(conversation, 'messages', [])
-    const csrfToken = get(this.props, 'csrfToken')
 
     const fullThread = [...messages, newMessage]
       .filter(message => !isNil(message))
@@ -121,8 +120,8 @@ class MessageThreadPage extends React.Component {
                   disabled={loading}
                 >
                   { loading
-                      ? <Loader messages={['Sending']} ellipsis />
-                      : 'Send reply'
+                    ? <Loader messages={['Sending']} ellipsis />
+                    : 'Send reply'
                   }
                 </Button>
               </form>
