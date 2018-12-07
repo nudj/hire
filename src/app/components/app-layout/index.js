@@ -252,21 +252,12 @@ const ApplicationLayout = props => {
         </Helmet>
         <div className={css(style.pageHeader)}>
           <div className={css(style.pageHeaderInner)}>
-            {onboarded ? (
-              <RouterLink className={css(style.logoContainer)} to='/'>
-                <img
-                  className={css(style.logo)}
-                  src='/assets/images/nudj-logo-dark.svg'
-                />
-              </RouterLink>
-            ) : (
-              <div className={css(style.logoContainer)}>
-                <img
-                  className={css(style.logo)}
-                  src='/assets/images/nudj-logo-dark.svg'
-                />
-              </div>
-            )}
+            <RouterLink className={css(style.logoContainer)} to='/'>
+              <img
+                className={css(style.logo)}
+                src='/assets/images/nudj-logo-dark.svg'
+              />
+            </RouterLink>
             <div className={css(style.bodyContainer)}>
               {showNavigation ? (
                 <ul className={css(style.navigationList)}>
