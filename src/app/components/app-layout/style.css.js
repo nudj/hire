@@ -1,6 +1,11 @@
 const { merge } = require('@nudj/library')
 const { StyleSheet, typography, sizes, colors, utilities } = require('@nudj/components/styles')
 
+const mainStyle = {
+  width: '100%',
+  overflow: 'hidden'
+}
+
 const navLinkStyle = merge(typography.type.smallIi, {
   backgroundColor: 'transparent',
   borderColor: 'transparent',
@@ -302,9 +307,9 @@ const styleSheet = StyleSheet.create({
       paddingLeft: sizes.largeIi
     }
   },
-  main: {
-    width: '100%',
-    overflow: 'hidden',
+  main: mainStyle,
+  paddedMain: {
+    ...mainStyle,
     '@media(min-width: 48rem)': {
       marginLeft: sizes.largeIi
     }

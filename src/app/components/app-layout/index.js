@@ -217,13 +217,39 @@ const ApplicationLayout = props => {
 
   const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
 
+  const subnav = isLoggedIn && locations.reduce((Subnav, location) => {
+    if (isActive(pathname, location)) {
+      Subnav = (
+        <Card style={style.subNav}>
+          <ul className={css(style.subNavLinkList)}>
+            {location.locations
+              .filter(location => isAdmin || !location.adminOnly)
+              .map((location, i) => (
+                <li key={i} className={css(style.subNavListItem)}>
+                  <NavLink
+                    isActive={isActive(pathname, location)}
+                    style={style.subNavLink}
+                    activeStyle={style.activeSubNavLink}
+                    to={location.path}
+                  >
+                    {location.title}
+                  </NavLink>
+                </li>
+              ))
+            }
+          </ul>
+        </Card>
+      )
+    }
+    return Subnav
+  }, null)
+
   return (
     <ScrollTop ignore={history.action === 'REPLACE'}>
       <div className={css(style.root)} onClick={onClick(props.dispatch)}>
         <Helmet>
           <body className={css(style.htmlBody)} />
         </Helmet>
-        <Notification notification={notification} dispatch={dispatch} />
         <div className={css(style.pageHeader)}>
           <div className={css(style.pageHeaderInner)}>
             {onboarded ? (
@@ -289,33 +315,9 @@ const ApplicationLayout = props => {
           </div>
         </div>
         <div className={css(style.body)}>
-          {isLoggedIn && locations.reduce((Subnav, location) => {
-            if (isActive(pathname, location)) {
-              Subnav = (
-                <Card style={style.subNav}>
-                  <ul className={css(style.subNavLinkList)}>
-                    {location.locations
-                      .filter(location => isAdmin || !location.adminOnly)
-                      .map((location, i) => (
-                        <li key={i} className={css(style.subNavListItem)}>
-                          <NavLink
-                            isActive={isActive(pathname, location)}
-                            style={style.subNavLink}
-                            activeStyle={style.activeSubNavLink}
-                            to={location.path}
-                          >
-                            {location.title}
-                          </NavLink>
-                        </li>
-                      ))
-                    }
-                  </ul>
-                </Card>
-              )
-            }
-            return Subnav
-          }, null)}
-          <div className={css(style.main)}>
+          {subnav}
+          <div className={css(subnav ? style.paddedMain : style.main)}>
+            <Notification notification={notification} dispatch={dispatch} />
             {syncingInProgress ? (<SyncingPage {...props} />) : children}
           </div>
         </div>
