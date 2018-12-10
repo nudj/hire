@@ -56,10 +56,7 @@ const SurveysQuestionsPage = props => {
               </ButtonLink>
             ]}
           </ActionBar>
-          <DraggableList
-            onDragEnd={onDragEnd}
-            reorderedList={state.reorderedList}
-          >
+          <DraggableList onDragEnd={onDragEnd} reorderedList={state.reorderedList}>
             {survey.questions.map(question => (
               <div id={question.id} key={question.id} className={css(style.listItem)}>
                 <Link className={css(style.card)} to={`${baseUrl}/${question.slug}`}>
