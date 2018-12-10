@@ -176,9 +176,10 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.12.1":
-  version "17.12.1"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.12.1.tgz#a6626307494ecb0dc30f3abfafcb9ff9542088e8"
+"@nudj/framework@17.13.1":
+  version "17.13.1"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.13.1.tgz#3db0b4be3e9f216aedfff095e723952fb3a910e7"
+  integrity sha512-3blihQXvaFbWfqXgNUaOlErNL13Cy2JApQJnySKElqovrAcHkKUY2AU5sitKpDcllbWwcECRED8PUfMmRj+3KA==
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
@@ -7615,13 +7616,7 @@ raf-schd@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-2.1.2.tgz#ec622b5167f2912089f054dc03ebd5bcf33c8f62"
 
-raf@^3.1.0:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
-  dependencies:
-    performance-now "^2.1.0"
-
-raf@^3.3.2:
+raf@^3.1.0, raf@^3.3.2:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
   dependencies:
@@ -7832,19 +7827,7 @@ react-motion@^0.5.2:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-redux@^5.0.3:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.1.1.tgz#88e368682c7fa80e34e055cd7ac56f5936b0f52f"
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    hoist-non-react-statics "^3.1.0"
-    invariant "^2.2.4"
-    loose-envify "^1.1.0"
-    prop-types "^15.6.1"
-    react-is "^16.6.0"
-    react-lifecycles-compat "^3.0.0"
-
-react-redux@^5.0.6:
+react-redux@^5.0.3, react-redux@^5.0.6:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.1.1.tgz#88e368682c7fa80e34e055cd7ac56f5936b0f52f"
   dependencies:
