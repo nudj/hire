@@ -22,6 +22,12 @@ const get = async ({ requestGQL }) => {
               slug
               introTitle
               status
+              questions: surveyQuestions {
+                id
+                answer: answerOfUser {
+                  id
+                }
+              }
             }
           }
         }
