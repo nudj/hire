@@ -69,7 +69,7 @@ const SurveysPage = props => {
           {Object.keys(groups).map(groupName => {
             const surveyGroup = groupedSurveys[groupName]
 
-            return !surveyGroup.length ? null : (
+            return surveyGroup && surveyGroup.length ? (
               <div key={groupName} className={css(style.listHeading)}>
                 <Heading
                   id={groupName}
@@ -106,7 +106,7 @@ const SurveysPage = props => {
                   ))}
                 </List>
               </div>
-            )
+            ) : null
           })}
         </div>
       ) : (
