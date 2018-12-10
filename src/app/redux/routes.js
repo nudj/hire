@@ -38,7 +38,6 @@ module.exports = {
   '/share-jobs': require('../pages/share-jobs'),
   '/surveys': require('../pages/surveys'),
   '/surveys/:surveySlug': require('../pages/survey'),
-  '/surveys/:surveySlug/complete': require('../pages/survey-complete'),
   '/surveys/:surveySlug/questions/:questionId': require('../pages/survey-question'),
   '/sync-contacts': checkMobileDevice(require('../pages/sync-contacts')),
   '/sync-contacts/linkedin': checkMobileDevice(require('../pages/setup-linkedin/request-data-guide')),
