@@ -10,7 +10,7 @@ function getNextSurveyUri (survey) {
     const nextQuestion = get(survey, `questions[${questionIndex + 1}]`)
     const baseURL = `/surveys/${get(survey, 'slug')}`
 
-    return nextQuestion ? `${baseURL}/questions/${nextQuestion.id}` : `${baseURL}/complete`
+    return nextQuestion ? `${baseURL}/questions/${nextQuestion.id}` : baseURL
   } catch (error) {
     console.error(error)
     return null

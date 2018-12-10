@@ -42,8 +42,8 @@ describe('getNextSurveyUri', () => {
     expect(getNextSurveyUri(twoQuestionSurvey)).to.equal(slug)
   })
 
-  it('fetches the survey-complete section if on final question', () => {
-    const slug = '/surveys/aided-recall-baby/complete'
+  it('fetches the survey base url if on final question', () => {
+    const slug = '/surveys/aided-recall-baby'
     expect(getNextSurveyUri(oneQuestionSurvey)).to.equal(slug)
   })
 })
