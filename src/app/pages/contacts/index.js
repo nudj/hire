@@ -309,7 +309,7 @@ class DiscoverPage extends React.Component {
                         style={mss.mtLgI}
                         nonsensitive
                       >
-                        Try survey
+                        Sync contacts
                       </ButtonLink>
                       <Link
                         href='https://help.nudj.co/hiring-with-nudj/discover-with-nudj'
@@ -332,7 +332,7 @@ class DiscoverPage extends React.Component {
                       how many people you actually know.
                     </Para>
                     <Para nonsensitive>
-                      A one-time survey and LinkedIn contact syncing will help you
+                      Syncing your LinkedIn contacts will help you
                       make more referrals and increase your chances of getting rewarded.
                     </Para>
                     <div className={css(mss.center)}>
