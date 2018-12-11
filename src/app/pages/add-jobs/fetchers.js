@@ -1,10 +1,30 @@
 const { Redirect } = require('@nudj/framework/errors')
-const { logNewJobToIntercom } = require('../../lib/intercom')
+const intercom = require('@nudj/library/lib/analytics/intercom')
 const {
   values: jobStatusTypes
 } = require('@nudj/api/gql/schema/enums/job-status-types')
 
 const { Global } = require('../../lib/graphql')
+
+async function logNewJobToIntercom (data, body) {
+  try {
+    const user = await intercom.user.getBy({
+      email: data.user.email
+    })
+
+    await intercom.user.logEvent({
+      user,
+      event: {
+        name: 'added job',
+        metadata: {
+          title: body.title
+        }
+      }
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const get = () => {
   const gql = `
