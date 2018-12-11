@@ -5,7 +5,7 @@ const logger = require('@nudj/framework/logger')
 
 const { Global } = require('../../lib/graphql')
 const { createNotification } = require('../../lib')
-const intercom = require('../../lib/intercom')
+const intercom = require('@nudj/library/lib/analytics/intercom')
 const mailer = require('../../lib/mailer')
 
 const fetchPageData = ({ session }) => {
@@ -68,17 +68,21 @@ const uploadConnections = ({ body, files, analytics }) => {
             newCompanyCount: companiesUploaded && companiesUploaded.created
           }
         })
-        intercom.logEvent({
-          event_name: 'linkedin network uploaded',
-          email: data.user.email,
-          metadata: {
-            category: 'onboarding'
+        intercom.user.logEvent({
+          user: { email: data.user.email },
+          event: {
+            name: 'linkedin network uploaded',
+            metadata: {
+              category: 'onboarding'
+            }
           }
         })
-        intercom.updateUser({
-          email: data.user.email,
-          custom_attributes: {
-            connections: body.connections.length
+        intercom.user.update({
+          user: { email: data.user.email },
+          data: {
+            custom_attributes: {
+              connections: body.connections.length
+            }
           }
         })
       } catch (error) {
