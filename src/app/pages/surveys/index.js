@@ -112,10 +112,10 @@ const SurveysPage = props => {
       ) : (
         <Section style={[mss.center, mss.mtReg]}>
           <Heading nonsensitive level={1} style={mss.fgPrimary}>
-            Nothing to see here
+            No surveys available
           </Heading>
           <Para nonsensitive>
-            Your company has no published surveys yet.
+            Your team has not yet created a survey for you to take. Check back here when a new survey has been made to get started.
           </Para>
         </Section>
       )}
