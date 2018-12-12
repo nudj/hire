@@ -31,7 +31,7 @@
     "@nudj/api": "19.0.0",
     "@nudj/components": "4.4.0",
     "@nudj/framework": "17.13.1",
-    "@nudj/library": "7.4.0",
+    "@nudj/library": "8.0.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.24.1",
