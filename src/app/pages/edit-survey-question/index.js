@@ -70,7 +70,7 @@ class EditSurveyQuestionPage extends React.Component {
                 >
                   <Input
                     id='title'
-                    placeholder='Survey name'
+                    placeholder='Question name'
                     name='title'
                     value={fieldValues.title}
                     onChange={this.handleChange}
