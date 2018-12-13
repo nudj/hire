@@ -77,11 +77,11 @@ const IntrosPage = props => {
                             <div>
                               <div className={css(style.titleContainer)}>
                                 <Text element='div' size='largeI' style={style.title} nonsensitive>
-                                  {fetchName(intro.person)}
+                                  {fetchName(intro.candidate)}
                                 </Text>
                               </div>
                               <Text element='span' size='smallI' style={style.subtitle} nonsensitive>
-                                {intro.person.email}
+                                {intro.candidate.email}
                               </Text>
                             </div>
                           )}

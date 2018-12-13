@@ -32,7 +32,6 @@ const get = props => {
               slug
               title
               url
-              templateTags
             }
           }
         }
