@@ -42,7 +42,7 @@ const get = props => {
                 lastName
               }
               account: accountByFilters(filters: { type: $accountType }) {
-                emailAddress
+                email
               }
             }
           }
