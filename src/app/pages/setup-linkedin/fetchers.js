@@ -35,13 +35,6 @@ const uploadConnections = ({ body, files, analytics }) => {
         hirer {
           company {
             name
-            survey: surveyByFilters (
-              filters: {
-                slug: "default"
-              }
-            ) {
-              slug
-            }
           }
         }
       }
