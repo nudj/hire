@@ -1,7 +1,7 @@
 const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
-const { ensureNoAccessRequestsPending } = require('../../../lib/middleware')
+const { ensureNoAccessRequestsPending } = require('../../lib/middleware')
 
 const Router = ({ respondWithGql, ensureLoggedIn }) => {
   const router = createRouter()

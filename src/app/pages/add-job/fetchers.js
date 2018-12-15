@@ -29,6 +29,11 @@ async function logNewJobToIntercom (data, body) {
 const get = () => {
   const gql = `
     query {
+      jobStatusTypes: __type(name: "JobStatus") {
+        values: enumValues {
+          name
+        }
+      }
       ${Global}
     }
   `
@@ -64,9 +69,8 @@ const post = ({ body, analytics }) => {
     job: {
       ...body,
       // Setting required defaults
-      tags: [],
       status: jobStatusTypes.DRAFT,
-      type: 'PERMANENT'
+      bonus: ''
     }
   }
 

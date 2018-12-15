@@ -1,4 +1,4 @@
-const { createReducer } = require('../../../lib')
+const { createReducer } = require('../../lib')
 const {
   SET_FIELD_VALUE,
   SET_FIELD_VALUES,
