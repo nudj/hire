@@ -1,5 +1,6 @@
 const get = require('lodash/get')
 const find = require('lodash/find')
+const mapValues = require('lodash/mapValues')
 const { Redirect } = require('@nudj/framework/errors')
 const logger = require('@nudj/framework/logger')
 
@@ -41,8 +42,12 @@ const uploadConnections = ({ body, files, analytics }) => {
       ${Global}
     }
   `
+
+  // trim all the connection values in case of whitespace
+  const connections = body.connections.map(connection => mapValues(connection, value => value && value.trim()))
+
   const variables = {
-    connections: body.connections
+    connections
   }
 
   return {
