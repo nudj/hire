@@ -5,15 +5,15 @@ const { app: appActions } = require('@nudj/framework/actions')
 const { Button } = require('@nudj/components')
 const { mss } = require('@nudj/components/styles')
 
-const { currencies, currencyKeys } = require('../../../lib/constants')
-const Layout = require('../../../components/app-layout')
-const JobBonusSelection = require('../../../components/job-bonus-selection')
-const Main = require('../../../components/main')
-const Section = require('../../../components/section')
+const { currencies, currencyKeys } = require('../../lib/constants')
+const Layout = require('../../components/app-layout')
+const JobBonusSelection = require('../../components/job-bonus-selection')
+const Main = require('../../components/main')
+const Section = require('../../components/section')
 const {
   Heading,
   Para
-} = require('../../../components/wizard')
+} = require('../../components/wizard')
 const {
   setFieldValues,
   submitBonusAndPublishJob

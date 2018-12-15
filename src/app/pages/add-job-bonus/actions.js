@@ -1,5 +1,5 @@
 const actions = require('@nudj/framework/actions')
-const { jobStatuses } = require('../../../lib/constants')
+const { jobStatuses } = require('../../lib/constants')
 
 const RESET_FORM = 'SET_BONUS_RESET_FORM'
 const SET_FIELD_VALUE = 'SET_BONUS_SET_FIELD_VALUE'
